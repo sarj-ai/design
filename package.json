@@ -1,0 +1,15 @@
+{
+  "name": "@sarj-ai/docs-ui-repository",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "npm@12.0.2",
+  "scripts": {
+    "build": "npm --prefix apps/docs-ui run build",
+    "check": "npm --prefix packages/docs-ui test && npm --prefix apps/docs-ui run lint && npm --prefix apps/docs-ui run check && npm --prefix apps/docs-ui run build",
+    "install:locked": "npm --prefix packages/docs-ui ci --ignore-scripts --no-audit --no-fund && npm --prefix apps/docs-ui ci --ignore-scripts --no-audit --no-fund",
+    "test": "npm --prefix packages/docs-ui test"
+  },
+  "engines": {
+    "node": ">=22.14.0"
+  }
+}
