@@ -39,7 +39,7 @@ async function verify() {
   assert.match(pageResponse.headers.get('content-security-policy') ?? '', /default-src 'none'/u);
   assert.match(
     pageResponse.headers.get('content-security-policy') ?? '',
-    /https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js/u,
+    /https:\/\/static\.cloudflareinsights\.com(?:\s|;)/u,
   );
   assert.notEqual(pageResponse.headers.get('x-robots-tag'), 'noindex, nofollow');
   assert.equal(pageResponse.headers.get('cross-origin-resource-policy'), 'same-origin');
