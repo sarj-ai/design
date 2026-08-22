@@ -68,6 +68,7 @@ jobs:
         with:
           name: npm-docs-ui
           path: ${{ runner.temp }}
+      - run: npm install --global npm@12.0.2 --ignore-scripts
       - name: Verify artifact digest
         env:
           EXPECTED_SHA256: ${{ needs.build.outputs.sha256 }}
