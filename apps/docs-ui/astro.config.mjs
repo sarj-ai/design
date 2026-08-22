@@ -24,7 +24,7 @@ export default defineConfig({
       scriptDirective: {
         resources: [
           { resource: "'self'", kind: 'element' },
-          { resource: 'https://static.cloudflareinsights.com/beacon.min.js', kind: 'element' },
+          { resource: 'https://static.cloudflareinsights.com', kind: 'element' },
         ],
       },
       styleDirective: { resources: [{ resource: "'unsafe-inline'", kind: 'attribute' }] },

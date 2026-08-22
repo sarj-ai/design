@@ -30,7 +30,7 @@ const exportsByComponent = Object.entries(componentCatalog);
       <div class="token-grid">
         {themeTokenCatalog.map((token) => (
           <article class="token-card">
-            <div class="token-swatches" aria-label={`${token.cssName} in light and dark themes`}>
+            <div class="token-swatches" role="img" aria-label={`${token.cssName} in light and dark themes`}>
               <span aria-hidden="true" style={`background:${token.light}`}></span>
               <span aria-hidden="true" style={`background:${token.dark}`}></span>
             </div>
