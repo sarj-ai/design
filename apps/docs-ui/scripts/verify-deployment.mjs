@@ -8,12 +8,20 @@ assert.ok(expectedCommit, 'EXPECTED_COMMIT is required');
 const base = new URL(process.env.DOCS_UI_BASE_URL ?? 'https://docs-ui.sarj.ai/');
 
 async function verify() {
-  const [healthResponse, contractResponse, pageResponse] = await Promise.all([
+  const [healthResponse, contractResponse, pageResponse, robotsResponse, faviconResponse] = await Promise.all([
     response(`health.json?commit=${encodeURIComponent(expectedCommit)}`),
     response('api/v1/docs-ui.json'),
     response(''),
+    response('robots.txt'),
+    response('favicon.svg'),
   ]);
-  for (const [name, candidate] of Object.entries({ healthResponse, contractResponse, pageResponse })) {
+  for (const [name, candidate] of Object.entries({
+    healthResponse,
+    contractResponse,
+    pageResponse,
+    robotsResponse,
+    faviconResponse,
+  })) {
     assert.ok(candidate.ok, `${name} returned ${String(candidate.status)}`);
   }
   const health = await healthResponse.json();
@@ -29,8 +37,15 @@ async function verify() {
   assert.doesNotMatch(page, /site-search|pagefind|type="search"/iu);
   assert.doesNotMatch(pageResponse.headers.get('content-security-policy') ?? '', /wasm-unsafe-eval/u);
   assert.match(pageResponse.headers.get('content-security-policy') ?? '', /default-src 'none'/u);
+  assert.match(
+    pageResponse.headers.get('content-security-policy') ?? '',
+    /https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js/u,
+  );
+  assert.notEqual(pageResponse.headers.get('x-robots-tag'), 'noindex, nofollow');
   assert.equal(pageResponse.headers.get('cross-origin-resource-policy'), 'same-origin');
   assert.equal(contractResponse.headers.get('access-control-allow-origin'), '*');
+  assert.match(await robotsResponse.text(), /^User-agent: \*\nAllow: \/$/mu);
+  assert.equal(faviconResponse.headers.get('content-type'), 'image/svg+xml');
   assert.equal((await response('pagefind/pagefind.js')).status, 404);
   assert.equal((await response(`definitely-not-a-page-${expectedCommit}/`)).status, 404);
 }

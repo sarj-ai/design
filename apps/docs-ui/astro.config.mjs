@@ -13,7 +13,7 @@ export default defineConfig({
     csp: {
       directives: [
         "base-uri 'self'",
-        "connect-src 'self'",
+        "connect-src 'self' https://cloudflareinsights.com",
         "default-src 'none'",
         "font-src 'self'",
         "frame-ancestors 'none'",
@@ -21,7 +21,12 @@ export default defineConfig({
         "img-src 'self' data:",
         "object-src 'none'",
       ],
-      scriptDirective: { resources: [{ resource: "'self'", kind: 'element' }] },
+      scriptDirective: {
+        resources: [
+          { resource: "'self'", kind: 'element' },
+          { resource: 'https://static.cloudflareinsights.com/beacon.min.js', kind: 'element' },
+        ],
+      },
       styleDirective: { resources: [{ resource: "'unsafe-inline'", kind: 'attribute' }] },
     },
   },
