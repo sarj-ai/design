@@ -1,9 +1,8 @@
 name: Deploy reference site
 
 on:
-  # Enabled only after the monorepo deploy writer is removed and the protected
-  # Cloudflare environment is configured. This prevents two repositories from
-  # racing to deploy the same Worker and custom domain during extraction.
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
