@@ -41,7 +41,7 @@ async function verify() {
     pageResponse.headers.get('content-security-policy') ?? '',
     /https:\/\/static\.cloudflareinsights\.com(?:\s|;)/u,
   );
-  assert.notEqual(pageResponse.headers.get('x-robots-tag'), 'noindex, nofollow');
+  assert.equal(pageResponse.headers.get('x-robots-tag'), 'all');
   assert.equal(pageResponse.headers.get('cross-origin-resource-policy'), 'same-origin');
   assert.equal(contractResponse.headers.get('access-control-allow-origin'), '*');
   assert.match(await robotsResponse.text(), /^User-agent: \*\nAllow: \/$/mu);
