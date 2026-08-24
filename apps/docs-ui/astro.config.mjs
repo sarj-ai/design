@@ -32,11 +32,21 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: '@sarj/docs-ui',
+      title: 'Sarj Documentation UI',
       description: 'Live components and tokens from the shared Sarj documentation UI package.',
+      favicon: '/favicon.svg',
+      logo: {
+        alt: 'Sarj',
+        dark: './public/sarj-logo-dark.png',
+        light: './public/sarj-logo-light.png',
+        replacesTitle: true,
+      },
       disable404Route: true,
       customCss: ['@sarj/docs-ui/starlight.css', './src/styles/global.css'],
-      sidebar: [],
+      sidebar: [
+        { label: 'About', link: '/' },
+        { label: 'Components', link: '/components/' },
+      ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/sarj-ai/docs-ui' }],
       pagefind: false,
       tableOfContents: false,

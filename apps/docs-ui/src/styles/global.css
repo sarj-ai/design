@@ -12,10 +12,14 @@ main {
   display: none;
 }
 
-.inspection-bench {
+.component-reference {
   display: grid;
   gap: 4rem;
   padding-block: clamp(1.5rem, 4vw, 4rem);
+}
+
+.docs-ui-about {
+  padding-top: 1.25rem;
 }
 
 .bench-header {
