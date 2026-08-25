@@ -49,12 +49,23 @@ for (const token of themeTokenCatalog) {
 }
 
 const starlightSource = readFileSync(join(packageRoot, 'src', 'styles', 'starlight.css'), 'utf8');
+const pageAnchorSource = readFileSync(join(packageRoot, 'src', 'components', 'PageAnchor.astro'), 'utf8');
 assert.match(starlightSource, /\.sarj-visually-hidden\s*\{/u);
 assert.match(starlightSource, /@container \(min-width: 52rem\)[\s\S]*grid-template-rows: subgrid/u);
 assert.match(
   starlightSource,
   /\.sarj-code-comparison__files > \.expressive-code:last-child > figure > pre/u,
 );
+assert.match(
+  starlightSource,
+  /\.content-panel:has\(> \.sl-container > \.reference-page-anchor:only-child\)\s*\{[^}]*padding-block: 0/u,
+);
+assert.doesNotMatch(
+  starlightSource,
+  /\.content-panel:has\([^)]*\.reference-page-anchor[^)]*\)\s*\{[^}]*display:\s*none/u,
+);
+assert.match(pageAnchorSource, /id="_top"/u);
+assert.match(pageAnchorSource, /tabindex="-1"/u);
 for (const declaration of [
   'position: absolute',
   'width: 1px',

@@ -8,10 +8,6 @@ main {
   min-width: 0;
 }
 
-.content-panel:has(> .reference-page-anchor:only-child) {
-  display: none;
-}
-
 .component-reference {
   display: grid;
   gap: 4rem;

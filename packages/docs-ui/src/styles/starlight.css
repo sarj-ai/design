@@ -40,8 +40,14 @@ body {
   width: 100%;
 }
 
-.content-panel:has(> .reference-page-anchor:only-child) {
-  display: none;
+.content-panel:has(> .sl-container > .reference-page-anchor:only-child) {
+  padding-block: 0;
+}
+
+.content-panel:has(> .sl-container > .reference-page-anchor:only-child) > .sl-container,
+.reference-page-anchor {
+  display: block;
+  block-size: 0;
 }
 
 .page > header.header {
