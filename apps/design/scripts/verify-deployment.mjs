@@ -5,11 +5,12 @@ import { URL } from 'node:url';
 
 const expectedCommit = process.env.EXPECTED_COMMIT;
 assert.ok(expectedCommit, 'EXPECTED_COMMIT is required');
-const base = new URL(process.env.DOCS_UI_BASE_URL ?? 'https://docs-ui.sarj.ai/');
+const base = new URL(process.env.DESIGN_BASE_URL ?? 'https://design.sarj.ai/');
 
 async function verify() {
-  const [healthResponse, contractResponse, pageResponse, componentsResponse, robotsResponse, faviconResponse] = await Promise.all([
+  const [healthResponse, contractResponse, legacyContractResponse, pageResponse, componentsResponse, robotsResponse, faviconResponse] = await Promise.all([
     response(`health.json?commit=${encodeURIComponent(expectedCommit)}`),
+    response('api/v1/design.json'),
     response('api/v1/docs-ui.json'),
     response(''),
     response('components/'),
@@ -19,6 +20,7 @@ async function verify() {
   for (const [name, candidate] of Object.entries({
     healthResponse,
     contractResponse,
+    legacyContractResponse,
     pageResponse,
     componentsResponse,
     robotsResponse,
@@ -28,11 +30,13 @@ async function verify() {
   }
   const health = await healthResponse.json();
   const contractText = await contractResponse.text();
+  const legacyContractText = await legacyContractResponse.text();
   const contract = JSON.parse(contractText);
   const page = await pageResponse.text();
   const componentsPage = await componentsResponse.text();
   assert.equal(health.commit, expectedCommit);
   assert.equal(createHash('sha256').update(contractText).digest('hex'), health.contractSha256);
+  assert.equal(legacyContractText, contractText, 'deprecated API alias must be byte-identical');
   assert.deepEqual(Object.keys(contract.components).sort(), ['Breadcrumbs', 'CodeComparison', 'PageAnchor', 'ReferencePage', 'RulePager']);
   assert.equal(contract.themeTokens.length, 6);
   for (const name of Object.keys(contract.components)) assert.match(componentsPage, new RegExp(`id="${name.toLowerCase()}"`, 'u'));
@@ -52,6 +56,7 @@ async function verify() {
   assert.equal(componentsResponse.headers.get('x-robots-tag'), 'all');
   assert.equal(pageResponse.headers.get('cross-origin-resource-policy'), 'same-origin');
   assert.equal(contractResponse.headers.get('access-control-allow-origin'), '*');
+  assert.equal(legacyContractResponse.headers.get('access-control-allow-origin'), '*');
   assert.match(await robotsResponse.text(), /^User-agent: \*\nAllow: \/$/mu);
   assert.equal(faviconResponse.headers.get('content-type'), 'image/svg+xml');
   assert.equal((await response('pagefind/pagefind.js')).status, 404);
@@ -66,7 +71,7 @@ let lastError;
 for (let attempt = 1; attempt <= 20; attempt += 1) {
   try {
     await verify();
-    process.stdout.write(`verified deployed documentation UI at ${expectedCommit}\n`);
+    process.stdout.write(`verified deployed Sarj Design at ${expectedCommit}\n`);
     lastError = undefined;
     break;
   } catch (error) {

@@ -4,9 +4,9 @@
   "private": true,
   "packageManager": "npm@12.0.2",
   "scripts": {
-    "build": "npm --prefix apps/docs-ui run build",
-    "check": "npm --prefix packages/design test && npm --prefix apps/docs-ui run lint && npm --prefix apps/docs-ui run check && npm --prefix apps/docs-ui run build",
-    "install:locked": "npm --prefix packages/design ci --ignore-scripts --no-audit --no-fund && npm --prefix apps/docs-ui ci --ignore-scripts --no-audit --no-fund",
+    "build": "npm --prefix apps/design run build",
+    "check": "npm --prefix packages/design test && npm --prefix apps/design run lint && npm --prefix apps/design run check && npm --prefix apps/design run build",
+    "install:locked": "npm --prefix packages/design ci --ignore-scripts --no-audit --no-fund && npm --prefix apps/design ci --ignore-scripts --no-audit --no-fund",
     "test": "npm --prefix packages/design test"
   },
   "engines": {

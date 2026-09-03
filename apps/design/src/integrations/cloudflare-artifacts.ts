@@ -4,7 +4,7 @@ import type { AstroIntegration } from 'astro';
 
 export default function cloudflareArtifacts(): AstroIntegration {
   return {
-    name: 'sarj-docs-ui-cloudflare-artifacts',
+    name: 'sarj-design-cloudflare-artifacts',
     hooks: {
       'astro:build:done': async ({ dir }) => {
         const htmlPaths = (await readdir(dir, { recursive: true })).filter((path) => path.endsWith('.html')).sort();

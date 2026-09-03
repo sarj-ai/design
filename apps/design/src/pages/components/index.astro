@@ -1,9 +1,9 @@
 ---
-import Breadcrumbs from '@sarj/docs-ui/Breadcrumbs.astro';
-import CodeComparison from '@sarj/docs-ui/CodeComparison.astro';
-import ReferencePage from '@sarj/docs-ui/ReferencePage.astro';
-import RulePager from '@sarj/docs-ui/RulePager.astro';
-import { componentCatalog, themeTokenCatalog } from '@sarj/docs-ui/catalog';
+import Breadcrumbs from '@sarj/design/Breadcrumbs.astro';
+import CodeComparison from '@sarj/design/CodeComparison.astro';
+import ReferencePage from '@sarj/design/ReferencePage.astro';
+import RulePager from '@sarj/design/RulePager.astro';
+import { componentCatalog, themeTokenCatalog } from '@sarj/design/catalog';
 import { SIDEBAR } from '../../lib/navigation';
 
 const exportsByComponent = Object.entries(componentCatalog);
@@ -11,7 +11,7 @@ const exportsByComponent = Object.entries(componentCatalog);
 
 <ReferencePage
   title="Components"
-  description="Live components and design tokens from @sarj/docs-ui."
+  description="Live components and color scheme tokens from @sarj/design."
   sidebar={SIDEBAR}
 >
   <article class="component-reference">

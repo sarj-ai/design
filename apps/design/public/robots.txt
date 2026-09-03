@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://design.sarj.ai/sitemap-index.xml

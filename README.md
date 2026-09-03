@@ -14,7 +14,7 @@ npm run check
 ```
 
 The publishable package lives in `packages/design`. The private reference site
-lives in `apps/docs-ui` and consumes the latest released package exactly as an
+lives in `apps/design` and consumes the latest released package exactly as an
 external consumer does.
 
 ## Releases

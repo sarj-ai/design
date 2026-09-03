@@ -8,7 +8,7 @@ updates:
       package-dependencies:
         patterns: ["*"]
   - package-ecosystem: npm
-    directory: /apps/docs-ui
+    directory: /apps/design
     schedule:
       interval: weekly
     groups:
