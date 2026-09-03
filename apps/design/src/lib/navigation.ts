@@ -1,4 +1,4 @@
-import type { ReferenceSidebar } from '@sarj/docs-ui/contracts';
+import type { ReferenceSidebar } from '@sarj/design/contracts';
 
 export const SIDEBAR = [
   { label: 'About', link: '/' },

@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "sarj-docs-ui-site",
-  "compatibility_date": "2026-08-20",
+  "name": "sarj-design-site",
+  "compatibility_date": "2026-09-03",
   "workers_dev": false,
   "preview_urls": false,
   "assets": {
@@ -11,7 +11,7 @@
   },
   "routes": [
     {
-      "pattern": "docs-ui.sarj.ai",
+      "pattern": "design.sarj.ai",
       "custom_domain": true
     }
   ]

@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 import cloudflareArtifacts from './src/integrations/cloudflare-artifacts.ts';
 
 export default defineConfig({
-  site: 'https://docs-ui.sarj.ai',
+  site: 'https://design.sarj.ai',
   output: 'static',
   trailingSlash: 'always',
   compressHTML: true,
@@ -32,8 +32,8 @@ export default defineConfig({
   },
   integrations: [
     starlight({
-      title: 'Sarj Documentation UI',
-      description: 'Live components and tokens from the shared Sarj documentation UI package.',
+      title: 'Sarj Design',
+      description: 'Public component and color scheme library for Sarj.',
       favicon: '/favicon.svg',
       logo: {
         alt: 'Sarj',
@@ -42,17 +42,17 @@ export default defineConfig({
         replacesTitle: true,
       },
       disable404Route: true,
-      customCss: ['@sarj/docs-ui/starlight.css', './src/styles/global.css'],
+      customCss: ['@sarj/design/starlight.css', './src/styles/global.css'],
       sidebar: [
         { label: 'About', link: '/' },
         { label: 'Components', link: '/components/' },
       ],
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/sarj-ai/docs-ui' }],
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/sarj-ai/design' }],
       pagefind: false,
       tableOfContents: false,
       credits: false,
       components: {
-        PageTitle: '@sarj/docs-ui/PageAnchor.astro',
+        PageTitle: '@sarj/design/PageAnchor.astro',
         Search: './src/components/NoSearch.astro',
       },
     }),
