@@ -81,9 +81,7 @@ jobs:
           EXPECTED_SHA256: ${{ needs.build.outputs.sha256 }}
         run: |
           version="${GITHUB_REF_NAME#design-v}"
-          if registry_url="$(npm view "@sarj/design@$version" dist.tarball --json 2>/dev/null)"; then
-            registry_url="${registry_url#\"}"
-            registry_url="${registry_url%\"}"
+          if registry_url="$(npm view "@sarj/design@$version" dist.tarball 2>/dev/null)"; then
             curl --fail --silent --show-error --location "$registry_url" --output "$RUNNER_TEMP/registry-package.tgz"
             echo "$EXPECTED_SHA256  $RUNNER_TEMP/registry-package.tgz" | sha256sum --check --strict
           else
