@@ -1,0 +1,23 @@
+{
+  "fingerprints": {
+    "behavioral-alerts": "19511c5caa7db9fe",
+    "call-retry": "5feead7c96268636",
+    "call-turn-timing": "1ec5e5264614bd22",
+    "configure-report": "1f40f28a5218b29c",
+    "connected-apps": "ea14f7f6b7169efa",
+    "conversations-revamp": "e67c229f6e8b0e4c",
+    "eou-timing": "d25848a413d83eb9",
+    "knowledge-base": "a9243fd9410537d3",
+    "listener-cues": "de2628c1e9ed10bf",
+    "model-catalog": "c3cd047946597bbd",
+    "personas-depth": "275ee3851a00fcc6",
+    "phone-numbers": "00872846800bae9d",
+    "phrase-mappings": "e801382f25287496",
+    "roles-permissions": "748419ba109f8369",
+    "scenario-single-screen": "57c6fa940a74584d",
+    "telephony": "163f3575dfb2956a",
+    "transfer-routing": "b52469be34aed7f5"
+  },
+  "height": 533,
+  "width": 1280
+}

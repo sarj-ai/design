@@ -1,0 +1,2224 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "design-lab",
+  "homepage": "https://mock-up-repo.vercel.app",
+  "items": [
+    {
+      "name": "transfer-routing",
+      "type": "registry:block",
+      "title": "Design multiple routing options for Transfer tool",
+      "description": "The Transfer tool configured with more than one destination: a card per route with its own cases, number and keypad key, an overlap warning when two routes read alike, and the shared settings each route can override.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "badge",
+        "button",
+        "card",
+        "collapsible",
+        "drawer",
+        "field",
+        "input",
+        "input-group",
+        "select",
+        "separator",
+        "switch",
+        "textarea",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/transfer-routing/page.tsx",
+          "type": "registry:page",
+          "target": "app/transfer-routing/page.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/transfer-routing/case-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/transfer-routing/case-field.tsx"
+        },
+        {
+          "path": "src/components/transfer-routing/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/transfer-routing/icons.tsx"
+        },
+        {
+          "path": "src/components/transfer-routing/route-card.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/transfer-routing/route-card.tsx"
+        },
+        {
+          "path": "src/components/transfer-routing/shared-settings.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/transfer-routing/shared-settings.tsx"
+        },
+        {
+          "path": "src/components/transfer-routing/transfer-tool-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/transfer-routing/transfer-tool-drawer.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/transfer-routing-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/transfer-routing-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "warning-foreground": "oklch(0.28 0.07 55)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "knowledge-base",
+      "type": "registry:block",
+      "title": "Knowledge base — files, text and URLs",
+      "description": "The knowledge base as a resource the agent queries rather than prompt text: documents added from files, a pasted note or a URL, each carrying its extraction state, and the summary that tells the agent when to reach for it.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "dialog",
+        "dropdown-menu",
+        "field",
+        "input",
+        "input-group",
+        "separator",
+        "sidebar",
+        "table",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/knowledge-base/page.tsx",
+          "type": "registry:page",
+          "target": "app/knowledge-base/page.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/knowledge-base/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/knowledge-base/app-shell.tsx"
+        },
+        {
+          "path": "src/components/knowledge-base/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/knowledge-base/icons.tsx"
+        },
+        {
+          "path": "src/components/knowledge-base/knowledge-base-index.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/knowledge-base/knowledge-base-index.tsx"
+        },
+        {
+          "path": "src/components/knowledge-base/new-knowledge-base-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/knowledge-base/new-knowledge-base-dialog.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/knowledge-base-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/knowledge-base-data.ts"
+        }
+      ],
+      "css": {
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-raised": "10",
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "call-turn-timing",
+      "type": "registry:block",
+      "title": "Turn timing on the call detail",
+      "description": "The turn detection panel on a call's Model Settings tab: which detection path actually ran, the minimum and maximum wait that applied and where each came from, and how many turns reached the maximum — including the first one.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "empty",
+        "item",
+        "select",
+        "separator",
+        "sidebar",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/call-turn-timing/page.tsx",
+          "type": "registry:page",
+          "target": "app/call-turn-timing/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/call-turn-timing/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-turn-timing/icons.tsx"
+        },
+        {
+          "path": "src/components/call-turn-timing/model-settings-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-turn-timing/model-settings-tab.tsx"
+        },
+        {
+          "path": "src/components/call-turn-timing/turn-detection-section.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-turn-timing/turn-detection-section.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/call-turn-timing-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/call-turn-timing-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-warning-foreground": "var(--warning-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "warning-foreground": "oklch(0.28 0.07 55)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "conversations-revamp",
+      "type": "registry:block",
+      "title": "Conversations with the revamped call drawer",
+      "description": "The Conversations page as it ships today — app shell, filter bar, result count, table and pagination — with the revamped call drawer (revamp 4) opening from its rows: one transcript with the STT mishearings marked in place, search, a resizable split, and a section panel the reader can reorder.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "react-resizable-panels",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input-group",
+        "item",
+        "label",
+        "popover",
+        "resizable",
+        "select",
+        "separator",
+        "sheet",
+        "sidebar",
+        "switch",
+        "table",
+        "textarea",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/conversations-revamp/page.tsx",
+          "type": "registry:page",
+          "target": "app/conversations-revamp/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/call-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/call-shell.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/cancel-call-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/cancel-call-dialog.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/completed-schedule-summary.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/completed-schedule-summary.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/fourth-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/fourth-drawer.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/icons.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/linked-call.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/linked-call.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/pre-call-panel.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/pre-call-panel.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/recording-player.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/recording-player.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/section-register.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/section-register.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/drawer/transcript-views.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/drawer/transcript-views.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/call-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/call-table.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/conversations-page.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/conversations-page.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/fields-dropdown.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/fields-dropdown.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/icons.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/search-filters.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/search-filters.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-badges.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-badges.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-filter.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-filter.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-help.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/conversations-revamp-drawer-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/conversations-revamp-drawer-data.ts"
+        },
+        {
+          "path": "src/lib/conversations-revamp-list-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/conversations-revamp-list-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
+          "color-chart-6": "var(--chart-6)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--chart-6": "oklch(0.66 0.18 300)",
+          "--z-sticky": "20",
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "personas-depth",
+      "type": "registry:block",
+      "title": "Personas index depth design",
+      "description": "Depth pass on the personas surface: index with search, filters and grouping, restructured create/edit, voice library with previews, and scenario assignment.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "motion",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "card",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "scroll-area",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "switch",
+        "table",
+        "tabs",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/personas-depth/page.tsx",
+          "type": "registry:page",
+          "target": "app/personas-depth/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/icons.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/persona-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/persona-dialog.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/persona-wizard.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/persona-wizard.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/personas-index.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/personas-index.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/scenario-assignment-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/scenario-assignment-dialog.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/voice-library.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/voice-library.tsx"
+        },
+        {
+          "path": "src/components/personas-depth/voice-picker.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/personas-depth/voice-picker.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/personas-depth-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/personas-depth-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "listener-cues",
+      "type": "registry:block",
+      "title": "Design backchanneling without mid-conversation interruption",
+      "description": "Mid-turn listener cues configured beside the existing post-turn filler words: a weighted cue mix that always totals 100%, an exact response-frequency slider with the recommended range marked, timing limits, per-language approved clips, and the inherit-then-override lifecycle across global settings and one persona.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "drawer",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "item",
+        "select",
+        "separator",
+        "sidebar",
+        "slider",
+        "switch",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/listener-cues/page.tsx",
+          "type": "registry:page",
+          "target": "app/listener-cues/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/listener-cues/backchannel-settings.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/listener-cues/backchannel-settings.tsx"
+        },
+        {
+          "path": "src/components/listener-cues/cue-row.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/listener-cues/cue-row.tsx"
+        },
+        {
+          "path": "src/components/listener-cues/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/listener-cues/icons.tsx"
+        },
+        {
+          "path": "src/components/listener-cues/listener-cues-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/listener-cues/listener-cues-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/listener-cues-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/listener-cues-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "phrase-mappings",
+      "type": "registry:block",
+      "title": "Design persona-specific backchannel phrase-response mappings",
+      "description": "Phrase-response mappings inside the existing Filler words drawer: several caller phrases map to one deterministic acknowledgment, kept exactly as typed so the voice pronounces it right. Priority ordering, whole-utterance or within-utterance matching, conflict validation, and a persona override that replaces the global set.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "card",
+        "collapsible",
+        "drawer",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "separator",
+        "sidebar",
+        "slider",
+        "spinner",
+        "switch",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/phrase-mappings/page.tsx",
+          "type": "registry:page",
+          "target": "app/phrase-mappings/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/backchannel-settings.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/backchannel-settings.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/filler-words-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/filler-words-drawer.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/generic-filler-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/generic-filler-field.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/icons.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/mapping-row.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/mapping-row.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/response-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/response-field.tsx"
+        },
+        {
+          "path": "src/components/phrase-mappings/trigger-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phrase-mappings/trigger-field.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/phrase-mappings-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/phrase-mappings-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "model-catalog",
+      "type": "registry:block",
+      "title": "Design model onboarding flows for platform admins",
+      "description": "The model catalog Sarj staff use to add a model without an engineer: a table per modality, a two-path add flow that fetches a provider's live model list where one exists and falls back to a manual ID plus connection test where it does not, and deactivate-reactivate that never breaks an org already configured to a model.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "dialog",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "spinner",
+        "table",
+        "tabs",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/model-catalog/page.tsx",
+          "type": "registry:page",
+          "target": "app/model-catalog/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/model-catalog/add-model-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/model-catalog/add-model-dialog.tsx"
+        },
+        {
+          "path": "src/components/model-catalog/catalog-page.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/model-catalog/catalog-page.tsx"
+        },
+        {
+          "path": "src/components/model-catalog/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/model-catalog/icons.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/model-catalog-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/model-catalog-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "eou-timing",
+      "type": "registry:block",
+      "title": "Design EOU configuration updates independent from backchanneling",
+      "description": "Minimum and maximum wait as configurable values: the global default shown beside the detection model that uses them, and the persona that inherits until it overrides. Bounded ranges, plain-language help and the out-of-band warning, scoped to the PRD's requirements.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "motion",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "field",
+        "input-group",
+        "label",
+        "select",
+        "separator",
+        "sidebar",
+        "switch",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/eou-timing/page.tsx",
+          "type": "registry:page",
+          "target": "app/eou-timing/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/eou-timing/global-turn-detection.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/eou-timing/global-turn-detection.tsx"
+        },
+        {
+          "path": "src/components/eou-timing/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/eou-timing/icons.tsx"
+        },
+        {
+          "path": "src/components/eou-timing/persona-turn-timing.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/eou-timing/persona-turn-timing.tsx"
+        },
+        {
+          "path": "src/components/eou-timing/wait-window.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/eou-timing/wait-window.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/eou-timing-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/eou-timing-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "scenario-single-screen",
+      "type": "registry:block",
+      "title": "Scenario editor on one screen",
+      "description": "The scenario editor with no tabs: the prompt and first message as the page, every other setting a one-line summary in a rail that opens a drawer to edit.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "drawer",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "label",
+        "radio-group",
+        "scroll-area",
+        "select",
+        "separator",
+        "sheet",
+        "sidebar",
+        "switch",
+        "table",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/scenario-single-screen/page.tsx",
+          "type": "registry:page",
+          "target": "app/scenario-single-screen/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/config-drawers.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/config-drawers.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/icons.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/review-drawers.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/review-drawers.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/scenario-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/scenario-editor.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/setting-rail.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/setting-rail.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/setting-sheet.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/setting-sheet.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/config-drawers.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/config-drawers.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/icons.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/prompt-builder.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/prompt-builder.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/raw-prompt-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/raw-prompt-drawer.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/review-drawers.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/review-drawers.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/scenario-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/scenario-editor.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/setting-rail.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/setting-rail.tsx"
+        },
+        {
+          "path": "src/components/scenario-single-screen/v2/setting-sheet.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/scenario-single-screen/v2/setting-sheet.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/scenario-single-screen-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/scenario-single-screen-data.ts"
+        },
+        {
+          "path": "src/lib/scenario-single-screen-v2-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/scenario-single-screen-v2-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+        }
+      },
+      "css": {
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-sticky": "20",
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "connected-apps",
+      "type": "registry:block",
+      "title": "Design custom integrations access token management flows",
+      "description": "An organization's own custom integrations as connected apps, and the access tokens each one authenticates with: scoped presets over the real permission enum, an expiry, and the one-time secret reveal that is the only moment the token can be copied.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "radio-group",
+        "scroll-area",
+        "select",
+        "separator",
+        "sidebar",
+        "spinner",
+        "table",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/connected-apps/page.tsx",
+          "type": "registry:page",
+          "target": "app/connected-apps/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/app-detail.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/app-detail.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/apps-overview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/apps-overview.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/create-app-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/create-app-dialog.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/create-token-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/create-token-dialog.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/icons.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/scope-picker.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/scope-picker.tsx"
+        },
+        {
+          "path": "src/components/connected-apps/token-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/connected-apps/token-table.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/connected-apps-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/connected-apps-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "configure-report",
+      "type": "registry:block",
+      "title": "Configure Report before generating it",
+      "description": "The approved Configure Report dialog: a template picker with save and set-as-default, and three groups of export columns as reorderable chips — each group's Add opening a searchable checkbox list with Select all, so a group is filled in one pass instead of one column per reopen.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "button-group",
+        "checkbox",
+        "command",
+        "dialog",
+        "label",
+        "popover",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "src/components/configure-report/column-chips.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/configure-report/column-chips.tsx"
+        },
+        {
+          "path": "src/components/configure-report/column-picker.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/configure-report/column-picker.tsx"
+        },
+        {
+          "path": "src/components/configure-report/configure-report-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/configure-report/configure-report-dialog.tsx"
+        },
+        {
+          "path": "src/components/configure-report/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/configure-report/icons.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/lib/configure-report-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/configure-report-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "roles-permissions",
+      "type": "registry:block",
+      "title": "Design view-only role and permissions updates",
+      "description": "The three roles redefined as distinct permission bundles over the platform's real 39-scope taxonomy: a matrix a Sarj super admin edits in place, with what each change costs before it applies.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "field",
+        "input",
+        "radio-group",
+        "scroll-area",
+        "separator",
+        "sidebar",
+        "table",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/roles-permissions/page.tsx",
+          "type": "registry:page",
+          "target": "app/roles-permissions/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/roles-permissions/create-role-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/roles-permissions/create-role-dialog.tsx"
+        },
+        {
+          "path": "src/components/roles-permissions/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/roles-permissions/icons.tsx"
+        },
+        {
+          "path": "src/components/roles-permissions/roles-matrix.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/roles-permissions/roles-matrix.tsx"
+        },
+        {
+          "path": "src/components/roles-permissions/save-changes-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/roles-permissions/save-changes-dialog.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/roles-permissions-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/roles-permissions-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-sticky": "20",
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "behavioral-alerts",
+      "type": "registry:block",
+      "title": "Configure call flags and surface them after every call",
+      "description": "Behavioural and emotional flags an admin defines per scenario, and the post-call analyst's detections beside a caller-experience card on the call detail.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "react-resizable-panels",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "label",
+        "popover",
+        "resizable",
+        "select",
+        "separator",
+        "sheet",
+        "sidebar",
+        "spinner",
+        "switch",
+        "table",
+        "tabs",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/behavioral-alerts/page.tsx",
+          "type": "registry:page",
+          "target": "app/behavioral-alerts/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/alert-detections.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/alert-detections.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/alert-form-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/alert-form-dialog.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/call-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/call-drawer.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/icons.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/recording-player.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/recording-player.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/scenario-alerts-section.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/scenario-alerts-section.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/section-register.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/section-register.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/seekable.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/seekable.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/severity.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/severity.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/transcript-panel.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/transcript-panel.tsx"
+        },
+        {
+          "path": "src/components/behavioral-alerts/user-experience.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/behavioral-alerts/user-experience.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/call-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/call-table.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/fields-dropdown.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/fields-dropdown.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/icons.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/search-filters.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/search-filters.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-badges.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-badges.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-filter.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-filter.tsx"
+        },
+        {
+          "path": "src/components/conversations-revamp/list/status-help.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/behavioral-alerts-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/behavioral-alerts-data.ts"
+        },
+        {
+          "path": "src/lib/conversations-revamp-list-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/conversations-revamp-list-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-sticky": "20",
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "call-retry",
+      "type": "registry:block",
+      "title": "Design retry mechanism across the platform",
+      "description": "One retry configuration owned by the scenario — how many attempts a call gets, how long between them, and the retry window with its timezone — plus the batch-calls override that inherits every value until it is switched on.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "label",
+        "select",
+        "separator",
+        "sidebar",
+        "switch",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/call-retry/page.tsx",
+          "type": "registry:page",
+          "target": "app/call-retry/page.tsx"
+        },
+        {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/call-retry/batch-retry.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/batch-retry.tsx"
+        },
+        {
+          "path": "src/components/call-retry/retry-settings-card.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/retry-settings-card.tsx"
+        },
+        {
+          "path": "src/components/call-retry/save-confirm-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/save-confirm-dialog.tsx"
+        },
+        {
+          "path": "src/components/call-retry/scenario-retry.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/scenario-retry.tsx"
+        },
+        {
+          "path": "src/components/call-retry/time-of-day-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/time-of-day-field.tsx"
+        },
+        {
+          "path": "src/components/call-retry/wait-duration-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/call-retry/wait-duration-field.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/call-retry-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/call-retry-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    },
+    {
+      "name": "phone-numbers",
+      "type": "registry:block",
+      "title": "Self serve telephony — the phone numbers index",
+      "description": "The phone numbers admin index and its three tabs — call activity, outbound trunk assignments and provisioned numbers — with every table on the platform-consistency pattern the revamp only reached one of them with.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "@vercel/toolbar",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "empty",
+        "input-group",
+        "label",
+        "select",
+        "separator",
+        "table",
+        "tabs",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/phone-numbers/page.tsx",
+          "type": "registry:page",
+          "target": "app/phone-numbers/page.tsx"
+        },
+        {
+          "path": "src/components/comment-toggle.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/comment-toggle.tsx"
+        },
+        {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/phone-numbers/call-activity-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phone-numbers/call-activity-tab.tsx"
+        },
+        {
+          "path": "src/components/phone-numbers/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phone-numbers/icons.tsx"
+        },
+        {
+          "path": "src/components/phone-numbers/outbound-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phone-numbers/outbound-tab.tsx"
+        },
+        {
+          "path": "src/components/phone-numbers/provisioned-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/phone-numbers/provisioned-tab.tsx"
+        },
+        {
+          "path": "src/components/staff-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/staff-toolbar.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/phone-numbers-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/phone-numbers-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
+    }
+  ]
+}

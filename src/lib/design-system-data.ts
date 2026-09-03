@@ -1,0 +1,532 @@
+/**
+ * The design system, written down.
+ *
+ * Content only. It lives here rather than inside the page because the rules
+ * are a list that gets edited, and a list that gets edited should not be
+ * tangled up in the markup that renders it.
+ */
+
+/** A named rule and the one line that says what it means. */
+export type Rule = {
+  label: string
+  detail: string
+}
+
+/**
+ * One of the seven non-negotiables. The `id` picks the worked example that runs
+ * underneath it in `RuleDemo` — the rule and its example are one thing, so they
+ * are keyed together rather than left to line up by position.
+ */
+export type GlobalRule = Rule & {
+  id:
+    | "icons"
+    | "shadows"
+    | "typography"
+    | "spacing"
+    | "radius"
+    | "accessibility"
+    | "scrollbars"
+}
+
+/**
+ * The non-negotiables. Seven rules, no exceptions, and none of them is a
+ * judgement call — which is why they are the first thing on the page.
+ */
+export const GLOBAL_RULES: GlobalRule[] = [
+  {
+    id: "icons",
+    label: "Icons",
+    detail: "Only HugeIcons, at one size and one style across the product.",
+  },
+  {
+    id: "shadows",
+    label: "Shadows",
+    detail: "One shared set, for elevation or separation. Never decorative.",
+  },
+  {
+    id: "typography",
+    label: "Typography",
+    detail: "One scale of sizes, weights, line heights and heading styles.",
+  },
+  {
+    id: "spacing",
+    label: "Spacing",
+    detail: "One scale, and the same rhythm everywhere.",
+  },
+  { id: "radius", label: "Radius", detail: "A small fixed set of tokens." },
+  {
+    id: "scrollbars",
+    label: "Scrollbars",
+    detail:
+      "One width and one token, native or ScrollArea. Never an arrow, never a track.",
+  },
+  {
+    id: "accessibility",
+    label: "Accessibility",
+    detail:
+      "Keyboard, visible focus, contrast and labels — part of the pattern, not a later pass.",
+  },
+]
+
+/** One of the three places a piece of configuration can live. */
+export type SurfaceChoice = {
+  id: "inline" | "drawer" | "modal"
+  title: string
+  /** The answer to "do I still need the page behind this?" */
+  criterion: string
+  examples: string
+}
+
+/**
+ * The decision the rest of the system hangs off. It is one question, and the
+ * amount of content never answers it — a drawer can hold two fields and a
+ * modal can hold twenty.
+ */
+export const SURFACE_CHOICES: SurfaceChoice[] = [
+  {
+    id: "inline",
+    title: "Inline",
+    criterion: "You are configuring the thing the page is already about.",
+    examples:
+      "Agent model, agent instructions, voice selection, project settings.",
+  },
+  {
+    id: "drawer",
+    title: "Drawer",
+    criterion: "You still need the page behind it.",
+    examples: "Agent page → Tools → configure one tool.",
+  },
+  {
+    id: "modal",
+    title: "Modal",
+    criterion: "You do not need the page behind it.",
+    examples: "Delete agent, create voice, import voice, create API key.",
+  },
+]
+
+/**
+ * Content for the three surface demos, and nothing beyond what they render.
+ *
+ * The demos configure a voice because that is the one object in the product
+ * that legitimately gets all three surfaces: picking one is inline, tuning one
+ * is a drawer, and making one is a modal.
+ */
+export const DEMO_VOICES = [
+  { id: "layla-gulf", label: "Layla — Gulf Arabic" },
+  { id: "omar-msa", label: "Omar — Modern Standard" },
+  { id: "sara-egyptian", label: "Sara — Egyptian" },
+]
+
+export const DEMO_RECORDINGS = [
+  { id: "CL-8840", label: "CL-8840 — Al Bilad Bank, 10:11" },
+  { id: "CL-8842", label: "CL-8842 — Rawabi Holding, 3:44" },
+]
+
+/** The anatomy of the index page, named part by part. */
+export const INDEX_PAGE_PARTS: Rule[] = [
+  { label: "Header", detail: "Title, optional description, primary action." },
+  {
+    label: "Controls",
+    detail: "Search, filters, sort — only the ones this collection needs.",
+  },
+  { label: "Content", detail: "Table, list, grid or cards." },
+  {
+    label: "Actions",
+    detail: "Per row, overflow, destructive, and bulk once selection exists.",
+  },
+  { label: "States", detail: "Loading, empty, no results, error, populated." },
+]
+
+/* ---------------------------------------------------------------------------
+ * The list table, moved here when /tables was folded into this page. It is the
+ * index page's content, and the colour key for the chips those rows render.
+ * ------------------------------------------------------------------------ */
+
+export type CallRow = {
+  id: string
+  customer: string
+  status: "completed" | "failed" | "in_progress" | "scheduled"
+  /** Rides inside the status chip, dimmed, rather than in a column of its own. */
+  cause: null | string
+  direction: "inbound" | "outbound"
+  scenario: string
+  /** ISO 639-1 codes, uppercased by the chip. One chip each. */
+  languages: string[]
+  /** Seconds. Formatted at the call site so the column stays sortable. */
+  duration: null | number
+  cost: null | number
+  started: string
+}
+
+export const CALL_ROWS: CallRow[] = [
+  {
+    id: "CL-8842",
+    customer: "Rawabi Holding",
+    status: "completed",
+    cause: null,
+    direction: "inbound",
+    scenario: "Appointment booking",
+    languages: ["AR"],
+    duration: 224,
+    cost: 0.41,
+    started: "12 Aug, 09:14",
+  },
+  {
+    id: "CL-8841",
+    customer: "Nadec Foods",
+    status: "failed",
+    cause: "not answered",
+    direction: "outbound",
+    scenario: "Payment reminder",
+    languages: ["AR"],
+    duration: null,
+    cost: null,
+    started: "12 Aug, 09:02",
+  },
+  {
+    id: "CL-8840",
+    customer: "Al Bilad Bank",
+    status: "completed",
+    cause: "transferred",
+    direction: "inbound",
+    scenario: "Card dispute intake",
+    languages: ["AR", "EN"],
+    duration: 611,
+    cost: 1.12,
+    started: "12 Aug, 08:47",
+  },
+  {
+    id: "CL-8839",
+    customer: "Tamimi Markets",
+    status: "in_progress",
+    cause: null,
+    direction: "outbound",
+    scenario: "Delivery confirmation",
+    languages: ["AR", "UR"],
+    duration: 38,
+    cost: null,
+    started: "12 Aug, 08:41",
+  },
+  {
+    id: "CL-8838",
+    customer: "Solutions by STC",
+    status: "scheduled",
+    cause: "customer asked",
+    direction: "outbound",
+    scenario: "Renewal follow-up",
+    languages: ["AR"],
+    duration: null,
+    cost: null,
+    started: "13 Aug, 10:00",
+  },
+  {
+    id: "CL-8837",
+    customer: "Jarir Bookstore",
+    status: "completed",
+    cause: null,
+    direction: "inbound",
+    scenario: "Order status",
+    languages: ["EN"],
+    duration: 96,
+    cost: 0.18,
+    started: "12 Aug, 08:22",
+  },
+]
+
+/**
+ * Every chip the table renders, and why it is the colour it is.
+ *
+ * The intent tokens in globals.css settle what each tint means across the app;
+ * this list is the layer under that — which of the four states gets which
+ * verdict, and which chips are deliberately not verdicts at all. Both halves
+ * matter: a reader who cannot see why `scheduled` is purple will pick amber for
+ * it on the next screen.
+ */
+export type ChipNote = {
+  label: string
+  tone: string
+  /** Mapped to a component at the call site so the data file stays data. */
+  icon: "completed" | "failed" | "inbound" | "running" | "scheduled" | null
+  token: string
+  why: string
+}
+
+export const CHIP_NOTES: ChipNote[] = [
+  {
+    label: "Completed",
+    tone: "bg-success-tint text-success-tint-foreground",
+    icon: "completed",
+    token: "success-tint",
+    why: "Nothing is left to do, so the reader can skip the row. The cause rides inside the chip, dimmed.",
+  },
+  {
+    label: "Failed",
+    tone: "bg-destructive-tint text-destructive-tint-foreground",
+    icon: "failed",
+    token: "destructive-tint",
+    why: "The row is the failure, and the only tone that should pull the eye down the column.",
+  },
+  {
+    label: "In progress",
+    tone: "bg-warning-tint text-warning-tint-foreground",
+    icon: "running",
+    token: "warning-tint",
+    why: "Unsettled, not wrong — the same reason the cost beside it is still a dash.",
+  },
+  {
+    label: "Scheduled",
+    tone: "bg-primary-tint text-primary-tint-foreground",
+    icon: "scheduled",
+    token: "primary-tint",
+    why: "Deliberate, and not yet the platform's turn. Warning would read as running late.",
+  },
+  {
+    label: "inbound",
+    tone: "bg-muted text-muted-foreground",
+    icon: "inbound",
+    token: "muted",
+    why: "Direction is a category, not a verdict. The arrow separates the two, so colour does not have to.",
+  },
+  {
+    label: "Order status",
+    tone: "bg-muted text-muted-foreground",
+    icon: null,
+    token: "muted",
+    why: "Same reason, and no icon — scenario names are per workspace, so no glyph fits them all.",
+  },
+]
+
+/**
+ * What goes in a cell that has nothing in it.
+ *
+ * The rule the list is answering: **one reason, one rendering, across the whole
+ * table.** A dash in one column and a word in the next, for the same reason, is
+ * two conventions doing one job — and the approval checklist gates on exactly
+ * that ("one empty-value convention").
+ */
+export type EmptyValueNote = {
+  /** Rendered as it appears in the cell. */
+  sample: string
+  /** The condition, or "Never" for the one that is here as a warning. */
+  when: string
+  why: string
+}
+
+export const EMPTY_VALUES: EmptyValueNote[] = [
+  {
+    sample: "—",
+    when: "The value cannot exist for this row",
+    why: "Nothing is missing, so nothing is said. A dash also end-aligns with the numbers above it.",
+  },
+  {
+    sample: "Not set",
+    when: "It could exist, and nobody has filled it in",
+    why: "Worth a word, because the reader can go and set it.",
+  },
+  {
+    sample: "Not analysed",
+    when: "It could exist, and the system has not produced it yet",
+    why: "Name what has not happened, so the reader waits rather than goes looking for a fix.",
+  },
+  {
+    sample: "Unavailable",
+    when: "Never",
+    why: "It names no reason, so nobody can act on it. Every case it covers is one of the three above.",
+  },
+]
+
+/**
+ * The three languages the platform has, from `LANGUAGES` and
+ * `LanguageLabels.en` in `precedent-iso/src/models/config.ts`. There is no
+ * fourth, and no dialect: `Language` is flat ISO 639-1, and the Hamsa dialect
+ * list is a TTS provider setting rather than a language a customer picks.
+ */
+export const LANGUAGES = [
+  { code: "EN", name: "English" },
+  { code: "AR", name: "Arabic" },
+  { code: "UR", name: "Urdu" },
+]
+
+/** Code to name, for the tooltip on a chip. */
+export const LANGUAGE_NAMES: Record<string, string> = Object.fromEntries(
+  LANGUAGES.map((language) => [language.code, language.name]),
+)
+
+/**
+ * When each button size is the right one.
+ *
+ * The four steps are 24, 28, 32 and 36px — close together on purpose, because
+ * size is a density decision and not a hierarchy one. Two of them are pinned to
+ * the form controls: `sm` is the height of a small Input or SelectTrigger and
+ * `default` is the height of a normal one, which is what makes a filter bar
+ * line up instead of stepping.
+ */
+export type ButtonSizeNote = {
+  size: "xs" | "sm" | "default" | "lg"
+  when: string
+  why: string
+}
+
+export const BUTTON_SIZES: ButtonSizeNote[] = [
+  {
+    size: "xs",
+    when: "Inside a table row or a dense toolbar",
+    why: "24px. The row height is fixed, so the button fits it rather than setting it.",
+  },
+  {
+    size: "sm",
+    when: "Beside a small field, and in most cards and drawers",
+    why: "28px, the height of a sm Input or Select. The most common size in the app.",
+  },
+  {
+    size: "default",
+    when: "Beside a normal field, and in page chrome",
+    why: "32px, the height of a default Input and SelectTrigger — which is what makes a filter bar line up.",
+  },
+  {
+    size: "lg",
+    when: "When it is the only thing on the surface to do",
+    why: "36px. An empty state\u2019s single action: bigger because nothing is next to it, not because it matters more.",
+  },
+]
+
+/**
+ * The eight form decisions, settled.
+ *
+ * Read out of the real forms in `bulbul` — persona, voice, batch calls, the
+ * scenario editor — rather than invented, except where the app contradicts
+ * itself. Where it does, the newest shipped code wins and the divergence is
+ * named in the rule.
+ */
+export const FORM_RULES: Rule[] = [
+  {
+    label: "Label placement",
+    detail:
+      "Above the control, always. A switch or checkbox is the exception: label at the start, control at the end, on one row.",
+  },
+  {
+    label: "Required and optional",
+    detail:
+      "Required carries a destructive asterisk after the label; optional carries nothing. The word “Required” is never used.",
+  },
+  {
+    label: "Help text",
+    detail:
+      "One sentence under the label, above the control. Never a paragraph, never a restatement of the label, and never an (i) tooltip on the same screen as an inline one.",
+  },
+  {
+    label: "Error messages",
+    detail:
+      "Under the control, and the label turns with it. Field errors stay on the field; a failed submit goes to a toast.",
+  },
+  {
+    label: "Validation timing",
+    detail:
+      "On submit, then live on change once a field has failed once. Nothing is marked wrong before the reader has finished typing it the first time.",
+  },
+  {
+    label: "Field grouping",
+    detail:
+      "A group gets a legend. A bordered box with no heading is not a group — the reader is left to infer what it collects.",
+  },
+  {
+    label: "Form actions",
+    detail:
+      "An end-aligned footer: Cancel as outline, then the primary. A long editor swaps the footer for a bar that appears only once something is dirty.",
+  },
+  {
+    label: "Disabled and read-only",
+    detail:
+      "A value that cannot be edited stays on screen, disabled, with one line saying why. Never swapped for plain text, never removed.",
+  },
+]
+
+/** Which variant carries which kind of action. */
+export type ButtonRoleNote = {
+  variant: "default" | "outline" | "ghost" | "destructive"
+  label: string
+  when: string
+}
+
+export const BUTTON_ROLES: ButtonRoleNote[] = [
+  {
+    variant: "default",
+    label: "Save",
+    when: "The one primary action on the surface. One per form, one per page.",
+  },
+  {
+    variant: "outline",
+    label: "Cancel",
+    when: "Cancel, and anything secondary standing beside a primary.",
+  },
+  {
+    variant: "ghost",
+    label: "Duplicate",
+    when: "Inside a row or a toolbar, where a border on every action would be noise.",
+  },
+  {
+    variant: "destructive",
+    label: "Delete",
+    when: "Delete, remove, revoke. A soft tint rather than solid red: it confirms first, so it does not also need to shout.",
+  },
+]
+
+/**
+ * A page pattern, split into what it cannot ship without and what it grows.
+ *
+ * The split is the point. "Anatomy" as one flat list reads as a checklist of
+ * things every page must have, and half of them are not — a bulk action on a
+ * collection nobody multi-selects is a feature with a cost and no reader.
+ */
+export type PatternAnatomy = {
+  id: string
+  title: string
+  description: string
+  /** Ship without one of these and the pattern is broken. */
+  required: Rule[]
+  /** Earn their place per surface; absent by default. */
+  optional: Rule[]
+}
+
+export const PATTERNS: PatternAnatomy[] = [
+  {
+    id: "multi-step-create",
+    title: "Multi-step creation",
+    description:
+      "Making one object across several screens, because it will not fit on one.",
+    required: [
+      {
+        label: "Step indicator",
+        detail: "Which step this is, and how many there are.",
+      },
+      {
+        label: "One decision per step",
+        detail: "A step that asks nothing is a step to delete.",
+      },
+      {
+        label: "Back",
+        detail:
+          "Every step after the first is leavable without losing what is in it.",
+      },
+      {
+        label: "Review",
+        detail:
+          "The last step shows what is about to be created, before it is.",
+      },
+      {
+        label: "Submitting state",
+        detail: "The primary disables and says what is happening.",
+      },
+      {
+        label: "Failure state",
+        detail:
+          "Which step broke, and the way back to it — never a bare toast.",
+      },
+    ],
+    /* Deliberately empty. The four that were here — named steps, jumping
+       back, saved draft, running summary — were removed as noise; the shell
+       enforces the required list and the rest was read as a menu of things to
+       add. `PatternAnatomy` drops the whole section when this is empty. */
+    optional: [],
+  },
+]
