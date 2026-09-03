@@ -77,13 +77,14 @@ jobs:
           EXPECTED_SHA256: ${{ needs.build.outputs.sha256 }}
         run: echo "$EXPECTED_SHA256  $RUNNER_TEMP/package.tgz" | sha256sum --check --strict
       - name: Publish or verify an existing immutable version
-        env:
-          EXPECTED_SHA256: ${{ needs.build.outputs.sha256 }}
         run: |
           version="${GITHUB_REF_NAME#design-v}"
           if registry_url="$(npm view "@sarj/design@$version" dist.tarball 2>/dev/null)"; then
             curl --fail --silent --show-error --location "$registry_url" --output "$RUNNER_TEMP/registry-package.tgz"
-            echo "$EXPECTED_SHA256  $RUNNER_TEMP/registry-package.tgz" | sha256sum --check --strict
+            mkdir "$RUNNER_TEMP/built-package" "$RUNNER_TEMP/registry-package"
+            tar --extract --gzip --file "$RUNNER_TEMP/package.tgz" --directory "$RUNNER_TEMP/built-package"
+            tar --extract --gzip --file "$RUNNER_TEMP/registry-package.tgz" --directory "$RUNNER_TEMP/registry-package"
+            diff --recursive --no-dereference "$RUNNER_TEMP/built-package" "$RUNNER_TEMP/registry-package"
           else
             npm publish "$RUNNER_TEMP/package.tgz" --access public --provenance --ignore-scripts
           fi
