@@ -13,7 +13,7 @@ import { verifyPackageSurface } from './package-surface.mjs';
 const packageRoot = fileURLToPath(new URL('..', import.meta.url));
 const manifest = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8'));
 const componentExportNames = Object.values(componentCatalog)
-  .map(({ exportPath }) => `.${exportPath.replace('@sarj/docs-ui', '')}`)
+  .map(({ exportPath }) => `.${exportPath.replace('@sarj/design', '')}`)
   .sort();
 assert.deepEqual(
   Object.keys(manifest.exports).filter((name) => name.endsWith('.astro')).sort(),
@@ -78,14 +78,14 @@ for (const declaration of [
   assert.ok(starlightSource.includes(declaration), `missing shared accessibility declaration: ${declaration}`);
 }
 
-const workingDirectory = await mkdtemp(join(tmpdir(), 'sarj-docs-ui-contract-'));
+const workingDirectory = await mkdtemp(join(tmpdir(), 'sarj-design-contract-'));
 
 try {
   execFileSync('npm', ['pack', '--ignore-scripts', '--pack-destination', workingDirectory], {
     cwd: packageRoot,
     encoding: 'utf8',
   });
-  const archiveName = `sarj-docs-ui-${manifest.version}.tgz`;
+  const archiveName = `sarj-design-${manifest.version}.tgz`;
   const tarballPath = join(workingDirectory, archiveName);
 
   verifyPackageSurface(tarballPath);
@@ -96,13 +96,13 @@ try {
     join(consumerRoot, 'package.json'),
     `${JSON.stringify(
       {
-        name: 'docs-ui-consumer-smoke',
+        name: 'design-consumer-smoke',
         private: true,
         type: 'module',
         dependencies: {
           '@astrojs/check': '0.9.10',
           '@astrojs/starlight': '0.41.7',
-          '@sarj/docs-ui': `file:${tarballPath}`,
+          '@sarj/design': `file:${tarballPath}`,
           astro: '7.2.4',
           typescript: '6.0.3',
         },
@@ -122,8 +122,8 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Consumer',
-      customCss: ['@sarj/docs-ui/starlight.css'],
-      components: { PageTitle: '@sarj/docs-ui/PageAnchor.astro' },
+      customCss: ['@sarj/design/starlight.css'],
+      components: { PageTitle: '@sarj/design/PageAnchor.astro' },
       sidebar: [{ label: 'Home', link: '/' }],
     }),
   ],
@@ -137,12 +137,12 @@ export default defineConfig({
   writeFileSync(
     join(consumerRoot, 'src', 'pages', 'index.astro'),
     `---
-import Breadcrumbs from '@sarj/docs-ui/Breadcrumbs.astro';
-import CodeComparison from '@sarj/docs-ui/CodeComparison.astro';
-import ReferencePage from '@sarj/docs-ui/ReferencePage.astro';
-import RulePager from '@sarj/docs-ui/RulePager.astro';
-import { componentCatalog } from '@sarj/docs-ui/catalog';
-import type { BreadcrumbsProps } from '@sarj/docs-ui/contracts';
+import Breadcrumbs from '@sarj/design/Breadcrumbs.astro';
+import CodeComparison from '@sarj/design/CodeComparison.astro';
+import ReferencePage from '@sarj/design/ReferencePage.astro';
+import RulePager from '@sarj/design/RulePager.astro';
+import { componentCatalog } from '@sarj/design/catalog';
+import type { BreadcrumbsProps } from '@sarj/design/contracts';
 
 const sidebar = [{ label: 'Home', link: '/' }];
 const breadcrumbs = {
@@ -165,7 +165,7 @@ const breadcrumbs = {
 `,
   );
   const behaviorPage = (properties) => `---
-import ReferencePage from '@sarj/docs-ui/ReferencePage.astro';
+import ReferencePage from '@sarj/design/ReferencePage.astro';
 const sidebar = [{ label: 'Home', link: '/' }];
 ---
 <ReferencePage title="Behavior" description="ReferencePage behavior" {sidebar} ${properties}>

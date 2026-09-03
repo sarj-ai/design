@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /packages/docs-ui
+    directory: /packages/design
     schedule:
       interval: weekly
     groups:

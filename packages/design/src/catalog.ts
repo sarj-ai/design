@@ -15,7 +15,7 @@ export interface ThemeTokenDefinition {
 
 export const componentCatalog = Object.freeze({
   Breadcrumbs: {
-    exportPath: '@sarj/docs-ui/Breadcrumbs.astro',
+    exportPath: '@sarj/design/Breadcrumbs.astro',
     purpose: 'Show a compact, accessible path to the current reference page.',
     properties: {
       ancestors: 'Ordered links from the reference root to the current page.',
@@ -23,7 +23,7 @@ export const componentCatalog = Object.freeze({
     },
   } satisfies ComponentDefinition<BreadcrumbsProps>,
   CodeComparison: {
-    exportPath: '@sarj/docs-ui/CodeComparison.astro',
+    exportPath: '@sarj/design/CodeComparison.astro',
     purpose: 'Compare independently readable before and after source with accessible change cues.',
     properties: {
       id: 'Stable identifier used to connect the comparison and its heading.',
@@ -33,12 +33,12 @@ export const componentCatalog = Object.freeze({
     },
   } satisfies ComponentDefinition<CodeComparisonProps>,
   PageAnchor: {
-    exportPath: '@sarj/docs-ui/PageAnchor.astro',
+    exportPath: '@sarj/design/PageAnchor.astro',
     purpose: 'Provide the focusable top anchor used by Starlight reference pages.',
     properties: {},
   } satisfies ComponentDefinition,
   ReferencePage: {
-    exportPath: '@sarj/docs-ui/ReferencePage.astro',
+    exportPath: '@sarj/design/ReferencePage.astro',
     purpose: 'Render a Starlight reference shell with explicit robots behavior.',
     properties: {
       title: 'Document title and primary accessible page identity.',
@@ -50,7 +50,7 @@ export const componentCatalog = Object.freeze({
     },
   } satisfies ComponentDefinition<ReferencePageProps>,
   RulePager: {
-    exportPath: '@sarj/docs-ui/RulePager.astro',
+    exportPath: '@sarj/design/RulePager.astro',
     purpose: 'Navigate between adjacent rules with accessible links and guarded arrow-key shortcuts.',
     properties: {
       previous: 'Optional previous rule link and label.',

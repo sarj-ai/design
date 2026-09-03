@@ -1,7 +1,8 @@
-# @sarj/docs-ui
+# Sarj Design
 
-Public source for the `@sarj/docs-ui` Astro/Starlight component package and its
-live contract reference at [docs-ui.sarj.ai](https://docs-ui.sarj.ai/).
+Public component and color scheme library for Sarj, published as the
+`@sarj/design` Astro/Starlight package with a live contract reference at
+[design.sarj.ai](https://design.sarj.ai/).
 
 ## Development
 
@@ -12,13 +13,13 @@ npm run install:locked
 npm run check
 ```
 
-The publishable package lives in `packages/docs-ui`. The private reference site
+The publishable package lives in `packages/design`. The private reference site
 lives in `apps/docs-ui` and consumes the latest released package exactly as an
 external consumer does.
 
 ## Releases
 
-Package releases are created from `docs-ui-v*` tags by the protected npm
+Package releases are created from `design-v*` tags by the protected npm
 trusted-publishing workflow. Site deployments are built once on `main` and
 promoted through the protected Cloudflare production environment.
 
