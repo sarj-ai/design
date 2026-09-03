@@ -7,7 +7,6 @@ import {
   ArrowUpRight01Icon,
   BookOpen01Icon,
   Cancel01Icon,
-  Comment01Icon,
   Copy01Icon,
   Link04Icon,
   Search01Icon,
@@ -50,7 +49,3 @@ export const RulesIcon = icon(BookOpen01Icon, "RulesIcon")
 /* Opens the card's links — the mockup's own URL and the tickets it answers —
    for copying rather than for following. */
 export const ShareLinkIcon = icon(Link04Icon, "ShareLinkIcon")
-
-/* The comment toggle at the end of the shell header — turns the Vercel toolbar
-   on so a reviewer can leave feedback on the mockup they are looking at. */
-export const CommentIcon = icon(Comment01Icon, "CommentIcon")

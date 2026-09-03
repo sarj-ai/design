@@ -5,7 +5,6 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { CommentToggle } from "@/components/comment-toggle"
 import { BackIcon } from "@/components/workspace-icons"
 
 /**
@@ -56,8 +55,6 @@ export function MockupShell({
         {actions ? (
           <div className="flex shrink-0 items-center gap-2">{actions}</div>
         ) : null}
-
-        <CommentToggle />
       </header>
 
       {/* A flex column so a page that wants the remaining height can take it

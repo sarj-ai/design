@@ -110,15 +110,8 @@ async function discoverRoutes(page, baseUrl) {
   return ["/", ...new Set(hrefs.filter((href) => href && href !== "/"))]
 }
 
-/**
- * `?toolbar=0` turns the Vercel toolbar off and, with it, the comment toggle in
- * the shell header. A capture is of the design, not of the chrome a reviewer
- * uses to talk about it.
- */
 function captureUrl(route, baseUrl) {
-  const url = new URL(route, baseUrl)
-  url.searchParams.set("toolbar", "0")
-  return url.href
+  return new URL(route, baseUrl).href
 }
 
 function fileNameFor(route) {

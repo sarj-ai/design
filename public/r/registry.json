@@ -11,7 +11,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -28,19 +27,13 @@
         "select",
         "separator",
         "switch",
-        "textarea",
-        "tooltip"
+        "textarea"
       ],
       "files": [
         {
           "path": "src/app/transfer-routing/page.tsx",
           "type": "registry:page",
           "target": "app/transfer-routing/page.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -51,11 +44,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/transfer-routing/case-field.tsx",
@@ -124,8 +112,7 @@
       "description": "The knowledge base as a resource the agent queries rather than prompt text: documents added from files, a pasted note or a URL, each carrying its extraction state, and the summary that tells the agent when to reach for it.",
       "dependencies": [
         "@hugeicons/core-free-icons",
-        "@hugeicons/react",
-        "@vercel/toolbar"
+        "@hugeicons/react"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -140,19 +127,13 @@
         "input-group",
         "separator",
         "sidebar",
-        "table",
-        "tooltip"
+        "table"
       ],
       "files": [
         {
           "path": "src/app/knowledge-base/page.tsx",
           "type": "registry:page",
           "target": "app/knowledge-base/page.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -183,11 +164,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -221,7 +197,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -272,11 +247,6 @@
           "target": "@components/sarj/call-turn-timing/turn-detection-section.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -285,11 +255,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -334,7 +299,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "react-resizable-panels",
         "sonner",
@@ -382,11 +346,6 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/conversations-revamp/drawer/call-shell.tsx",
@@ -489,11 +448,6 @@
           "target": "@components/sarj/mockup-shell.tsx"
         },
         {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
-        },
-        {
           "path": "src/components/workspace-icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/workspace-icons.tsx"
@@ -563,7 +517,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "motion",
         "tailwind-merge"
@@ -615,11 +568,6 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -663,11 +611,6 @@
           "path": "src/components/personas-depth/voice-picker.tsx",
           "type": "registry:component",
           "target": "@components/sarj/personas-depth/voice-picker.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -716,7 +659,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -738,8 +680,7 @@
         "sidebar",
         "slider",
         "switch",
-        "toggle-group",
-        "tooltip"
+        "toggle-group"
       ],
       "files": [
         {
@@ -756,11 +697,6 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -791,11 +727,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -842,7 +773,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -886,11 +816,6 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -938,11 +863,6 @@
           "target": "@components/sarj/phrase-mappings/trigger-field.tsx"
         },
         {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
-        },
-        {
           "path": "src/components/workspace-icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/workspace-icons.tsx"
@@ -975,7 +895,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "sonner",
         "tailwind-merge"
@@ -1021,11 +940,6 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -1049,11 +963,6 @@
           "path": "src/components/model-catalog/icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/model-catalog/icons.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -1100,7 +1009,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "motion",
         "tailwind-merge"
@@ -1139,11 +1047,6 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/eou-timing/global-turn-detection.tsx",
           "type": "registry:component",
           "target": "@components/sarj/eou-timing/global-turn-detection.tsx"
@@ -1172,11 +1075,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -1219,7 +1117,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -1248,8 +1145,7 @@
         "switch",
         "table",
         "textarea",
-        "toggle-group",
-        "tooltip"
+        "toggle-group"
       ],
       "files": [
         {
@@ -1266,11 +1162,6 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -1353,11 +1244,6 @@
           "target": "@components/sarj/scenario-single-screen/v2/setting-sheet.tsx"
         },
         {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
-        },
-        {
           "path": "src/components/workspace-icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/workspace-icons.tsx"
@@ -1413,7 +1299,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "sonner",
         "tailwind-merge"
@@ -1461,11 +1346,6 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/connected-apps/app-detail.tsx",
           "type": "registry:component",
           "target": "@components/sarj/connected-apps/app-detail.tsx"
@@ -1509,11 +1389,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -1630,7 +1505,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "sonner",
         "tailwind-merge"
@@ -1671,11 +1545,6 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -1704,11 +1573,6 @@
           "path": "src/components/roles-permissions/save-changes-dialog.tsx",
           "type": "registry:component",
           "target": "@components/sarj/roles-permissions/save-changes-dialog.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -1747,7 +1611,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "react-resizable-panels",
         "tailwind-merge"
@@ -1855,11 +1718,6 @@
           "target": "@components/sarj/behavioral-alerts/user-experience.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/conversations-revamp/list/call-table.tsx",
           "type": "registry:component",
           "target": "@components/sarj/conversations-revamp/list/call-table.tsx"
@@ -1903,11 +1761,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -1977,7 +1830,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "sonner",
         "tailwind-merge"
@@ -1998,8 +1850,7 @@
         "separator",
         "sidebar",
         "switch",
-        "toggle-group",
-        "tooltip"
+        "toggle-group"
       ],
       "files": [
         {
@@ -2048,11 +1899,6 @@
           "target": "@components/sarj/call-retry/wait-duration-field.tsx"
         },
         {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
-        },
-        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -2061,11 +1907,6 @@
           "path": "src/components/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
@@ -2100,7 +1941,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "@vercel/toolbar",
         "clsx",
         "tailwind-merge"
       ],
@@ -2123,11 +1963,6 @@
           "path": "src/app/phone-numbers/page.tsx",
           "type": "registry:page",
           "target": "app/phone-numbers/page.tsx"
-        },
-        {
-          "path": "src/components/comment-toggle.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/comment-toggle.tsx"
         },
         {
           "path": "src/components/data-table.tsx",
@@ -2163,11 +1998,6 @@
           "path": "src/components/phone-numbers/provisioned-tab.tsx",
           "type": "registry:component",
           "target": "@components/sarj/phone-numbers/provisioned-tab.tsx"
-        },
-        {
-          "path": "src/components/staff-toolbar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/staff-toolbar.tsx"
         },
         {
           "path": "src/components/workspace-icons.tsx",
