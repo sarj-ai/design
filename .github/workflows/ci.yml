@@ -29,14 +29,14 @@ jobs:
           node-version: '24.19.0'
           cache: npm
           cache-dependency-path: |
-            packages/docs-ui/package-lock.json
+            packages/design/package-lock.json
             apps/docs-ui/package-lock.json
       - run: npm install --global npm@12.0.2 --ignore-scripts
       - run: npm run install:locked
       - run: npm run check
       - name: Reject private or workspace dependency edges
         run: >-
-          node -e "const fs=require('node:fs');for(const p of ['packages/docs-ui/package-lock.json','apps/docs-ui/package-lock.json']){const s=fs.readFileSync(p,'utf8');if(/[\"'](?:file:|link:)|\.\.\/\.\.\/packages\//u.test(s))throw new Error(p+' contains a non-registry dependency')}"
+          node -e "const fs=require('node:fs');for(const p of ['packages/design/package-lock.json','apps/docs-ui/package-lock.json']){const s=fs.readFileSync(p,'utf8');if(/[\"'](?:file:|link:)|\.\.\/\.\.\/packages\//u.test(s))throw new Error(p+' contains a non-registry dependency')}"
 
   dependency-review:
     if: github.event_name == 'pull_request'
@@ -57,7 +57,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        directory: [packages/docs-ui, apps/docs-ui]
+        directory: [packages/design, apps/docs-ui]
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
