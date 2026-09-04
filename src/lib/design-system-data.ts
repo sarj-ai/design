@@ -530,3 +530,218 @@ export const PATTERNS: PatternAnatomy[] = [
     optional: [],
   },
 ]
+
+/* ---------------------------------------------------------------------------
+ * The docs navigation.
+ *
+ * The page reads as a documentation site rather than one long scroll: a rail
+ * on the start edge listing everything the system has, and one topic in the
+ * pane beside it. The rail is the table of contents *and* the inventory —
+ * scanning it is how you find out that `Marker` exists at all, which a tab
+ * strip of three words could never say.
+ *
+ * Everything here is a client-side view. AGENTS.md keeps alternate views of
+ * one thing on one route, so a topic switches the pane rather than the URL.
+ * ------------------------------------------------------------------------ */
+
+/** A leaf in the rail: a title, and the one line the pane opens with. */
+export type DocsPage = {
+  id: string
+  title: string
+  description: string
+}
+
+/** Leaves under an optional small label, the way `Components` splits its
+    guidance from its inventory. */
+export type DocsGroup = {
+  label?: string
+  pages: DocsPage[]
+}
+
+/** A top-level entry in the rail. It is itself a page — clicking it opens the
+    section's index rather than nothing. */
+export type DocsSection = DocsPage & { groups: DocsGroup[] }
+
+/**
+ * The twelve groups the primitive inventory is filed under.
+ *
+ * Named here rather than inside the catalog because the rail lists them and
+ * the catalog renders them — one array means the two cannot drift.
+ */
+export type CatalogGroupId =
+  | "surface"
+  | "actions"
+  | "status"
+  | "text-entry"
+  | "choice"
+  | "form-structure"
+  | "data"
+  | "overlays"
+  | "navigation"
+  | "feedback"
+  | "conversation"
+  | "effects"
+
+export type CatalogGroup = DocsPage & { id: CatalogGroupId }
+
+export const CATALOG_GROUPS: CatalogGroup[] = [
+  {
+    id: "surface",
+    title: "Surface and layout",
+    description:
+      "The boxes everything else sits in, and the ways to fold one away.",
+  },
+  {
+    id: "actions",
+    title: "Actions",
+    description: "Anything you press.",
+  },
+  {
+    id: "status",
+    title: "Status and identity",
+    description: "What state a thing is in, and who or what it is.",
+  },
+  {
+    id: "text-entry",
+    title: "Text entry",
+    description: "Typing, in each shape the product asks for it.",
+  },
+  {
+    id: "choice",
+    title: "Choice",
+    description: "Picking one, picking several, or picking a date.",
+  },
+  {
+    id: "form-structure",
+    title: "Form structure",
+    description: "The label, description and error that wrap every control.",
+  },
+  {
+    id: "data",
+    title: "Data",
+    description: "Rows, series, and the pages they come in.",
+  },
+  {
+    id: "overlays",
+    title: "Overlays",
+    description:
+      "Everything that opens over the page. Which one is a Patterns question.",
+  },
+  {
+    id: "navigation",
+    title: "Navigation",
+    description: "Getting between places, and saying where you are.",
+  },
+  {
+    id: "feedback",
+    title: "Feedback",
+    description: "Saying what happened, or that nothing has yet.",
+  },
+  {
+    id: "conversation",
+    title: "Conversation and media",
+    description: "Transcripts, attachments, and the frames they sit in.",
+  },
+  {
+    id: "effects",
+    title: "Effects and utilities",
+    description: "The three that are behaviour rather than surface.",
+  },
+]
+
+/** Colour leads, then the seven rules in the order the source document has
+    them. Each rule's own `detail` is the line its pane opens with. */
+const FOUNDATION_PAGES: DocsPage[] = [
+  {
+    id: "colour",
+    title: "Colour",
+    description:
+      "All 57 tokens in globals.css. A colour that is not on this page does not exist.",
+  },
+  ...GLOBAL_RULES.map((rule) => ({
+    id: rule.id,
+    title: rule.label,
+    description: rule.detail,
+  })),
+]
+
+const PATTERN_PAGES: DocsPage[] = [
+  {
+    id: "surfaces",
+    title: "Choosing a surface",
+    description:
+      "Do I still need the page behind this? The amount of content never decides it.",
+  },
+  {
+    id: PATTERNS[0].id,
+    title: PATTERNS[0].title,
+    description: PATTERNS[0].description,
+  },
+  {
+    id: "tabs",
+    title: "Tabs",
+    description:
+      "One object, several views of it. Never steps in a flow, and never two different objects.",
+  },
+  {
+    id: "drawer",
+    title: "Drawer",
+    description:
+      "Configuring one thing, or showing one thing, beside the page it belongs to.",
+  },
+  {
+    id: "stepper",
+    title: "Stepper",
+    description:
+      "Vertical where each step needs a line of its own, horizontal where the labels fit.",
+  },
+  {
+    id: "index-page",
+    title: "Index page",
+    description:
+      "A collection of one kind of object — agents, voices, API keys.",
+  },
+]
+
+export const DOCS_SECTIONS: DocsSection[] = [
+  {
+    id: "foundations",
+    title: "Foundations",
+    description:
+      "The fixed half of the system. Nothing here is a judgement call, which is what stops the decisions further down from being re-argued.",
+    groups: [{ pages: FOUNDATION_PAGES }],
+  },
+  {
+    id: "components",
+    title: "Components",
+    description:
+      "Every primitive in src/components/ui, running rather than described. If one of these covers it, nothing gets hand-rolled.",
+    groups: [
+      {
+        label: "Guidance",
+        pages: [
+          {
+            id: "buttons",
+            title: "Buttons",
+            description:
+              "Four sizes and four roles. Size is a density decision; the role is the hierarchy one.",
+          },
+          {
+            id: "forms",
+            title: "Forms",
+            description:
+              "Eight decisions, settled — and all eight visible in the form beside them.",
+          },
+        ],
+      },
+      { label: "Primitives", pages: CATALOG_GROUPS },
+    ],
+  },
+  {
+    id: "patterns",
+    title: "Patterns",
+    description:
+      "The shapes to reach for first, and what each one cannot ship without.",
+    groups: [{ pages: PATTERN_PAGES }],
+  },
+]

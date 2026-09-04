@@ -40,15 +40,12 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble"
-import {
-  ReferenceName,
-  ReferenceTable,
-} from "@/components/design-system/reference-table"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Calendar } from "@/components/ui/calendar"
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -228,22 +225,33 @@ import {
   RowMenuIcon,
   SearchIcon,
 } from "@/components/design-system/icons"
+import { CATALOG_GROUPS, type CatalogGroupId } from "@/lib/design-system-data"
 
 /**
  * Every primitive in `src/components/ui`, grouped by the job it does, each one
  * running rather than described.
  *
  * Data and demo live together here rather than splitting into `-data.ts`: the
- * demo *is* the entry's content, and JSX cannot live in a data module. Adding a
- * primitive means adding one row to one array.
+ * demo *is* the entry's content, and JSX cannot live in a data module. The
+ * group titles are the exception — the rail lists them, so they live in
+ * `design-system-data.ts` and this file refers to them by id.
  *
- * Two entries carry no demo. `direction` renders nothing by design, and
- * `animated-beam` measures two refs it has to be given — both say so instead of
- * showing a placeholder that would be a lie about what the primitive is.
+ * Adding a primitive means adding one entry to one array.
+ *
+ * Three entries stand a line of prose where the specimen would go.
+ * `Direction` renders nothing by design, `AnimatedBeam` measures two refs it
+ * has to be given, and `MultiStepLoader` takes the whole screen — all three
+ * say so rather than showing a placeholder that would be a lie about what the
+ * primitive is.
  */
 
-type Entry = { name: string; demo?: React.ReactNode }
-type Group = { title: string; entries: Entry[] }
+type Entry = {
+  name: string
+  /** One line, in the reader's language rather than the API's. */
+  note: string
+  demo?: React.ReactNode
+}
+type Group = { id: CatalogGroupId; entries: Entry[] }
 
 /** Real captures rather than grey boxes: a carousel is for media, and a
     placeholder does not show that the frames are the same size. */
@@ -262,12 +270,16 @@ const CHART_DATA = [
 
 const GROUPS: Group[] = [
   {
-    title: "Surface and layout",
+    id: "surface",
     entries: [
       {
         name: "Card",
+        note: "A titled panel. The default container for a section.",
         demo: (
-          <Card size="sm">
+          /* `w-full` because the tile centres its specimen with flex, and
+             Card's own `overflow-hidden` zeroes its automatic minimum size —
+             left to itself it collapses to the width of its longest word. */
+          <Card className="w-full" size="sm">
             <CardHeader>
               <CardTitle>Monthly spend</CardTitle>
               <CardDescription>Billing period to date</CardDescription>
@@ -277,6 +289,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Item",
+        note: "A list row: media, title, description, actions.",
         demo: (
           <Item size="sm" variant="outline">
             <ItemMedia variant="icon">
@@ -290,20 +303,25 @@ const GROUPS: Group[] = [
       },
       {
         name: "Separator",
+        note: "A rule between two things that belong apart.",
         demo: <Separator />,
       },
       {
         name: "AspectRatio",
+        note: "Holds one ratio while the width changes under it.",
         demo: (
           /* Capped: at full column width a 16:9 box is the tallest thing in
              the grid and drags the whole row down with it. */
+          /* Filled with `background` rather than `muted`: the tile's own
+             panel is muted, and a muted box on it is an invisible specimen. */
           <div className="max-w-48">
-            <AspectRatio className="rounded-md bg-muted" ratio={16 / 9} />
+            <AspectRatio className="rounded-md bg-background" ratio={16 / 9} />
           </div>
         ),
       },
       {
         name: "Resizable",
+        note: "Two panes the reader splits for themselves.",
         demo: (
           /* Both panes carry content, because an empty one demonstrates
              nothing: the point of this primitive is that the reader decides
@@ -333,8 +351,9 @@ const GROUPS: Group[] = [
       },
       {
         name: "ScrollArea",
+        note: "A scrolling region wearing the house scrollbar.",
         demo: (
-          <ScrollArea className="h-16 rounded-md border p-2">
+          <ScrollArea className="h-16 w-full rounded-md border p-2">
             <div className="flex flex-col gap-1 text-sm text-muted-foreground">
               <span>CL-8842 · Rawabi Holding</span>
               <span>CL-8841 · Nadec Foods</span>
@@ -346,6 +365,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Collapsible",
+        note: "One block that folds away.",
         demo: (
           <Collapsible>
             <CollapsibleTrigger asChild>
@@ -361,6 +381,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Accordion",
+        note: "A stack of them, one open at a time.",
         demo: (
           <Accordion collapsible type="single">
             <AccordionItem value="a">
@@ -372,6 +393,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Tabs",
+        note: "Several views of one object.",
         demo: (
           <Tabs defaultValue="transcript">
             <TabsList>
@@ -396,10 +418,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Actions",
+    id: "actions",
     entries: [
       {
         name: "Button",
+        note: "Every action, at four sizes and four roles.",
         demo: (
           <div className="flex flex-wrap items-center gap-2">
             <Button size="sm">Save</Button>
@@ -411,6 +434,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "ButtonGroup",
+        note: "Buttons that act on one thing, joined up.",
         demo: (
           <ButtonGroup>
             <Button aria-label="Search" size="icon-sm" variant="outline">
@@ -427,10 +451,12 @@ const GROUPS: Group[] = [
       },
       {
         name: "Toggle",
+        note: "A single action that stays pressed.",
         demo: <Toggle aria-label="Mark reviewed">Reviewed</Toggle>,
       },
       {
         name: "ToggleGroup",
+        note: "One choice, or several, shown as pressed buttons.",
         demo: (
           <ToggleGroup defaultValue="all" type="single" variant="outline">
             <ToggleGroupItem value="all">All</ToggleGroupItem>
@@ -442,10 +468,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Status and identity",
+    id: "status",
     entries: [
       {
         name: "Badge",
+        note: "A status, a count, or a label.",
         demo: (
           <div className="flex flex-wrap items-center gap-2">
             <Badge>Active</Badge>
@@ -456,6 +483,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Avatar",
+        note: "A person, as initials or a photo.",
         demo: (
           <Avatar>
             <AvatarFallback>FJ</AvatarFallback>
@@ -464,6 +492,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Marker",
+        note: "A quiet line of context between blocks.",
         demo: (
           <Marker>
             <MarkerIcon />
@@ -473,6 +502,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Kbd",
+        note: "A key, as it is printed on the keyboard.",
         demo: (
           <KbdGroup>
             <Kbd>⌘</Kbd>
@@ -482,12 +512,16 @@ const GROUPS: Group[] = [
       },
       {
         name: "Spinner",
+        note: "Something is happening; the length is unknown.",
         demo: <Spinner />,
       },
       {
         name: "Skeleton",
+        note: "The shape of content that has not arrived.",
         demo: (
-          <div className="flex flex-col gap-2">
+          /* On a surface, because a skeleton is `muted` and so is the tile's
+             panel — and a loading row only ever appears inside a surface. */
+          <div className="flex w-full flex-col gap-2 rounded-md bg-background p-3">
             <Skeleton className="h-4 w-2/3" />
             <Skeleton className="h-4" />
           </div>
@@ -495,23 +529,32 @@ const GROUPS: Group[] = [
       },
       {
         name: "Progress",
-        demo: <Progress value={62} />,
+        note: "How far through, when the end is known.",
+        demo: (
+          /* Same reason as the skeleton above: the track is `muted`. */
+          <div className="w-full rounded-md bg-background p-3">
+            <Progress value={62} />
+          </div>
+        ),
       },
     ],
   },
   {
-    title: "Text entry",
+    id: "text-entry",
     entries: [
       {
         name: "Input",
+        note: "One line of text.",
         demo: <Input defaultValue="Layla" />,
       },
       {
         name: "Textarea",
+        note: "Several lines of it.",
         demo: <Textarea rows={2} />,
       },
       {
         name: "InputGroup",
+        note: "An input with an icon, addon or button attached.",
         demo: (
           <InputGroup>
             <InputGroupAddon>
@@ -523,6 +566,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "InputOTP",
+        note: "A short code, one box per character.",
         demo: (
           <InputOTP maxLength={4}>
             <InputOTPGroup>
@@ -536,15 +580,17 @@ const GROUPS: Group[] = [
       },
       {
         name: "Label",
+        note: "The name of a control, tied to it.",
         demo: <Label>Scenario name</Label>,
       },
     ],
   },
   {
-    title: "Choice",
+    id: "choice",
     entries: [
       {
         name: "Select",
+        note: "One option from a list short enough to scan.",
         demo: (
           <Select defaultValue="ar">
             <SelectTrigger className="w-full">
@@ -560,6 +606,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "NativeSelect",
+        note: "The browser's own, where that is enough.",
         demo: (
           <NativeSelect className="w-full" defaultValue="ar">
             <NativeSelectOption value="ar">Arabic</NativeSelectOption>
@@ -569,6 +616,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Combobox",
+        note: "One option from a list too long to scan.",
         demo: (
           <Combobox>
             <ComboboxInput placeholder="Find a scenario" />
@@ -587,6 +635,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "RadioGroup",
+        note: "One option, with all of them visible.",
         demo: (
           <RadioGroup className="flex flex-col gap-2" defaultValue="all">
             <div className="flex items-center gap-2">
@@ -602,6 +651,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Checkbox",
+        note: "A yes/no that is one of a set.",
         demo: (
           <div className="flex items-center gap-2">
             <Checkbox defaultChecked id="cat-record" />
@@ -611,23 +661,34 @@ const GROUPS: Group[] = [
       },
       {
         name: "Switch",
+        note: "A setting that takes effect as you flip it.",
         demo: <Switch defaultChecked />,
       },
       {
         name: "Slider",
+        note: "A number in a range where the exact value is not the point.",
         demo: <Slider defaultValue={[40]} max={100} />,
       },
       {
         name: "Calendar",
-        demo: <Calendar className="rounded-md border" mode="single" />,
+        note: "A date, picked from the month it falls in.",
+        demo: (
+          /* Taller than the tile, so it is pinned to the top of the panel and
+             cropped at the bottom — a month with its caption cut off is not a
+             specimen of anything. */
+          <div className="self-start">
+            <Calendar className="rounded-md border" mode="single" />
+          </div>
+        ),
       },
     ],
   },
   {
-    title: "Form structure",
+    id: "form-structure",
     entries: [
       {
         name: "Field",
+        note: "Label, control, description and error as one unit.",
         demo: (
           <Field>
             <FieldLabel htmlFor="cat-field">Display name</FieldLabel>
@@ -641,12 +702,13 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Data",
+    id: "data",
     entries: [
       {
         name: "Table",
+        note: "Rows to compare down a column.",
         demo: (
-          <div className="overflow-hidden rounded-lg border">
+          <div className="w-full overflow-hidden rounded-lg border">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50 hover:bg-muted/50">
@@ -666,6 +728,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Chart",
+        note: "A series, in the purple ramp.",
         demo: (
           <ChartContainer
             className="h-24 w-full"
@@ -679,6 +742,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Pagination",
+        note: "Moving through pages of rows.",
         demo: (
           /* A real range, not a single page: one page with Previous and Next
              either side of it is the state where pagination should not be
@@ -716,10 +780,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Overlays",
+    id: "overlays",
     entries: [
       {
         name: "Dialog",
+        note: "A task that does not need the page behind it.",
         demo: (
           <Dialog>
             <DialogTrigger asChild>
@@ -743,6 +808,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "AlertDialog",
+        note: "A destructive step, confirmed before it runs.",
         demo: (
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -767,6 +833,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Sheet",
+        note: "A panel from an edge, over the page.",
         demo: (
           <Sheet>
             <SheetTrigger asChild>
@@ -785,6 +852,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Drawer",
+        note: "Configuring one thing beside the page it belongs to.",
         demo: (
           <Drawer direction="right">
             <DrawerTrigger asChild>
@@ -810,6 +878,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Popover",
+        note: "A small surface anchored to what opened it.",
         demo: (
           <Popover>
             <PopoverTrigger asChild>
@@ -825,6 +894,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "HoverCard",
+        note: "A preview on hover. Never a control.",
         demo: (
           <HoverCard>
             <HoverCardTrigger asChild>
@@ -840,6 +910,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Tooltip",
+        note: "The name of a control that shows only an icon.",
         demo: (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -853,6 +924,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "DropdownMenu",
+        note: "Actions on a thing, from the thing's own button.",
         demo: (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -869,6 +941,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "ContextMenu",
+        note: "The same actions, on right-click.",
         demo: (
           <ContextMenu>
             <ContextMenuTrigger className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
@@ -882,6 +955,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Menubar",
+        note: "Persistent menus across the top of a surface.",
         demo: (
           <Menubar>
             <MenubarMenu>
@@ -895,6 +969,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Command",
+        note: "Search over commands, opened from the keyboard.",
         demo: (
           <Command className="rounded-md border">
             <CommandInput placeholder="Type a command" />
@@ -910,10 +985,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Navigation",
+    id: "navigation",
     entries: [
       {
         name: "Sidebar",
+        note: "The app's own nav rail.",
         demo: (
           <div className="rounded-md bg-muted p-2 text-sm text-muted-foreground">
             Rendered at app scale — see any mockup’s shell.
@@ -922,6 +998,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "NavigationMenu",
+        note: "Top-level sections, with panels under them.",
         demo: (
           <NavigationMenu>
             <NavigationMenuList>
@@ -937,6 +1014,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Breadcrumb",
+        note: "Where this page sits, and the way back up.",
         demo: (
           <Breadcrumb>
             <BreadcrumbList>
@@ -954,10 +1032,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Feedback",
+    id: "feedback",
     entries: [
       {
         name: "Alert",
+        note: "A notice that stays on the page.",
         demo: (
           <Alert>
             <CompletedIcon />
@@ -968,6 +1047,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Empty",
+        note: "Nothing here yet, and the one action that changes that.",
         demo: (
           <Empty className="border">
             <EmptyHeader>
@@ -984,6 +1064,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Sonner",
+        note: "A toast: it finished, and no answer is needed.",
         demo: (
           <Button
             onClick={() => toast.success("Voice saved")}
@@ -997,10 +1078,11 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Conversation and media",
+    id: "conversation",
     entries: [
       {
         name: "Message",
+        note: "One turn in a transcript.",
         demo: (
           <MessageGroup>
             <Message>
@@ -1011,6 +1093,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "MessageScroller",
+        note: "A transcript pinned to its latest turn.",
         demo: (
           <div className="rounded-md bg-muted p-2 text-sm text-muted-foreground">
             Wraps a transcript; nothing to show on its own.
@@ -1019,6 +1102,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Bubble",
+        note: "A turn, as a chat bubble.",
         demo: (
           <BubbleGroup>
             <Bubble variant="muted">
@@ -1029,6 +1113,7 @@ const GROUPS: Group[] = [
       },
       {
         name: "Attachment",
+        note: "A file carried on a message.",
         demo: (
           <AttachmentGroup>
             <Attachment>
@@ -1041,16 +1126,13 @@ const GROUPS: Group[] = [
       },
       {
         name: "Carousel",
+        note: "Frames of media, one at a time.",
         demo: (
           /* The arrows are pinned 48px outside the carousel box, so without
-             matching margin they land in the neighbouring cell. With it the
-             component starts on the cell's start edge, arrows included.
-
-             Capped, because the Example column is ~940px: uncapped the frame
-             filled it and a 1280x533 capture was being blown up past its own
-             resolution. `sizes` has to match the cap or Next serves a file for
-             the wrong width and it blurs whatever the box does. */
-          <Carousel className="mx-12 max-w-sm">
+             matching margin they land outside the tile. `flex-1` rather than a
+             width: the tile centres its specimen with flex, and the carousel's
+             own overflow clip would otherwise let it collapse to nothing. */
+          <Carousel className="mx-12 min-w-0 flex-1">
             <CarouselContent>
               {CAROUSEL_CLIPS.map((clip) => (
                 <CarouselItem key={clip.src}>
@@ -1058,21 +1140,21 @@ const GROUPS: Group[] = [
                     className="overflow-hidden rounded-md bg-muted"
                     ratio={16 / 9}
                   >
-                    {/* quality 100 and a 2x sizes hint: the source is a webp
-                        the thumbnail script already wrote at q82, so the
-                        default re-encode at 75 was compressing a compressed
-                        capture. UI screenshots are fine text and thin rules —
-                        the first thing a second pass eats.
+                    {/* quality 100: the source is a webp the thumbnail script
+                        already wrote at q82, so the default re-encode at 75 was
+                        compressing a compressed capture. UI screenshots are
+                        fine text and thin rules — the first thing a second
+                        pass eats.
 
-                        sizes is the frame's real width, so a 2x screen asks
-                        for 768. Claiming more fetched a 1920 candidate, which
-                        the 1280-wide source can only upscale into. */}
+                        sizes is the frame's real width in the tile, so a 2x
+                        screen asks for 512 rather than a candidate the
+                        1280-wide source could only be upscaled into. */}
                     <Image
                       alt={clip.alt}
                       className="object-cover"
                       fill
                       quality={100}
-                      sizes="384px"
+                      sizes="256px"
                       src={clip.src}
                     />
                   </AspectRatio>
@@ -1087,21 +1169,22 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    title: "Effects and utilities",
+    id: "effects",
     entries: [
       {
         name: "MultiStepLoader",
-        demo: (
-          <div className="rounded-md bg-muted p-2 text-sm text-muted-foreground">
-            Takes over the screen while it runs.
-          </div>
-        ),
+        note: "A long job, reported step by step.",
+        demo: <NoSpecimen>Takes over the screen while it runs.</NoSpecimen>,
       },
       {
         name: "AnimatedBeam",
+        note: "A line drawn between two elements.",
+        demo: <NoSpecimen>Measures two refs it has to be given.</NoSpecimen>,
       },
       {
         name: "Direction",
+        note: "Sets text direction for everything inside it.",
+        demo: <NoSpecimen>Renders nothing of its own.</NoSpecimen>,
       },
     ],
   },
@@ -1133,32 +1216,76 @@ function BarChartDemo() {
   )
 }
 
-export function ComponentCatalog() {
+/** The line that stands in for a specimen that cannot be shown in a tile. */
+function NoSpecimen({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="text-sm text-balance text-muted-foreground">
+      {children}
+    </span>
+  )
+}
+
+/**
+ * One primitive, in the shape the rest of the catalog is browsed in: the
+ * component itself on an inset panel, then its name and the one line that says
+ * what it is for.
+ *
+ * The specimen leads because it answers the question people arrive with —
+ * *which one of these is the thing I am picturing* — before any name can. The
+ * panel is a fixed height so that a row of tiles reads as a row rather than as
+ * a stack of unrelated boxes; anything taller than that is cropped, which is
+ * what a thumbnail is.
+ */
+function PrimitiveTile({ entry }: { entry: Entry }) {
+  return (
+    <Card className="gap-3" size="sm">
+      <CardContent>
+        <div className="flex h-44 items-center justify-center overflow-hidden rounded-lg bg-muted p-4">
+          {entry.demo}
+        </div>
+      </CardContent>
+
+      <CardHeader>
+        <CardTitle className="font-mono">{entry.name}</CardTitle>
+        <CardDescription>{entry.note}</CardDescription>
+      </CardHeader>
+    </Card>
+  )
+}
+
+/**
+ * The inventory. Pass a group id for one shelf of it, or leave it off for all
+ * twelve — which is what the Components index opens with.
+ */
+export function ComponentCatalog({ group }: { group?: CatalogGroupId }) {
+  const shelves = group ? GROUPS.filter((shelf) => shelf.id === group) : GROUPS
+
   return (
     <div className="flex flex-col gap-8">
-      {GROUPS.map((group) => (
-        <section className="flex flex-col gap-3" key={group.title}>
-          <h3 className="text-sm font-medium text-muted-foreground">
-            {group.title}
-          </h3>
+      {shelves.map((shelf) => {
+        const meta = CATALOG_GROUPS.find((entry) => entry.id === shelf.id)
 
-          {/* One row per primitive rather than three across: the names then
-              read down a single column, which is how you scan for one. */}
-          <ReferenceTable
-            columns={[
-              { header: "Primitive", width: "w-64" },
-              { header: "Example" },
-            ]}
-            rows={group.entries.map((entry) => ({
-              key: entry.name,
-              cells: [
-                <ReferenceName key="name">{entry.name}</ReferenceName>,
-                entry.demo ?? null,
-              ],
-            }))}
-          />
-        </section>
-      ))}
+        return (
+          <section className="flex flex-col gap-4" key={shelf.id}>
+            {/* The heading is the group's own page title when one group is
+                showing, so it is not repeated above itself. */}
+            {group ? null : (
+              <div className="flex flex-col gap-1">
+                <h2 className="text-lg font-semibold">{meta?.title}</h2>
+                <p className="max-w-2xl text-sm text-muted-foreground">
+                  {meta?.description}
+                </p>
+              </div>
+            )}
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {shelf.entries.map((entry) => (
+                <PrimitiveTile entry={entry} key={entry.name} />
+              ))}
+            </div>
+          </section>
+        )
+      })}
     </div>
   )
 }

@@ -62,3 +62,8 @@ export const WarningIcon = icon(Alert02Icon, "WarningIcon")
 /** A bare tick, for a step already done. `CompletedIcon` is a circled one and
     would sit inside the stepper's own circle. */
 export const StepDoneIcon = icon(Tick02Icon, "StepDoneIcon")
+
+/* The rail's disclosure chevron. It points down when the section is open and
+   is rotated a quarter turn when it is not, so one glyph carries both states
+   rather than two glyphs that have to be told apart. */
+export const SectionToggleIcon = icon(ArrowDown01Icon, "SectionToggleIcon")
