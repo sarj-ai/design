@@ -99,7 +99,7 @@ export function TabsPreview() {
             edge instead, which is a transform, so the whole move is one
             composited property. Geometry goes in `style` because it is
             measured; every class here is on the scale. */}
-        <div className="flex w-fit flex-col gap-1">
+        <div className="flex w-fit flex-col gap-2">
           <TabsList className="relative gap-1 bg-transparent p-0">
             {pill ? (
               <div

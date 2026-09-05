@@ -234,14 +234,16 @@ const MultiStepForm = React.forwardRef<HTMLDivElement, MultiStepFormProps>(
                     step={step}
                   >
                     <StepperTrigger>
-                      {/* The fill and the glyph are one event, so they share
-                          200ms and ease-out-cubic. Colour is paint, but this is
-                          a 24px circle — the rule against paint animation is
-                          about large surfaces.
+                      {/* The fill and the glyph are one event. Colour is paint,
+                          but this is a 24px circle — the rule against paint
+                          animation is about large surfaces.
 
-                          The tick zooms from 0.5 rather than 0: something that
-                          grows from nothing reads as a pop, not an arrival. */}
-                      <StepperIndicator className="size-6 transition-colors duration-200 ease-out-cubic motion-reduce:transition-none data-[state=completed]:bg-success data-[state=completed]:text-success-foreground data-[state=completed]:[&_svg]:animate-in data-[state=completed]:[&_svg]:zoom-in-50 data-[state=completed]:[&_svg]:fade-in data-[state=completed]:[&_svg]:duration-200 data-[state=completed]:[&_svg]:ease-out-cubic motion-reduce:[&_svg]:animate-none">
+                          The tick is drawn rather than zoomed in: it is written
+                          along its own path, left to right, the same way the
+                          line before it fills. See the note on INDICATOR in
+                          stepper-preview.tsx for how the dash length is picked;
+                          the two are the same component and animate alike. */}
+                      <StepperIndicator className="size-6 transition-colors duration-200 ease-out-cubic motion-reduce:transition-none data-[state=completed]:bg-success data-[state=completed]:text-success-foreground data-[state=completed]:[&_svg_path]:[--draw-length:22] data-[state=completed]:[&_svg_path]:[stroke-dasharray:var(--draw-length)] data-[state=completed]:[&_svg_path]:animate-draw-stroke motion-reduce:[&_svg_path]:animate-none">
                         {step}
                       </StepperIndicator>
                     </StepperTrigger>
@@ -250,8 +252,13 @@ const MultiStepForm = React.forwardRef<HTMLDivElement, MultiStepFormProps>(
                          that turns green all at once says a step is done, a
                          line that fills says which way you are going. scaleX on
                          an overlay keeps it on the compositor — animating the
-                         bar's own width would be layout. */
-                      <StepperSeparator className="relative overflow-hidden before:absolute before:inset-0 before:origin-left before:scale-x-0 before:rounded-sm before:bg-success before:transition-transform before:duration-300 before:ease-out-cubic before:content-[''] group-data-[state=completed]/step:before:scale-x-100 motion-reduce:before:transition-none" />
+                         bar's own width would be layout.
+
+                         mx-0 over the primitive's own m-0.5: both ends of this
+                         line meet a circle, and 2px short of one at each end is
+                         a line laid between the steps rather than the track
+                         that carries you along them. */
+                      <StepperSeparator className="relative mx-0 overflow-hidden before:absolute before:inset-0 before:origin-left before:scale-x-0 before:rounded-sm before:bg-success before:transition-transform before:duration-300 before:ease-out-cubic before:content-[''] group-data-[state=completed]/step:before:scale-x-100 motion-reduce:before:transition-none" />
                     ) : null}
                   </StepperItem>
                 ),
