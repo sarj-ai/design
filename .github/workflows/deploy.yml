@@ -1,0 +1,49 @@
+# Push to main -> live on Cloudflare Workers.
+#
+# Needs two repository secrets, both from the Cloudflare dashboard:
+#   CLOUDFLARE_API_TOKEN   API token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  Workers & Pages -> Account ID
+#
+# Everything else — the worker name, the bindings, the compat flags — is in
+# wrangler.jsonc, so a deploy never depends on dashboard state someone has to
+# remember to keep in step.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # So a deploy can be re-run from the Actions tab without an empty commit.
+  workflow_dispatch:
+
+# A newer push supersedes one still building; never let two deploys race.
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The same gates that guard a local commit, so a red build never ships.
+      - run: npm run lint
+      - run: npm run typecheck
+
+      - name: Build for Workers
+        run: npm run cf:build
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

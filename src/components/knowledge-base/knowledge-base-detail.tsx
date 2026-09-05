@@ -30,7 +30,7 @@ import {
   type Source,
   type SourceKind,
 } from "@/lib/knowledge-base-data"
-import { KnowledgeAppShell } from "@/components/knowledge-base/app-shell"
+import { AppShell } from "@/components/app-shell"
 import {
   AddSourceDialog,
   AddSources,
@@ -118,7 +118,8 @@ export function KnowledgeBaseDetail({
   }
 
   return (
-    <KnowledgeAppShell crumb={base.name}>
+    <AppShell active="Knowledge Bases" breadcrumb={["Knowledge Bases", base.name]}>
+      <div className="flex flex-col gap-6 p-3 lg:p-4">
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">{base.name}</h1>
         <p className="text-sm text-muted-foreground">
@@ -227,6 +228,7 @@ export function KnowledgeBaseDetail({
         onOpenChange={(open) => setDialog(open ? dialog : null)}
         onAdd={addTyped}
       />
-    </KnowledgeAppShell>
+      </div>
+    </AppShell>
   )
 }

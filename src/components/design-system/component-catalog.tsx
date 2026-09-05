@@ -1190,6 +1190,18 @@ const GROUPS: Group[] = [
   },
 ]
 
+/**
+ * Every primitive name, filed under the group it sits in.
+ *
+ * The index the rail's search runs against: the rail lists twelve group titles,
+ * so without this, typing `Tooltip` finds nothing even though the page has one.
+ * Derived from `GROUPS` rather than written out a second time — a list of names
+ * kept beside the entries goes stale the first time one is renamed.
+ */
+export const PRIMITIVE_NAMES: Record<string, string[]> = Object.fromEntries(
+  GROUPS.map((group) => [group.id, group.entries.map((entry) => entry.name)]),
+)
+
 /** Recharts is a peer of ChartContainer, so the chart lives in its own node. */
 function BarChartDemo() {
   const [Recharts, setRecharts] = React.useState<
@@ -1240,8 +1252,14 @@ function PrimitiveTile({ entry }: { entry: Entry }) {
   return (
     <Card className="gap-3" size="sm">
       <CardContent>
-        <div className="flex h-44 items-center justify-center overflow-hidden rounded-lg bg-muted p-4">
-          {entry.demo}
+        {/* The frame and the padding are separate elements on purpose: radius
+            + edge + padding on one div is a hand-rolled Card, which
+            `sarj/use-ui-primitives` rejects. Same split ReferenceTable uses —
+            the border is the wrapper's, the inset is the child's. */}
+        <div className="h-44 overflow-hidden rounded-lg border">
+          <div className="flex h-full items-center justify-center p-4">
+            {entry.demo}
+          </div>
         </div>
       </CardContent>
 

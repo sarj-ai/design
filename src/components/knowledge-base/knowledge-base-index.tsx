@@ -38,7 +38,7 @@ import {
   KNOWLEDGE_BASES,
   type KnowledgeBaseRow,
 } from "@/lib/knowledge-base-data"
-import { KnowledgeAppShell } from "@/components/knowledge-base/app-shell"
+import { AppShell } from "@/components/app-shell"
 import { NewKnowledgeBaseDialog } from "@/components/knowledge-base/new-knowledge-base-dialog"
 import { RowMenuIcon, SearchIcon } from "@/components/knowledge-base/icons"
 
@@ -63,7 +63,8 @@ export function KnowledgeBaseIndex({
   const [deleting, setDeleting] = React.useState<KnowledgeBaseRow | null>(null)
 
   return (
-    <KnowledgeAppShell>
+    <AppShell active="Knowledge Bases">
+      <div className="flex flex-col gap-6 p-3 lg:p-4">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Knowledge Bases</h1>
         <Button onClick={() => setCreating(true)}>New Knowledge Base</Button>
@@ -218,6 +219,7 @@ export function KnowledgeBaseIndex({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </KnowledgeAppShell>
+      </div>
+    </AppShell>
   )
 }

@@ -1,9 +1,23 @@
 "use client"
 
+import Image from "next/image"
+import Link from "next/link"
 import * as React from "react"
 
-import { SectionToggleIcon } from "@/components/design-system/icons"
+import { AppHeader } from "@/components/app-shell"
+import { PRIMITIVE_NAMES } from "@/components/design-system/component-catalog"
+import {
+  CloseIcon,
+  SearchIcon,
+  SectionToggleIcon,
+} from "@/components/design-system/icons"
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
 import {
   Item,
   ItemContent,
@@ -16,13 +30,36 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system-data"
+import { Button } from "@/components/ui/button"
+import { BackIcon } from "@/components/workspace-icons"
+import {
+  DOCS_SECTIONS,
+  type DocsPage,
+  type DocsSection,
+} from "@/lib/design-system-data"
 import { cn } from "@/lib/utils"
+
+/**
+ * A rail entry while a search is running.
+ *
+ * Same shape the rail always renders, plus the primitive names that matched
+ * under it — the only thing a search puts in the rail that is not otherwise in
+ * it, and it hangs off the shelf it belongs to rather than floating loose.
+ */
+type RailPage = DocsPage & { primitives?: string[] }
+type RailGroup = { label?: string; pages: RailPage[] }
+type RailSection = DocsPage & { groups: RailGroup[] }
 
 /**
  * The documentation shell: a rail listing every topic, and one topic open
@@ -39,6 +76,25 @@ import { cn } from "@/lib/utils"
  * look first. A topic with no entry in `views` falls back to its section's
  * index — that is what a section header opens.
  */
+/**
+ * Marks a topic whose answer is ours rather than an inherited default.
+ *
+ * A dot rather than a word: it sits in a 15rem rail beside titles that already
+ * fill it, and a badge saying "custom" on a third of the rows would be read
+ * once and then be noise on every visit. `title` carries the meaning for
+ * anyone who wants it, and the dot is `aria-hidden` so a screen reader gets
+ * the sentence instead of a bullet.
+ */
+function SarjDot({ className }: { className?: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn("size-1.5 shrink-0 rounded-full bg-primary", className)}
+      title="A decision of ours, not a default"
+    />
+  )
+}
+
 export function DesignSystemDocs({
   views,
 }: {
@@ -46,6 +102,9 @@ export function DesignSystemDocs({
   views: Record<string, React.ReactNode>
 }) {
   const [active, setActive] = React.useState(DOCS_SECTIONS[0].id)
+  const [query, setQuery] = React.useState("")
+
+  const term = query.trim().toLowerCase()
 
   /* Sections open independently. Switching topic never closes a section the
      reader opened — the rail is a map, and a map that rearranges itself under
@@ -70,6 +129,39 @@ export function DesignSystemDocs({
           .flatMap((group) => group.pages)
           .find((candidate) => candidate.id === active) ?? section)
 
+  /* What the rail lists right now: everything, or what the query reaches.
+     The search has to reach inside the twelve primitive shelves and not just
+     their twelve titles — the rail is how a reader finds out that `Tooltip`
+     exists at all, and "Overlays" does not say so. */
+  const rail = React.useMemo<RailSection[]>(() => {
+    if (!term) return DOCS_SECTIONS
+
+    return DOCS_SECTIONS.flatMap((section) => {
+      /* A section whose own title matches keeps everything under it. The match
+         is the section, so narrowing what is in it answers a question nobody
+         asked. */
+      if (section.title.toLowerCase().includes(term)) return [section]
+
+      const groups = section.groups.flatMap((group) => {
+        const pages = group.pages.flatMap((page) => {
+          const primitives = (PRIMITIVE_NAMES[page.id] ?? []).filter((name) =>
+            name.toLowerCase().includes(term),
+          )
+
+          if (!primitives.length) {
+            return page.title.toLowerCase().includes(term) ? [page] : []
+          }
+
+          return [{ ...page, primitives }]
+        })
+
+        return pages.length ? [{ ...group, pages }] : []
+      })
+
+      return groups.length ? [{ ...section, groups }] : []
+    })
+  }, [term])
+
   function openSection(id: string) {
     /* One control, two jobs: it opens the section's index, and it opens the
        section. Pressing the one you are already on is what closes it again —
@@ -83,42 +175,111 @@ export function DesignSystemDocs({
   }
 
   return (
-    <SidebarProvider className="min-h-0 flex-1 items-start">
-      {/* Pinned under the mockup shell's own 48px header, with its own scroll:
-          the rail is longer than the pane on the short topics and shorter on
-          the long ones, and neither should drag the other. */}
-      <Sidebar
-        className="sticky top-12 h-[calc(100svh-3rem)] border-e"
-        collapsible="none"
-      >
+    /* The app's own chrome, so the reference reads as a page of the product
+       rather than a site beside it: same 15rem inset rail, same header row. */
+    <SidebarProvider
+      className="min-h-0 flex-1"
+      style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
+    >
+      <Sidebar collapsible="icon" variant="inset">
+        <SidebarHeader className="px-2 pt-2 pb-1">
+          <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
+            <Image
+              alt="sarj.ai"
+              className="group-data-[state=collapsed]:hidden"
+              height={32}
+              priority
+              src="/logo.png"
+              width={56}
+            />
+            <SidebarTrigger className="size-8 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground [&>svg]:size-5" />
+          </div>
+
+          {/* In the header rather than at the top of the list it filters: a
+              field that scrolls away from its own results is one you lose the
+              moment you start reading them. */}
+          <InputGroup className="group-data-[state=collapsed]:hidden">
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupInput
+              aria-label="Search topics and components"
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") setQuery("")
+              }}
+              placeholder="Search"
+              value={query}
+            />
+
+            {/* Absent until there is something to clear. */}
+            {query ? (
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  aria-label="Clear search"
+                  onClick={() => setQuery("")}
+                  size="icon-xs"
+                >
+                  <CloseIcon />
+                </InputGroupButton>
+              </InputGroupAddon>
+            ) : null}
+          </InputGroup>
+        </SidebarHeader>
+
         <SidebarContent className="gap-0 py-2">
-          {DOCS_SECTIONS.map((entry) => (
+          {rail.map((entry) => (
             <DocsSectionNav
               active={active}
               key={entry.id}
               onSelect={setActive}
               onToggle={openSection}
-              open={open[entry.id] ?? false}
+              /* Whatever a search leaves standing is open: a match inside a
+                 collapsed section is a match the reader is shown and cannot
+                 reach. Clearing the field restores what they had open. */
+              open={term ? true : (open[entry.id] ?? false)}
               section={entry}
             />
           ))}
+
+          {rail.length === 0 ? (
+            <p className="px-4 py-2 text-sm text-muted-foreground">
+              Nothing matches.
+            </p>
+          ) : null}
         </SidebarContent>
       </Sidebar>
 
-      <div className="min-w-0 flex-1">
-        <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-8">
-          <header className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold">{page.title}</h1>
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              {page.description}
-            </p>
-          </header>
+      <SidebarInset className="min-w-0 overflow-hidden">
+        {/* The way back to the index, in the row that is already there. The
+            page carried a second bar above this one for the same one link. */}
+        <AppHeader
+          actions={
+            <Button asChild size="sm" variant="outline">
+              <Link href="/">
+                <BackIcon />
+                All mockups
+              </Link>
+            </Button>
+          }
+          trail={["Design system", page.title]}
+        />
+        {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
+        <div className="min-h-0 flex-1 overflow-auto">
+          <main className="flex flex-col gap-8 p-3 lg:p-4">
+            <header className="flex flex-col gap-1">
+              <h1 className="text-2xl font-semibold">{page.title}</h1>
+              <p className="max-w-2xl text-sm text-muted-foreground">
+                {page.description}
+              </p>
+            </header>
 
-          {views[active] ?? (
-            <SectionIndex onSelect={setActive} section={section} />
-          )}
-        </main>
-      </div>
+            {views[active] ?? (
+              <SectionIndex onSelect={setActive} section={section} />
+            )}
+          </main>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   )
 }
@@ -135,7 +296,7 @@ function DocsSectionNav({
   onSelect: (id: string) => void
   onToggle: (id: string) => void
   open: boolean
-  section: DocsSection
+  section: RailSection
 }) {
   return (
     <Collapsible open={open}>
@@ -181,7 +342,32 @@ function DocsSectionNav({
                       onClick={() => onSelect(entry.id)}
                     >
                       <span className="truncate">{entry.title}</span>
+                      {entry.sarj ? <SarjDot className="ms-auto" /> : null}
                     </SidebarMenuButton>
+
+                    {/* The primitives a search matched, under the shelf they
+                        are on. Mono, because a component name is something you
+                        type and a topic title is not — and they open the shelf
+                        rather than a page of their own, which is why none of
+                        them ever reads as the current one. */}
+                    {entry.primitives?.length ? (
+                      <SidebarMenuSub>
+                        {entry.primitives.map((name) => (
+                          <SidebarMenuSubItem key={name}>
+                            <SidebarMenuSubButton asChild>
+                              <button
+                                onClick={() => onSelect(entry.id)}
+                                type="button"
+                              >
+                                <span className="truncate font-mono">
+                                  {name}
+                                </span>
+                              </button>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    ) : null}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -221,7 +407,10 @@ function SectionIndex({
                   type="button"
                 >
                   <ItemContent>
-                    <ItemTitle>{page.title}</ItemTitle>
+                    <ItemTitle className="flex items-center gap-2">
+                      {page.title}
+                      {page.sarj ? <SarjDot /> : null}
+                    </ItemTitle>
                     <ItemDescription>{page.description}</ItemDescription>
                   </ItemContent>
                 </button>

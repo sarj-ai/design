@@ -1,4 +1,10 @@
 "use client"
+/* eslint-disable sarj/no-raw-color, sarj/use-ui-primitives, sarj/no-arbitrary-scale --
+   A skeuomorphic specimen, deliberately outside the token system: the whole
+   subject is a literal metal gradient, a letterpress text-shadow and a hairline
+   bevel, none of which any brand token describes or should. It is not a Sarj
+   component and nothing imports it. Kept as a reference for the technique;
+   delete the file rather than trying to bring it onto the scale. */
 /**
  * Glossy silver pill button with a vertical white-to-gray gradient stroke and embossed letterpress text, in slim steel and chunky pearl variants.
  */
@@ -56,7 +62,7 @@ const SilverButton = React.forwardRef<HTMLButtonElement, SilverButtonProps>(
       <button
         ref={ref}
         className={cn(
-          "relative inline-flex items-center justify-center whitespace-nowrap font-medium leading-[23px] outline-none transition-transform duration-150 active:scale-[0.98]",
+          "relative inline-flex items-center justify-center whitespace-nowrap font-medium leading-[23px] outline-none transition-transform duration-150 active:scale-[0.98] motion-reduce:transition-none",
           className,
         )}
         style={{

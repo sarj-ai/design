@@ -13,6 +13,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Cloudflare build output. The bundled server handler is a single 10MB
+    // line, and linting it exhausts the heap before it fails.
+    ".open-next/**",
+    ".wrangler/**",
   ]),
 
   /**

@@ -47,3 +47,7 @@ next-env.d.ts
 # run its conformance gate. Internal product documents, and the folder is meant
 # to be deleted once PRDs live on Linear; committing them would outlive that.
 /PRD
+
+# cloudflare build output
+.open-next/
+.wrangler/

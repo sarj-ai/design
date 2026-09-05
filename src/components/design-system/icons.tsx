@@ -7,11 +7,14 @@ import {
   ArrowDownLeft01Icon,
   ArrowUp01Icon,
   ArrowUpRight01Icon,
+  BubbleChatIcon,
   Calendar03Icon,
   Cancel01Icon,
   CancelCircleIcon,
   CheckmarkCircle02Icon,
   Clock01Icon,
+  Coins01Icon,
+  CpuIcon,
   Delete02Icon,
   Download01Icon,
   FilterIcon,
@@ -67,3 +70,10 @@ export const StepDoneIcon = icon(Tick02Icon, "StepDoneIcon")
    is rotated a quarter turn when it is not, so one glyph carries both states
    rather than two glyphs that have to be told apart. */
 export const SectionToggleIcon = icon(ArrowDown01Icon, "SectionToggleIcon")
+
+/* The tabs demo. One glyph per view of the same call, each naming what that
+   view holds — the bar is the thing being demonstrated, so the labels carry
+   an icon the way a real settings or record bar does. */
+export const TranscriptIcon = icon(BubbleChatIcon, "TranscriptIcon")
+export const ModelIcon = icon(CpuIcon, "ModelIcon")
+export const CostIcon = icon(Coins01Icon, "CostIcon")

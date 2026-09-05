@@ -31,7 +31,7 @@ import { Switch } from "@/components/ui/switch"
  * are still reading — and that is the opposite of a creation flow, which takes
  * the whole screen because the page behind it no longer matters. So a drawer
  * never carries steps: it configures one setting or shows one thing, and if it
- * needs a second screen it was a modal all along.
+ * needs a second screen it was a pop-up all along.
  *
  * The header is the shape AGENTS.md fixes: a title, a description and Close.
  * No icon tile — the platform does not put one there, and a glyph beside a

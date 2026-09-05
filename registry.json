@@ -112,7 +112,9 @@
       "description": "The knowledge base as a resource the agent queries rather than prompt text: documents added from files, a pasted note or a URL, each carrying its extraction state, and the summary that tells the agent when to reach for it.",
       "dependencies": [
         "@hugeicons/core-free-icons",
-        "@hugeicons/react"
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -120,6 +122,7 @@
         "breadcrumb",
         "button",
         "card",
+        "collapsible",
         "dialog",
         "dropdown-menu",
         "field",
@@ -136,14 +139,19 @@
           "target": "app/knowledge-base/page.tsx"
         },
         {
+          "path": "src/components/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/app-shell.tsx"
+        },
+        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
-        },
-        {
-          "path": "src/components/knowledge-base/app-shell.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/knowledge-base/app-shell.tsx"
         },
         {
           "path": "src/components/knowledge-base/icons.tsx",
@@ -174,6 +182,11 @@
           "path": "src/lib/knowledge-base-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/knowledge-base-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
         }
       ],
       "css": {

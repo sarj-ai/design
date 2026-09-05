@@ -61,18 +61,19 @@ import {
 } from "@/lib/design-system-data"
 
 /**
- * The three surfaces, opened rather than described.
+ * The four surfaces, opened rather than described.
  *
  * The diagram above each one says where the surface sits; this says what it
  * feels like to be in it — which is the half a reader cannot get from a
- * criterion. Same object in all three so the comparison is about the surface
- * and not about the content: picking a voice is inline, tuning one is a
- * drawer, making one is a modal.
+ * criterion. Same object throughout so the comparison is about the surface and
+ * not about the content: picking a voice is inline, tuning one is a drawer,
+ * deleting one is a pop-up, and making one runs across steps.
  */
 export function SurfaceDemo({ variant }: { variant: SurfaceChoice["id"] }) {
   if (variant === "inline") return <InlineDemo />
   if (variant === "drawer") return <DrawerDemo />
-  return <ModalDemo />
+  if (variant === "multi-step") return <CreateVoiceDialog />
+  return <PopupDemo />
 }
 
 /**
@@ -227,21 +228,21 @@ function DrawerDemo() {
 }
 
 /**
- * Modal: the two things it is for, side by side. One is a decision the reader
- * has to finish before the page means anything again; the other is a flow with
- * steps, where the page behind would only be in the way.
+ * Pop-up: the one thing it is for. A decision the reader has to finish before
+ * the page means anything again — which is why it takes the page rather than
+ * sitting beside it, and why it is over in one screen.
  */
-function ModalDemo() {
-  return (
-    <div className="flex flex-wrap gap-2">
-      <CreateVoiceDialog />
-      <DeleteAgentDialog />
-    </div>
-  )
+function PopupDemo() {
+  return <DeleteAgentDialog />
 }
 
 /**
- * Creating a voice, on the shared multi-step shell.
+ * Multi-step: creating a voice, on the shared multi-step shell.
+ *
+ * It sits under its own surface rather than beside the delete dialog, where it
+ * used to be: both open over the page, but one is answered in a sentence and
+ * the other is three screens of work, and putting them in one cell was the
+ * reason the comparison never named the second.
  *
  * It was a hand-rolled three-step dialog with its own step counter, its own
  * Back and its own footer — written before that shell existed, and the reason

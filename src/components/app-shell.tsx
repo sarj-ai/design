@@ -149,12 +149,20 @@ function NavLink({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
+        /* Two differences from the primitive's defaults, both as the app has
+           them: hover lands on the neutral `accent` rather than the purple
+           `sidebar-accent`, and the active item carries a hairline of its own
+           foreground so the filled pill reads as a border, not just a wash. */
+        className="border border-transparent hover:bg-accent hover:text-accent-foreground data-active:border-sidebar-accent-foreground/10"
         isActive={active}
         tooltip={item.title}
         onClick={() => onNavigate?.(item.title)}
       >
         <item.icon />
-        <span className="truncate">{item.title}</span>
+        {/* Closing to the rail fades the label out rather than clipping it. */}
+        <span className="truncate transition-opacity duration-200 ease-out-cubic group-data-[collapsible=icon]:opacity-0 motion-reduce:transition-none">
+          {item.title}
+        </span>
       </SidebarMenuButton>
       {/* `rounded-sm` in place of the primitive's `rounded-md` and `right-2` in
           place of `right-1`, both as the app has them.
@@ -237,60 +245,83 @@ function NavGroup({
 }
 
 /** Breadcrumb start, account end — the row every page in the app sits under. */
-function AppHeader({
-  breadcrumb,
+export function AppHeader({
+  actions,
+  trail,
   showSettings,
 }: {
-  breadcrumb: string
-  showSettings: boolean
+  /** Replaces the account row entirely. The design-system page uses it to
+   *  carry the way back to the index; a mockup leaves it off and gets the
+   *  row the app itself shows. */
+  actions?: React.ReactNode
+  /** Crumbs after Home. The last is the page; earlier ones are links. */
+  trail: readonly string[]
+  showSettings?: boolean
 }) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-4 px-4">
       <Breadcrumb>
-        <BreadcrumbList>
+        {/* The app spaces its crumbs at 2.5; the primitive ships 1.5. */}
+        <BreadcrumbList className="gap-2.5">
           <BreadcrumbItem>
             <BreadcrumbLink href="#">Home</BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{breadcrumb}</BreadcrumbPage>
-          </BreadcrumbItem>
+          {trail.map((crumb, index) => (
+            <React.Fragment key={crumb}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                {index === trail.length - 1 ? (
+                  <BreadcrumbPage>{crumb}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink href="#">{crumb}</BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </React.Fragment>
+          ))}
         </BreadcrumbList>
       </Breadcrumb>
 
       <div className="flex shrink-0 items-center gap-2">
-        <Button size="sm" variant="outline">
-          <DeveloperDocsIcon />
-          Developer Doc
-        </Button>
-        {/* The same allowlist the nav reads. The app has this gear on its own
+        {actions ?? (
+          <>
+            <Button size="sm" variant="outline">
+              <DeveloperDocsIcon />
+              Developer Doc
+            </Button>
+            {/* The same allowlist the nav reads. The app has this gear on its own
             check today, which is how an admin gets a second dead end to the
             page the sidebar already sent them to. */}
-        {showSettings ? (
-          <Button aria-label="Global settings" size="icon-sm" variant="outline">
-            <SettingsIcon />
-          </Button>
-        ) : null}
-        {/* Wrapped, rather than given `self-center`: the primitive ships
+            {showSettings ? (
+              <Button
+                aria-label="Global settings"
+                size="icon-sm"
+                variant="outline"
+              >
+                <SettingsIcon />
+              </Button>
+            ) : null}
+            {/* Wrapped, rather than given `self-center`: the primitive ships
             `data-vertical:self-stretch`, and an attribute variant outranks a
             plain utility, so the rule stretched to the 28px row, got held to
             h-4, and settled at the top of it — 6px above the centre the buttons
             and the avatar share. Inside a wrapper of its own the flex line is
             the rule's own height, so stretching changes nothing and the wrapper
             is what the header centres. */}
-        <div className="flex items-center">
-          <Separator className="mx-1 h-4" orientation="vertical" />
-        </div>
-        {/* A rounded square at the same radius and height as the two buttons,
+            <div className="flex items-center">
+              <Separator className="mx-1 h-4" orientation="vertical" />
+            </div>
+            {/* A rounded square at the same radius and height as the two buttons,
             not a circle. The app's account button is Clerk's, and Clerk does not
             inherit the app's CSS vars — so the real header sets its avatar
             radius to a 0.625rem literal, which is `--radius`, which is
             `rounded-lg`. A circle here is the one thing in this row that would
             not be in the app. `after:` and the fallback carry the primitive's
             own `rounded-full`, so both have to be squared off with it. */}
-        <Avatar className="size-7 rounded-lg after:rounded-lg">
-          <AvatarFallback className="rounded-lg">TA</AvatarFallback>
-        </Avatar>
+            <Avatar className="size-7 rounded-lg after:rounded-lg">
+              <AvatarFallback className="rounded-lg">TA</AvatarFallback>
+            </Avatar>
+          </>
+        )}
       </div>
     </header>
   )
@@ -305,8 +336,8 @@ export function AppShell({
 }: {
   /** Title of the sidebar item this screen lives under, e.g. "Personas". */
   active: string
-  /** Page label in the breadcrumb; defaults to `active`. */
-  breadcrumb?: string
+  /** Crumbs after Home; a bare string is a single one. Defaults to `active`. */
+  breadcrumb?: string | readonly string[]
   /**
    * Nav item titles this viewer's role cannot open, so the menu holds only
    * what they can reach. Omit it and the nav is the full one, which is what
@@ -325,7 +356,12 @@ export function AppShell({
   })).filter((group) => group.items.length > 0)
 
   return (
-    <SidebarProvider className="min-h-0 flex-1">
+    /* The app sizes its sidebar at 15rem; the shadcn primitive ships 16rem.
+       Set here rather than in the primitive, which is generated. */
+    <SidebarProvider
+      className="min-h-0 flex-1"
+      style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
+    >
       {/* The sidebar pins to the viewport as it does in the app, so it clears
           the mockup shell's own header rather than sliding under it. */}
       <Sidebar className="pt-12" collapsible="icon" variant="inset">
@@ -340,7 +376,7 @@ export function AppShell({
               src="/logo.png"
               width={56}
             />
-            <SidebarTrigger className="text-muted-foreground" />
+            <SidebarTrigger className="size-8 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground [&>svg]:size-5" />
           </div>
         </SidebarHeader>
 
@@ -384,13 +420,17 @@ export function AppShell({
 
       <SidebarInset className="min-w-0 overflow-hidden">
         <AppHeader
-          breadcrumb={breadcrumb ?? active}
+          trail={
+            breadcrumb === undefined
+              ? [active]
+              : typeof breadcrumb === "string"
+                ? [breadcrumb]
+                : breadcrumb
+          }
           showSettings={!hidden.has("Global Settings")}
         />
         {/* No gutter here: the page owns its p-3 lg:p-4, matching the header. */}
-        <div className="flex min-h-0 flex-1 flex-col overflow-auto">
-          {children}
-        </div>
+        <div className="min-h-0 flex-1 overflow-auto">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )
