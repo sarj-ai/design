@@ -9,32 +9,39 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 /**
  * A label and the (i) that explains it, on one line.
  *
- * The repo's default is an inline `FieldDescription` under the label, and it
- * is the better call on a full-width form. These two surfaces are not that: a
- * dialog step is two columns and a side drawer is about 384px, so a sentence
- * under every label wraps to two lines and the controls end up below a wall of
- * prose. The (i) keeps the field list scannable and puts the sentence one
- * hover away.
+ * What decides between this and an inline `FieldDescription` is the surface. A
+ * form is full width and met once, so it explains inline. A drawer is 384px
+ * and a dialog step is two columns, and both are read many times and answered
+ * once — there a sentence under every label is a paragraph under every label,
+ * and the panel stops being a list of settings you can scan.
  *
- * Shared rather than copied, because the rule both screens are keeping is that
- * a screen uses one explanation language throughout — which is only checkable
- * if there is one thing to check.
+ * One screen uses one of the two for every field on it. The cost of this one
+ * is that a constraint behind a hover is a constraint a reader can set wrong,
+ * so a hard limit belongs in the label rather than only in the hint.
+ *
+ * Shared rather than copied so the boundary is enforced in one place.
  */
 export function FieldHint({
   children,
+  className,
   hint,
   htmlFor,
 }: {
   children: React.ReactNode
+  /** Placement only. A horizontal `Field` grows the child carrying the
+      field-label slot, and this wrapper is a div around one, so the row needs
+      to be told to give it the space. */
+  className?: string
   hint: string
   htmlFor: string
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <Label htmlFor={htmlFor}>{children}</Label>
       <Tooltip>
         {/* size-4 explicitly: the shadcn primitives size icons through their

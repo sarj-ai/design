@@ -1,5 +1,6 @@
 "use client"
 
+import { FieldHint } from "@/components/design-system/field-hint"
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -22,28 +23,27 @@ import { Textarea } from "@/components/ui/textarea"
  *
  * Static on purpose: the error and the read-only row are states a live form
  * would only reach by being driven into them, and the point here is that all
- * eight decisions are visible in a single glance.
+ * of the decisions are visible in a single glance.
  */
 export function FormDemo() {
   return (
     <form className="flex max-w-xl flex-col gap-6">
       <FieldSet>
-        <FieldLegend>Voice</FieldLegend>
+        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">Voice</FieldLegend>
 
         <FieldGroup>
-          {/* Required: the asterisk, and no description — the label is enough. */}
+          {/* Most of this form is required, so the few that are not are what
+              gets marked. Asterisks on five of six fields are not information,
+              they are a texture. */}
           <Field>
-            <FieldLabel htmlFor="form-demo-name">
-              Display name <span className="text-destructive">*</span>
-            </FieldLabel>
+            <FieldLabel htmlFor="form-demo-name">Display name</FieldLabel>
             <Input defaultValue="Layla" id="form-demo-name" />
           </Field>
 
-          {/* Help text under the label, above the control. */}
+          {/* Help text the reader needs in order to answer: it says what the
+              choice does elsewhere, which is not guessable from "Language". */}
           <Field>
-            <FieldLabel htmlFor="form-demo-language">
-              Language <span className="text-destructive">*</span>
-            </FieldLabel>
+            <FieldLabel htmlFor="form-demo-language">Language</FieldLabel>
             <FieldDescription>
               Every scenario this voice is assigned to answers in it.
             </FieldDescription>
@@ -58,18 +58,52 @@ export function FormDemo() {
             </NativeSelect>
           </Field>
 
-          {/* The error state: the whole field turns, label included. */}
-          <Field data-invalid>
-            <FieldLabel htmlFor="form-demo-sample">
-              Sample script <span className="text-destructive">*</span>
-            </FieldLabel>
-            <Textarea aria-invalid id="form-demo-sample" rows={2} />
-            <FieldError>Add a line for the voice to read.</FieldError>
+          {/* The control is as wide as the value it takes. Three characters
+              in a 576px box asks for a sentence and then rejects one.
+
+              max-w rather than w: the vertical Field sets `*:w-full` on every
+              direct child, and a child selector outranks the control's own
+              class. A cap wins over a width without fighting it. */}
+          <Field>
+            <FieldLabel htmlFor="form-demo-rate">Speaking rate</FieldLabel>
+            <FieldDescription>
+              Between 0.5 and 2.0. Most voices sit at 1.0.
+            </FieldDescription>
+            <Input
+              className="max-w-24"
+              defaultValue="1.0"
+              id="form-demo-rate"
+              inputMode="decimal"
+            />
           </Field>
 
-          {/* Optional carries nothing at all. */}
+          {/* Everything a field says, it says above its control: label, then
+              help, then the error, then the box. The control is the last thing
+              in every field, so a column of them keeps one rhythm instead of
+              growing a line under whichever box happens to be in trouble.
+
+              The label stays the colour it always is — the border and this
+              line carry the state. The placeholder is an example of the shape,
+              and it is gone by the second keystroke, so nothing needed while
+              typing is in it. */}
           <Field>
-            <FieldLabel htmlFor="form-demo-notes">Notes</FieldLabel>
+            <FieldLabel htmlFor="form-demo-sample">Sample script</FieldLabel>
+            <FieldError>Add a line for the voice to read.</FieldError>
+            <Textarea
+              aria-invalid
+              id="form-demo-sample"
+              placeholder="Good morning, this is Layla from Rawabi Holding."
+              rows={2}
+            />
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="form-demo-notes">
+              Notes{" "}
+              <span className="font-normal text-muted-foreground">
+                (optional)
+              </span>
+            </FieldLabel>
             <Input id="form-demo-notes" />
           </Field>
         </FieldGroup>
@@ -78,7 +112,7 @@ export function FormDemo() {
       <FieldSeparator />
 
       <FieldSet>
-        <FieldLegend>Availability</FieldLegend>
+        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">Availability</FieldLegend>
 
         <FieldGroup>
           {/* The one horizontal case: a switch, label start, control end. */}
@@ -87,18 +121,36 @@ export function FormDemo() {
             <Switch defaultChecked id="form-demo-active" />
           </Field>
 
-          {/* Read-only stays on screen, disabled, with the reason under it. */}
+          {/* Background rather than instruction: knowing what barge-in means
+              does not change how you answer, it changes whether you know what
+              you are answering. That is the (i)'s whole remit. */}
+          <Field orientation="horizontal">
+            <FieldHint
+              className="flex-auto"
+              hint="Lets the caller interrupt the agent mid-sentence instead of waiting for it to finish."
+              htmlFor="form-demo-barge"
+            >
+              Barge-in
+            </FieldHint>
+            <Switch id="form-demo-barge" />
+          </Field>
+
+          {/* Read-only stays on screen, disabled, with the reason above it.
+              The reason is help text like any other, so it sits where all help
+              text sits — under the label. Below the control it reads as
+              something that happened because of the value, which is what an
+              error is, and it is the only thing that goes there. */}
           <Field>
             <FieldLabel htmlFor="form-demo-provider">Provider</FieldLabel>
+            <FieldDescription>
+              Set by the workspace and the same for every voice in it.
+            </FieldDescription>
             <Input
               defaultValue="Hamsa"
               disabled
               id="form-demo-provider"
               readOnly
             />
-            <FieldDescription>
-              Set by the workspace and the same for every voice in it.
-            </FieldDescription>
           </Field>
         </FieldGroup>
       </FieldSet>

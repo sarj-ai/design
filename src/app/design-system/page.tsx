@@ -7,6 +7,7 @@ import {
 } from "@/components/design-system/reference-table"
 import { ComponentCatalog } from "@/components/design-system/component-catalog"
 import { FileTypeIllustrations } from "@/components/design-system/file-type-illustrations"
+import { MeshOrbPreview } from "@/components/design-system/mesh-orb-preview"
 import { OrbPreview } from "@/components/design-system/orb-preview"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
@@ -20,8 +21,11 @@ import { FoundationTable } from "@/components/design-system/foundation-tables"
 import { FormDemo } from "@/components/design-system/form-demo"
 import { LanguageNotes } from "@/components/design-system/language-notes"
 import { IndexPagePreview } from "@/components/design-system/page-preview"
+import { RowActionNotes } from "@/components/design-system/row-action-notes"
+import { MotionTable } from "@/components/design-system/motion-tables"
 import { RuleList } from "@/components/design-system/rule-list"
 import { StepperPreview } from "@/components/design-system/stepper-preview"
+import { SelectionPreview } from "@/components/design-system/selection-preview"
 import { TabsPreview } from "@/components/design-system/tabs-preview"
 import { SurfaceDemo } from "@/components/design-system/surface-demos"
 import { SurfaceDiagram } from "@/components/design-system/surface-diagram"
@@ -31,6 +35,7 @@ import {
   CATALOG_GROUPS,
   FORM_RULES,
   GLOBAL_RULES,
+  MOTION_RULES,
   PATTERNS,
   SURFACE_CHOICES,
 } from "@/lib/design-system-data"
@@ -90,6 +95,19 @@ export default function DesignSystemPage() {
           GLOBAL_RULES.map((rule) => [
             rule.id,
             <FoundationTable id={rule.id} key={rule.id} />,
+          ]),
+        ),
+
+        /* Motion — the three enforced rules, plus the curve and the step to
+           pick. Wrapped in a Card like every other reference pane. */
+        ...Object.fromEntries(
+          MOTION_RULES.map((rule) => [
+            rule.id,
+            <Card key={rule.id}>
+              <CardContent>
+                <MotionTable id={rule.id} />
+              </CardContent>
+            </Card>,
           ]),
         ),
 
@@ -170,6 +188,17 @@ export default function DesignSystemPage() {
           </Card>
         ),
 
+        /* Its own topic rather than a note on the index page: the same edge
+           answers a picker in a drawer, a wizard step and a row in a list, and
+           before this it was re-decided in each of them. */
+        selection: (
+          <Card>
+            <CardContent>
+              <SelectionPreview />
+            </CardContent>
+          </Card>
+        ),
+
         /* Its own topic, and pointedly not a variant of the one above: a
              drawer keeps the page behind it, which is the opposite of what a
              creation flow wants, so it never carries steps. */
@@ -197,12 +226,14 @@ export default function DesignSystemPage() {
             <CardContent className="flex flex-col gap-6">
               <IndexPagePreview />
 
-              {/* The colour, empty-cell and language keys belong against the
-                    rows they explain, so they ride under this preview. */}
+              {/* The colour, empty-cell, language and action keys belong
+                    against the rows they explain, so they ride under this
+                    preview. The three lookups first, then the one decision. */}
               <Separator />
               <ChipNotes />
               <EmptyValueNotes />
               <LanguageNotes />
+              <RowActionNotes />
             </CardContent>
           </Card>
         ),
@@ -238,6 +269,13 @@ export default function DesignSystemPage() {
             </CardContent>
           </Card>
         ),
+        "mesh-orb": (
+          <Card>
+            <CardContent>
+              <MeshOrbPreview />
+            </CardContent>
+          </Card>
+        ),
         "file-card": (
           <Card>
             <CardContent>
@@ -264,6 +302,40 @@ export default function DesignSystemPage() {
                 <span className="text-sm font-medium">Radial mask</span>
                 <div className="relative h-72 w-full overflow-hidden rounded-md">
                   <DotPattern className="text-border" mask="radial" />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ripple carries the mask as well: a travelling ring that stops
+                dead at the container edge is the same cropped-texture problem
+                the mask exists to solve, and the motion makes it louder.
+
+                Darker than the two above, which sit at text-border. A static
+                field only has to be seen; a moving one has to be seen changing,
+                and border grey has almost no room above itself to brighten
+                into. */}
+            <Card>
+              <CardContent className="flex flex-col gap-3">
+                <span className="text-sm font-medium">Ripple</span>
+                <div className="relative h-72 w-full overflow-hidden rounded-md">
+                  <DotPattern
+                    className="text-muted-foreground/30"
+                    mask="radial"
+                    ripple
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* The only variant that reacts to the reader rather than running
+                on its own: the dots under the pointer swell and settle back
+                to the plain field a thumb's width away, in the field's own
+                colour. Move the pointer over the panel. */}
+            <Card>
+              <CardContent className="flex flex-col gap-3">
+                <span className="text-sm font-medium">Hover</span>
+                <div className="relative h-72 w-full overflow-hidden rounded-md">
+                  <DotPattern className="text-border" hover />
                 </div>
               </CardContent>
             </Card>

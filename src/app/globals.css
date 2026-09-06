@@ -237,6 +237,19 @@
      path beside it, and be at least the path's own length. */
   --animate-draw-stroke: draw-stroke 0.3s var(--ease-out-cubic) both;
 
+  /* A pane of content arriving in place of another. ease-out because it is
+     entering; 200ms because it is a swap inside a page rather than a page.
+
+     It travels along the inline axis, from the side the control that switched
+     it is on — the rail is at the start of the page and a tab bar is read from
+     the start, so content emerging from there is content answering the thing
+     you just clicked. Vertically it competed with the page's own scroll.
+
+     4px, not 8: the larger the surface the less it has to travel to read as
+     having arrived, and a full pane sliding a whole 8px reads as the page
+     lurching rather than the content changing. */
+  --animate-pane-in: pane-in 0.2s var(--ease-out-cubic) both;
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -287,6 +300,17 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes pane-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--pane-in-from, -4px));
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 
@@ -462,6 +486,14 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* `pane-in` travels along the inline axis, and `translateX` is a physical one.
+   The workspace is left-to-right and this changes nothing today; it is what
+   keeps the entrance pointing the right way if the Arabic mirror is ever
+   wanted back, at the cost of one declaration. */
+[dir="rtl"] {
+  --pane-in-from: 4px;
 }
 
 @keyframes highlight-pulse {

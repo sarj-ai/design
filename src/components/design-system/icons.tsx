@@ -17,6 +17,7 @@ import {
   CpuIcon,
   Delete02Icon,
   Download01Icon,
+  PencilEdit02Icon,
   FilterIcon,
   InformationCircleIcon,
   MoreHorizontalIcon,
@@ -33,6 +34,9 @@ export const PreviewIcon = icon(PlayIcon, "PreviewIcon")
 export const NarrowIcon = icon(FilterIcon, "NarrowIcon")
 export const ExportIcon = icon(Download01Icon, "ExportIcon")
 export const DeleteIcon = icon(Delete02Icon, "DeleteIcon")
+
+/** The two a row carries. Named for the row, not for the glyph. */
+export const EditRowIcon = icon(PencilEdit02Icon, "EditRowIcon")
 
 /** Sorting: the active direction, and the affordance on a column that is not sorted. */
 export const SortAscIcon = icon(ArrowUp01Icon, "SortAscIcon")

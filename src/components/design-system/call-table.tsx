@@ -30,7 +30,8 @@ import {
   FailedIcon,
   InboundIcon,
   OutboundIcon,
-  RowMenuIcon,
+  DeleteIcon,
+  EditRowIcon,
   RunningIcon,
   ScheduledIcon,
   SearchIcon,
@@ -130,9 +131,10 @@ export function CallTable() {
             value={query}
           />
         </InputGroup>
-        <span className="text-sm text-muted-foreground">
-          {rows.length} of {CALL_ROWS.length} calls
-        </span>
+        {/* The page's own action, on the row it acts on. Default size, the
+            same height as the search field beside it and the sidebar rows
+            behind it — a list header has one button height, not three. */}
+        <Button>Start call</Button>
       </div>
 
       <DataTable>
@@ -241,14 +243,33 @@ function CallTableRow({ row }: { row: CallRow }) {
 
       <TableCell className="text-muted-foreground">{row.started}</TableCell>
 
-      <TableCell className="text-end">
-        <Button
-          aria-label={`Actions for ${row.id}`}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <RowMenuIcon />
-        </Button>
+      {/* Icons only. Both of these have a glyph a reader already knows, so
+          neither needs a word — and a word was what forced the controls down a
+          size, because 28px of button plus the cell's own p-2 is a 44px body
+          against a 40px header.
+
+          py-1.5 on this cell instead, so the padding gives way rather than the
+          control: 28 + 12 is the 40px the header already is. Every other cell
+          keeps p-2, and none of them is tall enough to set the height. */}
+      <TableCell className="py-1.5 text-end">
+        <div className="flex items-center justify-end gap-1">
+          <Button aria-label={`Edit ${row.id}`} size="icon-sm" variant="ghost">
+            <EditRowIcon />
+          </Button>
+          {/* Destructive on the glyph, not a filled box: `variant="destructive"`
+              paints bg-destructive/10, and six tinted squares down one column
+              read as a warning about the table rather than about the action.
+              Ghost keeps the row flat until the pointer is on it, and the red
+              still says which of the two you cannot undo. */}
+          <Button
+            aria-label={`Delete ${row.id}`}
+            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            size="icon-sm"
+            variant="ghost"
+          >
+            <DeleteIcon />
+          </Button>
+        </div>
       </TableCell>
     </TableRow>
   )
@@ -264,9 +285,16 @@ function CallTableRow({ row }: { row: CallRow }) {
  * carry three at once. The name is what assistive tech reads, so the chip is
  * never just two unexplained letters.
  */
+/**
+ * The codes stay on one line. Wrapping put a second language under the first
+ * and grew that row past the table's fixed 40px, so a row with two languages
+ * was taller than a row with one — and once row heights vary, the eye reads
+ * the ragged left edge of the next column instead of the data. Two or three
+ * two-letter codes cost less width than the header word above them.
+ */
 function LanguageChip({ languages }: { languages: string[] }) {
   return (
-    <span className="flex flex-wrap items-center gap-1">
+    <span className="flex flex-nowrap items-center gap-1 whitespace-nowrap">
       {languages.map((code) => (
         <Tooltip key={code}>
           <TooltipTrigger asChild>

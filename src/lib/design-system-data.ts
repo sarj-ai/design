@@ -421,29 +421,49 @@ export const BUTTON_SIZES: ButtonSizeNote[] = [
  */
 export const FORM_RULES: Rule[] = [
   {
-    label: "Label placement",
+    label: "The label",
     detail:
-      "Above the control, always. A switch or checkbox is the exception: label at the start, control at the end, on one row.",
+      "Above the control, text-sm font-medium, at full text-foreground. Never muted: at text-muted-foreground it clears AA by 0.04 and stops being tellable from its own description, which is the same size in the same grey. A switch or checkbox is the exception to placement — label at the start, control at the end, on one row.",
   },
   {
     label: "Required and optional",
     detail:
-      "Required carries a destructive asterisk after the label; optional carries nothing. The word “Required” is never used.",
+      "Mark the minority. A destructive asterisk on the required ones where most are optional; “(optional)” after the label where most are required. Never both in one form, and never the word “Required”.",
   },
   {
-    label: "Help text",
+    label: "Help text on a form",
     detail:
-      "One sentence under the label, above the control. Never a paragraph, never a restatement of the label, and never an (i) tooltip on the same screen as an inline one.",
+      "One sentence under the label, above the control — never below it, and that includes the line saying why a read-only value cannot be edited. Constraints, formats, and what the choice changes elsewhere. A form is met once and answered once, so the reader gets it without asking.",
+  },
+  {
+    label: "Help text in a drawer or a dialog",
+    detail:
+      "An (i) beside the label, on hover. A panel is 384px and a dialog step is two columns, so a sentence under every label is a paragraph under every label and the settings stop being scannable. These surfaces are read many times and answered once. The cost is real — a constraint behind a hover is one a reader can set wrong — so put a hard limit in the label where it matters and the rest in the hint.",
+  },
+  {
+    label: "One language per screen",
+    detail:
+      "Whichever of the two a screen uses, it uses for every field on it. Both at once and the reader has to learn which sentences live where, which is a rule nobody reads a form to discover.",
   },
   {
     label: "Error messages",
     detail:
-      "Under the control, and the label turns with it. Field errors stay on the field; a failed submit goes to a toast.",
+      "Under the label with the help text, above the control, saying what to do rather than what went wrong. Nothing sits below a control — the box is the last thing in every field, so a column of fields keeps one rhythm instead of growing a line under whichever one is in trouble. The control's border carries the state and the label does not turn — the field's name is not the thing that is wrong, and a column of labels that changes colour is the one stable thing you were scanning to find the error. A failed submit goes to a toast.",
   },
   {
     label: "Validation timing",
     detail:
       "On submit, then live on change once a field has failed once. Nothing is marked wrong before the reader has finished typing it the first time.",
+  },
+  {
+    label: "Control width",
+    detail:
+      "As wide as the longest plausible value, up to the form's own column. A three-character value in a full-width box asks for a sentence and then rejects one.",
+  },
+  {
+    label: "Placeholders",
+    detail:
+      "An example of the shape, never a second label and never a constraint. It is gone by the second keystroke, so nothing the reader needs while typing can live in it.",
   },
   {
     label: "Field grouping",
@@ -458,7 +478,7 @@ export const FORM_RULES: Rule[] = [
   {
     label: "Disabled and read-only",
     detail:
-      "A value that cannot be edited stays on screen, disabled, with one line saying why. Never swapped for plain text, never removed.",
+      "A value that cannot be edited stays on screen, disabled, with one line saying why. Never swapped for plain text, never removed. The line is dropped when the control that turns editing on is on the same screen — a panel of dead switches under the switch that killed them needs no caption, and one that appears in only one state is a section the reader re-reads every visit.",
   },
 ]
 
@@ -629,6 +649,13 @@ export const PLATFORM_COMPONENTS: DocsPage[] = [
     sarj: true,
   },
   {
+    id: "mesh-orb",
+    title: "MeshOrb",
+    description:
+      "The same four states as a mesh gradient. Softer than FluidOrb, and the choice between them is a look.",
+    sarj: true,
+  },
+  {
     id: "file-card",
     title: "FileCard",
     description:
@@ -740,6 +767,64 @@ const FOUNDATION_PAGES: DocsPage[] = [
   })),
 ]
 
+/**
+ * The motion rules, which lint already enforces.
+ *
+ * They live in `eslint-rules/rules/motion-*.mjs` and were unwritten here, so
+ * the only way to learn them was to break one and read the error. Three of the
+ * ten enforced rules are motion rules; none of them had a page.
+ */
+export type MotionRule = {
+  id:
+    | "easing"
+    | "duration"
+    | "animatable"
+    | "reduced-motion"
+    | "motion-performance"
+  label: string
+  detail: string
+}
+
+export const MOTION_RULES: MotionRule[] = [
+  {
+    id: "easing",
+    label: "Easing",
+    detail:
+      "Two curves. Out for anything entering or leaving, in-out for something already on screen that moves.",
+  },
+  {
+    id: "duration",
+    label: "Duration",
+    detail:
+      "Six steps, and nothing over 300ms. Past that an animation stops reading as feedback and starts reading as latency.",
+  },
+  {
+    id: "animatable",
+    label: "What may animate",
+    detail:
+      "Transform and opacity. They are the only two properties the browser hands to the compositor.",
+  },
+  {
+    id: "reduced-motion",
+    label: "Reduced motion",
+    detail:
+      "Every animated element carries its own escape. No exception for opacity, and none for colour.",
+  },
+  {
+    id: "motion-performance",
+    label: "Performance",
+    detail:
+      "Picking the right property is most of it. The rest is not making React re-render sixty times a second.",
+  },
+]
+
+const MOTION_PAGES: DocsPage[] = MOTION_RULES.map((rule) => ({
+  id: rule.id,
+  title: rule.label,
+  description: rule.detail,
+  sarj: true,
+}))
+
 const PATTERN_PAGES: DocsPage[] = [
   {
     id: "buttons",
@@ -752,7 +837,7 @@ const PATTERN_PAGES: DocsPage[] = [
     id: "forms",
     title: "Forms",
     description:
-      "Eight decisions, settled — and all eight visible in the form beside them.",
+      "Every decision settled, and all of them visible in the form beside them.",
     sarj: true,
   },
   {
@@ -790,6 +875,13 @@ const PATTERN_PAGES: DocsPage[] = [
     sarj: true,
   },
   {
+    id: "selection",
+    title: "Selection",
+    description:
+      "What a card looks like when it is the one you picked. The edge changes and nothing else does.",
+    sarj: true,
+  },
+  {
     id: "index-page",
     title: "Index page",
     description:
@@ -805,6 +897,17 @@ export const DOCS_SECTIONS: DocsSection[] = [
     description:
       "The fixed half of the system. Nothing here is a judgement call, which is what stops the decisions further down from being re-argued.",
     groups: [{ pages: FOUNDATION_PAGES }],
+  },
+  /* Its own section rather than a page under Foundations: three of the ten
+     enforced rules are motion rules, and each one is a different question —
+     which curve, how long, what may move, and who has asked not to see it. */
+  {
+    id: "motion",
+    title: "Motion",
+    description:
+      "When something moves, how far, and for how long. Every rule here is one lint already fails you for.",
+    sarj: true,
+    groups: [{ pages: MOTION_PAGES }],
   },
   {
     id: "patterns",

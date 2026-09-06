@@ -266,7 +266,25 @@ export function DesignSystemDocs({
         />
         {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
         <div className="min-h-0 flex-1 overflow-auto">
-          <main className="flex flex-col gap-8 p-3 lg:p-4">
+          {/* Keyed on the topic so React replaces the pane rather than patching
+              it, which is what gives the new one an entrance to play. The old
+              one leaves without an exit on purpose: crossfading two panes needs
+              both of them positioned absolutely, and two documents of different
+              heights stacked on each other is a layout problem bought to solve
+              a 200ms one.
+
+              One stage, not a stagger. The title and the body arrive together
+              because they are one thing arriving — sequencing them would be
+              motion answering a question nobody asked, on a surface a reader
+              switches a dozen times in a sitting.
+
+              The travel is horizontal, from the rail's side. Vertically it
+              read as the page scrolling itself, which is the one thing this
+              pane also genuinely does. */}
+          <main
+            className="flex animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
+            key={active}
+          >
             <header className="flex flex-col gap-1">
               <h1 className="text-2xl font-semibold">{page.title}</h1>
               <p className="max-w-2xl text-sm text-muted-foreground">
