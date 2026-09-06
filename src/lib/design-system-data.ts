@@ -656,6 +656,15 @@ export const PLATFORM_COMPONENTS: DocsPage[] = [
     sarj: true,
   },
   {
+    /* No sarj dot: this one is installed from `zzzzshawn/orbkit`, so its
+       quirks are upstream's and `npx shadcn add` regenerates it. The two orbs
+       above are written here and are ours to argue about. */
+    id: "shdr-31",
+    title: "Shdr31",
+    description:
+      "A raymarched shell lit from inside, installed from the orbkit registry rather than written here.",
+  },
+  {
     id: "file-card",
     title: "FileCard",
     description:

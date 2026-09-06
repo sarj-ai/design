@@ -9,6 +9,7 @@ import { ComponentCatalog } from "@/components/design-system/component-catalog"
 import { FileTypeIllustrations } from "@/components/design-system/file-type-illustrations"
 import { MeshOrbPreview } from "@/components/design-system/mesh-orb-preview"
 import { OrbPreview } from "@/components/design-system/orb-preview"
+import { Shdr31Preview } from "@/components/design-system/shdr-31-preview"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
 import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
@@ -273,6 +274,13 @@ export default function DesignSystemPage() {
           <Card>
             <CardContent>
               <MeshOrbPreview />
+            </CardContent>
+          </Card>
+        ),
+        "shdr-31": (
+          <Card>
+            <CardContent>
+              <Shdr31Preview />
             </CardContent>
           </Card>
         ),
