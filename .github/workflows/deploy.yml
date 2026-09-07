@@ -42,8 +42,47 @@ jobs:
       - name: Build for Workers
         run: npm run cf:build
 
-      - uses: cloudflare/wrangler-action@v3
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+
+      # A green build is not a working site. This asks the deployed URL for a
+      # page and only calls the deploy done once one comes back.
+      - name: Smoke check the live site
+        id: smoke
+        env:
+          URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "::error::wrangler reported no deployment URL, so nothing can be checked."
+            exit 1
+          fi
+          code=000
+          # Routing the new version takes a moment; five tries, five seconds apart.
+          for i in 1 2 3 4 5; do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$URL" || echo 000)"
+            echo "attempt $i -> HTTP $code"
+            # 401 counts: if the SITE_PASSWORD gate in src/proxy.ts is switched
+            # back on, a challenge still proves the Worker is alive and serving.
+            case "$code" in
+              2*|3*|401) echo "$URL is up."; exit 0 ;;
+            esac
+            sleep 5
+          done
+          echo "::error::$URL never came back healthy (last status $code)."
+          exit 1
+
+      # Workers keeps every version, so undoing a bad release is one command —
+      # no revert commit, no second build, no waiting for CI to go round again.
+      - name: Roll back the bad deploy
+        if: failure() && steps.smoke.outcome == 'failure'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler rollback -y -m "Automatic rollback: smoke check failed for ${{ github.sha }}"
+          echo "::warning::Rolled back to the previous version. main still has the bad commit."

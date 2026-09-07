@@ -1,0 +1,81 @@
+# Every pull request gets its own URL, running on real Workers.
+#
+# `wrangler versions upload` publishes a Worker *version* without routing any
+# traffic to it: production keeps serving whatever is on main, and the version
+# gets a preview URL of its own. So a reviewer clicks the actual code, on the
+# actual runtime, before it is merged — which is the step this repo was missing.
+#
+# Needs the same two secrets as deploy.yml, and nothing else.
+name: Preview
+
+on:
+  pull_request:
+
+# A new commit supersedes the preview still building for the same PR.
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    # A fork's pull request cannot see the Cloudflare secrets, and a job that
+    # fails on missing credentials is a red X that says nothing about the code.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          # Same runtime as ci.yml and deploy.yml. A preview built on a
+          # different Node than the one that ships is not a preview.
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      - name: Build for Workers
+        run: npm run cf:build
+
+      - name: Upload a preview version
+        id: upload
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -o pipefail
+          npx wrangler versions upload 2>&1 | tee upload.log
+          # Wrangler prints "Version Preview URL: https://<prefix>-design-lab.<subdomain>.workers.dev"
+          url="$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev' upload.log | head -1)"
+          if [ -z "$url" ]; then
+            echo "::error::No preview URL in the wrangler output. Version preview URLs may be disabled for this Worker."
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment the preview URL
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          URL: ${{ steps.upload.outputs.url }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          body="**Preview:** $URL
+
+          Built from \`${SHA:0:7}\`. This version is uploaded but takes no production traffic — main is still serving whatever was last deployed."
+          # --edit-last keeps one comment per PR instead of one per push; the
+          # fallback covers the first run, when there is nothing to edit.
+          gh pr comment "$PR" --edit-last --body "$body" || gh pr comment "$PR" --body "$body"
