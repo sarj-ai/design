@@ -1,0 +1,515 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
+
+/* This workspace is light only — there is no `.dark` token block and no theme
+   toggle. The line stays because the 61 generated shadcn primitives are full of
+   `dark:` utilities: binding the variant to a class nothing ever sets makes
+   every one of them dead. Delete it and Tailwind falls back to its built-in
+   `prefers-color-scheme` behaviour, which would turn the whole app dark for
+   anyone whose OS is. */
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+   Base tokens — shadcn "Nova" neutral base, full OKLCH values.
+   Brand purple overrides --primary / --primary-foreground and the sidebar
+   accent so the app stays branded (NOT Nova-neutral gray).
+--------------------------------------------------------------------------- */
+:root {
+  --radius: 0.625rem;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+
+  /* BRAND override (Nova base would be oklch(0.205 0 0)) — #392868 */
+  --primary: oklch(0.334 0.107 291.8);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.28 0.07 55);
+  --success: oklch(0.627 0.17 149.2);
+  --success-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Brand-tint surface — selected rows, active nav items, icon containers.
+     Same values the sidebar accent uses, exposed under a primary-* name so it
+     reads correctly outside a sidebar. */
+  --primary-tint: oklch(0.948 0.019 291.8); /* #eeecfa */
+  --primary-tint-foreground: oklch(0.411 0.108 291.8); /* #4d3d80 */
+
+  /* Intent-tint surfaces — status pills, chips, inline state badges.
+     Built the same way as --primary-tint: a near-white surface at the intent's
+     own hue, paired with a foreground dark enough to clear 4.5:1 at text-xs.
+     The solid --success / --warning / --destructive stay as they are and remain
+     correct for icons, bars, rings and anything on a filled background; they
+     are simply too light to be read as 12px text on their own tint. */
+  --success-tint: oklch(0.945 0.045 149.2);
+  --success-tint-foreground: oklch(0.402 0.098 149.2);
+  --warning-tint: oklch(0.955 0.055 70.08);
+  --warning-tint-foreground: oklch(0.402 0.086 55);
+  --destructive-tint: oklch(0.948 0.028 27.325);
+  --destructive-tint-foreground: oklch(0.442 0.176 27.325);
+
+  /* Info — the fourth intent. There was no colour for "here is something you
+     should know" that is not an error, a warning or a success, so screens
+     reached for --primary-tint and an informational note ended up looking like
+     a selected row. Blue, following the same solid + tint shape as the other
+     three: #0871c1 carries near-white at 4.85:1 (destructive manages 4.56,
+     success 3.16), and the tint carries its foreground at 6.96:1. */
+  --info: oklch(0.54 0.15 250); /* #0871c1 */
+  --info-foreground: oklch(0.985 0 0);
+  --info-tint: oklch(0.948 0.03 250); /* #dff0ff */
+  --info-tint-foreground: oklch(0.43 0.11 250); /* #125289 */
+
+  /* Charts — DES-174. Brand purple first, then five distinct hues.
+     Replaces a ramp of one purple stepped by lightness. That ramp is right for
+     a ranked series, where the reader only has to see more and less, and wrong
+     the moment the series are unrelated: six steps of one purple made "voice"
+     and "latency" look like more and less of one thing.
+
+     Chosen against a measured target, not by eye. The worst-separated pair,
+     in OKLab across normal vision plus simulated protanopia, deuteranopia and
+     tritanopia (Machado 2009), is ΔE 0.121. For comparison the Okabe-Ito
+     palette — the reference for colour-blind safety — manages 0.076 and
+     Tableau 10 manages 0.007. Every colour also clears 2.99:1 against white so
+     a fill reads as a shape, and none comes closer than ΔE 0.112 to
+     --destructive, --warning or --success, so a bare dot is never mistaken for
+     a status.
+
+     Marks, not text surfaces: fills, dots and legend swatches, so no
+     -foreground. Anything read as text belongs on an intent tint.
+
+     --chart-1 follows --primary so the set stays branded under a whitelabel,
+     but the separation above was measured against Sarj purple; a whitelabel
+     whose brand colour is blue would sit close to --chart-2.
+
+     Ordinal data does not belong here. Three ranked steps are one hue at three
+     opacities — see PRIORITY_DOT in behavioral-alerts/severity.tsx. */
+  --chart-1: var(--primary); /* #392868 */
+  --chart-2: oklch(0.5 0.13 250); /* #1666aa */
+  --chart-3: oklch(0.66 0.08 178); /* #57a292 */
+  --chart-4: oklch(0.62 0.13 72); /* #b6770b */
+  --chart-5: oklch(0.46 0.08 350); /* #79455e */
+  --chart-6: oklch(0.66 0.18 300); /* #a473ee */
+
+  /* Nova uses --sidebar (renamed from --sidebar-background) */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  /* BRAND-tinted purple accent (kept branded, not Nova neutral) — brand hue 291.8 (#392868) */
+  --sidebar-accent: oklch(0.948 0.019 291.8);
+  --sidebar-accent-foreground: oklch(0.411 0.108 291.8);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* ---------------------------------------------------------------------------
+   @theme inline — alias base tokens, declare brand --color-* tokens,
+   radius scale, fonts, animations, keyframes.
+--------------------------------------------------------------------------- */
+@theme inline {
+  /* Brand-static color tokens */
+  --color-tailwind-black: #06050f;
+  --color-manafa-blue: #0d6efd;
+  --color-manafa-light-blue: #3d8bfd;
+
+  /* Brand primary unified with --primary so bg-primary == --color-primary ==
+     #392868. References the base token, so anything that overrides --primary —
+     a whitelabel, if one is ever added back — cascades through. */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-highlight: color-mix(in oklch, #392868 85%, white);
+  --color-primary-light: color-mix(in oklch, #392868 70%, white);
+  --color-primary-dark: color-mix(in oklch, #392868 80%, black);
+
+  --color-variable: #0369a1;
+  --color-variable-background: #e0f2fe;
+
+  /* shadcn aliases — bare var(), NO hsl() wrapper */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-primary-tint: var(--primary-tint);
+  --color-primary-tint-foreground: var(--primary-tint-foreground);
+
+  --color-success-tint: var(--success-tint);
+  --color-success-tint-foreground: var(--success-tint-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-tint: var(--info-tint);
+  --color-info-tint-foreground: var(--info-tint-foreground);
+  --color-warning-tint: var(--warning-tint);
+  --color-warning-tint-foreground: var(--warning-tint-foreground);
+  --color-destructive-tint: var(--destructive-tint);
+  --color-destructive-tint-foreground: var(--destructive-tint-foreground);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Nova radius scale (wider than bulbul's — Nova components use 2xl–4xl) */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Font — Nunito via next/font CSS var */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+
+  /* Two rungs above text-9xl, for the ghost status code behind a 404 or 500.
+     It is a graphic rather than a heading — nothing reads it, the title below
+     it does the talking — but it still belongs on the scale rather than
+     arbitrary-valued at the call site, so there is one place to change it and
+     one place to look when a second oversized number turns up. */
+  --text-status-code: 10rem;
+  --text-status-code--line-height: 1;
+  --text-status-code-lg: 16rem;
+  --text-status-code-lg--line-height: 1;
+
+  /* Easing — ease-out for anything entering or leaving, ease-in-out for an
+     on-screen element resizing or moving. Never a raw cubic-bezier in a
+     component. */
+  --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  /* The app's sidebar open/close curve. */
+  --ease-sidebar: cubic-bezier(0.165, 0.85, 0.45, 1);
+
+  --animate-collapsible-down: collapsible-down 0.2s var(--ease-out-cubic);
+  --animate-collapsible-up: collapsible-up 0.2s var(--ease-out-cubic) forwards;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-fade-in-up: fade-in-up 0.4s ease-out;
+  /* A stroke drawn along its own path, for a tick that arrives by being
+     written rather than by appearing. The dash length has to be set on the
+     path beside it, and be at least the path's own length. */
+  --animate-draw-stroke: draw-stroke 0.3s var(--ease-out-cubic) both;
+
+  /* A pane of content arriving in place of another. ease-out because it is
+     entering; 200ms because it is a swap inside a page rather than a page.
+
+     It travels along the inline axis, from the side the control that switched
+     it is on — the rail is at the start of the page and a tab bar is read from
+     the start, so content emerging from there is content answering the thing
+     you just clicked. Vertically it competed with the page's own scroll.
+
+     4px, not 8: the larger the surface the less it has to travel to read as
+     having arrived, and a full pane sliding a whole 8px reads as the page
+     lurching rather than the content changing. */
+  --animate-pane-in: pane-in 0.2s var(--ease-out-cubic) both;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+    }
+  }
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pane-in {
+    from {
+      opacity: 0;
+      transform: translateX(var(--pane-in-from, -4px));
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes draw-stroke {
+    from {
+      stroke-dashoffset: var(--draw-length);
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Stacking scale — z-index is a design token, not a number you pick.
+
+   Every layer name maps to one UI concept. `--z-modal: 50` matches what the
+   shadcn overlay primitives already use, so feature code composes with them
+   instead of guessing. Anything that must sit above a dialog gets `z-popover`
+   or higher; never a bigger number.
+
+   Enforced by the `sarj/z-index-tokens` lint rule outside src/components/ui.
+--------------------------------------------------------------------------- */
+:root {
+  --z-base: 0; /* normal flow */
+  --z-raised: 10; /* sticky table header, hover lift */
+  --z-sticky: 20; /* sticky page toolbar / filter bar */
+  --z-nav: 30; /* app sidebar, top nav */
+  --z-overlay: 40; /* scrim behind a panel */
+  --z-modal: 50; /* dialog, sheet, drawer content */
+  --z-popover: 60; /* popover/select opened from inside a modal */
+  --z-toast: 70; /* toasts */
+  --z-tooltip: 80; /* always on top */
+}
+
+@utility z-base {
+  z-index: var(--z-base);
+}
+@utility z-raised {
+  z-index: var(--z-raised);
+}
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-nav {
+  z-index: var(--z-nav);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-popover {
+  z-index: var(--z-popover);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+@utility z-tooltip {
+  z-index: var(--z-tooltip);
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The opening-crawl mask.
+
+   A crawl has no edges — text has to arrive out of nothing at the bottom and
+   dissolve into the vanishing point at the top, or the tilt just looks like a
+   rotated div with two hard cuts in it. The stops are a mask, not a colour:
+   `black` and `transparent` here mean opaque and clear, so no token applies.
+--------------------------------------------------------------------------- */
+@utility crawl-mask {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 22%,
+    black 86%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 22%,
+    black 86%,
+    transparent 100%
+  );
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+  html {
+    @apply font-sans;
+  }
+
+  /* The browser's own spinner on a number field. Chrome and Safari draw it
+     inside the input, so it lands on top of the primitive's padding, eats a
+     sixth of a narrow box, and is the one control on the page the design
+     system does not own — wrong radius, wrong weight, and no token anywhere
+     near it. Nothing here wants it: every number field on these screens is
+     typed into, clamped in JS, and reads its bounds from a description. */
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+/* One scrollbar across the app.
+
+   ScrollArea draws a 10px border-coloured thumb on a transparent track, but a
+   dozen surfaces scroll with a plain `overflow-y-auto` and were getting the
+   OS one instead — so the same product showed two scrollbars depending on
+   which component you happened to be inside. These make the native one match
+   the primitive: same width, same token, no arrows, no track chrome.
+
+   `scrollbar-width`/`scrollbar-color` are the standard properties; the
+   `::-webkit-` block is for Safari, which does not support them yet. The thumb
+   is inset with a transparent border and `background-clip` rather than a
+   smaller width, so the hit area stays the full 10px. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  background-clip: content-box;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--ring);
+}
+
+/* Beats the `*` rule above on specificity, so hiding still hides. */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* `pane-in` travels along the inline axis, and `translateX` is a physical one.
+   The workspace is left-to-right and this changes nothing today; it is what
+   keeps the entrance pointing the right way if the Arabic mirror is ever
+   wanted back, at the cost of one declaration. */
+[dir="rtl"] {
+  --pane-in-from: 4px;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 40%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in oklch, var(--primary) 20%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 0%, transparent);
+  }
+}
+
+.highlight-pulse {
+  animation: highlight-pulse 1s ease-in-out 2;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "design-lab",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-01",
+  // nodejs_compat: /api/mcp runs `runtime = "nodejs"` and pulls in the MCP SDK.
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  // next/image is used on the index and in the two shells. Without this
+  // binding the optimiser has nothing to call and every image 500s.
+  "images": {
+    "binding": "IMAGES"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

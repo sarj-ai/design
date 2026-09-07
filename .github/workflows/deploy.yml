@@ -1,88 +1,88 @@
-name: Deploy reference site
+# Push to main -> live on Cloudflare Workers.
+#
+# Needs two repository secrets, both from the Cloudflare dashboard:
+#   CLOUDFLARE_API_TOKEN   API token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  Workers & Pages -> Account ID
+#
+# Everything else — the worker name, the bindings, the compat flags — is in
+# wrangler.jsonc, so a deploy never depends on dashboard state someone has to
+# remember to keep in step.
+name: Deploy
 
 on:
   push:
     branches: [main]
+  # So a deploy can be re-run from the Actions tab without an empty commit.
   workflow_dispatch:
 
-permissions:
-  contents: read
-
+# A newer push supersedes one still building; never let two deploys race.
 concurrency:
-  group: design-production
-  cancel-in-progress: false
+  group: deploy-main
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: apps/design
-    steps:
-      - name: Harden the runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
-        with:
-          egress-policy: audit
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version: '24.19.0'
-          cache: npm
-          cache-dependency-path: apps/design/package-lock.json
-      - run: npm install --global npm@12.0.2 --ignore-scripts
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run lint
-      - run: npm run check
-      - run: npm run build
-        env:
-          WORKERS_CI_COMMIT_SHA: ${{ github.sha }}
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: design-site
-          path: apps/design/dist
-          if-no-files-found: error
-          retention-days: 1
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    environment:
-      name: design-production
-      url: https://design.sarj.ai
-    defaults:
-      run:
-        working-directory: apps/design
+    permissions:
+      contents: read
     steps:
-      - name: Harden the runner
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          egress-policy: audit
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
-        with:
-          node-version: '24.19.0'
+          node-version: 22
           cache: npm
-          cache-dependency-path: apps/design/package-lock.json
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+
+      - run: npm ci
+
+      # The same gates that guard a local commit, so a red build never ships.
+      - run: npm run lint
+      - run: npm run typecheck
+
+      - name: Build for Workers
+        run: npm run cf:build
+
+      - name: Deploy
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
-          name: design-site
-          path: apps/design/dist
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - run: npm run deploy
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+      # A green build is not a working site. This asks the deployed URL for a
+      # page and only calls the deploy done once one comes back.
+      - name: Smoke check the live site
+        id: smoke
         env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "::error::wrangler reported no deployment URL, so nothing can be checked."
+            exit 1
+          fi
+          code=000
+          # Routing the new version takes a moment; five tries, five seconds apart.
+          for i in 1 2 3 4 5; do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$URL" || echo 000)"
+            echo "attempt $i -> HTTP $code"
+            # 401 counts: if the SITE_PASSWORD gate in src/proxy.ts is switched
+            # back on, a challenge still proves the Worker is alive and serving.
+            case "$code" in
+              2*|3*|401) echo "$URL is up."; exit 0 ;;
+            esac
+            sleep 5
+          done
+          echo "::error::$URL never came back healthy (last status $code)."
+          exit 1
+
+      # Workers keeps every version, so undoing a bad release is one command —
+      # no revert commit, no second build, no waiting for CI to go round again.
+      - name: Roll back the bad deploy
+        if: failure() && steps.smoke.outcome == 'failure'
+        env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      - run: npm run verify:deployment
-        env:
-          EXPECTED_COMMIT: ${{ github.sha }}
-      - run: npm run deploy:legacy-redirect
-        env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      - run: npm run verify:legacy-redirect
+        run: |
+          npx wrangler rollback -y -m "Automatic rollback: smoke check failed for ${{ github.sha }}"
+          echo "::warning::Rolled back to the previous version. main still has the bad commit."
