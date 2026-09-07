@@ -26,6 +26,22 @@ jobs:
     permissions:
       contents: read
     steps:
+      # Before the build, not after: a missing credential should cost ten
+      # seconds, not the two minutes it takes to get to the Deploy step. A
+      # secret can exist and still hold an empty string, and wrangler's
+      # "token not set" error reads identically either way.
+      - name: Check the Cloudflare credentials are present
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          [ -n "$TOKEN" ]   || { echo "::error::CLOUDFLARE_API_TOKEN is empty"; exit 1; }
+          [ -n "$ACCOUNT" ] || { echo "::error::CLOUDFLARE_ACCOUNT_ID is empty"; exit 1; }
+          # Lengths only, never the values. A real token is 40 characters and an
+          # account id is 32 hex, so this distinguishes "wrong thing pasted"
+          # from "wrong scope" without putting a secret in the log.
+          echo "token: ${#TOKEN} chars, account: ${#ACCOUNT} chars"
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -49,6 +65,16 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+        # The `with:` inputs above are not enough. The action detects OpenNext
+        # and calls `opennextjs-cloudflare deploy`, which spawns wrangler as a
+        # nested subprocess -- and that subprocess reads the environment, not
+        # the action's inputs. Without these two, wrangler falls back to
+        # interactive OAuth and dies with "necessary to set a
+        # CLOUDFLARE_API_TOKEN environment variable".
+        # cloudflare/wrangler-action#246, opennextjs/opennextjs-cloudflare#910.
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       # A green build is not a working site. This asks the deployed URL for a
       # page and only calls the deploy done once one comes back.
