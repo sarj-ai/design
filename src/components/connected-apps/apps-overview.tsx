@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -17,7 +18,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
@@ -97,20 +97,12 @@ export function AppsOverview({
           <div className="overflow-x-auto">
             <Table className="[&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4">
               <TableHeader>
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                  <TableHead className="font-semibold text-foreground">
-                    App
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Access tokens
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Created
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Created by
-                  </TableHead>
-                </TableRow>
+                <DataTableHeaderRow>
+                  <DataTableHead>App</DataTableHead>
+                  <DataTableHead>Access tokens</DataTableHead>
+                  <DataTableHead>Created</DataTableHead>
+                  <DataTableHead>Created by</DataTableHead>
+                </DataTableHeaderRow>
               </TableHeader>
 
               <TableBody>

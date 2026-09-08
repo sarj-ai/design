@@ -7,9 +7,6 @@ import {
 } from "@/components/design-system/reference-table"
 import { ComponentCatalog } from "@/components/design-system/component-catalog"
 import { FileTypeIllustrations } from "@/components/design-system/file-type-illustrations"
-import { MeshOrbPreview } from "@/components/design-system/mesh-orb-preview"
-import { OrbPreview } from "@/components/design-system/orb-preview"
-import { Shdr31Preview } from "@/components/design-system/shdr-31-preview"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
 import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
@@ -30,16 +27,33 @@ import { SelectionPreview } from "@/components/design-system/selection-preview"
 import { TabsPreview } from "@/components/design-system/tabs-preview"
 import { SurfaceDemo } from "@/components/design-system/surface-demos"
 import { SurfaceDiagram } from "@/components/design-system/surface-diagram"
+import { ControlScale } from "@/components/design-system/control-scale"
+import { LayerTable } from "@/components/design-system/layer-table"
+import { LintRules } from "@/components/design-system/lint-rules"
+import { PaginationPreview } from "@/components/design-system/pagination-preview"
+import {
+  EmptyStatePreview,
+  ErrorStatePreview,
+  LoadingPreview,
+  NoResultsPreview,
+} from "@/components/design-system/state-previews"
+import { TableAnatomy } from "@/components/design-system/table-anatomy"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {
   CATALOG_GROUPS,
+  EMPTY_STATE_RULES,
+  ERROR_RULES,
   FORM_RULES,
   GLOBAL_RULES,
+  LOADING_RULES,
   MOTION_RULES,
+  NO_RESULTS_RULES,
   PATTERNS,
   SURFACE_CHOICES,
 } from "@/lib/design-system-data"
+import { docsParams, resolveDocs } from "@/lib/design-system-nav"
+import { notFound } from "next/navigation"
 
 /**
  * `/design-system` — the rules and the patterns, written down.
@@ -54,10 +68,8 @@ import {
  * and the switching; this file owns what each topic actually renders, keyed by
  * the ids in `DOCS_SECTIONS`.
  *
- * A topic left out of this map falls back to its section's index, which is why
- * `foundations` and `patterns` are absent — a list of what is in them is the
- * right thing for a section header to open, and the shell builds it from the
- * same data the rail is built from.
+ * Every topic in `DOCS_SECTIONS` needs an entry here. A section does not: it is
+ * a shelf in the rail that opens in place, not a page.
  *
  * No topic repeats its own title in a card header: the heading above the pane
  * has already said it. A live demo still sits on a `Card` — a lone "Open
@@ -65,9 +77,28 @@ import {
  * while a topic that is only a reference table stays bare, because a table
  * inside a card is two edges drawn around one thing.
  */
-export default function DesignSystemPage() {
+export async function generateStaticParams() {
+  return docsParams()
+}
+
+export default async function DesignSystemPage({
+  params,
+}: {
+  params: Promise<{ slug?: string[] }>
+}) {
+  const { slug } = await params
+  const location = resolveDocs(slug)
+
+  /* A slug that names nothing is a 404 rather than a quiet fall back to the
+     overview: a link that lands somewhere else never tells the person who sent
+     it that they sent the wrong one. */
+  if (!location) notFound()
+
   return (
     <DesignSystemDocs
+      activeId={location.activeId}
+      page={location.page}
+      section={location.section}
       views={{
         /* Foundations — what is fixed. */
         colour: (
@@ -98,6 +129,12 @@ export default function DesignSystemPage() {
             <FoundationTable id={rule.id} key={rule.id} />,
           ]),
         ),
+
+        /* Bare, like the colour table above it: a reference table inside a
+           card is two edges drawn around one thing. */
+        layering: <LayerTable />,
+        "control-scale": <ControlScale />,
+        enforcement: <LintRules />,
 
         /* Motion — the three enforced rules, plus the curve and the step to
            pick. Wrapped in a Card like every other reference pane. */
@@ -238,6 +275,61 @@ export default function DesignSystemPage() {
             </CardContent>
           </Card>
         ),
+        /* The table shape, then the four states of the page it usually sits
+           on. Each state is one Card, because each is a live surface rather
+           than a reference table — and the rules ride under the demo they
+           describe rather than in a list of their own. */
+        tables: (
+          <Card>
+            <CardContent>
+              <TableAnatomy />
+            </CardContent>
+          </Card>
+        ),
+        pagination: (
+          <Card>
+            <CardContent>
+              <PaginationPreview />
+            </CardContent>
+          </Card>
+        ),
+        loading: (
+          <Card>
+            <CardContent className="flex flex-col gap-6">
+              <LoadingPreview />
+              <Separator />
+              <RuleList rules={LOADING_RULES} />
+            </CardContent>
+          </Card>
+        ),
+        "empty-state": (
+          <Card>
+            <CardContent className="flex flex-col gap-6">
+              <EmptyStatePreview />
+              <Separator />
+              <RuleList rules={EMPTY_STATE_RULES} />
+            </CardContent>
+          </Card>
+        ),
+        "no-results": (
+          <Card>
+            <CardContent className="flex flex-col gap-6">
+              <NoResultsPreview />
+              <Separator />
+              <RuleList rules={NO_RESULTS_RULES} />
+            </CardContent>
+          </Card>
+        ),
+        "error-state": (
+          <Card>
+            <CardContent className="flex flex-col gap-6">
+              <ErrorStatePreview />
+              <Separator />
+              <RuleList rules={ERROR_RULES} />
+            </CardContent>
+          </Card>
+        ),
+
         /* Components — the guidance, then the inventory. */
         buttons: (
           <div className="flex flex-col gap-8">
@@ -253,7 +345,6 @@ export default function DesignSystemPage() {
             </CardContent>
           </Card>
         ),
-        components: <ComponentCatalog />,
         ...Object.fromEntries(
           CATALOG_GROUPS.map((group) => [
             group.id,
@@ -261,29 +352,6 @@ export default function DesignSystemPage() {
           ]),
         ),
 
-        /* One page each, rather than one shelf holding three: the rail lists
-           them by name, so each name has to open something of its own. */
-        "fluid-orb": (
-          <Card>
-            <CardContent>
-              <OrbPreview />
-            </CardContent>
-          </Card>
-        ),
-        "mesh-orb": (
-          <Card>
-            <CardContent>
-              <MeshOrbPreview />
-            </CardContent>
-          </Card>
-        ),
-        "shdr-31": (
-          <Card>
-            <CardContent>
-              <Shdr31Preview />
-            </CardContent>
-          </Card>
-        ),
         "file-card": (
           <Card>
             <CardContent>

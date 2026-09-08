@@ -12,6 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
@@ -366,26 +367,16 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
-                  <TableHead className="font-semibold text-foreground">
-                    Persona
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Voice
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Language
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Scenarios
-                  </TableHead>
-                  <TableHead className="font-semibold text-foreground">
-                    Created
-                  </TableHead>
+                <DataTableHeaderRow>
+                  <DataTableHead>Persona</DataTableHead>
+                  <DataTableHead>Voice</DataTableHead>
+                  <DataTableHead>Language</DataTableHead>
+                  <DataTableHead>Scenarios</DataTableHead>
+                  <DataTableHead>Created</DataTableHead>
                   <TableHead className="text-end font-semibold text-foreground">
                     Actions
                   </TableHead>
-                </TableRow>
+                </DataTableHeaderRow>
               </TableHeader>
 
               <TableBody>

@@ -86,8 +86,8 @@ scripts/                       new-mockup.mjs, screenshots.mjs
 .claude/skills/                sarj-mockup, sarj-lint, sarj-brand
 ```
 
-Review settings (theme and direction) live in
-`src/lib/review-settings.ts`, persist to localStorage, and apply to `<html>`.
-They follow you across every page, including the index.
+The workspace is light and left-to-right. There is no theme switch and no
+direction switch — the product ships one look, and a second palette nobody
+opens is a second set of colours to keep correct for no reader.
 
 Responsive is deliberately unenforced — these mockups are desktop-first.

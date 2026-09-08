@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -65,17 +66,13 @@ export function SourceTable({
   return (
     <Table>
       <TableHeader>
-        <TableRow className="bg-muted/50 hover:bg-muted/50">
-          <TableHead className="font-semibold text-foreground">Name</TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Added by
-          </TableHead>
-          <TableHead className="font-semibold text-foreground">Added</TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Status
-          </TableHead>
+        <DataTableHeaderRow>
+          <DataTableHead>Name</DataTableHead>
+          <DataTableHead>Added by</DataTableHead>
+          <DataTableHead>Added</DataTableHead>
+          <DataTableHead>Status</DataTableHead>
           <TableHead className="w-24" />
-        </TableRow>
+        </DataTableHeaderRow>
       </TableHeader>
 
       <TableBody>

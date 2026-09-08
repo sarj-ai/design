@@ -68,6 +68,9 @@ src/components/ui/             61 shadcn primitives — GENERATED, do not edit
 src/components/icon.tsx        the icon() factory every icons.tsx is built on
 src/components/mockup-shell.tsx  the chrome every mockup page wraps itself in
 src/lib/mockups-data.ts        the landing index registry
+src/app/design-system/[[...slug]]/page.tsx  the written system, one URL per topic
+src/lib/design-system-data.ts  its content — the rail tree and every rule
+src/lib/design-system-nav.ts   slug <-> topic, and generateStaticParams
 src/app/globals.css            every token: colour, z-layers, motion
 src/app/page.tsx               the index — renders the registry, nothing else
 eslint-rules/                  the sarj/* plugin, one file per rule
@@ -75,6 +78,13 @@ scripts/                       new-mockup.mjs, screenshots.mjs
 .claude/skills/                the deep reference — see below
 PRD/                           local PRD snapshots — gitignored, see PRD/README.md
 ```
+
+**The design system is addressable.** `/design-system` is the overview,
+`/design-system/<section>` a section index, and `/design-system/<section>/<topic>`
+one topic — every one of them prerendered, so any topic can be sent to someone
+on its own. The tree lives in `DOCS_SECTIONS`; add a page there and give its id
+a view in the route file, and the URL, the rail entry and the static path all
+follow. A topic with no view falls back to its section's index.
 
 **PRDs live on `wiki.sarj.ai`, behind a Google sign-in nothing here can read.**
 That makes the review checklist's "matches the PRD exactly" gate unrunnable

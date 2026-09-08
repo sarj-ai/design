@@ -206,7 +206,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Toggle } from "@/components/ui/toggle"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
@@ -389,30 +388,6 @@ const GROUPS: Group[] = [
               <AccordionContent>Semantic, 480ms minimum wait.</AccordionContent>
             </AccordionItem>
           </Accordion>
-        ),
-      },
-      {
-        name: "Tabs",
-        note: "Several views of one object.",
-        demo: (
-          <Tabs defaultValue="transcript">
-            <TabsList>
-              <TabsTrigger value="transcript">Transcript</TabsTrigger>
-              <TabsTrigger value="model">Model</TabsTrigger>
-            </TabsList>
-            <TabsContent
-              className="pt-2 text-sm text-muted-foreground"
-              value="transcript"
-            >
-              Four turns.
-            </TabsContent>
-            <TabsContent
-              className="pt-2 text-sm text-muted-foreground"
-              value="model"
-            >
-              Claude Sonnet 5.
-            </TabsContent>
-          </Tabs>
         ),
       },
     ],

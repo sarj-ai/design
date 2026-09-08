@@ -61,21 +61,31 @@ PRD says get missed) and the Upcoming zone (ate ~40% of the viewport).
 
 ## What is built right now
 
-One route: **`/conversations-v2`**. It is the only mockup in the workspace.
+The route is **`/conversations-revamp`**. It was `/conversations-v2` when this
+file was first written, and it is no longer the only mockup in the workspace —
+`src/lib/mockups-data.ts` is the current list.
 
 ```
-src/app/conversations-v2/page.tsx              route, highlight toggle, state
-src/components/conversations-v2/
-  app-shell.tsx          sidebar + breadcrumb + Export + admin banner — copied
-                         from bulbul, unchanged, do not redesign
-  call-table.tsx         bulbul's table + the Source column + the dial time
-  call-detail-sheet.tsx  bulbul's row drawer + the scheduling record + Cancel
-  toolbar.tsx            bulbul's filter bar + the Source filter
-  cells.tsx              Source / Status / Outcome chips
-  change-mark.tsx        review annotation (red outlines)
-  icons.tsx              HugeIcons, named for the job
-src/lib/conversations-v2-data.ts               one CALLS array
+src/app/conversations-revamp/page.tsx          route and state
+src/components/conversations-revamp/list/
+  conversations-page.tsx  the page itself
+  call-table.tsx          bulbul's table + the Source column + the dial time
+  search-filters.tsx      bulbul's filter bar + the Source filter
+  status-badges.tsx       Source / Status / Outcome chips
+  status-filter.tsx, status-help.tsx, fields-dropdown.tsx
+  icons.tsx               HugeIcons, named for the job
+src/components/conversations-revamp/drawer/
+  call-shell.tsx          bulbul's row drawer + the scheduling record
+  cancel-call-dialog.tsx  Cancel, as a pop-up because it is one decision
+  pre-call-panel.tsx, completed-schedule-summary.tsx, linked-call.tsx
+  recording-player.tsx, transcript-views.tsx, section-register.tsx
+  fourth-drawer.tsx, icons.tsx
+src/lib/conversations-revamp-list-data.ts      the CALLS array
+src/lib/conversations-revamp-drawer-data.ts    the drawer's record
 ```
+
+The app shell is no longer copied per mockup: `src/components/app-shell.tsx`
+and `src/components/mockup-shell.tsx` are shared by every route.
 
 **Every field traces to a PRD line.** Vansh cut the rest on Aug 10 — the dial
 time on the row, the pending count beside the results count, "booked from", the
@@ -174,6 +184,6 @@ Flag these rather than inventing answers:
 - `npm run lint` must report **zero** problems. The ten `sarj/*` rules are real
   errors, not warnings.
 - Verify with `npm run lint && npm run typecheck && npm run shots -- --routes
-  /conversations-v2`, then actually open the screenshot.
+  /conversations-revamp`, then actually open the screenshot.
 - State any addition that is not traceable to the PRD or a screenshot at the end
   of your reply.
