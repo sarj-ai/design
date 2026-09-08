@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -60,22 +61,14 @@ export function TokenTable({
       className="[&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4"
     >
       <TableHeader>
-        <TableRow className="bg-muted/50 hover:bg-muted/50">
-          <TableHead className="font-semibold text-foreground">Name</TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Scopes
-          </TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Expires
-          </TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Last used
-          </TableHead>
-          <TableHead className="font-semibold text-foreground">
-            Status
-          </TableHead>
+        <DataTableHeaderRow>
+          <DataTableHead>Name</DataTableHead>
+          <DataTableHead>Scopes</DataTableHead>
+          <DataTableHead>Expires</DataTableHead>
+          <DataTableHead>Last used</DataTableHead>
+          <DataTableHead>Status</DataTableHead>
           <TableHead className="text-end font-semibold text-foreground" />
-        </TableRow>
+        </DataTableHeaderRow>
       </TableHeader>
 
       <TableBody>

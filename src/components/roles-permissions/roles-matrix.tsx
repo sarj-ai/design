@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -82,10 +83,8 @@ export function RolesMatrix({
         className="table-fixed [&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4"
       >
         <TableHeader>
-          <TableRow className="bg-muted/50 hover:bg-muted/50">
-            <TableHead className="font-semibold text-foreground">
-              Permission
-            </TableHead>
+          <DataTableHeaderRow>
+            <DataTableHead>Permission</DataTableHead>
             {roles.map((role) => (
               <RoleHead
                 canEdit={canEdit && editingRoleId === null}
@@ -95,7 +94,7 @@ export function RolesMatrix({
                 role={role}
               />
             ))}
-          </TableRow>
+          </DataTableHeaderRow>
         </TableHeader>
 
         <TableBody>
@@ -107,7 +106,7 @@ export function RolesMatrix({
                   also where the role names come back, two screens down from a
                   header that cannot be made sticky inside this card. */}
               {index > 0 ? (
-                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                <DataTableHeaderRow>
                   <TableCell className="py-2 font-medium">
                     {section.label}
                   </TableCell>
@@ -118,7 +117,7 @@ export function RolesMatrix({
                       </span>
                     </TableCell>
                   ))}
-                </TableRow>
+                </DataTableHeaderRow>
               ) : null}
 
               {PERMISSIONS[section.id].map((permission) => (

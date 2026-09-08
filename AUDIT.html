@@ -1,0 +1,1915 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Bulbul Design Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  /* ---------------------------------------------------------------
+     Tokens. Complete light palette on bare :root, redefined twice so
+     the page resolves in all three viewer states. Taken from the real
+     Sarj brand: primary #392868, tint #eeecfa on #4d3d80.
+     --------------------------------------------------------------- */
+  :root {
+    --paper:        #ffffff;
+    --surface:      #f6f5f9;
+    --surface-2:    #eeedf3;
+    --line:         #e4e2ec;
+    --line-strong:  #cdc9db;
+    --ink:          #14121b;
+    --ink-2:        #4b4759;
+    --ink-3:        #74707f;
+
+    --brand:        #392868;
+    --brand-ink:    #4d3d80;
+    --brand-tint:   #eeecfa;
+    --brand-edge:   #d9d4f0;
+
+    --ok:           #15803d;
+    --ok-tint:      #e6f4ea;
+    --warn:         #a35a06;
+    --warn-tint:    #fbeed8;
+    --bad:          #b91c1c;
+    --bad-tint:     #fbe9e9;
+
+    --rail: 15rem;
+    --measure: 68ch;
+
+    --step--1: 0.8125rem;
+    --step-0:  0.9688rem;
+    --step-1:  1.125rem;
+    --step-2:  1.375rem;
+    --step-3:  1.75rem;
+    --step-4:  2.375rem;
+
+    --sans: "Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --ease: cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:       #0e0d12;
+      --surface:     #17161d;
+      --surface-2:   #201e29;
+      --line:        #2b2836;
+      --line-strong: #3d3950;
+      --ink:         #f2f1f6;
+      --ink-2:       #b6b2c4;
+      --ink-3:       #8d889c;
+
+      --brand:       #a99ee0;
+      --brand-ink:   #c9c1ef;
+      --brand-tint:  #241d3d;
+      --brand-edge:  #3b3160;
+
+      --ok:          #6ee7a0;
+      --ok-tint:     #10251a;
+      --warn:        #f0b45e;
+      --warn-tint:   #2b1f0c;
+      --bad:         #f78585;
+      --bad-tint:    #2c1414;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:       #0e0d12;
+    --surface:     #17161d;
+    --surface-2:   #201e29;
+    --line:        #2b2836;
+    --line-strong: #3d3950;
+    --ink:         #f2f1f6;
+    --ink-2:       #b6b2c4;
+    --ink-3:       #8d889c;
+
+    --brand:       #a99ee0;
+    --brand-ink:   #c9c1ef;
+    --brand-tint:  #241d3d;
+    --brand-edge:  #3b3160;
+
+    --ok:          #6ee7a0;
+    --ok-tint:     #10251a;
+    --warn:        #f0b45e;
+    --warn-tint:   #2b1f0c;
+    --bad:         #f78585;
+    --bad-tint:    #2c1414;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--brand-tint); color: var(--brand-ink); }
+
+  a { color: var(--brand); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  code, .mono { font-family: var(--mono); font-variant-ligatures: none; }
+
+  code {
+    font-size: 0.86em;
+    background: var(--surface-2);
+    border-radius: 4px;
+    padding: 0.1em 0.34em;
+    color: var(--ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------------------------------------------------------------
+     Shell
+     --------------------------------------------------------------- */
+  .shell {
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    align-items: start;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+
+  /* --- rail ------------------------------------------------------ */
+  .rail {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 2rem 1rem 2rem 1.5rem;
+    border-inline-end: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scrollbar-width: thin;
+  }
+
+  .rail-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: var(--step-0);
+    letter-spacing: -0.01em;
+  }
+  .rail-mark span.dot {
+    inline-size: 0.6rem;
+    block-size: 0.6rem;
+    border-radius: 2px;
+    background: var(--brand);
+    flex: none;
+  }
+  .rail-sub {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--ink-3);
+    letter-spacing: 0.02em;
+    margin-block-start: -1rem;
+  }
+
+  .rail nav { display: flex; flex-direction: column; gap: 1px; }
+
+  .rail a {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.375rem;
+    align-items: baseline;
+    padding: 0.28rem 0.5rem;
+    border-radius: 6px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: var(--step--1);
+    line-height: 1.35;
+    transition: background 150ms var(--ease), color 150ms var(--ease);
+  }
+  .rail a .n {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .rail a:hover { background: var(--surface); color: var(--ink); }
+  .rail a[aria-current="true"] {
+    background: var(--brand-tint);
+    color: var(--brand-ink);
+    font-weight: 700;
+  }
+  .rail a[aria-current="true"] .n { color: var(--brand-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail a, .chip, .row, .btn { transition: none; }
+  }
+
+  /* --- main ------------------------------------------------------ */
+  main {
+    min-width: 0;
+    padding: 3.5rem clamp(1.25rem, 4vw, 4rem) 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  .measure { max-width: var(--measure); }
+
+  h1, h2, h3, h4 { text-wrap: balance; margin: 0; letter-spacing: -0.018em; }
+  h1 { font-size: var(--step-4); font-weight: 800; line-height: 1.1; }
+  h2 { font-size: var(--step-3); font-weight: 800; line-height: 1.2; }
+  h3 { font-size: var(--step-1); font-weight: 700; line-height: 1.3; }
+  h4 { font-size: var(--step-0); font-weight: 700; }
+  p  { margin: 0; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* --- masthead -------------------------------------------------- */
+  .masthead { display: flex; flex-direction: column; gap: 1.5rem; }
+  .masthead p.lede {
+    font-size: var(--step-1);
+    color: var(--ink-2);
+    max-width: 58ch;
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 2rem;
+    padding-block: 0.875rem;
+    border-block: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .facts div { display: flex; gap: 0.5rem; padding-block: 0.125rem; }
+  .facts dt { color: var(--ink-3); }
+  .facts dd { margin: 0; color: var(--ink); }
+
+  /* --- headline stats -------------------------------------------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .stat { background: var(--paper); padding: 1rem 1.125rem; display: flex; flex-direction: column; gap: 0.125rem; }
+  .stat b {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .stat span { font-size: 0.75rem; color: var(--ink-3); line-height: 1.35; }
+  .stat.is-bad b  { color: var(--bad); }
+  .stat.is-warn b { color: var(--warn); }
+
+  /* --- findings list --------------------------------------------- */
+  .findings { display: flex; flex-direction: column; gap: 0; border-block-start: 1px solid var(--line); }
+  .finding {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.875rem;
+    padding-block: 1.125rem;
+    border-block-end: 1px solid var(--line);
+    align-items: start;
+  }
+  .finding .n {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    padding-block-start: 0.15rem;
+  }
+  .finding h4 { margin-block-end: 0.2rem; }
+  .finding p { color: var(--ink-2); font-size: var(--step--1); max-width: 62ch; }
+
+  /* --- generic sections ------------------------------------------ */
+  section { display: flex; flex-direction: column; gap: 1.25rem; scroll-margin-top: 1.5rem; }
+  .sec-head { display: flex; flex-direction: column; gap: 0.375rem; }
+  .sec-head .eyebrow { display: flex; align-items: center; gap: 0.5rem; }
+  .sec-head .eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  section > p, section > ul, section > ol { max-width: var(--measure); }
+
+  ul, ol { margin: 0; padding-inline-start: 1.15rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  li { color: var(--ink-2); }
+  li::marker { color: var(--ink-3); }
+
+  .sub { display: flex; flex-direction: column; gap: 0.875rem; }
+  .sub > p, .sub > ul, .sub > ol { max-width: var(--measure); }
+
+  /* --- tables ---------------------------------------------------- */
+  .tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; scrollbar-width: thin; }
+  table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+  thead th {
+    background: var(--surface);
+    text-align: start;
+    font-weight: 700;
+    color: var(--ink);
+    padding: 0.5rem 0.875rem;
+    white-space: nowrap;
+    border-block-end: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+  }
+  tbody td { padding: 0.5rem 0.875rem; border-block-end: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+  tbody tr:last-child td { border-block-end: 0; }
+  tbody tr:hover td { background: var(--surface); }
+  td.num, th.num { text-align: end; font-variant-numeric: tabular-nums; font-family: var(--mono); }
+
+  /* --- chips ----------------------------------------------------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 1.3rem;
+    padding-inline: 0.44rem;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    font-family: var(--mono);
+    white-space: nowrap;
+    background: var(--surface-2);
+    color: var(--ink-2);
+  }
+  .chip.ok   { background: var(--ok-tint);   color: var(--ok); }
+  .chip.warn { background: var(--warn-tint); color: var(--warn); }
+  .chip.bad  { background: var(--bad-tint);  color: var(--bad); }
+  .chip.brand{ background: var(--brand-tint);color: var(--brand-ink); }
+  .chip.mute { background: transparent; color: var(--ink-3); font-weight: 400; }
+
+  .yes { color: var(--ok); font-weight: 700; }
+  .no  { color: var(--ink-3); }
+
+  /* --- callouts -------------------------------------------------- */
+  .note {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem 1.125rem;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: var(--measure);
+  }
+  .note.key { border-color: var(--brand-edge); background: var(--brand-tint); }
+  .note.key .eyebrow { color: var(--brand-ink); }
+  .note.key p, .note.key li { color: var(--brand-ink); }
+  .note p { font-size: var(--step--1); color: var(--ink-2); }
+
+  blockquote {
+    margin: 0;
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--brand-edge);
+    color: var(--ink-2);
+    font-style: italic;
+    max-width: var(--measure);
+  }
+
+  /* --- specimen: the evidence, rendered ------------------------- */
+  .specimen {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .specimen > figcaption {
+    padding: 0.5rem 0.875rem;
+    border-block-end: 1px solid var(--line);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .specimen .body { padding: 1.125rem; display: flex; flex-wrap: wrap; gap: 1.75rem; }
+
+  .swatch-set { display: flex; flex-direction: column; gap: 0.55rem; }
+  .swatch-set h4 { font-size: 0.75rem; font-family: var(--mono); font-weight: 500; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .swatch-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .sw {
+    display: inline-flex;
+    align-items: center;
+    height: 1.4rem;
+    padding-inline: 0.5rem;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+  }
+
+  /* the four palettes still hard-coded in badge.tsx — shown as they
+     literally render, because the point is that they are literals */
+  .sw-green { background:#f0fdf4; color:#15803d; }
+  .sw-amber { background:#fffbeb; color:#b45309; }
+  .sw-blue  { background:#eff6ff; color:#1d4ed8; }
+  .sw-red   { background:#fef2f2; color:#b91c1c; }
+
+  .scale-demo { display: flex; align-items: flex-end; gap: 1.25rem; }
+  .scale-col { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+  .scale-col small { font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-3); }
+  .box {
+    display: flex; align-items: center; justify-content: center;
+    inline-size: 6.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: var(--paper);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--ink-2);
+  }
+  .box.sys { block-size: 32px; }
+  .box.prd { block-size: 36px; }
+  .gapmark {
+    align-self: stretch;
+    display: flex; align-items: flex-end;
+    font-family: var(--mono); font-size: 0.6875rem; color: var(--bad);
+    padding-block-end: 0.25rem;
+  }
+
+  /* --- scorecard controls ---------------------------------------- */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn {
+    height: 2rem;
+    padding-inline: 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: var(--paper);
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease);
+  }
+  .btn:hover { background: var(--surface); color: var(--ink); }
+  .btn[aria-pressed="true"] {
+    background: var(--brand-tint);
+    border-color: var(--brand-edge);
+    color: var(--brand-ink);
+    font-weight: 700;
+  }
+  .search {
+    height: 2rem;
+    flex: 1 1 12rem;
+    min-width: 9rem;
+    max-width: 20rem;
+    padding-inline: 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+  }
+  .search::placeholder { color: var(--ink-3); }
+  .count { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-3); margin-inline-start: auto; }
+
+  /* --- backlog --------------------------------------------------- */
+  .tier { display: flex; flex-direction: column; gap: 0.75rem; }
+  .tier > h3 { display: flex; align-items: baseline; gap: 0.6rem; }
+  .tier > h3 em { font-style: normal; font-size: var(--step--1); font-weight: 400; color: var(--ink-3); }
+
+  .task {
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--paper);
+    align-items: start;
+  }
+  .task .n {
+    font-family: var(--mono); font-weight: 700; font-size: 0.8125rem;
+    color: var(--ink-3); font-variant-numeric: tabular-nums; padding-block-start: 0.12rem;
+  }
+  .task h4 { margin-block-end: 0.2rem; }
+  .task p { font-size: var(--step--1); color: var(--ink-2); max-width: 62ch; }
+
+  /* --- code block ------------------------------------------------ */
+  pre {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem 1.125rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+    scrollbar-width: thin;
+  }
+  pre .c { color: var(--ink-3); }
+
+  footer {
+    border-block-start: 1px solid var(--line);
+    padding-block-start: 1.5rem;
+    font-size: var(--step--1);
+    color: var(--ink-3);
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* --- narrow ---------------------------------------------------- */
+  @media (max-width: 62rem) {
+    .shell { grid-template-columns: 1fr; }
+    .rail {
+      position: static;
+      height: auto;
+      border-inline-end: 0;
+      border-block-end: 1px solid var(--line);
+      padding: 1.5rem 1.25rem;
+    }
+    .rail nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+    .rail a { grid-template-columns: auto auto; border: 1px solid var(--line); }
+    main { padding-block-start: 2.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="rail">
+    <div class="rail-mark"><span class="dot"></span> Bulbul Design Audit</div>
+    <p class="rail-sub">bulbul @ e51fe6f0a</p>
+    <nav id="rail" aria-label="Sections">
+      <a href="#summary"><span class="n">—</span><span>The short version</span></a>
+      <a href="#s1"><span class="n">01</span><span>What was measured</span></a>
+      <a href="#s2"><span class="n">02</span><span>Four sources of truth</span></a>
+      <a href="#s3"><span class="n">03</span><span>Foundations</span></a>
+      <a href="#s4"><span class="n">04</span><span>Surfaces &amp; drawers</span></a>
+      <a href="#s5"><span class="n">05</span><span>Index-page states</span></a>
+      <a href="#s6"><span class="n">06</span><span>Tables</span></a>
+      <a href="#s7"><span class="n">07</span><span>Motion</span></a>
+      <a href="#s8"><span class="n">08</span><span>Accessibility</span></a>
+      <a href="#s9"><span class="n">09</span><span>Icons</span></a>
+      <a href="#s10"><span class="n">10</span><span>Theming &amp; RTL</span></a>
+      <a href="#s11"><span class="n">11</span><span>Enforcement</span></a>
+      <a href="#s12"><span class="n">12</span><span>Nav coverage</span></a>
+      <a href="#s13"><span class="n">13</span><span>Route scorecard</span></a>
+      <a href="#s14"><span class="n">14</span><span>Design lab hygiene</span></a>
+      <a href="#s15"><span class="n">15</span><span>Backlog</span></a>
+      <a href="#s16"><span class="n">16</span><span>Reproducing it</span></a>
+    </nav>
+  </aside>
+
+  <main>
+
+    <!-- ================= MASTHEAD ================= -->
+    <header class="masthead">
+      <p class="eyebrow">Frontend conformance audit</p>
+      <h1>The product against<br>the design system</h1>
+      <p class="lede">
+        Where <code>sarj-ai/bulbul</code>’s shipped frontend and the written design
+        system disagree — measured against the system itself, not against the mockups.
+        Nothing here says “mockup X has not been built”.
+      </p>
+      <dl class="facts">
+        <div><dt>Subject</dt><dd>typescript/packages/app</dd></div>
+        <div><dt>Commit</dt><dd>e51fe6f0a</dd></div>
+        <div><dt>Routes</dt><dd>48</dd></div>
+        <div><dt>Reference</dt><dd>new-des-lab</dd></div>
+        <div><dt>Scope</dt><dd>code-level</dd></div>
+      </dl>
+    </header>
+
+    <!-- ================= SUMMARY ================= -->
+    <section id="summary">
+      <div class="sec-head">
+        <p class="eyebrow">The short version</p>
+        <h2>Pages were converted. The primitives underneath them were not.</h2>
+      </div>
+
+      <p class="measure">
+        DES-192 did what it said: 17 list surfaces now share one index-page shape.
+        The gap is that <strong>it converted pages while the primitives those pages
+        are built from stayed unconverted</strong>, and nothing enforces the result.
+      </p>
+
+      <div class="stats">
+        <div class="stat is-bad"><b>162<span style="font-size:.8rem;color:var(--ink-3)">&nbsp;/&nbsp;57</span></b><span>lucide files vs. HugeIcons — 3:1 the wrong way</span></div>
+        <div class="stat is-bad"><b>2<span style="font-size:.8rem;color:var(--ink-3)">&nbsp;/&nbsp;87</span></b><span>animated files carrying <code style="font-size:.9em">motion-reduce:</code></span></div>
+        <div class="stat is-bad"><b>1</b><span>use of the <code style="font-size:.9em">Empty</code> primitive, product-wide</span></div>
+        <div class="stat is-warn"><b>47<span style="font-size:.8rem;color:var(--ink-3)">&nbsp;/&nbsp;9</span></b><span>Dialog files vs. side panels</span></div>
+        <div class="stat is-warn"><b>14</b><span>tables off the converted pattern</span></div>
+        <div class="stat is-bad"><b>0</b><span>of the ten <code style="font-size:.9em">sarj/*</code> rules enforced</span></div>
+      </div>
+
+      <div class="findings">
+        <div class="finding">
+          <span class="n">01</span>
+          <div>
+            <h4><code>components/ui/badge.tsx</code> still hard-codes the palettes the commit removed</h4>
+            <p><code>green-50</code>, <code>amber-50</code>, <code>blue-50</code>, <code>red-50</code> — the exact
+            palettes DES-192’s message says it replaced. They survived because
+            <code>src/components/ui/**</code> is in the ESLint <code>ignores</code> list. One file, three call sites.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="n">02</span>
+          <div>
+            <h4>The control scale is one step taller than the system’s</h4>
+            <p><code>Input</code> is <code>h-9</code> against <code>h-8</code>; <code>Button</code> default the same.
+            Button sizes are pinned to field heights <em>so a filter bar lines up</em> — the whole scale is off by 4px,
+            and Input, Select and outline Button also carry <code>shadow-xs</code>, which the system bans.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="n">03</span>
+          <div>
+            <h4>No <code>Drawer</code> primitive, and no <code>DataTable</code> one either</h4>
+            <p>Nine side panels exist, all <code>Sheet</code>; against them 47 files use <code>Dialog</code> and 27 use
+            <code>AlertDialog</code>. The 30 conforming tables each repeat the header-band class strings inline, so
+            nothing holds them there.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="n">04</span>
+          <div>
+            <h4>The <code>Empty</code> primitive is used once in the whole product</h4>
+            <p>Every list surface hand-rolls its own through four different mechanisms — including eight separate
+            private <code>EmptyState</code> components — with copy that disagrees with itself.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="n">05</span>
+          <div>
+            <h4>87 files animate; 2 carry <code>motion-reduce:</code></h4>
+            <p>The only <code>prefers-reduced-motion</code> block in <code>globals.css</code> covers one loading dot.
+            This is an accessibility regression, not a style preference.</p>
+          </div>
+        </div>
+        <div class="finding">
+          <span class="n">06</span>
+          <div>
+            <h4>Nothing enforces any of it</h4>
+            <p>The design lab enforces ten <code>sarj/*</code> rules. The product enforces none. Everything above can
+            come back the day after it is fixed.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note key">
+        <p class="eyebrow">Read this first</p>
+        <p><strong>Start at §3.</strong> Most of the rest follows from it — pages cannot converge while the
+        primitives they are assembled from disagree.</p>
+      </div>
+    </section>
+
+    <!-- ================= 1 ================= -->
+    <section id="s1">
+      <div class="sec-head">
+        <p class="eyebrow">01 — Method</p>
+        <h2>What was measured</h2>
+      </div>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:9rem">Chapter</th><th>The rule</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Foundations</strong></td><td>Seven non-negotiables — icons (HugeIcons only), shadows (none), typography, spacing, radius, scrollbars, accessibility. Colour: “a colour that is not on this page does not exist.”</td></tr>
+            <tr><td><strong>Surfaces</strong></td><td>Four, and only four: <strong>inline</strong> (configuring, where it fits) · <strong>drawer</strong> (configuring or reading, too big for the page) · <strong>pop-up</strong> (one quick decision) · <strong>multi-step</strong> (creating something that will not fit on one screen).</td></tr>
+            <tr><td><strong>Index page</strong></td><td>Header · Controls · Content · Actions · <strong>States: loading, empty, no-results, error, populated</strong>.</td></tr>
+            <tr><td><strong>Tables</strong></td><td>The chip vocabulary (<code>*-tint</code>, colour only on the status column), <strong>one empty-value convention</strong>, row actions (word → icon → overflow, never more than three), language chips, 40px rows matched to the header band.</td></tr>
+            <tr><td><strong>Forms</strong></td><td>Twelve settled decisions, from label weight to disabled-and-read-only.</td></tr>
+            <tr><td><strong>Buttons</strong></td><td>Four sizes (24 / 28 / 32 / 36px, pinned to Input and Select heights) × four roles.</td></tr>
+            <tr><td><strong>Motion</strong></td><td>Two curves, six durations, nothing over 300ms, transform and opacity only, every animated element carrying its own <code>motion-reduce:</code>.</td></tr>
+            <tr><td><strong>Patterns</strong></td><td>Multi-step creation: step indicator, one decision per step, Back, <strong>Review</strong>, submitting state, failure state naming the broken step.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <p class="eyebrow">One asymmetry matters</p>
+        <p>The design lab is deliberately light-mode and left-to-right, and its <code>ui-review</code> skill says not
+        to spend findings on dark mode or RTL <em>there</em>. The product ships dark tokens, the <code>tasama</code>
+        whitelabel and Arabic. So the token rules bind <strong>harder</strong> in the product than in the lab that
+        wrote them, and §10 treats them as live.</p>
+      </div>
+    </section>
+
+    <!-- ================= 2 ================= -->
+    <section id="s2">
+      <div class="sec-head">
+        <p class="eyebrow">02 — Governance</p>
+        <h2>Four sources of truth, and they disagree</h2>
+      </div>
+      <p class="measure">Before anything is fixed, one of these has to win. Today a developer can follow any of
+      them and be told they are wrong by another.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:17rem">Source</th><th>Says</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="chip brand">canonical</span><br><strong>The design lab</strong><br><code>/design-system</code>, <code>AGENTS.md</code>, <code>eslint-rules/</code></td>
+              <td>Newest. Tint tokens, no shadows, HugeIcons, the four surfaces.</td>
+            </tr>
+            <tr>
+              <td><span class="chip warn">stale</span><br><code>bulbul/src/app/doc/design-tokens.md</code></td>
+              <td>Documents <code>--chart-1 … --chart-5</code>; <code>globals.css</code> ships six. Never mentions the <code>*-tint</code> family or <code>scrollbar-thin</code> — the tokens DES-192 added and this doc is supposed to cover.</td>
+            </tr>
+            <tr>
+              <td><span class="chip bad">wrong</span><br><code>bulbul/.claude/skills/design-system-rules/</code></td>
+              <td>Says light/dark runs on <code>next-themes</code> with <code>attribute="class"</code>. <code>next-themes</code> is <strong>not a dependency</strong>, and there is no theme switcher anywhere in <code>src/</code>.</td>
+            </tr>
+            <tr>
+              <td><span class="chip warn">overruled</span><br>The lab’s own <code>sarj-brand</code> skill</td>
+              <td>Still prescribes <code>green-50</code>-style soft badges and “soft shadows” — both overruled since, by the tint tokens and by <code>no-shadow</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note key">
+        <p class="eyebrow">Recommendation</p>
+        <p>Make <code>/design-system</code> canonical, cut the overlapping halves of the other three down to pointers,
+        and fix the two factual errors (<code>chart-1…5</code>, <code>next-themes</code>).</p>
+      </div>
+    </section>
+
+    <!-- ================= 3 ================= -->
+    <section id="s3">
+      <div class="sec-head">
+        <p class="eyebrow">03 — The chapter the others depend on</p>
+        <h2>Foundations: the primitives and the tokens</h2>
+      </div>
+      <p class="measure">Pages cannot converge while the primitives they are assembled from disagree.</p>
+
+      <div class="sub">
+        <h3>3.1 &nbsp;Inventory</h3>
+        <p>70 primitives in the lab, 53 in the product, 42 shared.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:13rem">Group</th><th>Components</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="chip bad">missing</span><br>In the system, absent from the product</td>
+                <td><code>drawer</code>, <code>stepper</code>, <code>combobox</code>, <code>accordion</code>,
+                <code>toggle</code>/<code>toggle-group</code>, <code>context-menu</code>, <code>hover-card</code>,
+                <code>native-select</code>, <code>pagination</code>, <code>resizable</code>, <code>marker</code>,
+                <code>input-otp</code>, <code>aspect-ratio</code>, <code>menubar</code>, <code>navigation-menu</code>,
+                and the whole Conversation and media group (<code>message</code>, <code>bubble</code>,
+                <code>attachment</code>).<br><br><strong><code>drawer</code> and <code>stepper</code> are the two that
+                cost real behaviour</strong> — see §4.</td>
+              </tr>
+              <tr>
+                <td><span class="chip warn">unused</span><br>Installed and never imported</td>
+                <td><code>field.tsx</code>, <code>item.tsx</code>. Both core to the system (Form structure, and the
+                list row). Forms went to react-hook-form + <code>form.tsx</code> instead, in 21 files. Defensible — the
+                product’s own <code>forms</code> skill mandates it — but it is a divergence, and the system’s Forms
+                chapter describes <code>Field</code>/<code>FieldLabel</code>/<code>FieldDescription</code>/<code>FieldError</code>.
+                Pick one and say so.</td>
+              </tr>
+              <tr>
+                <td><span class="chip">undocumented</span><br>In the product, no rule covers them</td>
+                <td><code>animated-tabs</code>, <code>date-time-picker</code>, <code>date-time-range-picker</code>,
+                <code>filter-chip</code>, <code>labeled-toggle</code>, <code>multi-select</code>,
+                <code>segmented-control</code>, <code>siri-orb</code>, <code>time-picker</code>,
+                <code>timezone-select</code>, <code>waveform-player</code>. The system’s Custom components section
+                lists <code>FluidOrb</code>, <code>MeshOrb</code>, <code>Shdr31</code>, <code>FileCard</code>,
+                <code>DotPattern</code> — none of which the product has, and none of which cover
+                <code>siri-orb</code>. Eleven components nobody owns a rule for.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>3.2 &nbsp;The control scale is one step out</h3>
+
+        <figure class="specimen">
+          <figcaption>Drawn at actual size — the difference is 4px on every control</figcaption>
+          <div class="body">
+            <div class="scale-demo">
+              <div class="scale-col">
+                <div class="box sys">h-8 · 32px</div>
+                <small>system</small>
+              </div>
+              <div class="gapmark">↕ 4px</div>
+              <div class="scale-col">
+                <div class="box prd">h-9 · 36px</div>
+                <small>product</small>
+              </div>
+            </div>
+            <div class="swatch-set" style="flex:1;min-width:16rem">
+              <h4>Why it matters</h4>
+              <p style="font-size:var(--step--1);color:var(--ink-2);margin:0">
+                The system pins <code>sm</code> to a small Input and <code>default</code> to a normal one for one
+                stated reason — <em>“which is what makes a filter bar line up instead of stepping.”</em> The product’s
+                scale breaks that pairing everywhere at once, so no per-page fix can settle it.
+              </p>
+            </div>
+          </div>
+        </figure>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th></th><th>System</th><th>Product</th></tr></thead>
+            <tbody>
+              <tr><td><code>Input</code></td><td><code>h-8</code> (32px)</td><td><code>h-9</code> (36px), plus <code>shadow-xs</code></td></tr>
+              <tr><td><code>Select</code> trigger</td><td><code>h-8</code> / <code>h-7</code> (sm)</td><td><code>h-9</code> / <code>h-8</code>, plus <code>shadow-xs</code></td></tr>
+              <tr><td><code>Button</code></td><td>xs 24 · sm 28 · default 32 · lg 36</td><td>xs 24 · sm 32 · default 36 · lg 40</td></tr>
+              <tr><td>Radius</td><td><code>rounded-lg</code></td><td><code>rounded-md</code></td></tr>
+              <tr><td>Press feedback</td><td><code>active:translate-y-px</code></td><td class="no">none</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>3.3 &nbsp;Shadows and Card</h3>
+        <p><code>Card</code> in the system is <code>ring-1 ring-foreground/10</code>, no border, no shadow, with
+        <code>--card-spacing</code> at 16px (12px at <code>size="sm"</code>) and a <code>bg-muted/50</code> footer.</p>
+        <p><code>Card</code> in the product is <code>border … py-6 shadow-sm gap-6 px-6</code> with no <code>size</code>
+        variant, and <code>CardTitle</code> is <code>leading-none font-semibold</code> against the system’s
+        <code>font-heading text-base leading-snug font-medium</code>.</p>
+        <p>So every card in the product is 24px-padded, bordered, shadowed, and titled a weight heavier. Add Input,
+        Select and outline Button carrying <code>shadow-xs</code>, and <code>--shadow-sidebar-outline</code> in
+        <code>globals.css</code>, and the “no shadows” foundation is not partially met — <strong>it is
+        inverted</strong>.</p>
+      </div>
+
+      <div class="sub">
+        <h3>3.4 &nbsp;<code>badge.tsx</code> — the highest-value single fix</h3>
+
+        <figure class="specimen">
+          <figcaption>badge.tsx:23–29 — rendered as it literally renders</figcaption>
+          <div class="body">
+            <div class="swatch-set">
+              <h4>Shipping today — raw palette literals</h4>
+              <div class="swatch-row">
+                <span class="sw sw-green">green-50 / green-700</span>
+                <span class="sw sw-amber">amber-50 / amber-700</span>
+                <span class="sw sw-blue">blue-50 / blue-700</span>
+                <span class="sw sw-red">red-50 / red-700</span>
+              </div>
+              <p style="font-size:0.75rem;color:var(--ink-3);margin:0;max-width:34ch">
+                Twenty palette tokens. None reachable by <code>[data-whitelabel="tasama"]</code>.
+              </p>
+            </div>
+            <div class="swatch-set">
+              <h4>What should be there — the tint tokens</h4>
+              <div class="swatch-row">
+                <span class="chip ok">success-tint</span>
+                <span class="chip warn">warning-tint</span>
+                <span class="chip brand">primary-tint</span>
+                <span class="chip bad">destructive-tint</span>
+              </div>
+              <p style="font-size:0.75rem;color:var(--ink-3);margin:0;max-width:34ch">
+                One directory away, added by the same commit. These follow the theme and the whitelabel.
+              </p>
+            </div>
+          </div>
+        </figure>
+
+        <p><code>eslint.config.js</code> ignores <code>src/components/ui/**</code>, so no lint sees them. Three live
+        call sites, all <code>variant="info"</code>, all in
+        <code>app/batch-calls/batch-call-table.tsx:67,79,153</code> — a route DES-192 converted. The other three
+        variants are dead API surface inviting reuse.</p>
+
+        <p>Separately, <code>Badge</code> and <code>Button</code> <code>variant="destructive"</code> are solid
+        <code>bg-destructive text-white</code> where the system’s is a soft tint
+        (<code>bg-destructive/10 text-destructive</code>) — deliberate there, because
+        <em>“it confirms first, so it does not also need to shout.”</em></p>
+      </div>
+
+      <div class="sub">
+        <h3>3.5 &nbsp;Tokens</h3>
+        <p>142 tokens in the lab, 114 in the product.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:11rem">Status</th><th>Tokens</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="chip bad">missing</span></td>
+                <td>The whole <code>--info</code> family (<code>info</code>, <code>-foreground</code>,
+                <code>-tint</code>, <code>-tint-foreground</code>) — which is why <code>Badge variant="info"</code> is
+                still on <code>blue-50</code> · the z-index scale (<code>--z-base</code> … <code>--z-tooltip</code>),
+                so every layer is a raw number · <code>--ease-in-out-cubic</code>, one of the system’s two curves ·
+                <code>--radius-2xl</code>/<code>-3xl</code>/<code>-4xl</code> · <code>--font-heading</code>,
+                <code>--font-mono</code></td>
+              </tr>
+              <tr>
+                <td><span class="chip warn">against the rules</span></td>
+                <td><code>--shadow-sidebar-outline</code> · <code>--animate-fade-in</code> at 500ms and
+                <code>--animate-fade-in-up</code> at 400ms, both over the 300ms cap and both on a raw
+                <code>ease-out</code> · <code>--ease-sidebar</code>, a fifth curve where the system has two</td>
+              </tr>
+              <tr>
+                <td><span class="chip bad">dead on arrival</span></td>
+                <td>The six-slot <code>--chart-1 … --chart-6</code> palette DES-192 added has <strong>zero
+                consumers</strong>. The product’s only chart,
+                <code>app/dashboard/call-volume-chart.tsx:51,55</code>, uses raw <code>hsl(276, 100%, 80%)</code> and
+                <code>hsl(276, 100%, 60%)</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4 ================= -->
+    <section id="s4">
+      <div class="sec-head">
+        <p class="eyebrow">04 — Surfaces</p>
+        <h2>“Is there any other type of drawer?”</h2>
+      </div>
+
+      <div class="note key">
+        <p><strong>No.</strong> There is no <code>Drawer</code> primitive in the product at all. <code>Sheet</code> is
+        the only side panel, and there are nine of them.</p>
+      </div>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:12rem">Panel</th><th>File</th><th>Opened from</th></tr></thead>
+          <tbody>
+            <tr><td>Call detail</td><td><code>app/calls/call-detail-sheet.tsx</code></td><td><code>/calls</code> row click <strong>and</strong> <code>/quality/dashboard</code> row click</td></tr>
+            <tr><td>Messaging detail</td><td><code>app/messaging/messaging-detail-sheet.tsx</code></td><td><code>/messaging</code> row click</td></tr>
+            <tr><td>Batch settings</td><td><code>app/batch-calls/batch-settings-sheet.tsx</code></td><td><code>/batch-calls/[batchId]</code> header</td></tr>
+            <tr><td>AI Notes</td><td><code>app/scenarios/ai-notes-sidebar.tsx</code>, hosted twice</td><td>floating FAB on the scenario editor</td></tr>
+            <tr><td>Tool configuration</td><td><code>components/scenario/tools-configuration.tsx</code></td><td>gear on a configured tool</td></tr>
+            <tr><td>Filler words / backchannel</td><td><code>components/settings/backchannel-settings.tsx:212</code></td><td>gear on the Backchannel block</td></tr>
+            <tr><td>Background noise</td><td><code>components/settings/background-noise-settings.tsx:130</code></td><td>gear on the Background noise block</td></tr>
+            <tr><td>Playground scenario list</td><td><code>app/(playground)/playground-view.tsx</code></td><td>mobile “Browse Agents”</td></tr>
+            <tr><td>Mobile app sidebar</td><td><code>components/ui/sidebar.tsx</code></td><td>mobile hamburger</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="measure">Two notes on that list. <code>app/calls/call-metadata-sidebar.tsx</code> is <em>not</em> a
+      tenth — it is the fixed 325px rail inside the call detail sheet. And AI Notes is built twice —
+      <code>scenarios/[scenarioId]/scenario-view-edit.tsx:832</code> and
+      <code>scenarios/scenario-form.tsx:754</code> — two copies of the same mobile panel, one on the edit screen and
+      one on the create screen, both <code>mobileAINotesOpen</code>. That duplication is worth collapsing on its own.</p>
+
+      <div class="note">
+        <p class="eyebrow">The pattern already works, three times</p>
+        <p>Backchannel and background noise are configuration too large for the row that opens them, they keep the
+        page behind them, and they are reused by all three consumers — the persona create form, the persona update
+        form, and the “Persona Default Values” block of global settings. Together with the tool-configuration sheet
+        they are three correct precedents already in the codebase, which is what makes the next part a
+        <strong>re-filing job rather than a new pattern</strong>.</p>
+      </div>
+
+      <p class="measure">Against those nine: <strong>47 files import <code>ui/dialog</code> and 27 import
+      <code>ui/alert-dialog</code>.</strong></p>
+
+      <div class="sub">
+        <h3>4.1 &nbsp;Filed as a pop-up, but it is configuration</h3>
+        <p>The system: a pop-up is <em>“a quick decision, and only that”</em>, and explicitly
+        <em>“never configuration, and anything with more to read — that is a drawer.”</em> These are multi-field
+        configuration in a Dialog:</p>
+        <ul>
+          <li><code>admin/phone-numbers/provisioned/manage-outbound-dialog.tsx</code></li>
+          <li><code>admin/phone-numbers/provisioned/edit-trunk-dialog.tsx</code></li>
+          <li><code>admin/phone-numbers/provisioned/change-allocation-dialog.tsx</code></li>
+          <li><code>app/calls/configure-report-dialog.tsx</code> — 678 lines: template picker, three column groups, chip reordering, a nested save-as-template dialog</li>
+          <li><code>messaging-settings/components/add-config-dialog.tsx</code> and <code>edit-config-dialog.tsx</code> — organization, name, provider, token, per-scenario mapping rows, enabled switch</li>
+          <li><code>admin/voices/components/add-voice-dialog.tsx</code> / <code>edit-voice-dialog.tsx</code> — <code>voice-form.tsx</code> is 860 lines with provider-conditional field sets</li>
+          <li><code>agents/components/add-agent-profile-dialog.tsx</code> / <code>edit-agent-profile-dialog.tsx</code></li>
+          <li><code>components/scenario/advanced-settings-section.tsx</code></li>
+          <li><code>components/scenario/sinks/zoho-crm-sink-config.tsx</code></li>
+          <li><code>admin/telephony/connections/[sipConnectionId]/number-format-dialog.tsx</code></li>
+          <li><code>integrations/zoho/management/webhook-management-client.tsx</code> — module, events checklist, scenario, condition builder</li>
+        </ul>
+      </div>
+
+      <div class="sub">
+        <h3>4.2 &nbsp;Multi-step creation</h3>
+        <p>Exactly <strong>one</strong> multi-step flow exists:
+        <code>app/admin/telephony/connections/new/connection-wizard.tsx</code>, six steps.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:14rem">Required by the pattern</th><th>Present</th></tr></thead>
+            <tbody>
+              <tr><td>Step indicator</td><td><span class="chip warn">hand-rolled</span> <code>Progress</code> + “Step {n} of 6”, because there is no <code>Stepper</code> primitive</td></tr>
+              <tr><td>One decision per step</td><td><span class="chip ok">yes</span></td></tr>
+              <tr><td>Back</td><td><span class="chip ok">yes</span> with state preserved</td></tr>
+              <tr><td><strong>Review</strong></td><td><span class="chip bad">no</span> the last step is <code>step-verification</code>, which tests the connection rather than showing what is about to be created</td></tr>
+              <tr><td>Submitting state</td><td><span class="chip ok">yes</span></td></tr>
+              <tr><td>Failure state naming the step</td><td><span class="chip warn">partial</span> <code>step-collision-check</code> reports its own; other steps do not</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="measure"><code>app/scenarios/new/</code> is a second stepped flow (industry → use case → name → form)
+        and also hand-rolls its progression. And the system’s <em>other</em> named multi-step example —
+        <strong>“Create voice”</strong> — ships as a plain Dialog wrapping an 860-line form.</p>
+      </div>
+    </section>
+
+    <!-- ================= 5 ================= -->
+    <section id="s5">
+      <div class="sec-head">
+        <p class="eyebrow">05 — Index pages</p>
+        <h2>The five states, one at a time</h2>
+      </div>
+
+      <div class="sub">
+        <h3>5.1 &nbsp;Empty states: one primitive, four mechanisms</h3>
+        <p><code>components/ui/empty.tsx</code> is imported by exactly <strong>one</strong> file in the product:
+        <code>components/status-page.tsx</code>. Every list surface does something else.</p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:3rem" class="num">#</th><th style="width:13rem">Mechanism</th><th>Where</th></tr></thead>
+            <tbody>
+              <tr><td class="num">1</td><td>Hand-rolled cards<br><code>&lt;h3 class="mb-2 text-lg font-semibold"&gt;</code></td><td><code>reports/page.tsx:64</code>, <code>variables/client.tsx:149</code>, <code>messaging-settings/page.tsx:109</code>, <code>admin/telephony/providers/page.tsx:130</code>, and others</td></tr>
+              <tr><td class="num">2</td><td>Eight private <code>EmptyState</code> components, each shared with nothing</td><td><code>admin/phone-numbers/provisioned/provisioned-numbers-panel.tsx</code>, <code>admin/telephony/connections/page.tsx</code>, <code>admin/telephony/providers/page.tsx</code>, <code>api-keys/client.tsx</code>, <code>batch-calls/batch-table.tsx</code>, <code>calls/call-transcript.tsx</code>, <code>integrations/salla/salla-integration-content.tsx</code>, <code>phone-numbers/page.tsx</code></td></tr>
+              <tr><td class="num">3</td><td>In-table <code>colSpan</code> rows</td><td>7 sites — “No phone numbers found.”, “No organizations found.”</td></tr>
+              <tr><td class="num">4</td><td><span class="chip bad">nothing at all</span></td><td><code>/calls</code> renders an empty table under “0 results”; <code>/admin/voices</code> has no empty state</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="measure">The copy disagrees with itself too, which the approval checklist gates on directly
+        (“microcopy consistency, capitalization…”):
+        <em>“No Files Yet”</em>, <em>“No tasks found”</em>, <em>“No batch calls found.”</em>,
+        <em>“No providers yet”</em>, <em>“No variables yet”</em>, <em>“No reports yet”</em>.</p>
+      </div>
+
+      <div class="sub">
+        <h3>5.2 &nbsp;Loading</h3>
+        <p>37 of 48 routes have <code>loading.tsx</code>. The gaps that matter are the ones that own tables:</p>
+        <ul>
+          <li><code>developer/webhooks</code> — <strong>three tables</strong>, no skeleton</li>
+          <li><code>admin/telephony/kamailio</code> — <strong>two tables</strong>, no skeleton</li>
+          <li><code>admin/scenario-templates/[industryId]</code> — one table, no skeleton</li>
+        </ul>
+        <p>Plus <code>developer</code>, <code>developer/api-reference</code>, <code>connections/new</code>,
+        <code>connections/adopt</code>, <code>scenarios/auto-generate</code> and its <code>generating</code>, and
+        <code>mcp/authorize</code>.</p>
+
+        <h4 style="margin-block-start:.5rem">Skeleton parity</h4>
+        <p style="max-width:var(--measure)">A skeleton that does not match its table reflows the page on load.</p>
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:14rem">Route</th><th>Skeleton</th><th>Real</th></tr></thead>
+            <tbody>
+              <tr><td><code>messaging</code></td><td>5 columns</td><td><span class="chip bad">6</span> for system admins — <code>Organization</code> is conditional</td></tr>
+              <tr><td><code>admin/telephony/providers</code></td><td><span class="chip bad">no <code>&lt;Table&gt;</code> at all</span> a 5×5 grid of <code>&lt;div&gt;</code>s</td><td>5 <code>&lt;TableHead&gt;</code></td></tr>
+              <tr><td><code>integrations/zoho/management</code></td><td><span class="chip bad">no <code>&lt;Table&gt;</code></span> two Cards of stacked rows</td><td>6 columns</td></tr>
+              <tr><td><code>admin/organizations</code></td><td>5</td><td><span class="chip warn">5 / 6</span> orgs tab / users tab</td></tr>
+              <tr><td><code>admin/phone-numbers</code></td><td>9</td><td><span class="chip warn">9 / 5 / 10</span> across the three tabs</td></tr>
+              <tr><td><code>calls</code></td><td>9</td><td><span class="chip warn">9 / 10</span> default / detailed (admin)</td></tr>
+              <tr><td><code>scenarios</code></td><td>8</td><td><span class="chip warn">variable</span> permission- and status-filtered</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="measure">The last four match only their default tab or the default role, which may be an acceptable
+        call — but it is a call, not currently a documented one.</p>
+      </div>
+
+      <div class="sub">
+        <h3>5.3 &nbsp;Error</h3>
+        <p>Nine routes have <code>error.tsx</code>: <code>admin</code>,
+        <code>connections/[sipConnectionId]</code>, <code>batch-calls</code>, <code>calls</code>,
+        <code>dashboard</code>, <code>knowledge-bases</code>, <code>phone-numbers</code>, <code>scenarios</code>,
+        plus the root <code>error.tsx</code> and <code>global-error.tsx</code>.</p>
+        <p>Falling through to the generic root boundary: <code>reports</code>, <code>messaging</code>,
+        <code>messaging-settings</code>, <code>variables</code>, <code>webhooks</code>, <code>api-keys</code>,
+        <code>agents</code>, <code>admin/voices</code>, <code>quality/dashboard</code>, <code>integrations</code>.</p>
+        <p>The converted routes with an <code>error.tsx</code> write a specific title (“Could not load calls”). The
+        ten above get “Something went wrong”.</p>
+      </div>
+
+      <div class="sub">
+        <h3>5.4 &nbsp;Pagination is three different things</h3>
+        <ul>
+          <li><strong>Shared cursor <code>Pagination</code> + <code>LimitSelector</code></strong> (10/25/50/100, cookie-backed) — <code>calls</code>, <code>scenarios</code>, <code>agents</code>, <code>knowledge-bases</code>, <code>batch-calls</code>, <code>messaging</code>, <code>reports</code>, <code>admin/voices</code>, <code>admin/phone-numbers</code>.</li>
+          <li><strong>Hand-rolled</strong> — <code>quality/dashboard</code> renders its own Previous / “Page 1” / Next at a fixed limit of 50, with no limit selector.</li>
+          <li><strong>None</strong> — <code>phone-numbers</code>, <code>messaging-settings</code>, <code>variables</code>, <code>api-keys</code>, <code>webhooks</code>, <code>admin/organizations</code>, <code>admin/scenario-templates</code>, <code>admin/telephony/*</code>.</li>
+        </ul>
+        <p>There is also no <code>pagination</code> primitive in <code>components/ui/</code>; the shared one is
+        <code>components/pagination/pagination.tsx</code>.</p>
+      </div>
+
+      <div class="sub">
+        <h3>5.5 &nbsp;The page shell</h3>
+        <p><code>ListPageLayout</code> reaches 17 surfaces. Not converted: <code>api-keys</code>,
+        <code>admin/tasks</code>, <code>admin/telephony/providers</code>, <code>admin/global-prompts</code>,
+        <code>admin/global-settings</code>, <code>integrations</code> (+ <code>salla</code>/<code>zoho</code>
+        management), <code>developer</code>, <code>developer/webhooks</code>, <code>dashboard</code>,
+        <code>(playground)</code>, and the detail routes <code>knowledge-bases/[kbId]</code>,
+        <code>batch-calls/[batchId]</code>, <code>admin/organizations/[id]</code>,
+        <code>admin/scenario-templates/[industryId]</code>, <code>connections/[sipConnectionId]</code>,
+        <code>scenarios/[scenarioId]</code>.</p>
+        <p><code>app/phone-numbers/page.tsx</code> is the half-conversion: it imports <code>ListPageLayout</code> and
+        then keeps the legacy <code>Card</code> + <code>overflow-x-auto rounded-md border</code> table and
+        <code>lg:shadow-sm</code> inside it.</p>
+
+        <div class="note">
+          <p class="eyebrow">48 sites still use <code>min-h-screen w-full</code></p>
+          <p>The exact bug <code>ListPageLayout</code>’s own docblock says it exists to kill —
+          <em>“Asking for 100vh in there demanded a header’s worth more height than existed, so every list page
+          scrolled by ~64px even when its content fit.”</em> 36 of them are
+          <code>min-h-screen w-full bg-white</code>, so they carry §10’s theming problem at the same time.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6 ================= -->
+    <section id="s6">
+      <div class="sec-head">
+        <p class="eyebrow">06 — Tables</p>
+        <h2>Thirty conforming, fourteen not, nothing holding them</h2>
+      </div>
+
+      <div class="sub">
+        <h3>6.1 &nbsp;The shape</h3>
+        <p>30 files carry both halves of the converted pattern — <code>bg-muted/50 hover:bg-muted/50</code> on the
+        header row and <code>[&amp;_td]:h-10 [&amp;_td]:px-4 [&amp;_th]:px-4</code> on the table.
+        <strong>Fourteen live tables in thirteen files do not:</strong></p>
+
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:22rem">File</th><th>Wrapper</th><th style="width:5rem">Band</th><th style="width:8rem">40px row</th></tr></thead>
+            <tbody>
+              <tr><td><code>admin/telephony/kamailio/page.tsx:163</code> <strong>and <code>:402</code></strong></td><td><code>overflow-x-auto rounded-md border</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/telephony/providers/page.tsx:71</code></td><td><code>overflow-x-auto rounded-md border</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/telephony/connections/[sipConnectionId]/page.tsx:299</code></td><td><code>overflow-x-auto rounded-md border</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/phone-numbers/trunk-assignments-table.tsx:60</code></td><td><code>rounded-md border</code>, no scroll container</td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/phone-numbers/provisioned/provisioned-numbers-panel.tsx:139</code></td><td><code>overflow-x-auto rounded-md border</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>phone-numbers/page.tsx:54</code></td><td>legacy Card + <code>rounded-md border</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/organizations/[id]/page.tsx:125</code></td><td>bare <code>CardContent</code></td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>admin/scenario-templates/[industryId]/use-cases-table.tsx:30</code></td><td class="no">none</td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>api-keys/client.tsx:276</code></td><td><code>Card</code> + <code>CardContent p-6</code></td><td class="no">✗</td><td class="no">✗ <code>px-4 py-3</code></td></tr>
+              <tr><td><code>integrations/zoho/management/webhook-table.tsx:59</code></td><td class="no">none</td><td class="no">✗</td><td class="no">✗</td></tr>
+              <tr><td><code>scenarios/template-variables-table.tsx:145</code></td><td><code>rounded-lg border</code></td><td><span class="chip warn">near</span> <code>bg-muted</code>, no <code>/50</code>, no hover lock</td><td class="no">✗ % widths</td></tr>
+              <tr><td><code>developer/webhooks/page.tsx:255, :296, :~359</code> <em>(3 tables)</em></td><td><code>Card</code> / <code>CardContent</code></td><td class="no">✗</td><td class="no">✗ <code>py-2</code></td></tr>
+              <tr><td><code>batch-calls/file-preview.tsx:39</code></td><td><code>overflow-hidden rounded-md border</code></td><td><span class="chip warn">no hover lock</span> the band lights up under the pointer</td><td class="no">✗</td></tr>
+              <tr><td><code>batch-calls/batch-call-table.tsx:215</code></td><td>bare <code>&lt;Table&gt;</code></td><td class="yes">✓ <code>:217</code></td><td class="no"><strong>✗ band without the matching row height</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="measure">Two of these sit inside routes DES-192 converted. <code>admin/phone-numbers</code> is the
+        sharpest case: <strong>three tabs, two table shapes</strong>. Call Activity conforms; Outbound Assignments and
+        Provisioned do not — exactly what the design lab’s own <code>data-table.tsx</code> docblock predicted in
+        writing:</p>
+
+        <blockquote>On that branch only <code>call-activity-table.tsx</code> had been brought across — the trunk
+        assignments and provisioned tables were still on plain <code>&lt;TableHead&gt;</code> inside a
+        <code>rounded-md border</code>.</blockquote>
+
+        <p class="measure"><strong>Five skeleton tables also diverge</strong>: <code>admin/loading.tsx:20</code> and
+        <code>phone-numbers/loading.tsx:23</code>, <code>admin/organizations/[id]/loading.tsx:14</code> and
+        <code>api-keys/loading.tsx:66</code>, and <code>admin/telephony/providers/loading.tsx</code>, which fakes a
+        table out of <code>&lt;div&gt;</code>s.</p>
+
+        <div class="note key">
+          <p class="eyebrow">The structural fix</p>
+          <p>The product has <strong>no <code>DataTable</code> primitive</strong>. All 30 conforming tables repeat the
+          class strings inline, so nothing holds them there and the next table starts from whichever neighbour gets
+          copied. Port <code>src/components/data-table.tsx</code> from the lab —
+          <code>DataTable</code> / <code>DataTableHeaderRow</code> / <code>DataTableHead</code> — and convert the 14.
+          That turns a recurring styling review into a compile-time choice.</p>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>6.2 &nbsp;Empty cells: five conventions doing one job</h3>
+
+        <div style="display:flex;flex-wrap:wrap;gap:1.25rem;align-items:flex-start">
+          <div class="tw" style="flex:1 1 22rem">
+            <table>
+              <thead><tr><th style="width:8rem">The system says</th><th>When</th></tr></thead>
+              <tbody>
+                <tr><td><code>—</code></td><td>the value cannot exist for this row</td></tr>
+                <tr><td><code>Not set</code></td><td>it could exist and nobody has filled it in</td></tr>
+                <tr><td><code>Not analysed</code></td><td>it could exist and the system has not produced it yet</td></tr>
+                <tr><td><s><code>Unavailable</code></s></td><td><strong>never</strong> — it names no reason, so nobody can act on it</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tw" style="flex:1 1 16rem">
+            <table>
+              <thead><tr><th>The product renders</th><th class="num">Sites</th></tr></thead>
+              <tbody>
+                <tr><td><code>—</code> <span class="chip ok">correct</span></td><td class="num">16</td></tr>
+                <tr><td><code>-</code> <span class="chip warn">hyphen, not em dash</span></td><td class="num">6</td></tr>
+                <tr><td><code>N/A</code></td><td class="num">4</td></tr>
+                <tr><td><code>Unknown</code></td><td class="num">3</td></tr>
+                <tr><td><code>None</code></td><td class="num">2</td></tr>
+                <tr><td><code>Not set</code></td><td class="num" style="color:var(--bad);font-weight:700">0</td></tr>
+                <tr><td><code>Not analysed</code></td><td class="num" style="color:var(--bad);font-weight:700">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <p class="measure">So the two values that carry <em>meaning</em> are the two that are never used, and a reader
+        cannot tell “this row can’t have one” from “nobody filled it in” from “the system hasn’t produced it yet”.
+        The <code>—</code> sites are already right. This is a vocabulary decision plus a shared <code>NoValue</code>
+        component, not a redesign.</p>
+      </div>
+
+      <div class="sub">
+        <h3>6.3 &nbsp;Row actions</h3>
+        <p>The rule is a word, then an icon, then the overflow — never more than three controls on one row — with an
+        <code>aria-label</code> on every glyph, “because the glyph is the only name it has.” The product mostly
+        follows the shape. The accessibility half does not: see §8.</p>
+      </div>
+    </section>
+
+    <!-- ================= 7 ================= -->
+    <section id="s7">
+      <div class="sec-head">
+        <p class="eyebrow">07 — Motion</p>
+        <h2>Five rules, four unmet</h2>
+      </div>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:15rem">Rule</th><th>Product</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Every animated element carries <code>motion-reduce:</code></td>
+              <td><span class="chip bad">2 of 87</span> The only <code>prefers-reduced-motion</code> block in <code>globals.css</code> covers <code>.thinking-dot</code> — one loading dot.</td>
+            </tr>
+            <tr>
+              <td>Transform and opacity only</td>
+              <td><span class="chip bad">44 sites</span> 42 <code>transition-all</code> outside <code>components/ui/</code>, plus <code>calls/call-detail-sheet.tsx:54</code> and <code>messaging/messaging-detail-sheet.tsx:51</code> animating <code>transition-[width]</code>.</td>
+            </tr>
+            <tr>
+              <td>Nothing over 300ms</td>
+              <td><span class="chip bad">7 sites</span> <code>--animate-fade-in</code> 500ms, <code>--animate-fade-in-up</code> 400ms, <code>ui/sheet.tsx:53</code> <code>duration-500</code>, <code>ui/message-scroller.tsx:99</code> <code>duration-400</code>, <code>scenarios/auto-generate/client.tsx:402</code>, and two in <code>data-extraction.css</code>.</td>
+            </tr>
+            <tr>
+              <td>Two curves</td>
+              <td><span class="chip warn">plus a fifth</span> <code>--ease-sidebar</code>, and raw <code>ease-out</code> on the two animate tokens; <code>--ease-in-out-cubic</code> is not defined at all.</td>
+            </tr>
+            <tr>
+              <td>Name the layer, never the number</td>
+              <td><span class="chip bad">no scale exists</span> 23 raw sites: <code>z-[9999]</code> in <code>app/components/connection-error-alert.tsx:27</code>, ten <code>z-50</code>, eleven <code>z-10</code>. Two <code>z-50</code> sticky bars sit at the same layer as five fullscreen <code>z-50</code> overlays in <code>generating-content.tsx</code>, with no ordering guarantee between them.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note key">
+        <p>The reduced-motion number is the one to act on. It is an accessibility regression rather than a style
+        preference, and it is <strong>98% unmet</strong>.</p>
+      </div>
+    </section>
+
+    <!-- ================= 8 ================= -->
+    <section id="s8">
+      <div class="sec-head">
+        <p class="eyebrow">08 — Accessibility</p>
+        <h2>Half the icon buttons have no name</h2>
+      </div>
+
+      <p class="measure"><strong>43 of 84 icon-only <code>&lt;Button&gt;</code>s have no <code>aria-label</code> or
+      <code>aria-labelledby</code>.</strong> Parsed structurally, not by line grep — a naive line-based count reports
+      79 of 79 and is wrong, because the attribute usually sits on its own line.</p>
+
+      <p class="measure">Among them: <code>calls/call-transcript.tsx:93</code>,
+      <code>calls/retry-call-outcome-button.tsx:64</code>, <code>calls/call-detail-content.tsx:172,449</code>,
+      <code>calls/enhanced-transcript-display.tsx:61</code>, <code>knowledge-bases/kb-table.tsx:160,182,203</code>,
+      <code>admin/phone-numbers/trunk-assignments-table.tsx:221</code>,
+      <code>admin/scenario-templates/[industryId]/delete-use-case-button.tsx:39</code>.</p>
+
+      <p class="measure">Some are wrapped in a <code>Tooltip</code>, which helps a sighted mouse user and does not give
+      the control a name. The row-action rule asks for the label directly.</p>
+
+      <div class="note">
+        <p class="eyebrow">Headings</p>
+        <p>Only 14 route files contain an <code>&lt;h1&gt;</code>, out of 48. The cause is architectural rather than
+        careless — page titles live in the app header via <code>HeaderSlot</code>, and <code>app-header.tsx</code>
+        renders breadcrumbs, not a heading. But the result is that most pages have no <code>h1</code>, and
+        <code>ui-review</code> gates on “exactly one h1 per page”. Decide whether the breadcrumb’s current crumb
+        becomes the <code>h1</code> or whether <code>ListPageLayout</code> grows a title slot.</p>
+      </div>
+
+      <div class="note" style="border-color:var(--ok);background:var(--ok-tint)">
+        <p class="eyebrow" style="color:var(--ok)">Clean</p>
+        <p style="color:var(--ok)">No hand-rolled <code style="background:transparent">&lt;table&gt;</code>,
+        <code style="background:transparent">&lt;input&gt;</code>,
+        <code style="background:transparent">&lt;textarea&gt;</code> or
+        <code style="background:transparent">&lt;select&gt;</code> anywhere outside
+        <code style="background:transparent">components/ui/</code>, and only two raw
+        <code style="background:transparent">&lt;button&gt;</code>s, both inside the primitives layer. The
+        <code style="background:transparent">use-ui-primitives</code> rule would pass today.</p>
+      </div>
+    </section>
+
+    <!-- ================= 9 ================= -->
+    <section id="s9">
+      <div class="sec-head">
+        <p class="eyebrow">09 — Icons</p>
+        <h2>lucide outnumbers HugeIcons three to one</h2>
+      </div>
+
+      <p class="measure"><strong>162 files import <code>lucide-react</code> outside <code>components/ui/</code>.
+      57 use HugeIcons.</strong></p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th style="width:18rem">Segment</th><th class="num" style="width:6rem">Files</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td><code>components/**</code> (non-ui)</td><td class="num">43</td><td></td></tr>
+            <tr><td><code>admin/telephony/**</code></td><td class="num">15</td><td></td></tr>
+            <tr><td><code>calls/**</code></td><td class="num">13</td><td><span class="chip warn">converted route</span></td></tr>
+            <tr><td><code>(playground)/**</code></td><td class="num">10</td><td></td></tr>
+            <tr><td><code>batch-calls/**</code></td><td class="num">9</td><td><span class="chip warn">converted route</span></td></tr>
+            <tr><td>root app shell</td><td class="num">7</td><td></td></tr>
+            <tr><td><code>scenarios/**</code></td><td class="num">6</td><td><span class="chip warn">converted route</span></td></tr>
+            <tr><td><code>admin/phone-numbers/**</code></td><td class="num">6</td><td><span class="chip warn">converted route</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="measure">Four of those are routes DES-192 converted — it converted the tables, not the leaf components
+      around them. Three places make the mixture <strong>structural</strong> rather than incidental:</p>
+
+      <ul>
+        <li><code>app/sidebar-nav.tsx:26</code> imports both libraries and defines a <code>lucideNavIcon()</code> shim
+        at <code>:74</code> to reconcile stroke weights — the comment reads <em>“lucide strokes at 2 on a 24 grid,
+        which reads heavier than hugeicons’ 1.5”</em>. Used at <code>:204</code> (Reports) and <code>:247</code>
+        (Webhooks). Both glyphs exist in HugeIcons; the lab’s <code>app-shell-icons.tsx</code> has them.</li>
+        <li><code>components/scenario/tools/types.ts:7</code> types the tool registry on <code>LucideIcon</code>.
+        That contract has to change before any tool icon can.</li>
+        <li><code>app/error.tsx</code>, <code>global-error.tsx</code>, <code>not-found.tsx</code>,
+        <code>impersonation-banner.tsx</code>, <code>sandbox-banner.tsx</code>, <code>user-button-client.tsx</code> —
+        the whole app shell.</li>
+      </ul>
+    </section>
+
+    <!-- ================= 10 ================= -->
+    <section id="s10">
+      <div class="sec-head">
+        <p class="eyebrow">10 — Theming</p>
+        <h2>Dark mode, whitelabel, RTL</h2>
+      </div>
+
+      <div class="note">
+        <p class="eyebrow">Dark mode is complete and unreachable</p>
+        <p><code>globals.css</code> carries a full <code>.dark</code> token set and <code>@custom-variant dark</code>,
+        but <code>next-themes</code> is not a dependency, there is no <code>ThemeProvider</code> or
+        <code>useTheme</code> anywhere, and nothing adds <code>dark</code> to <code>&lt;html&gt;</code>.
+        <code>app/doc/design-tokens.md:113</code> admits it: <em>“The app doesn’t yet ship an in-app theme switcher,
+        so flip modes by editing the root <code>&lt;html&gt;</code> element in DevTools.”</em></p>
+      </div>
+
+      <p class="measure">That makes the <strong>74 <code>bg-white</code> / <code>text-white</code> sites across 55
+      files</strong> latent rather than visible — but every one will break the day a switcher ships, and they are
+      invisible to a <code>green-50</code>-style grep. Worst: <code>dashboard/page.tsx</code> (7),
+      <code>dashboard/loading.tsx</code> (4), <code>batch-calls/form/batch-retry-settings.tsx</code> (4),
+      <code>batch-calls/[batchId]/page.tsx</code> (4), plus <code>calls/call-outcome.tsx:49,98</code> and
+      <code>calls/call-flags-list.tsx:47</code> inside a converted route.</p>
+
+      <div class="sub">
+        <h4>The whitelabel is wired — these are what it cannot reach</h4>
+        <div class="tw">
+          <table>
+            <thead><tr><th style="width:22rem">File</th><th>What is there</th></tr></thead>
+            <tbody>
+              <tr><td><code>calls/call-flag-constants.ts:13-18</code></td><td>Six categorical <code>bg-*-500</code> classes, and at <code>:25-30</code> their six <code>rgba()</code> twins. Precisely the <code>--chart-1…6</code> case.</td></tr>
+              <tr><td><code>scenarios/ai-notes-sidebar.tsx:70-72</code></td><td><code>border-l-purple-500</code> / <code>-green-500</code> / <code>-orange-500</code> — raw palette <em>and</em> a physical border side.</td></tr>
+              <tr><td><code>lib/json-schema-editor/index.ts:8-19</code></td><td>12 palette tokens.</td></tr>
+              <tr><td><code>components/scenario/data-extraction.css:93-125</code></td><td><strong>135 OKLCH literals</strong> — a full Tailwind ramp re-declared as <code>--jsonjoy-color-*</code>. A second colour system, in the second CSS file in the app, that nothing can theme.</td></tr>
+              <tr><td><code>components/ui/waveform-player.tsx:132-137</code></td><td><code>rgb(181,126,232)</code> twice — the brand purple, hard-coded — and <code>rgb(226,232,240)</code>.</td></tr>
+              <tr><td><code>components/ui/siri-orb.tsx:27-30</code></td><td>Four raw <code>oklch()</code> literals.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h4>RTL is not wired at the root</h4>
+        <p><code>layout.tsx:73</code> is <code>lang="en"</code> with no <code>dir</code>, and there is no locale
+        provider or <code>[dir=rtl]</code> rule. What exists is per-element: nine correct <code>dir="auto"</code>
+        sites, and five that <strong>hard-code <code>dir="rtl"</code> with <code>text-right</code></strong> —
+        <code>components/scenario/tools/voicemail-detection-form.tsx:59</code>,
+        <code>transfer-to-human-form.tsx:89,132</code>, <code>end-call-form.tsx:38</code>,
+        <code>code-switching.tsx:41</code>.</p>
+        <p>112 physical-direction sites remain across 63 route files. The two that break layout rather than spacing:</p>
+        <ul>
+          <li><code>scenarios/page.tsx:259,262</code> — <code>sticky right-0</code> pins the Actions column to the
+          wrong edge in RTL, in a converted table.</li>
+          <li>The paired <code>pr-10</code> / <code>right-0</code> input adornments in
+          <code>messaging-settings/components/add-config-dialog.tsx:283,287</code>,
+          <code>edit-config-dialog.tsx:202,206</code>, and
+          <code>batch-calls/form/batch-retry-settings.tsx:182,198</code> — both halves must flip together or the icon
+          lands on the text.</li>
+        </ul>
+        <p>Also <code>developer/webhooks/page.tsx</code> carries nine redundant <code>text-left</code> on
+        <code>&lt;TableHead&gt;</code> elements that already left-align — noise that only does something in RTL, and
+        the wrong thing.</p>
+      </div>
+    </section>
+
+    <!-- ================= 11 ================= -->
+    <section id="s11">
+      <div class="sec-head">
+        <p class="eyebrow">11 — Enforcement</p>
+        <h2>Nothing enforces any of this</h2>
+      </div>
+
+      <p class="measure">The design lab enforces ten <code>sarj/*</code> rules. The product enforces
+      <strong>none of them</strong>. <code>typescript/packages/app/eslint.config.js</code> has exactly one
+      design-adjacent rule — <code>&lt;label&gt;</code> must be <code>&lt;Label&gt;</code> — and its
+      <code>ignores</code> block excludes <code>src/components/ui/**</code> entirely, which is how §3.4 survived a
+      commit whose message was about removing those very palettes.</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th class="num" style="width:3rem">#</th><th style="width:12rem">Rule</th><th>Why this order</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td><code>no-raw-color</code></td><td>And <strong>lift the <code>components/ui</code> exemption for colour specifically</strong>, since that is where the worst offender lives.</td></tr>
+            <tr><td class="num">2</td><td><code>icon-source</code></td><td>162 files, but mechanical — and it stops the count growing.</td></tr>
+            <tr><td class="num">3</td><td><code>motion-reduce</code></td><td>85 files, each a one-class fix.</td></tr>
+            <tr><td class="num">4</td><td><code>z-index-tokens</code></td><td>Needs the token scale added first (§3.5).</td></tr>
+            <tr><td class="num">5</td><td><code>no-shadow</code>, <code>no-arbitrary-scale</code>, <code>motion-tokens</code>, <code>no-layout-animation</code></td><td>The remainder, once the loud ones are quiet.</td></tr>
+            <tr><td class="num">—</td><td><code>use-ui-primitives</code>, <code>no-primitive-override</code></td><td><span class="chip ok">free</span> Can go on immediately — §8 shows the first is already clean.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="measure">Expect a baseline file rather than a clean first run. The point is the ratchet, not day-one
+      zero.</p>
+    </section>
+
+    <!-- ================= 12 ================= -->
+    <section id="s12">
+      <div class="sec-head">
+        <p class="eyebrow">12 — Coverage</p>
+        <h2>Two nav destinations with no route</h2>
+      </div>
+      <p class="measure">The lab’s replica shell (<code>src/components/app-shell.tsx</code>) carries two Configuration
+      items the product has no route for:</p>
+      <ul>
+        <li><strong>Roles</strong> — DES-170. No <code>/roles</code> in the product; roles are
+        <code>permissions_for_role()</code> server-side only.</li>
+        <li><strong>Models</strong> — DES-169. <code>app/admin/models/</code> exists but has <strong>no
+        <code>page.tsx</code></strong> — it is three form fragments (<code>llm.tsx</code>, <code>stt.tsx</code>,
+        <code>tts.tsx</code>) imported only by
+        <code>admin/global-settings/language-settings-tab.tsx</code>.</li>
+      </ul>
+      <p class="measure">Everything else in the replica nav maps to a real route, and the labels match: the product’s
+      sidebar correctly says “Personas” for <code>/agents</code> and “Conversations” for <code>/calls</code>. The
+      route paths still say <code>agents</code> and <code>calls</code>, which is invisible to users and worth leaving
+      alone.</p>
+    </section>
+
+    <!-- ================= 13 ================= -->
+    <section id="s13">
+      <div class="sec-head">
+        <p class="eyebrow">13 — The worklist</p>
+        <h2>Per-route scorecard</h2>
+      </div>
+      <p class="measure">All 48 routes with a <code>page.tsx</code>, generated mechanically from the tree.
+      <strong>Table</strong>: <code>ok</code> = header band and 40px rows · <code>part</code> = one of the two ·
+      <code>legacy</code> = neither. <strong>Empty</strong> is a pattern match, so treat it as a pointer — §5.1 has
+      the cases read directly.</p>
+
+      <div class="controls">
+        <button class="btn" data-filter="all" aria-pressed="true">All</button>
+        <button class="btn" data-filter="conformant">Fully on pattern</button>
+        <button class="btn" data-filter="legacy">Legacy table</button>
+        <button class="btn" data-filter="noshell">No shell</button>
+        <button class="btn" data-filter="lucide">Uses lucide</button>
+        <button class="btn" data-filter="gaps">State gaps</button>
+        <input class="search" id="q" type="search" placeholder="filter routes…" aria-label="Filter routes">
+        <span class="count" id="count"></span>
+      </div>
+
+      <div class="tw">
+        <table id="score">
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Shell</th>
+              <th>Table</th>
+              <th>Load</th>
+              <th>Empty</th>
+              <th>Error</th>
+              <th>Pages</th>
+              <th>Icons</th>
+              <th class="num">Panels</th>
+              <th class="num">Pop-ups</th>
+            </tr>
+          </thead>
+          <tbody id="scorebody"></tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <p class="eyebrow">Reading it</p>
+        <p><strong>Fifteen routes are fully on the pattern</strong> (shell + <code>ok</code> table + loading).
+        <strong>Eight have a table on neither half of it.</strong> <code>phone-numbers</code> is the one
+        <code>part</code> row — the half-conversion.</p>
+        <p><strong>Pop-up hotspots</strong>: <code>admin/phone-numbers</code> (12),
+        <code>admin/telephony/connections/[sipConnectionId]</code> (7), <code>agents</code> (6),
+        <code>knowledge-bases</code> (6), <code>scenarios</code> (5). §4.1 says which of these are configuration in
+        the wrong surface.</p>
+        <p><strong>lucide on a route whose table says <code>ok</code></strong> — <code>batch-calls</code>,
+        <code>calls</code>, <code>knowledge-bases</code>, <code>messaging</code>, <code>scenarios</code>,
+        <code>admin/phone-numbers</code>, <code>admin/scenario-templates</code>,
+        <code>admin/telephony/connections</code> — is DES-192’s exact shape: the table was converted, the components
+        around it were not.</p>
+      </div>
+    </section>
+
+    <!-- ================= 14 ================= -->
+    <section id="s14">
+      <div class="sec-head">
+        <p class="eyebrow">14 — The reference itself</p>
+        <h2>Design lab hygiene</h2>
+      </div>
+      <p class="measure">Small, but the lab is the reference and should be trustworthy.</p>
+      <ul>
+        <li><code>src/lib/thumbnails.json</code> holds a fingerprint for slug <strong><code>telephony</code></strong>.
+        No such route exists — <code>phone-numbers</code> superseded it.</li>
+        <li><code>README.md</code> says review settings live in <code>src/lib/review-settings.ts</code>. That file was
+        deleted with dark mode.</li>
+        <li><code>CONTEXT.md</code> documents a route <code>/conversations-v2</code> and
+        <code>src/components/conversations-v2/</code>, both replaced by <code>/conversations-revamp</code>. It is
+        otherwise the only file that maps mockups to real product paths, so it is worth correcting rather than
+        deleting.</li>
+        <li><strong>Only <code>/phone-numbers</code> consumes <code>src/components/data-table.tsx</code>.</strong>
+        Eight other mockups hand-roll <code>TableRow className="bg-muted/50 hover:bg-muted/50"</code> +
+        <code>TableHead className="font-semibold text-foreground"</code> — the exact duplication the primitive exists
+        to prevent, and the same failure §6.1 asks the product to fix. Fix it here first; it is nine files.</li>
+        <li>Two independent copies of the section-register exist
+        (<code>conversations-revamp/drawer/section-register.tsx</code> and
+        <code>behavioral-alerts/section-register.tsx</code>), and two of the icon barrel
+        (<code>app-shell-icons.tsx</code> and <code>conversations-revamp/list/icons.tsx</code>).</li>
+        <li><code>src/components/pixel-perfect/silver-button.tsx</code> is a deliberate non-Sarj specimen with three
+        lint suppressions and no importers. Its own comment says to delete it rather than bring it onto the scale.
+        Worth acting on, so a reader does not find three <code>sarj/*</code> suppressions and conclude they are
+        negotiable.</li>
+      </ul>
+    </section>
+
+    <!-- ================= 15 ================= -->
+    <section id="s15">
+      <div class="sec-head">
+        <p class="eyebrow">15 — Sequence</p>
+        <h2>Backlog, by impact over effort</h2>
+      </div>
+
+      <div class="tier">
+        <h3>Do first <em>— one file each, and they unblock the rest</em></h3>
+        <div class="task">
+          <span class="n">01</span>
+          <div>
+            <h4><code>components/ui/badge.tsx:23-29</code> → the <code>*-tint</code> tokens</h4>
+            <p>Add the <code>--info</code> family to <code>globals.css</code> first. Three call sites to check
+            (<code>batch-calls/batch-call-table.tsx:67,79,153</code>). Unblocks the whitelabel and dark mode for
+            every badge in the product.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">02</span>
+          <div>
+            <h4>Port <code>data-table.tsx</code> and convert the 14 tables</h4>
+            <p>Turns a recurring review comment into a compile-time choice.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">03</span>
+          <div>
+            <h4>Settle the empty-value vocabulary, add one shared <code>NoValue</code></h4>
+            <p>31 sites, 16 of them already correct.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <h3>Do next <em>— mechanical, high volume, and they stop the drift growing</em></h3>
+        <div class="task">
+          <span class="n">04</span>
+          <div>
+            <h4>Adopt <code>Empty</code></h4>
+            <p>Retire the eight private <code>EmptyState</code> components, the hand-rolled cards and the in-table
+            rows. Settle the copy at the same time — sentence case, one convention.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">05</span>
+          <div>
+            <h4>Port the lint rules, with a baseline</h4>
+            <p>In the §11 order. Without this, items 1–4 regress.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">06</span>
+          <div>
+            <h4><code>motion-reduce:</code> across the 85 files</h4>
+            <p>Or a global reduced-motion rule in <code>globals.css</code> — but say which, because per-element is
+            what the rule asks for.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">07</span>
+          <div>
+            <h4><code>aria-label</code> on the 43 unnamed icon buttons</h4>
+            <p>Each one names the row or the action it acts on.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <h3>Then <em>— bigger, and each is a decision as much as a change</em></h3>
+        <div class="task">
+          <span class="n">08</span>
+          <div>
+            <h4>The control scale <span class="chip warn">own PR</span></h4>
+            <p>Input, Select and Button heights, radius, and the <code>shadow-xs</code>/<code>shadow-sm</code> removal
+            from Input, Select, Button and Card. One commit that moves every screen 4px, so it wants its own PR and
+            its own QA pass.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">09</span>
+          <div>
+            <h4><code>dashboard</code></h4>
+            <p>Untouched by DES-192, holds the product’s only chart, and that chart ignores the
+            <code>--chart-1…6</code> palette DES-192 shipped. 12 shadows, 11 <code>bg-white</code>.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">10</span>
+          <div>
+            <h4><code>admin/telephony</code></h4>
+            <p>15 lucide files, four legacy tables, <code>kamailio</code> has two tables and no skeleton,
+            <code>providers/loading.tsx</code> fakes a table out of <code>&lt;div&gt;</code>s.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">11</span>
+          <div>
+            <h4><code>components/scenario/data-extraction.css</code></h4>
+            <p>135 OKLCH literals in a parallel colour system. Decide whether it maps onto tokens or gets isolated and
+            documented as third-party.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">12</span>
+          <div>
+            <h4>Re-file the configuration dialogs as drawers</h4>
+            <p>Per §4.1, and give <code>connection-wizard</code> a Review step. Add <code>drawer</code> and
+            <code>stepper</code> to <code>components/ui/</code> first.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">13</span>
+          <div>
+            <h4>RTL</h4>
+            <p>Root <code>dir</code>, the five hard-coded <code>dir="rtl"</code> components, the
+            <code>sticky right-0</code> actions column, and the paired <code>pr-*</code>/<code>right-0</code>
+            adornments.</p>
+          </div>
+        </div>
+        <div class="task">
+          <span class="n">14</span>
+          <div>
+            <h4>Dark mode switcher — or a decision that dark mode is not shipping</h4>
+            <p>Right now the product carries a full second palette that no user can reach and no reviewer can check,
+            and 74 <code>bg-white</code> sites that will surface the moment it is turned on.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 16 ================= -->
+    <section id="s16">
+      <div class="sec-head">
+        <p class="eyebrow">16 — Verification</p>
+        <h2>Reproducing the numbers</h2>
+      </div>
+      <p class="measure">Run from <code>typescript/packages/app/src</code> unless noted.</p>
+
+<pre><span class="c"># §3.5 chart palette consumers (expect none)</span>
+grep -rn --include='*.tsx' --include='*.ts' -E 'chart-[1-6]|var\(--chart' \
+  app/ components/ lib/ | grep -v 'components/ui/chart.tsx'
+
+<span class="c"># §4 surfaces</span>
+grep -rl 'components/ui/sheet'        --include='*.tsx' . | wc -l
+grep -rl 'components/ui/dialog'       --include='*.tsx' . | wc -l
+grep -rl 'components/ui/alert-dialog' --include='*.tsx' . | wc -l
+
+<span class="c"># §5.1 the Empty primitive</span>
+grep -rl 'components/ui/empty' --include='*.tsx' .
+
+<span class="c"># §6.2 empty-cell conventions</span>
+for p in '"—"' '"-"' '"N/A"' '"Unknown"' '"None"' '"Not set"' '"Not analysed"'; do
+  printf '%-16s %s\n' "$p" "$(grep -rn --include='*.tsx' -F "$p" . | wc -l)"
+done
+
+<span class="c"># §7 reduced motion</span>
+grep -rlE --include='*.tsx' '(transition-|animate-)' . | grep -v components/ui/ | wc -l
+grep -rl  --include='*.tsx' 'motion-reduce'          . | grep -v components/ui/ | wc -l
+
+<span class="c"># §9 icon sources</span>
+grep -rl 'lucide-react' --include='*.tsx' --include='*.ts' app/ components/ lib/ | grep -v components/ui/ | wc -l
+grep -rl '@hugeicons'   --include='*.tsx' --include='*.ts' app/ components/ lib/ | grep -v components/ui/ | wc -l
+
+<span class="c"># §13 route count</span>
+find app -name page.tsx | wc -l</pre>
+
+      <p class="measure">§8’s icon-button count needs a parser, not a grep — a line-based match reports 79 of 79
+      because <code>aria-label</code> usually sits on its own line. Walk each <code>&lt;Button</code> to the end of its
+      opening tag and test the whole tag.</p>
+    </section>
+
+    <footer>
+      <p>Source: <code>new-des-lab/AUDIT.md</code>. Measured against <code>bulbul@e51fe6f0a</code>, 48 routes,
+      code-level. Two counts in this document were corrected during verification: the side-panel inventory (seven → nine)
+      and the unnamed icon buttons (79/79 → 43/84, once JSX attributes spanning lines are parsed).</p>
+      <p>This page is built in the design system it audits — Sarj brand purple on its own tint surfaces, Nunito,
+      the 4px spacing scale, rings instead of shadows, and no motion over 300ms.</p>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  /* ---------- scorecard ---------- */
+  const ROWS = [
+    ["/(playground)",0,"—",1,"—",0,0,"lucide",1,2],
+    ["/admin/global-prompts",0,"—",1,"—",0,0,"lucide",0,2],
+    ["/admin/global-settings",0,"—",1,"—",0,0,"lucide",0,2],
+    ["/admin/organizations",1,"ok",1,"row",0,0,"huge",0,2],
+    ["/admin/organizations/[id]",0,"legacy",1,"row",0,0,"lucide",0,1],
+    ["/admin/phone-numbers",1,"ok",1,"local",0,1,"both",0,12],
+    ["/admin/scenario-templates",1,"ok",1,"card",0,0,"both",0,2],
+    ["/admin/scenario-templates/[industryId]",0,"legacy",0,"card",0,0,"lucide",0,0],
+    ["/admin/tasks",0,"—",1,"—",0,0,"lucide",0,0],
+    ["/admin/telephony/connections",1,"ok",1,"local",0,0,"both",0,0],
+    ["/admin/telephony/connections/[sipConnectionId]",0,"legacy",1,"—",1,0,"lucide",0,7],
+    ["/admin/telephony/connections/adopt",0,"—",0,"—",0,0,"—",0,0],
+    ["/admin/telephony/connections/new",0,"—",0,"card",0,0,"lucide",0,0],
+    ["/admin/telephony/kamailio",0,"legacy",0,"—",0,0,"—",0,0],
+    ["/admin/telephony/providers",0,"legacy",1,"local",0,0,"lucide",0,2],
+    ["/admin/voices",1,"ok",1,"row",0,1,"huge",0,2],
+    ["/agents",1,"ok",1,"card",0,1,"huge",0,6],
+    ["/api-keys",0,"legacy",1,"local",0,0,"lucide",0,2],
+    ["/batch-calls",1,"ok",1,"local",1,1,"both",1,1],
+    ["/batch-calls/[batchId]",0,"—",1,"—",0,1,"lucide",0,0],
+    ["/batch-calls/create",0,"—",1,"—",0,0,"—",0,0],
+    ["/calls",1,"ok",1,"local",1,1,"both",2,3],
+    ["/dashboard",0,"—",1,"—",1,0,"lucide",0,0],
+    ["/dev/error-boundary",0,"—",0,"—",0,0,"—",0,0],
+    ["/developer",0,"—",0,"—",0,0,"lucide",0,0],
+    ["/developer/api-reference",0,"—",0,"—",0,0,"—",0,0],
+    ["/developer/webhooks",0,"legacy",0,"—",0,0,"lucide",0,0],
+    ["/integrations",0,"—",1,"local",0,0,"lucide",0,1],
+    ["/integrations/salla/management",0,"—",1,"card",0,0,"—",0,0],
+    ["/integrations/zoho/management",0,"legacy",1,"card",0,0,"lucide",0,2],
+    ["/knowledge-bases",1,"ok",1,"card",1,1,"both",0,6],
+    ["/knowledge-bases/[kbId]",0,"—",1,"—",0,0,"lucide",0,0],
+    ["/mcp/authorize",0,"—",0,"—",0,0,"—",0,0],
+    ["/messaging",1,"ok",1,"card",0,1,"both",1,0],
+    ["/messaging-settings",1,"ok",1,"card",0,0,"both",0,3],
+    ["/no-organization",0,"—",1,"—",0,0,"lucide",0,0],
+    ["/phone-numbers",1,"legacy",1,"local",1,0,"lucide",0,0],
+    ["/quality/dashboard",1,"ok",1,"card",0,0,"huge",0,0],
+    ["/reports",1,"ok",1,"card",0,1,"huge",0,0],
+    ["/scenarios",1,"ok",1,"card",1,1,"both",1,5],
+    ["/scenarios/[scenarioId]",0,"—",1,"card",0,0,"lucide",1,2],
+    ["/scenarios/[scenarioId]/run",0,"—",1,"—",0,0,"—",0,0],
+    ["/scenarios/auto-generate",0,"—",0,"—",0,0,"lucide",0,0],
+    ["/scenarios/auto-generate/generating",0,"—",0,"—",0,0,"lucide",0,0],
+    ["/scenarios/new",0,"—",1,"card",0,0,"lucide",0,0],
+    ["/sign-in/[[...sign-in]]",0,"—",0,"—",0,0,"—",0,0],
+    ["/variables",1,"ok",1,"card",0,0,"huge",0,1],
+    ["/webhooks",1,"—",1,"—",0,0,"huge",0,0]
+  ];
+
+  const tableChip = (v) =>
+    v === "ok"     ? '<span class="chip ok">ok</span>'
+  : v === "legacy" ? '<span class="chip bad">legacy</span>'
+  : v === "part"   ? '<span class="chip warn">part</span>'
+  :                  '<span class="chip mute">—</span>';
+
+  const emptyChip = (v) =>
+    v === "Empty" ? '<span class="chip ok">Empty</span>'
+  : v === "local" ? '<span class="chip warn">local</span>'
+  : v === "card"  ? '<span class="chip warn">card</span>'
+  : v === "row"   ? '<span class="chip warn">row</span>'
+  :                 '<span class="chip mute">none</span>';
+
+  const iconChip = (v) =>
+    v === "huge"   ? '<span class="chip ok">huge</span>'
+  : v === "both"   ? '<span class="chip warn">both</span>'
+  : v === "lucide" ? '<span class="chip bad">lucide</span>'
+  :                  '<span class="chip mute">—</span>';
+
+  const mark = (n) => n ? '<span class="yes">✓</span>' : '<span class="no">·</span>';
+
+  const body = document.getElementById("scorebody");
+  const count = document.getElementById("count");
+  const q = document.getElementById("q");
+  let active = "all";
+
+  const passes = (r) => {
+    const [route, shell, tbl, load, empty, err, pag, icons] = r;
+    switch (active) {
+      case "conformant": return shell === 1 && tbl === "ok" && load === 1;
+      case "legacy":     return tbl === "legacy" || tbl === "part";
+      case "noshell":    return shell === 0;
+      case "lucide":     return icons === "lucide" || icons === "both";
+      case "gaps":       return load === 0 || empty === "—" || err === 0;
+      default:           return true;
+    }
+  };
+
+  function render() {
+    const term = q.value.trim().toLowerCase();
+    const rows = ROWS.filter(r => passes(r) && r[0].toLowerCase().includes(term));
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td><code>${r[0]}</code></td>
+        <td>${mark(r[1])}</td>
+        <td>${tableChip(r[2])}</td>
+        <td>${mark(r[3])}</td>
+        <td>${emptyChip(r[4])}</td>
+        <td>${mark(r[5])}</td>
+        <td>${mark(r[6])}</td>
+        <td>${iconChip(r[7])}</td>
+        <td class="num">${r[8] || '<span class="no">·</span>'}</td>
+        <td class="num">${r[9] || '<span class="no">·</span>'}</td>
+      </tr>`).join("");
+    count.textContent = `${rows.length} of ${ROWS.length} routes`;
+  }
+
+  document.querySelectorAll("[data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      active = btn.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach(b =>
+        b.setAttribute("aria-pressed", String(b === btn)));
+      render();
+    });
+  });
+  q.addEventListener("input", render);
+  render();
+
+  /* ---------- rail scroll-spy ---------- */
+  const links = [...document.querySelectorAll("#rail a")];
+  const targets = links
+    .map(a => document.querySelector(a.getAttribute("href")))
+    .filter(Boolean);
+
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const id = e.target.id;
+      links.forEach(a =>
+        a.setAttribute("aria-current", String(a.getAttribute("href") === "#" + id)));
+    });
+  }, { rootMargin: "-10% 0px -80% 0px", threshold: 0 });
+
+  targets.forEach(t => spy.observe(t));
+  links[0].setAttribute("aria-current", "true");
+</script>
+</body>
+</html>

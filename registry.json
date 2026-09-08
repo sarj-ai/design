@@ -149,6 +149,11 @@
           "target": "@components/sarj/app-shell.tsx"
         },
         {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
+        },
+        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -451,6 +456,11 @@
           "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
         },
         {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
+        },
+        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -579,6 +589,11 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -1394,6 +1409,11 @@
           "target": "@components/sarj/connected-apps/token-table.tsx"
         },
         {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
+        },
+        {
           "path": "src/components/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/icon.tsx"
@@ -1556,6 +1576,11 @@
           "path": "src/components/app-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/app-shell.tsx"
+        },
+        {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
         },
         {
           "path": "src/components/icon.tsx",
@@ -1764,6 +1789,11 @@
           "path": "src/components/conversations-revamp/list/status-help.tsx",
           "type": "registry:component",
           "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
+        },
+        {
+          "path": "src/components/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/data-table.tsx"
         },
         {
           "path": "src/components/icon.tsx",

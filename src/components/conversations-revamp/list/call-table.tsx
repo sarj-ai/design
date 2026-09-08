@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react"
 
+import { DataTableHeaderRow } from "@/components/data-table"
 import {
   Table,
   TableBody,
@@ -64,7 +65,7 @@ export function CallTable({
   return (
     <Table>
       <TableHeader>
-        <TableRow className="bg-muted/50 hover:bg-muted/50">
+        <DataTableHeaderRow>
           {shown.map((column) => (
             <TableHead
               className="font-semibold text-foreground"
@@ -85,7 +86,7 @@ export function CallTable({
               )}
             </TableHead>
           ))}
-        </TableRow>
+        </DataTableHeaderRow>
       </TableHeader>
 
       <TableBody>

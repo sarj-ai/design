@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { DataTableHead, DataTableHeaderRow } from "@/components/data-table"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertAction } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -184,26 +185,16 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50 hover:bg-muted/50">
-                <TableHead className="font-semibold text-foreground">
-                  Voice
-                </TableHead>
-                <TableHead className="font-semibold text-foreground">
-                  Language
-                </TableHead>
-                <TableHead className="font-semibold text-foreground">
-                  Gender
-                </TableHead>
-                <TableHead className="font-semibold text-foreground">
-                  Provider
-                </TableHead>
-                <TableHead className="font-semibold text-foreground">
-                  Status
-                </TableHead>
+              <DataTableHeaderRow>
+                <DataTableHead>Voice</DataTableHead>
+                <DataTableHead>Language</DataTableHead>
+                <DataTableHead>Gender</DataTableHead>
+                <DataTableHead>Provider</DataTableHead>
+                <DataTableHead>Status</DataTableHead>
                 <TableHead className="text-end font-semibold text-foreground">
                   Preview
                 </TableHead>
-              </TableRow>
+              </DataTableHeaderRow>
             </TableHeader>
 
             <TableBody>

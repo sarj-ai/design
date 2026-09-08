@@ -48,6 +48,8 @@ import {
   type DocsPage,
   type DocsSection,
 } from "@/lib/design-system-data"
+import { docsHref } from "@/lib/design-system-nav"
+import { CopyLinkButton } from "@/components/design-system/copy-link-button"
 import { cn } from "@/lib/utils"
 
 /**
@@ -73,8 +75,8 @@ type RailSection = DocsPage & { groups: RailGroup[] }
  *
  * Views arrive as a prop rather than being built here: the route file stays
  * the place the content lives, which is where anyone editing this page will
- * look first. A topic with no entry in `views` falls back to its section's
- * index — that is what a section header opens.
+ * look first. Every topic has one; a section does not, because a section is a
+ * shelf in the rail rather than a page.
  */
 /**
  * Marks a topic whose answer is ours rather than an inherited default.
@@ -96,38 +98,31 @@ function SarjDot({ className }: { className?: string }) {
 }
 
 export function DesignSystemDocs({
+  activeId,
+  page,
+  section,
   views,
 }: {
+  /** The rail entry that reads as current. Empty on the overview. */
+  activeId: string
+  /** The topic whose pane is open, or null on the overview. */
+  page: DocsPage | null
+  /** The section that topic sits under, or null on the overview. */
+  section: DocsSection | null
   /** Topic id → what its pane renders. */
   views: Record<string, React.ReactNode>
 }) {
-  const [active, setActive] = React.useState(DOCS_SECTIONS[0].id)
   const [query, setQuery] = React.useState("")
 
   const term = query.trim().toLowerCase()
 
-  /* Sections open independently. Switching topic never closes a section the
-     reader opened — the rail is a map, and a map that rearranges itself under
-     you is not one. */
-  const [open, setOpen] = React.useState<Record<string, boolean>>({
-    [DOCS_SECTIONS[0].id]: true,
-  })
+  /* Sections open independently, and the one being read starts open. An
+     override map rather than initial state: the reader arrives by URL, so the
+     section that has to be open is not known until render, and a rail that
+     collapsed the row you just landed on would hide where you are. */
+  const [open, setOpen] = React.useState<Record<string, boolean>>({})
 
-  const section =
-    DOCS_SECTIONS.find(
-      (candidate) =>
-        candidate.id === active ||
-        candidate.groups.some((group) =>
-          group.pages.some((page) => page.id === active),
-        ),
-    ) ?? DOCS_SECTIONS[0]
-
-  const page =
-    section.id === active
-      ? section
-      : (section.groups
-          .flatMap((group) => group.pages)
-          .find((candidate) => candidate.id === active) ?? section)
+  const openFor = (id: string) => open[id] ?? id === section?.id
 
   /* What the rail lists right now: everything, or what the query reaches.
      The search has to reach inside the twelve primitive shelves and not just
@@ -162,16 +157,13 @@ export function DesignSystemDocs({
     })
   }, [term])
 
-  function openSection(id: string) {
-    /* One control, two jobs: it opens the section's index, and it opens the
-       section. Pressing the one you are already on is what closes it again —
-       a second chevron button beside the label would be a hit target the
-       whole rail pays for so that one row can be shut. */
+  function toggleSection(id: string) {
+    /* One job: open the shelf, or shut it. A section is not a page — pressing
+       its row has never had a second thing to mean. */
     setOpen((current) => ({
       ...current,
-      [id]: active === id ? !current[id] : true,
+      [id]: !(current[id] ?? id === section?.id),
     }))
-    setActive(id)
   }
 
   return (
@@ -230,14 +222,13 @@ export function DesignSystemDocs({
         <SidebarContent className="gap-0 py-2">
           {rail.map((entry) => (
             <DocsSectionNav
-              active={active}
+              active={activeId}
               key={entry.id}
-              onSelect={setActive}
-              onToggle={openSection}
+              onToggle={toggleSection}
               /* Whatever a search leaves standing is open: a match inside a
                  collapsed section is a match the reader is shown and cannot
                  reach. Clearing the field restores what they had open. */
-              open={term ? true : (open[entry.id] ?? false)}
+              open={term ? true : openFor(entry.id)}
               section={entry}
             />
           ))}
@@ -255,14 +246,24 @@ export function DesignSystemDocs({
             page carried a second bar above this one for the same one link. */}
         <AppHeader
           actions={
-            <Button asChild size="sm" variant="outline">
-              <Link href="/">
-                <BackIcon />
-                All mockups
-              </Link>
-            </Button>
+            <>
+              {/* Every topic has an address now, so the one thing a reader
+                  wants from a reference page — hand this exact page to someone
+                  — is a control rather than a trip to the address bar. */}
+              <CopyLinkButton />
+              <Button asChild size="sm" variant="outline">
+                <Link href="/">
+                  <BackIcon />
+                  All mockups
+                </Link>
+              </Button>
+            </>
           }
-          trail={["Design system", page.title]}
+          trail={
+            page && section && page.id !== section.id
+              ? ["Design system", section.title, page.title]
+              : ["Design system", ...(page ? [page.title] : [])]
+          }
         />
         {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
         <div className="min-h-0 flex-1 overflow-auto">
@@ -283,18 +284,20 @@ export function DesignSystemDocs({
               pane also genuinely does. */}
           <main
             className="flex animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
-            key={active}
+            key={activeId}
           >
             <header className="flex flex-col gap-1">
-              <h1 className="text-2xl font-semibold">{page.title}</h1>
+              <h1 className="text-2xl font-semibold">
+                {page ? page.title : "Design system"}
+              </h1>
               <p className="max-w-2xl text-sm text-muted-foreground">
-                {page.description}
+                {page
+                  ? page.description
+                  : "Every rule, pattern and primitive the product is built from. Each topic is its own address, so any one of them can be sent on its own."}
               </p>
             </header>
 
-            {views[active] ?? (
-              <SectionIndex onSelect={setActive} section={section} />
-            )}
+            {page ? views[activeId] : <DocsOverview />}
           </main>
         </div>
       </SidebarInset>
@@ -305,13 +308,12 @@ export function DesignSystemDocs({
 /** One top-level entry and everything filed under it. */
 function DocsSectionNav({
   active,
-  onSelect,
   onToggle,
   open,
   section,
 }: {
+  /** The topic that reads as current, if it is one of this section's. */
   active: string
-  onSelect: (id: string) => void
   onToggle: (id: string) => void
   open: boolean
   section: RailSection
@@ -323,9 +325,7 @@ function DocsSectionNav({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                aria-current={active === section.id ? "page" : undefined}
                 aria-expanded={open}
-                isActive={active === section.id}
                 onClick={() => onToggle(section.id)}
               >
                 <SectionToggleIcon
@@ -356,11 +356,13 @@ function DocsSectionNav({
                   <SidebarMenuItem key={entry.id}>
                     <SidebarMenuButton
                       aria-current={active === entry.id ? "page" : undefined}
+                      asChild
                       isActive={active === entry.id}
-                      onClick={() => onSelect(entry.id)}
                     >
-                      <span className="truncate">{entry.title}</span>
-                      {entry.sarj ? <SarjDot className="ms-auto" /> : null}
+                      <Link href={docsHref(entry.id)}>
+                        <span className="truncate">{entry.title}</span>
+                        {entry.sarj ? <SarjDot className="ms-auto" /> : null}
+                      </Link>
                     </SidebarMenuButton>
 
                     {/* The primitives a search matched, under the shelf they
@@ -373,14 +375,11 @@ function DocsSectionNav({
                         {entry.primitives.map((name) => (
                           <SidebarMenuSubItem key={name}>
                             <SidebarMenuSubButton asChild>
-                              <button
-                                onClick={() => onSelect(entry.id)}
-                                type="button"
-                              >
+                              <Link href={docsHref(entry.id)}>
                                 <span className="truncate font-mono">
                                   {name}
                                 </span>
-                              </button>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -398,44 +397,61 @@ function DocsSectionNav({
 }
 
 /**
- * What a section header opens: everything filed under it, with the line each
- * topic opens with, as a way in that does not require reading the rail.
+ * What `/design-system` itself opens: every topic, filed under its section.
+ *
+ * The root used to be whichever section happened to be first in the rail,
+ * which made the shortest link in the system — the one anybody sends — open a
+ * page about colour rather than a map. A reader who was sent the root wants to
+ * know what is in here; a reader who wants colour was sent the colour link.
+ *
+ * The topics themselves rather than a count of them, because a section is no
+ * longer a page: this is the one place a reader who has not learned the rail
+ * can see the whole system at once, and a card that only said "12 topics"
+ * would have nowhere left to send them.
  */
-function SectionIndex({
-  onSelect,
-  section,
-}: {
-  onSelect: (id: string) => void
-  section: DocsSection
-}) {
+function DocsOverview() {
   return (
-    <div className="flex flex-col gap-8">
-      {section.groups.map((group, index) => (
-        <section className="flex flex-col gap-4" key={group.label ?? index}>
-          {group.label ? (
-            <h2 className="text-lg font-semibold">{group.label}</h2>
-          ) : null}
+    /* Stretched, not ragged: five cards of five different heights read as five
+       unrelated things. `grow-0` on the content below is what keeps each list
+       under its description rather than pushed to the floor of the card. */
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {DOCS_SECTIONS.map((section) => (
+        <Item
+          className="flex-col flex-nowrap items-start gap-4"
+          key={section.id}
+          variant="outline"
+        >
+          {/* `grow-0`: ItemContent is `flex-1`, which in a column stretched to
+              the tallest card in the row would push the list to the floor. */}
+          <ItemContent className="grow-0">
+            <ItemTitle className="flex items-center gap-2">
+              {section.title}
+              {section.sarj ? <SarjDot /> : null}
+            </ItemTitle>
+            <ItemDescription>{section.description}</ItemDescription>
+          </ItemContent>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {group.pages.map((page) => (
-              <Item asChild key={page.id} variant="outline">
-                <button
-                  className="h-full items-start text-start hover:bg-muted"
-                  onClick={() => onSelect(page.id)}
-                  type="button"
+          {section.groups.map((group, index) => (
+            <div
+              className="flex w-full flex-col gap-0.5"
+              key={group.label ?? index}
+            >
+              {group.label ? (
+                <p className="px-2 pb-1 text-xs font-medium">{group.label}</p>
+              ) : null}
+
+              {group.pages.map((page) => (
+                <Link
+                  className="rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                  href={docsHref(page.id)}
+                  key={page.id}
                 >
-                  <ItemContent>
-                    <ItemTitle className="flex items-center gap-2">
-                      {page.title}
-                      {page.sarj ? <SarjDot /> : null}
-                    </ItemTitle>
-                    <ItemDescription>{page.description}</ItemDescription>
-                  </ItemContent>
-                </button>
-              </Item>
-            ))}
-          </div>
-        </section>
+                  {page.title}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </Item>
       ))}
     </div>
   )

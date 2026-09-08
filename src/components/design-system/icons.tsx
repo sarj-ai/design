@@ -7,6 +7,7 @@ import {
   ArrowDownLeft01Icon,
   ArrowUp01Icon,
   ArrowUpRight01Icon,
+  BookOpen02Icon,
   BubbleChatIcon,
   Calendar03Icon,
   Cancel01Icon,
@@ -14,6 +15,7 @@ import {
   CheckmarkCircle02Icon,
   Clock01Icon,
   Coins01Icon,
+  CopyLinkIcon as CopyLinkGlyph,
   CpuIcon,
   Delete02Icon,
   Download01Icon,
@@ -22,7 +24,9 @@ import {
   InformationCircleIcon,
   MoreHorizontalIcon,
   PlayIcon,
+  RefreshIcon,
   Search01Icon,
+  SearchRemoveIcon,
   Tick02Icon,
 } from "@hugeicons/core-free-icons"
 
@@ -81,3 +85,15 @@ export const SectionToggleIcon = icon(ArrowDown01Icon, "SectionToggleIcon")
 export const TranscriptIcon = icon(BubbleChatIcon, "TranscriptIcon")
 export const ModelIcon = icon(CpuIcon, "ModelIcon")
 export const CostIcon = icon(Coins01Icon, "CostIcon")
+
+/* The header control that hands this exact topic to someone. The tick is the
+   same glyph a finished step uses — one "done" mark across the reference,
+   rather than a second one that has to be learned. */
+export const CopyLinkIcon = icon(CopyLinkGlyph, "CopyLinkIcon")
+export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")
+
+/* The three states that are not the populated one, each named for the state
+   rather than the glyph: nothing here yet, nothing matched, and it broke. */
+export const NoResultsIcon = icon(SearchRemoveIcon, "NoResultsIcon")
+export const SourceIcon = icon(BookOpen02Icon, "SourceIcon")
+export const RetryIcon = icon(RefreshIcon, "RetryIcon")
