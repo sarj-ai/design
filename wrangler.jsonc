@@ -5,6 +5,13 @@
   "compatibility_date": "2026-07-01",
   // nodejs_compat: /api/mcp runs `runtime = "nodejs"` and pulls in the MCP SDK.
   "compatibility_flags": ["nodejs_compat"],
+
+  // The site's real address. A custom domain is exclusive to one Worker, so
+  // the previous holder -- the `sarj-design-site` Worker -- has to release
+  // design.sarj.ai before a deploy here can claim it, or wrangler fails with
+  // a conflict. workers.dev stays on as well: it is the URL a deploy reports
+  // and the one the smoke check probes.
+  "routes": [{ "pattern": "design.sarj.ai", "custom_domain": true }],
   "assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets"
