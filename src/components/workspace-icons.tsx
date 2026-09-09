@@ -7,6 +7,8 @@ import {
   ArrowUpRight01Icon,
   BookOpen01Icon,
   Cancel01Icon,
+  CircleQuestionMarkIcon,
+  ComputerTerminal01Icon,
   Copy01Icon,
   Link04Icon,
   Search01Icon,
@@ -49,3 +51,8 @@ export const RulesIcon = icon(BookOpen01Icon, "RulesIcon")
 /* Opens the card's links — the mockup's own URL and the tickets it answers —
    for copying rather than for following. */
 export const ShareLinkIcon = icon(Link04Icon, "ShareLinkIcon")
+
+/* The index header's way back into the registry walkthrough, and the terminal
+   the walkthrough's last step is about. */
+export const HelpIcon = icon(CircleQuestionMarkIcon, "HelpIcon")
+export const TerminalIcon = icon(ComputerTerminal01Icon, "TerminalIcon")

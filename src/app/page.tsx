@@ -46,6 +46,7 @@ import {
 } from "@/components/workspace-icons"
 import { LinkMenu } from "@/components/link-menu"
 import { RegistryMenu } from "@/components/registry-menu"
+import { RegistryOnboarding } from "@/components/registry-onboarding"
 import { SurfaceDock } from "@/components/surface-dock"
 import {
   groupBySurface,
@@ -102,6 +103,10 @@ export default function Home() {
         <h1 className="text-2xl font-semibold">Design lab</h1>
 
         <div className="flex flex-wrap items-center gap-3">
+          {/* Opens itself once on a first visit; this button is how it is
+              reached every time after that. */}
+          <RegistryOnboarding />
+
           {/* The design system is not a mockup, so it has no card in the list
               below — it lives up here, where it is reachable from the index
               without a search that would only ever return one result. */}
