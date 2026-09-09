@@ -8,7 +8,7 @@
  */
 
 export const REGISTRY_ORIGIN =
-  process.env.NEXT_PUBLIC_REGISTRY_ORIGIN ?? "https://mock-up-repo.vercel.app"
+  process.env.NEXT_PUBLIC_REGISTRY_ORIGIN ?? "https://design.sarj.ai"
 
 export function registryUrl(slug: string): string {
   return `${REGISTRY_ORIGIN}/r/${slug}.json`

@@ -319,7 +319,7 @@ It gates `public/r/*.json` too, so `npx shadcn@latest add <url>` needs the
 credentials in the URL:
 
 ```bash
-npx shadcn@latest add https://x:PASSWORD@mock-up-repo.vercel.app/r/<slug>.json
+npx shadcn@latest add https://x:PASSWORD@design.sarj.ai/r/<slug>.json
 ```
 
 Basic auth over HTTPS keeps the site out of a browser and off a search engine.
@@ -336,7 +336,7 @@ the index carries a `</>` menu with the command for npm, pnpm, bun and yarn,
 plus the raw URL.
 
 ```bash
-npx shadcn@latest add https://mock-up-repo.vercel.app/r/<slug>.json
+npx shadcn@latest add https://design.sarj.ai/r/<slug>.json
 ```
 
 That installs the route, its components, its mock data and the shared shell into
@@ -376,8 +376,8 @@ replaced did, so a link sent without one was a dead end.
 The flag still exists and still works:
 
 ```
-https://mock-up-repo.vercel.app/<slug>?toolbar=1   turn it on (sticks)
-https://mock-up-repo.vercel.app/<slug>?toolbar=0   turn it off
+https://design.sarj.ai/<slug>?toolbar=1   turn it on (sticks)
+https://design.sarj.ai/<slug>?toolbar=0   turn it off
 ```
 
 `?toolbar=1` is what the button writes into the address bar when you press it —
