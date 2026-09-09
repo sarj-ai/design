@@ -66,25 +66,30 @@ export function KnowledgeBaseIndex({
   return (
     <AppShell active="Knowledge Bases">
       <div className="flex flex-col gap-6 p-3 lg:p-4">
-        <header className="flex flex-wrap items-center justify-between gap-4">
+        <header>
           <h1 className="text-2xl font-semibold">Knowledge Bases</h1>
-          <Button onClick={() => setCreating(true)}>New Knowledge Base</Button>
         </header>
 
-        {/* Search sits outside the card rather than in a band inside it. It is
-          one control over one table, so the card can hold only the table, and
-          the gap here is tighter than the page's own so the two still read as
-          one thing. */}
+        {/* Search sits outside the card rather than in a band inside it, sharing
+          a row with the action that adds to the table — so the card can hold
+          only the table, and the gap here is tighter than the page's own so the
+          two still read as one thing. */}
         <section className="flex flex-col gap-4">
-          <InputGroup className="max-w-80">
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              placeholder="Search knowledge bases..."
-              aria-label="Search knowledge bases"
-            />
-          </InputGroup>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <InputGroup className="max-w-80">
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupInput
+                placeholder="Search knowledge bases..."
+                aria-label="Search knowledge bases"
+              />
+            </InputGroup>
+
+            <Button onClick={() => setCreating(true)}>
+              New Knowledge Base
+            </Button>
+          </div>
 
           {/* `--card-spacing: 0` is how Card is told its content reaches the
             edge — the table draws its own header band and row rules, so the
