@@ -1,7 +1,7 @@
 /**
  * The design lab as an MCP server.
  *
- *   https://mock-up-repo.vercel.app/api/mcp
+ *   https://design.sarj.ai/api/mcp
  *
  * Engineers point their editor at this endpoint and ask for a design by its
  * Linear ticket. The alternative it replaces is a person opening the index,

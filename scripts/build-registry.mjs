@@ -324,7 +324,7 @@ writeFileSync(
     {
       $schema: "https://ui.shadcn.com/schema/registry.json",
       name: "design-lab",
-      homepage: "https://mock-up-repo.vercel.app",
+      homepage: "https://design.sarj.ai",
       items,
     },
     null,
