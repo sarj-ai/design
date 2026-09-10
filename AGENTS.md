@@ -41,12 +41,14 @@ The ticket and the PRD are the spec. Screenshots the user attaches are the spec.
 | Command | What it does |
 |---|---|
 | `npm run new -- <slug>` | Scaffolds a mockup: writes the route, registers the card. Nothing else. |
+| `npm run new:reel -- <slug>` | Scaffolds a reel: route, a starting composition, the card. |
 | `npm run dev` | http://localhost:3000 |
 | `npm run lint` | The design system, enforced. **Must report zero problems.** |
 | `npm run lint:fix` | The same, with the auto-fixable ones applied |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run format` | Prettier (skips generated and markdown files) |
 | `npm run shots` | Screenshots every route → `screenshots/` |
+| `npm run reel -- <slug>` | Renders that reel to `reels/<slug>.mp4` (1080p, h264) |
 | `npm run registry` | Regenerates `registry.json` + `public/r/*.json` from the import graph |
 | `npm run thumbs` | Regenerates the index card previews → `public/thumbs/*.webp`. **A new mockup's card is blank until this runs.** |
 | `npm run build` | Production build |
@@ -68,13 +70,20 @@ src/components/ui/             61 shadcn primitives — GENERATED, do not edit
 src/components/icon.tsx        the icon() factory every icons.tsx is built on
 src/components/mockup-shell.tsx  the chrome every mockup page wraps itself in
 src/lib/mockups-data.ts        the landing index registry
+src/app/reels/<slug>/page.tsx  one route per reel
+src/components/reels/          the reel toolkit — canvas, camera, type
+src/components/reels/<slug>/   that reel's composition
+src/lib/reels/anim.ts          the animation kernel
+src/lib/reels/cursor.ts        the scripted-cursor tour engine
+src/lib/reels-data.ts          the reel index registry
+public/reels/<slug>/           that reel's screenshots
 src/app/design-system/[[...slug]]/page.tsx  the written system, one URL per topic
 src/lib/design-system-data.ts  its content — the rail tree and every rule
 src/lib/design-system-nav.ts   slug <-> topic, and generateStaticParams
 src/app/globals.css            every token: colour, z-layers, motion
 src/app/page.tsx               the index — renders the registry, nothing else
 eslint-rules/                  the sarj/* plugin, one file per rule
-scripts/                       new-mockup.mjs, screenshots.mjs
+scripts/                       new-mockup.mjs, screenshots.mjs, new-reel.mjs, render-reel.mjs
 .claude/skills/                the deep reference — see below
 PRD/                           local PRD snapshots — gitignored, see PRD/README.md
 ```
@@ -210,6 +219,60 @@ first one. A live control over an empty list reads as a bug.
 
 ---
 
+## Reels — release and feature videos
+
+`/reels` is a second index beside the mockup one: one video, one route, one
+card. A reel is a **React composition on a 1920x1080 canvas**, not a filled-in
+template, and `npm run reel -- <slug>` renders it to MP4.
+
+**The one rule: a reel is a pure function of one integer.** Given a frame
+number the composition draws exactly one picture. No `transition-*`, no
+`animate-*`, no timers. That is what makes the browser preview and the exported
+file the same thing — playback is a rAF loop advancing the number, rendering is
+Playwright setting the number and screenshotting. They cannot disagree.
+
+Everything that moves comes from `src/lib/reels/anim.ts` — `interpolate`,
+`enter`, `exit`, `stagger`, and the design system's easing curves ported to JS.
+Reach for `interpolate` directly whenever `Appear` is not the move you want;
+that freedom is the point.
+
+**Write each reel from scratch.** The shared layer is the canvas, the camera and
+the type — the things that must not vary. Above that, vary the layout every
+beat. The engine this replaced took the opposite bet — one card shape, a JSON
+spec of headline plus sub — and every release looked like the last one because
+structurally it was.
+
+**Show the product.** That engine's hard rule was "motif cards, not
+screenshots", and no viewer could tell from a shield or a bolt what had
+shipped. Put real screenshots in `public/reels/<slug>/`, captured at 2x, and use
+`<Shot focus={…}>` to push the camera into the region that matters — a 2880px
+screenshot dropped whole onto a 1080p canvas renders every control at a third of
+readable size. `<Spotlight>` and `<Pin>` attach to a region in the screenshot's
+own pixels and travel with the camera.
+
+**Screenshot hygiene.** Crop the design-lab shell header and the Agentation dev
+overlay out of anything captured from a dev server — neither is product UI. Real
+customer names must not reach a video that leaves the company.
+
+**The scripted cursor.** For "here is how you use it", drive a pointer through
+the screenshot rather than cutting between framings. A tour is authored as verbs
+— `parkAt` `enter` `moveTo` `click` `wait` `zoomTo` `leave` — compiled to
+keyframe tracks and sampled at the playhead, so it renders as deterministically
+as everything else. Targets are **named regions**, never pixels, and travel time
+is derived from distance rather than fixed, which is most of why it reads as a
+hand instead of a tween. Pass `camera={tour}` and one script owns both the frame
+and the pointer. Do not put a `Spotlight` or a `Pin` on a control the cursor is
+already clicking.
+
+**Copy follows `sarj-no-slop`.** Sentence case. A beat is one idea: the headline
+carries it, and the lead exists only when the headline genuinely cannot.
+`Kicker` is the one place uppercase is allowed, matching `sarj-brand`.
+
+Lint applies in full — a reel with an off-brand purple or a drop shadow fails
+`npm run lint` like any other file. That is the point: the previous engine
+rendered every video in `#674EA7`, a pre-rebrand purple, for as long as nobody
+hand-checked it.
+
 ## One mode, and why
 
 The workspace is **light and left-to-right**. There is no theme switch and no
@@ -249,7 +312,7 @@ fabricate what a reference app does.
 
 ## Skills — what each one is for
 
-Seven skills are installed at `.claude/skills/`. Load them with the Skill tool
+Eight skills are installed at `.claude/skills/`. Load them with the Skill tool
 (or read the `SKILL.md`). They are deep reference, deliberately not inlined here
 — this file is what you need to act; they are what you need to get a specific
 thing exactly right.
@@ -258,6 +321,7 @@ thing exactly right.
 |---|---|---|
 | **`sarj-mockup`** | The build procedure: the three laws, the full primitive inventory mapped to what you need, the page skeleton, layout rhythm, visual hierarchy, the reject list, a self-check | **Before writing any page, screen, or component in this repo.** The default first move for any build request. |
 | **`sarj-no-slop`** | The tells lint cannot see: ALL CAPS and Title Case, paragraphs where a label belongs, a heading over every block, launch-page copy, token-coloured gradients and glass, an icon per line, pills on everything, motion that answers nothing, over-designed empty states, the default dashboard | **While writing any copy or screen**, alongside `sarj-mockup`, and as a pass before a ticket moves to In Review. It lists what the lint rules already kill, so it never re-litigates those. |
+| **`sarj-reel`** | The reel system end to end: the one rule, the animation kernel, framing a screenshot, the scripted-cursor tour, reel copy, and what lint still enforces on a video | **Before writing or editing any reel.** The default first move for a release video, feature demo or product tour. |
 | **`sarj-lint`** | The ten rules above, rule by rule: what each bans, the reasoning, and exactly what to write instead — plus escape hatches and how to name a token | Before writing a className, and any time `npm run lint` reports a `sarj/*` error you are not sure how to resolve |
 | **`sarj-brand`** | The brand itself: every colour as OKLCH + hex across light and dark (it also documents a dark palette and the tasama whitelabel, neither of which this workspace renders), the Nunito type system, spacing/radius/motion scales, the chart ramp, component recipes, a copy-paste starter | Producing something Sarj-branded **outside this app** — slides, standalone HTML, an artifact, a diagram, a marketing page. Inside the app you want tokens, not values, so reach for `sarj-mockup` instead. |
 | **`ui-ux-pro-max`** | A searchable database: `ux-guidelines.csv`, `products.csv`, `ui-reasoning.csv`, `charts.csv`, `app-interface.csv` | Choosing a pattern for a product type, picking a chart, or reasoning about an interaction. **Ignore its `colors.csv`, `google-fonts.csv`, `typography.csv`, `styles.csv`** — generic palettes and font pairings that contradict the tokens and Nunito, and lint will reject them. Take the reasoning, not the values. |

@@ -44,6 +44,7 @@ import {
   SearchIcon,
   TicketLinkIcon,
 } from "@/components/workspace-icons"
+import { ReelIcon } from "@/components/reels/icons"
 import { LinkMenu } from "@/components/link-menu"
 import { RegistryMenu } from "@/components/registry-menu"
 import { RegistryOnboarding } from "@/components/registry-onboarding"
@@ -114,6 +115,16 @@ export default function Home() {
             <Link href="/design-system">
               <RulesIcon />
               Design system
+            </Link>
+          </Button>
+
+          {/* Reels are not mockups, so they have no card in the list below —
+              they get their own index, reached from here for the same reason
+              the design system is. */}
+          <Button asChild size="sm" variant="outline">
+            <Link href="/reels">
+              <ReelIcon />
+              Reels
             </Link>
           </Button>
 

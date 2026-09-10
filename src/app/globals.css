@@ -218,6 +218,26 @@
   --text-status-code-lg: 16rem;
   --text-status-code-lg--line-height: 1;
 
+  /* Reel type — the video canvas is 1920x1080 and read from across a room or
+     in a muted Slack autoplay, so it needs rungs above the app's scale. The
+     app's text-4xl is 36px, which is a caption at this size, not a headline.
+
+     Same reasoning as --text-status-code above: these are genuinely off the
+     scale, so they become tokens rather than arbitrary values at the call
+     site. Only reels use them; nothing on a mockup should be this large. */
+  --text-reel-display: 5.5rem;
+  --text-reel-display--line-height: 1.02;
+  --text-reel-h1: 4rem;
+  --text-reel-h1--line-height: 1.05;
+  --text-reel-h2: 2.75rem;
+  --text-reel-h2--line-height: 1.1;
+  --text-reel-lead: 1.75rem;
+  --text-reel-lead--line-height: 1.4;
+  --text-reel-body: 1.375rem;
+  --text-reel-body--line-height: 1.45;
+  --text-reel-kicker: 1.125rem;
+  --text-reel-kicker--line-height: 1.2;
+
   /* Easing — ease-out for anything entering or leaving, ease-in-out for an
      on-screen element resizing or moving. Never a raw cubic-bezier in a
      component. */
