@@ -146,22 +146,13 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
         onValueChange={(value) => setModality(value as Modality)}
         value={modality}
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <TabsList>
-            {MODALITIES.map((option) => (
-              <TabsTrigger key={option.id} value={option.id}>
-                {option.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {canOnboard(modality) ? (
-            <Button className="ms-auto" onClick={() => setAddOpen(true)}>
-              <AddModelIcon />
-              Add model
-            </Button>
-          ) : null}
-        </div>
+        <TabsList className="w-fit">
+          {MODALITIES.map((option) => (
+            <TabsTrigger key={option.id} value={option.id}>
+              {option.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
         {MODALITIES.map((option) => {
           const all =
@@ -185,35 +176,60 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
               key={option.id}
               value={option.id}
             >
-              {/* A search box over a list that is loading, failed, or has
-                  nothing in it is a control with no subject. */}
-              {state === "populated" ? (
-                <div className="flex flex-wrap items-center gap-3">
-                  <InputGroup className="max-w-64 bg-card">
-                    <InputGroupAddon>
-                      <SearchIcon />
-                    </InputGroupAddon>
-                    <InputGroupInput
-                      aria-label="Search models"
-                      onChange={(event) => setSearch(event.target.value)}
-                      placeholder="Search models…"
-                      value={search}
-                    />
-                  </InputGroup>
+              {/* Search and the action that adds to the table share one row,
+                  its right edge against the table's — the same call as the
+                  Knowledge Bases index.
 
-                  <Select onValueChange={setStatusFilter} value={statusFilter}>
-                    <SelectTrigger
-                      aria-label="Filter by status"
-                      className="bg-card"
+                  They come and go separately, though. A search box over a list
+                  that is loading, failed or empty is a control with no subject;
+                  Add still has one, so only the filters go. */}
+              {state === "populated" || canOnboard(option.id) ? (
+                <div className="flex flex-wrap items-center gap-3">
+                  {state === "populated" ? (
+                    <>
+                      <InputGroup className="max-w-64 bg-card">
+                        <InputGroupAddon>
+                          <SearchIcon />
+                        </InputGroupAddon>
+                        <InputGroupInput
+                          aria-label="Search models"
+                          onChange={(event) => setSearch(event.target.value)}
+                          placeholder="Search models…"
+                          value={search}
+                        />
+                      </InputGroup>
+
+                      <Select
+                        onValueChange={setStatusFilter}
+                        value={statusFilter}
+                      >
+                        <SelectTrigger
+                          aria-label="Filter by status"
+                          className="bg-card"
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All statuses</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="inactive">Deactivated</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  ) : null}
+
+                  {/* `ms-auto` rather than justify-between: on a loading or
+                      failed tab this button is the row's only child, and
+                      justify-between would park it on the left. */}
+                  {canOnboard(option.id) ? (
+                    <Button
+                      className="ms-auto"
+                      onClick={() => setAddOpen(true)}
                     >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All statuses</SelectItem>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Deactivated</SelectItem>
-                    </SelectContent>
-                  </Select>
+                      <AddModelIcon />
+                      Add model
+                    </Button>
+                  ) : null}
                 </div>
               ) : null}
 

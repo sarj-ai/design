@@ -415,8 +415,12 @@ screen that does not compile.
   stale. It reaches the installer because `/r/*` is bypassed in Access; see
   [The gate on the deployed site](#the-gate-on-the-deployed-site).
 
-Run `npm run registry` whenever a mockup is added, renamed, deleted, or changes
-what it imports.
+Run `npm run registry` whenever a mockup is **changed at all** — not only when
+it is added, renamed, deleted or re-imports something. `public/r/<slug>.json`
+embeds every file's *contents*, not just its path, so any source edit leaves the
+published item stale and a consumer installing from that URL silently gets the
+old screen. Nothing warns about it: the URL still resolves and the install still
+succeeds.
 
 ---
 
