@@ -54,6 +54,7 @@ import {
 import {
   CATALOG,
   MODALITIES,
+  canOnboard,
   providerById,
   type CatalogEntry,
   type Modality,
@@ -66,9 +67,12 @@ export type CatalogState = "populated" | "empty" | "loading" | "error"
 /**
  * The model catalog — DES-169, scoped to DIS-9.
  *
- * One table per modality, because LLM, TTS and STT are three lists an admin
- * reads separately even though all three share an add flow. Tabs rather than
- * three routes: it is one surface with three views of the same five columns.
+ * One table per modality, because LLM and TTS are two lists an admin reads
+ * separately. Tabs rather than two routes: it is one surface with two views of
+ * the same five columns.
+ *
+ * Only LLM can be onboarded here. TTS is activate-only, so its tab carries the
+ * table and the row action and no Add button at all — see `canOnboard`.
  *
  * The page follows the closest thing bulbul already ships — the telephony
  * providers admin screen — which is a one-line description above a table whose
@@ -151,10 +155,12 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
             ))}
           </TabsList>
 
-          <Button className="ms-auto" onClick={() => setAddOpen(true)}>
-            <AddModelIcon />
-            Add model
-          </Button>
+          {canOnboard(modality) ? (
+            <Button className="ms-auto" onClick={() => setAddOpen(true)}>
+              <AddModelIcon />
+              Add model
+            </Button>
+          ) : null}
         </div>
 
         {MODALITIES.map((option) => {
@@ -212,6 +218,7 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
               ) : null}
 
               <CatalogBody
+                canAdd={canOnboard(option.id)}
                 filtersOn={filtersOn}
                 label={option.label}
                 onAdd={() => setAddOpen(true)}
@@ -247,6 +254,7 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
  * and one shared "nothing here" block would say neither.
  */
 function CatalogBody({
+  canAdd,
   filtersOn,
   label,
   onAdd,
@@ -255,6 +263,7 @@ function CatalogBody({
   rows,
   state,
 }: {
+  canAdd: boolean
   filtersOn: boolean
   label: string
   onAdd: () => void
@@ -347,17 +356,23 @@ function CatalogBody({
             <ModelIcon />
           </EmptyMedia>
           <EmptyTitle>No {label} models yet</EmptyTitle>
+          {/* The only place the missing Add button needs explaining. On a
+              populated TTS tab the rows and their actions say what the screen
+              does; on an empty one there would otherwise be nothing at all. */}
           <EmptyDescription>
-            Add one and it becomes selectable for every organization on the
-            platform.
+            {canAdd
+              ? "Add one and it becomes selectable for every organization on the platform."
+              : "TTS models ship with the platform, so there is nothing to add here."}
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
-          <Button onClick={onAdd}>
-            <AddModelIcon />
-            Add model
-          </Button>
-        </EmptyContent>
+        {canAdd ? (
+          <EmptyContent>
+            <Button onClick={onAdd}>
+              <AddModelIcon />
+              Add model
+            </Button>
+          </EmptyContent>
+        ) : null}
       </Empty>
     )
   }

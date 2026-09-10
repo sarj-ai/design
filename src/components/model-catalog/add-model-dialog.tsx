@@ -84,11 +84,14 @@ const NEW_PROVIDER = "__new__"
  * Placeholder examples per modality. A TTS voice-set caveat shown in the LLM
  * dialog is the kind of thing a reviewer reads as invented data, so every
  * example moves with the tab the dialog was opened from.
+ *
+ * Only LLM can reach this dialog today — TTS is activate-only — but the type
+ * covers every modality, so the TTS example stays correct rather than being
+ * deleted and re-guessed if onboarding ever opens up again.
  */
 const EXAMPLES: Record<Modality, { model: string; name: string }> = {
   llm: { model: "llama-3.3-70b-versatile", name: "Llama 3.3 70B" },
   tts: { model: "eleven_flash_v2_5", name: "ElevenLabs Flash v2.5" },
-  stt: { model: "nova-3", name: "Deepgram Nova 3" },
 }
 
 type Mode = "pick" | "connect"

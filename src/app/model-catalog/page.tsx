@@ -23,7 +23,7 @@ export default function ModelCatalogRoute() {
 
   return (
     <MockupShell
-      title="Model catalog — onboarding LLM, TTS and STT"
+      title="Model catalog — onboarding LLM, activating TTS"
       /* A reviewer control, not a product one: nothing in the app switches a
          page between loaded and failed. Up here it stays out of the design it
          exists to let you check. The states reachable by clicking — no search

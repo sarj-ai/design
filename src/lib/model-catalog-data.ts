@@ -2,20 +2,24 @@
  * Mock data for the model catalog (DES-169 / DIS-9).
  *
  * Shapes mirror the platform: the providers and model IDs here are the ones
- * bulbul's own enums carry today — `LLMConfig`, `STTProvider`, `TTSVoice` and
- * the model lists hardcoded in `admin/models/{llm,stt,tts}.tsx` — so the
- * catalog reads as the same platform rather than an invented one.
+ * bulbul's own enums carry today — `LLMConfig`, `TTSVoice` and the model lists
+ * hardcoded in `admin/models/{llm,tts}.tsx` — so the catalog reads as the same
+ * platform rather than an invented one.
  *
  * The columns are the PRD's five and nothing else: Provider, Model, Display
  * name, Status, and the deactivate/reactivate action.
  */
 
-export type Modality = "llm" | "tts" | "stt"
+export type Modality = "llm" | "tts"
 
 /**
- * LLM, TTS and STT only.
+ * LLM and TTS.
  *
- * EOU is deliberately absent. The PRD's Q&A answers it directly: choosing
+ * STT is gone. It is not hidden behind a flag or filtered out of a list that
+ * still knows about it — the modality, its providers and its catalog rows are
+ * all deleted, so nothing here can put an STT row back on screen.
+ *
+ * EOU was never here either. The PRD's Q&A answers that one directly: choosing
  * between Sarj's classifier and LiveKit's is already self-service through the
  * existing turn detection control in Global Settings, and onboarding a new EOU
  * model is an ONNX export plus an image rebuild — a deploy pipeline no form
@@ -24,7 +28,6 @@ export type Modality = "llm" | "tts" | "stt"
 export const MODALITIES: { id: Modality; label: string }[] = [
   { id: "llm", label: "LLM" },
   { id: "tts", label: "TTS" },
-  { id: "stt", label: "STT" },
 ]
 
 /**
@@ -44,53 +47,33 @@ export type Provider = {
 }
 
 /* The four that publish a list are the four the PRD names: OpenAI, Gemini,
-   Groq and ElevenLabs. */
+   Groq and ElevenLabs. Speechmatics is not here any more — it only ever did
+   STT, so removing the modality removed the provider with it. */
 export const PROVIDERS: Provider[] = [
   {
     id: "openai",
     name: "OpenAI",
-    modalities: ["llm", "tts", "stt"],
+    modalities: ["llm", "tts"],
     listsModels: true,
   },
   { id: "gemini", name: "Gemini", modalities: ["llm"], listsModels: true },
-  {
-    id: "groq",
-    name: "Groq",
-    modalities: ["llm", "stt"],
-    listsModels: true,
-  },
+  { id: "groq", name: "Groq", modalities: ["llm"], listsModels: true },
   {
     id: "elevenlabs",
     name: "ElevenLabs",
-    modalities: ["tts", "stt"],
+    modalities: ["tts"],
     listsModels: true,
   },
   {
     id: "azure_openai",
     name: "Azure OpenAI",
-    modalities: ["llm", "stt"],
+    modalities: ["llm"],
     listsModels: false,
   },
   { id: "cerebras", name: "Cerebras", modalities: ["llm"], listsModels: false },
   { id: "cartesia", name: "Cartesia", modalities: ["tts"], listsModels: false },
-  {
-    id: "deepgram",
-    name: "Deepgram",
-    modalities: ["tts", "stt"],
-    listsModels: false,
-  },
-  {
-    id: "speechmatics",
-    name: "Speechmatics",
-    modalities: ["stt"],
-    listsModels: false,
-  },
-  {
-    id: "hamsa",
-    name: "Hamsa",
-    modalities: ["tts", "stt"],
-    listsModels: false,
-  },
+  { id: "deepgram", name: "Deepgram", modalities: ["tts"], listsModels: false },
+  { id: "hamsa", name: "Hamsa", modalities: ["tts"], listsModels: false },
 ]
 
 /**
@@ -115,7 +98,6 @@ export const LIVE_MODELS: Record<
       "o4-mini",
     ],
     tts: ["gpt-4o-mini-tts", "tts-1-hd", "tts-1"],
-    stt: ["gpt-4o-transcribe", "gpt-4o-mini-transcribe", "whisper-1"],
   },
   gemini: { llm: ["pro", "flash", "flash-lite-3.1"] },
   groq: {
@@ -125,11 +107,9 @@ export const LIVE_MODELS: Record<
       "openai/gpt-oss-120b",
       "gemma2-9b-it",
     ],
-    stt: ["whisper-large-v3", "whisper-large-v3-turbo"],
   },
   elevenlabs: {
     tts: ["eleven_turbo_v2_5", "eleven_multilingual_v2", "eleven_flash_v2_5"],
-    stt: ["scribe_v1"],
   },
 }
 
@@ -142,10 +122,10 @@ export type CatalogEntry = {
   /** What this model is called in the Global and Org Settings pickers. */
   displayName: string
   /**
-   * The one optional free-text field the PRD asks for. TTS and STT carry
-   * compatibility baggage a plain string cannot express — voice or language
-   * support — and the PRD is explicit that this is one notes field, not a
-   * schema per provider.
+   * The one optional free-text field the PRD asks for. TTS carries
+   * compatibility baggage a plain string cannot express — which voices and
+   * which languages — and the PRD is explicit that this is one notes field,
+   * not a schema per provider.
    */
   notes: null | string
   active: boolean
@@ -244,44 +224,22 @@ export const CATALOG: CatalogEntry[] = [
       "Gulf dialect only. No English fallback — pair it with a second model.",
     active: false,
   },
-
-  {
-    id: "mc_stt_1",
-    modality: "stt",
-    providerId: "openai",
-    modelId: "gpt-4o-transcribe",
-    displayName: "OpenAI Transcribe",
-    notes: null,
-    active: true,
-  },
-  {
-    id: "mc_stt_2",
-    modality: "stt",
-    providerId: "groq",
-    modelId: "whisper-large-v3",
-    displayName: "Groq Whisper Large v3",
-    notes: null,
-    active: true,
-  },
-  {
-    id: "mc_stt_3",
-    modality: "stt",
-    providerId: "elevenlabs",
-    modelId: "scribe_v1",
-    displayName: "ElevenLabs Scribe",
-    notes: null,
-    active: true,
-  },
-  {
-    id: "mc_stt_4",
-    modality: "stt",
-    providerId: "speechmatics",
-    modelId: "enhanced-ar",
-    displayName: "Speechmatics Enhanced (AR)",
-    notes: "Speechmatics exposes no model list — this one was added by ID.",
-    active: true,
-  },
 ]
+
+/**
+ * Whether a modality can be onboarded from this screen.
+ *
+ * TTS is activate-only: the models are fixed and the one thing staff do to one
+ * is turn it on or off. So the Add button is *absent* on that tab rather than
+ * present and disabled — a control with nothing to act on is not disabled, it
+ * is absent, and a disabled Add would invite a click that can never work.
+ *
+ * The rule lives here rather than in the JSX so there is one place to change
+ * it, and so the tab list and the empty state cannot disagree about it.
+ */
+export function canOnboard(modality: Modality): boolean {
+  return modality === "llm"
+}
 
 export function providerById(id: string): Provider | undefined {
   return PROVIDERS.find((provider) => provider.id === id)

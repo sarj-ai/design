@@ -168,7 +168,7 @@ export const MOCKUPS: Mockup[] = [
     meta: "Page + dialog · exploration",
     surface: null,
     description:
-      "The model catalog Sarj staff use to add a model without an engineer: a table per modality, a two-path add flow that fetches a provider's live model list where one exists and falls back to a manual ID plus connection test where it does not, and deactivate-reactivate that never breaks an org already configured to a model.",
+      "The model catalog Sarj staff use to add an LLM without an engineer: a table per modality, a two-path add flow that fetches a provider's live model list where one exists and falls back to a manual ID plus connection test where it does not, and deactivate-reactivate that never breaks an org already configured to a model. TTS is activate-only — no add flow — and STT is not here at all.",
     icon: SparklesIcon,
     tickets: ["DES-169"],
   },
