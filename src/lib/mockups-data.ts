@@ -1,4 +1,5 @@
 import {
+  AiVoiceIcon,
   Alert02Icon,
   ArrowReloadHorizontalIcon,
   AudioWave01Icon,
@@ -253,6 +254,16 @@ export const MOCKUPS: Mockup[] = [
       "The phone numbers admin index and its three tabs — call activity, outbound trunk assignments and provisioned numbers — with every table on the platform-consistency pattern the revamp only reached one of them with.",
     icon: TelephoneIcon,
     tickets: ["DES-188", "INT-78"],
+  },
+  {
+    href: "/add-voice",
+    title: "Design TTS fallback options for provider outages",
+    meta: "Dialog · ready for dev",
+    surface: "Personas",
+    description:
+      "A voice entering the global library carries the voice it falls back to, so a provider outage swaps the voice instead of dropping the call to silence. Display name, vibe, language and gender, then the TTS provider config that renders it, then the fallback that covers it.",
+    icon: AiVoiceIcon,
+    tickets: ["DES-159"],
   },
   // `npm run new` appends new mockups above this line.
 ]

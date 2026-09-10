@@ -1,5 +1,6 @@
 {
   "fingerprints": {
+    "add-voice": "ac8e8af7f65dad40",
     "behavioral-alerts": "cdab4f89dd0b7a00",
     "call-retry": "3f8778a512e0d9b9",
     "call-turn-timing": "aa10055f214e58d6",

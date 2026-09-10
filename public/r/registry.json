@@ -2092,6 +2092,79 @@
           "--z-overlay": "40"
         }
       }
+    },
+    {
+      "name": "add-voice",
+      "type": "registry:block",
+      "title": "Design TTS fallback options for provider outages",
+      "description": "A voice entering the global library carries the voice it falls back to, so a provider outage swaps the voice instead of dropping the call to silence. Display name, vibe, language and gender, then the TTS provider config that renders it, then the fallback that covers it.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "field",
+        "input",
+        "item",
+        "label",
+        "popover",
+        "radio-group",
+        "select",
+        "separator",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/add-voice/page.tsx",
+          "type": "registry:page",
+          "target": "app/add-voice/page.tsx"
+        },
+        {
+          "path": "src/components/add-voice/add-voice-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/add-voice/add-voice-dialog.tsx"
+        },
+        {
+          "path": "src/components/add-voice/fallback-voice-picker.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/add-voice/fallback-voice-picker.tsx"
+        },
+        {
+          "path": "src/components/add-voice/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/add-voice/icons.tsx"
+        },
+        {
+          "path": "src/components/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/icon.tsx"
+        },
+        {
+          "path": "src/components/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/add-voice-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/add-voice-data.ts"
+        }
+      ],
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
     }
   ]
 }
