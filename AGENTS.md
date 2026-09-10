@@ -281,52 +281,44 @@ thing exactly right.
 
 ---
 
-## The password on the deployed site
+## The gate on the deployed site
 
-`src/proxy.ts` puts the whole published site behind HTTP Basic auth — every
-route, every static asset, and `public/r/*`. The browser asks, and until it is
-answered nothing renders at all.
+**Cloudflare Access** sits in front of `design.sarj.ai`. It answers at the edge,
+before the Worker runs, so an anonymous request never reaches the app at all —
+it gets a 302 to a Cloudflare login page. Reviewers sign in there with whatever
+identity provider the Access application is configured for — so there is no
+password to circulate and nothing to put in a link.
 
-The password is **`SITE_PASSWORD`**, never a literal in this repo — the remote
-is pushed, and a literal here would publish the password beside the thing it
-protects. It lives in two places:
+**It is configured in the Cloudflare dashboard, not in this repo.** Nothing here
+can turn it on, off, or sideways — `.github/`, `wrangler.jsonc` and `src/` hold
+no copy of it. Changing who gets in is Zero Trust → Access → Applications, and
+it takes an admin.
 
-```bash
-# localhost, so the prompt can be seen while working. Gitignored via .env*
-echo 'SITE_PASSWORD=sarj123' > .env.local
+Two paths are deliberately **bypassed**, because the callers are machines that
+cannot sign in to anything:
 
-# the deployed site
-vercel env add SITE_PASSWORD production
-vercel env add SITE_PASSWORD preview
-```
+| Path | Why |
+|---|---|
+| `/r/*` | the shadcn registry JSON — `shadcn add` runs in someone else's terminal |
+| `/api/mcp` | the MCP endpoint — an editor points at it directly |
 
-Any username works; only the password is checked, so a reviewer needs one
-string and no account.
+So both answer anonymously and the rest of the site does not. That is the
+trade Access is holding: mockup source and mock data are readable by anyone
+who knows a slug, and the pages around them are not.
 
-Three behaviours worth knowing:
+`deploy.yml` checks the **root** after every deploy and fails the job if it
+answers `2xx` anonymously. It cannot prove the app is healthy — Access
+redirects identically whether the Worker serves pages or throws — but it can
+prove the gate is still on, which is the half worth having.
 
-- **The gate is on wherever the password is set**, localhost included. Delete
-  `.env.local` and local goes back to open.
-- **It fails closed on Vercel.** A deploy with no `SITE_PASSWORD` is
-  unreachable rather than public, so a missing variable can never silently undo
-  the gate. With no password set, only *local* stays open.
-- **`npm run shots` and `npm run thumbs` carry the password themselves.** They
-  read `.env.local` through `@next/env` and hand it to the capture browser —
-  Node does not read that file on its own, and without it every capture comes
-  back as a blank 401.
+**Localhost is open.** No Access, no password, nothing to configure: `npm run
+dev`, `npm run shots` and `npm run thumbs` all just work.
 
-It gates `public/r/*.json` too, so `npx shadcn@latest add <url>` needs the
-credentials in the URL:
-
-```bash
-npx shadcn@latest add https://x:PASSWORD@design.sarj.ai/r/<slug>.json
-```
-
-Basic auth over HTTPS keeps the site out of a browser and off a search engine.
-It is not a defence against someone guessing a short password, so treat the
-mock data the way `Where everything lives` already says to.
-
----
+`src/proxy.ts` still holds the HTTP Basic gate the Vercel deployment used,
+commented out and with the instructions for switching it back on. It does
+nothing today — Access replaced it. Deleting it is fine; leaving it is fine.
+What is not fine is reading it as a description of how the live site is
+gated, because it is not.
 
 ## The shadcn registry
 
@@ -354,57 +346,32 @@ screen that does not compile.
 - npm packages become `dependencies`.
 - Route files need a `~/`-prefixed target. A bare `app/...` target is dropped
   without an error.
-- `public/r/*.json` is build output but **is committed** — Vercel serves it
-  statically, so an unbuilt registry means the published URLs are stale.
+- `public/r/*.json` is build output but **is committed** — the Worker serves it
+  from its assets binding, so an unbuilt registry means the published URLs are
+  stale. It reaches the installer because `/r/*` is bypassed in Access; see
+  [The gate on the deployed site](#the-gate-on-the-deployed-site).
 
 Run `npm run registry` whenever a mockup is added, renamed, deleted, or changes
 what it imports.
 
 ---
 
-## Review comments on the deployed site
+## Review comments — there are none right now
 
-Reviewers leave comments through the Vercel toolbar, which carries Vercel
-Comments. Preview deployments get it automatically. **Production does not** —
-so `src/components/staff-toolbar.tsx` mounts it there, and the comment button
-at the end of every mockup's shell header turns it on.
+The Vercel deployment carried Vercel Comments through a `staff-toolbar.tsx`
+that mounted the toolbar on production, and a button in every mockup's shell
+header that turned it on. **All of it went with the move to Cloudflare.** The
+component is gone, the `?toolbar=1` flag is gone, and the shell header is now
+a back link, the title and whatever `actions` a mockup passes.
 
-That button is the way in. It is the last thing in the `MockupShell` header,
-identical on every mockup, and it needs no briefing — which the query param it
-replaced did, so a link sent without one was a dead end.
+Vercel Comments is a Vercel-hosting feature. It cannot be added back to a site
+served from Cloudflare Workers — so nothing here is a port waiting to happen.
 
-The flag still exists and still works:
+**A reviewer on `design.sarj.ai` has no way to leave a comment on the page.**
+Feedback comes back through Linear, Slack, or a screenshot. If that becomes the
+bottleneck, the thing to reach for is a comment layer that does not care who
+hosts the site — not a rebuild of the old one.
 
-```
-https://design.sarj.ai/<slug>?toolbar=1   turn it on (sticks)
-https://design.sarj.ai/<slug>?toolbar=0   turn it off
-```
-
-`?toolbar=1` is what the button writes into the address bar when you press it —
-no reload, but the URL is then worth copying, because the next reviewer gets a
-link that arrives already opted in. Opting in sticks across every mockup until
-you turn it off.
-
-`?toolbar=0` hides the comment button as well as the toolbar: no toolbar, and
-nothing offering to turn one on. `npm run shots` and `npm run thumbs` drive
-every route with it, so a capture carries the design and not the chrome a
-reviewer uses to talk about it. Anything else that screenshots a route must
-pass it too.
-
-**The toolbar is opt-in on purpose.** Mounting it for everyone prompts *every*
-visitor to log in to Vercel, on top of the site password they have already
-given. A button mounts nothing — only pressing it does — so a reviewer gets one
-click and nobody else is asked for anything.
-
-Everyone who comments needs a Vercel account; a free one is enough, and they do
-not have to join the team. Reviewers log in through the toolbar itself, not
-through a separate invite. On a Pro team the **Pro Viewer** role is free and
-carries commenting, so reviewers cost nothing; external collaborators are
-invited per deployment through **Share**, several on Pro and Enterprise but
-only one at a time on Hobby. Comments on production do not email anyone by
-default — @-mention the person, or connect the Slack integration.
-
-If the toolbar refuses to appear after pressing the button, check Settings →
-General → **Vercel Toolbar** → Production is **On** at team or project level.
-It defaults to preview-only, and when it is off the flag mounts the script and
-Vercel renders nothing.
+`Agentation` is mounted in `src/app/layout.tsx` behind
+`NODE_ENV === "development"`, so it is a local tool for pointing this agent at
+an element. It never ships, and it is not a review channel.
