@@ -2,10 +2,10 @@ import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/data-table"
+} from "@/components/shared/data-table"
 import { RuleList } from "@/components/design-system/rule-list"
 import { TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { CALL_ROWS, TABLE_RULES } from "@/lib/design-system-data"
+import { CALL_ROWS, TABLE_RULES } from "@/lib/design-system/data"
 
 /**
  * The table shape, running, above the rules that describe it.

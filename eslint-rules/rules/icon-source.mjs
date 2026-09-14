@@ -32,7 +32,7 @@ const iconSource = {
     schema: [],
     messages: {
       bannedIconLibrary:
-        '{{reason}}. Use HugeIcons here:\n\n  import { HugeiconsIcon } from "@hugeicons/react"\n  import { Settings01Icon } from "@hugeicons/core-free-icons"\n\n  <HugeiconsIcon icon={Settings01Icon} />\n\nSee src/components/transfer-routing/icons.tsx for the pattern used in this repo.',
+        '{{reason}}. Use HugeIcons here:\n\n  import { HugeiconsIcon } from "@hugeicons/react"\n  import { Settings01Icon } from "@hugeicons/core-free-icons"\n\n  <HugeiconsIcon icon={Settings01Icon} />\n\nSee src/components/mockups/transfer-routing/icons.tsx for the pattern used in this repo.',
     },
   },
 

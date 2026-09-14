@@ -99,8 +99,11 @@ function placement(file) {
        rather than inside it in any project that keeps its router under src/ —
        a file Next never reads. A bare target goes through the framework
        resolver instead, which lands it at src/app/… where there is a src
-       directory and app/… where there is not. */
-    return { type: "registry:page", target: rel }
+       directory and app/… where there is not.
+
+       Route groups are stripped. `(mockups)` only sorts this repo's routes; it
+       never reaches a URL, so it has no business in someone else's app. */
+    return { type: "registry:page", target: rel.replace(/\([^/]+\)\//g, "") }
   }
   if (rel === "lib/utils.ts") {
     /* The one exception. This is shadcn's own `cn`, and every ui primitive
@@ -249,7 +252,7 @@ function styling(names, tokens) {
  * it imports — no route file, no shell, nothing the consumer already has.
  */
 function entryFor({ slug, registryEntry }) {
-  const rel = registryEntry ?? `app/${slug}/page.tsx`
+  const rel = registryEntry ?? `app/(mockups)/${slug}/page.tsx`
 
   const entry = path.join(SRC, ...rel.split("/"))
   if (!existsSync(entry)) throw new Error(`No entry for /${slug}: src/${rel}`)

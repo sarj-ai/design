@@ -58,7 +58,7 @@ import {
   DEMO_RECORDINGS,
   DEMO_VOICES,
   type SurfaceChoice,
-} from "@/lib/design-system-data"
+} from "@/lib/design-system/data"
 
 /**
  * The four surfaces, opened rather than described.

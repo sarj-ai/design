@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { PAGINATION_RULES } from "@/lib/design-system-data"
+import { PAGINATION_RULES } from "@/lib/design-system/data"
 
 /**
  * The row that sits under a table, and the rules it follows.

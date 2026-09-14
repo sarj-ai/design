@@ -197,7 +197,7 @@ import { Settings01Icon } from "@hugeicons/core-free-icons"
 <HugeiconsIcon icon={Settings01Icon} />
 ```
 
-See `src/components/transfer-routing/icons.tsx` for the pattern used here.
+See `src/components/mockups/transfer-routing/icons.tsx` for the pattern used here.
 
 Banned in authored code: `lucide-react`, `@tabler/icons-react`, `react-icons`,
 `@heroicons/react`, `@radix-ui/react-icons`. Emoji are never icons.

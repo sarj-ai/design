@@ -1,4 +1,4 @@
-import type { SurfaceChoice } from "@/lib/design-system-data"
+import type { SurfaceChoice } from "@/lib/design-system/data"
 
 /**
  * Where the surface sits on the screen, at the size of a thumbnail.

@@ -3,7 +3,7 @@ import {
   ReferenceTable,
 } from "@/components/design-system/reference-table"
 import { Badge } from "@/components/ui/badge"
-import { LANGUAGES } from "@/lib/design-system-data"
+import { LANGUAGES } from "@/lib/design-system/data"
 
 /**
  * The language rule, which is one sentence: a chip with the two-letter code.

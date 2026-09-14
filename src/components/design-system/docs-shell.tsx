@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import * as React from "react"
 
-import { AppHeader } from "@/components/app-shell"
+import { AppHeader } from "@/components/shell/app-shell"
 import { PRIMITIVE_NAMES } from "@/components/design-system/component-catalog"
 import {
   CloseIcon,
@@ -42,13 +42,13 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
-import { BackIcon } from "@/components/workspace-icons"
+import { BackIcon } from "@/components/shell/workspace-icons"
 import {
   DOCS_SECTIONS,
   type DocsPage,
   type DocsSection,
-} from "@/lib/design-system-data"
-import { docsHref } from "@/lib/design-system-nav"
+} from "@/lib/design-system/data"
+import { docsHref } from "@/lib/design-system/nav"
 import { CopyLinkButton } from "@/components/design-system/copy-link-button"
 import { cn } from "@/lib/utils"
 

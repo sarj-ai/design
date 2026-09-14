@@ -1,5 +1,8 @@
 import { FileCard } from "@/components/ui/file-card-collections"
-import { SOURCE_LABELS, type SourceKind } from "@/lib/knowledge-base-data"
+import {
+  SOURCE_LABELS,
+  type SourceKind,
+} from "@/lib/mockups/knowledge-base-data"
 
 /**
  * A card per source a knowledge base accepts, for the places a row of text

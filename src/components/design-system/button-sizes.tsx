@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { BUTTON_SIZES } from "@/lib/design-system-data"
+import { BUTTON_SIZES } from "@/lib/design-system/data"
 
 /**
  * Which of the four sizes to reach for, with the button itself as the sample.

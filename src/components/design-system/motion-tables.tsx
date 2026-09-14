@@ -9,7 +9,7 @@ import {
   ReferenceTable,
 } from "@/components/design-system/reference-table"
 import { Button } from "@/components/ui/button"
-import type { MotionRule } from "@/lib/design-system-data"
+import type { MotionRule } from "@/lib/design-system/data"
 import { cn } from "@/lib/utils"
 
 /**

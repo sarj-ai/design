@@ -11,8 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { REELS } from "@/lib/reels-data"
-import posters from "@/lib/reel-posters.json"
+import { REELS } from "@/lib/site/reels-data"
+import posters from "@/lib/site/reel-posters.json"
 import { BackToReelsIcon, PlayReelIcon } from "@/components/reels/icons"
 
 export const metadata = {

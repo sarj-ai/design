@@ -106,7 +106,7 @@ export function collect(entry) {
  * page.
  */
 export function readMockups() {
-  const source = read(path.join(SRC, "lib/mockups-data.ts"))
+  const source = read(path.join(SRC, "lib/site/mockups-data.ts"))
 
   const entries = [
     ...source.matchAll(
@@ -130,7 +130,7 @@ export function readMockups() {
 
 /** A mockup's route file, which is what a reader sees and what gets shot. */
 export function routeFile(slug) {
-  const file = path.join(SRC, "app", slug, "page.tsx")
+  const file = path.join(SRC, "app", "(mockups)", slug, "page.tsx")
   if (!existsSync(file)) throw new Error(`No route for /${slug}`)
   return file
 }

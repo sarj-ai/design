@@ -31,54 +31,54 @@
       ],
       "files": [
         {
-          "path": "src/app/transfer-routing/page.tsx",
+          "path": "src/app/(mockups)/transfer-routing/page.tsx",
           "type": "registry:page",
           "target": "app/transfer-routing/page.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/transfer-routing/case-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/transfer-routing/case-field.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/mockups/transfer-routing/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/mockups/transfer-routing/icons.tsx"
         },
         {
-          "path": "src/components/transfer-routing/case-field.tsx",
+          "path": "src/components/mockups/transfer-routing/route-card.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/transfer-routing/case-field.tsx"
+          "target": "@components/sarj/mockups/transfer-routing/route-card.tsx"
         },
         {
-          "path": "src/components/transfer-routing/icons.tsx",
+          "path": "src/components/mockups/transfer-routing/shared-settings.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/transfer-routing/icons.tsx"
+          "target": "@components/sarj/mockups/transfer-routing/shared-settings.tsx"
         },
         {
-          "path": "src/components/transfer-routing/route-card.tsx",
+          "path": "src/components/mockups/transfer-routing/transfer-tool-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/transfer-routing/route-card.tsx"
+          "target": "@components/sarj/mockups/transfer-routing/transfer-tool-drawer.tsx"
         },
         {
-          "path": "src/components/transfer-routing/shared-settings.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/transfer-routing/shared-settings.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/transfer-routing/transfer-tool-drawer.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/transfer-routing/transfer-tool-drawer.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/transfer-routing-data.ts",
+          "path": "src/lib/mockups/transfer-routing-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/transfer-routing-data.ts"
+          "target": "@lib/sarj/mockups/transfer-routing-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -134,59 +134,59 @@
       ],
       "files": [
         {
-          "path": "src/app/knowledge-base/page.tsx",
+          "path": "src/app/(mockups)/knowledge-base/page.tsx",
           "type": "registry:page",
           "target": "app/knowledge-base/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/knowledge-base/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/knowledge-base/icons.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/knowledge-base/knowledge-base-index.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/knowledge-base/knowledge-base-index.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/mockups/knowledge-base/new-knowledge-base-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/mockups/knowledge-base/new-knowledge-base-dialog.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/knowledge-base/icons.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/knowledge-base/icons.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/knowledge-base/knowledge-base-index.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/knowledge-base/knowledge-base-index.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/knowledge-base/new-knowledge-base-dialog.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/knowledge-base/new-knowledge-base-dialog.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/knowledge-base-data.ts",
+          "path": "src/lib/mockups/knowledge-base-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/knowledge-base-data.ts"
+          "target": "@lib/sarj/mockups/knowledge-base-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -235,54 +235,54 @@
       ],
       "files": [
         {
-          "path": "src/app/call-turn-timing/page.tsx",
+          "path": "src/app/(mockups)/call-turn-timing/page.tsx",
           "type": "registry:page",
           "target": "app/call-turn-timing/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/call-turn-timing/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/call-turn-timing/icons.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/call-turn-timing/model-settings-tab.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/call-turn-timing/model-settings-tab.tsx"
         },
         {
-          "path": "src/components/call-turn-timing/icons.tsx",
+          "path": "src/components/mockups/call-turn-timing/turn-detection-section.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-turn-timing/icons.tsx"
+          "target": "@components/sarj/mockups/call-turn-timing/turn-detection-section.tsx"
         },
         {
-          "path": "src/components/call-turn-timing/model-settings-tab.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-turn-timing/model-settings-tab.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/call-turn-timing/turn-detection-section.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-turn-timing/turn-detection-section.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/call-turn-timing-data.ts",
+          "path": "src/lib/mockups/call-turn-timing-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/call-turn-timing-data.ts"
+          "target": "@lib/sarj/mockups/call-turn-timing-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -351,139 +351,139 @@
       ],
       "files": [
         {
-          "path": "src/app/conversations-revamp/page.tsx",
+          "path": "src/app/(mockups)/conversations-revamp/page.tsx",
           "type": "registry:page",
           "target": "app/conversations-revamp/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/call-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/call-shell.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/cancel-call-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/cancel-call-dialog.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/call-shell.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/completed-schedule-summary.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/call-shell.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/completed-schedule-summary.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/cancel-call-dialog.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/fourth-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/cancel-call-dialog.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/fourth-drawer.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/completed-schedule-summary.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/completed-schedule-summary.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/icons.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/fourth-drawer.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/linked-call.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/fourth-drawer.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/linked-call.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/icons.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/pre-call-panel.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/icons.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/pre-call-panel.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/linked-call.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/recording-player.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/linked-call.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/recording-player.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/pre-call-panel.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/section-register.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/pre-call-panel.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/section-register.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/recording-player.tsx",
+          "path": "src/components/mockups/conversations-revamp/drawer/transcript-views.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/recording-player.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/drawer/transcript-views.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/section-register.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/call-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/section-register.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/call-table.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/drawer/transcript-views.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/conversations-page.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/drawer/transcript-views.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/conversations-page.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/call-table.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/fields-dropdown.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/call-table.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/fields-dropdown.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/conversations-page.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/conversations-page.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/icons.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/fields-dropdown.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/search-filters.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/fields-dropdown.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/search-filters.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/icons.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-badges.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/icons.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-badges.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/search-filters.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-filter.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/search-filters.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-filter.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-badges.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-help.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-badges.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-help.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-filter.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-filter.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-help.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/conversations-revamp-drawer-data.ts",
+          "path": "src/lib/mockups/conversations-revamp-drawer-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/conversations-revamp-drawer-data.ts"
+          "target": "@lib/sarj/mockups/conversations-revamp-drawer-data.ts"
         },
         {
-          "path": "src/lib/conversations-revamp-list-data.ts",
+          "path": "src/lib/mockups/conversations-revamp-list-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/conversations-revamp-list-data.ts"
+          "target": "@lib/sarj/mockups/conversations-revamp-list-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -576,79 +576,79 @@
       ],
       "files": [
         {
-          "path": "src/app/personas-depth/page.tsx",
+          "path": "src/app/(mockups)/personas-depth/page.tsx",
           "type": "registry:page",
           "target": "app/personas-depth/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/personas-depth/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/personas-depth/icons.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/personas-depth/persona-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/personas-depth/persona-dialog.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/mockups/personas-depth/persona-wizard.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/mockups/personas-depth/persona-wizard.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/personas-depth/personas-index.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/personas-depth/personas-index.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/mockups/personas-depth/scenario-assignment-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/mockups/personas-depth/scenario-assignment-dialog.tsx"
         },
         {
-          "path": "src/components/personas-depth/icons.tsx",
+          "path": "src/components/mockups/personas-depth/voice-library.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/icons.tsx"
+          "target": "@components/sarj/mockups/personas-depth/voice-library.tsx"
         },
         {
-          "path": "src/components/personas-depth/persona-dialog.tsx",
+          "path": "src/components/mockups/personas-depth/voice-picker.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/persona-dialog.tsx"
+          "target": "@components/sarj/mockups/personas-depth/voice-picker.tsx"
         },
         {
-          "path": "src/components/personas-depth/persona-wizard.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/persona-wizard.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/personas-depth/personas-index.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/personas-index.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/personas-depth/scenario-assignment-dialog.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/scenario-assignment-dialog.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/personas-depth/voice-library.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/voice-library.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/personas-depth/voice-picker.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/personas-depth/voice-picker.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/personas-depth-data.ts",
+          "path": "src/lib/mockups/personas-depth-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/personas-depth-data.ts"
+          "target": "@lib/sarj/mockups/personas-depth-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -712,59 +712,59 @@
       ],
       "files": [
         {
-          "path": "src/app/listener-cues/page.tsx",
+          "path": "src/app/(mockups)/listener-cues/page.tsx",
           "type": "registry:page",
           "target": "app/listener-cues/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/listener-cues/backchannel-settings.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/listener-cues/backchannel-settings.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/listener-cues/cue-row.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/listener-cues/cue-row.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/listener-cues/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/listener-cues/icons.tsx"
         },
         {
-          "path": "src/components/listener-cues/backchannel-settings.tsx",
+          "path": "src/components/mockups/listener-cues/listener-cues-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/listener-cues/backchannel-settings.tsx"
+          "target": "@components/sarj/mockups/listener-cues/listener-cues-drawer.tsx"
         },
         {
-          "path": "src/components/listener-cues/cue-row.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/listener-cues/cue-row.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/listener-cues/icons.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/listener-cues/icons.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/listener-cues/listener-cues-drawer.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/listener-cues/listener-cues-drawer.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/listener-cues-data.ts",
+          "path": "src/lib/mockups/listener-cues-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/listener-cues-data.ts"
+          "target": "@lib/sarj/mockups/listener-cues-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -831,74 +831,74 @@
       ],
       "files": [
         {
-          "path": "src/app/phrase-mappings/page.tsx",
+          "path": "src/app/(mockups)/phrase-mappings/page.tsx",
           "type": "registry:page",
           "target": "app/phrase-mappings/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/phrase-mappings/backchannel-settings.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/backchannel-settings.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/phrase-mappings/filler-words-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/filler-words-drawer.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/phrase-mappings/generic-filler-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/generic-filler-field.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/mockups/phrase-mappings/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/icons.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/backchannel-settings.tsx",
+          "path": "src/components/mockups/phrase-mappings/mapping-row.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/backchannel-settings.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/mapping-row.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/filler-words-drawer.tsx",
+          "path": "src/components/mockups/phrase-mappings/response-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/filler-words-drawer.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/response-field.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/generic-filler-field.tsx",
+          "path": "src/components/mockups/phrase-mappings/trigger-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/generic-filler-field.tsx"
+          "target": "@components/sarj/mockups/phrase-mappings/trigger-field.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/icons.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/icons.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/mapping-row.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/mapping-row.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/response-field.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/response-field.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/phrase-mappings/trigger-field.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phrase-mappings/trigger-field.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/phrase-mappings-data.ts",
+          "path": "src/lib/mockups/phrase-mappings-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/phrase-mappings-data.ts"
+          "target": "@lib/sarj/mockups/phrase-mappings-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -953,54 +953,54 @@
       ],
       "files": [
         {
-          "path": "src/app/model-catalog/page.tsx",
+          "path": "src/app/(mockups)/model-catalog/page.tsx",
           "type": "registry:page",
           "target": "app/model-catalog/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/model-catalog/add-model-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/model-catalog/add-model-dialog.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/model-catalog/catalog-page.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/model-catalog/catalog-page.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/model-catalog/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/model-catalog/icons.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/model-catalog/add-model-dialog.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/model-catalog/add-model-dialog.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/model-catalog/catalog-page.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/model-catalog/catalog-page.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/model-catalog/icons.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/model-catalog/icons.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/model-catalog-data.ts",
+          "path": "src/lib/mockups/model-catalog-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/model-catalog-data.ts"
+          "target": "@lib/sarj/mockups/model-catalog-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1060,59 +1060,59 @@
       ],
       "files": [
         {
-          "path": "src/app/eou-timing/page.tsx",
+          "path": "src/app/(mockups)/eou-timing/page.tsx",
           "type": "registry:page",
           "target": "app/eou-timing/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/eou-timing/global-turn-detection.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/eou-timing/global-turn-detection.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/eou-timing/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/eou-timing/icons.tsx"
         },
         {
-          "path": "src/components/eou-timing/global-turn-detection.tsx",
+          "path": "src/components/mockups/eou-timing/persona-turn-timing.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/eou-timing/global-turn-detection.tsx"
+          "target": "@components/sarj/mockups/eou-timing/persona-turn-timing.tsx"
         },
         {
-          "path": "src/components/eou-timing/icons.tsx",
+          "path": "src/components/mockups/eou-timing/wait-window.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/eou-timing/icons.tsx"
+          "target": "@components/sarj/mockups/eou-timing/wait-window.tsx"
         },
         {
-          "path": "src/components/eou-timing/persona-turn-timing.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/eou-timing/persona-turn-timing.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/eou-timing/wait-window.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/eou-timing/wait-window.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/eou-timing-data.ts",
+          "path": "src/lib/mockups/eou-timing-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/eou-timing-data.ts"
+          "target": "@lib/sarj/mockups/eou-timing-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1177,114 +1177,114 @@
       ],
       "files": [
         {
-          "path": "src/app/scenario-single-screen/page.tsx",
+          "path": "src/app/(mockups)/scenario-single-screen/page.tsx",
           "type": "registry:page",
           "target": "app/scenario-single-screen/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/scenario-single-screen/config-drawers.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/config-drawers.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/scenario-single-screen/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/scenario-single-screen/review-drawers.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/review-drawers.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/mockups/scenario-single-screen/scenario-editor.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/scenario-editor.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/config-drawers.tsx",
+          "path": "src/components/mockups/scenario-single-screen/setting-rail.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/config-drawers.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/setting-rail.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/icons.tsx",
+          "path": "src/components/mockups/scenario-single-screen/setting-sheet.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/icons.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/setting-sheet.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/review-drawers.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/config-drawers.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/review-drawers.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/config-drawers.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/scenario-editor.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/scenario-editor.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/icons.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/setting-rail.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/prompt-builder.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/setting-rail.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/prompt-builder.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/setting-sheet.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/raw-prompt-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/setting-sheet.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/raw-prompt-drawer.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/config-drawers.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/review-drawers.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/config-drawers.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/review-drawers.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/icons.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/scenario-editor.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/icons.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/scenario-editor.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/prompt-builder.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/setting-rail.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/prompt-builder.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/setting-rail.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/raw-prompt-drawer.tsx",
+          "path": "src/components/mockups/scenario-single-screen/v2/setting-sheet.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/raw-prompt-drawer.tsx"
+          "target": "@components/sarj/mockups/scenario-single-screen/v2/setting-sheet.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/review-drawers.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/review-drawers.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/scenario-editor.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/scenario-editor.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/setting-rail.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/setting-rail.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/scenario-single-screen/v2/setting-sheet.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/scenario-single-screen/v2/setting-sheet.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/scenario-single-screen-data.ts",
+          "path": "src/lib/mockups/scenario-single-screen-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/scenario-single-screen-data.ts"
+          "target": "@lib/sarj/mockups/scenario-single-screen-data.ts"
         },
         {
-          "path": "src/lib/scenario-single-screen-v2-data.ts",
+          "path": "src/lib/mockups/scenario-single-screen-v2-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/scenario-single-screen-v2-data.ts"
+          "target": "@lib/sarj/mockups/scenario-single-screen-v2-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1359,79 +1359,79 @@
       ],
       "files": [
         {
-          "path": "src/app/connected-apps/page.tsx",
+          "path": "src/app/(mockups)/connected-apps/page.tsx",
           "type": "registry:page",
           "target": "app/connected-apps/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/connected-apps/app-detail.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/connected-apps/app-detail.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/connected-apps/apps-overview.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/connected-apps/apps-overview.tsx"
         },
         {
-          "path": "src/components/connected-apps/app-detail.tsx",
+          "path": "src/components/mockups/connected-apps/create-app-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/app-detail.tsx"
+          "target": "@components/sarj/mockups/connected-apps/create-app-dialog.tsx"
         },
         {
-          "path": "src/components/connected-apps/apps-overview.tsx",
+          "path": "src/components/mockups/connected-apps/create-token-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/apps-overview.tsx"
+          "target": "@components/sarj/mockups/connected-apps/create-token-dialog.tsx"
         },
         {
-          "path": "src/components/connected-apps/create-app-dialog.tsx",
+          "path": "src/components/mockups/connected-apps/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/create-app-dialog.tsx"
+          "target": "@components/sarj/mockups/connected-apps/icons.tsx"
         },
         {
-          "path": "src/components/connected-apps/create-token-dialog.tsx",
+          "path": "src/components/mockups/connected-apps/scope-picker.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/create-token-dialog.tsx"
+          "target": "@components/sarj/mockups/connected-apps/scope-picker.tsx"
         },
         {
-          "path": "src/components/connected-apps/icons.tsx",
+          "path": "src/components/mockups/connected-apps/token-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/icons.tsx"
+          "target": "@components/sarj/mockups/connected-apps/token-table.tsx"
         },
         {
-          "path": "src/components/connected-apps/scope-picker.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/scope-picker.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/connected-apps/token-table.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/connected-apps/token-table.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/connected-apps-data.ts",
+          "path": "src/lib/mockups/connected-apps-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/connected-apps-data.ts"
+          "target": "@lib/sarj/mockups/connected-apps-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1494,34 +1494,34 @@
       ],
       "files": [
         {
-          "path": "src/components/configure-report/column-chips.tsx",
+          "path": "src/components/mockups/configure-report/column-chips.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/configure-report/column-chips.tsx"
+          "target": "@components/sarj/mockups/configure-report/column-chips.tsx"
         },
         {
-          "path": "src/components/configure-report/column-picker.tsx",
+          "path": "src/components/mockups/configure-report/column-picker.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/configure-report/column-picker.tsx"
+          "target": "@components/sarj/mockups/configure-report/column-picker.tsx"
         },
         {
-          "path": "src/components/configure-report/configure-report-dialog.tsx",
+          "path": "src/components/mockups/configure-report/configure-report-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/configure-report/configure-report-dialog.tsx"
+          "target": "@components/sarj/mockups/configure-report/configure-report-dialog.tsx"
         },
         {
-          "path": "src/components/configure-report/icons.tsx",
+          "path": "src/components/mockups/configure-report/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/configure-report/icons.tsx"
+          "target": "@components/sarj/mockups/configure-report/icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/lib/configure-report-data.ts",
+          "path": "src/lib/mockups/configure-report-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/configure-report-data.ts"
+          "target": "@lib/sarj/mockups/configure-report-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1563,64 +1563,64 @@
       ],
       "files": [
         {
-          "path": "src/app/roles-permissions/page.tsx",
+          "path": "src/app/(mockups)/roles-permissions/page.tsx",
           "type": "registry:page",
           "target": "app/roles-permissions/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/roles-permissions/create-role-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/roles-permissions/create-role-dialog.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/roles-permissions/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/roles-permissions/icons.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/mockups/roles-permissions/roles-matrix.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/mockups/roles-permissions/roles-matrix.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/roles-permissions/save-changes-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/roles-permissions/save-changes-dialog.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/roles-permissions/create-role-dialog.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/roles-permissions/create-role-dialog.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/roles-permissions/icons.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/roles-permissions/icons.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/roles-permissions/roles-matrix.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/roles-permissions/roles-matrix.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/roles-permissions/save-changes-dialog.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/roles-permissions/save-changes-dialog.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/roles-permissions-data.ts",
+          "path": "src/lib/mockups/roles-permissions-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/roles-permissions-data.ts"
+          "target": "@lib/sarj/mockups/roles-permissions-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1686,139 +1686,139 @@
       ],
       "files": [
         {
-          "path": "src/app/behavioral-alerts/page.tsx",
+          "path": "src/app/(mockups)/behavioral-alerts/page.tsx",
           "type": "registry:page",
           "target": "app/behavioral-alerts/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/behavioral-alerts/alert-detections.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/alert-detections.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/behavioral-alerts/alert-form-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/alert-form-dialog.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/alert-detections.tsx",
+          "path": "src/components/mockups/behavioral-alerts/call-drawer.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/alert-detections.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/call-drawer.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/alert-form-dialog.tsx",
+          "path": "src/components/mockups/behavioral-alerts/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/alert-form-dialog.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/icons.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/call-drawer.tsx",
+          "path": "src/components/mockups/behavioral-alerts/recording-player.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/call-drawer.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/recording-player.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/icons.tsx",
+          "path": "src/components/mockups/behavioral-alerts/scenario-alerts-section.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/icons.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/scenario-alerts-section.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/recording-player.tsx",
+          "path": "src/components/mockups/behavioral-alerts/section-register.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/recording-player.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/section-register.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/scenario-alerts-section.tsx",
+          "path": "src/components/mockups/behavioral-alerts/seekable.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/scenario-alerts-section.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/seekable.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/section-register.tsx",
+          "path": "src/components/mockups/behavioral-alerts/severity.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/section-register.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/severity.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/seekable.tsx",
+          "path": "src/components/mockups/behavioral-alerts/transcript-panel.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/seekable.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/transcript-panel.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/severity.tsx",
+          "path": "src/components/mockups/behavioral-alerts/user-experience.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/severity.tsx"
+          "target": "@components/sarj/mockups/behavioral-alerts/user-experience.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/transcript-panel.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/call-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/transcript-panel.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/call-table.tsx"
         },
         {
-          "path": "src/components/behavioral-alerts/user-experience.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/fields-dropdown.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/behavioral-alerts/user-experience.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/fields-dropdown.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/call-table.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/call-table.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/icons.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/fields-dropdown.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/search-filters.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/fields-dropdown.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/search-filters.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/icons.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-badges.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/icons.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-badges.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/search-filters.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-filter.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/search-filters.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-filter.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-badges.tsx",
+          "path": "src/components/mockups/conversations-revamp/list/status-help.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-badges.tsx"
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-help.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-filter.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-filter.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/conversations-revamp/list/status-help.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/conversations-revamp/list/status-help.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/behavioral-alerts-data.ts",
+          "path": "src/lib/mockups/behavioral-alerts-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/behavioral-alerts-data.ts"
+          "target": "@lib/sarj/mockups/behavioral-alerts-data.ts"
         },
         {
-          "path": "src/lib/conversations-revamp-list-data.ts",
+          "path": "src/lib/mockups/conversations-revamp-list-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/conversations-revamp-list-data.ts"
+          "target": "@lib/sarj/mockups/conversations-revamp-list-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1897,69 +1897,69 @@
       ],
       "files": [
         {
-          "path": "src/app/call-retry/page.tsx",
+          "path": "src/app/(mockups)/call-retry/page.tsx",
           "type": "registry:page",
           "target": "app/call-retry/page.tsx"
         },
         {
-          "path": "src/components/app-shell-icons.tsx",
+          "path": "src/components/mockups/call-retry/batch-retry.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell-icons.tsx"
+          "target": "@components/sarj/mockups/call-retry/batch-retry.tsx"
         },
         {
-          "path": "src/components/app-shell.tsx",
+          "path": "src/components/mockups/call-retry/retry-settings-card.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/app-shell.tsx"
+          "target": "@components/sarj/mockups/call-retry/retry-settings-card.tsx"
         },
         {
-          "path": "src/components/call-retry/batch-retry.tsx",
+          "path": "src/components/mockups/call-retry/save-confirm-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/batch-retry.tsx"
+          "target": "@components/sarj/mockups/call-retry/save-confirm-dialog.tsx"
         },
         {
-          "path": "src/components/call-retry/retry-settings-card.tsx",
+          "path": "src/components/mockups/call-retry/scenario-retry.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/retry-settings-card.tsx"
+          "target": "@components/sarj/mockups/call-retry/scenario-retry.tsx"
         },
         {
-          "path": "src/components/call-retry/save-confirm-dialog.tsx",
+          "path": "src/components/mockups/call-retry/time-of-day-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/save-confirm-dialog.tsx"
+          "target": "@components/sarj/mockups/call-retry/time-of-day-field.tsx"
         },
         {
-          "path": "src/components/call-retry/scenario-retry.tsx",
+          "path": "src/components/mockups/call-retry/wait-duration-field.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/scenario-retry.tsx"
+          "target": "@components/sarj/mockups/call-retry/wait-duration-field.tsx"
         },
         {
-          "path": "src/components/call-retry/time-of-day-field.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/time-of-day-field.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/call-retry/wait-duration-field.tsx",
+          "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/call-retry/wait-duration-field.tsx"
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shell/app-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shell/app-shell.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/call-retry-data.ts",
+          "path": "src/lib/mockups/call-retry-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/call-retry-data.ts"
+          "target": "@lib/sarj/mockups/call-retry-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -2003,54 +2003,54 @@
       ],
       "files": [
         {
-          "path": "src/app/phone-numbers/page.tsx",
+          "path": "src/app/(mockups)/phone-numbers/page.tsx",
           "type": "registry:page",
           "target": "app/phone-numbers/page.tsx"
         },
         {
-          "path": "src/components/data-table.tsx",
+          "path": "src/components/mockups/phone-numbers/call-activity-tab.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/data-table.tsx"
+          "target": "@components/sarj/mockups/phone-numbers/call-activity-tab.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/mockups/phone-numbers/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/mockups/phone-numbers/icons.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/mockups/phone-numbers/outbound-tab.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/mockups/phone-numbers/outbound-tab.tsx"
         },
         {
-          "path": "src/components/phone-numbers/call-activity-tab.tsx",
+          "path": "src/components/mockups/phone-numbers/provisioned-tab.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phone-numbers/call-activity-tab.tsx"
+          "target": "@components/sarj/mockups/phone-numbers/provisioned-tab.tsx"
         },
         {
-          "path": "src/components/phone-numbers/icons.tsx",
+          "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phone-numbers/icons.tsx"
+          "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/phone-numbers/outbound-tab.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phone-numbers/outbound-tab.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/phone-numbers/provisioned-tab.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/phone-numbers/provisioned-tab.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/phone-numbers-data.ts",
+          "path": "src/lib/mockups/phone-numbers-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/phone-numbers-data.ts"
+          "target": "@lib/sarj/mockups/phone-numbers-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -2117,44 +2117,44 @@
       ],
       "files": [
         {
-          "path": "src/app/add-voice/page.tsx",
+          "path": "src/app/(mockups)/add-voice/page.tsx",
           "type": "registry:page",
           "target": "app/add-voice/page.tsx"
         },
         {
-          "path": "src/components/add-voice/add-voice-dialog.tsx",
+          "path": "src/components/mockups/add-voice/add-voice-dialog.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/add-voice/add-voice-dialog.tsx"
+          "target": "@components/sarj/mockups/add-voice/add-voice-dialog.tsx"
         },
         {
-          "path": "src/components/add-voice/fallback-voice-picker.tsx",
+          "path": "src/components/mockups/add-voice/fallback-voice-picker.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/add-voice/fallback-voice-picker.tsx"
+          "target": "@components/sarj/mockups/add-voice/fallback-voice-picker.tsx"
         },
         {
-          "path": "src/components/add-voice/icons.tsx",
+          "path": "src/components/mockups/add-voice/icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/add-voice/icons.tsx"
+          "target": "@components/sarj/mockups/add-voice/icons.tsx"
         },
         {
-          "path": "src/components/icon.tsx",
+          "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/icon.tsx"
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
-          "path": "src/components/mockup-shell.tsx",
+          "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/mockup-shell.tsx"
+          "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/workspace-icons.tsx",
+          "path": "src/components/shell/workspace-icons.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/workspace-icons.tsx"
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
-          "path": "src/lib/add-voice-data.ts",
+          "path": "src/lib/mockups/add-voice-data.ts",
           "type": "registry:lib",
-          "target": "@lib/sarj/add-voice-data.ts"
+          "target": "@lib/sarj/mockups/add-voice-data.ts"
         }
       ],
       "css": {

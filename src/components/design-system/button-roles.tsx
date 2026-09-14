@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { BUTTON_ROLES } from "@/lib/design-system-data"
+import { BUTTON_ROLES } from "@/lib/design-system/data"
 
 /**
  * Which variant carries which kind of action — the half of a button that size

@@ -18,7 +18,7 @@ import { spawn } from "node:child_process"
 import path from "node:path"
 import process from "node:process"
 
-const REGISTRY = "src/lib/mockups-data.ts"
+const REGISTRY = "src/lib/site/mockups-data.ts"
 const ICON_MODULE = "@hugeicons/core-free-icons"
 const ICON_IMPORT_BLOCK =
   /import \{([^}]*)\} from "@hugeicons\/core-free-icons"/
@@ -100,7 +100,7 @@ function pageSource({ slug, title, description, eyebrow }) {
 
   return `"use client"
 
-import { MockupShell } from "@/components/mockup-shell"
+import { MockupShell } from "@/components/shell/mockup-shell"
 
 export default function ${pascalCase(slug)}Page() {
   return (
@@ -114,7 +114,7 @@ export default function ${pascalCase(slug)}Page() {
         </header>
 
         {/* Build the ticket here. Components go in
-            src/components/${slug}/, mock data in src/lib/${slug}-data.ts —
+            src/components/mockups/${slug}/, mock data in src/lib/mockups/${slug}-data.ts —
             create them when the ticket needs them, not before. */}
       </main>
     </MockupShell>
@@ -205,7 +205,7 @@ async function main() {
     )
   }
 
-  const routeDir = path.join("src/app", args.slug)
+  const routeDir = path.join("src/app/(mockups)", args.slug)
   if (await exists(routeDir)) {
     throw new Error(`${routeDir} already exists. Pick another slug.`)
   }

@@ -24,7 +24,7 @@ import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/data-table"
+} from "@/components/shared/data-table"
 import {
   CompletedIcon,
   FailedIcon,
@@ -43,7 +43,7 @@ import {
   CALL_ROWS,
   type CallRow,
   LANGUAGE_NAMES,
-} from "@/lib/design-system-data"
+} from "@/lib/design-system/data"
 import { cn } from "@/lib/utils"
 
 /** The state column, and the only coloured chip in the row. */

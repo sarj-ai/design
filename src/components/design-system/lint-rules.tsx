@@ -3,7 +3,7 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import { LINT_RULES } from "@/lib/design-system-data"
+import { LINT_RULES } from "@/lib/design-system/data"
 
 /**
  * The ten rules that are errors rather than advice.

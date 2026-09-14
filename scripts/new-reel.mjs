@@ -20,7 +20,7 @@ import { access, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import process from "node:process"
 
-const REGISTRY = "src/lib/reels-data.ts"
+const REGISTRY = "src/lib/site/reels-data.ts"
 const ICON_IMPORT_BLOCK =
   /import \{([^}]*)\} from "@hugeicons\/core-free-icons"/
 const SENTINEL = "  // `npm run new:reel` appends new reels above this line."

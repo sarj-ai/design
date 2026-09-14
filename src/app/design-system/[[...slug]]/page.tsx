@@ -51,8 +51,8 @@ import {
   NO_RESULTS_RULES,
   PATTERNS,
   SURFACE_CHOICES,
-} from "@/lib/design-system-data"
-import { docsParams, resolveDocs } from "@/lib/design-system-nav"
+} from "@/lib/design-system/data"
+import { docsParams, resolveDocs } from "@/lib/design-system/nav"
 import { notFound } from "next/navigation"
 
 /**

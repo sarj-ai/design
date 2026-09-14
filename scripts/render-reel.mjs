@@ -117,7 +117,7 @@ function credentials() {
 
 /** The gallery card's poster. 16:9 off a 1920x1080 canvas. */
 const POSTER = { width: 1280, height: 720 }
-const POSTER_MANIFEST = "src/lib/reel-posters.json"
+const POSTER_MANIFEST = "src/lib/site/reel-posters.json"
 
 /**
  * Record the poster so the gallery can render it.

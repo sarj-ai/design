@@ -3,7 +3,7 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import type { Rule } from "@/lib/design-system-data"
+import type { Rule } from "@/lib/design-system/data"
 
 /**
  * A named rule over the line that explains it, repeated down a card.

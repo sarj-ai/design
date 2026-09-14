@@ -29,7 +29,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import type { GlobalRule } from "@/lib/design-system-data"
+import type { GlobalRule } from "@/lib/design-system/data"
 import { cn } from "@/lib/utils"
 
 /**

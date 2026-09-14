@@ -30,7 +30,7 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons"
 
-import { icon } from "@/components/icon"
+import { icon } from "@/components/shared/icon"
 
 /* The icon rule's example: ordinary actions, because the point of that card is
    one size and one stroke weight rather than the glyphs themselves. */

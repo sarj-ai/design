@@ -20,10 +20,10 @@ npm run new -- call-recording --title "Call recording consent" \
   --meta "Dialog · in progress" --icon Mic01Icon --tickets DES-201
 ```
 
-That writes `src/app/call-recording/page.tsx` and adds the card to the index.
-It creates nothing else on purpose — components go in
-`src/components/<slug>/` and mock data in `src/lib/<slug>-data.ts` when the
-ticket actually needs them.
+That writes `src/app/(mockups)/call-recording/page.tsx` and adds the card to
+the index. It creates nothing else on purpose — components go in
+`src/components/mockups/<slug>/` and mock data in
+`src/lib/mockups/<slug>-data.ts` when the ticket actually needs them.
 
 Then read `.claude/skills/sarj-mockup/SKILL.md` before writing the screen. It
 has the primitive inventory, the page skeleton, the layout rhythm, and the
@@ -75,15 +75,18 @@ moment a warning is normal, new ones stop being visible. The only exemption in
 ## Layout
 
 ```
-src/app/<slug>/page.tsx        one route per mockup
-src/components/<slug>/         that mockup's components
-src/components/ui/             shadcn primitives — generated, do not edit
-src/lib/<slug>-data.ts         mock data
-src/lib/mockups-data.ts        the index registry
-src/app/globals.css            every token: colour, z-layers
-eslint-rules/                  the sarj/* plugin
-scripts/                       new-mockup.mjs, screenshots.mjs
-.claude/skills/                sarj-mockup, sarj-lint, sarj-brand
+src/app/(mockups)/<slug>/page.tsx   one route per mockup
+src/components/mockups/<slug>/      that mockup's components
+src/components/ui/                  shadcn primitives — generated, do not edit
+src/components/shell/               the chrome screens sit in
+src/components/shared/              building blocks more than one area uses
+src/lib/mockups/<slug>-data.ts      mock data
+src/lib/site/mockups-data.ts        the index registry
+src/app/globals.css                 every token: colour, z-layers
+eslint-rules/                       the sarj/* plugin
+scripts/                            new-mockup.mjs, screenshots.mjs
+.claude/skills/                     every skill — sarj-mockup, sarj-lint, sarj-brand…
+docs/                               audits and handoff notes
 ```
 
 The workspace is light and left-to-right. There is no theme switch and no

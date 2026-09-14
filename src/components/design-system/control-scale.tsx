@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
-import { CONTROL_STEPS } from "@/lib/design-system-data"
+import { CONTROL_STEPS } from "@/lib/design-system/data"
 
 /**
  * The four heights, and the demo that says why they are pinned together.

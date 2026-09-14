@@ -44,7 +44,7 @@ import { ROOT, collect, readMockups, routeFile } from "./lib/import-graph.mjs"
 
 /** Where the images land, and where the page reads the fingerprints from. */
 const OUT_DIR = path.join(ROOT, "public/thumbs")
-const MANIFEST = path.join(ROOT, "src/lib/thumbnails.json")
+const MANIFEST = path.join(ROOT, "src/lib/site/thumbnails.json")
 
 /* The shot. 1440x900 is the viewport every review screenshot uses.
 

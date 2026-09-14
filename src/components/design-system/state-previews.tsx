@@ -2,7 +2,7 @@ import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/data-table"
+} from "@/components/shared/data-table"
 import {
   NoResultsIcon,
   RetryIcon,

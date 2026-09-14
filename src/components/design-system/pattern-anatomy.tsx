@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { RuleList } from "@/components/design-system/rule-list"
-import type { PatternAnatomy as Anatomy } from "@/lib/design-system-data"
+import type { PatternAnatomy as Anatomy } from "@/lib/design-system/data"
 
 /**
  * A pattern's parts, split into the bare minimum and the rest.

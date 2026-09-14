@@ -43,20 +43,20 @@ import {
   RulesIcon,
   SearchIcon,
   TicketLinkIcon,
-} from "@/components/workspace-icons"
+} from "@/components/shell/workspace-icons"
 import { ReelIcon } from "@/components/reels/icons"
-import { LinkMenu } from "@/components/link-menu"
-import { RegistryMenu } from "@/components/registry-menu"
-import { RegistryOnboarding } from "@/components/registry-onboarding"
-import { SurfaceDock } from "@/components/surface-dock"
+import { LinkMenu } from "@/components/site/link-menu"
+import { RegistryMenu } from "@/components/site/registry-menu"
+import { RegistryOnboarding } from "@/components/site/registry-onboarding"
+import { SurfaceDock } from "@/components/site/surface-dock"
 import {
   groupBySurface,
   searchMockups,
   surfaceId,
   surfaceLabel,
-} from "@/lib/mockups-data"
-import { linearIssueUrl } from "@/lib/linear"
-import thumbnails from "@/lib/thumbnails.json"
+} from "@/lib/site/mockups-data"
+import { linearIssueUrl } from "@/lib/site/linear"
+import thumbnails from "@/lib/site/thumbnails.json"
 
 export default function Home() {
   const [query, setQuery] = useState("")

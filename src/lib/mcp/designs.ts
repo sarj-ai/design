@@ -9,9 +9,9 @@
  * already keys off.
  */
 
-import { linearIssueUrl } from "@/lib/linear"
-import { MOCKUPS, searchMockups, surfaceLabel } from "@/lib/mockups-data"
-import thumbnails from "@/lib/thumbnails.json"
+import { linearIssueUrl } from "@/lib/site/linear"
+import { MOCKUPS, searchMockups, surfaceLabel } from "@/lib/site/mockups-data"
+import thumbnails from "@/lib/site/thumbnails.json"
 
 import registryJson from "../../../registry.json"
 

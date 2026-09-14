@@ -3,7 +3,7 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import { COLOUR_GROUPS } from "@/lib/colour-tokens"
+import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens"
 import { cn } from "@/lib/utils"
 
 /**

@@ -3,7 +3,7 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import { EMPTY_VALUES } from "@/lib/design-system-data"
+import { EMPTY_VALUES } from "@/lib/design-system/data"
 
 /**
  * The empty-cell key, laid out like the chips section above it: the value as it

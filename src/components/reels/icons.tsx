@@ -8,7 +8,7 @@ import {
   VideoReplayIcon,
 } from "@hugeicons/core-free-icons"
 
-import { icon } from "@/components/icon"
+import { icon } from "@/components/shared/icon"
 
 /** Icons for the reel gallery and the player chrome around a reel. */
 export const PlayReelIcon = icon(PlayIcon, "PlayReelIcon")

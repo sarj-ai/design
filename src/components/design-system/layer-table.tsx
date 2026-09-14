@@ -3,7 +3,7 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import { LAYER_TOKENS } from "@/lib/design-system-data"
+import { LAYER_TOKENS } from "@/lib/design-system/data"
 
 /**
  * The nine layer names, in the order they stack.

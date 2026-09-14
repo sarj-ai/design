@@ -11,7 +11,7 @@ import {
   ReferenceTable,
 } from "@/components/design-system/reference-table"
 import { Badge } from "@/components/ui/badge"
-import { CHIP_NOTES } from "@/lib/design-system-data"
+import { CHIP_NOTES } from "@/lib/design-system/data"
 
 const CHIP_ICONS = {
   completed: CompletedIcon,

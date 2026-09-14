@@ -224,7 +224,7 @@ import {
   RowMenuIcon,
   SearchIcon,
 } from "@/components/design-system/icons"
-import { CATALOG_GROUPS, type CatalogGroupId } from "@/lib/design-system-data"
+import { CATALOG_GROUPS, type CatalogGroupId } from "@/lib/design-system/data"
 
 /**
  * Every primitive in `src/components/ui`, grouped by the job it does, each one
