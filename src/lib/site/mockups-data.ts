@@ -2,6 +2,7 @@ import {
   AiVoiceIcon,
   Alert02Icon,
   ArrowReloadHorizontalIcon,
+  AtIcon,
   AudioWave01Icon,
   BookBookmark01Icon,
   CallOutgoing01Icon,
@@ -270,6 +271,16 @@ export const MOCKUPS: Mockup[] = [
       "A voice entering the global library carries the voice it falls back to, so a provider outage swaps the voice instead of dropping the call to silence. Display name, vibe, language and gender, then the TTS provider config that renders it, then the fallback that covers it.",
     icon: AiVoiceIcon,
     tickets: ["DES-159"],
+  },
+  {
+    href: "/variable-mentions",
+    title: "Variable mentions in the scenario editor",
+    meta: "Editor · exploration",
+    surface: "Scenario Edit",
+    description:
+      "The @ mention flow that replaces typed {{brackets}}: a caret-anchored picker grouped by where a value comes from, the inserted variable as an inline chip, and three chip colour treatments side by side so the direction can be picked on the live editor.",
+    icon: AtIcon,
+    tickets: ["DES-185"],
   },
   // `npm run new` appends new mockups above this line.
 ]

@@ -2165,6 +2165,122 @@
           "--z-overlay": "40"
         }
       }
+    },
+    {
+      "name": "variable-mentions",
+      "type": "registry:block",
+      "title": "Variable mentions in the scenario editor",
+      "description": "The @ mention flow that replaces typed {{brackets}}: a caret-anchored picker grouped by where a value comes from, the inserted variable as an inline chip, and three chip colour treatments side by side so the direction can be picked on the live editor.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "command",
+        "input-group",
+        "kbd",
+        "label",
+        "popover",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "switch",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/variable-mentions/page.tsx",
+          "type": "registry:page",
+          "target": "app/variable-mentions/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/variable-mentions/chip-treatment.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/variable-mentions/chip-treatment.ts"
+        },
+        {
+          "path": "src/components/mockups/variable-mentions/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/variable-mentions/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/variable-mentions/mention-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/variable-mentions/mention-editor.tsx"
+        },
+        {
+          "path": "src/components/mockups/variable-mentions/scenario-prompt.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/variable-mentions/scenario-prompt.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/variable-mentions-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/variable-mentions-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
+          "color-chart-6": "var(--chart-6)"
+        },
+        "light": {
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--chart-6": "oklch(0.66 0.18 300)",
+          "--z-overlay": "40"
+        }
+      }
     }
   ]
 }
