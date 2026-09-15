@@ -8,6 +8,7 @@ import {
   CallOutgoing01Icon,
   DocumentAttachmentIcon,
   Key01Icon,
+  LanguageSkillIcon,
   Layers01Icon,
   LayoutTable01Icon,
   Message01Icon,
@@ -281,6 +282,16 @@ export const MOCKUPS: Mockup[] = [
       "The @ mention flow that replaces typed {{brackets}}: a caret-anchored picker grouped by where a value comes from, the inserted variable as an inline chip, and three chip colour treatments side by side so the direction can be picked on the live editor.",
     icon: AtIcon,
     tickets: ["DES-185"],
+  },
+  {
+    href: "/persona-pronunciation",
+    title: "Design persona pronunciation UX and voice model split",
+    meta: "Dialog · ready for dev",
+    surface: "Personas",
+    description:
+      "The edit persona dialog rebuilt so pronunciation gets room: identity, voice cards, behavior toggles and end-call-on-silence up top, then a searchable pronunciation table with an always-visible add row, per-term playback, inline edit, delete and bulk upload.",
+    icon: LanguageSkillIcon,
+    tickets: ["DES-148"],
   },
   // `npm run new` appends new mockups above this line.
 ]

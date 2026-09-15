@@ -2281,6 +2281,89 @@
           "--z-overlay": "40"
         }
       }
+    },
+    {
+      "name": "persona-pronunciation",
+      "type": "registry:block",
+      "title": "Design persona pronunciation UX and voice model split",
+      "description": "The edit persona dialog rebuilt so pronunciation gets room: identity, voice cards, behavior toggles and end-call-on-silence up top, then a searchable pronunciation table with an always-visible add row, per-term playback, inline edit, delete and bulk upload.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "dialog",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "radio-group",
+        "scroll-area",
+        "select",
+        "separator",
+        "switch",
+        "table",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/persona-pronunciation/page.tsx",
+          "type": "registry:page",
+          "target": "app/persona-pronunciation/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-pronunciation/edit-persona-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-pronunciation/edit-persona-dialog.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-pronunciation/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-pronunciation/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-pronunciation/pronunciation-terms.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-pronunciation/pronunciation-terms.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/persona-pronunciation-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/persona-pronunciation-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
     }
   ]
 }
