@@ -44,7 +44,8 @@ export type PersonaDraft = {
   prompt: string
 }
 
-/* The product's actual Arabic defaults — see bulbul's backchannel-settings. */
+/* The product's actual Arabic defaults — see the platform's
+   components/settings/backchannel-settings.tsx. */
 const DEFAULT_FILLER_WORDS = ["تمام", "حاضر", "ممتاز", "زين", "نعم"]
 
 /* The product's four ambience options, "Office" first as its default. */

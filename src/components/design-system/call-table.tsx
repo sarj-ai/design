@@ -346,7 +346,7 @@ function SortableHead({
 
   return (
     <DataTableHead className={cn(numeric && "text-end")}>
-      {/* A Button, not an onClick on the cell: bulbul's version puts the
+      {/* A Button, not an onClick on the cell: the platform's version puts the
           handler on the <th>, which sorts by mouse and is unreachable by
           keyboard — the same defect the consistency pass fixed on a
           copy-to-clipboard cell. The -mx-2.5 cancels the button's own padding

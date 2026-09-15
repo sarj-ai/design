@@ -194,7 +194,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Nova radius scale (wider than bulbul's — Nova components use 2xl–4xl) */
+  /* Nova radius scale (wider than the platform's — Nova components use 2xl–4xl) */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

@@ -2,7 +2,7 @@
  * Mock data for the model catalog (DES-169 / DIS-9).
  *
  * Shapes mirror the platform: the providers and model IDs here are the ones
- * bulbul's own enums carry today — `LLMConfig`, `TTSVoice` and the model lists
+ * the platform's own enums carry today — `LLMConfig`, `TTSVoice` and the model lists
  * hardcoded in `admin/models/{llm,tts}.tsx` — so the catalog reads as the same
  * platform rather than an invented one.
  *

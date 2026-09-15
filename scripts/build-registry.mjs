@@ -206,7 +206,7 @@ function tokensFor(files, tokens) {
  * the chart ramp inside `@theme` as `--z-overlay: var(--z-overlay)` and
  * `--chart-6: var(--chart-6)` — properties defined as themselves, which is
  * junk in somebody's design system and was found by installing this into
- * bulbul rather than by reading the CLI. Both are written as plain CSS
+ * the product rather than by reading the CLI. Both are written as plain CSS
  * instead: the value in `:root`, and for a layer the `@utility` block that
  * reads it, which is what makes `z-overlay` a utility rather than a variable
  * nothing consults.

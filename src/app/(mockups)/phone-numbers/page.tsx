@@ -28,7 +28,7 @@ export default function PhoneNumbersPage() {
           <h1 className="text-2xl font-semibold">Phone numbers</h1>
 
           {/* Stock shadcn tabs, as `phone-numbers-tabs.tsx` uses them. The two
-              size classes only pull this repo's generation up to bulbul's:
+              size classes only pull this repo's generation up to the platform's:
               its TabsList is h-9 to this one's h-8, and its TabsTrigger is
               px-2 py-1 to this one's px-1.5 py-0.5. */}
           <Tabs className="gap-6" defaultValue="call-activity">

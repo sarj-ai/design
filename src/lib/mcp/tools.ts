@@ -74,19 +74,27 @@ function clashes(design: Design): string[][] {
 /**
  * What a caller has to know before running the install, in plain language.
  *
- * These are the four things that actually surprise people, so they travel with
- * every brief rather than living in a README nobody installing a design reads.
+ * Every line here was learned by installing a design into `sarj-ai/platform`
+ * and reading the diff, so they travel with every brief rather than living in
+ * a README nobody installing a design reads.
  */
 function notes(design: Design) {
   const lines = [
-    "Run the command from the repository root. --cwd points shadcn at the package that owns components.json, so every file lands inside that package and nothing touches the rest of the monorepo.",
-    "The `yes n` prefix matters. shadcn asks before touching any file you already have, once per file, and this design lists every primitive it uses — without it an unattended run answers none of those prompts and writes nothing. Answering no keeps your files and writes only what is new. Drop the prefix if you would rather decide file by file.",
-    "Check `primitives` against your own components/ui first. Anything you are missing is installed from shadcn's default registry, which ships Radix-backed versions — drawer also pulls in vaul, and resizable pulls in react-resizable-panels.",
-    "These components are written against Radix and use the `asChild` prop. If your primitives are built on @base-ui/react, `asChild` does not exist there — those call sites become `render` and will not typecheck until you convert them.",
-    "Installing also adds the npm packages those primitives depend on — radix-ui among them — even for primitives that were skipped because you already had them. Read the package.json diff before committing.",
-    "Budget a cleanup pass if your tsconfig is stricter than the design lab's. exactOptionalPropertyTypes and noUncheckedIndexedAccess both flag mockup code that compiles cleanly here.",
+    `Run the command from the sarj-ai/platform repository root. The repo's only components.json is in ${DEFAULT_CWD} (@sarj/platform-web), so --cwd points shadcn at that package: every file lands under its src/, the npm packages go into its package.json and the root yarn.lock, and nothing else in the monorepo is touched. Without --cwd shadcn finds no components.json at the root and stops.`,
+    "The `yes n` prefix matters. shadcn asks before touching any file you already have, once per file, and this design lists every primitive it uses — without it an unattended run answers none of those prompts and writes nothing. Answering no keeps your files and writes only what is new. It is also what protects src/lib/utils.ts: this item ships shadcn's stock lib/utils.ts, and the platform's copy exports more than cn — say yes to that prompt and formatDuration and the form helpers are gone. Drop the prefix only if you would rather decide file by file.",
+    "The platform's primitives are built on @base-ui/react and take a `render` prop. This design is written against Radix and uses `asChild`, which does not exist there — every `<Trigger asChild><Button /></Trigger>` in the installed files fails to typecheck until it is rewritten as `<Trigger render={<Button />} />`. `grep -rn asChild src/components/sarj src/app/<slug>` lists them.",
+    "Check `primitives` against src/components/ui first. Anything the platform is missing is installed from shadcn's default registry, which ships Radix-backed versions — and, as of September 2026, those import cn from an npm package literally called `cn` (unrelated to shadcn; it is a Chuck Norris joke CLI) and add it to package.json next to `radix-ui`. Point those imports at @/lib/utils, drop both packages, and decide whether you want a Radix primitive in a Base UI app at all. sidebar also drops hooks/use-mobile.ts beside the platform's existing use-mobile.tsx, and the .ts wins the import.",
+    "Installing adds npm packages even for primitives that were skipped because you already had them — expect radix-ui in products/platform/apps/web/package.json and a thousand-line yarn.lock diff after a run that copied nothing under ui/. Read the package.json diff before committing.",
+    "The platform's tsconfig turns on exactOptionalPropertyTypes and noUncheckedIndexedAccess, which this repo's does not: expect a few TS2375 (an optional prop passed as `x | undefined`) and TS18048 (an indexed value 'possibly undefined') errors per screen on top of the asChild ones. They are real under those flags and compile cleanly here.",
+    "Budget a cleanup pass. The platform's eslint (simple-import-sort, perfectionist/sort-jsx-props, consistent-type-assertions, @sarj/prefer-immutable-module-constant and friends) reports one to eight errors per installed file; the import and prop ordering ones autofix with `yarn workspace @sarj/platform-web fix`, the type-assertion and module-constant ones do not. globals.css comes back with four-space indents in a two-space file and no trailing newline.",
     "This is a mockup. Its data is invented and includes real customer names — adapt the screen, do not ship it as it stands.",
   ]
+
+  if (design.item?.files.some((file) => file.type === "registry:page")) {
+    lines.push(
+      `This item ships app/${design.slug}/page.tsx, and shadcn lands it at src/app/${design.slug}/page.tsx — a live route under the platform's root layout, which already wraps every page in Clerk auth and the real product sidebar. The page also renders the design lab's own AppShell, so the result is a mock sidebar and breadcrumb nested inside the real ones. Take the components under components/sarj/mockups/${design.slug} and mount them in a real route; delete the page and components/sarj/shell/*.`,
+    )
+  }
 
   for (const paths of clashes(design)) {
     lines.push(
@@ -94,9 +102,9 @@ function notes(design: Design) {
     )
   }
 
-  if (design.item?.cssVars?.light) {
+  if (design.item?.cssVars?.light || design.item?.css?.[":root"]) {
     lines.push(
-      "`tokens` are added to your globals.css. A custom property you already define is left alone. The values are light-mode only — this workspace ships one mode, so a dark theme shows the light value until you choose one.",
+      '`tokens` are added to globals.css — values in :root and aliases in @theme inline, light mode only. The platform also has a .dark block and a [data-whitelabel="tasama"] block, and neither receives a value, so under either a tint resolves to nothing. A property the platform already defines (warning, for instance) is left alone. Add the dark and tasama values by hand.',
     )
   }
 
@@ -160,7 +168,7 @@ export function createDesignLabServer(origin: string): McpServer {
           .string()
           .optional()
           .describe(
-            `Path from the repo root to the package that owns components.json. Defaults to "${DEFAULT_CWD}".`,
+            `Path from the repo root to the package that owns components.json. Defaults to "${DEFAULT_CWD}" (@sarj/platform-web) — sarj-ai/platform has no components.json at its root, so the default is right for the product and only worth changing for another repo.`,
           ),
       },
     },

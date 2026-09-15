@@ -156,8 +156,8 @@ export function RegistryOnboarding() {
     },
     {
       id: "paste",
-      title: "Paste it in that repo's terminal",
-      body: "It installs the route, its mock data and every shadcn primitive the screen uses — into your own components folder, so your Button is not overwritten with this one.",
+      title: "Run it from the platform repo root",
+      body: "--cwd points shadcn at products/platform/apps/web, the one package with a components.json. It installs the route, its mock data and any shadcn primitive the screen uses that you do not have — your own Button is never overwritten.",
       /* The live command, not a picture of one: the whole step is the copy,
          and a reader who copies it here has already done the thing. */
       figure: (

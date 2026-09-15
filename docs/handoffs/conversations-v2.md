@@ -69,13 +69,13 @@ file was first written, and it is no longer the only mockup in the workspace —
 src/app/(mockups)/conversations-revamp/page.tsx  route and state
 src/components/mockups/conversations-revamp/list/
   conversations-page.tsx  the page itself
-  call-table.tsx          bulbul's table + the Source column + the dial time
-  search-filters.tsx      bulbul's filter bar + the Source filter
+  call-table.tsx          the product's table + the Source column + the dial time
+  search-filters.tsx      the product's filter bar + the Source filter
   status-badges.tsx       Source / Status / Outcome chips
   status-filter.tsx, status-help.tsx, fields-dropdown.tsx
   icons.tsx               HugeIcons, named for the job
 src/components/mockups/conversations-revamp/drawer/
-  call-shell.tsx          bulbul's row drawer + the scheduling record
+  call-shell.tsx          the product's row drawer + the scheduling record
   cancel-call-dialog.tsx  Cancel, as a pop-up because it is one decision
   pre-call-panel.tsx, completed-schedule-summary.tsx, linked-call.tsx
   recording-player.tsx, transcript-views.tsx, section-register.tsx
@@ -136,9 +136,11 @@ How it behaves:
 
 ## Reference
 
-**The real product is at `~/Desktop/mvp/dev/office/sarj/bulbul`** (the
-`sarj-ai/bulbul` GitHub repo). The Conversations page lives at
-`typescript/packages/app/src/app/calls/`:
+**The real product is at `~/Desktop/mvp/dev/office/S/platform`** (the
+`sarj-ai/platform` GitHub repo — default branch `dev`, frontend package
+`products/platform/apps/web`, `@sarj/platform-web`; it moved there from
+`sarj-ai/bulbul`). The Conversations page lives at
+`products/platform/apps/web/src/app/calls/`:
 
 | File | What to take from it |
 |---|---|

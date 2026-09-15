@@ -397,18 +397,60 @@ gated, because it is not.
 ## The shadcn registry
 
 Every mockup is published as a shadcn registry item, so a screen can be pulled
-into another repo with one command instead of copied file by file. Each card on
-the index carries a `</>` menu with the command for npm, pnpm, bun and yarn,
+into the product with one command instead of copied file by file. Each card on
+the index carries a `</>` menu with the command for yarn, npm, pnpm and bun,
 plus the raw URL.
 
 ```bash
-npx shadcn@latest add https://design.sarj.ai/r/<slug>.json
+# from the sarj-ai/platform repository root
+yarn dlx shadcn@latest add https://design.sarj.ai/r/<slug>.json --cwd products/platform/apps/web
 ```
 
-That installs the route, its components, its mock data and the shared shell into
-the consumer's own `components/` and `lib/` — and installs every shadcn
-primitive it uses from *their* registry, so their `Button` is not overwritten
-with this repo's copy.
+**The consumer is `sarj-ai/platform`, package `products/platform/apps/web`
+(`@sarj/platform-web`).** It is a Yarn 4 workspace monorepo whose default
+branch is `dev`, and that package holds the repo's only `components.json` —
+which is why every command carries `--cwd`. Run from the root without it,
+shadcn finds no `components.json` and stops. With it, every file lands under
+that package's `src/`, the npm packages go into its `package.json` and the
+root `yarn.lock`, and nothing else in the monorepo is touched. The MCP brief
+(`src/lib/mcp/tools.ts`) hands out the same command with `yes n |` in front
+and `--yes` behind, so it runs unattended; `DEFAULT_CWD` in
+`src/lib/site/registry.ts` is the one place the path is written.
+
+That installs the route, its components, its mock data and the shared shell
+into `src/components/sarj/…`, `src/lib/sarj/…` and `src/app/<slug>/page.tsx` —
+and installs any shadcn primitive it uses that the platform lacks from
+*shadcn's* registry, so the platform's `Button` is not overwritten with this
+repo's copy. Verified on 2026-09-15 by installing `eou-timing` and
+`variable-mentions` into a throwaway branch.
+
+**What the platform does with it.** Four things every installer meets, and
+the MCP brief spells out per design:
+
+- **Base UI, not Radix.** The platform's primitives are built on
+  `@base-ui/react` and take a `render` prop. This repo's are Radix and use
+  `asChild`, so every `<Trigger asChild>` in an installed file fails to
+  typecheck until it becomes `<Trigger render={…} />`. A primitive the
+  platform is missing arrives Radix-backed from shadcn's default registry —
+  and, as of September 2026, that registry imports `cn` from an npm package
+  literally called `cn` (a Chuck Norris joke CLI) and adds it to
+  `package.json` next to `radix-ui`. `radix-ui` is added even when every
+  primitive was skipped. The platform's tsconfig is also stricter
+  (`exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`), so a screen that
+  typechecks here arrives with a few TS2375 and TS18048 errors as well.
+- **Light-only tokens.** `cssVars` land in `:root` and `@theme inline`. The
+  platform also has a `.dark` block and a `[data-whitelabel="tasama"]`
+  block, and neither receives a value, so a tint is undefined under either.
+  A property the platform already defines is left alone.
+- **A route item nests a shell inside the real one.** The platform's root
+  layout already wraps every page in Clerk auth and the product sidebar, and
+  `src/app/<slug>/page.tsx` renders this repo's `AppShell` on top of it. Mount
+  the mockup's components in a real route and delete the page and
+  `components/sarj/shell/*`. A mockup whose deliverable is one component
+  should set `registryEntry` in the index so no page or shell ships at all.
+- **`lib/utils.ts` is guarded by `yes n` only.** The item ships shadcn's stock
+  `cn`, at `@lib/utils.ts`; the platform's file exports more than `cn`, and
+  saying yes to that one prompt deletes the rest.
 
 **`registry.json` is generated, never hand-edited.** `scripts/build-registry.mjs`
 starts at each route in `src/lib/site/mockups-data.ts`, follows every local import,
@@ -418,8 +460,12 @@ screen that does not compile.
 
 - `src/components/ui/*` is never copied; it becomes `registryDependencies`.
 - npm packages become `dependencies`.
-- Route files need a `~/`-prefixed target. A bare `app/...` target is dropped
-  without an error.
+- Route files carry a **bare** `app/<slug>/page.tsx` target, deliberately not
+  `~/`-prefixed: shadcn's framework resolver lands it at `src/app/<slug>/…`
+  where there is a `src` directory and `app/…` where there is not. A `~/`
+  target is joined to the project root verbatim and drops the route beside
+  `src/`, where Next never reads it. Verified against the platform: the bare
+  target landed at `src/app/eou-timing/page.tsx`.
 - `public/r/*.json` is build output but **is committed** — the Worker serves it
   from its assets binding, so an unbuilt registry means the published URLs are
   stale. It reaches the installer because `/r/*` is bypassed in Access; see

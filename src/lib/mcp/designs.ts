@@ -11,18 +11,15 @@
 
 import { linearIssueUrl } from "@/lib/site/linear"
 import { MOCKUPS, searchMockups, surfaceLabel } from "@/lib/site/mockups-data"
+import { DEFAULT_CWD } from "@/lib/site/registry"
 import thumbnails from "@/lib/site/thumbnails.json"
 
 import registryJson from "../../../registry.json"
 
-/**
- * Where bulbul keeps its frontend package.
- *
- * shadcn resolves every alias from the nearest components.json, so pointing
- * `--cwd` at the package is what keeps an install inside `@sarj/app` rather
- * than scattering files across the monorepo root.
- */
-export const DEFAULT_CWD = "typescript/packages/app"
+/* The install target lives in site/registry.ts so the index cards can carry
+   the same `--cwd` as the MCP brief without pulling the registry into the
+   client bundle. Re-exported so the MCP tools keep one import. */
+export { DEFAULT_CWD }
 
 export type RegistryFile = {
   path: string

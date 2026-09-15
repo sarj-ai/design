@@ -74,7 +74,7 @@ export type CatalogState = "populated" | "empty" | "loading" | "error"
  * Only LLM can be onboarded here. TTS is activate-only, so its tab carries the
  * table and the row action and no Add button at all — see `canOnboard`.
  *
- * The page follows the closest thing bulbul already ships — the telephony
+ * The page follows the closest thing the platform already ships — the telephony
  * providers admin screen — which is a one-line description above a table whose
  * status column is a badge and whose row carries a single state-changing
  * action. Search and the status filter come from the Voice Library admin

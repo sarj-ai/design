@@ -15,7 +15,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
  *
  * It sits under Configuration beside the other platform-wide admin surfaces,
  * because onboarding a model is a Sarj-staff action whose result every
- * organization inherits. In bulbul that group is the one gated on
+ * organization inherits. In the platform that group is the one gated on
  * `hasSuperAdminRole`, which is where this belongs too.
  */
 export default function ModelCatalogRoute() {

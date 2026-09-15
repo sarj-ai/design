@@ -3,7 +3,8 @@
  * platform returns.
  *
  * Field names and unions come from `precedent-iso/src/models/phone-number.ts`
- * and the three table components under `admin/phone-numbers/` in `bulbul`, so
+ * and the three table components under `src/app/admin/phone-numbers/` in
+ * `sarj-ai/platform`, so
  * every column here is a column that exists today.
  */
 

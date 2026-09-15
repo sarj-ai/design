@@ -25,7 +25,7 @@ import { NativeSelect } from "@/components/ui/native-select"
  * One flow poured into the shell, so the standard is shown being used rather
  * than described.
  *
- * The content is the telephony connection wizard from `bulbul`, down to the
+ * The content is the telephony connection wizard from `sarj-ai/platform`, down to the
  * field names — organization, endpoint name, signaling IPs, transport, digest
  * username. Three of its steps are not here. "Collision check" asks the reader
  * nothing, and the rule beside this preview says a step that asks nothing is a

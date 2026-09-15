@@ -414,7 +414,7 @@ export const BUTTON_SIZES: ButtonSizeNote[] = [
 /**
  * The eight form decisions, settled.
  *
- * Read out of the real forms in `bulbul` — persona, voice, batch calls, the
+ * Read out of the real forms in `sarj-ai/platform` — persona, voice, batch calls, the
  * scenario editor — rather than invented, except where the app contradicts
  * itself. Where it does, the newest shipped code wins and the divergence is
  * named in the rule.

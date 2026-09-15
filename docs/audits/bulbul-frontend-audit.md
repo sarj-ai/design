@@ -1,3 +1,5 @@
+> **Historical.** The product has since moved to `sarj-ai/platform` (`products/platform/apps/web`, `@sarj/platform-web`). This audit measured the old `bulbul` repo at the commit below and has not been re-run against the new one.
+
 # Frontend audit — the product against the design system
 
 The product is `sarj-ai/bulbul`, `typescript/packages/app`, at

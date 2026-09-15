@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils"
 
 /**
  * The table shape the platform-consistency pass settled on, taken verbatim
- * from `vnagar/platform-consistency` in `bulbul`:
+ * from the product's `vnagar/platform-consistency` branch (then `sarj-ai/bulbul`,
+ * now `sarj-ai/platform`):
  *
  *  - a bordered, radiused container with no padding of its own, so the header
  *    band reaches the edge instead of floating inside an inset;

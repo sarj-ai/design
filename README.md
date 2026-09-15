@@ -46,6 +46,28 @@ npm run shots -- --routes /call-recording
 It captures each route as it loads — it does not click into dialogs or
 drawers. A mockup whose subject is an overlay should open it on mount.
 
+## Installing one into the product
+
+Every mockup is also a shadcn registry item. The product is `sarj-ai/platform`,
+a Yarn 4 workspace monorepo (default branch `dev`) whose frontend package
+`products/platform/apps/web` (`@sarj/platform-web`) holds the repo's only
+`components.json` — so the command runs from the platform root and points
+shadcn at that package:
+
+```bash
+yarn dlx shadcn@latest add https://design.sarj.ai/r/<slug>.json --cwd products/platform/apps/web
+```
+
+The `</>` menu on each index card carries this line, and the MCP server at
+`/api/mcp` hands an agent the unattended form (`yes n | … --yes`) with a brief
+of what to expect. Expect four things: the platform's primitives are Base UI
+(`render`) and this repo's are Radix (`asChild`), so each `asChild` needs
+converting; tokens arrive light-only, with nothing for `.dark` or the tasama
+whitelabel; a route item lands a live `src/app/<slug>/page.tsx` that nests this
+repo's shell inside the real product sidebar; and only the `yes n` guard keeps
+the platform's `src/lib/utils.ts` from being replaced by shadcn's stock one.
+`AGENTS.md` has the full account.
+
 ## The rules
 
 `AGENTS.md` is the full brief and loads into every agent session. The short
