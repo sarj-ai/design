@@ -7,6 +7,7 @@ import {
   BookBookmark01Icon,
   CallOutgoing01Icon,
   DocumentAttachmentIcon,
+  Flag02Icon,
   Key01Icon,
   LanguageSkillIcon,
   Layers01Icon,
@@ -292,6 +293,16 @@ export const MOCKUPS: Mockup[] = [
       "The edit persona dialog rebuilt so pronunciation gets room: identity, voice cards, behavior toggles and end-call-on-silence up top, then a searchable pronunciation table with an always-visible add row, per-term playback, inline edit, delete and bulk upload.",
     icon: LanguageSkillIcon,
     tickets: ["DES-148"],
+  },
+  {
+    href: "/call-flagging",
+    title: "Design flagging category UI and color system",
+    meta: "Dialog · ready for dev",
+    surface: "Conversations",
+    description:
+      "Flag this call: a pop-up that files a moment of a call under one of the ten DIS-50 parent categories and any number of its subcategories. The first row ticked commits the flag to its parent and every other group dims; ticking a row in another group moves the flag there and drops the old ticks. The footer reads the flag back before it is saved. Latency carries a Not sure row because its subcategories are optional; the four parents with none are plain rows under the divider.",
+    icon: Flag02Icon,
+    tickets: ["DES-167"],
   },
   // `npm run new` appends new mockups above this line.
 ]

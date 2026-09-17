@@ -2364,6 +2364,71 @@
           "--z-overlay": "40"
         }
       }
+    },
+    {
+      "name": "call-flagging",
+      "type": "registry:block",
+      "title": "Design flagging category UI and color system",
+      "description": "Flag this call: a pop-up that files a moment of a call under one of the ten DIS-50 parent categories and any number of its subcategories. The first row ticked commits the flag to its parent and every other group dims; ticking a row in another group moves the flag there and drops the old ticks. The footer reads the flag back before it is saved. Latency carries a Not sure row because its subcategories are optional; the four parents with none are plain rows under the divider.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "dialog",
+        "field",
+        "scroll-area",
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/call-flagging/page.tsx",
+          "type": "registry:page",
+          "target": "app/call-flagging/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/call-flagging/flag-call-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/call-flagging/flag-call-dialog.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/call-flagging-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/call-flagging-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        ":root": {
+          "--z-overlay": "40"
+        }
+      }
     }
   ]
 }
