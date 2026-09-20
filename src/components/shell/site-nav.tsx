@@ -121,7 +121,7 @@ export function SiteNav({
     <div className="pointer-events-none sticky top-0 z-nav flex justify-center p-4">
       <nav
         aria-label="Design lab"
-        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-2xl bg-background/85 p-1.5 ring-1 ring-foreground/10 backdrop-blur-sm"
+        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-2xl bg-background/90 p-1.5 ring-1 ring-foreground/15 backdrop-blur-sm"
       >
         <Link
           aria-label="Design lab"
@@ -150,19 +150,51 @@ export function SiteNav({
               className="mx-1 h-5 data-vertical:self-center"
               orientation="vertical"
             />
-            <div className="flex min-w-0 items-center gap-2 pe-2">
+
+            {/* Each part capped on its own rather than the pair sharing one
+                budget. A mockup's title is a sentence — the ticket's own
+                wording — so at the same size as everything else the two of
+                them grew the pill to two thirds of the window. Sharing a cap
+                then truncated a title that would have fitted, because the
+                eyebrow had already spent half of it. The full text is on the
+                element, so hovering still gives it. */}
+            <div
+              className="flex min-w-0 items-baseline gap-1.5"
+              title={eyebrow ? `${eyebrow} — ${title}` : title}
+            >
               {eyebrow ? (
-                <span className="truncate text-sm text-muted-foreground">
-                  {eyebrow}
-                </span>
+                <>
+                  {/* One step down, not just a lighter grey. Both at `text-sm`
+                      the context and the name were one run of text with a
+                      colour change in the middle of it. */}
+                  <span className="max-w-40 truncate text-xs text-muted-foreground">
+                    {eyebrow}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="shrink-0 text-xs text-muted-foreground/60"
+                  >
+                    /
+                  </span>
+                </>
               ) : null}
-              <span className="truncate text-sm font-medium">{title}</span>
+              <span className="max-w-72 truncate text-sm font-medium">
+                {title}
+              </span>
             </div>
           </>
         ) : null}
 
         {actions ? (
-          <div className="flex shrink-0 items-center gap-1">{actions}</div>
+          <>
+            {/* Its own rule. Without one a bare label like "Case" sat straight
+                against the title and read as the end of it. */}
+            <Separator
+              className="mx-1 h-5 data-vertical:self-center"
+              orientation="vertical"
+            />
+            <div className="flex shrink-0 items-center gap-1.5">{actions}</div>
+          </>
         ) : null}
 
         {/* Last, so it is the end of the pill on every page whether or not

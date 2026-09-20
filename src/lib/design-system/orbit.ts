@@ -35,8 +35,96 @@ export const RINGS: Ring[] = [
   { rotate: -34, rx: 0.88, ry: 0.16 },
 ]
 
-/** The hub's radius, as a fraction of the figure radius. */
-export const HUB = 0.075
+/**
+ * The cube at the centre, as a fraction of the figure radius.
+ *
+ * Half-extent, so the cube spans twice this before projection and rather more
+ * than that when a corner swings towards the viewer. Comfortably larger than
+ * the flat disc it replaced, which at 0.075 read as a dot the orbits happened
+ * to cross rather than as the thing they go round.
+ */
+export const CUBE = 0.15
+
+/** Turns per second. Slow — it is a centre of gravity, not a spinner. */
+export const CUBE_SPIN = 0.055
+
+/**
+ * The isometric elevation, `atan(1/√2)` ≈ 35.26°.
+ *
+ * The one angle at which a cube's three visible faces project to equal areas,
+ * which is what makes a drawing read as isometric rather than as an arbitrary
+ * perspective. Fixed, while the cube turns about its vertical axis underneath
+ * it — so every frame is a true isometric view of a rotating cube, instead of
+ * a cube tumbling through angles that are not isometric at all.
+ */
+export const ISO_TILT = Math.atan(1 / Math.SQRT2)
+
+export type Vec3 = { x: number; y: number; z: number }
+
+/** The eight corners of a cube of half-extent 1. */
+export const CUBE_CORNERS: Vec3[] = [
+  { x: -1, y: -1, z: -1 },
+  { x: 1, y: -1, z: -1 },
+  { x: 1, y: 1, z: -1 },
+  { x: -1, y: 1, z: -1 },
+  { x: -1, y: -1, z: 1 },
+  { x: 1, y: -1, z: 1 },
+  { x: 1, y: 1, z: 1 },
+  { x: -1, y: 1, z: 1 },
+]
+
+/** The twelve edges: the back face, the front face, and the four struts. */
+export const CUBE_EDGES: [number, number][] = [
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [3, 0],
+  [4, 5],
+  [5, 6],
+  [6, 7],
+  [7, 4],
+  [0, 4],
+  [1, 5],
+  [2, 6],
+  [3, 7],
+]
+
+/**
+ * A corner, turned about the vertical axis and projected isometrically.
+ *
+ * Orthographic, not perspective: parallel edges stay parallel, which is the
+ * whole character of an isometric drawing. A perspective divide here would
+ * make the near corner flare and the cube would read as a photograph of a box
+ * rather than as a diagram of one.
+ *
+ * `depth` comes back so the caller can fade the far edges. Twelve identical
+ * lines are a Necker cube — genuinely ambiguous about which face is front, and
+ * the eye keeps flipping it. A little less ink on the far edges settles it
+ * without adding anything that is not black, white or grey.
+ */
+export function isoProject(
+  corner: Vec3,
+  spin: number,
+): { x: number; y: number; depth: number } {
+  const sin = Math.sin(spin)
+  const cos = Math.cos(spin)
+
+  /* About Y — the turn. */
+  const x = corner.x * cos + corner.z * sin
+  const z = corner.z * cos - corner.x * sin
+
+  /* About X — the fixed elevation. */
+  const tiltSin = Math.sin(ISO_TILT)
+  const tiltCos = Math.cos(ISO_TILT)
+
+  return {
+    /* 0 at the far corner, 1 at the near one. */
+    depth: (z * tiltSin + corner.y * tiltCos + Math.SQRT2) / (2 * Math.SQRT2),
+    x,
+    /* Negated: screen y grows downward, the cube's y grows up. */
+    y: -(corner.y * tiltCos - z * tiltSin),
+  }
+}
 
 export type Point = { x: number; y: number }
 

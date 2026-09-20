@@ -31,7 +31,14 @@ export function MockupShell({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-full grow flex-col">
+    /* `bg-sidebar`, because the nav reserves a strip and nothing was painting
+       it. `SiteNav` is `sticky`, which still takes its height out of the flow,
+       and that strip plus every ancestor above it is transparent — so it fell
+       through to the body's pure-white `--background` while the shell below
+       painted `--sidebar` at 0.985. A 1.5% step across the full width is
+       exactly the sort of difference that reads as a seam rather than as a
+       shade. Painting the strip the shell's own colour closes it. */
+    <div className="flex min-h-full grow flex-col bg-sidebar">
       <SiteNav actions={actions} eyebrow={eyebrow} title={title} />
 
       {/* A flex column so a page that wants the remaining height can take it

@@ -195,9 +195,16 @@ export function NavSearch() {
 
   return (
     <div className="relative shrink-0" ref={rootRef}>
+      {/* `clip`, not `hidden`. Both hide the field while it is a 32px square,
+          but `overflow: hidden` makes this a scroll container — so focusing
+          the input scrolls it, and the browser leaves it scrolled. The field
+          then sits a pixel or more to the left of the box clipping it, which
+          shaves its left border and its rounded corner and opens a gap on the
+          right. `overflow: clip` is not scrollable, so there is nothing for
+          focus to shift. */}
       <motion.div
         animate={{ width: open ? EXPANDED : COLLAPSED }}
-        className="overflow-hidden"
+        className="overflow-clip"
         initial={false}
         transition={
           reduced

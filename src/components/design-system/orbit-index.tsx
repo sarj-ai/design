@@ -23,11 +23,15 @@ import { docsHref } from "@/lib/design-system/nav"
 import {
   DRAW_DURATION,
   OPEN_DELAY,
-  HUB,
+  CUBE,
+  CUBE_CORNERS,
+  CUBE_EDGES,
+  CUBE_SPIN,
   LABEL_DURATION,
   LABEL_STAGGER,
   RINGS,
   dotSpeed,
+  isoProject,
   dots,
   entranceEnd,
   figureRadius,
@@ -113,6 +117,7 @@ export function DesignSystemOrbit() {
   const stageRef = React.useRef<HTMLDivElement>(null)
   const ringRefs = React.useRef<(SVGEllipseElement | null)[]>([])
   const dotRefs = React.useRef<(SVGCircleElement | null)[]>([])
+  const edgeRefs = React.useRef<(SVGLineElement | null)[]>([])
   const labelRefs = React.useRef<(HTMLDivElement | null)[]>([])
 
   const rafRef = React.useRef<number | null>(null)
@@ -172,6 +177,31 @@ export function DesignSystemOrbit() {
       const at = ringPoint(RINGS[rider.ring], t)
       dot.setAttribute("cx", String(at.x * r))
       dot.setAttribute("cy", String(at.y * r))
+    }
+
+    /* The cube. One turn about its vertical axis, under a fixed isometric
+       elevation, drawn straight into the twelve line endpoints. It rides the
+       draw-in too, so it grows with the orbits rather than sitting at full
+       size behind a figure that has not arrived yet. */
+    const spin = seconds * CUBE_SPIN * Math.PI * 2
+    const size = CUBE * r * (1 - drawn)
+    const corners = CUBE_CORNERS.map((corner) => isoProject(corner, spin))
+
+    for (let index = 0; index < CUBE_EDGES.length; index += 1) {
+      const line = edgeRefs.current[index]
+      const edge = CUBE_EDGES[index]
+      if (!line || !edge) continue
+
+      const from = corners[edge[0]]
+      const to = corners[edge[1]]
+
+      line.setAttribute("x1", String(from.x * size))
+      line.setAttribute("y1", String(from.y * size))
+      line.setAttribute("x2", String(to.x * size))
+      line.setAttribute("y2", String(to.y * size))
+      line.style.opacity = String(
+        0.3 + ((from.depth + to.depth) / 2) * 0.7,
+      )
     }
 
     /* Reduced motion has no dots to keep running for, so once the figure has
@@ -320,15 +350,25 @@ export function DesignSystemOrbit() {
               />
             ))}
 
-            {/* The hub. A tinted disc rather than a mark: whatever sits at the
-                centre of this figure is the thing the orbits belong to, and
-                that is the page you are already on. */}
-            <circle className="fill-primary-tint" r={HUB * radius} />
-            <circle
-              className="fill-none stroke-border"
-              r={HUB * radius}
-              strokeWidth={1}
-            />
+            {/* The hub, as a wireframe cube turning under a fixed isometric
+                elevation. Edges only and no fill, so the orbits behind it stay
+                readable through it — a solid centre would punch a hole in the
+                figure it is supposed to belong to.
+
+                Drawn in `foreground` while the orbits are in `border`: the one
+                thing everything here goes round should be the darkest mark on
+                the page, and the whole figure stays black, white and grey. */}
+            {CUBE_EDGES.map((edge, index) => (
+              <line
+                className="stroke-foreground"
+                key={`${edge[0]}-${edge[1]}`}
+                ref={(node) => {
+                  edgeRefs.current[index] = node
+                }}
+                strokeLinecap="round"
+                strokeWidth={1.25}
+              />
+            ))}
           </g>
         </svg>
 
