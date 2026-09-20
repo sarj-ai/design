@@ -109,6 +109,7 @@ export function GooMenu({
   copiedId = "",
   cols = 2,
   dropWidth = 48,
+  tour,
 }: {
   /** Accessible name of the trigger. */
   label: string
@@ -120,6 +121,13 @@ export function GooMenu({
   copiedId?: string
   cols?: number
   dropWidth?: number
+  /**
+   * Marks this menu for the walkthrough in `hey-click.tsx`. It lands on the
+   * root rather than on the trigger, because the walkthrough points at two
+   * things here — the pill, and then the drops it throws — and one marker on
+   * the thing that contains both is what lets it address either.
+   */
+  tour?: string
 }) {
   const [hovered, setHovered] = React.useState(false)
   const [pinned, setPinned] = React.useState(false)
@@ -188,6 +196,7 @@ export function GooMenu({
   return (
     <div
       ref={root}
+      data-tour={tour}
       className="relative isolate inline-flex"
       onPointerEnter={(event) => {
         if (event.pointerType === "touch") return

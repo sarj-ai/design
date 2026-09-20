@@ -7,9 +7,8 @@ import {
   ArrowUpRight01Icon,
   BookOpen01Icon,
   Cancel01Icon,
-  CircleQuestionMarkIcon,
-  ComputerTerminal01Icon,
   Copy01Icon,
+  Cursor02Icon,
   Link04Icon,
   Search01Icon,
   SourceCodeIcon,
@@ -52,7 +51,8 @@ export const RulesIcon = icon(BookOpen01Icon, "RulesIcon")
    for copying rather than for following. */
 export const ShareLinkIcon = icon(Link04Icon, "ShareLinkIcon")
 
-/* The index header's way back into the registry walkthrough, and the terminal
-   the walkthrough's last step is about. */
-export const HelpIcon = icon(CircleQuestionMarkIcon, "HelpIcon")
-export const TerminalIcon = icon(ComputerTerminal01Icon, "TerminalIcon")
+/* The coach. It labels the nav button that replays the walkthrough, and it is
+   the glyph the walkthrough parks on whatever control the reader is meant to
+   press — the one place in the lab where an icon stands in for a pointer,
+   because the pointer is what it is talking about. */
+export const PointerIcon = icon(Cursor02Icon, "PointerIcon")

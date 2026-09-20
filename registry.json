@@ -12,7 +12,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -24,6 +27,7 @@
         "field",
         "input",
         "input-group",
+        "navigation-menu",
         "select",
         "separator",
         "switch",
@@ -71,14 +75,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/transfer-routing-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/transfer-routing-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -89,19 +133,69 @@
       "cssVars": {
         "theme": {
           "color-warning": "var(--warning)",
-          "color-warning-foreground": "var(--warning-foreground)"
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
-          "warning-foreground": "oklch(0.28 0.07 55)"
+          "warning-foreground": "oklch(0.28 0.07 55)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -114,7 +208,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -128,6 +225,7 @@
         "field",
         "input",
         "input-group",
+        "navigation-menu",
         "separator",
         "sidebar",
         "table"
@@ -179,9 +277,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/knowledge-base-data.ts",
@@ -189,21 +307,95 @@
           "target": "@lib/sarj/mockups/knowledge-base-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
         "@utility z-raised": {
           "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
         },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
+          "--z-base": "0",
           "--z-raised": "10",
-          "--z-overlay": "40"
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -216,7 +408,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -228,6 +423,7 @@
         "collapsible",
         "empty",
         "item",
+        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -275,14 +471,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/call-turn-timing-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/call-turn-timing-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -293,19 +529,69 @@
       "cssVars": {
         "theme": {
           "color-warning": "var(--warning)",
-          "color-warning-foreground": "var(--warning-foreground)"
+          "color-warning-foreground": "var(--warning-foreground)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
-          "warning-foreground": "oklch(0.28 0.07 55)"
+          "warning-foreground": "oklch(0.28 0.07 55)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -318,9 +604,12 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "react-resizable-panels",
         "sonner",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -338,6 +627,7 @@
         "input-group",
         "item",
         "label",
+        "navigation-menu",
         "popover",
         "resizable",
         "select",
@@ -471,9 +761,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/conversations-revamp-drawer-data.ts",
@@ -484,6 +794,26 @@
           "path": "src/lib/mockups/conversations-revamp-list-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/conversations-revamp-list-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -519,16 +849,44 @@
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
         "@utility z-sticky": {
           "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
         },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
           "--chart-6": "oklch(0.66 0.18 300)",
+          "--z-base": "0",
+          "--z-raised": "10",
           "--z-sticky": "20",
-          "--z-overlay": "40"
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -541,8 +899,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "motion",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -561,6 +922,7 @@
         "input",
         "input-group",
         "item",
+        "navigation-menu",
         "scroll-area",
         "select",
         "separator",
@@ -641,14 +1003,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/personas-depth-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/personas-depth-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -658,24 +1060,68 @@
       ],
       "cssVars": {
         "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
           "color-primary-tint": "var(--primary-tint)",
           "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
           "color-destructive-tint": "var(--destructive-tint)",
           "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
           "primary-tint": "oklch(0.948 0.019 291.8)",
           "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
           "destructive-tint": "oklch(0.948 0.028 27.325)",
           "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -688,7 +1134,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -703,6 +1152,7 @@
         "empty",
         "field",
         "item",
+        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -757,14 +1207,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/listener-cues-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/listener-cues-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -774,22 +1264,68 @@
       ],
       "cssVars": {
         "theme": {
+          "color-warning": "var(--warning)",
           "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
           "color-success-tint": "var(--success-tint)",
-          "color-success-tint-foreground": "var(--success-tint-foreground)"
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
           "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
           "success-tint": "oklch(0.945 0.045 149.2)",
-          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -802,7 +1338,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "accordion",
@@ -821,6 +1360,7 @@
         "input",
         "input-group",
         "item",
+        "navigation-menu",
         "separator",
         "sidebar",
         "slider",
@@ -891,9 +1431,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/phrase-mappings-data.ts",
@@ -901,17 +1461,95 @@
           "target": "@lib/sarj/mockups/phrase-mappings-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -924,8 +1562,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "sonner",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -940,6 +1581,7 @@
         "field",
         "input",
         "input-group",
+        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -993,14 +1635,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/model-catalog-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/model-catalog-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1010,22 +1692,68 @@
       ],
       "cssVars": {
         "theme": {
+          "color-warning": "var(--warning)",
           "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
           "color-success-tint": "var(--success-tint)",
-          "color-success-tint-foreground": "var(--success-tint-foreground)"
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
           "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
           "success-tint": "oklch(0.945 0.045 149.2)",
-          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1038,8 +1766,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "motion",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -1051,6 +1782,7 @@
         "field",
         "input-group",
         "label",
+        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -1105,14 +1837,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/eou-timing-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/eou-timing-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1122,18 +1894,68 @@
       ],
       "cssVars": {
         "theme": {
-          "color-warning": "var(--warning)"
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
-          "warning": "oklch(0.769 0.188 70.08)"
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1146,7 +1968,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -1164,6 +1989,7 @@
         "input-group",
         "item",
         "label",
+        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -1272,9 +2098,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/scenario-single-screen-data.ts",
@@ -1287,6 +2133,26 @@
           "target": "@lib/sarj/mockups/scenario-single-screen-v2-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
@@ -1296,26 +2162,66 @@
         "theme": {
           "color-warning": "var(--warning)",
           "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
           "color-success-tint": "var(--success-tint)",
-          "color-success-tint-foreground": "var(--success-tint-foreground)"
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
           "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
           "success-tint": "oklch(0.945 0.045 149.2)",
-          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
         "@utility z-sticky": {
           "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
         },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
+          "--z-base": "0",
+          "--z-raised": "10",
           "--z-sticky": "20",
-          "--z-overlay": "40"
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1328,8 +2234,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "sonner",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert",
@@ -1346,6 +2255,7 @@
         "field",
         "input",
         "input-group",
+        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -1424,14 +2334,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/connected-apps-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/connected-apps-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1448,7 +2398,9 @@
           "color-success-tint": "var(--success-tint)",
           "color-success-tint-foreground": "var(--success-tint-foreground)",
           "color-warning-tint": "var(--warning-tint)",
-          "color-warning-tint-foreground": "var(--warning-tint-foreground)"
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
@@ -1458,15 +2410,49 @@
           "success-tint": "oklch(0.945 0.045 149.2)",
           "success-tint-foreground": "oklch(0.402 0.098 149.2)",
           "warning-tint": "oklch(0.955 0.055 70.08)",
-          "warning-tint-foreground": "oklch(0.402 0.086 55)"
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1539,8 +2525,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "sonner",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -1553,6 +2542,7 @@
         "dialog",
         "field",
         "input",
+        "navigation-menu",
         "radio-group",
         "scroll-area",
         "separator",
@@ -1613,9 +2603,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/roles-permissions-data.ts",
@@ -1623,21 +2633,95 @@
           "target": "@lib/sarj/mockups/roles-permissions-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
         "@utility z-sticky": {
           "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
         },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
+          "--z-base": "0",
+          "--z-raised": "10",
           "--z-sticky": "20",
-          "--z-overlay": "40"
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1650,8 +2734,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "react-resizable-panels",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -1670,6 +2757,7 @@
         "input-group",
         "item",
         "label",
+        "navigation-menu",
         "popover",
         "resizable",
         "select",
@@ -1806,9 +2894,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/behavioral-alerts-data.ts",
@@ -1819,6 +2927,26 @@
           "path": "src/lib/mockups/conversations-revamp-list-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/conversations-revamp-list-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -1853,15 +2981,43 @@
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
         "@utility z-sticky": {
           "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
         },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
+          "--z-base": "0",
+          "--z-raised": "10",
           "--z-sticky": "20",
-          "--z-overlay": "40"
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1874,8 +3030,11 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "conversation",
+        "conversations",
         "sonner",
-        "tailwind-merge"
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "alert-dialog",
@@ -1889,6 +3048,7 @@
         "input-group",
         "item",
         "label",
+        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -1952,9 +3112,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/call-retry-data.ts",
@@ -1962,17 +3142,95 @@
           "target": "@lib/sarj/mockups/call-retry-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -1985,7 +3243,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "badge",
@@ -1995,6 +3256,7 @@
         "empty",
         "input-group",
         "label",
+        "navigation-menu",
         "select",
         "separator",
         "table",
@@ -2043,14 +3305,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/phone-numbers-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/phone-numbers-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -2085,11 +3387,43 @@
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -2100,7 +3434,12 @@
       "description": "A voice entering the global library carries the voice it falls back to, so a provider outage swaps the voice instead of dropping the call to silence. Display name, vibe, language and gender, then the TTS provider config that renders it, then the fallback that covers it.",
       "dependencies": [
         "@hugeicons/core-free-icons",
-        "@hugeicons/react"
+        "@hugeicons/react",
+        "clsx",
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "button",
@@ -2109,6 +3448,7 @@
         "input",
         "item",
         "label",
+        "navigation-menu",
         "popover",
         "radio-group",
         "select",
@@ -2147,22 +3487,125 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/add-voice-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/add-voice-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -2175,7 +3618,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "avatar",
@@ -2187,6 +3633,7 @@
         "input-group",
         "kbd",
         "label",
+        "navigation-menu",
         "popover",
         "separator",
         "sidebar",
@@ -2242,14 +3689,54 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/variable-mentions-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/variable-mentions-data.ts"
+        },
+        {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
         },
         {
           "path": "src/lib/utils.ts",
@@ -2259,26 +3746,70 @@
       ],
       "cssVars": {
         "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
           "color-primary-tint": "var(--primary-tint)",
           "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
           "color-destructive-tint": "var(--destructive-tint)",
           "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
           "color-chart-6": "var(--chart-6)"
         },
         "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
           "primary-tint": "oklch(0.948 0.019 291.8)",
           "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
           "destructive-tint": "oklch(0.948 0.028 27.325)",
           "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
           "--chart-6": "oklch(0.66 0.18 300)",
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -2291,7 +3822,10 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "badge",
@@ -2301,6 +3835,7 @@
         "input",
         "input-group",
         "item",
+        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -2341,9 +3876,29 @@
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/persona-pronunciation-data.ts",
@@ -2351,17 +3906,95 @@
           "target": "@lib/sarj/mockups/persona-pronunciation-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     },
@@ -2374,13 +4007,17 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "tailwind-merge"
+        "conversation",
+        "conversations",
+        "tailwind-merge",
+        "voice"
       ],
       "registryDependencies": [
         "button",
         "checkbox",
         "dialog",
         "field",
+        "navigation-menu",
         "scroll-area",
         "separator"
       ],
@@ -2396,19 +4033,34 @@
           "target": "@components/sarj/mockups/call-flagging/flag-call-dialog.tsx"
         },
         {
-          "path": "src/components/shared/icon.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/icon.tsx"
-        },
-        {
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
         },
         {
-          "path": "src/components/shell/workspace-icons.tsx",
+          "path": "src/components/shell/nav-figures.tsx",
           "type": "registry:component",
-          "target": "@components/sarj/shell/workspace-icons.tsx"
+          "target": "@components/sarj/shell/nav-figures.tsx"
+        },
+        {
+          "path": "src/components/shell/sarj-mark.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/sarj-mark.tsx"
+        },
+        {
+          "path": "src/components/shell/site-nav.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/design-system/nav.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/nav.ts"
         },
         {
           "path": "src/lib/mockups/call-flagging-data.ts",
@@ -2416,17 +4068,95 @@
           "target": "@lib/sarj/mockups/call-flagging-data.ts"
         },
         {
+          "path": "src/lib/reels/anim.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/reels/anim.ts"
+        },
+        {
+          "path": "src/lib/site/fuzzy.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/fuzzy.ts"
+        },
+        {
+          "path": "src/lib/site/mockups-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/mockups-data.ts"
+        },
+        {
+          "path": "src/lib/site/reels-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/site/reels-data.ts"
+        },
+        {
           "path": "src/lib/utils.ts",
           "type": "registry:lib",
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
       "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
         "@utility z-overlay": {
           "z-index": "var(--z-overlay)"
         },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
         ":root": {
-          "--z-overlay": "40"
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
         }
       }
     }

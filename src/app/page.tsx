@@ -41,9 +41,9 @@ import {
   SearchIcon,
 } from "@/components/shell/workspace-icons"
 import { SiteNav } from "@/components/shell/site-nav"
+import { HeyClick } from "@/components/site/hey-click"
 import { LinkMenu } from "@/components/site/link-menu"
 import { RegistryMenu } from "@/components/site/registry-menu"
-import { RegistryOnboarding } from "@/components/site/registry-onboarding"
 import { SurfaceDock } from "@/components/site/surface-dock"
 import {
   groupBySurface,
@@ -98,7 +98,7 @@ export default function Home() {
       {/* The design system and the reels used to be two outline buttons in
           this header. They are two menus in the nav now, on every page rather
           than on this one. */}
-      <SiteNav actions={<RegistryOnboarding />} />
+      <SiteNav actions={<HeyClick />} />
 
       <main className="mx-auto flex w-full max-w-350 flex-col gap-8 px-8 pb-8">
         <header className="flex flex-wrap items-center justify-between gap-4">
@@ -147,7 +147,7 @@ export default function Home() {
             </EmptyHeader>
           </Empty>
         ) : (
-          groups.map(({ surface, mockups }) => (
+          groups.map(({ surface, mockups }, group) => (
             <section
               key={surfaceId(surface)}
               id={surfaceId(surface)}
@@ -162,8 +162,13 @@ export default function Home() {
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
-                {mockups.map(({ href, title, meta, icon, tickets }) => {
+                {mockups.map(({ href, title, meta, icon, tickets }, card) => {
                   const slug = href.slice(1)
+                  /* The walkthrough points at one install menu, and this is
+                     how it finds it. First card of the first group *after*
+                     the search, so a reader who started the tour with a query
+                     typed still gets pointed at a card they can see. */
+                  const tour = group === 0 && card === 0 ? "install" : undefined
 
                   return (
                     /* `relative` so the thumbnail's link can sit over it.
@@ -255,7 +260,7 @@ export default function Home() {
                             tickets={tickets}
                             title={title}
                           />
-                          <RegistryMenu slug={slug} title={title} />
+                          <RegistryMenu slug={slug} title={title} tour={tour} />
                         </CardAction>
                       </CardHeader>
                       {/* No body: the thumbnail and title say what the mockup

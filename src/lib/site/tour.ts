@@ -49,7 +49,7 @@ export const TOUR: Beat[] = [
     id: "hey",
     say: "Hey. Every screen here is published as a shadcn registry item, so taking one is a command rather than a copy of a dozen files.",
     advance: "button",
-    action: "Show me",
+    action: "Go on",
   },
   {
     id: "open",

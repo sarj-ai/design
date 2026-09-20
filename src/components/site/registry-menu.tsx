@@ -13,7 +13,16 @@ import { RegistryIcon } from "@/components/shell/workspace-icons"
  * four package managers because the repo it lands in is not this one. Four
  * short words, so two columns of narrow drops.
  */
-export function RegistryMenu({ slug, title }: { slug: string; title: string }) {
+export function RegistryMenu({
+  slug,
+  title,
+  tour,
+}: {
+  slug: string
+  title: string
+  /** Set on the first card only — see `hey-click.tsx`. */
+  tour?: string
+}) {
   const { copied, copy } = useCopy()
   const url = registryUrl(slug)
 
@@ -23,6 +32,7 @@ export function RegistryMenu({ slug, title }: { slug: string; title: string }) {
       menuLabel="Install commands"
       icon={<RegistryIcon />}
       copiedId={copied}
+      tour={tour}
       items={INSTALL_COMMANDS.map((manager) => ({
         id: manager.id,
         label: manager.label,

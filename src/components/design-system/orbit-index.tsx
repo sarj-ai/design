@@ -6,6 +6,7 @@ import * as React from "react"
 
 import { AllSectionsIcon } from "@/components/design-system/icons"
 import { Button } from "@/components/ui/button"
+import { Item } from "@/components/ui/item"
 import {
   DOCS_SECTIONS,
   type DocsPage,
@@ -13,72 +14,80 @@ import {
 } from "@/lib/design-system/data"
 import { docsHref } from "@/lib/design-system/nav"
 import {
-  DRAG_TO_DEGREES,
+  AUTO_AXIS,
+  AUTO_SPEED,
+  DRAG_SPEED,
   ENTER_DURATION,
-  KEY_STEP_DEGREES,
-  SPIN_DECAY,
-  SPIN_FLOOR,
-  WHEEL_TO_DEGREES,
-  arrivalEnd,
-  orbitArrival,
-  orbitNode,
-  orbitRadius,
+  FRICTION,
+  IDENTITY,
+  KEY_STEP,
+  MOTION_FLOOR,
+  type Quat,
+  type Vec3,
+  REVEAL_RATE,
+  SMOOTHING,
+  TAP_SLOP,
+  X_AXIS,
+  Y_AXIS,
+  fibonacciSphere,
+  fromAxisAngle,
+  multiply,
+  normalize,
+  perspectiveFor,
+  project,
+  sphereRadius,
 } from "@/lib/design-system/orbit"
 import { easeOutCubic, interpolate } from "@/lib/reels/anim"
 
 /**
- * `/design-system` — the front door, as a ring rather than a grid of cards.
+ * `/design-system` — the front door, as a sphere you can spin.
  *
- * Five sections orbit the title. Turning the ring brings one to the front;
- * opening one re-forms the ring out of that section's topics, and opening a
- * topic lifts the document up from the bottom edge and lands on its real URL.
- * Two levels, one gesture, and the address bar still ends up somewhere that can
- * be sent to someone — the rail and every `/design-system/<section>/<topic>`
- * page are untouched by this file.
+ * The five sections sit on a Fibonacci sphere. Dragging turns it with inertia,
+ * it drifts on its own until you touch it, and every node faces you however far
+ * it has travelled. Opening a section rebuilds the sphere out of that section's
+ * topics; opening a topic lifts the document up from the bottom edge and lands
+ * on its real URL.
  *
- * **Nothing here uses a `transition-*` or `animate-*` class.** Every frame is
- * computed from one clock and written to the style prop as geometry, the way
- * the reels kernel does it, because the ring's position has to be a function of
- * a rotation the wheel is still changing — a CSS transition would be fighting
- * for the same property. It also means the house motion tokens, which cap a
- * class-driven animation at 300ms, are not being quietly stretched to cover an
- * 1100ms entrance they were never written for.
+ * **The loop writes to the DOM, not to React state.** Fifteen nodes each
+ * needing a new transform every frame is fifteen style writes, which is cheap;
+ * the same thing as a state update is a full render tree fifteen times a
+ * second-and-a-half of entrance plus every frame of every drag. So the motion
+ * lives entirely in refs and `draw` sets `style.transform` directly. React owns
+ * what is on the sphere, never where it is.
  *
- * The clock stops when there is nothing left to move: the loop exits once the
- * last node has arrived and the coast has decayed, and the wheel restarts it.
- * An idle ring costs nothing, which is the whole reason it does not drift on
- * its own.
+ * Nothing here uses a `transition-*` or `animate-*` class either, which is why
+ * none of this is quietly stretching the house motion tokens past the 300ms
+ * they cap: a sphere's position is a function of a drag that is still
+ * happening, and a CSS transition would be fighting for the same property.
+ *
+ * The clock stops when nothing is moving and any input restarts it, so an
+ * untouched sphere that has finished drifting costs nothing.
  */
 
-/** A thing on the ring. Sections and topics differ only in what opening does. */
+/** A thing on the sphere. Sections and topics differ only in what opening does. */
 type OrbitItem = {
   page: DocsPage
-  /** Topics only. Sections re-form the ring instead of navigating. */
+  /** Topics only. Sections rebuild the sphere instead of navigating. */
   href?: string
-  /** Sections only, for the count beside the title. */
+  /** Sections only, for the count under the title. */
   topics?: number
 }
 
-/** Every topic filed under a section, with its group labels flattened away. */
 function topicsOf(section: DocsSection): DocsPage[] {
   return section.groups.flatMap((group) => group.pages)
 }
 
-function sectionItems(): OrbitItem[] {
-  return DOCS_SECTIONS.map((section) => ({
-    page: section,
-    topics: topicsOf(section).length,
-  }))
+function itemsFor(section: DocsSection | null): OrbitItem[] {
+  if (!section) {
+    return DOCS_SECTIONS.map((entry) => ({
+      page: entry,
+      topics: topicsOf(entry).length,
+    }))
+  }
+
+  return topicsOf(section).map((page) => ({ href: docsHref(page.id), page }))
 }
 
-function topicItems(section: DocsSection): OrbitItem[] {
-  return topicsOf(section).map((page) => ({
-    href: docsHref(page.id),
-    page,
-  }))
-}
-
-/** Whether the reader has asked the OS for less movement. */
 function useReducedMotion(): boolean {
   const [reduced, setReduced] = React.useState(false)
 
@@ -98,104 +107,155 @@ export function DesignSystemOrbit() {
   const reduced = useReducedMotion()
 
   const [openSection, setOpenSection] = React.useState<DocsSection | null>(null)
-  const [stage, setStage] = React.useState({ height: 620, width: 1280 })
-  const [rotation, setRotation] = React.useState(0)
+  const [entering, setEntering] = React.useState<{
+    href: string
+    page: DocsPage
+  } | null>(null)
+  const [enterMs, setEnterMs] = React.useState(0)
 
-  /* Starts at the first frame of the entrance, which is every node at zero
-     opacity, so the prerendered HTML is an empty stage and the ring builds
-     itself once.
-
-     Starting settled instead — a finished ring in the HTML — looked safer and
-     read worse: the server's ring painted, then the first frame of the loop
-     rewound it to nothing and built it again, so the entrance began with the
-     ending. The cost is that the ring needs JS to appear at all, which the
-     rail, the search and the collapsibles on every other docs page already
-     did. Reduced motion is handled where the clock is, not here. */
-  const [elapsed, setElapsed] = React.useState(0)
-
-  const items = React.useMemo(
-    () => (openSection ? topicItems(openSection) : sectionItems()),
-    [openSection],
-  )
-  const count = items.length
+  const items = React.useMemo(() => itemsFor(openSection), [openSection])
 
   const stageRef = React.useRef<HTMLDivElement>(null)
+  const nodeRefs = React.useRef<(HTMLButtonElement | null)[]>([])
+
+  /* The layout of the sphere is derived, so it is a memo. Everything the loop
+     mutates frame to frame is a ref, so a drag never re-renders. */
+  const points = React.useMemo(
+    () => fibonacciSphere(items.length),
+    [items.length],
+  )
+
+  const pointsRef = React.useRef<Vec3[]>([])
+  const rotation = React.useRef<Quat>(IDENTITY)
+  const target = React.useRef({ x: 0, y: 0 })
+  const smooth = React.useRef({ x: 0, y: 0 })
+  const velocity = React.useRef({ x: 0, y: 0 })
+  const reveal = React.useRef(0)
+  const touched = React.useRef(false)
   const rafRef = React.useRef<number | null>(null)
-  const startRef = React.useRef(0)
-  const spinRef = React.useRef(0)
-  const rotationRef = React.useRef(0)
-  const draggingRef = React.useRef(false)
+  const lastRef = React.useRef(0)
+  const reducedRef = React.useRef(reduced)
 
-  /**
-   * Run the clock until nothing is moving, then stop.
-   *
-   * Everything that changes the ring calls this rather than starting a loop of
-   * its own, so there is only ever one.
-   */
-  const wake = React.useCallback(() => {
-    if (rafRef.current !== null || reduced) return
+  React.useEffect(() => {
+    reducedRef.current = reduced
+  }, [reduced])
 
-    let last = performance.now()
+  /* A named function expression so the loop can re-schedule itself by its own
+     binding. A self-referencing arrow held in a const is the same loop, but it
+     reads its own name out of the enclosing scope before that name exists. */
+  const draw = React.useCallback(function step(now: number) {
+    rafRef.current = null
 
-    const loop = (now: number) => {
-      /* Capped: a backgrounded tab resumes with a gap of seconds, and an
-         uncapped one would apply all of it to the coast in a single step. */
-      const delta = Math.min(now - last, 64)
-      last = now
+    const stage = stageRef.current
+    if (!stage) return
 
-      const since = now - startRef.current
-      const arriving = since < arrivalEnd(count)
-      if (arriving) setElapsed(since)
+    const still = reducedRef.current
+    /* Capped: a backgrounded tab resumes with a gap of seconds, and applying
+       all of it in one step would fling the sphere. */
+    const dt = Math.min(32, now - (lastRef.current || now)) / 16.667
+    lastRef.current = now
 
-      if (spinRef.current !== 0) {
-        const steps = delta / 16
-        rotationRef.current += spinRef.current * steps
-        spinRef.current *= Math.pow(SPIN_DECAY, steps)
-        if (Math.abs(spinRef.current) < SPIN_FLOOR) spinRef.current = 0
-        setRotation(rotationRef.current)
-      }
-
-      if (arriving || spinRef.current !== 0 || draggingRef.current) {
-        rafRef.current = requestAnimationFrame(loop)
-        return
-      }
-
-      rafRef.current = null
-      setElapsed(Number.POSITIVE_INFINITY)
+    if (still) {
+      velocity.current.x = 0
+      velocity.current.y = 0
+      smooth.current = { ...target.current }
+      reveal.current = 1
+    } else {
+      target.current.x += velocity.current.x * dt
+      target.current.y += velocity.current.y * dt
+      const friction = Math.pow(FRICTION, dt)
+      velocity.current.x *= friction
+      velocity.current.y *= friction
     }
 
-    rafRef.current = requestAnimationFrame(loop)
-  }, [count, reduced])
+    const previous = { ...smooth.current }
 
-  /**
-   * Re-form the ring: every node flies in again, staggered.
-   *
-   * Moves the clock and starts the loop, and deliberately sets no state of its
-   * own — the first frame of the loop is what pulls `elapsed` back to zero.
-   * Rewinding here instead would be a synchronous setState inside the effect
-   * that calls this, which is the cascading-render pattern the hooks lint
-   * rejects, and the one frame of settled ring it saves is not worth it.
-   */
-  const reform = React.useCallback(() => {
-    if (reduced) return
-    startRef.current = performance.now()
-    wake()
-  }, [reduced, wake])
+    if (!still) {
+      const ease = 1 - Math.pow(1 - SMOOTHING, dt)
+      smooth.current.x += (target.current.x - smooth.current.x) * ease
+      smooth.current.y += (target.current.y - smooth.current.y) * ease
+      reveal.current += (1 - reveal.current) * (1 - Math.pow(REVEAL_RATE, dt))
+    }
 
-  /* The entrance, and a fresh one whenever the ring changes what it is made
-     of. Depending on the level rather than on `items` keeps a re-render from
-     restarting the entrance under the reader. */
+    /* Pre-multiplied, so each drag is applied in the viewer's frame rather
+       than in the sphere's — that is what keeps a sideways drag sideways
+       after the sphere has already been tilted. */
+    rotation.current = multiply(
+      fromAxisAngle(Y_AXIS, smooth.current.x - previous.x),
+      rotation.current,
+    )
+    rotation.current = multiply(
+      fromAxisAngle(X_AXIS, smooth.current.y - previous.y),
+      rotation.current,
+    )
+
+    if (!touched.current && !still) {
+      rotation.current = multiply(
+        fromAxisAngle(AUTO_AXIS, AUTO_SPEED * dt),
+        rotation.current,
+      )
+    }
+
+    rotation.current = normalize(rotation.current)
+
+    const width = stage.clientWidth
+    const height = stage.clientHeight
+    const radius = sphereRadius(width, height)
+    const perspective = perspectiveFor(height)
+
+    for (let index = 0; index < pointsRef.current.length; index += 1) {
+      const node = nodeRefs.current[index]
+      if (!node) continue
+
+      const at = project(
+        pointsRef.current[index],
+        rotation.current,
+        radius,
+        perspective,
+        reveal.current,
+      )
+
+      node.style.transform = `translate(-50%, -50%) translate3d(${at.x}px, ${at.y}px, 0) scale(${at.scale})`
+      node.style.opacity = String(at.opacity)
+      node.style.zIndex = String(at.z + 1000)
+    }
+
+    const drifting = !touched.current && !still
+    const moving =
+      Math.abs(velocity.current.x) +
+        Math.abs(velocity.current.y) +
+        Math.abs(target.current.x - smooth.current.x) +
+        Math.abs(target.current.y - smooth.current.y) >
+      MOTION_FLOOR
+
+    if (moving || reveal.current < 0.9999 || drifting) {
+      rafRef.current = requestAnimationFrame(step)
+    }
+  }, [])
+
+  const wake = React.useCallback(() => {
+    if (rafRef.current !== null || document.hidden) return
+    lastRef.current = performance.now()
+    rafRef.current = requestAnimationFrame(draw)
+  }, [draw])
+
+  /* Hands the new layout to the loop and rewinds the reveal, so mounting and
+     changing level both play the sphere out of the centre. Refs and a frame
+     request only — nothing here sets state. */
   React.useEffect(() => {
-    reform()
-  }, [openSection, reform])
+    pointsRef.current = points
+    nodeRefs.current = nodeRefs.current.slice(0, points.length)
+    reveal.current = 0
+    wake()
+  }, [points, wake])
 
-  /* Clearing the handle matters as much as cancelling the frame. `wake` treats
-     a non-null handle as "a loop is already running", so a cleanup that
-     cancelled without clearing left a dead id behind and every later wake
-     returned early — no entrance and a wheel that did nothing. Strict Mode's
-     double mount in development hits that on the very first render. */
   React.useEffect(
     () => () => {
+      /* Clearing the handle matters as much as cancelling the frame: `wake`
+         reads a non-null handle as "already running", so a cleanup that
+         cancelled without clearing would leave a dead id behind and every
+         later wake would return early. Strict Mode's double mount in
+         development hits that on the very first render. */
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
@@ -204,60 +264,90 @@ export function DesignSystemOrbit() {
     [],
   )
 
-  /* The stage drives the radius, so the ring fits a laptop and a wide monitor
-     without either one being the size it was written against. */
   React.useEffect(() => {
-    const element = stageRef.current
-    if (!element) return
+    const stage = stageRef.current
+    if (!stage) return
 
-    const observer = new ResizeObserver(([entry]) => {
-      const { height, width } = entry.contentRect
-      setStage({ height, width })
-    })
-    observer.observe(element)
+    const observer = new ResizeObserver(() => wake())
+    observer.observe(stage)
     return () => observer.disconnect()
-  }, [])
+  }, [wake])
 
-  const turn = React.useCallback(
-    (degrees: number) => {
-      rotationRef.current += degrees
-      setRotation(rotationRef.current)
+  /* The drag. Pointer capture keeps a drag alive past the edge of the stage,
+     and costs the click: with the pointer captured, press and release no longer
+     share the node underneath, so the browser never synthesises one. The tap is
+     resolved by hit-testing the release point instead. */
+  const pointerId = React.useRef<number | null>(null)
+  const last = React.useRef({ x: 0, y: 0 })
+  const travel = React.useRef(0)
+
+  const openItem = React.useCallback(
+    (item: OrbitItem) => {
+      if (item.href) {
+        setEnterMs(0)
+        setEntering({ href: item.href, page: item.page })
+        return
+      }
+
+      const next = DOCS_SECTIONS.find((entry) => entry.id === item.page.id)
+      if (next) setOpenSection(next)
     },
     [],
   )
 
-  /* Non-passive, because the wheel drives the ring instead of the page and the
-     browser has to be told so before it starts a scroll it will not finish. */
-  React.useEffect(() => {
-    const element = stageRef.current
-    if (!element) return
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0) return
+    pointerId.current = event.pointerId
+    last.current = { x: event.clientX, y: event.clientY }
+    travel.current = 0
+    touched.current = true
+    velocity.current = { x: 0, y: 0 }
+    event.currentTarget.setPointerCapture(event.pointerId)
+  }
 
-    const onWheel = (event: WheelEvent) => {
-      event.preventDefault()
-      if (reduced) {
-        turn(event.deltaY * WHEEL_TO_DEGREES)
-        return
-      }
-      spinRef.current += event.deltaY * WHEEL_TO_DEGREES * 0.34
-      wake()
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerId.current !== event.pointerId) return
+
+    const dx = event.clientX - last.current.x
+    const dy = event.clientY - last.current.y
+    last.current = { x: event.clientX, y: event.clientY }
+    travel.current += Math.hypot(dx, dy)
+
+    if (reducedRef.current) {
+      target.current.x += dx * DRAG_SPEED * 8
+      target.current.y += dy * DRAG_SPEED * 8
+    } else {
+      velocity.current.x += dx * DRAG_SPEED
+      velocity.current.y += dy * DRAG_SPEED
     }
 
-    element.addEventListener("wheel", onWheel, { passive: false })
-    return () => element.removeEventListener("wheel", onWheel)
-  }, [reduced, turn, wake])
+    wake()
+  }
 
-  /** The doc on its way up from the bottom edge, or nothing. */
-  const [entering, setEntering] = React.useState<{
-    href: string
-    page: DocsPage
-    section: string
-  } | null>(null)
-  const [enterMs, setEnterMs] = React.useState(0)
+  const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerId.current !== event.pointerId) return
+    pointerId.current = null
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+
+    if (event.type !== "pointerup" || travel.current > TAP_SLOP) return
+
+    const hit = document
+      .elementFromPoint(event.clientX, event.clientY)
+      ?.closest<HTMLElement>("[data-sphere-node]")
+
+    if (!hit) return
+
+    const index = Number(hit.dataset.sphereNode)
+    const item = items[index]
+    if (item) openItem(item)
+  }
 
   React.useEffect(() => {
     if (!entering) return
 
-    /* No climb to watch, so there is no reason to make them wait for one. */
     if (reduced) {
       router.push(entering.href)
       return
@@ -267,221 +357,130 @@ export function DesignSystemOrbit() {
     let frame = 0
     let pushed = false
 
-    const loop = (now: number) => {
+    const climb = (now: number) => {
       const ms = now - start
       setEnterMs(ms)
 
-      /* Pushed a little before the panel lands rather than after: the topic
-         routes are prerendered, so the real page is painted underneath by the
-         time the panel covers the ring, and the swap has nothing to show. */
+      /* Pushed a little before the panel lands: the topic routes are
+         prerendered, so the real page is painted underneath by the time the
+         panel covers the sphere and the swap has nothing to show. */
       if (!pushed && ms >= ENTER_DURATION * 0.72) {
         pushed = true
         router.push(entering.href)
       }
 
-      if (ms < ENTER_DURATION) frame = requestAnimationFrame(loop)
+      if (ms < ENTER_DURATION) frame = requestAnimationFrame(climb)
     }
 
-    frame = requestAnimationFrame(loop)
+    frame = requestAnimationFrame(climb)
     return () => cancelAnimationFrame(frame)
   }, [entering, reduced, router])
 
-  const open = React.useCallback(
-    (item: OrbitItem) => {
-      if (item.href) {
-        setEnterMs(0)
-        setEntering({
-          href: item.href,
-          page: item.page,
-          section: openSection?.title ?? "",
-        })
-        return
-      }
-
-      const next = DOCS_SECTIONS.find((section) => section.id === item.page.id)
-      if (next) setOpenSection(next)
-    },
-    [openSection],
-  )
-
-  const radius = orbitRadius(stage.width, stage.height)
-  /* Reduced motion settles the ring in render rather than by pushing state,
-     which keeps it out of the effect and means a reader who flips the OS
-     setting mid-entrance lands on a finished ring instead of a frozen one. */
-  const settled = reduced || elapsed === Number.POSITIVE_INFINITY
-
-  /**
-   * Pointer drag, as a second way to turn the ring.
-   *
-   * The move and release are on `window` rather than on the stage, and nothing
-   * calls `setPointerCapture`. Capturing looked tidier and quietly broke every
-   * node: it retargets the pointer events at the stage, so press and release
-   * no longer share the button underneath and the browser never synthesises
-   * the click. Listening on the window keeps a drag that runs off the edge of
-   * the stage working, which is the only thing capture was buying.
-   */
-  const dragRef = React.useRef({ moved: 0, x: 0 })
-
-  React.useEffect(() => {
-    const onMove = (event: PointerEvent) => {
-      if (!draggingRef.current) return
-      const step = event.clientX - dragRef.current.x
-      dragRef.current = {
-        moved: dragRef.current.moved + Math.abs(step),
-        x: event.clientX,
-      }
-      turn(step * DRAG_TO_DEGREES)
-      /* Carried into the coast, so letting go mid-flick keeps going. */
-      spinRef.current = step * DRAG_TO_DEGREES * 0.5
-    }
-
-    const onUp = () => {
-      if (!draggingRef.current) return
-      draggingRef.current = false
-      wake()
-    }
-
-    window.addEventListener("pointermove", onMove)
-    window.addEventListener("pointerup", onUp)
-    window.addEventListener("pointercancel", onUp)
-    return () => {
-      window.removeEventListener("pointermove", onMove)
-      window.removeEventListener("pointerup", onUp)
-      window.removeEventListener("pointercancel", onUp)
-    }
-  }, [turn, wake])
-
-  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return
-    draggingRef.current = true
-    dragRef.current = { moved: 0, x: event.clientX }
-    spinRef.current = 0
-  }
-
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-      <div
-        className="relative flex min-h-0 flex-1 touch-pan-y select-none items-center justify-center"
-        onKeyDown={(event) => {
-          if (event.key === "ArrowLeft") turn(-KEY_STEP_DEGREES)
-          if (event.key === "ArrowRight") turn(KEY_STEP_DEGREES)
-        }}
-        onPointerDown={onPointerDown}
-        ref={stageRef}
-      >
-        {/* What the ring turns around. It is the heading of the page, so the
-            centre is doing a job rather than being a decorative hub. */}
-        <div className="pointer-events-none absolute flex max-w-xs flex-col items-center gap-2 text-center">
-          {openSection ? (
-            <>
-              <h1 className="text-2xl font-semibold">{openSection.title}</h1>
-              <p className="text-sm text-muted-foreground">
-                {openSection.description}
-              </p>
-              <Button
-                className="pointer-events-auto mt-1"
-                onClick={() => setOpenSection(null)}
-                size="sm"
-                variant="outline"
-              >
-                <AllSectionsIcon />
-                All sections
-              </Button>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-semibold">Design system</h1>
-              <p className="text-sm text-muted-foreground">
-                Every rule, pattern and primitive the product is built from.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Scroll or drag to turn the ring.
-              </p>
-            </>
-          )}
-        </div>
+      {/* In flow above the stage, not floating over it. Absolutely placed, the
+          near face of the sphere rides straight through the title — the nodes
+          reach further from the centre than the sphere's own radius because
+          perspective scales the close ones up. Giving the heading its own band
+          and handing the rest to the stage means they cannot collide at any
+          size. */}
+      <div className="flex flex-col items-center gap-1 px-6 pt-6 text-center">
+        <h1 className="text-2xl font-semibold">
+          {openSection ? openSection.title : "Design system"}
+        </h1>
+        <p className="max-w-md text-sm text-muted-foreground">
+          {openSection
+            ? openSection.description
+            : "Every rule, pattern and primitive the product is built from."}
+        </p>
 
-        {items.map((item, index) => {
-          const arrival = settled ? null : orbitArrival(index, elapsed)
-          const node = orbitNode(
-            index,
-            count,
-            rotation + (arrival?.swing ?? 0),
-            radius * (arrival?.pull ?? 1),
-          )
-
-          return (
-            <div
-              className="absolute"
-              key={item.page.id}
-              style={{
-                opacity: node.opacity * (arrival?.opacity ?? 1),
-                transform: `translate3d(${node.x}px, ${node.y}px, 0) scale(${
-                  node.scale * (arrival?.scale ?? 1)
-                })`,
-                zIndex: node.z,
-              }}
-            >
-              {item.href ? (
-                /* A real link, so the address is copyable and a
-                   cmd-click still opens a second tab. The handler only
-                   takes over the plain case, which is the one that gets
-                   the panel. */
-                <Button asChild className="whitespace-nowrap" variant="outline">
-                  <Link
-                    href={item.href}
-                    onClick={(event) => {
-                      /* A flick that happened to end on a node turned the
-                         ring; it did not ask for this topic. */
-                      if (dragRef.current.moved > 6) {
-                        event.preventDefault()
-                        return
-                      }
-                      if (
-                        event.metaKey ||
-                        event.ctrlKey ||
-                        event.shiftKey ||
-                        event.altKey
-                      ) {
-                        return
-                      }
-                      event.preventDefault()
-                      open(item)
-                    }}
-                    onPointerEnter={() => router.prefetch(item.href as string)}
-                  >
-                    {item.page.title}
-                  </Link>
-                </Button>
-              ) : (
-                <Button
-                  className="whitespace-nowrap"
-                  onClick={() => {
-                    if (dragRef.current.moved > 6) return
-                    open(item)
-                  }}
-                  variant="secondary"
-                >
-                  {item.page.title}
-                  {/* The topic count, as a number rather than a pill: every
-                      node on this ring would carry one, and a badge on all
-                      five stops distinguishing anything. */}
-                  <span className="text-muted-foreground">{item.topics}</span>
-                </Button>
-              )}
-            </div>
-          )
-        })}
+        {openSection ? (
+          <Button
+            className="mt-2"
+            onClick={() => setOpenSection(null)}
+            size="sm"
+            variant="outline"
+          >
+            <AllSectionsIcon />
+            All sections
+          </Button>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            Drag to turn the sphere.
+          </p>
+        )}
       </div>
 
-      {/* The document arriving. A solid surface so the ring is covered by the
-          time the route swaps underneath it, carrying the heading at the size
-          and position the real page puts it — the panel lands and the page it
-          became is already wearing the same header. */}
+      <div
+        aria-label="Design system sections. Drag to turn the sphere, arrow keys to rotate."
+        className="relative min-h-0 flex-1 cursor-grab touch-none select-none outline-none"
+        onKeyDown={(event) => {
+          const step =
+            event.key === "ArrowLeft"
+              ? -KEY_STEP
+              : event.key === "ArrowRight"
+                ? KEY_STEP
+                : 0
+          const lift =
+            event.key === "ArrowUp"
+              ? -KEY_STEP
+              : event.key === "ArrowDown"
+                ? KEY_STEP
+                : 0
+
+          if (!step && !lift) return
+          event.preventDefault()
+          touched.current = true
+          target.current.x += step
+          target.current.y += lift
+          wake()
+        }}
+        onPointerCancel={onPointerUp}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        ref={stageRef}
+        role="application"
+        tabIndex={0}
+      >
+        {items.map((item, index) => (
+          /* `Item asChild` over a raw button: the primitive brings the ring,
+             the radius and the hover, and the button stays a real button. */
+          <Item
+            asChild
+            className="absolute start-1/2 top-1/2 w-24 flex-col items-stretch gap-2 opacity-0"
+            key={item.page.id}
+            variant="outline"
+          >
+            <button
+              data-sphere-node={index}
+              ref={(node) => {
+                nodeRefs.current[index] = node
+              }}
+              type="button"
+            >
+              {/* The illustration slot. Empty until there is art for it —
+                  a muted panel at the tile's aspect, so the sphere already
+                  has the shape the pictures will land in. */}
+              <span className="h-28 w-full rounded-md bg-muted" />
+              <span className="text-xs font-medium">{item.page.title}</span>
+              {item.topics ? (
+                <span className="text-xs text-muted-foreground">
+                  {item.topics} topics
+                </span>
+              ) : null}
+            </button>
+          </Item>
+        ))}
+      </div>
+
+      {/* The document arriving: a solid surface climbing from the bottom edge,
+          carrying the heading at the size and position the real page puts it,
+          so the panel lands already wearing the header it becomes. */}
       {entering ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 flex flex-col gap-8 bg-background p-3 lg:p-4"
+          className="pointer-events-none absolute inset-0 z-modal flex flex-col gap-8 bg-background p-3 lg:p-4"
           style={{
             transform: `translateY(${interpolate(
               enterMs,
@@ -489,7 +488,6 @@ export function DesignSystemOrbit() {
               [100, 0],
               { easing: easeOutCubic },
             )}%)`,
-            zIndex: 50,
           }}
         >
           <header className="flex flex-col gap-1">
@@ -500,6 +498,17 @@ export function DesignSystemOrbit() {
           </header>
         </div>
       ) : null}
+
+      {/* A sphere is a pointer toy. The same list, reachable without one. */}
+      <nav className="sr-only">
+        {items.map((item) =>
+          item.href ? (
+            <Link href={item.href} key={item.page.id}>
+              {item.page.title}
+            </Link>
+          ) : null,
+        )}
+      </nav>
     </div>
   )
 }
