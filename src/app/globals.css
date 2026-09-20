@@ -270,6 +270,19 @@
      lurching rather than the content changing. */
   --animate-pane-in: pane-in 0.2s var(--ease-out-cubic) both;
 
+  /* A small panel rising from the bottom edge — the affordance that answers a
+     click on the design system's orbit figure while the topic it names loads.
+
+     300ms, the top of the drawer band: it travels its own full height, which
+     is the longest distance anything in this system moves, and at 200ms that
+     reads as a snap rather than as something arriving. `both` so it holds the
+     start frame before it runs and the end frame after, instead of flashing at
+     its destination for one frame first.
+
+     Transform only. The panel carries a card's own surface, and fading a
+     surface in while it moves reads as two things happening to it. */
+  --animate-drawer-up: drawer-up 0.3s var(--ease-out-cubic) both;
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -331,6 +344,15 @@
     to {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes drawer-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
     }
   }
 

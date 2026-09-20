@@ -5,8 +5,15 @@ import { useRouter } from "next/navigation"
 import * as React from "react"
 
 import { AllSectionsIcon } from "@/components/design-system/icons"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Item } from "@/components/ui/item"
+import {
+  Card,
+  CardAction,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DOCS_SECTIONS,
   type DocsPage,
@@ -14,62 +21,48 @@ import {
 } from "@/lib/design-system/data"
 import { docsHref } from "@/lib/design-system/nav"
 import {
-  AUTO_AXIS,
-  AUTO_SPEED,
-  DRAG_SPEED,
-  ENTER_DURATION,
-  FRICTION,
-  IDENTITY,
-  KEY_STEP,
-  MOTION_FLOOR,
-  type Quat,
-  type Vec3,
-  REVEAL_RATE,
-  SMOOTHING,
-  TAP_SLOP,
-  X_AXIS,
-  Y_AXIS,
-  fibonacciSphere,
-  fromAxisAngle,
-  multiply,
-  normalize,
-  perspectiveFor,
-  project,
-  sphereRadius,
+  DRAW_DURATION,
+  OPEN_DELAY,
+  HUB,
+  LABEL_DURATION,
+  LABEL_STAGGER,
+  RINGS,
+  dotSpeed,
+  dots,
+  entranceEnd,
+  figureRadius,
+  placements,
+  ringPoint,
 } from "@/lib/design-system/orbit"
 import { easeOutCubic, interpolate } from "@/lib/reels/anim"
 
 /**
- * `/design-system` — the front door, as a sphere you can spin.
+ * `/design-system` — the front door, as an orbit diagram.
  *
- * The five sections sit on a Fibonacci sphere. Dragging turns it with inertia,
- * it drifts on its own until you touch it, and every node faces you however far
- * it has travelled. Opening a section rebuilds the sphere out of that section's
- * topics; opening a topic lifts the document up from the bottom edge and lands
- * on its real URL.
+ * A hub with orbits drawn through it, one label per section sitting on a curve,
+ * and dots travelling the paths. Opening a section redraws the figure out of
+ * that section's topics; opening a topic lifts the document up from the bottom
+ * edge and lands on its real URL.
  *
- * **The loop writes to the DOM, not to React state.** Fifteen nodes each
- * needing a new transform every frame is fifteen style writes, which is cheap;
- * the same thing as a state update is a full render tree fifteen times a
- * second-and-a-half of entrance plus every frame of every drag. So the motion
- * lives entirely in refs and `draw` sets `style.transform` directly. React owns
- * what is on the sphere, never where it is.
+ * **The loop writes to the DOM, not to React state.** The dots move every
+ * frame, and a dot's position as state would re-render the whole figure sixty
+ * times a second to move eighteen circles four pixels. React owns what is on
+ * the diagram; the loop owns where the moving parts are.
  *
- * Nothing here uses a `transition-*` or `animate-*` class either, which is why
- * none of this is quietly stretching the house motion tokens past the 300ms
- * they cap: a sphere's position is a function of a drag that is still
- * happening, and a CSS transition would be fighting for the same property.
+ * Nothing here uses a `transition-*` or `animate-*` class, so the house motion
+ * tokens — which cap a class-driven animation at 300ms — are not being quietly
+ * stretched to cover a 900ms draw-in.
  *
- * The clock stops when nothing is moving and any input restarts it, so an
- * untouched sphere that has finished drifting costs nothing.
+ * The clock stops when the entrance is done and reduced motion has stopped the
+ * dots; otherwise the dots are the one thing that keeps it running, because a
+ * diagram of orbits with nothing moving on them is just a drawing.
  */
 
-/** A thing on the sphere. Sections and topics differ only in what opening does. */
 type OrbitItem = {
   page: DocsPage
-  /** Topics only. Sections rebuild the sphere instead of navigating. */
+  /** Topics only. Sections redraw the figure instead of navigating. */
   href?: string
-  /** Sections only, for the count under the title. */
+  /** Sections only, for the count beside the title. */
   topics?: number
 }
 
@@ -107,155 +100,107 @@ export function DesignSystemOrbit() {
   const reduced = useReducedMotion()
 
   const [openSection, setOpenSection] = React.useState<DocsSection | null>(null)
+  const [stage, setStage] = React.useState({ height: 620, width: 1280 })
   const [entering, setEntering] = React.useState<{
     href: string
     page: DocsPage
   } | null>(null)
-  const [enterMs, setEnterMs] = React.useState(0)
 
   const items = React.useMemo(() => itemsFor(openSection), [openSection])
+  const spots = React.useMemo(() => placements(items.length), [items.length])
+  const riders = React.useMemo(() => dots(), [])
 
   const stageRef = React.useRef<HTMLDivElement>(null)
-  const nodeRefs = React.useRef<(HTMLButtonElement | null)[]>([])
+  const ringRefs = React.useRef<(SVGEllipseElement | null)[]>([])
+  const dotRefs = React.useRef<(SVGCircleElement | null)[]>([])
+  const labelRefs = React.useRef<(HTMLDivElement | null)[]>([])
 
-  /* The layout of the sphere is derived, so it is a memo. Everything the loop
-     mutates frame to frame is a ref, so a drag never re-renders. */
-  const points = React.useMemo(
-    () => fibonacciSphere(items.length),
-    [items.length],
-  )
-
-  const pointsRef = React.useRef<Vec3[]>([])
-  const rotation = React.useRef<Quat>(IDENTITY)
-  const target = React.useRef({ x: 0, y: 0 })
-  const smooth = React.useRef({ x: 0, y: 0 })
-  const velocity = React.useRef({ x: 0, y: 0 })
-  const reveal = React.useRef(0)
-  const touched = React.useRef(false)
   const rafRef = React.useRef<number | null>(null)
-  const lastRef = React.useRef(0)
+  const startRef = React.useRef(0)
+  const countRef = React.useRef(items.length)
+  countRef.current = items.length
+  const radiusRef = React.useRef(0)
   const reducedRef = React.useRef(reduced)
 
   React.useEffect(() => {
     reducedRef.current = reduced
   }, [reduced])
 
-  /* A named function expression so the loop can re-schedule itself by its own
-     binding. A self-referencing arrow held in a const is the same loop, but it
-     reads its own name out of the enclosing scope before that name exists. */
+  const radius = figureRadius(stage.width, stage.height)
+  radiusRef.current = radius
+
   const draw = React.useCallback(function step(now: number) {
     rafRef.current = null
 
-    const stage = stageRef.current
-    if (!stage) return
-
     const still = reducedRef.current
-    /* Capped: a backgrounded tab resumes with a gap of seconds, and applying
-       all of it in one step would fling the sphere. */
-    const dt = Math.min(32, now - (lastRef.current || now)) / 16.667
-    lastRef.current = now
+    const elapsed = still ? Number.MAX_SAFE_INTEGER : now - startRef.current
+    const r = radiusRef.current
 
-    if (still) {
-      velocity.current.x = 0
-      velocity.current.y = 0
-      smooth.current = { ...target.current }
-      reveal.current = 1
-    } else {
-      target.current.x += velocity.current.x * dt
-      target.current.y += velocity.current.y * dt
-      const friction = Math.pow(FRICTION, dt)
-      velocity.current.x *= friction
-      velocity.current.y *= friction
+    /* The orbits drawing themselves in. `pathLength={1}` normalises every
+       ellipse to one unit of stroke whatever its real circumference, so one
+       number drives all six regardless of how different their sizes are. */
+    const drawn = interpolate(elapsed, [0, DRAW_DURATION], [1, 0], {
+      easing: easeOutCubic,
+    })
+    for (const ring of ringRefs.current) {
+      if (ring) ring.style.strokeDashoffset = String(drawn)
     }
 
-    const previous = { ...smooth.current }
+    /* The labels, staggered, each arriving from slightly inside its orbit so
+       it settles outward onto the curve rather than fading in on top of it. */
+    for (let index = 0; index < labelRefs.current.length; index += 1) {
+      const label = labelRefs.current[index]
+      if (!label) continue
 
-    if (!still) {
-      const ease = 1 - Math.pow(1 - SMOOTHING, dt)
-      smooth.current.x += (target.current.x - smooth.current.x) * ease
-      smooth.current.y += (target.current.y - smooth.current.y) * ease
-      reveal.current += (1 - reveal.current) * (1 - Math.pow(REVEAL_RATE, dt))
+      const from = index * LABEL_STAGGER
+      const span = [from, from + LABEL_DURATION] as const
+      const at = interpolate(elapsed, span, [0, 1], { easing: easeOutCubic })
+
+      label.style.opacity = String(at)
+      label.style.transform = `translate(-50%, -50%) scale(${0.82 + at * 0.18})`
     }
 
-    /* Pre-multiplied, so each drag is applied in the viewer's frame rather
-       than in the sphere's — that is what keeps a sideways drag sideways
-       after the sphere has already been tilted. */
-    rotation.current = multiply(
-      fromAxisAngle(Y_AXIS, smooth.current.x - previous.x),
-      rotation.current,
-    )
-    rotation.current = multiply(
-      fromAxisAngle(X_AXIS, smooth.current.y - previous.y),
-      rotation.current,
-    )
+    /* The dots, riding their orbits. Position only — they do not fade in,
+       because a dot arriving is indistinguishable from a dot moving. */
+    const seconds = still ? 0 : elapsed / 1000
+    for (let index = 0; index < riders.length; index += 1) {
+      const dot = dotRefs.current[index]
+      const rider = riders[index]
+      if (!dot || !rider) continue
 
-    if (!touched.current && !still) {
-      rotation.current = multiply(
-        fromAxisAngle(AUTO_AXIS, AUTO_SPEED * dt),
-        rotation.current,
-      )
+      const t = (rider.t + seconds * dotSpeed(rider.ring)) % 1
+      const at = ringPoint(RINGS[rider.ring], t)
+      dot.setAttribute("cx", String(at.x * r))
+      dot.setAttribute("cy", String(at.y * r))
     }
 
-    rotation.current = normalize(rotation.current)
-
-    const width = stage.clientWidth
-    const height = stage.clientHeight
-    const radius = sphereRadius(width, height)
-    const perspective = perspectiveFor(height)
-
-    for (let index = 0; index < pointsRef.current.length; index += 1) {
-      const node = nodeRefs.current[index]
-      if (!node) continue
-
-      const at = project(
-        pointsRef.current[index],
-        rotation.current,
-        radius,
-        perspective,
-        reveal.current,
-      )
-
-      node.style.transform = `translate(-50%, -50%) translate3d(${at.x}px, ${at.y}px, 0) scale(${at.scale})`
-      node.style.opacity = String(at.opacity)
-      node.style.zIndex = String(at.z + 1000)
-    }
-
-    const drifting = !touched.current && !still
-    const moving =
-      Math.abs(velocity.current.x) +
-        Math.abs(velocity.current.y) +
-        Math.abs(target.current.x - smooth.current.x) +
-        Math.abs(target.current.y - smooth.current.y) >
-      MOTION_FLOOR
-
-    if (moving || reveal.current < 0.9999 || drifting) {
+    /* Reduced motion has no dots to keep running for, so once the figure has
+       settled the loop has nothing left to do. */
+    if (!still || elapsed < entranceEnd(countRef.current)) {
       rafRef.current = requestAnimationFrame(step)
     }
-  }, [])
+  }, [riders])
 
   const wake = React.useCallback(() => {
-    if (rafRef.current !== null || document.hidden) return
-    lastRef.current = performance.now()
+    if (rafRef.current !== null) return
     rafRef.current = requestAnimationFrame(draw)
   }, [draw])
 
-  /* Hands the new layout to the loop and rewinds the reveal, so mounting and
-     changing level both play the sphere out of the centre. Refs and a frame
-     request only — nothing here sets state. */
+  /* Mount and every level change replay the entrance. Refs and a frame request
+     only — nothing here sets state. */
   React.useEffect(() => {
-    pointsRef.current = points
-    nodeRefs.current = nodeRefs.current.slice(0, points.length)
-    reveal.current = 0
+    startRef.current = performance.now()
+    ringRefs.current = ringRefs.current.slice(0, RINGS.length)
+    labelRefs.current = labelRefs.current.slice(0, items.length)
     wake()
-  }, [points, wake])
+  }, [items, wake])
 
   React.useEffect(
     () => () => {
       /* Clearing the handle matters as much as cancelling the frame: `wake`
-         reads a non-null handle as "already running", so a cleanup that
-         cancelled without clearing would leave a dead id behind and every
-         later wake would return early. Strict Mode's double mount in
-         development hits that on the very first render. */
+         reads a non-null handle as "already running", so cancelling without
+         clearing leaves a dead id behind and every later wake returns early.
+         Strict Mode's double mount in development hits that on first render. */
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
@@ -265,125 +210,57 @@ export function DesignSystemOrbit() {
   )
 
   React.useEffect(() => {
-    const stage = stageRef.current
-    if (!stage) return
+    const element = stageRef.current
+    if (!element) return
 
-    const observer = new ResizeObserver(() => wake())
-    observer.observe(stage)
+    const observer = new ResizeObserver(([entry]) => {
+      const { height, width } = entry.contentRect
+      setStage({ height, width })
+    })
+    observer.observe(element)
     return () => observer.disconnect()
-  }, [wake])
+  }, [])
 
-  /* The drag. Pointer capture keeps a drag alive past the edge of the stage,
-     and costs the click: with the pointer captured, press and release no longer
-     share the node underneath, so the browser never synthesises one. The tap is
-     resolved by hit-testing the release point instead. */
-  const pointerId = React.useRef<number | null>(null)
-  const last = React.useRef({ x: 0, y: 0 })
-  const travel = React.useRef(0)
-
-  const openItem = React.useCallback(
-    (item: OrbitItem) => {
-      if (item.href) {
-        setEnterMs(0)
-        setEntering({ href: item.href, page: item.page })
-        return
-      }
-
-      const next = DOCS_SECTIONS.find((entry) => entry.id === item.page.id)
-      if (next) setOpenSection(next)
-    },
-    [],
-  )
-
-  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!event.isPrimary || event.button !== 0) return
-    pointerId.current = event.pointerId
-    last.current = { x: event.clientX, y: event.clientY }
-    travel.current = 0
-    touched.current = true
-    velocity.current = { x: 0, y: 0 }
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }
-
-  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (pointerId.current !== event.pointerId) return
-
-    const dx = event.clientX - last.current.x
-    const dy = event.clientY - last.current.y
-    last.current = { x: event.clientX, y: event.clientY }
-    travel.current += Math.hypot(dx, dy)
-
-    if (reducedRef.current) {
-      target.current.x += dx * DRAG_SPEED * 8
-      target.current.y += dy * DRAG_SPEED * 8
-    } else {
-      velocity.current.x += dx * DRAG_SPEED
-      velocity.current.y += dy * DRAG_SPEED
+  const open = React.useCallback((item: OrbitItem) => {
+    if (item.href) {
+      setEntering({ href: item.href, page: item.page })
+      return
     }
 
-    wake()
-  }
+    const next = DOCS_SECTIONS.find((entry) => entry.id === item.page.id)
+    if (next) setOpenSection(next)
+  }, [])
 
-  const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (pointerId.current !== event.pointerId) return
-    pointerId.current = null
+  /* One timeout, not a frame loop.
 
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId)
-    }
-
-    if (event.type !== "pointerup" || travel.current > TAP_SLOP) return
-
-    const hit = document
-      .elementFromPoint(event.clientX, event.clientY)
-      ?.closest<HTMLElement>("[data-sphere-node]")
-
-    if (!hit) return
-
-    const index = Number(hit.dataset.sphereNode)
-    const item = items[index]
-    if (item) openItem(item)
-  }
-
+     This used to drive the panel's own transform from `requestAnimationFrame`,
+     setting state every frame — which re-rendered the whole figure sixty times
+     a second to move one card, and was exactly why the climb stuttered. The
+     movement is a keyframe token now, so the compositor owns it and React is
+     left with one job: push the route once the panel has landed. */
   React.useEffect(() => {
     if (!entering) return
 
+    /* No climb to wait for, so there is no reason to make them wait for one. */
     if (reduced) {
       router.push(entering.href)
       return
     }
 
-    const start = performance.now()
-    let frame = 0
-    let pushed = false
-
-    const climb = (now: number) => {
-      const ms = now - start
-      setEnterMs(ms)
-
-      /* Pushed a little before the panel lands: the topic routes are
-         prerendered, so the real page is painted underneath by the time the
-         panel covers the sphere and the swap has nothing to show. */
-      if (!pushed && ms >= ENTER_DURATION * 0.72) {
-        pushed = true
-        router.push(entering.href)
-      }
-
-      if (ms < ENTER_DURATION) frame = requestAnimationFrame(climb)
-    }
-
-    frame = requestAnimationFrame(climb)
-    return () => cancelAnimationFrame(frame)
+    const timer = window.setTimeout(
+      () => router.push(entering.href),
+      OPEN_DELAY,
+    )
+    return () => window.clearTimeout(timer)
   }, [entering, reduced, router])
+
+  const cx = stage.width / 2
+  const cy = stage.height / 2
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-      {/* In flow above the stage, not floating over it. Absolutely placed, the
-          near face of the sphere rides straight through the title — the nodes
-          reach further from the centre than the sphere's own radius because
-          perspective scales the close ones up. Giving the heading its own band
-          and handing the rest to the stage means they cannot collide at any
-          size. */}
+      {/* In flow above the figure, not floating over it, so the orbits and the
+          title can never collide at any size. */}
       <div className="flex flex-col items-center gap-1 px-6 pt-6 text-center">
         <h1 className="text-2xl font-semibold">
           {openSection ? openSection.title : "Design system"}
@@ -404,111 +281,140 @@ export function DesignSystemOrbit() {
             <AllSectionsIcon />
             All sections
           </Button>
-        ) : (
-          <p className="text-xs text-muted-foreground">
-            Drag to turn the sphere.
-          </p>
-        )}
+        ) : null}
       </div>
 
-      <div
-        aria-label="Design system sections. Drag to turn the sphere, arrow keys to rotate."
-        className="relative min-h-0 flex-1 cursor-grab touch-none select-none outline-none"
-        onKeyDown={(event) => {
-          const step =
-            event.key === "ArrowLeft"
-              ? -KEY_STEP
-              : event.key === "ArrowRight"
-                ? KEY_STEP
-                : 0
-          const lift =
-            event.key === "ArrowUp"
-              ? -KEY_STEP
-              : event.key === "ArrowDown"
-                ? KEY_STEP
-                : 0
+      <div className="relative min-h-0 flex-1" ref={stageRef}>
+        <svg
+          aria-hidden
+          className="absolute inset-0 h-full w-full"
+          height={stage.height}
+          width={stage.width}
+        >
+          <g transform={`translate(${cx} ${cy})`}>
+            {RINGS.map((ring, index) => (
+              <ellipse
+                className="fill-none stroke-border"
+                key={index}
+                pathLength={1}
+                ref={(node) => {
+                  ringRefs.current[index] = node
+                }}
+                rx={ring.rx * radius}
+                ry={ring.ry * radius}
+                strokeDasharray={1}
+                strokeDashoffset={1}
+                strokeWidth={1}
+                transform={`rotate(${ring.rotate})`}
+              />
+            ))}
 
-          if (!step && !lift) return
-          event.preventDefault()
-          touched.current = true
-          target.current.x += step
-          target.current.y += lift
-          wake()
-        }}
-        onPointerCancel={onPointerUp}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        ref={stageRef}
-        role="application"
-        tabIndex={0}
-      >
-        {items.map((item, index) => (
-          /* `Item asChild` over a raw button: the primitive brings the ring,
-             the radius and the hover, and the button stays a real button. */
-          <Item
-            asChild
-            className="absolute start-1/2 top-1/2 w-24 flex-col items-stretch gap-2 opacity-0"
-            key={item.page.id}
-            variant="outline"
-          >
-            <button
-              data-sphere-node={index}
+            {riders.map((rider, index) => (
+              <circle
+                className="fill-muted-foreground"
+                key={index}
+                r={2}
+                ref={(node) => {
+                  dotRefs.current[index] = node
+                }}
+              />
+            ))}
+
+            {/* The hub. A tinted disc rather than a mark: whatever sits at the
+                centre of this figure is the thing the orbits belong to, and
+                that is the page you are already on. */}
+            <circle className="fill-primary-tint" r={HUB * radius} />
+            <circle
+              className="fill-none stroke-border"
+              r={HUB * radius}
+              strokeWidth={1}
+            />
+          </g>
+        </svg>
+
+        {items.map((item, index) => {
+          const spot = spots[index]
+          const at = ringPoint(RINGS[spot.ring], spot.t)
+
+          return (
+            <div
+              className="absolute opacity-0"
+              key={item.page.id}
               ref={(node) => {
-                nodeRefs.current[index] = node
+                labelRefs.current[index] = node
               }}
-              type="button"
+              style={{
+                insetInlineStart: `${cx + at.x * radius}px`,
+                top: `${cy + at.y * radius}px`,
+              }}
             >
-              {/* The illustration slot. Empty until there is art for it —
-                  a muted panel at the tile's aspect, so the sphere already
-                  has the shape the pictures will land in. */}
-              <span className="h-28 w-full rounded-md bg-muted" />
-              <span className="text-xs font-medium">{item.page.title}</span>
-              {item.topics ? (
-                <span className="text-xs text-muted-foreground">
-                  {item.topics} topics
-                </span>
-              ) : null}
-            </button>
-          </Item>
-        ))}
+              {/* `Badge asChild` over a real link or a real button: the
+                  primitive is already the pill, and the child stays the right
+                  element. Two Badges rather than one wrapping a ternary — the
+                  anchor has to be the pill's immediate child for `asChild` to
+                  merge onto it at all. */}
+              {item.href ? (
+                <Badge asChild variant="secondary">
+                  <Link
+                    href={item.href}
+                    onClick={(event) => {
+                      if (
+                        event.metaKey ||
+                        event.ctrlKey ||
+                        event.shiftKey ||
+                        event.altKey
+                      ) {
+                        return
+                      }
+                      event.preventDefault()
+                      open(item)
+                    }}
+                    onPointerEnter={() => router.prefetch(item.href as string)}
+                  >
+                    {item.page.title}
+                  </Link>
+                </Badge>
+              ) : (
+                <Badge asChild variant="secondary">
+                  <button onClick={() => open(item)} type="button">
+                    {item.page.title}
+                    <span className="text-muted-foreground">{item.topics}</span>
+                  </button>
+                </Badge>
+              )}
+            </div>
+          )
+        })}
       </div>
 
-      {/* The document arriving: a solid surface climbing from the bottom edge,
-          carrying the heading at the size and position the real page puts it,
-          so the panel lands already wearing the header it becomes. */}
+      {/* The drawer. A narrow card standing up from the bottom edge rather
+          than a full-bleed sheet: the topic it names is prerendered and arrives
+          in a third of a second, so this is an acknowledgement of the click,
+          and something that covers the page to say "one moment" is louder than
+          the thing it is announcing.
+
+          `animate-drawer-up` rather than a transition on a state flip — a
+          keyframe runs on mount with nothing to toggle, so there is no first
+          frame at the destination to hide. */}
       {entering ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-modal flex flex-col gap-8 bg-background p-3 lg:p-4"
-          style={{
-            transform: `translateY(${interpolate(
-              enterMs,
-              [0, ENTER_DURATION],
-              [100, 0],
-              { easing: easeOutCubic },
-            )}%)`,
-          }}
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-modal flex justify-center px-4"
         >
-          <header className="flex flex-col gap-1">
-            <h1 className="text-2xl font-semibold">{entering.page.title}</h1>
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              {entering.page.description}
-            </p>
-          </header>
+          <Card
+            className="w-full max-w-sm animate-drawer-up motion-reduce:animate-none"
+            size="sm"
+          >
+            <CardHeader>
+              <CardTitle>{entering.page.title}</CardTitle>
+              <CardAction>
+                <Spinner />
+              </CardAction>
+            </CardHeader>
+          </Card>
         </div>
       ) : null}
 
-      {/* A sphere is a pointer toy. The same list, reachable without one. */}
-      <nav className="sr-only">
-        {items.map((item) =>
-          item.href ? (
-            <Link href={item.href} key={item.page.id}>
-              {item.page.title}
-            </Link>
-          ) : null,
-        )}
-      </nav>
     </div>
   )
 }

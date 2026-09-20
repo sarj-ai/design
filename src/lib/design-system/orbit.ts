@@ -1,218 +1,180 @@
 /**
- * The sphere on `/design-system` — geometry and timing, with no React in it.
+ * The orbit diagram on `/design-system` — geometry and timing, no React in it.
  *
- * Nodes sit on a **Fibonacci sphere** and the whole sphere is turned by a
- * **quaternion**, not by two Euler angles. That choice is the difference
- * between a globe and a carousel: with pitch and yaw kept as separate numbers,
- * dragging sideways after dragging up turns the sphere about the wrong axis,
- * because "sideways" is still measured against the world while the sphere has
- * already tilted. Pre-multiplying a fresh axis-angle rotation onto the
- * accumulated one applies each drag in the viewer's frame instead, so a
- * horizontal drag always spins it horizontally whatever came before, and there
- * is no gimbal lock at the poles.
+ * A hub with a set of ellipses drawn through it, labels sitting on the curves,
+ * and dots travelling round them. Every ellipse shares the hub as its centre
+ * and differs only in width, height and tilt, which is what produces the
+ * lens pattern: a wide flat ellipse reads as a long orbit, and the same ellipse
+ * turned forty degrees reads as a pair of lines crossing the middle. The
+ * "spokes" in a figure like this are not spokes — they are the narrow orbits
+ * seen almost edge-on.
  *
- * Each node is then projected through a real perspective divide, so one on the
- * near face is genuinely larger than one on the far face. The nodes themselves
- * are ordinary DOM and are never rotated — they always face the viewer, which
- * is what keeps their text readable at every angle.
- *
- * `three` would supply `Quaternion` and `Vector3`, but it is not a dependency
- * here, and adding it for two small classes would also add it to the npm
- * dependencies of every registry item that reaches this file. The formulae
- * below are the standard ones.
+ * Positions are computed in a unit space where 1 is the figure's half-width,
+ * then multiplied by a radius the stage decides. Keeping the shape independent
+ * of the pixel size is what lets the same figure be right on a laptop and on a
+ * wide monitor without a second set of numbers.
  */
 
-export type Vec3 = { x: number; y: number; z: number }
-
-/** `w` is the scalar part. */
-export type Quat = { w: number; x: number; y: number; z: number }
-
-export const IDENTITY: Quat = { w: 1, x: 0, y: 0, z: 0 }
+/** One ellipse through the hub. `rx`/`ry` are fractions of the figure radius. */
+export type Ring = { rx: number; ry: number; rotate: number }
 
 /**
- * `count` points spread evenly over the unit sphere.
+ * The orbits, widest first.
  *
- * The golden-angle spiral, which is the usual answer to "put N points on a
- * sphere without them clumping". A latitude/longitude grid crowds hard at the
- * poles, and the crowding is obvious the moment the sphere turns.
+ * Four increasingly narrow upright ellipses give the nested-lens core; the two
+ * tilted flat ones give the long diagonals that read as spokes. Tilts are not
+ * mirror images of each other on purpose — a figure whose every curve has an
+ * exact opposite reads as a logo, and this one wants to read as a diagram.
  */
-export function fibonacciSphere(count: number): Vec3[] {
-  if (count <= 0) return []
+export const RINGS: Ring[] = [
+  { rotate: 0, rx: 1, ry: 0.46 },
+  { rotate: 0, rx: 0.72, ry: 0.5 },
+  { rotate: 0, rx: 0.34, ry: 0.52 },
+  { rotate: 0, rx: 0.13, ry: 0.5 },
+  { rotate: 27, rx: 0.94, ry: 0.2 },
+  { rotate: -34, rx: 0.88, ry: 0.16 },
+]
 
-  const golden = Math.PI * (3 - Math.sqrt(5))
+/** The hub's radius, as a fraction of the figure radius. */
+export const HUB = 0.075
 
-  return Array.from({ length: count }, (_, index) => {
-    const y = (index * 2) / count - 1 + 1 / count
-    const ring = Math.sqrt(Math.max(0, 1 - y * y))
-    const theta = golden * index
+export type Point = { x: number; y: number }
 
-    return { x: Math.cos(theta) * ring, y, z: Math.sin(theta) * ring }
-  })
-}
+/**
+ * The point at parameter `t` on `ring`, in figure units.
+ *
+ * `t` runs 0 to 1 around the ellipse. Note this is the parametric angle, not
+ * the polar one — on a flat ellipse the two diverge sharply, which is exactly
+ * why dots spaced evenly in `t` bunch up at the ends of a long orbit and spread
+ * out across its middle. That is the correct behaviour for something travelling
+ * an orbit, so it is left alone.
+ */
+export function ringPoint(ring: Ring, t: number): Point {
+  const angle = t * Math.PI * 2
+  const tilt = (ring.rotate * Math.PI) / 180
+  const x = ring.rx * Math.cos(angle)
+  const y = ring.ry * Math.sin(angle)
 
-/** A rotation of `angle` radians about `axis`, which must be unit length. */
-export function fromAxisAngle(axis: Vec3, angle: number): Quat {
-  const half = angle / 2
-  const sin = Math.sin(half)
-
-  return { w: Math.cos(half), x: axis.x * sin, y: axis.y * sin, z: axis.z * sin }
-}
-
-/** `a * b` — the rotation `b`, then the rotation `a`. */
-export function multiply(a: Quat, b: Quat): Quat {
   return {
-    w: a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
-    x: a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
-    y: a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
-    z: a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
+    x: x * Math.cos(tilt) - y * Math.sin(tilt),
+    y: x * Math.sin(tilt) + y * Math.cos(tilt),
   }
 }
 
+/** Where one label sits: which orbit, and how far round it. */
+export type Placement = { ring: number; t: number }
+
+/** How far above and below the hub the outermost label sits, in radians. */
+const FAN = Math.PI / 3
+
 /**
- * Scale back to unit length.
+ * Which orbit a label sits on, by how far it is from the hub's own level.
  *
- * Every frame, because each drag multiplies another quaternion in and the
- * rounding error in those products compounds until the sphere visibly shears.
+ * Read left to right: a label level with the hub takes the narrow orbit, and
+ * one at the top or bottom of the fan takes the widest. That inversion is what
+ * squares the figure off. Put every label on one orbit instead and the column
+ * bows inward at its ends, because the far side of an ellipse curves back
+ * towards the centre — the top and bottom labels end up nearer the middle than
+ * the one beside them, which reads as a mistake rather than as a curve.
+ *
+ * Only upright orbits are listed. A label on a tilted one cannot have a mirror
+ * image, and the mirroring is the point.
  */
-export function normalize(q: Quat): Quat {
-  const length = Math.hypot(q.w, q.x, q.y, q.z)
-  if (length === 0) return IDENTITY
+const LADDER = [2, 1, 0]
 
-  return { w: q.w / length, x: q.x / length, y: q.y / length, z: q.z / length }
-}
+/**
+ * Labels in mirrored rows, one pair either side of the hub.
+ *
+ * Every row places both of its labels from a single angle: an ellipse is
+ * symmetric about its own vertical axis, so the point at `t` and the point at
+ * `π − t` share a `y` and differ only in the sign of their `x`. One number, two
+ * labels, and they cannot drift apart.
+ *
+ * Rows rather than two independently fanned columns. Fanning each side on its
+ * own looks identical while the count is even and falls apart the moment it is
+ * not: a column of six and a column of five spread across the same arc put
+ * their labels at different heights, so only the topmost and bottommost pair
+ * line up and everything between them reads as scattered.
+ *
+ * An odd label goes under the hub on the centre line, where being unpaired is
+ * the point rather than a gap. Hanging it off one side instead leaves a hole
+ * opposite it, which is the same failure in a different place.
+ */
+export function placements(count: number): Placement[] {
+  const pairs = Math.floor(count / 2)
+  const wrap = (angle: number) => (((angle / (Math.PI * 2)) % 1) + 1) % 1
+  const spots: Placement[] = []
 
-/** Turn `v` by `q`. */
-export function rotate(v: Vec3, q: Quat): Vec3 {
-  /* q * v * q⁻¹, with the conjugate folded in rather than built separately. */
-  const ix = q.w * v.x + q.y * v.z - q.z * v.y
-  const iy = q.w * v.y + q.z * v.x - q.x * v.z
-  const iz = q.w * v.z + q.x * v.y - q.y * v.x
-  const iw = -q.x * v.x - q.y * v.y - q.z * v.z
+  for (let row = 0; row < pairs; row += 1) {
+    /* +1 at the top of the fan, -1 at the bottom, 0 level with the hub. */
+    const height = pairs === 1 ? 0 : 1 - (row / (pairs - 1)) * 2
 
-  return {
-    x: ix * q.w + iw * -q.x + iy * -q.z - iz * -q.y,
-    y: iy * q.w + iw * -q.y + iz * -q.x - ix * -q.z,
-    z: iz * q.w + iw * -q.z + ix * -q.y - iy * -q.x,
+    /* Negated because y grows downward on screen: the top of the fan is a
+       negative y, which is a negative sine. */
+    const angle = -height * FAN
+
+    /* A lone row takes the widest orbit rather than the narrow one the ladder
+       would give it — with nothing above or below to square off against, a
+       pair tucked in beside the hub just looks cramped. */
+    const ring =
+      pairs === 1
+        ? 0
+        : LADDER[Math.round(Math.abs(height) * (LADDER.length - 1))]
+
+    spots.push({ ring, t: wrap(angle) })
+    spots.push({ ring, t: wrap(Math.PI - angle) })
   }
+
+  /* Straight down from the hub, on the tallest orbit so it clears the bottom
+     row rather than landing on top of it. */
+  if (count % 2 === 1) spots.push({ ring: LADDER[0], t: 0.25 })
+
+  return spots
 }
 
-/** The world axes a drag turns the sphere about. */
-export const Y_AXIS: Vec3 = { x: 0, y: 1, z: 0 }
-export const X_AXIS: Vec3 = { x: 1, y: 0, z: 0 }
-
-/**
- * The idle axis, tilted 23° off vertical.
- *
- * A sphere turning about a perfectly upright axis reads as a machine. Tilting
- * it means the nodes trace visibly different paths across a turn, which is what
- * makes the motion look like it has a shape rather than a period.
- */
-export const AUTO_AXIS: Vec3 = {
-  x: Math.sin((23 * Math.PI) / 180),
-  y: Math.cos((23 * Math.PI) / 180),
-  z: 0,
-}
-
-/** Radians per 16ms step while idle. */
-export const AUTO_SPEED = 0.001
-
-/** Angular impulse per pixel of drag. */
-export const DRAG_SPEED = 0.001
-
-/** What one arrow-key press adds, in radians. */
-export const KEY_STEP = 0.3
-
-/** Speed kept per 16ms step once the drag ends. */
-export const FRICTION = 0.94
-
-/** How fast the drawn angle chases the target angle, per 16ms step. */
-export const SMOOTHING = 0.11
-
-/** How fast the sphere grows out of the centre on arrival, per 16ms step. */
-export const REVEAL_RATE = 0.9
-
-/** Below this the coast has stopped and the loop can idle. */
-export const MOTION_FLOOR = 0.00001
-
-/** Pixels of pointer travel past which a press was a drag, not a click. */
-export const TAP_SLOP = 6
-
-/** How long the doc panel takes to climb from the bottom edge. */
-export const ENTER_DURATION = 460
-
-/** How far a node at the far pole is faded back. */
-const DEPTH_FADE = 0.3
-
-export type Projected = {
-  /** Screen offset from the centre of the stage, in pixels. */
-  x: number
-  y: number
-  /** Perspective scale: above 1 on the near face, below it on the far. */
-  scale: number
-  opacity: number
-  /** Paint order, so the near face covers the far one. */
-  z: number
-}
-
-/**
- * The camera's focal length for a stage this tall — a 60° vertical field.
- *
- * Derived from the height rather than fixed, so the amount of perspective looks
- * the same on a laptop and on a tall monitor. A fixed focal length makes a
- * short window look flat and a tall one look like a fisheye.
- */
-export function perspectiveFor(height: number): number {
-  return height / (2 * Math.tan(Math.PI / 6))
-}
-
-/**
- * The sphere's radius for a stage this size.
- *
- * Well under half the stage on purpose. A node's distance from the centre is
- * the radius times its perspective scale, and the near face scales up — so a
- * radius sized to the stage puts the closest nodes, the large ones, off the
- * bottom of it.
- */
-export function sphereRadius(width: number, height: number): number {
-  return Math.max(110, Math.min(width, height) * 0.26)
-}
-
-/**
- * Where a unit-sphere point lands on screen once turned and projected.
- *
- * `reveal` runs 0 to 1 and scales the radius, so the whole sphere grows out of
- * one point at the centre — that is the entrance, and the same number fades the
- * nodes in as they travel out.
- */
-export function project(
-  point: Vec3,
-  rotation: Quat,
-  radius: number,
-  perspective: number,
-  reveal: number,
-): Projected {
-  const spread = radius * reveal
-  const turned = rotate(
-    { x: point.x * spread, y: point.y * spread, z: point.z * spread },
-    rotation,
+/** Dots riding each orbit, as `[ring, startingT]` pairs. */
+export function dots(): { ring: number; t: number }[] {
+  return RINGS.flatMap((_, ring) =>
+    /* Three to an orbit, offset so they never line up into a spoke. */
+    [0, 0.37, 0.71].map((t) => ({ ring, t: (t + ring * 0.13) % 1 })),
   )
-
-  /* The perspective divide. Guarded because a node landing exactly on the
-     camera plane would divide by zero and fling itself off the stage. */
-  const scale = perspective / Math.max(1, perspective - turned.z)
-
-  /* A depth fade on top of the perspective scale. The scale alone leaves
-     far-face text at full strength behind near-face text, and two labels of
-     equal weight overlapping is the one thing that makes a sphere of words
-     unreadable. */
-  const depth = (turned.z / (radius || 1) + 1) / 2
-
-  return {
-    opacity: reveal * (DEPTH_FADE + depth * (1 - DEPTH_FADE)),
-    scale,
-    x: turned.x * scale,
-    /* Screen y grows downward, sphere y grows upward. */
-    y: -turned.y * scale,
-    z: Math.round(turned.z),
-  }
 }
+
+/** Turns per second for a dot on `ring`. Outer orbits travel slower. */
+export function dotSpeed(ring: number): number {
+  return 0.035 / (0.6 + RINGS[ring].rx)
+}
+
+/** The figure's radius for a stage this size. */
+export function figureRadius(width: number, height: number): number {
+  /* Bounded by both axes: the figure is roughly twice as wide as it is tall,
+     so height is the binding constraint on a short window and width on a
+     narrow one. */
+  return Math.max(160, Math.min(width * 0.42, height * 0.78))
+}
+
+/** Milliseconds between one label's arrival and the next. */
+export const LABEL_STAGGER = 90
+
+/** How long one label takes to arrive. */
+export const LABEL_DURATION = 520
+
+/** How long the orbits take to draw themselves in. */
+export const DRAW_DURATION = 900
+
+/** When every label of a figure this size has arrived. */
+export function entranceEnd(count: number): number {
+  return Math.max(
+    DRAW_DURATION,
+    Math.max(count - 1, 0) * LABEL_STAGGER + LABEL_DURATION,
+  )
+}
+
+/**
+ * How long to let the drawer stand before the route is pushed.
+ *
+ * Slightly past the 300ms the `drawer-up` token takes, so the panel has landed
+ * rather than being swapped out mid-climb. The topic routes are prerendered, so
+ * this is the whole wait — it is an affordance, not a loading screen.
+ */
+export const OPEN_DELAY = 340

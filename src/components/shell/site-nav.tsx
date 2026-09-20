@@ -12,6 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
 import { Separator } from "@/components/ui/separator"
+import { NavSearch } from "@/components/shell/nav-search"
 import { SarjMark } from "@/components/shell/sarj-mark"
 import {
   MockupsFigure,
@@ -130,13 +131,6 @@ export function SiteNav({
           <SarjMark />
         </Link>
 
-        {/* The name only where nothing else is named. On a mockup the title
-            below says where you are, and two names in one pill is one too
-            many. */}
-        {title ? null : (
-          <span className="pe-2 ps-1 text-sm font-semibold">Design lab</span>
-        )}
-
         <NavigationMenu>
           <NavigationMenuList>
             {MENUS.map((menu) => (
@@ -170,6 +164,10 @@ export function SiteNav({
         {actions ? (
           <div className="flex shrink-0 items-center gap-1">{actions}</div>
         ) : null}
+
+        {/* Last, so it is the end of the pill on every page whether or not
+            that page brought a title or controls of its own. */}
+        <NavSearch />
       </nav>
     </div>
   )

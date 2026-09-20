@@ -3,7 +3,6 @@
 import Link from "next/link"
 import * as React from "react"
 
-import { AppHeader } from "@/components/shell/app-shell"
 import { SiteNav } from "@/components/shell/site-nav"
 import { AllSectionsIcon } from "@/components/design-system/icons"
 import { Button } from "@/components/ui/button"
@@ -54,13 +53,18 @@ export function DesignSystemDocs({
   /** Topic id → what its pane renders. */
   views: Record<string, React.ReactNode>
 }) {
-  /* The overview is the sphere. `DocsOverview` — a grid of five cards listing
-     the same five sections — went with the rail. */
+  /* The overview is the orbit figure. `DocsOverview` — a grid of five cards
+     listing the same five sections — went with the rail.
+
+     No `AppHeader` on it either. Its trail here read "Home › Design system",
+     which is the nav above it saying the same thing twice, and the figure
+     wants the height more than the breadcrumb wants the row. A topic still
+     gets one, because there the trail names which topic of which section is
+     open. */
   if (!page) {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <SiteNav />
-        <AppHeader trail={["Design system"]} />
         <DesignSystemOrbit />
       </div>
     )
@@ -70,55 +74,56 @@ export function DesignSystemDocs({
     <>
       <SiteNav />
 
-      <div className="flex min-h-0 flex-1 flex-col">
-        {/* The product's own row, kept: the trail is what says which topic of
-            which section you have open. */}
-        <AppHeader
-          actions={
-            <>
+      {/* No `AppHeader` on a topic either. Its trail restated the nav above
+          it and then the title below it, so the row cost height to say a third
+          time what the page already says twice. The two controls it carried
+          were worth keeping, so they moved onto the page's own header, beside
+          the title they act on. */}
+      <div className="min-h-0 flex-1 overflow-auto">
+        {/* Keyed on the topic so React replaces the pane rather than patching
+            it, which is what gives the new one an entrance to play.
+
+            Capped and centred, which the rail used to do by taking 15rem off
+            the side. Full-bleed prose on a wide monitor is a 1400px line
+            length, and the tables on these pages still have room at this
+            width. */}
+        <main
+          className="mx-auto flex w-full max-w-5xl animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
+          key={activeId}
+        >
+          <header className="flex items-start justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              {/* Which shelf this topic sits on. The breadcrumb said it and is
+                  gone; a topic title alone does not tell you that Choice is a
+                  shadcn component rather than a pattern. */}
+              {section && page.id !== section.id ? (
+                <p className="text-sm text-muted-foreground">{section.title}</p>
+              ) : null}
+              <h1 className="text-2xl font-semibold">{page.title}</h1>
+              <p className="max-w-2xl text-sm text-muted-foreground">
+                {page.description}
+              </p>
+            </div>
+
+            {/* Pinned to the title's line rather than centred on the block, as
+                every other trailing action in this system is. */}
+            <div className="flex shrink-0 items-center gap-2">
               {/* Every topic has an address, so the one thing a reader wants
                   from a reference page — hand this exact page to someone — is
                   a control rather than a trip to the address bar. */}
               <CopyLinkButton />
-              {/* With the rail gone this is the only way back up, so it is a
-                  control rather than a breadcrumb nobody can click. */}
+              {/* With the rail gone this is the only way back up. */}
               <Button asChild size="sm" variant="outline">
                 <Link href={DOCS_ROOT}>
                   <AllSectionsIcon />
                   All sections
                 </Link>
               </Button>
-            </>
-          }
-          trail={
-            section && page.id !== section.id
-              ? ["Design system", section.title, page.title]
-              : ["Design system", page.title]
-          }
-        />
+            </div>
+          </header>
 
-        <div className="min-h-0 flex-1 overflow-auto">
-          {/* Keyed on the topic so React replaces the pane rather than patching
-              it, which is what gives the new one an entrance to play.
-
-              Capped and centred, which the rail used to do by taking 15rem off
-              the side. Full-bleed prose on a wide monitor is a 1400px line
-              length, and the tables on these pages still have room at this
-              width. */}
-          <main
-            className="mx-auto flex w-full max-w-5xl animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
-            key={activeId}
-          >
-            <header className="flex flex-col gap-1">
-              <h1 className="text-2xl font-semibold">{page.title}</h1>
-              <p className="max-w-2xl text-sm text-muted-foreground">
-                {page.description}
-              </p>
-            </header>
-
-            {views[activeId]}
-          </main>
-        </div>
+          {views[activeId]}
+        </main>
       </div>
     </>
   )

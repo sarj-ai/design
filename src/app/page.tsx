@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react"
+import { useMemo } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -20,46 +14,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/input-group"
-import { Kbd } from "@/components/ui/kbd"
 import { Separator } from "@/components/ui/separator"
-import {
-  ClearIcon,
-  OpenIcon,
-  SearchIcon,
-} from "@/components/shell/workspace-icons"
+import { OpenIcon } from "@/components/shell/workspace-icons"
 import { SiteNav } from "@/components/shell/site-nav"
 import { HeyClick } from "@/components/site/hey-click"
 import { LinkMenu } from "@/components/site/link-menu"
 import { RegistryMenu } from "@/components/site/registry-menu"
 import { SurfaceDock } from "@/components/site/surface-dock"
 import {
+  MOCKUPS,
   groupBySurface,
-  searchMockups,
   surfaceId,
   surfaceLabel,
 } from "@/lib/site/mockups-data"
 import thumbnails from "@/lib/site/thumbnails.json"
 
 export default function Home() {
-  const [query, setQuery] = useState("")
-  const groups = useMemo(
-    () =>
-      groupBySurface(searchMockups(query), { ranked: query.trim().length > 0 }),
-    [query],
-  )
+  /* Every mockup, always. The field that used to filter this list lives in
+     the nav now and reaches the reels and the design system too, so it
+     navigates rather than filtering — which means this page has nothing left
+     to hide and no empty state to reach. */
+  const groups = useMemo(() => groupBySurface(MOCKUPS), [])
 
   /* Memoised because the dock re-measures the page whenever this identity
      changes, and a fresh array every render would mean every render. */
@@ -72,82 +47,20 @@ export default function Home() {
     [groups],
   )
 
-  const search = useRef<HTMLInputElement>(null)
-
-  /* This page is a search field and the list it filters, so the browser's own
-     find bar is the wrong tool on it — that one searches the cards already on
-     screen, not the mockups the query has hidden. ⌘F goes to the field. */
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key.toLowerCase() !== "f") return
-      if (!event.metaKey && !event.ctrlKey) return
-
-      event.preventDefault()
-      search.current?.focus()
-      search.current?.select()
-    }
-
-    window.addEventListener("keydown", onKeyDown)
-    return () => window.removeEventListener("keydown", onKeyDown)
-  }, [])
-
-  const modifier = useModifierKey()
 
   return (
     <>
       {/* The design system and the reels used to be two outline buttons in
-          this header. They are two menus in the nav now, on every page rather
-          than on this one. */}
-      <SiteNav actions={<HeyClick />} />
+          a header on this page. They are two menus in the nav now, on every
+          page rather than on this one, and the search field went with them:
+          on the index the nav is where you say what you are looking for,
+          and being sticky it stays within reach however far the list goes. */}
+      <SiteNav
+        actions={<HeyClick />}
+      />
 
       <main className="mx-auto flex w-full max-w-350 flex-col gap-8 px-8 pb-8">
-        <header className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-semibold">Design lab</h1>
-
-          <InputGroup className="w-full sm:w-80">
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              ref={search}
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search mockups"
-              aria-label="Search mockups"
-            />
-            {query ? (
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  size="icon-xs"
-                  aria-label="Clear search"
-                  onClick={() => setQuery("")}
-                >
-                  <ClearIcon />
-                </InputGroupButton>
-              </InputGroupAddon>
-            ) : modifier ? (
-              <InputGroupAddon align="inline-end">
-                <Kbd>{modifier}F</Kbd>
-              </InputGroupAddon>
-            ) : null}
-          </InputGroup>
-        </header>
-
-        {groups.length === 0 ? (
-          <Empty className="border">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <SearchIcon />
-              </EmptyMedia>
-              <EmptyTitle>No mockups match “{query}”</EmptyTitle>
-              <EmptyDescription>
-                Try fewer characters, a ticket ID like DES-149, or a surface
-                like Settings.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : (
-          groups.map(({ surface, mockups }, group) => (
+        {          groups.map(({ surface, mockups }, group) => (
             <section
               key={surfaceId(surface)}
               id={surfaceId(surface)}
@@ -279,8 +192,7 @@ export default function Home() {
                 })}
               </div>
             </section>
-          ))
-        )}
+          ))}
 
         {/* Nothing to navigate between until there are two groups, and the
           reader who has just searched the list down to one does not need a
@@ -291,20 +203,3 @@ export default function Home() {
   )
 }
 
-/** The keyboard never changes under us, so there is nothing to subscribe to. */
-const NEVER_CHANGES = () => () => {}
-
-/**
- * Which modifier to print in the shortcut hint.
- *
- * It depends on the reader's keyboard, which the server has no way to know, so
- * the hint is empty until hydration rather than rendering one modifier and
- * correcting itself to the other in front of the reader.
- */
-function useModifierKey() {
-  return useSyncExternalStore(
-    NEVER_CHANGES,
-    () => (navigator.userAgent.includes("Mac") ? "⌘" : "Ctrl"),
-    () => "",
-  )
-}
