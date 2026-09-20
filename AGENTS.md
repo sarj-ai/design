@@ -111,6 +111,10 @@ browser's own back and forward, and every navigation under reduced motion.
 Direct loads never see it, so `npm run shots` and the reel renderer capture the
 page alone.
 
+**No scrollbar, anywhere.** `globals.css` hides every bar — the page's, every
+`overflow-auto` panel's, and the ScrollArea primitive's — and everything still
+scrolls. Do not style a scrollbar in a mockup; there is nothing to style.
+
 **PRDs live on `wiki.sarj.ai`, behind a Google sign-in nothing here can read.**
 That makes the review checklist's "matches the PRD exactly" gate unrunnable
 unless someone pastes the document in. `PRD/` is the stopgap: one markdown

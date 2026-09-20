@@ -460,51 +460,33 @@
   }
 }
 
-/* One scrollbar across the app.
+/* No scrollbar, anywhere.
 
-   ScrollArea draws a 10px border-coloured thumb on a transparent track, but a
-   dozen surfaces scroll with a plain `overflow-y-auto` and were getting the
-   OS one instead — so the same product showed two scrollbars depending on
-   which component you happened to be inside. These make the native one match
-   the primitive: same width, same token, no arrows, no track chrome.
+   Every surface still scrolls — wheel, trackpad, keyboard, drag — but nothing
+   draws a bar for it: not the page, not an `overflow-auto` panel, and not the
+   ScrollArea primitive, whose bar is a Radix element rather than a native
+   scrollbar and so needs hiding on its own.
 
-   `scrollbar-width`/`scrollbar-color` are the standard properties; the
-   `::-webkit-` block is for Safari, which does not support them yet. The thumb
-   is inset with a transparent border and `background-clip` rather than a
-   smaller width, so the hit area stays the full 10px. */
+   `scrollbar-width` is the standard property (Firefox, and Chromium 121+,
+   where it also switches the `::-webkit-` rules off); the `::-webkit-` rule
+   is for Safari, which does not support it yet. */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-width: none;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
-::-webkit-scrollbar-track,
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--border);
-  background-clip: content-box;
-  border: 2px solid transparent;
-  border-radius: 9999px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--ring);
-}
-
-/* Beats the `*` rule above on specificity, so hiding still hides. */
-.scrollbar-hide::-webkit-scrollbar {
+[data-slot="scroll-area-scrollbar"] {
   display: none;
 }
 
+/* Redundant now that every bar is hidden, and kept only because three mockup
+   surfaces still carry the class. */
 .scrollbar-hide {
-  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
