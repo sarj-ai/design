@@ -68,6 +68,7 @@ src/components/mockups/<slug>/icons.tsx  its icons, named for what they do here
 src/lib/mockups/<slug>-data.ts           its mock data
 src/components/ui/                       61 shadcn primitives — GENERATED, do not edit
 src/components/shell/                    the chrome screens sit in: mockup-shell, app-shell and their icons
+src/components/shell/page-transition.tsx the curtain between screens — mounted once, in the root layout
 src/components/shared/                   building blocks more than one area uses: icon.tsx, data-table.tsx
 src/components/site/                     the landing index's own pieces: registry menu, onboarding, dock
 src/lib/site/mockups-data.ts             the landing index registry
@@ -99,6 +100,16 @@ one topic — every one of them prerendered, so any topic can be sent to someone
 on its own. The tree lives in `DOCS_SECTIONS`; add a page there and give its id
 a view in the route file, and the URL, the rail entry and the static path all
 follow. A topic with no view falls back to its section's index.
+
+**Every click between screens plays the curtain.** `page-transition.tsx`
+wraps every route once, from the root layout: a click on an internal link
+raises a curtain that names where the reader is going, pushes the route under
+it, and lifts it off the top with the new page rising into place. It skips
+browsing inside one section (topic to topic in the design system), anything a
+link opts out of with `data-no-transition`, modified and external clicks, the
+browser's own back and forward, and every navigation under reduced motion.
+Direct loads never see it, so `npm run shots` and the reel renderer capture the
+page alone.
 
 **PRDs live on `wiki.sarj.ai`, behind a Google sign-in nothing here can read.**
 That makes the review checklist's "matches the PRD exactly" gate unrunnable
@@ -398,8 +409,8 @@ gated, because it is not.
 
 Every mockup is published as a shadcn registry item, so a screen can be pulled
 into the product with one command instead of copied file by file. Each card on
-the index carries a `</>` menu with the command for yarn, npm, pnpm and bun,
-plus the raw URL.
+the index carries a `</>` button that splits into yarn, npm, pnpm and bun on
+hover, each one a click to copy that command.
 
 ```bash
 # from the sarj-ai/platform repository root

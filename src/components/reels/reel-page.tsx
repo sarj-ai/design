@@ -1,13 +1,10 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import { SiteNav } from "@/components/shell/site-nav"
 import { Stage } from "@/components/reels/stage"
 import { ReelPlayer } from "@/components/reels/player"
-import { BackToReelsIcon } from "@/components/reels/icons"
 
 /**
  * One reel, at its own address.
@@ -38,30 +35,9 @@ export function ReelPage({
 
   return (
     <div className="flex min-h-full grow flex-col">
-      <header className="sticky top-0 z-overlay flex flex-wrap items-center gap-3 border-b bg-background px-4 py-2">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/reels">
-            <BackToReelsIcon />
-            All reels
-          </Link>
-        </Button>
+      <SiteNav eyebrow={eyebrow} title={title} />
 
-        <Separator
-          orientation="vertical"
-          className="h-5 data-vertical:self-center"
-        />
-
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          {eyebrow ? (
-            <span className="truncate text-sm text-muted-foreground">
-              {eyebrow}
-            </span>
-          ) : null}
-          <span className="truncate text-sm font-medium">{title}</span>
-        </div>
-      </header>
-
-      <main className="mx-auto flex w-full max-w-350 flex-col gap-6 p-8">
+      <main className="mx-auto flex w-full max-w-350 flex-col gap-6 px-8 pb-8">
         <ReelPlayer duration={duration}>{children}</ReelPlayer>
       </main>
     </div>

@@ -19,12 +19,6 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/ui/item"
-import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -50,6 +44,7 @@ import {
 } from "@/lib/design-system/data"
 import { docsHref } from "@/lib/design-system/nav"
 import { CopyLinkButton } from "@/components/design-system/copy-link-button"
+import { DesignSystemOrbit } from "@/components/design-system/orbit-index"
 import { cn } from "@/lib/utils"
 
 /**
@@ -166,6 +161,37 @@ export function DesignSystemDocs({
     }))
   }
 
+  /* The overview is the ring, not the rail.
+
+     A front door and a reference page want opposite things. Reading a topic
+     wants every other topic listed beside it, which is what the rail is for;
+     arriving wants one question answered — which of the five parts of this
+     system am I here for — and a 40-row rail answers that by showing all
+     forty. So the overview drops the rail entirely and orbits the five
+     sections around the title, and every `/design-system/<section>/<topic>`
+     below keeps the shell exactly as it was.
+
+     `DocsOverview` is gone with it: the grid of five cards it rendered was the
+     same five sections, listed. */
+  if (!page) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <AppHeader
+          actions={
+            <Button asChild size="sm" variant="outline">
+              <Link href="/">
+                <BackIcon />
+                All mockups
+              </Link>
+            </Button>
+          }
+          trail={["Design system"]}
+        />
+        <DesignSystemOrbit />
+      </div>
+    )
+  }
+
   return (
     /* The app's own chrome, so the reference reads as a page of the product
        rather than a site beside it: same 15rem inset rail, same header row. */
@@ -260,9 +286,9 @@ export function DesignSystemDocs({
             </>
           }
           trail={
-            page && section && page.id !== section.id
+            section && page.id !== section.id
               ? ["Design system", section.title, page.title]
-              : ["Design system", ...(page ? [page.title] : [])]
+              : ["Design system", page.title]
           }
         />
         {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
@@ -287,17 +313,13 @@ export function DesignSystemDocs({
             key={activeId}
           >
             <header className="flex flex-col gap-1">
-              <h1 className="text-2xl font-semibold">
-                {page ? page.title : "Design system"}
-              </h1>
+              <h1 className="text-2xl font-semibold">{page.title}</h1>
               <p className="max-w-2xl text-sm text-muted-foreground">
-                {page
-                  ? page.description
-                  : "Every rule, pattern and primitive the product is built from. Each topic is its own address, so any one of them can be sent on its own."}
+                {page.description}
               </p>
             </header>
 
-            {page ? views[activeId] : <DocsOverview />}
+            {views[activeId]}
           </main>
         </div>
       </SidebarInset>
@@ -396,63 +418,3 @@ function DocsSectionNav({
   )
 }
 
-/**
- * What `/design-system` itself opens: every topic, filed under its section.
- *
- * The root used to be whichever section happened to be first in the rail,
- * which made the shortest link in the system — the one anybody sends — open a
- * page about colour rather than a map. A reader who was sent the root wants to
- * know what is in here; a reader who wants colour was sent the colour link.
- *
- * The topics themselves rather than a count of them, because a section is no
- * longer a page: this is the one place a reader who has not learned the rail
- * can see the whole system at once, and a card that only said "12 topics"
- * would have nowhere left to send them.
- */
-function DocsOverview() {
-  return (
-    /* Stretched, not ragged: five cards of five different heights read as five
-       unrelated things. `grow-0` on the content below is what keeps each list
-       under its description rather than pushed to the floor of the card. */
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {DOCS_SECTIONS.map((section) => (
-        <Item
-          className="flex-col flex-nowrap items-start gap-4"
-          key={section.id}
-          variant="outline"
-        >
-          {/* `grow-0`: ItemContent is `flex-1`, which in a column stretched to
-              the tallest card in the row would push the list to the floor. */}
-          <ItemContent className="grow-0">
-            <ItemTitle className="flex items-center gap-2">
-              {section.title}
-              {section.sarj ? <SarjDot /> : null}
-            </ItemTitle>
-            <ItemDescription>{section.description}</ItemDescription>
-          </ItemContent>
-
-          {section.groups.map((group, index) => (
-            <div
-              className="flex w-full flex-col gap-0.5"
-              key={group.label ?? index}
-            >
-              {group.label ? (
-                <p className="px-2 pb-1 text-xs font-medium">{group.label}</p>
-              ) : null}
-
-              {group.pages.map((page) => (
-                <Link
-                  className="rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                  href={docsHref(page.id)}
-                  key={page.id}
-                >
-                  {page.title}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </Item>
-      ))}
-    </div>
-  )
-}

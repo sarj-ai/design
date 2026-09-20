@@ -40,11 +40,10 @@ import { Separator } from "@/components/ui/separator"
 import {
   ClearIcon,
   OpenIcon,
-  RulesIcon,
   SearchIcon,
   TicketLinkIcon,
 } from "@/components/shell/workspace-icons"
-import { ReelIcon } from "@/components/reels/icons"
+import { SiteNav } from "@/components/shell/site-nav"
 import { LinkMenu } from "@/components/site/link-menu"
 import { RegistryMenu } from "@/components/site/registry-menu"
 import { RegistryOnboarding } from "@/components/site/registry-onboarding"
@@ -99,34 +98,15 @@ export default function Home() {
   const modifier = useModifierKey()
 
   return (
-    <main className="mx-auto flex w-full max-w-350 flex-col gap-8 p-8">
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Design lab</h1>
+    <>
+      {/* The design system and the reels used to be two outline buttons in
+          this header. They are two menus in the nav now, on every page rather
+          than on this one. */}
+      <SiteNav actions={<RegistryOnboarding />} />
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Opens itself once on a first visit; this button is how it is
-              reached every time after that. */}
-          <RegistryOnboarding />
-
-          {/* The design system is not a mockup, so it has no card in the list
-              below — it lives up here, where it is reachable from the index
-              without a search that would only ever return one result. */}
-          <Button asChild size="sm" variant="outline">
-            <Link href="/design-system">
-              <RulesIcon />
-              Design system
-            </Link>
-          </Button>
-
-          {/* Reels are not mockups, so they have no card in the list below —
-              they get their own index, reached from here for the same reason
-              the design system is. */}
-          <Button asChild size="sm" variant="outline">
-            <Link href="/reels">
-              <ReelIcon />
-              Reels
-            </Link>
-          </Button>
+      <main className="mx-auto flex w-full max-w-350 flex-col gap-8 px-8 pb-8">
+        <header className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="text-2xl font-semibold">Design lab</h1>
 
           <InputGroup className="w-full sm:w-80">
             <InputGroupAddon>
@@ -155,39 +135,38 @@ export default function Home() {
               </InputGroupAddon>
             ) : null}
           </InputGroup>
-        </div>
-      </header>
+        </header>
 
-      {groups.length === 0 ? (
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <SearchIcon />
-            </EmptyMedia>
-            <EmptyTitle>No mockups match “{query}”</EmptyTitle>
-            <EmptyDescription>
-              Try fewer characters, a ticket ID like DES-149, a surface like
-              Settings, or a word from the description.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : (
-        groups.map(({ surface, mockups }) => (
-          <section
-            key={surfaceId(surface)}
-            id={surfaceId(surface)}
-            className="flex scroll-mt-8 flex-col gap-4"
-            aria-label={surfaceLabel(surface)}
-          >
-            <div className="flex items-center gap-3">
-              <h2 className="text-sm font-semibold">{surfaceLabel(surface)}</h2>
-              <Badge variant="secondary">{mockups.length}</Badge>
-              <Separator className="flex-1" />
-            </div>
+        {groups.length === 0 ? (
+          <Empty className="border">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <SearchIcon />
+              </EmptyMedia>
+              <EmptyTitle>No mockups match “{query}”</EmptyTitle>
+              <EmptyDescription>
+                Try fewer characters, a ticket ID like DES-149, or a surface
+                like Settings.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          groups.map(({ surface, mockups }) => (
+            <section
+              key={surfaceId(surface)}
+              id={surfaceId(surface)}
+              className="flex scroll-mt-8 flex-col gap-4"
+              aria-label={surfaceLabel(surface)}
+            >
+              <div className="flex items-center gap-3">
+                <h2 className="text-sm font-semibold">
+                  {surfaceLabel(surface)}
+                </h2>
+                <Separator className="flex-1" />
+              </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {mockups.map(
-                ({ href, title, meta, description, icon, tickets }) => {
+              <div className="grid gap-6 md:grid-cols-2">
+                {mockups.map(({ href, title, meta, icon, tickets }) => {
                   const slug = href.slice(1)
 
                   return (
@@ -283,34 +262,34 @@ export default function Home() {
                           <RegistryMenu slug={slug} title={title} />
                         </CardAction>
                       </CardHeader>
-                      <CardContent className="flex flex-1 flex-col gap-3">
-                        <p className="text-sm text-muted-foreground">
-                          {description}
-                        </p>
-                        {tickets.length ? (
-                          <div className="flex flex-wrap gap-2">
-                            {/* The chip names the ticket and opens it. It used
-                                to do neither and be shadowed by a row of
-                                "DES-110 in Linear" buttons in the footer —
-                                every ticket printed twice, and on a card
-                                answering four of them the footer wrapped onto
-                                a second line of near-identical buttons. */}
-                            {tickets.map((ticket) => (
-                              <Badge asChild key={ticket} variant="outline">
-                                <a
-                                  href={linearIssueUrl(ticket)}
-                                  rel="noreferrer"
-                                  target="_blank"
-                                  title={`Open ${ticket} in Linear`}
-                                >
-                                  {ticket}
-                                  <TicketLinkIcon data-icon="inline-end" />
-                                </a>
-                              </Badge>
-                            ))}
-                          </div>
-                        ) : null}
-                      </CardContent>
+                      {/* The body is the ticket chips and nothing else — the
+                          description that used to sit above them came off the
+                          card, since the thumbnail and title already say what
+                          the mockup is. A card answering no ticket has no
+                          body at all rather than an empty one holding a gap. */}
+                      {tickets.length ? (
+                        <CardContent className="flex flex-1 flex-wrap gap-2">
+                          {/* The chip names the ticket and opens it. It used
+                              to do neither and be shadowed by a row of
+                              "DES-110 in Linear" buttons in the footer —
+                              every ticket printed twice, and on a card
+                              answering four of them the footer wrapped onto
+                              a second line of near-identical buttons. */}
+                          {tickets.map((ticket) => (
+                            <Badge asChild key={ticket} variant="outline">
+                              <a
+                                href={linearIssueUrl(ticket)}
+                                rel="noreferrer"
+                                target="_blank"
+                                title={`Open ${ticket} in Linear`}
+                              >
+                                {ticket}
+                                <TicketLinkIcon data-icon="inline-end" />
+                              </a>
+                            </Badge>
+                          ))}
+                        </CardContent>
+                      ) : null}
                       <CardFooter>
                         <Button variant="outline" size="sm" asChild>
                           <Link href={href}>
@@ -321,18 +300,18 @@ export default function Home() {
                       </CardFooter>
                     </Card>
                   )
-                },
-              )}
-            </div>
-          </section>
-        ))
-      )}
+                })}
+              </div>
+            </section>
+          ))
+        )}
 
-      {/* Nothing to navigate between until there are two groups, and the
+        {/* Nothing to navigate between until there are two groups, and the
           reader who has just searched the list down to one does not need a
           control telling them so. */}
-      {sections.length > 1 ? <SurfaceDock sections={sections} /> : null}
-    </main>
+        {sections.length > 1 ? <SurfaceDock sections={sections} /> : null}
+      </main>
+    </>
   )
 }
 

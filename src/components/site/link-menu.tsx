@@ -1,29 +1,10 @@
 "use client"
 
-import * as React from "react"
-import { toast } from "sonner"
-
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { GooMenu } from "@/components/site/goo-menu"
+import { useCopy } from "@/components/site/use-copy"
 import { linearIssueUrl } from "@/lib/site/linear"
 import { mockupUrl } from "@/lib/site/registry"
-import {
-  CopiedIcon,
-  CopyIcon,
-  ShareLinkIcon,
-} from "@/components/shell/workspace-icons"
+import { ShareLinkIcon } from "@/components/shell/workspace-icons"
 
 /**
  * Every link this card has, in one place, ready to paste.
@@ -37,6 +18,10 @@ import {
  * Ticket chips on the card carry the same links and OPEN them. This menu is
  * the other half of the same job: one is for going there, one is for handing
  * it to someone else.
+ *
+ * The mockup's own link leads, then a drop per ticket. Three columns of wider
+ * drops, because a ticket ID is longer than a package manager's name and a
+ * card can answer four tickets.
  */
 export function LinkMenu({
   slug,
@@ -47,85 +32,35 @@ export function LinkMenu({
   tickets: string[]
   title: string
 }) {
-  /* Which row was last copied, so the tick lands on that row rather than on
-     the whole menu. Cleared on a timer. */
-  const [copied, setCopied] = React.useState<string>("")
-  const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  )
-
-  React.useEffect(() => () => clearTimeout(timer.current), [])
-
-  async function copy(id: string, value: string, description: string) {
-    try {
-      await navigator.clipboard.writeText(value)
-      setCopied(id)
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => setCopied(""), 2000)
-      toast.success(`${description} copied`, { description: value })
-    } catch {
-      /* Clipboard is permission-gated and fails on an insecure origin, so the
-         reader still needs a way to get the text. */
-      toast.error("Could not reach the clipboard", { description: value })
-    }
-  }
-
-  const rows = [
-    { id: "mockup", label: "Mockup link", value: mockupUrl(slug) },
-    ...tickets.map((ticket) => ({
-      id: ticket,
-      label: ticket,
-      value: linearIssueUrl(ticket),
-    })),
-  ]
+  const { copied, copy } = useCopy()
+  const page = mockupUrl(slug)
 
   return (
-    <DropdownMenu>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DropdownMenuTrigger asChild>
-            <Button
-              aria-label={`Copy links for ${title}`}
-              size="icon-sm"
-              variant="ghost"
-            >
-              <ShareLinkIcon />
-            </Button>
-          </DropdownMenuTrigger>
-        </TooltipTrigger>
-        <TooltipContent>Copy links</TooltipContent>
-      </Tooltip>
-
-      <DropdownMenuContent align="end" className="w-72">
-        <DropdownMenuLabel>Copy links</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        {rows.map((row, index) => (
-          <React.Fragment key={row.id}>
-            {/* The mockup is the thing; the tickets are what it answers. A
-                rule between them so a reviewer reaching for one does not have
-                to read the other. */}
-            {index === 1 ? <DropdownMenuSeparator /> : null}
-            <DropdownMenuItem
-              onSelect={(event) => {
-                /* Kept open: copying the mockup link and then a ticket is one
-                   errand, and a menu that shuts on every click makes it two. */
-                event.preventDefault()
-                copy(row.id, row.value, row.label)
-              }}
-            >
-              <span className="me-auto">{row.label}</span>
-              {copied === row.id ? <CopiedIcon /> : <CopyIcon />}
-            </DropdownMenuItem>
-          </React.Fragment>
-        ))}
-
-        {tickets.length ? null : (
-          <p className="px-1.5 py-1 text-xs text-muted-foreground">
-            No ticket is listed for this mockup yet.
-          </p>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <GooMenu
+      label={`Copy links for ${title}`}
+      menuLabel="Copy links"
+      icon={<ShareLinkIcon />}
+      copiedId={copied}
+      cols={3}
+      dropWidth={64}
+      items={[
+        {
+          id: "mockup",
+          label: "Mockup",
+          onSelect: () => copy("mockup", page, "Mockup link", page),
+        },
+        ...tickets.map((ticket) => ({
+          id: ticket,
+          label: ticket,
+          onSelect: () =>
+            copy(
+              ticket,
+              linearIssueUrl(ticket),
+              ticket,
+              linearIssueUrl(ticket),
+            ),
+        })),
+      ]}
+    />
   )
 }

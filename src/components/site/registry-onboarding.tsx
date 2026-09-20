@@ -139,7 +139,7 @@ export function RegistryOnboarding() {
     {
       id: "copy",
       title: "Open its install command",
-      body: "Every card carries one beside Open mockup. It holds the same install in npm, pnpm, bun and yarn, and the raw registry URL under them.",
+      body: "Every card carries one in its header. Hover it and it splits into yarn, npm, pnpm and bun; click one to copy that install.",
       figure: (
         <Item aria-hidden className="pointer-events-none" variant="outline">
           <ItemContent>

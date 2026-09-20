@@ -5,6 +5,7 @@ import {
   ArrowDataTransferVerticalIcon,
   ArrowDown01Icon,
   ArrowDownLeft01Icon,
+  ArrowLeft01Icon,
   ArrowUp01Icon,
   ArrowUpRight01Icon,
   BookOpen02Icon,
@@ -97,3 +98,8 @@ export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")
 export const NoResultsIcon = icon(SearchRemoveIcon, "NoResultsIcon")
 export const SourceIcon = icon(BookOpen02Icon, "SourceIcon")
 export const RetryIcon = icon(RefreshIcon, "RetryIcon")
+
+/* The ring's way back up a level: from one section's topics to the five
+   sections themselves. Named for where it goes rather than for the arrow,
+   because the same glyph points back to two different places on this page. */
+export const AllSectionsIcon = icon(ArrowLeft01Icon, "AllSectionsIcon")
