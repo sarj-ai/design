@@ -35,15 +35,26 @@ export const RINGS: Ring[] = [
   { rotate: -34, rx: 0.88, ry: 0.16 },
 ]
 
+/** The narrowest orbit, which is what the cube has to fit inside. */
+const NARROWEST = Math.min(...RINGS.map((ring) => ring.rx))
+
 /**
  * The cube at the centre, as a fraction of the figure radius.
  *
- * Half-extent, so the cube spans twice this before projection and rather more
- * than that when a corner swings towards the viewer. Comfortably larger than
- * the flat disc it replaced, which at 0.075 read as a dot the orbits happened
- * to cross rather than as the thing they go round.
+ * Half-extent — and the half-extent is not what has to fit. A cube turned 45°
+ * swings its corners out to √2 times this, so the projected silhouette is
+ * always wider than the number written here, and sizing by eye against the
+ * half-extent is what made the last one too big.
+ *
+ * Derived from the narrowest orbit rather than picked, because that orbit is
+ * the edge of the space at the centre of the figure. At a flat 0.15 the
+ * corners reached 1.6 times its width and punched through four orbits, so the
+ * cube read as sprawling across the middle rather than sitting at it — the
+ * figure lost its centre, because the thing marking the centre was bigger than
+ * the centre. The 0.92 keeps a little air between the corners and the curve;
+ * touching it exactly reads as a mistake.
  */
-export const CUBE = 0.15
+export const CUBE = (NARROWEST / Math.SQRT2) * 0.92
 
 /** Turns per second. Slow — it is a centre of gravity, not a spinner. */
 export const CUBE_SPIN = 0.055
