@@ -11,12 +11,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -41,7 +39,6 @@ import {
   ClearIcon,
   OpenIcon,
   SearchIcon,
-  TicketLinkIcon,
 } from "@/components/shell/workspace-icons"
 import { SiteNav } from "@/components/shell/site-nav"
 import { LinkMenu } from "@/components/site/link-menu"
@@ -54,7 +51,6 @@ import {
   surfaceId,
   surfaceLabel,
 } from "@/lib/site/mockups-data"
-import { linearIssueUrl } from "@/lib/site/linear"
 import thumbnails from "@/lib/site/thumbnails.json"
 
 export default function Home() {
@@ -262,34 +258,9 @@ export default function Home() {
                           <RegistryMenu slug={slug} title={title} />
                         </CardAction>
                       </CardHeader>
-                      {/* The body is the ticket chips and nothing else — the
-                          description that used to sit above them came off the
-                          card, since the thumbnail and title already say what
-                          the mockup is. A card answering no ticket has no
-                          body at all rather than an empty one holding a gap. */}
-                      {tickets.length ? (
-                        <CardContent className="flex flex-1 flex-wrap gap-2">
-                          {/* The chip names the ticket and opens it. It used
-                              to do neither and be shadowed by a row of
-                              "DES-110 in Linear" buttons in the footer —
-                              every ticket printed twice, and on a card
-                              answering four of them the footer wrapped onto
-                              a second line of near-identical buttons. */}
-                          {tickets.map((ticket) => (
-                            <Badge asChild key={ticket} variant="outline">
-                              <a
-                                href={linearIssueUrl(ticket)}
-                                rel="noreferrer"
-                                target="_blank"
-                                title={`Open ${ticket} in Linear`}
-                              >
-                                {ticket}
-                                <TicketLinkIcon data-icon="inline-end" />
-                              </a>
-                            </Badge>
-                          ))}
-                        </CardContent>
-                      ) : null}
+                      {/* No body: the thumbnail and title say what the mockup
+                          is, and the tickets it answers live in the link menu
+                          above, where they can be copied. */}
                       <CardFooter>
                         <Button variant="outline" size="sm" asChild>
                           <Link href={href}>

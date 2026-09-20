@@ -24,7 +24,10 @@ export function SarjMark({ className }: { className?: string }) {
     >
       <rect className="fill-primary" height="32" rx="9" width="32" />
       {/* The dot of the ج, at the size it carries in the wordmark. */}
-      <path className="fill-primary-foreground" d="M14 6.5 21 14l-7 7.5L7 14z" />
+      <path
+        className="fill-primary-foreground"
+        d="M14 6.5 21 14l-7 7.5L7 14z"
+      />
       {/* The full stop in sarj.ai — same shape, the step down in scale the
           wordmark already makes between the two lines. */}
       <path

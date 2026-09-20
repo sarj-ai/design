@@ -189,7 +189,11 @@ function Panel({ menu }: { menu: Menu }) {
     <div className={cn("grid grid-cols-2", menu.wide ? "w-192" : "w-160")}>
       <NavigationMenuLink asChild>
         <Link
-          className="group/cell flex flex-col gap-1 overflow-hidden border-e p-4 transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
+          /* `items-stretch` is not decoration: NavigationMenuLink's own class
+             is `flex items-center`, and a column that centres its children
+             shrinks them to their content — which collapses a `w-full`
+             drawing to nothing and pulls the title off the start edge. */
+          className="group/cell flex flex-col items-stretch gap-1 overflow-hidden border-e p-4 transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
           href={menu.feature.href}
         >
           <span className="text-sm font-medium">{menu.feature.title}</span>

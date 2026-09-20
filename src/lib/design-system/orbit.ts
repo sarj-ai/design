@@ -19,8 +19,15 @@
 
 import { easeOutCubic, interpolate } from "@/lib/reels/anim"
 
-/** How far the vertical axis is squashed. 1 is a circle, 0 is a flat line. */
-const DEPTH_TILT = 0.4
+/**
+ * How far the vertical axis is squashed. 1 is a circle, 0 is a flat line.
+ *
+ * 0.4 was too flat to read as a ring at the top level, where there are only
+ * five nodes: five labels on a very wide, very shallow ellipse look scattered
+ * rather than arranged. Half is enough tilt for the eye to close the curve
+ * while still reading as a disc seen at an angle rather than face on.
+ */
+const DEPTH_TILT = 0.52
 
 /** Scale at the back of the ring and at the front, interpolated by depth. */
 const DEPTH_SCALE = [0.74, 1] as const
@@ -156,5 +163,8 @@ export function arrivalEnd(count: number): number {
  * stops reading as the middle of anything.
  */
 export function orbitRadius(width: number, height: number): number {
-  return Math.max(150, Math.min(width * 0.33, height * 0.82, 400))
+  /* The cap is what keeps the top level legible. Uncapped on a wide monitor
+     the five sections sit so far apart that nothing relates them, and the
+     centre they orbit stops reading as a centre. */
+  return Math.max(150, Math.min(width * 0.28, height * 0.72, 330))
 }

@@ -34,7 +34,12 @@ function Figure({
   return (
     <svg
       aria-hidden="true"
-      className={cn("w-full", className)}
+      /* `size-auto` is load-bearing. Anywhere these are used inside a
+         NavigationMenuLink, the primitive's own
+         `[&_svg:not([class*='size-'])]:size-4` wins on specificity and cuts
+         the drawing down to a 16px icon. Carrying a `size-` class at all is
+         what opts out of that. */
+      className={cn("size-auto w-full", className)}
       fill="none"
       viewBox="0 0 520 320"
     >
@@ -166,11 +171,7 @@ export function SystemFigure({ className }: FigureProps) {
         <path d="M356 172h20M416 172v20" opacity=".6" strokeDasharray="4 8" />
       </g>
 
-      <text
-        className="fill-current text-9xl font-semibold"
-        x="88"
-        y="232"
-      >
+      <text className="fill-current text-9xl font-semibold" x="88" y="232">
         Aa
       </text>
 

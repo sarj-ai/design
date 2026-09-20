@@ -5,6 +5,7 @@ import Link from "next/link"
 import * as React from "react"
 
 import { AppHeader } from "@/components/shell/app-shell"
+import { SiteNav } from "@/components/shell/site-nav"
 import { PRIMITIVE_NAMES } from "@/components/design-system/component-catalog"
 import {
   CloseIcon,
@@ -35,8 +36,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
-import { BackIcon } from "@/components/shell/workspace-icons"
 import {
   DOCS_SECTIONS,
   type DocsPage,
@@ -176,124 +175,112 @@ export function DesignSystemDocs({
   if (!page) {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
-        <AppHeader
-          actions={
-            <Button asChild size="sm" variant="outline">
-              <Link href="/">
-                <BackIcon />
-                All mockups
-              </Link>
-            </Button>
-          }
-          trail={["Design system"]}
-        />
+        <SiteNav />
+        <AppHeader trail={["Design system"]} />
         <DesignSystemOrbit />
       </div>
     )
   }
 
   return (
-    /* The app's own chrome, so the reference reads as a page of the product
-       rather than a site beside it: same 15rem inset rail, same header row. */
-    <SidebarProvider
-      className="min-h-0 flex-1"
-      style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
-    >
-      <Sidebar collapsible="icon" variant="inset">
-        <SidebarHeader className="px-2 pt-2 pb-1">
-          <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
-            <Image
-              alt="sarj.ai"
-              className="group-data-[state=collapsed]:hidden"
-              height={32}
-              priority
-              src="/logo.png"
-              width={56}
-            />
-            <SidebarTrigger className="size-8 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground [&>svg]:size-5" />
-          </div>
+    <>
+      <SiteNav />
 
-          {/* In the header rather than at the top of the list it filters: a
+      {/* The app's own chrome under it, so the reference still reads as a page
+          of the product rather than a site beside it: same 15rem inset rail,
+          same header row. */}
+      <SidebarProvider
+        className="min-h-0 flex-1"
+        style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
+      >
+        <Sidebar collapsible="icon" variant="inset">
+          <SidebarHeader className="px-2 pt-2 pb-1">
+            <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
+              <Image
+                alt="sarj.ai"
+                className="group-data-[state=collapsed]:hidden"
+                height={32}
+                priority
+                src="/logo.png"
+                width={56}
+              />
+              <SidebarTrigger className="size-8 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground [&>svg]:size-5" />
+            </div>
+
+            {/* In the header rather than at the top of the list it filters: a
               field that scrolls away from its own results is one you lose the
               moment you start reading them. */}
-          <InputGroup className="group-data-[state=collapsed]:hidden">
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              aria-label="Search topics and components"
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") setQuery("")
-              }}
-              placeholder="Search"
-              value={query}
-            />
-
-            {/* Absent until there is something to clear. */}
-            {query ? (
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  aria-label="Clear search"
-                  onClick={() => setQuery("")}
-                  size="icon-xs"
-                >
-                  <CloseIcon />
-                </InputGroupButton>
+            <InputGroup className="group-data-[state=collapsed]:hidden">
+              <InputGroupAddon>
+                <SearchIcon />
               </InputGroupAddon>
-            ) : null}
-          </InputGroup>
-        </SidebarHeader>
+              <InputGroupInput
+                aria-label="Search topics and components"
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") setQuery("")
+                }}
+                placeholder="Search"
+                value={query}
+              />
 
-        <SidebarContent className="gap-0 py-2">
-          {rail.map((entry) => (
-            <DocsSectionNav
-              active={activeId}
-              key={entry.id}
-              onToggle={toggleSection}
-              /* Whatever a search leaves standing is open: a match inside a
+              {/* Absent until there is something to clear. */}
+              {query ? (
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton
+                    aria-label="Clear search"
+                    onClick={() => setQuery("")}
+                    size="icon-xs"
+                  >
+                    <CloseIcon />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              ) : null}
+            </InputGroup>
+          </SidebarHeader>
+
+          <SidebarContent className="gap-0 py-2">
+            {rail.map((entry) => (
+              <DocsSectionNav
+                active={activeId}
+                key={entry.id}
+                onToggle={toggleSection}
+                /* Whatever a search leaves standing is open: a match inside a
                  collapsed section is a match the reader is shown and cannot
                  reach. Clearing the field restores what they had open. */
-              open={term ? true : openFor(entry.id)}
-              section={entry}
-            />
-          ))}
+                open={term ? true : openFor(entry.id)}
+                section={entry}
+              />
+            ))}
 
-          {rail.length === 0 ? (
-            <p className="px-4 py-2 text-sm text-muted-foreground">
-              Nothing matches.
-            </p>
-          ) : null}
-        </SidebarContent>
-      </Sidebar>
+            {rail.length === 0 ? (
+              <p className="px-4 py-2 text-sm text-muted-foreground">
+                Nothing matches.
+              </p>
+            ) : null}
+          </SidebarContent>
+        </Sidebar>
 
-      <SidebarInset className="min-w-0 overflow-hidden">
-        {/* The way back to the index, in the row that is already there. The
-            page carried a second bar above this one for the same one link. */}
-        <AppHeader
-          actions={
-            <>
-              {/* Every topic has an address now, so the one thing a reader
-                  wants from a reference page — hand this exact page to someone
-                  — is a control rather than a trip to the address bar. */}
+        <SidebarInset className="min-w-0 overflow-hidden">
+          {/* The product's own row, kept: the trail is what says which topic of
+            which section you have open. The way back to the index left it
+            when the lab's nav took over that job. */}
+          <AppHeader
+            actions={
+              /* Every topic has an address now, so the one thing a reader wants
+               from a reference page — hand this exact page to someone — is a
+               control rather than a trip to the address bar. */
               <CopyLinkButton />
-              <Button asChild size="sm" variant="outline">
-                <Link href="/">
-                  <BackIcon />
-                  All mockups
-                </Link>
-              </Button>
-            </>
-          }
-          trail={
-            section && page.id !== section.id
-              ? ["Design system", section.title, page.title]
-              : ["Design system", page.title]
-          }
-        />
-        {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
-        <div className="min-h-0 flex-1 overflow-auto">
-          {/* Keyed on the topic so React replaces the pane rather than patching
+            }
+            trail={
+              section && page.id !== section.id
+                ? ["Design system", section.title, page.title]
+                : ["Design system", page.title]
+            }
+          />
+          {/* No gutter here: the page owns its p-3 lg:p-4, as the app's do. */}
+          <div className="min-h-0 flex-1 overflow-auto">
+            {/* Keyed on the topic so React replaces the pane rather than patching
               it, which is what gives the new one an entrance to play. The old
               one leaves without an exit on purpose: crossfading two panes needs
               both of them positioned absolutely, and two documents of different
@@ -308,22 +295,23 @@ export function DesignSystemDocs({
               The travel is horizontal, from the rail's side. Vertically it
               read as the page scrolling itself, which is the one thing this
               pane also genuinely does. */}
-          <main
-            className="flex animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
-            key={activeId}
-          >
-            <header className="flex flex-col gap-1">
-              <h1 className="text-2xl font-semibold">{page.title}</h1>
-              <p className="max-w-2xl text-sm text-muted-foreground">
-                {page.description}
-              </p>
-            </header>
+            <main
+              className="flex animate-pane-in flex-col gap-8 p-3 motion-reduce:animate-none lg:p-4"
+              key={activeId}
+            >
+              <header className="flex flex-col gap-1">
+                <h1 className="text-2xl font-semibold">{page.title}</h1>
+                <p className="max-w-2xl text-sm text-muted-foreground">
+                  {page.description}
+                </p>
+              </header>
 
-            {views[activeId]}
-          </main>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+              {views[activeId]}
+            </main>
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    </>
   )
 }
 
@@ -417,4 +405,3 @@ function DocsSectionNav({
     </Collapsible>
   )
 }
-
