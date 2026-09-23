@@ -1,0 +1,8 @@
+## Page Feedback: /design-system
+**Viewport:** 1502×863
+
+### 1. <DesignSystemHero> <SectionCard> <motion.div> <LinkComponent> <Card> <CardHeader> h3 "shadcn components"
+**Location:** .group/card > .group/card-header > .flex > .text-3xl
+**Source:** _next/static/chunks/node_modules_agentation_dist_index_mjs_1bt__qk._.js:14067:23
+**React:** <DesignSystemHero> <SectionCard> <motion.div> <LinkComponent> <Card> <CardHeader>
+**Feedback:** CAN U MAKE S CAPITAL

@@ -68,8 +68,8 @@ import { notFound } from "next/navigation"
  * and the switching; this file owns what each topic actually renders, keyed by
  * the ids in `DOCS_SECTIONS`.
  *
- * Every topic in `DOCS_SECTIONS` needs an entry here. A section does not: it is
- * a shelf in the rail that opens in place, not a page.
+ * Every topic in `DOCS_SECTIONS` needs an entry here. A section does not: its
+ * page is the list of its topics, which the shell draws.
  *
  * No topic repeats its own title in a card header: the heading above the pane
  * has already said it. A live demo still sits on a `Card` — a lone "Open

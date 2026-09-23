@@ -55,7 +55,7 @@ export default function ReelsIndex() {
         actions={<CopySkillButton content={SKILL} path={SKILL_PATH} />}
       />
 
-      <main className="mx-auto flex w-full max-w-350 flex-col gap-8 px-8 pb-8">
+      <main className="mx-auto flex w-full max-w-360 flex-col gap-8 px-8 pb-8">
         <h1 className="text-2xl font-semibold">Reels</h1>
 
         <div className="grid gap-6 md:grid-cols-2">

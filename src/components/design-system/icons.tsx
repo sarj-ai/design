@@ -6,6 +6,7 @@ import {
   ArrowDown01Icon,
   ArrowDownLeft01Icon,
   ArrowLeft01Icon,
+  ArrowRight01Icon,
   ArrowUp01Icon,
   ArrowUpRight01Icon,
   BookOpen02Icon,
@@ -16,8 +17,13 @@ import {
   CheckmarkCircle02Icon,
   Clock01Icon,
   Coins01Icon,
+  ColorsIcon,
+  ComponentIcon,
+  CubeIcon,
   CopyLinkIcon as CopyLinkGlyph,
   CpuIcon,
+  DashboardSquare01Icon,
+  EaseCurveControlPointsIcon,
   Delete02Icon,
   Download01Icon,
   PencilEdit02Icon,
@@ -103,3 +109,19 @@ export const RetryIcon = icon(RefreshIcon, "RetryIcon")
    sections themselves. Named for where it goes rather than for the arrow,
    because the same glyph points back to two different places on this page. */
 export const AllSectionsIcon = icon(ArrowLeft01Icon, "AllSectionsIcon")
+
+/** The trailing mark on a section row on the overview. */
+export const OpenSectionIcon = icon(ArrowRight01Icon, "OpenSectionIcon")
+
+/* One per section on the overview. Named for the shelf, not the glyph, and
+   present for the reason the house rules allow an icon in a list at all: five
+   cards that differ only by a word are quicker to tell apart with a mark than
+   without one. Nothing else on that page carries an icon. */
+export const FoundationsIcon = icon(ColorsIcon, "FoundationsIcon")
+export const MotionSectionIcon = icon(
+  EaseCurveControlPointsIcon,
+  "MotionSectionIcon",
+)
+export const PatternsIcon = icon(DashboardSquare01Icon, "PatternsIcon")
+export const CustomComponentsIcon = icon(CubeIcon, "CustomComponentsIcon")
+export const ShadcnComponentsIcon = icon(ComponentIcon, "ShadcnComponentsIcon")

@@ -2,14 +2,15 @@
  * Addresses for the design system.
  *
  * Every topic in `DOCS_SECTIONS` is a real URL rather than a client-side tab,
- * so a page can be sent to someone. There are two shapes:
+ * so a page can be sent to someone. There are three shapes:
  *
- *   /design-system                       the overview — every topic listed
+ *   /design-system                       the overview — the five sections
+ *   /design-system/<section>             one section — every topic on it
  *   /design-system/<section>/<page>      one topic
  *
- * A section is not one of them. It is a shelf in the rail, and clicking it
- * opens the shelf — so `/design-system/<section>` is a 404 rather than a page
- * listing what the rail is already listing one row below.
+ * A section is a real page because the overview cards and the nav menu both
+ * open one, and a reader who clicks Patterns wants every pattern, not
+ * whichever topic happens to be filed first.
  *
  * Nested rather than flat because a bare `/design-system/data` does not say
  * whether it is the shadcn shelf or something about tables, and a link is read
@@ -59,11 +60,17 @@ export function docsHref(id: string): string {
   return sectionId ? `${DOCS_ROOT}/${sectionId}/${id}` : DOCS_ROOT
 }
 
-/** What a URL resolves to. `page` is null on the overview. */
+/** The URL for one section's index. */
+export function sectionHref(id: string): string {
+  return SECTION_BY_ID.has(id) ? `${DOCS_ROOT}/${id}` : DOCS_ROOT
+}
+
+/** What a URL resolves to. `page` is null on the overview and on a section. */
 export type DocsLocation = {
   section: DocsSection | null
   page: DocsPage | null
-  /** What the rail marks as current: a topic id, or "" on the overview. */
+  /** What the pane is keyed on: a topic id, a section id, or "" on the
+      overview. */
   activeId: string
 }
 
@@ -83,8 +90,7 @@ export function resolveDocs(slug?: string[]): DocsLocation | null {
   const section = SECTION_BY_ID.get(sectionId)
   if (!section) return null
 
-  /* A section has no page of its own: the rail opens it in place. */
-  if (!pageId) return null
+  if (!pageId) return { activeId: section.id, page: null, section }
 
   /* The topic has to be under this section, not merely exist: without the
      check, `/design-system/motion/colour` would render the colour page under
@@ -101,6 +107,7 @@ export function resolveDocs(slug?: string[]): DocsLocation | null {
 export function docsParams(): { slug: string[] | undefined }[] {
   return [
     { slug: undefined },
+    ...DOCS_SECTIONS.map((section) => ({ slug: [section.id] })),
     ...DOCS_SECTIONS.flatMap((section) =>
       section.groups.flatMap((group) =>
         group.pages.map((page) => ({ slug: [section.id, page.id] })),

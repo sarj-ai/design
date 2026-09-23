@@ -337,7 +337,7 @@ fabricate what a reference app does.
 
 ## Skills — what each one is for
 
-Eight skills are installed at `.claude/skills/`. Load them with the Skill tool
+Nine skills are installed at `.claude/skills/`. Load them with the Skill tool
 (or read the `SKILL.md`). They are deep reference, deliberately not inlined here
 — this file is what you need to act; they are what you need to get a specific
 thing exactly right.
@@ -351,6 +351,7 @@ thing exactly right.
 | **`sarj-brand`** | The brand itself: every colour as OKLCH + hex across light and dark (it also documents a dark palette and the tasama whitelabel, neither of which this workspace renders), the Nunito type system, spacing/radius/motion scales, the chart ramp, component recipes, a copy-paste starter | Producing something Sarj-branded **outside this app** — slides, standalone HTML, an artifact, a diagram, a marketing page. Inside the app you want tokens, not values, so reach for `sarj-mockup` instead. |
 | **`ui-ux-pro-max`** | A searchable database: `ux-guidelines.csv`, `products.csv`, `ui-reasoning.csv`, `charts.csv`, `app-interface.csv` | Choosing a pattern for a product type, picking a chart, or reasoning about an interaction. **Ignore its `colors.csv`, `google-fonts.csv`, `typography.csv`, `styles.csv`** — generic palettes and font pairings that contradict the tokens and Nunito, and lint will reject them. Take the reasoning, not the values. |
 | **`web-animation-design`** | Easing blueprints, duration guidance, springs, performance, accessibility, and this repo's motion house rules | Adding or reviewing motion beyond the tokenised defaults. The rules above cover the common cases; this covers the judgement calls. |
+| **`sarj-figure`** | The register of the lab's hairline technical drawings — a plan of the thing, `currentColor` strokes, one true measurement called out — plus the shared `Figure` frame, sheet sizes, and how to check one at size | Drawing or reviewing an illustration in a nav panel, a design-system section card, or any card that needs one |
 | **`ui-review`** | The Sarj Design Approval Checklist as hard gates, plus the review rules mined from real DES rounds (the helper-text principle, the no-flags ban, state coverage, PRD conformance) and a full UI/UX lens pass | **Before moving a design ticket to In Review.** Self-review the live route, then fix or explicitly waive every finding in the ticket. Also for reviewing any screenshot or mockup on request. |
 
 ---

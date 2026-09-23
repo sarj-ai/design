@@ -1005,7 +1005,7 @@ export const DOCS_SECTIONS: DocsSection[] = [
      part anyone reads through. Everything above it is a decision of ours. */
   {
     id: "components",
-    title: "shadcn components",
+    title: "Shadcn components",
     description:
       "Every shadcn primitive in src/components/ui, running rather than described. If one of these covers it, nothing gets hand-rolled.",
     groups: [{ pages: CATALOG_GROUPS }],

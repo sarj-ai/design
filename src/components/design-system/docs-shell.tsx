@@ -4,15 +4,26 @@ import Link from "next/link"
 import * as React from "react"
 
 import { SiteNav } from "@/components/shell/site-nav"
-import { AllSectionsIcon } from "@/components/design-system/icons"
+import {
+  AllSectionsIcon,
+  OpenSectionIcon,
+} from "@/components/design-system/icons"
 import { Button } from "@/components/ui/button"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item"
 import {
   type DocsPage,
   type DocsSection,
 } from "@/lib/design-system/data"
-import { DOCS_ROOT } from "@/lib/design-system/nav"
+import { DOCS_ROOT, docsHref } from "@/lib/design-system/nav"
 import { CopyLinkButton } from "@/components/design-system/copy-link-button"
-import { DesignSystemOrbit } from "@/components/design-system/orbit-index"
+import { DesignSystemHero } from "@/components/design-system/hero"
 
 /**
  * A rail entry while a search is running.
@@ -34,9 +45,44 @@ import { DesignSystemOrbit } from "@/components/design-system/orbit-index"
  *
  * Views arrive as a prop rather than being built here: the route file stays
  * the place the content lives, which is where anyone editing this page will
- * look first. Every topic has one; a section does not, because a section is a
- * shelf in the rail rather than a page.
+ * look first. Every topic has one; a section does not, because its page is
+ * the list of its topics, drawn here.
  */
+
+/**
+ * A section's own page: every topic on the shelf, under the small labels the
+ * shelf is already split by. What the overview cards and the nav menu open.
+ */
+function SectionIndex({ section }: { section: DocsSection }) {
+  return (
+    <div className="flex flex-col gap-8">
+      {section.groups.map((group, index) => (
+        <section className="flex flex-col gap-2" key={group.label ?? index}>
+          {group.label ? (
+            <h2 className="text-sm font-medium text-muted-foreground">
+              {group.label}
+            </h2>
+          ) : null}
+          <ItemGroup className="gap-2">
+            {group.pages.map((topic) => (
+              <Item asChild key={topic.id} variant="outline">
+                <Link href={docsHref(topic.id)}>
+                  <ItemContent>
+                    <ItemTitle>{topic.title}</ItemTitle>
+                    <ItemDescription>{topic.description}</ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <OpenSectionIcon className="text-muted-foreground" />
+                  </ItemActions>
+                </Link>
+              </Item>
+            ))}
+          </ItemGroup>
+        </section>
+      ))}
+    </div>
+  )
+}
 
 export function DesignSystemDocs({
   activeId,
@@ -46,29 +92,36 @@ export function DesignSystemDocs({
 }: {
   /** The rail entry that reads as current. Empty on the overview. */
   activeId: string
-  /** The topic whose pane is open, or null on the overview. */
+  /** The topic whose pane is open, or null on the overview and a section. */
   page: DocsPage | null
-  /** The section that topic sits under, or null on the overview. */
+  /** The section open, or the one the topic sits under; null on the
+      overview. */
   section: DocsSection | null
   /** Topic id → what its pane renders. */
   views: Record<string, React.ReactNode>
 }) {
-  /* The overview is the orbit figure. `DocsOverview` — a grid of five cards
-     listing the same five sections — went with the rail.
+  /* The overview is the hero: one headline, one supporting line, and the five
+     sections as rows. It replaced the orbit figure, which made the reader
+     watch an animation to find out where the sections were. `DocsOverview` — a
+     grid of five cards listing the same five sections — went with the rail.
 
      No `AppHeader` on it either. Its trail here read "Home › Design system",
      which is the nav above it saying the same thing twice, and the figure
      wants the height more than the breadcrumb wants the row. A topic still
      gets one, because there the trail names which topic of which section is
      open. */
-  if (!page) {
+  if (!section) {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <SiteNav />
-        <DesignSystemOrbit />
+        <DesignSystemHero />
       </div>
     )
   }
+
+  /* A section page wears the same header a topic does, with the section's
+     own title and line in it. */
+  const heading = page ?? section
 
   return (
     <>
@@ -96,12 +149,12 @@ export function DesignSystemDocs({
               {/* Which shelf this topic sits on. The breadcrumb said it and is
                   gone; a topic title alone does not tell you that Choice is a
                   shadcn component rather than a pattern. */}
-              {section && page.id !== section.id ? (
+              {page && page.id !== section.id ? (
                 <p className="text-sm text-muted-foreground">{section.title}</p>
               ) : null}
-              <h1 className="text-2xl font-semibold">{page.title}</h1>
+              <h1 className="text-2xl font-semibold">{heading.title}</h1>
               <p className="max-w-2xl text-sm text-muted-foreground">
-                {page.description}
+                {heading.description}
               </p>
             </div>
 
@@ -122,7 +175,7 @@ export function DesignSystemDocs({
             </div>
           </header>
 
-          {views[activeId]}
+          {page ? views[activeId] : <SectionIndex section={section} />}
         </main>
       </div>
     </>

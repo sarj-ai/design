@@ -283,6 +283,18 @@
      surface in while it moves reads as two things happening to it. */
   --animate-drawer-up: drawer-up 0.3s var(--ease-out-cubic) both;
 
+  /* The design system's front door, arriving a line at a time.
+
+     `both` rather than the bare fill `fade-in-up` carries, because the pieces
+     are staggered: without it every line paints at its final position first
+     and then snaps back to the start frame when its delay elapses. The delay
+     is the one value set at the call site — it is per-line ordering, not a
+     duration, so it is not something a token can hold.
+
+     300ms and ease-out-cubic, like everything else that enters. Transform and
+     opacity only; the type does not reflow as it lands. */
+  --animate-hero-in: hero-in 0.3s var(--ease-out-cubic) both;
+
   @keyframes accordion-down {
     from {
       height: 0;
@@ -352,6 +364,17 @@
       transform: translateY(100%);
     }
     to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
       transform: translateY(0);
     }
   }

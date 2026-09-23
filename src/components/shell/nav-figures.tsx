@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
 
 /**
  * The drawings in the nav panels.
@@ -13,40 +13,8 @@ import { cn } from "@/lib/utils"
  * reading as annotation rather than as copy, without an off-scale type size.
  *
  * Every stroke is `currentColor`, so the cell owns the colour and can lift the
- * whole drawing on hover with one class.
+ * whole drawing on hover with one class. The frame is `shared/figure.tsx`.
  */
-
-type FigureProps = { className?: string }
-
-/* Hairlines, one weight, round ends: a drawing, not a diagram. */
-const LINE = {
-  fill: "none" as const,
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-}
-
-function Figure({
-  children,
-  className,
-}: FigureProps & { children: React.ReactNode }) {
-  return (
-    <svg
-      aria-hidden="true"
-      /* `size-auto` is load-bearing. Anywhere these are used inside a
-         NavigationMenuLink, the primitive's own
-         `[&_svg:not([class*='size-'])]:size-4` wins on specificity and cuts
-         the drawing down to a 16px icon. Carrying a `size-` class at all is
-         what opts out of that. */
-      className={cn("size-auto w-full", className)}
-      fill="none"
-      viewBox="0 0 520 320"
-    >
-      {children}
-    </svg>
-  )
-}
 
 /**
  * The index: an app window, measured. 1400px is `max-w-350`, the width every
