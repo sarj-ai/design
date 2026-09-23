@@ -1,7 +1,7 @@
 /**
- * The sheet every section card's drawing is cut from: a wide strip, drawn at
- * about 1.4x the ~672px it lands at, so a `text-xs` label reads at roughly 8px
- * — annotation, not copy. The same register as the nav panels' figures, one
- * row lower and much wider.
+ * The sheet every section's drawing is cut from: a 4:1 strip. It is shown
+ * twice — in a ~320px plate at the end of the section's row, where only the
+ * silhouette reads, and at ~1000px in the opened section, where a `text-xs`
+ * label lands at about 12px and every tick is inspected.
  */
-export const SECTION_FIGURE_VIEWBOX = "0 0 960 200"
+export const SECTION_FIGURE_VIEWBOX = "0 0 960 240"

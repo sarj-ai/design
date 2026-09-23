@@ -2,91 +2,102 @@ import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
 
 import { SECTION_FIGURE_VIEWBOX } from "./frame"
 
-/* The dot lattice, at 2x. DotPattern's defaults are a 16px tile with each dot
-   at (1, 1) inside it and a 1px radius — so at 2x a 32-unit pitch, dots 2
-   units in from the panel's corner, radius 2. The panel starts at x 420 and
-   runs off the sheet; the content block inside it is cut out of the field,
-   because the field is never drawn over content. */
-const PANEL_X = 420
-const PANEL_Y = 48
-const CONTENT = { x: 548, y: 96, width: 192, height: 64 }
+/* Both objects are drawn at 2 units to the pixel, so the card and the dot
+   lattice share one scale.
 
-const DOTS = Array.from({ length: 17 * 5 }, (_, i) => ({
-  x: PANEL_X + 2 + (i % 17) * 32,
-  y: PANEL_Y + 2 + Math.floor(i / 17) * 32,
-})).filter(
-  (dot) =>
-    dot.x < CONTENT.x - 8 ||
-    dot.x > CONTENT.x + CONTENT.width + 8 ||
-    dot.y < CONTENT.y - 8 ||
-    dot.y > CONTENT.y + CONTENT.height + 8,
-)
+   The FileCard's sheet starts at CARD_X. The DotPattern field is 11 columns
+   by 5 rows at a 32-unit pitch (16px), centred on the card's height. The
+   content panel sits in it on the half-pitch, so the field stops 24 units
+   (12px) short of the panel on every side: the dots in rows 1–3, columns 3–7
+   are the ones the panel would cover, and they are not drawn. */
+const CARD_X = 220
+const FIELD_X = 476
+const FIELD_Y = 72
+const PITCH = 32
+
+const DOTS = Array.from({ length: 11 * 5 }, (_, i) => ({
+  col: i % 11,
+  row: Math.floor(i / 11),
+}))
+  .filter(({ col, row }) => row === 0 || row === 4 || col < 3 || col > 7)
+  .map(({ col, row }) => ({
+    x: FIELD_X + col * PITCH,
+    y: FIELD_Y + row * PITCH,
+  }))
 
 /**
  * Custom components: the two this product added rather than took from
- * shadcn, each drawn at 2x and measured from its own source.
+ * shadcn, side by side at 2x and measured from their own source.
  *
  * Left, a FileCard in plan: the `w-14 h-18` sheet (56 by 72px) cut to
- * `rounded-md` (8px), a few placeholder rules for its contents, and the type
- * badge that overhangs the right edge by `-right-2` (8px).
+ * `rounded-md` (8px, `--radius-md`), `p-2` in to its placeholder rules, and
+ * the type badge hung `-right-2` (8px) past the right edge and `bottom-1.5`
+ * (6px) up from the bottom — `ui/file-card-collections.tsx`.
  *
- * Right, a DotPattern field behind a panel, with the pitch called out: 16px
- * is the component's default `width` and `height`, and every placement in the
- * design system uses the default. The block in the middle of the panel is
- * content, and the field stops around it.
+ * Right, a DotPattern field with its pitch called out: 16px is the
+ * component's default `width` and `height` (`ui/dot-pattern.tsx`), dots of
+ * `cr` 1. A content panel sits in the middle and the field stops around it —
+ * "a field of dots behind a panel, never over content" (PLATFORM_COMPONENTS
+ * in `lib/design-system/data.ts`).
  */
 export function CustomComponentsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={SECTION_FIGURE_VIEWBOX}>
       <g {...LINE}>
-        {/* The FileCard's top and bottom edges, run off the left of the
-            sheet, so the drawing reads as cropped from a larger one. */}
-        <path d="M0 48h960M0 192h960" opacity=".6" strokeDasharray="4 8" />
+        {/* The card's top and bottom edges, run to both edges of the sheet. */}
+        <path d="M0 64h960M0 208h960" opacity=".6" strokeDasharray="4 8" />
 
         {/* 56px, measured over the card. */}
-        <path d="M120 30h112" />
-        <path d="M120 20v20M232 20v20" />
-        <path d="m130 22-10 8 10 8M222 22l10 8-10 8" />
+        <path d={`M${CARD_X} 44h112`} />
+        <path d={`M${CARD_X} 34v20M${CARD_X + 112} 34v20`} />
+        <path
+          d={`m${CARD_X + 10} 36-10 8 10 8M${CARD_X + 102} 36l10 8-10 8`}
+        />
 
         {/* 72px, measured beside it. */}
-        <path d="M88 48v144" />
-        <path d="M78 48h20M78 192h20" />
-        <path d="m80 58 8-10 8 10M80 182l8 10 8-10" />
-
-        {/* The card: 112x144 at 2x, radius 16 (rounded-md, 8px), p-2 in from
-            each edge to the placeholder rules. Its outline stops where the
-            badge sits over it. */}
-        <path d="M232 152V64a16 16 0 0 0-16-16h-80a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h80a16 16 0 0 0 11.3-4.7" />
+        <path d={`M${CARD_X - 32} 64v144`} />
+        <path d={`M${CARD_X - 42} 64h20M${CARD_X - 42} 208h20`} />
         <path
-          d="M136 68h40M136 84h24M166 84h24M136 100h40M182 100h24M136 116h24"
+          d={`m${CARD_X - 40} 74 8-10 8 10M${CARD_X - 40} 198l8 10 8-10`}
+        />
+
+        {/* The card: 112 x 144, radius 16. Its right edge breaks where the
+            badge sits over it, and picks up again on the corner arc. */}
+        <path
+          d={`M${CARD_X + 112} 168V80a16 16 0 0 0-16-16h-80a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h80a16 16 0 0 0 15.49-12`}
+        />
+
+        {/* Placeholder rules, 16 in from the edge (p-2). */}
+        <path
+          d={`M${CARD_X + 16} 84h40M${CARD_X + 16} 100h24M${CARD_X + 48} 100h24M${CARD_X + 16} 116h48`}
           opacity=".7"
         />
 
-        {/* The type badge, hung off the right edge by -right-2. */}
-        <rect height="28" rx="8" width="56" x="192" y="152" />
+        {/* The type badge: 16 past the right edge, 12 up from the bottom. */}
+        <rect height="28" rx="8" width="56" x={CARD_X + 72} y="168" />
 
-        {/* The panel the field sits behind: its right side runs off the
-            sheet. */}
+        {/* 16px, the pitch between two dots in the field's top row. */}
+        <path d={`M${FIELD_X} 34v20M${FIELD_X + PITCH} 34v20`} />
+        <path d={`M${FIELD_X - 24} 44h24M${FIELD_X + PITCH + 24} 44h-24`} />
         <path
-          d={`M960 ${PANEL_Y}H436a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h524`}
+          d={`m${FIELD_X - 10} 36 10 8-10 8M${FIELD_X + PITCH + 10} 36l-10 8 10 8`}
         />
 
-        {/* The content the field stops short of. */}
+        {/* The content panel the field stops short of. */}
         <rect
-          height={CONTENT.height}
-          opacity=".7"
-          rx="12"
-          width={CONTENT.width}
-          x={CONTENT.x}
-          y={CONTENT.y}
+          height="80"
+          rx="16"
+          width="144"
+          x={FIELD_X + 88}
+          y={FIELD_Y + 24}
         />
-
-        {/* 16px, the pitch between two dots. */}
-        <path d="M454 20v20M486 20v20" />
-        <path d="M430 30h24M510 30h-24" />
-        <path d="m444 22 10 8-10 8M496 22l-10 8 10 8" />
+        <path
+          d={`M${FIELD_X + 112} ${FIELD_Y + 52}h64M${FIELD_X + 112} ${FIELD_Y + 76}h40`}
+          opacity=".7"
+        />
       </g>
 
+      {/* The field: dots of radius 2 (cr 1 at 2x). */}
       <g fill="currentColor">
         {DOTS.map((dot) => (
           <circle cx={dot.x} cy={dot.y} key={`${dot.x}-${dot.y}`} r="2" />
@@ -97,8 +108,8 @@ export function CustomComponentsFigure({ className }: FigureProps) {
         className="text-xs"
         fill="currentColor"
         textAnchor="middle"
-        x="176"
-        y="14"
+        x={CARD_X + 56}
+        y="28"
       >
         56px
       </text>
@@ -106,13 +117,19 @@ export function CustomComponentsFigure({ className }: FigureProps) {
         className="text-xs"
         fill="currentColor"
         textAnchor="middle"
-        transform="rotate(-90 64 120)"
-        x="64"
-        y="120"
+        transform={`rotate(-90 ${CARD_X - 48} 136)`}
+        x={CARD_X - 48}
+        y="136"
       >
         72px
       </text>
-      <text className="text-xs" fill="currentColor" x="522" y="34">
+      <text
+        className="text-xs"
+        fill="currentColor"
+        textAnchor="middle"
+        x={FIELD_X + PITCH / 2}
+        y="28"
+      >
         16px
       </text>
     </Figure>

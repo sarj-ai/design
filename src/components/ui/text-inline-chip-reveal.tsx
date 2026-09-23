@@ -153,7 +153,7 @@ interface TextInlineChipRevealProps {
   stagger?: number;
   /** The element to render. A page's headline needs to be an `h1`; the
       default `p` suits the standalone paragraph the source was written for. */
-  as?: "p" | "h1" | "h2";
+  as?: "p" | "h1" | "h2" | "h3";
   /** Seconds before the first word starts, for a second block that should
       trail the first rather than reveal alongside it. */
   delay?: number;
@@ -167,7 +167,8 @@ export default function TextInlineChipReveal({
   as = "p",
   delay = 0,
 }: TextInlineChipRevealProps) {
-  const Tag = as === "h1" ? motion.h1 : as === "h2" ? motion.h2 : motion.p;
+  const Tag =
+    as === "h1" ? motion.h1 : as === "h2" ? motion.h2 : as === "h3" ? motion.h3 : motion.p;
   const reduced = useReducedMotion() ?? false;
 
   const words = useMemo(() => text.trim().split(/\s+/).filter(Boolean), [text]);

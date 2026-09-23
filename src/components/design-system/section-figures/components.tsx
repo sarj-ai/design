@@ -3,57 +3,63 @@ import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
 import { SECTION_FIGURE_VIEWBOX } from "./frame"
 
 /**
- * The inventory: four primitives in plan, side by side on one control row —
- * a Button, an Input, a Switch and a Checkbox — drawn at 2x their real size.
+ * The inventory, running: four primitives from `src/components/ui` standing
+ * on one control line, drawn at 3 units to the pixel. The Button is the
+ * focal object at full strength; the Input, Switch and Checkbox sit a step
+ * back beside it.
  *
- * 32px is the default height in `src/components/ui`: `h-8` on Button's
- * default size, on Input, and on SelectTrigger's default (`CONTROL_STEPS` in
- * `lib/design-system/data.ts`). The Switch (32 x 18.4) and the Checkbox
- * (`size-4`, `rounded-[4px]`) are smaller and sit centred in that row, which
- * is what lets any of them stand beside any other without a nudge.
+ * 32px is the default control height: `h-8` on Button's default size and on
+ * Input, both cut to `rounded-lg` (10px, `--radius`). The Switch (32 x
+ * 18.4px, `rounded-full`, a `size-4` thumb) and the Checkbox (`size-4`,
+ * `rounded-[4px]`) are shorter and centre on the same line — which is what
+ * lets any of them stand beside any other without a nudge.
  */
 export function ShadcnComponentsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={SECTION_FIGURE_VIEWBOX}>
       <g {...LINE}>
-        {/* The row's top and bottom, run off both edges wherever no control
-            already draws them. */}
-        <path
-          d="M0 72h960M0 136h960"
-          opacity=".6"
-          strokeDasharray="4 8"
-        />
+        {/* The row's top and bottom, 96 units apart (32px), run off both
+            edges. They double as the dimension's extension lines. */}
+        <path d="M0 72h960M0 168h960" opacity=".6" strokeDasharray="4 8" />
 
-        {/* 32px, measured on the row. */}
-        <path d="M112 72v64" />
-        <path d="M102 72h20M102 136h20" />
-        <path d="m104 82 8-10 8 10M104 126l8 10 8-10" />
+        {/* 32px, measured on the row, outside the controls. */}
+        <path d="M100 72v96" />
+        <path d="M90 72h20M90 168h20" />
+        <path d="m92 82 8-10 8 10M92 158l8 10 8-10" />
 
-        {/* Button: 32 tall, `rounded-lg` (10px), a label in it. */}
-        <rect height="64" rx="20" width="144" x="160" y="72" />
-        <path d="M200 104h64" opacity=".7" />
+        {/* Button: 72 x 32px, radius 10px, a label rule across its content
+            box (px-2.5). The focal object. */}
+        <rect height="96" rx="30" width="216" x="148" y="72" />
+        <path d="M188 120h136" />
 
         {/* Input: the same height and radius, a placeholder and a caret. */}
-        <rect height="64" rx="20" width="224" x="336" y="72" />
-        <path d="M364 104h96" opacity=".5" />
-        <path d="M476 88v32" opacity=".7" />
+        <g opacity=".7">
+          <rect height="96" rx="30" width="288" x="396" y="72" />
+          <path d="M426 120h120" opacity=".7" />
+          <path d="M566 100v40" />
+        </g>
 
-        {/* Switch: 32 x 18.4, centred in the row, thumb on. */}
-        <rect height="37" rx="18.5" width="64" x="592" y="85.5" />
-        <circle cx="637.5" cy="104" fill="currentColor" r="12" />
+        {/* Switch: 32 x 18.4px, fully round, checked — the 16px thumb sits
+            14px along (translate-x 100% - 2px). */}
+        <g opacity=".7">
+          <rect height="55.2" rx="27.6" width="96" x="716" y="92.4" />
+          <circle cx="785" cy="120" fill="currentColor" r="24" />
+        </g>
 
-        {/* Checkbox: 16px, 4px radius, checked. */}
-        <rect height="32" rx="8" width="32" x="688" y="88" />
-        <path d="m696 104 6 6 12-12" />
+        {/* Checkbox: 16px, radius 4px, checked. */}
+        <g opacity=".7">
+          <rect height="48" rx="12" width="48" x="844" y="96" />
+          <path d="m856 121 8 8 16-17" />
+        </g>
       </g>
 
       <text
         className="text-xs"
         fill="currentColor"
         textAnchor="middle"
-        transform="rotate(-90 86 104)"
-        x="86"
-        y="104"
+        transform="rotate(-90 74 120)"
+        x="74"
+        y="120"
       >
         32px
       </text>

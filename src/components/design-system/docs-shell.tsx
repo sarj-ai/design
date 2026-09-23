@@ -24,6 +24,7 @@ import {
 import { DOCS_ROOT, docsHref } from "@/lib/design-system/nav"
 import { CopyLinkButton } from "@/components/design-system/copy-link-button"
 import { DesignSystemHero } from "@/components/design-system/hero"
+import TextHighlightWave from "@/components/ui/text-highlight-wave"
 
 /**
  * A rail entry while a search is running.
@@ -68,7 +69,13 @@ function SectionIndex({ section }: { section: DocsSection }) {
               <Item asChild key={topic.id} variant="outline">
                 <Link href={docsHref(topic.id)}>
                   <ItemContent>
-                    <ItemTitle>{topic.title}</ItemTitle>
+                    <ItemTitle>
+                      <TextHighlightWave
+                        charStagger={0.02}
+                        className="text-sm leading-snug font-medium tracking-normal sm:text-sm"
+                        text={topic.title}
+                      />
+                    </ItemTitle>
                     <ItemDescription>{topic.description}</ItemDescription>
                   </ItemContent>
                   <ItemActions>
@@ -114,7 +121,9 @@ export function DesignSystemDocs({
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <SiteNav />
-        <DesignSystemHero />
+        {/* The topics' views ride along so a tile in an opened section can
+            zoom into its topic in place. */}
+        <DesignSystemHero views={views} />
       </div>
     )
   }
@@ -149,13 +158,30 @@ export function DesignSystemDocs({
               {/* Which shelf this topic sits on. The breadcrumb said it and is
                   gone; a topic title alone does not tell you that Choice is a
                   shadcn component rather than a pattern. */}
+              {/* The lab's one reveal: a highlight washing across each line
+                  a letter at a time — the same wave the front door runs. */}
               {page && page.id !== section.id ? (
-                <p className="text-sm text-muted-foreground">{section.title}</p>
+                <TextHighlightWave
+                  as="p"
+                  charStagger={0.02}
+                  className="text-sm leading-normal font-normal tracking-normal text-muted-foreground sm:text-sm"
+                  text={section.title}
+                />
               ) : null}
-              <h1 className="text-2xl font-semibold">{heading.title}</h1>
-              <p className="max-w-2xl text-sm text-muted-foreground">
-                {heading.description}
-              </p>
+              <TextHighlightWave
+                as="h1"
+                charStagger={0.03}
+                className="text-2xl leading-tight font-semibold tracking-normal sm:text-2xl"
+                delay={0.1}
+                text={heading.title}
+              />
+              <TextHighlightWave
+                as="p"
+                charStagger={0.006}
+                className="max-w-2xl text-sm leading-normal font-normal tracking-normal text-muted-foreground sm:text-sm"
+                delay={0.3}
+                text={heading.description}
+              />
             </div>
 
             {/* Pinned to the title's line rather than centred on the block, as

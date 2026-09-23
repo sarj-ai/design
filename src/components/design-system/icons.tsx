@@ -19,17 +19,18 @@ import {
   Coins01Icon,
   ColorsIcon,
   ComponentIcon,
-  CubeIcon,
   CopyLinkIcon as CopyLinkGlyph,
   CpuIcon,
+  CubeIcon,
   DashboardSquare01Icon,
-  EaseCurveControlPointsIcon,
   Delete02Icon,
   Download01Icon,
-  PencilEdit02Icon,
+  EaseCurveControlPointsIcon,
   FilterIcon,
+  Home01Icon,
   InformationCircleIcon,
   MoreHorizontalIcon,
+  PencilEdit02Icon,
   PlayIcon,
   RefreshIcon,
   Search01Icon,
@@ -125,3 +126,7 @@ export const MotionSectionIcon = icon(
 export const PatternsIcon = icon(DashboardSquare01Icon, "PatternsIcon")
 export const CustomComponentsIcon = icon(CubeIcon, "CustomComponentsIcon")
 export const ShadcnComponentsIcon = icon(ComponentIcon, "ShadcnComponentsIcon")
+
+/* The Icons tile's subject: one everyday glyph from the set the product draws
+   from, set on its construction sheet by the tile's drawing. */
+export const IconsTopicGlyph = icon(Home01Icon, "IconsTopicGlyph")

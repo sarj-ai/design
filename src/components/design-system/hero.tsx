@@ -1,8 +1,8 @@
 "use client"
 
 import { SectionMenu } from "@/components/design-system/section-menu"
-import CurrencySkyBackground from "@/components/ui/currency-sky-background"
-import TextInlineChipReveal from "@/components/ui/text-inline-chip-reveal"
+import ContourMapBackground from "@/components/ui/contour-map-background"
+import TextHighlightWave from "@/components/ui/text-highlight-wave"
 
 /**
  * `/design-system` — the front door.
@@ -19,10 +19,9 @@ import TextInlineChipReveal from "@/components/ui/text-inline-chip-reveal"
  * than a panel cut into it. It still stops above the list: a moving field
  * behind a row of links is a row of links you have to read through weather.
  *
- * The headline resolves a word at a time: each one arrives as a purple glow
- * and inks in behind it, on a hue that sweeps across the whole line. That
- * reveal is the emphasis device, so the headline is one even weight of ink
- * rather than the two-tone split it started as.
+ * The headline and its line resolve under a highlight that washes across
+ * them a letter at a time (`text-highlight-wave`) — the same wave the section
+ * names run, so the page has one reveal.
  *
  * The supporting line sits in its own narrow column, aligned to the *bottom*
  * of the headline rather than the top. Aligned to the top it reads as a
@@ -30,7 +29,12 @@ import TextInlineChipReveal from "@/components/ui/text-inline-chip-reveal"
  * second half of one thought, which is what it is.
  */
 
-export function DesignSystemHero() {
+export function DesignSystemHero({
+  views,
+}: {
+  /** Topic id → what its page renders, for the tiles to open in place. */
+  views: Record<string, React.ReactNode>
+}) {
   return (
     <main className="flex flex-1 flex-col">
       {/* `-mt-20` pulls the cover up under the nav, which is `sticky top-0`
@@ -44,49 +48,37 @@ export function DesignSystemHero() {
           display headline that starts immediately under the chrome reads as
           the first row of a document; the same headline with a screen's worth
           of air above it reads as a cover. */}
-      <CurrencySkyBackground className="-mt-20" fadeBottom tone="light">
-        <div className="flex w-full flex-col gap-8 px-6 pt-32 pb-16 lg:flex-row lg:items-end lg:justify-between lg:gap-16 lg:px-12 lg:pt-44 lg:pb-20">
-          {/* The headline resolves word by word, each one arriving as a purple
-              glow before it inks in. That reveal is now the emphasis device,
-              which is why the two-tone split it replaced is gone: holding the
-              first clause back in half-strength ink *and* lighting every word
-              on the way in are two answers to the same question, and running
-              both makes the line fussy rather than twice as deliberate.
-
-              Ordinary `foreground` ink, because the terrain is drawn on white
-              now. The page has one surface again, so nothing here needs the
-              light-on-dark pair it used while the cover was near-black.
-
-              Chips off. They are five cycling colour tiles built for a long
-              sentence; on a four-word headline only the first slot is even in
-              range, which lands one tile after "Every" for no reason. */}
-          <TextInlineChipReveal
+      <ContourMapBackground className="-mt-20" fadeBottom>
+        <div className="flex w-full flex-col gap-8 px-6 pt-40 pb-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16 lg:px-12 lg:pt-56 lg:pb-8">
+          {/* A highlight washes across the headline a letter at a time,
+              lifting each one out of a dimmed rest — the same wave the
+              section names below run, so the page has one reveal. The break
+              is written in rather than left to wrapping, so the second line
+              trails the first as the line it visually is. */}
+          <TextHighlightWave
             as="h1"
-            chipAfter={[]}
-            className="max-w-3xl text-start text-6xl font-semibold leading-none tracking-tighter text-foreground sm:text-6xl md:text-7xl lg:text-8xl"
-            text="Every rule, written down."
+            className="max-w-3xl text-start text-6xl font-semibold leading-none tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl"
+            text={"Every rule,\nwritten down."}
           />
 
-          {/* The same reveal as the headline, trailing it by a third of a
-              second so the two read as one event with an order rather than as
-              two things starting at once. Its stagger is halved: this line has
-              five times the words, and at the headline's rate the last of them
-              would still be arriving two seconds in. */}
-          <TextInlineChipReveal
-            chipAfter={[]}
-            className="max-w-sm text-start text-base leading-normal font-normal tracking-normal text-pretty text-muted-foreground sm:text-base md:text-base"
-            delay={0.35}
-            stagger={0.025}
+          {/* The same wave, starting as the headline's second line finishes.
+              Five times the letters, so a fifth of the stagger — at the
+              headline's rate the last of them would arrive five seconds in. */}
+          <TextHighlightWave
+            as="p"
+            charStagger={0.008}
+            className="max-w-sm text-start text-base leading-normal font-normal tracking-normal text-pretty text-muted-foreground sm:text-base"
+            delay={0.6}
             text="The tokens, primitives and patterns the product is built from, and the ten lint rules that keep a screen from drifting off them."
           />
         </div>
-      </CurrencySkyBackground>
+      </ContourMapBackground>
 
       {/* The five sections, as a menu that opens into a grid of each one's
           topics. It replaced a stack of sticky cards that each led to the
           first topic on its shelf rather than to the shelf. */}
       <div className="pb-24">
-        <SectionMenu />
+        <SectionMenu views={views} />
       </div>
     </main>
   )
