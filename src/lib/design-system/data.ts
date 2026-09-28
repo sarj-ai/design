@@ -656,6 +656,26 @@ export const PLATFORM_COMPONENTS: DocsPage[] = [
   },
 ]
 
+/** The Components section: ours, built for this product. */
+export const PRODUCT_COMPONENTS: DocsPage[] = [
+  /* `index` rather than `index-page`: that id is the pattern's, and a topic
+     id has to be unique across every section. */
+  {
+    id: "index",
+    title: "Index page",
+    description:
+      "A collection of one kind of object, and the four states it can be in instead of full.",
+    sarj: true,
+  },
+  {
+    id: "orb-avatar",
+    title: "Avatar",
+    description:
+      "A shader orb for anyone without a photo. The name moves the light, so the same name always gets the same orb.",
+    sarj: true,
+  },
+]
+
 export const CATALOG_GROUPS: CatalogGroup[] = [
   {
     id: "surface",
@@ -1000,6 +1020,15 @@ export const DOCS_SECTIONS: DocsSection[] = [
       "Not shadcn. Added for this product, and ours to maintain rather than upstream's.",
     sarj: true,
     groups: [{ pages: PLATFORM_COMPONENTS }],
+  },
+  /* `product-components` rather than `components`: that address already
+     belongs to the shadcn inventory below, and links to it are out there. */
+  {
+    id: "product-components",
+    title: "Components",
+    description: "The components the product is built from.",
+    sarj: true,
+    groups: [{ pages: PRODUCT_COMPONENTS }],
   },
   /* Last on purpose: it is the inventory you look something up in, not the
      part anyone reads through. Everything above it is a decision of ours. */

@@ -7,7 +7,7 @@ import {
   type Transition,
 } from "motion/react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { CloseIcon } from "@/components/design-system/icons"
 import { SECTION_FIGURES } from "@/components/design-system/section-figures"
@@ -15,7 +15,7 @@ import { TOPIC_FIGURES } from "@/components/design-system/topic-figures"
 import { Button } from "@/components/ui/button"
 import TextHighlightWave from "@/components/ui/text-highlight-wave"
 import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system/data"
-import { docsHref, sectionHref } from "@/lib/design-system/nav"
+import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
 import { cn } from "@/lib/utils"
 
 /**
@@ -31,6 +31,12 @@ import { cn } from "@/lib/utils"
  * Every row is still a real link to `/design-system/<section>`: the click is
  * only intercepted when it is a plain one, so a middle-click or a new tab
  * gets the section page, and so does a browser without the script.
+ *
+ * Opening a section or a topic in place still moves the address bar to its
+ * own URL, with a history entry each. So the link can be copied from the bar,
+ * a reload lands on that page, and Back closes one layer rather than leaving
+ * the design system. The overlay follows the history, not the other way
+ * round: Close steps back, and a popstate sets what is open.
  *
  * The timings are the reference's, not the house tokens. These are JS-driven
  * and choreographed across a whole screen, which is what the 300ms cap on
@@ -61,6 +67,14 @@ function lift(index: number) {
   return (index * 67) % 200
 }
 
+/** Where a row sits now, for the cover to grow out of. */
+function rowRect(id: string): Rect {
+  const box = document
+    .querySelector(`[data-section-row="${id}"]`)
+    ?.getBoundingClientRect()
+  return { top: box?.top ?? 0, bottom: box?.bottom ?? 0 }
+}
+
 /** Two digits, so a column of numbers lines up. */
 function ordinal(index: number) {
   return String(index + 1).padStart(2, "0")
@@ -68,9 +82,14 @@ function ordinal(index: number) {
 
 export function SectionMenu({
   views,
+  initialSection = null,
+  initialTopic = null,
 }: {
   /** Topic id → what its page renders, shown when a tile opens in place. */
   views: Record<string, React.ReactNode>
+  /** Open on load — the page was reached by a section or topic URL. */
+  initialSection?: string | null
+  initialTopic?: string | null
 }) {
   const reduced = useReducedMotion() ?? false
   const [hovered, setHovered] = useState<string | null>(null)
@@ -81,15 +100,89 @@ export function SectionMenu({
     setHovered(id)
     setTurns((current) => ({ ...current, [id]: (current[id] ?? 0) + 1 }))
   }
-  const [open, setOpen] = useState<{ id: string; rect: Rect } | null>(null)
+  const [open, setOpen] = useState<{ id: string; rect: Rect } | null>(
+    initialSection ? { id: initialSection, rect: { top: 0, bottom: 0 } } : null,
+  )
   /* The topic zoomed open inside the section. `landed` holds its contents
      back until the page has finished growing, so the move animates one
      surface rather than a surface with a long table inside it. `lastTopic`
      outlives the page, so the tile it shrinks back into stays above its
      neighbours until it lands. */
-  const [topic, setTopic] = useState<{ id: string } | null>(null)
-  const [landed, setLanded] = useState(false)
-  const [lastTopic, setLastTopic] = useState<string | null>(null)
+  const [topic, setTopic] = useState<{ id: string } | null>(
+    initialTopic ? { id: initialTopic } : null,
+  )
+  const [landed, setLanded] = useState(Boolean(initialTopic))
+  const [lastTopic, setLastTopic] = useState<string | null>(initialTopic)
+
+  /* Read inside the popstate listener, which is bound once. */
+  const topicRef = useRef(topic)
+  useEffect(() => {
+    topicRef.current = topic
+  })
+
+  /* How deep the page loaded — 0 on the overview, 1 on a section URL, 2 on a
+     topic — and how deep it is now. Close steps back through entries this
+     page pushed, and only rewrites the address when it has to go shallower
+     than it loaded, since there is no entry behind that to step back to. */
+  const base = initialTopic ? 2 : initialSection ? 1 : 0
+  const depth = useRef(base)
+
+  /* Back and Forward: whatever the address now names is what is open. */
+  useEffect(() => {
+    const sync = () => {
+      const [sectionId, topicId] = window.location.pathname
+        .slice(DOCS_ROOT.length)
+        .split("/")
+        .filter(Boolean)
+      const section = DOCS_SECTIONS.find((item) => item.id === sectionId)
+      depth.current = section ? (topicId ? 2 : 1) : 0
+      if (!section) {
+        setTopic(null)
+        setOpen(null)
+        return
+      }
+      setOpen((current) =>
+        current?.id === section.id
+          ? current
+          : { id: section.id, rect: rowRect(section.id) },
+      )
+      const next = topicsOf(section).some((page) => page.id === topicId)
+        ? topicId
+        : null
+      if (!next) {
+        setTopic(null)
+      } else if (topicRef.current?.id !== next) {
+        setLanded(false)
+        setLastTopic(next)
+        setTopic({ id: next })
+      }
+    }
+    window.addEventListener("popstate", sync)
+    return () => window.removeEventListener("popstate", sync)
+  }, [])
+
+  const closeTo = (target: 0 | 1) => {
+    if (target >= base) {
+      window.history.go(target - depth.current)
+      return
+    }
+    const sectionId = open?.id
+    window.history.replaceState(
+      null,
+      "",
+      target === 1 && sectionId ? sectionHref(sectionId) : DOCS_ROOT,
+    )
+    depth.current = target
+    setTopic(null)
+    if (target === 0) setOpen(null)
+  }
+  const closeTopic = () => closeTo(1)
+  const closeSection = () => closeTo(0)
+  /* For the Escape listener, which is bound before these are declared. */
+  const closers = useRef({ topic: closeTopic, section: closeSection })
+  useEffect(() => {
+    closers.current = { topic: closeTopic, section: closeSection }
+  })
 
   const cross = (delay = 0): Transition => ({
     duration: reduced ? 0 : 0.9,
@@ -106,8 +199,8 @@ export function SectionMenu({
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return
       /* One layer at a time: a topic's page first, then the section. */
-      if (topic) setTopic(null)
-      else setOpen(null)
+      if (topic) closers.current.topic()
+      else closers.current.section()
     }
     window.addEventListener("keydown", onKey)
     return () => {
@@ -172,6 +265,7 @@ export function SectionMenu({
                   isHovered && "bg-primary text-primary-foreground",
                 )}
                 data-no-transition
+                data-section-row={section.id}
                 href={sectionHref(section.id)}
                 onBlur={() => setHovered(null)}
                 onClick={(event) => {
@@ -183,6 +277,8 @@ export function SectionMenu({
                   )
                     return
                   event.preventDefault()
+                  window.history.pushState(null, "", sectionHref(section.id))
+                  depth.current = 1
                   const box = event.currentTarget.getBoundingClientRect()
                   setHovered(null)
                   setOpen({
@@ -272,7 +368,9 @@ export function SectionMenu({
         })}
       </ul>
 
-      <AnimatePresence>
+      {/* No entrance on load: a page reached by its URL opens already
+          covered, rather than growing a cover out of a row nobody clicked. */}
+      <AnimatePresence initial={!initialSection}>
         {open && openSection ? (
           <motion.div
             className="fixed inset-0 z-modal overflow-y-auto"
@@ -319,10 +417,7 @@ export function SectionMenu({
             >
               <Button
                 aria-label="Close"
-                onClick={() => {
-                  setTopic(null)
-                  setOpen(null)
-                }}
+                onClick={closeSection}
                 size="icon"
                 className="text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 variant="ghost"
@@ -384,6 +479,8 @@ export function SectionMenu({
                           )
                             return
                           event.preventDefault()
+                          window.history.pushState(null, "", docsHref(topic.id))
+                          depth.current = 2
                           setLanded(false)
                           setLastTopic(topic.id)
                           setTopic({ id: topic.id })
@@ -512,7 +609,7 @@ export function SectionMenu({
                       },
                     }}
                     initial={{ opacity: 0 }}
-                    onClick={() => setTopic(null)}
+                    onClick={closeTopic}
                     transition={{
                       duration: reduced ? 0 : 0.4,
                       ease: "easeOut",
@@ -547,7 +644,7 @@ export function SectionMenu({
                       initial={{ opacity: 0, y: 8 }}
                       transition={{ duration: reduced ? 0 : 0.3, ease: ARRIVE }}
                     >
-                      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 pt-14 pb-16">
+                      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 pt-14 pb-16">
                         <header className="flex flex-col gap-1">
                           <TextHighlightWave
                             as="p"
@@ -590,7 +687,7 @@ export function SectionMenu({
                   >
                     <Button
                       aria-label="Close"
-                      onClick={() => setTopic(null)}
+                      onClick={closeTopic}
                       size="icon"
                       variant="ghost"
                     >

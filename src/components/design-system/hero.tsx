@@ -31,9 +31,14 @@ import TextHighlightWave from "@/components/ui/text-highlight-wave"
 
 export function DesignSystemHero({
   views,
+  initialSection = null,
+  initialTopic = null,
 }: {
   /** Topic id → what its page renders, for the tiles to open in place. */
   views: Record<string, React.ReactNode>
+  /** Open on load, when the page was reached by a section or topic URL. */
+  initialSection?: string | null
+  initialTopic?: string | null
 }) {
   return (
     <main className="flex flex-1 flex-col">
@@ -78,7 +83,11 @@ export function DesignSystemHero({
           topics. It replaced a stack of sticky cards that each led to the
           first topic on its shelf rather than to the shelf. */}
       <div className="pb-24">
-        <SectionMenu views={views} />
+        <SectionMenu
+          initialSection={initialSection}
+          initialTopic={initialTopic}
+          views={views}
+        />
       </div>
     </main>
   )

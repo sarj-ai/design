@@ -107,6 +107,13 @@
   --chart-5: oklch(0.46 0.08 350); /* #79455e */
   --chart-6: oklch(0.66 0.18 300); /* #a473ee */
 
+  /* The avatar orb's three stops, deep to pale. A violet brighter than
+     --primary on purpose: the orb is lit glass, and the brand purple reads as
+     slate at that size. Used by OrbAvatar and nothing else. */
+  --orb-deep: oklch(0.499 0.265 287.9); /* #6821ec */
+  --orb-body: oklch(0.67 0.172 295.3); /* #9f7bf2 */
+  --orb-light: oklch(0.825 0.086 302.1); /* #d0b9f5 */
+
   /* Nova uses --sidebar (renamed from --sidebar-background) */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -184,6 +191,10 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
+
+  --color-orb-deep: var(--orb-deep);
+  --color-orb-body: var(--orb-body);
+  --color-orb-light: var(--orb-light);
 
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);

@@ -7,6 +7,14 @@ import {
 } from "@/components/design-system/reference-table"
 import { ComponentCatalog } from "@/components/design-system/component-catalog"
 import { FileTypeIllustrations } from "@/components/design-system/file-type-illustrations"
+import { OrbAnatomy } from "@/components/design-system/orb-anatomy"
+import { OrbAvatar } from "@/components/shared/orb-avatar"
+import { ORB_TONES } from "@/components/shared/orb-tones"
+import {
+  AvatarBadge,
+  AvatarGroup,
+  AvatarGroupCount,
+} from "@/components/ui/avatar"
 import { DotPattern } from "@/components/ui/dot-pattern"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
 import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
@@ -18,6 +26,7 @@ import { EmptyValueNotes } from "@/components/design-system/empty-value-notes"
 import { FoundationTable } from "@/components/design-system/foundation-tables"
 import { FormDemo } from "@/components/design-system/form-demo"
 import { LanguageNotes } from "@/components/design-system/language-notes"
+import { IndexPageDemo } from "@/components/design-system/index-page-demo"
 import { IndexPagePreview } from "@/components/design-system/page-preview"
 import { RowActionNotes } from "@/components/design-system/row-action-notes"
 import { MotionTable } from "@/components/design-system/motion-tables"
@@ -77,6 +86,9 @@ import { notFound } from "next/navigation"
  * while a topic that is only a reference table stays bare, because a table
  * inside a card is two edges drawn around one thing.
  */
+/* The avatar group on the avatar topic. */
+const ORB_NAMES = ["Sara", "Nour", "Yusuf"]
+
 export async function generateStaticParams() {
   return docsParams()
 }
@@ -96,7 +108,6 @@ export default async function DesignSystemPage({
 
   return (
     <DesignSystemDocs
-      activeId={location.activeId}
       page={location.page}
       section={location.section}
       views={{
@@ -352,6 +363,60 @@ export default async function DesignSystemPage({
           ]),
         ),
 
+        index: (
+          <Card>
+            <CardContent>
+              <IndexPageDemo />
+            </CardContent>
+          </Card>
+        ),
+        "orb-avatar": (
+          <div className="flex flex-col gap-4">
+            {/* One height per row: the grid stretches each card to the
+                tallest beside it. The demo and the sizes share a row; the six
+                tones need one of their own. */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {/* The shadcn avatar demo, with the orb in place of the photo:
+                on its own, with a status badge, and as a group with a
+                count. */}
+              <Card>
+                <CardContent className="flex min-h-48 flex-1 flex-wrap items-center justify-center gap-8">
+                  <OrbAvatar name="Layla" />
+                  <OrbAvatar name="Omar">
+                    <AvatarBadge className="bg-success" />
+                  </OrbAvatar>
+                  <AvatarGroup>
+                    {ORB_NAMES.map((name) => (
+                      <OrbAvatar key={name} name={name} />
+                    ))}
+                    <AvatarGroupCount>+3</AvatarGroupCount>
+                  </AvatarGroup>
+                </CardContent>
+              </Card>
+              {/* The primitive's three sizes: 24, 32 and 40px. */}
+              <Card>
+                <CardContent className="flex min-h-48 flex-1 items-center justify-center gap-6">
+                  {(["sm", "default", "lg"] as const).map((size) => (
+                    <OrbAvatar key={size} name="Layla" size={size} />
+                  ))}
+                </CardContent>
+              </Card>
+              {/* Every tone, on one name, so only the colour changes. */}
+              <Card className="sm:col-span-2">
+                <CardContent className="flex min-h-48 flex-1 flex-wrap items-center justify-center gap-4">
+                  {ORB_TONES.map((tone) => (
+                    <OrbAvatar key={tone} name="Layla" size="lg" tone={tone} />
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+            <Card>
+              <CardContent>
+                <OrbAnatomy className="text-muted-foreground" />
+              </CardContent>
+            </Card>
+          </div>
+        ),
         "file-card": (
           <Card>
             <CardContent>
