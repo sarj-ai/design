@@ -55,10 +55,7 @@ import {
 export function ConversationsPage({
   initialDrawerOpen = false,
   initialStatusOpen = false,
-  scope,
 }: {
-  /** The admin view, passed through to the top bar. */
-  scope?: React.ReactNode
   /** Opens the call drawer, for reviewing and exporting that state. */
   initialDrawerOpen?: boolean
   /** Opens the Status filter's list. */
@@ -111,7 +108,7 @@ export function ConversationsPage({
   }
 
   return (
-    <AppShell active="Conversations" scope={scope}>
+    <AppShell active="Conversations">
       <div className="flex-1 p-3 lg:p-4">
         <SearchFilters
           columns={columns}

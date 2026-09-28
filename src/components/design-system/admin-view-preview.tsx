@@ -10,7 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { OrganisationIcon } from "@/components/design-system/icons"
-import { ConversationsPage } from "@/components/mockups/conversations-revamp/list/conversations-page"
+import { AppShell } from "@/components/shell/app-shell"
+import { ConversationsIndexPreview } from "@/components/design-system/conversations-index-preview"
 
 const ORGANISATIONS = ["Sarj.ai", "Rawabi Holding", "Tamimi Markets"]
 
@@ -48,15 +49,21 @@ export function AdminViewSwitcher() {
 }
 
 /**
- * The conversations index, as the mockup ships it, with the admin view in
- * its top bar. Framed so the app's sidebar and drawers stay inside the demo:
+ * The conversations index, laid out by the index page rules, with the admin
+ * view in its top bar. Framed so the app's sidebar and drawers stay inside the demo:
  * `translate-x-0` makes the frame the containing block for their fixed
  * positioning.
  */
 export function AdminViewPagePreview() {
   return (
     <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
-      <ConversationsPage scope={<AdminViewSwitcher />} />
+      <AppShell
+        active="Conversations"
+        scope={<AdminViewSwitcher />}
+        underShell={false}
+      >
+        <ConversationsIndexPreview />
+      </AppShell>
     </div>
   )
 }

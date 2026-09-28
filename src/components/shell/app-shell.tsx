@@ -335,6 +335,7 @@ export function AppHeader({
 export function AppShell({
   active,
   scope,
+  underShell = true,
   breadcrumb,
   hiddenItems,
   onNavigate,
@@ -344,6 +345,9 @@ export function AppShell({
   active: string
   /** The admin view, in the top bar. Only a superadmin sees one. */
   scope?: React.ReactNode
+  /** Whether the mockup shell's header sits above, which the sidebar has to
+   *  clear. Off when the app is shown inside a frame on its own. */
+  underShell?: boolean
   /** Crumbs after Home; a bare string is a single one. Defaults to `active`. */
   breadcrumb?: string | readonly string[]
   /**
@@ -372,7 +376,11 @@ export function AppShell({
     >
       {/* The sidebar pins to the viewport as it does in the app, so it clears
           the mockup shell's own header rather than sliding under it. */}
-      <Sidebar className="pt-12" collapsible="icon" variant="inset">
+      <Sidebar
+        className={underShell ? "pt-12" : undefined}
+        collapsible="icon"
+        variant="inset"
+      >
         <SidebarHeader className="px-2 pt-2 pb-1">
           <div className="flex items-center justify-between group-data-[state=collapsed]:justify-center">
             {/* 56×32 is the size the app's own header renders it at. */}
