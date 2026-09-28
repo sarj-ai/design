@@ -19,7 +19,13 @@ import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
 import { cn } from "@/lib/utils"
 
 /** Topics whose demo is a whole page, shown at the sheet's full width. */
-const FULL_WIDTH_TOPICS = new Set(["index", "admin-view", "developers"])
+const FULL_WIDTH_TOPICS = new Set([
+  "index",
+  "admin-view",
+  "developers",
+  "unsaved-changes",
+  "integration-card",
+])
 
 /**
  * The five sections as a menu that opens into a grid — after Codrops' "Menu
@@ -470,7 +476,11 @@ export function SectionMenu({
                   return (
                     <li key={topic.id}>
                       <Link
-                        className="group flex flex-col gap-2"
+                        /* No outline on the link: it drew a box around tile
+                           and caption, and stayed after a click. Keyboard
+                           focus lights the tile's own ring instead, the one
+                           hover uses. */
+                        className="group flex flex-col gap-2 outline-none"
                         data-no-transition
                         href={docsHref(topic.id)}
                         onClick={(event) => {
@@ -492,7 +502,7 @@ export function SectionMenu({
                         <motion.span
                           animate={{ opacity: 1, scale: 1, y: "0%" }}
                           className={cn(
-                            "relative aspect-square w-full rounded-lg ring-2 ring-transparent transition-colors duration-150 ease-out-cubic group-hover:ring-primary-foreground motion-reduce:transition-none",
+                            "relative aspect-square w-full rounded-lg ring-2 ring-transparent transition-colors duration-150 ease-out-cubic group-hover:ring-primary-foreground group-focus-visible:ring-primary-foreground motion-reduce:transition-none",
                             lastTopic === topic.id && "z-raised",
                             /* Hidden outright while its page is open, rather
                              than trusting the shared-layout handoff to hide

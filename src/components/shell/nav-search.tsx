@@ -5,7 +5,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import * as React from "react"
 
-import { PRIMITIVE_NAMES } from "@/components/design-system/component-catalog"
 import { ClearIcon, SearchIcon } from "@/components/shell/workspace-icons"
 import { Card } from "@/components/ui/card"
 import { Kbd } from "@/components/ui/kbd"
@@ -66,24 +65,11 @@ type Hit = { group: string; href: string; title: string }
 const HAYSTACK: Hit[] = [
   ...DOCS_SECTIONS.flatMap((section) =>
     section.groups.flatMap((group) =>
-      group.pages.flatMap((page) => {
-        const topic: Hit = {
-          group: section.title,
-          href: docsHref(page.id),
-          title: page.title,
-        }
-
-        /* A primitive is not a page, but it is what people actually search
-           for — "Tooltip" is findable even though the topic is "Overlays". */
-        return [
-          topic,
-          ...(PRIMITIVE_NAMES[page.id] ?? []).map((name) => ({
-            group: page.title,
-            href: docsHref(page.id),
-            title: name,
-          })),
-        ]
-      }),
+      group.pages.map((page) => ({
+        group: section.title,
+        href: docsHref(page.id),
+        title: page.title,
+      })),
     ),
   ),
   ...MOCKUPS.map((entry) => ({

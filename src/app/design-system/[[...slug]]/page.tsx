@@ -5,8 +5,6 @@ import {
   ReferenceNote,
   ReferenceTable,
 } from "@/components/design-system/reference-table"
-import { ComponentCatalog } from "@/components/design-system/component-catalog"
-import { FileTypeIllustrations } from "@/components/design-system/file-type-illustrations"
 import { OrbAnatomy } from "@/components/design-system/orb-anatomy"
 import { OrbAvatar } from "@/components/shared/orb-avatar"
 import { ORB_TONES } from "@/components/shared/orb-tones"
@@ -15,13 +13,14 @@ import {
   AvatarGroup,
   AvatarGroupCount,
 } from "@/components/ui/avatar"
-import { DotPattern } from "@/components/ui/dot-pattern"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
 import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
 import { PatternAnatomy } from "@/components/design-system/pattern-anatomy"
 import { ButtonSizes } from "@/components/design-system/button-sizes"
 import { ChipNotes, ChipTable } from "@/components/design-system/chip-notes"
 import { DrawerPreview } from "@/components/design-system/drawer-preview"
+import { SaveBarPreview } from "@/components/design-system/save-bar-preview"
+import { IntegrationCardPreview } from "@/components/design-system/integration-card-preview"
 import { DevelopersPage } from "@/components/mockups/developers/developers-page"
 import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
 import { EmptyValueNotes } from "@/components/design-system/empty-value-notes"
@@ -53,7 +52,6 @@ import { TableAnatomy } from "@/components/design-system/table-anatomy"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {
-  CATALOG_GROUPS,
   EMPTY_STATE_RULES,
   ERROR_RULES,
   FORM_RULES,
@@ -359,12 +357,6 @@ export default async function DesignSystemPage({
             </CardContent>
           </Card>
         ),
-        ...Object.fromEntries(
-          CATALOG_GROUPS.map((group) => [
-            group.id,
-            <ComponentCatalog group={group.id} key={group.id} />,
-          ]),
-        ),
 
         index: <IndexPageDemo />,
         "drawer-anatomy": (
@@ -375,6 +367,8 @@ export default async function DesignSystemPage({
           </Card>
         ),
         "admin-view": <AdminViewPagePreview />,
+        "unsaved-changes": <SaveBarPreview />,
+        "integration-card": <IntegrationCardPreview />,
         developers: (
           /* Framed like the admin view: `translate-x-0` makes the frame the
              containing block for the app's fixed sidebar. */
@@ -425,71 +419,6 @@ export default async function DesignSystemPage({
             <Card>
               <CardContent>
                 <OrbAnatomy className="text-muted-foreground" />
-              </CardContent>
-            </Card>
-          </div>
-        ),
-        "file-card": (
-          <Card>
-            <CardContent>
-              <FileTypeIllustrations />
-            </CardContent>
-          </Card>
-        ),
-        "dot-pattern": (
-          <div className="flex flex-col gap-4">
-            <Card>
-              <CardContent className="flex flex-col gap-3">
-                <span className="text-sm font-medium">Plain</span>
-                <div className="relative h-72 w-full overflow-hidden rounded-md">
-                  <DotPattern className="text-border" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* The variation worth having: a field that runs to the container
-                edge ends in a hard line, which reads as a cropped texture
-                rather than a background. The mask dissolves it instead. */}
-            <Card>
-              <CardContent className="flex flex-col gap-3">
-                <span className="text-sm font-medium">Radial mask</span>
-                <div className="relative h-72 w-full overflow-hidden rounded-md">
-                  <DotPattern className="text-border" mask="radial" />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Ripple carries the mask as well: a travelling ring that stops
-                dead at the container edge is the same cropped-texture problem
-                the mask exists to solve, and the motion makes it louder.
-
-                Darker than the two above, which sit at text-border. A static
-                field only has to be seen; a moving one has to be seen changing,
-                and border grey has almost no room above itself to brighten
-                into. */}
-            <Card>
-              <CardContent className="flex flex-col gap-3">
-                <span className="text-sm font-medium">Ripple</span>
-                <div className="relative h-72 w-full overflow-hidden rounded-md">
-                  <DotPattern
-                    className="text-muted-foreground/30"
-                    mask="radial"
-                    ripple
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* The only variant that reacts to the reader rather than running
-                on its own: the dots under the pointer swell and settle back
-                to the plain field a thumb's width away, in the field's own
-                colour. Move the pointer over the panel. */}
-            <Card>
-              <CardContent className="flex flex-col gap-3">
-                <span className="text-sm font-medium">Hover</span>
-                <div className="relative h-72 w-full overflow-hidden rounded-md">
-                  <DotPattern className="text-border" hover />
-                </div>
               </CardContent>
             </Card>
           </div>

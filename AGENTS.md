@@ -337,7 +337,7 @@ fabricate what a reference app does.
 
 ## Skills — what each one is for
 
-Nine skills are installed at `.claude/skills/`. Load them with the Skill tool
+Ten skills are installed at `.claude/skills/`. Load them with the Skill tool
 (or read the `SKILL.md`). They are deep reference, deliberately not inlined here
 — this file is what you need to act; they are what you need to get a specific
 thing exactly right.
@@ -353,6 +353,7 @@ thing exactly right.
 | **`web-animation-design`** | Easing blueprints, duration guidance, springs, performance, accessibility, and this repo's motion house rules | Adding or reviewing motion beyond the tokenised defaults. The rules above cover the common cases; this covers the judgement calls. |
 | **`sarj-figure`** | The register of the lab's hairline technical drawings — a plan of the thing, `currentColor` strokes, one true measurement called out — plus the shared `Figure` frame, sheet sizes, and how to check one at size | Drawing or reviewing an illustration in a nav panel, a design-system section card, or any card that needs one |
 | **`ui-review`** | The Sarj Design Approval Checklist as hard gates, plus the review rules mined from real DES rounds (the helper-text principle, the no-flags ban, state coverage, PRD conformance) and a full UI/UX lens pass | **Before moving a design ticket to In Review.** Self-review the live route, then fix or explicitly waive every finding in the ticket. Also for reviewing any screenshot or mockup on request. |
+| **`sarj-components`** | Where the design-system Components work stands: the shared page blocks (`PageHeader`, `ActionTile`, `FilterBar`, `ListFooter`), the decided layouts for index pages, drawers, unsaved-changes bars, the admin view and the Developers page, how to add a Components topic, and how the work is iterated | **Before touching `/design-system/product-components`**, or building an index page, drawer, filter bar, pagination footer or save bar in a mockup, or picking this work up in a new session. |
 
 ---
 
