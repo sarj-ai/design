@@ -187,7 +187,7 @@ export function RouteCard({
               <SelectTrigger id={`${route.id}-key`}>
                 <SelectValue placeholder="None" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {KEYPAD_KEYS.map((key) => (
                   <SelectItem key={key} value={key}>
                     Press {key}
@@ -245,7 +245,7 @@ export function RouteCard({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {TRANSFER_MODES.map((item) => (
                     <SelectItem key={item.value} value={item.value}>
                       {item.label}

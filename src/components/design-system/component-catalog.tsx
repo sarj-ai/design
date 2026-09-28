@@ -571,7 +571,7 @@ const GROUPS: Group[] = [
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value="ar">Arabic</SelectItem>
               <SelectItem value="en">English</SelectItem>
               <SelectItem value="ur">Urdu</SelectItem>

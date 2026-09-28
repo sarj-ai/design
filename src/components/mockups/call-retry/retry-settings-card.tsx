@@ -233,7 +233,7 @@ export function RetrySettingsCard({
                 >
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {TIMEZONES.map((zone) => (
                     <SelectItem key={zone} value={zone}>
                       {zone}

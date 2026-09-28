@@ -41,6 +41,11 @@ import {
   Search01Icon,
   SearchRemoveIcon,
   Tick02Icon,
+  GlobalIcon,
+  File01Icon,
+  TextIcon,
+  FolderAddIcon,
+  FolderSyncIcon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
@@ -147,3 +152,10 @@ export const OrganisationIcon = icon(Building02Icon, "OrganisationIcon")
 export const CreateTemplateIcon = icon(FileValidationIcon, "CreateTemplateIcon")
 export const ActiveIcon = icon(CheckmarkCircle02Icon, "ActiveIcon")
 export const DeletedIcon = icon(Delete02Icon, "DeletedIcon")
+
+/* The knowledge base's five ways in, as its header tiles. */
+export const AddUrlIcon = icon(GlobalIcon, "AddUrlIcon")
+export const AddFilesIcon = icon(File01Icon, "AddFilesIcon")
+export const AddTextIcon = icon(TextIcon, "AddTextIcon")
+export const CreateFolderIcon = icon(FolderAddIcon, "CreateFolderIcon")
+export const SyncDocumentsIcon = icon(FolderSyncIcon, "SyncDocumentsIcon")

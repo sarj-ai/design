@@ -293,7 +293,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
             <SelectTrigger className="bg-card" aria-label="Filter by language">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value="all">All languages</SelectItem>
               {LANGUAGES.map((option) => (
                 <SelectItem key={option} value={option}>
@@ -307,7 +307,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
             <SelectTrigger className="bg-card" aria-label="Filter by gender">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value="all">All genders</SelectItem>
               {GENDERS.map((option) => (
                 <SelectItem key={option} value={option}>
@@ -324,7 +324,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
             <SelectTrigger className="bg-card" aria-label="Group personas">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value="none">No grouping</SelectItem>
               <SelectItem value="language">Group by language</SelectItem>
               <SelectItem value="gender">Group by gender</SelectItem>

@@ -104,7 +104,7 @@ export function ProvisionedTab() {
               <SelectTrigger className="w-50" id="pn-organization" size="sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value={ALL}>All organizations</SelectItem>
                 {ORGANIZATIONS.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
@@ -121,7 +121,7 @@ export function ProvisionedTab() {
               <SelectTrigger className="w-50" id="pn-provider" size="sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 <SelectItem value={ALL}>All providers</SelectItem>
                 {PROVIDERS.map((item) => (
                   <SelectItem key={item.id} value={item.id}>

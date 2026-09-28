@@ -370,7 +370,7 @@ function FlagDialog({ at }: { at: number }) {
             <SelectTrigger id="flag-issue-type">
               <SelectValue placeholder="Select an issue type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {ISSUE_TYPE_ORDER.map((type) => (
                 <SelectItem key={type} value={type}>
                   <span className="flex items-center gap-2">

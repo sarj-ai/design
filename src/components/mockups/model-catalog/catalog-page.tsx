@@ -209,7 +209,7 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
                         >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent position="popper">
                           <SelectItem value="all">All statuses</SelectItem>
                           <SelectItem value="active">Active</SelectItem>
                           <SelectItem value="inactive">Deactivated</SelectItem>

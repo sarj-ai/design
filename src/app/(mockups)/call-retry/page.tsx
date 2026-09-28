@@ -110,7 +110,7 @@ export default function CallRetryPage() {
                 <SelectTrigger aria-label="Scenario state" size="sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {SCENARIO_STATES.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
                       {option.label}

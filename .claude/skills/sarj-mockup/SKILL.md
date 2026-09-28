@@ -112,6 +112,7 @@ Specifics that trip people up in this repo:
 - **`Button`/`Badge` `variant="destructive"` is a soft tint** (`bg-destructive/10 text-destructive`), not solid red. That's intentional — don't "fix" it.
 - **`Badge` is already a pill** (`rounded-4xl`, `h-5`, `text-xs`).
 - **`DrawerContent` for `direction="left|right"` pins itself to `sm:max-w-sm`** via a direction-scoped class that outranks a plain `sm:max-w-2xl`. A wide side panel needs the important modifier — `className="sm:max-w-3xl!"`. This is the one place overriding a primitive's width is expected.
+- **`SelectContent` always takes `position="popper"`.** The primitive defaults to `item-aligned`, which lays the open list over the trigger so the chosen item sits where the trigger was — it covers the control and reads as broken. `popper` drops the list below the trigger, at least as wide as it, like every other menu in the product. The primitive is generated, so the default cannot be changed there: set it on every `<SelectContent>`.
 - Compose classes with `cn()` from `@/lib/utils`. Never string-concatenate.
 
 ## Step 3 — color: tokens only
@@ -300,6 +301,7 @@ Mock data goes in a `const` array above the component. Keep it realistic — rea
 - Title→description gap the same size as block→block gap → tighten the inner one
 - Sibling cards in a row with different header structures → make them identical
 - Four type levels on one surface, or a size jump used where muted color would do
+- A `<SelectContent>` without `position="popper"` → the list opens over the trigger; add it
 
 ## Self-check before returning
 

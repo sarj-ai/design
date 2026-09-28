@@ -45,7 +45,7 @@ export default function CallTurnTimingPage() {
             <SelectTrigger aria-label="Call case" size="sm">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {CALL_CASES.map((entry) => (
                 <SelectItem key={entry.id} value={entry.id}>
                   {entry.label}

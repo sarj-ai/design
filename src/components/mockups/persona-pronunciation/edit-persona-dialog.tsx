@@ -187,7 +187,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
                   <SelectTrigger className="w-full" id="persona-language">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {LANGUAGES.map((option) => (
                       <SelectItem key={option} value={option}>
                         {option}
@@ -206,7 +206,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
                   <SelectTrigger className="w-full" id="persona-gender">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {GENDERS.map((option) => (
                       <SelectItem key={option} value={option}>
                         {option}

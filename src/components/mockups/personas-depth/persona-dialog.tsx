@@ -187,7 +187,7 @@ function PersonaForm({
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       {LANGUAGES.map((option) => (
                         <SelectItem key={option} value={option}>
                           {option}
@@ -208,7 +208,7 @@ function PersonaForm({
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       {GENDERS.map((option) => (
                         <SelectItem key={option} value={option}>
                           {option}
@@ -361,7 +361,7 @@ function PersonaForm({
                         >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent position="popper">
                           {NOISE_TYPES.map((option) => (
                             <SelectItem key={option} value={option}>
                               {option}

@@ -79,7 +79,7 @@ export function SearchFilters({
               <CalendarIcon className="text-muted-foreground" />
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value="all">All time</SelectItem>
               <SelectItem value="today">Today</SelectItem>
               <SelectItem value="week">Last 7 days</SelectItem>
@@ -153,7 +153,7 @@ export function SearchFilters({
                   <SelectTrigger className="bg-card">
                     <SelectValue placeholder="All directions" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectItem value="both">Both</SelectItem>
                     <SelectItem value="inbound">
                       <InboundIcon />
@@ -173,7 +173,7 @@ export function SearchFilters({
                   <SelectTrigger className="bg-card">
                     <SelectValue placeholder="Any duration" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectItem value="all">Any duration</SelectItem>
                     <SelectItem value="short">Under 1 minute</SelectItem>
                     <SelectItem value="medium">1 to 5 minutes</SelectItem>

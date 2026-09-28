@@ -89,7 +89,7 @@ export function GlobalTurnDetection({
             <SelectTrigger id="detection-model">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {DETECTION_MODELS.map((entry) => (
                 <SelectItem key={entry.id} value={entry.id}>
                   {entry.label}

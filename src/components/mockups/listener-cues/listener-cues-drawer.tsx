@@ -445,7 +445,7 @@ export function ListenerCuesDrawer({
                     <SelectTrigger id={`${fieldId}-start`}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       {START_AFTER_OPTIONS.map((seconds) => (
                         <SelectItem key={seconds} value={String(seconds)}>
                           {seconds} seconds
@@ -467,7 +467,7 @@ export function ListenerCuesDrawer({
                     <SelectTrigger id={`${fieldId}-wait`}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       {COOLDOWN_OPTIONS.map((seconds) => (
                         <SelectItem key={seconds} value={String(seconds)}>
                           {seconds} seconds
@@ -489,7 +489,7 @@ export function ListenerCuesDrawer({
                     <SelectTrigger id={`${fieldId}-max`}>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       {MAX_PER_TURN_OPTIONS.map((count) => (
                         <SelectItem key={count} value={String(count)}>
                           {count === 1 ? "1 cue" : `${count} cues`}

@@ -127,7 +127,7 @@ export function PersonaDrawerBody({
             <SelectTrigger id={`persona-${entry.language}`}>
               <SelectValue placeholder="Select a persona" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {PERSONAS.map((persona) => (
                 <SelectItem key={persona} value={persona}>
                   {persona}
@@ -219,7 +219,7 @@ export function LanguagesDrawerBody({
           <SelectTrigger aria-label="Timezone">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {TIMEZONES.map((zone) => (
               <SelectItem key={zone} value={zone}>
                 {zone}

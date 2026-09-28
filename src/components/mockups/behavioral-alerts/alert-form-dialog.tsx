@@ -110,7 +110,7 @@ export function AlertFormDialog({
             <SelectTrigger id="alert-priority">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {PRIORITY_ORDER.map((level) => (
                 <SelectItem key={level} value={level}>
                   {PRIORITY_LABELS[level]}

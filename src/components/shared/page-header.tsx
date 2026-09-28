@@ -66,7 +66,7 @@ export function ActionTile({
       asChild
       /* On the Item, not the button: Slot joins the two class lists without
          merging them, so the Item's own w-full and padding would win. */
-      className="w-36 flex-col items-start gap-3 p-4 [&_svg]:size-4 text-start transition-colors duration-150 ease-out-cubic hover:bg-muted motion-reduce:transition-none"
+      className="w-36 flex-col items-start gap-2 p-3 [&_svg]:size-4 text-start transition-colors duration-150 ease-out-cubic hover:bg-muted motion-reduce:transition-none"
     >
       <button type="button" onClick={onClick}>
         {icon}

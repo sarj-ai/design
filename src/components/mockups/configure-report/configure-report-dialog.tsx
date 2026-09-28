@@ -100,7 +100,7 @@ export function ConfigureReportDialog({
                 <SelectTrigger aria-label="Template" className="w-64">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {TEMPLATES.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
                       {option.label}

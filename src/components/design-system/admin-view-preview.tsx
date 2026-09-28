@@ -50,7 +50,7 @@ export function AdminViewPreview() {
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {ORGANISATIONS.map((name) => (
               <SelectItem key={name} value={name}>
                 {name}

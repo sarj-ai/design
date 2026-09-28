@@ -133,7 +133,7 @@ export function ScenarioAssignmentDialog({
                   }
                 />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {assignable.map((scenario) => (
                   <SelectItem key={scenario.id} value={scenario.id}>
                     {scenario.name}

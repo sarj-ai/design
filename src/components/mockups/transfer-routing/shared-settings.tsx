@@ -60,7 +60,7 @@ export function SharedSettings({
           <SelectTrigger id="shared-mode">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {TRANSFER_MODES.map((item) => (
               <SelectItem key={item.value} value={item.value}>
                 {item.label}
@@ -120,7 +120,7 @@ export function SharedSettings({
           <SelectTrigger id="shared-trunk">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {OUTBOUND_TRUNKS.map((trunk) => (
               <SelectItem key={trunk} value={trunk}>
                 {trunk}

@@ -174,7 +174,7 @@ export function OwnershipDrawerBody({
           <SelectTrigger id="owner-organization">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {ORGANIZATIONS.map((name) => (
               <SelectItem key={name} value={name}>
                 {name}

@@ -353,7 +353,7 @@ function CreateTokenBody({
             <SelectTrigger id="token-expiry">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {EXPIRY_CHOICES.map((option) => (
                 <SelectItem key={option.id} value={option.id}>
                   {option.label}

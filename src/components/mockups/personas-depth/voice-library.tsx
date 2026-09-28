@@ -138,7 +138,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
           <SelectTrigger size="sm" aria-label="Filter by language">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="all">All languages</SelectItem>
             {LANGUAGES.map((option) => (
               <SelectItem key={option} value={option}>
@@ -152,7 +152,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
           <SelectTrigger size="sm" aria-label="Filter by gender">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="all">All genders</SelectItem>
             <SelectItem value="Female">Female</SelectItem>
             <SelectItem value="Male">Male</SelectItem>
@@ -163,7 +163,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
           <SelectTrigger size="sm" aria-label="Filter by provider">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             <SelectItem value="all">All providers</SelectItem>
             {PROVIDERS.map((option) => (
               <SelectItem key={option} value={option}>

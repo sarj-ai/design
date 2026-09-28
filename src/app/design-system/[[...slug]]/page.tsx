@@ -367,7 +367,9 @@ export default async function DesignSystemPage({
         index: <IndexPageDemo />,
         "admin-view": (
           <Card>
-            <CardContent>
+            {/* The same stage height as the other component demos, with the
+                band centred in it rather than hugging the top edge. */}
+            <CardContent className="flex min-h-48 items-center">
               <AdminViewPreview />
             </CardContent>
           </Card>

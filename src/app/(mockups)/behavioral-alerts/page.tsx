@@ -218,7 +218,7 @@ export default function BehavioralAlertsPage() {
               <SelectTrigger aria-label="Open a call" size="sm">
                 <SelectValue placeholder="Open a call" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent position="popper">
                 {STATE_OPTIONS.map((option) => (
                   <SelectItem key={option.id} value={option.id}>
                     {option.label}
@@ -291,7 +291,7 @@ export default function BehavioralAlertsPage() {
                     >
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper">
                       <SelectItem value="25">25</SelectItem>
                       <SelectItem value="50">50</SelectItem>
                       <SelectItem value="100">100</SelectItem>

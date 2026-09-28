@@ -339,7 +339,7 @@ function AddModelBody({
                 <SelectTrigger className="w-full" id="provider">
                   <SelectValue placeholder="Pick a provider" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {eligible.map((option) => (
                     <SelectItem key={option.id} value={option.id}>
                       {option.name}
@@ -545,7 +545,7 @@ function ModelField({
           <SelectTrigger className="w-full" id="model">
             <SelectValue placeholder="Pick a model" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper">
             {liveModels.map((option) => (
               <SelectItem key={option} value={option}>
                 {option}

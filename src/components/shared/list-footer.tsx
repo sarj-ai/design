@@ -74,10 +74,14 @@ export function ListFooter({
           value={String(pageSize)}
           onValueChange={(next) => onPageSizeChange?.(Number(next))}
         >
-          <SelectTrigger aria-label="Rows per page" size="sm" className="text-xs">
+          <SelectTrigger
+            aria-label="Rows per page"
+            size="sm"
+            className="text-xs"
+          >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent align="end">
+          <SelectContent position="popper" align="end">
             {PAGE_SIZES.map((size) => (
               <SelectItem key={size} value={String(size)}>
                 {size} / page

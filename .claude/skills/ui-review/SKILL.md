@@ -30,6 +30,7 @@ These came from actual feedback by Fatma, Fatema Janahi (PM), Mamdouh, Abdulrahm
 
 ### Hard bans
 - **Never country flags for languages, anywhere.** (Abdulrahman, DES-149: "I will never accept seeing flags")
+- **A select opens below its trigger, never over it.** Every `SelectContent` carries `position="popper"`; the primitive's `item-aligned` default covers the control with the list. Flag any dropdown that opens on top of what was clicked.
 - **No affordance for unsupported capabilities**: if the backend rejects a file type or action, the picker/control must not offer it; an "unsupported" label on an offered option is not a fix. (Fatema, DES-149)
 
 ### States, flows, completeness

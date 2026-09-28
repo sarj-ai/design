@@ -159,7 +159,7 @@ export function ConversationsPage({
                 <SelectTrigger className="w-20" aria-label="Results per page">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   <SelectItem value="25">25</SelectItem>
                   <SelectItem value="50">50</SelectItem>
                   <SelectItem value="100">100</SelectItem>

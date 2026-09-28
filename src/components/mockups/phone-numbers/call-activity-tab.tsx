@@ -108,7 +108,7 @@ export function CallActivityTab() {
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               <SelectItem value={ALL}>All organizations</SelectItem>
               {ORGANIZATIONS.map((organization) => (
                 <SelectItem key={organization.id} value={organization.id}>
@@ -122,7 +122,7 @@ export function CallActivityTab() {
             <SelectTrigger aria-label="Filter by time range" size="sm">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper">
               {TIME_RANGES.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}

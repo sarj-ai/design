@@ -111,7 +111,7 @@ export function AddVoiceDialog() {
                   <SelectTrigger className="w-full" id="voice-language">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {LANGUAGES.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -127,7 +127,7 @@ export function AddVoiceDialog() {
                   <SelectTrigger className="w-full" id="voice-gender">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {GENDERS.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -149,7 +149,7 @@ export function AddVoiceDialog() {
                   <SelectTrigger className="w-full" id="voice-provider">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {PROVIDERS.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
