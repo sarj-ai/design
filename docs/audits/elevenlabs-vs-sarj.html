@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ElevenLabs vs Sarj</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --paper:#ffffff; --surface:#f6f5f9; --surface-2:#eeedf3; --line:#e4e2ec; --line-strong:#cdc9db;
+    --ink:#14121b; --ink-2:#4b4759; --ink-3:#74707f;
+    --brand:#392868; --brand-ink:#4d3d80; --brand-tint:#eeecfa; --brand-edge:#d9d4f0;
+    --ok:#15803d; --ok-tint:#e6f4ea; --warn:#a35a06; --warn-tint:#fbeed8; --bad:#b91c1c; --bad-tint:#fbe9e9;
+    --rail:15rem; --measure:68ch;
+    --step--1:0.8125rem; --step-0:0.9688rem; --step-1:1.125rem; --step-2:1.375rem; --step-3:1.75rem; --step-4:2.375rem;
+    --sans:"Nunito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --ease:cubic-bezier(0.33,1,0.68,1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper:#0e0d12; --surface:#17161d; --surface-2:#201e29; --line:#2b2836; --line-strong:#3d3950;
+      --ink:#f2f1f6; --ink-2:#b6b2c4; --ink-3:#8d889c;
+      --brand:#a99ee0; --brand-ink:#c9c1ef; --brand-tint:#241d3d; --brand-edge:#3b3160;
+      --ok:#6ee7a0; --ok-tint:#10251a; --warn:#f0b45e; --warn-tint:#2b1f0c; --bad:#f78585; --bad-tint:#2c1414;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper:#0e0d12; --surface:#17161d; --surface-2:#201e29; --line:#2b2836; --line-strong:#3d3950;
+    --ink:#f2f1f6; --ink-2:#b6b2c4; --ink-3:#8d889c;
+    --brand:#a99ee0; --brand-ink:#c9c1ef; --brand-tint:#241d3d; --brand-edge:#3b3160;
+    --ok:#6ee7a0; --ok-tint:#10251a; --warn:#f0b45e; --warn-tint:#2b1f0c; --bad:#f78585; --bad-tint:#2c1414;
+  }
+
+  body { background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:var(--step-0); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  ::selection { background:var(--brand-tint); color:var(--brand-ink); }
+  a { color:var(--brand); text-decoration-thickness:1px; text-underline-offset:2px; }
+  :focus-visible { outline:2px solid var(--brand); outline-offset:2px; border-radius:3px; }
+  code { font-family:var(--mono); font-variant-ligatures:none; font-size:0.84em; background:var(--surface-2); border-radius:4px; padding:0.1em 0.34em; color:var(--ink-2); overflow-wrap:anywhere; }
+
+  .shell { display:grid; grid-template-columns:var(--rail) minmax(0,1fr); align-items:start; max-width:90rem; margin-inline:auto; }
+  .rail { position:sticky; top:env(safe-area-inset-top,0px); height:100vh; overflow-y:auto; padding:2rem 1rem 2rem 1.5rem; border-inline-end:1px solid var(--line); display:flex; flex-direction:column; gap:1.25rem; }
+  .rail-mark { display:flex; align-items:center; gap:0.5rem; font-weight:800; }
+  .rail-mark .dot { inline-size:0.6rem; block-size:0.6rem; border-radius:2px; background:var(--brand); flex:none; }
+  .rail-sub { font-family:var(--mono); font-size:0.6875rem; color:var(--ink-3); margin-block-start:-1rem; }
+  .rail nav { display:flex; flex-direction:column; gap:1px; }
+  .rail a { display:grid; grid-template-columns:1.6rem 1fr; gap:0.375rem; align-items:baseline; padding:0.28rem 0.5rem; border-radius:6px; color:var(--ink-2); text-decoration:none; font-size:var(--step--1); line-height:1.35; transition:background 150ms var(--ease), color 150ms var(--ease); }
+  .rail a .n { font-family:var(--mono); font-size:0.6875rem; color:var(--ink-3); }
+  .rail a:hover { background:var(--surface); color:var(--ink); }
+  .rail a.sub-link { padding-inline-start:2.4rem; grid-template-columns:1fr; font-size:0.78rem; }
+  @media (prefers-reduced-motion: reduce) { .rail a { transition:none; } }
+
+  main { min-width:0; padding:3.5rem clamp(1rem,4vw,4rem) 6rem; display:flex; flex-direction:column; gap:3.5rem; }
+  h1,h2,h3,h4 { text-wrap:balance; margin:0; letter-spacing:-0.018em; }
+  h1 { font-size:var(--step-4); font-weight:800; line-height:1.1; }
+  h2 { font-size:var(--step-3); font-weight:800; line-height:1.2; }
+  h3 { font-size:var(--step-1); font-weight:700; line-height:1.3; }
+  h4 { font-size:var(--step-0); font-weight:700; }
+  p { margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:0.6875rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-3); }
+
+  .masthead { display:flex; flex-direction:column; gap:1.5rem; }
+  .lede { font-size:var(--step-1); color:var(--ink-2); max-width:60ch; }
+  .facts { display:flex; flex-wrap:wrap; gap:0 2rem; padding-block:0.875rem; border-block:1px solid var(--line); font-family:var(--mono); font-size:0.75rem; margin:0; }
+  .facts div { display:flex; gap:0.5rem; padding-block:0.125rem; }
+  .facts dt { color:var(--ink-3); } .facts dd { margin:0; }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .stat { background:var(--paper); padding:1rem 1.125rem; display:flex; flex-direction:column; gap:0.2rem; }
+  .stat b { font-family:var(--mono); font-size:1.5rem; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
+  .stat span { font-size:0.75rem; color:var(--ink-3); line-height:1.35; }
+  .stat.bad b { color:var(--bad); } .stat.warn b { color:var(--warn); }
+
+  .findings { display:flex; flex-direction:column; border-block-start:1px solid var(--line); }
+  .finding { display:grid; grid-template-columns:2rem 1fr; gap:0.875rem; padding-block:1.125rem; border-block-end:1px solid var(--line); }
+  .finding .n { font-family:var(--mono); font-size:0.8125rem; font-weight:700; color:var(--ink-3); padding-block-start:0.15rem; }
+  .finding h4 { margin-block-end:0.2rem; }
+  .finding p, .finding li { color:var(--ink-2); font-size:var(--step--1); max-width:64ch; }
+  .finding ul { margin-block-start:0.35rem; }
+
+  section { display:flex; flex-direction:column; gap:1.25rem; scroll-margin-top:1.5rem; }
+  .sec-head { display:flex; flex-direction:column; gap:0.375rem; }
+  .sec-head .eyebrow { display:flex; align-items:center; gap:0.5rem; }
+  .sec-head .eyebrow::after { content:""; flex:1; height:1px; background:var(--line); }
+  section > p, section > ul, .sub > p, .sub > ul { max-width:var(--measure); }
+  .sub { display:flex; flex-direction:column; gap:0.875rem; scroll-margin-top:1.5rem; }
+  ul, ol { margin:0; padding-inline-start:1.15rem; display:flex; flex-direction:column; gap:0.4rem; }
+  li { color:var(--ink-2); } li::marker { color:var(--ink-3); }
+
+  .tw { overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; font-size:var(--step--1); }
+  thead th { background:var(--surface); text-align:start; font-weight:700; padding:0.5rem 0.875rem; white-space:nowrap; border-block-end:1px solid var(--line); }
+  tbody td { padding:0.55rem 0.875rem; border-block-end:1px solid var(--line); vertical-align:top; color:var(--ink-2); min-width:9rem; }
+  tbody td:first-child { color:var(--ink); font-weight:700; min-width:7rem; }
+  tbody tr:last-child td { border-block-end:0; }
+  td.gap { color:var(--ink); }
+  td.num { text-align:end; font-family:var(--mono); font-variant-numeric:tabular-nums; min-width:0; }
+
+  .chip { display:inline-flex; align-items:center; height:1.3rem; padding-inline:0.44rem; border-radius:999px; font-size:0.6875rem; font-weight:700; font-family:var(--mono); white-space:nowrap; background:var(--surface-2); color:var(--ink-2); vertical-align:1px; }
+  .chip.ok { background:var(--ok-tint); color:var(--ok); }
+  .chip.warn { background:var(--warn-tint); color:var(--warn); }
+  .chip.bad { background:var(--bad-tint); color:var(--bad); }
+  .chip.brand { background:var(--brand-tint); color:var(--brand-ink); }
+
+  .note { border:1px solid var(--line); border-radius:10px; padding:1rem 1.125rem; background:var(--surface); display:flex; flex-direction:column; gap:0.5rem; max-width:var(--measure); }
+  .note.key { border-color:var(--brand-edge); background:var(--brand-tint); }
+  .note.key p, .note.key .eyebrow { color:var(--brand-ink); }
+  .note p { font-size:var(--step--1); color:var(--ink-2); }
+
+  figure.specimen { margin:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .specimen figcaption { padding:0.5rem 0.875rem; border-block-end:1px solid var(--line); background:var(--surface); font-family:var(--mono); font-size:0.6875rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-3); }
+  .specimen .body { padding:1.25rem; display:flex; flex-wrap:wrap; gap:2.5rem; align-items:flex-end; }
+  .scale-group { display:flex; flex-direction:column; gap:0.6rem; }
+  .scale-group h4 { font-family:var(--mono); font-size:0.7rem; font-weight:500; color:var(--ink-3); text-transform:uppercase; letter-spacing:0.06em; }
+  .scale { display:flex; align-items:flex-end; gap:0.75rem; }
+  .ctl { display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
+  .ctl i { display:flex; align-items:center; justify-content:center; inline-size:5.2rem; border:1px solid var(--line-strong); border-radius:8px; font-style:normal; font-family:var(--mono); font-size:0.7rem; color:var(--ink-2); background:var(--paper); }
+  .ctl.p i { border-color:var(--warn); color:var(--warn); }
+  .ctl small { font-family:var(--mono); font-size:0.66rem; color:var(--ink-3); }
+
+  .paint { display:flex; flex-direction:column; gap:0.5rem; }
+  .paint-row { display:grid; grid-template-columns:minmax(0,14rem) 1fr; gap:0.75rem; align-items:center; font-size:var(--step--1); color:var(--ink-2); }
+  .paint-row code { justify-self:start; }
+
+  .ranked { counter-reset:r; display:flex; flex-direction:column; border-block-start:1px solid var(--line); }
+  .rk { display:grid; grid-template-columns:2rem minmax(0,1fr) auto; gap:0.875rem; padding-block:1rem; border-block-end:1px solid var(--line); align-items:start; }
+  .rk .n { font-family:var(--mono); font-weight:700; color:var(--ink-3); font-size:0.8125rem; padding-block-start:0.1rem; }
+  .rk h4 { margin-block-end:0.2rem; }
+  .rk p { color:var(--ink-2); font-size:var(--step--1); max-width:68ch; }
+  .rk p.why { color:var(--ink-3); margin-block-start:0.25rem; }
+
+  .two { display:grid; grid-template-columns:repeat(auto-fit,minmax(18rem,1fr)); gap:1rem; }
+  .two .note { max-width:none; }
+
+  @media (max-width: 60rem) {
+    .shell { grid-template-columns:minmax(0,1fr); }
+    .rail { display:none; }
+    main { padding-block:2rem 4rem; padding-inline:1rem; gap:2.75rem; }
+    h1 { font-size:var(--step-3); }
+    .rk { grid-template-columns:1.6rem minmax(0,1fr); }
+    .rk .chip { grid-column:2; justify-self:start; }
+    .paint-row { grid-template-columns:1fr; gap:0.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-mark"><span class="dot"></span>ElevenLabs vs Sarj</div>
+    <div class="rail-sub">Design-system audit · 28 Sep 2026</div>
+    <nav aria-label="Contents">
+      <a href="#short"><span class="n">1</span>The short version</a>
+      <a href="#organised"><span class="n">2</span>How the three are organised</a>
+      <a href="#surfaces"><span class="n">3</span>Surface by surface</a>
+      <a class="sub-link" href="#s-conversations">Conversations</a>
+      <a class="sub-link" href="#s-scenario-edit">Scenario edit</a>
+      <a class="sub-link" href="#s-scenarios">Scenarios index</a>
+      <a class="sub-link" href="#s-personas">Personas</a>
+      <a class="sub-link" href="#s-kb">Knowledge bases</a>
+      <a class="sub-link" href="#s-playground">Playground</a>
+      <a class="sub-link" href="#s-settings">Integrations and settings</a>
+      <a href="#matrix"><span class="n">4</span>Component matrix</a>
+      <a href="#itself"><span class="n">5</span>The system against itself</a>
+      <a href="#fixes"><span class="n">6</span>Fixes, in order</a>
+      <a href="#reference"><span class="n">7</span>What to take from ElevenLabs</a>
+      <a href="#unchecked"><span class="n">8</span>What was not checked</a>
+    </nav>
+  </aside>
+
+  <main>
+    <header class="masthead">
+      <span class="eyebrow">Design-system audit</span>
+      <h1>ElevenLabs vs Sarj, and what the design system is missing</h1>
+      <p class="lede">The Sarj product, the Sarj design system and ElevenLabs Agents, measured against each other. The point is the design system: the competitor and the product are measured so it can decide what to own next.</p>
+      <dl class="facts">
+        <div><dt>ElevenLabs</dt><dd>56 in-app screens (Mobbin, Mar–Apr 2026) + public docs</dd></div>
+        <div><dt>Product</dt><dd>sarj-ai/platform · apps/web · 51 routes, read from source</dd></div>
+        <div><dt>System</dt><dd>design-lab · 50 topics · 74 primitives · 20 mockups</dd></div>
+      </dl>
+    </header>
+
+    <div class="stats" role="list">
+      <div class="stat warn" role="listitem"><b>+4px</b><span>every product control is one step taller than the system's</span></div>
+      <div class="stat bad" role="listitem"><b>5</b><span>paint systems for status badges in the product</span></div>
+      <div class="stat bad" role="listitem"><b>~16</b><span>filter bars in the product, none shared</span></div>
+      <div class="stat warn" role="listitem"><b>~10</b><span>date formatters in the product; 7 more in mockups</span></div>
+      <div class="stat" role="listitem"><b>6</b><span>places where the system's docs contradict its code</span></div>
+    </div>
+
+    <section id="short">
+      <div class="sec-head"><span class="eyebrow">1 · The short version</span><h2>Five findings carry most of the weight</h2></div>
+      <div class="findings">
+        <div class="finding"><span class="n">1</span><div><h4>The system covers generic SaaS, and almost none of the voice product</h4><p>Surfaces, forms, tables, index-page states, motion and z-layers are written down. The recording player, transcript, turn timing and latency, live-call state, charts, value formatting and Arabic content are not. The product builds all of them by hand, the mockups do too, and both already disagree with themselves.</p></div></div>
+        <div class="finding"><span class="n">2</span><div><h4>The system and the product are two different shadcn styles</h4><p>The product is <code>new-york</code> on Base UI, and the system is <code>radix-nova</code> on Radix. Every shared control is one step taller in the product. The <code>control-scale</code> topic says 24/28/32/36 px; the product ships 24/32/36/40, so every mockup installed through the registry renders a step smaller than the product around it.</p></div></div>
+        <div class="finding"><span class="n">3</span><div><h4>Status is painted five ways in the product, four in the mockups</h4><p>The system has the tint tokens but no Badge variant that uses them, and its chip key covers four call statuses. The product's Badge falls back to raw <code>green-50</code>, <code>amber-50</code> and <code>red-50</code>.</p></div></div>
+        <div class="finding"><span class="n">4</span><div><h4>The docs contradict the code in six places</h4><ul><li>AGENTS.md and three skills say charts are "one purple ramp". Since DES-174, <code>globals.css:79-108</code> has six separate hues.</li><li><code>data.ts:439</code> still sends drawer help text to an (i) tooltip, against the inline-description house rule.</li></ul></div></div>
+        <div class="finding"><span class="n">5</span><div><h4>ElevenLabs is ahead on three things Sarj has no pattern for</h4><ul><li>Versioning: draft, then a diff, then publish, with branches.</li><li>Per-turn latency in the transcript.</li><li>Evaluation criteria and extracted data, defined and inspected on one screen.</li></ul><p style="margin-block-start:0.4rem">Sarj is ahead on quality flags pinned to the waveform, the Scenario Copilot, the Arabic end-of-utterance model, batch calling with retries, and the Salla and Zoho automations. None of those has a design-system pattern either.</p></div></div>
+      </div>
+    </section>
+
+    <section id="organised">
+      <div class="sec-head"><span class="eyebrow">2 · Structure</span><h2>How the three are organised</h2></div>
+      <div class="tw"><table>
+        <thead><tr><th></th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th></tr></thead>
+        <tbody>
+          <tr><td>Top level</td><td>Sidebar by lifecycle: <b>Configure</b> (Agents, Knowledge Base, Tools, Integrations, Voices) · <b>Monitor</b> (Conversations, Users, Tests) · <b>Deploy</b> (Phone Numbers, WhatsApp, Outbound)</td><td>Playground on top, then <b>Agents</b> (Personas, Scenarios, Knowledge Bases, Batch Calls) · <b>Monitor</b> (Dashboard, Conversations, Messaging, Quality, Reports) · <b>Configuration</b></td><td>Eight Linear surfaces: Conversations, Personas, Scenarios Index, Scenario Edit, Knowledge Bases, Integrations, Playground, Settings</td></tr>
+          <tr><td>The agent</td><td>One object. Prompt, voice, LLM, tools, knowledge and analysis all live on it.</td><td>Split in two. The <b>scenario</b> holds prompt, tools, knowledge, analysis and success criteria. The <b>persona</b> holds voice, persona prompt and behaviour. LLM, STT, turn detection and interruptions are global or per organisation.</td><td class="gap">No pattern for how scenario, persona and global settings relate on screen.</td></tr>
+          <tr><td>Libraries</td><td>Knowledge, Tools and Tests exist globally and per agent: build a library, attach from it.</td><td>Knowledge bases are global and attached per scenario. Tools are per scenario only.</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <p>The split between scenario and persona is Sarj's decision, not a gap. It does mean every comparison below maps one ElevenLabs agent onto two Sarj screens plus admin settings.</p>
+    </section>
+
+    <section id="surfaces">
+      <div class="sec-head"><span class="eyebrow">3 · Surface by surface</span><h2>Each surface: ElevenLabs, the product, the system, the gap</h2></div>
+      <p>The last column is what the design system should close. <span class="chip ok">Sarj ahead</span> marks rows where the product already does more than ElevenLabs.</p>
+
+      <div class="sub" id="s-conversations">
+        <h3>Conversations</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>List</td><td>Date, Agent + branch, Duration, Messages, Call status. Search plus 12 "+ filter" chips. <a href="https://mobbin.com/screens/9369bd47-0cec-4ff6-bc1e-0e087830e574">screen</a></td><td>Time, User, Type, Direction, Phone, Scenario, Status, Outcome, Duration. Filter bar, active-filter chips, time-range strip, cursor pagination.</td><td><code>index-page</code>, <code>tables</code>, <code>DataTable</code>; chip key covers 4 statuses</td><td class="gap">Filter-bar pattern. The product has ~16; so does the conversations-revamp mockup.</td></tr>
+            <tr><td>Detail</td><td>Wide sheet over the list with prev/next "2/3". <a href="https://mobbin.com/screens/133736a1-0af5-40ad-8039-c937a7d6f904">screen</a></td><td>Sheet at <code>sm:max-w-6xl</code> via <code>?callId=</code></td><td><code>drawer</code> says a panel is 384px</td><td class="gap">Two panel widths (settings vs record viewer) and prev/next.</td></tr>
+            <tr><td>Recording</td><td>Waveform, play, 1.0x, skip</td><td>wavesurfer.js with flag regions; a flag click seeks. Raw colours ×6.</td><td>Nothing. Two mockups hand-roll <code>recording-player.tsx</code> (216 and 229 lines).</td><td class="gap">Recording-player pattern + shared block.</td></tr>
+            <tr><td>Transcript</td><td>Each agent turn names its workflow node and branch. <b>Latency chips per turn</b> (TTS 146 ms, LLM 1.2 s). Tool and routing events as inline rows. "Turn into a test" per message. <a href="https://mobbin.com/screens/0ce2e993-4b26-4e04-bfeb-ac0a44dc226c">screen</a></td><td>Enhanced / Raw toggle; raw shows tool names. 5 renderers across calls, quality, playground, messaging. <b>No per-turn latency.</b></td><td>Nothing. <code>Message</code>, <code>Bubble</code>, <code>MessageScroller</code> exist, unused. Two mockups fork <code>TranscriptPanel</code> with different data models.</td><td class="gap">Transcript pattern + shared block, with tool rows and latency.</td></tr>
+            <tr><td>Analysis</td><td>AI summary, status with re-run, how the call ended, <b>criteria "4 of 4 successful" with a written reason each</b></td><td>Outcome + reason, success-criteria results, "Generate report"; callback card</td><td>Nothing</td><td class="gap">Evaluation-result pattern: pass/fail per criterion plus a reason.</td></tr>
+            <tr><td>Metadata</td><td>Right column: date, environment, duration, cost</td><td>Right sidebar: call ID, caller, callee, times, SIP status, trunk, each with a hand-rolled copy button</td><td>Nothing</td><td class="gap">Copy button, ID display, key-value list.</td></tr>
+            <tr><td>Quality <span class="chip ok">Sarj ahead</span></td><td>Not observed</td><td>Flag dialog (6 issue types), flags on the waveform, quality dashboard with inline status</td><td><code>call-flagging</code> mockup only</td><td class="gap">The flag marker belongs to the player pattern.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-scenario-edit">
+        <h3>Scenario edit <span style="font-weight:400;color:var(--ink-3)">(ElevenLabs: agent editor)</span></h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>Structure</td><td>10 tabs: Agent, Workflow, Branches, Knowledge Base, Analysis, Tools, Tests, Widget, Security, Advanced. <a href="https://mobbin.com/screens/294390cf-8038-4610-996c-332a3734d536">screen</a></td><td>Scenario, Configuration, Schedule, Optimization (superadmin)</td><td><code>tabs</code>; the scenario-single-screen mockup (no ticket)</td><td class="gap">A position on long config objects: tabs, one scroll with anchors, or a settings rail.</td></tr>
+            <tr><td>Header</td><td>Name / branch / "Live 100%" / Draft / Variables / Preview / Publish. <a href="https://mobbin.com/screens/618baeaf-1522-4b97-92db-e61f36b76331">screen</a></td><td>Inline name, Active/Archived, Run / Import / Delete</td><td>Nothing</td><td class="gap">Page-header pattern (19 <code>&lt;h1&gt;</code> at three sizes in the product).</td></tr>
+            <tr><td>Prompt</td><td>Large textarea, expand, AI-improve, <code>{{</code> inserts a variable</td><td>Lexical editor with variable chips; 3 separate <code>{{var}}</code> parsers</td><td>variable-mentions mockup; <code>variable</code> is a raw-hex token</td><td class="gap">Prompt editor + variable chip on a real token.</td></tr>
+            <tr><td>First message</td><td>"Interruptible" toggle on the field itself</td><td>On/off switch; RTL for Arabic</td><td>Nothing</td><td class="gap">Rule: a setting that changes one field sits on that field.</td></tr>
+            <tr><td>Tools</td><td>Library + attach; system tools as toggles with a gear each. <a href="https://mobbin.com/screens/91e14363-35ec-4a12-8d4b-4b0d6a9c4ece">screen</a></td><td>Nine tool types; full HTTP endpoint editor; warm/cold transfer, hours, DTMF</td><td>transfer-routing mockup</td><td class="gap">Key-value editor, code/JSON block, test-request result.</td></tr>
+            <tr><td>Turn-taking</td><td>Eagerness, silence timeout 1–30 s, filler, max duration, per agent (docs)</td><td>Global/org only: EOU model, threshold, min/max wait, interruptions</td><td>eou-timing and call-turn-timing mockups; their <code>formatSeconds</code> disagree ("3.0s" vs "3s")</td><td class="gap">Timing-value format rule; slider + number settings row.</td></tr>
+            <tr><td>Analysis config</td><td>Rail beside the results table defines criteria, data points, language; rows expand to extracted values. <a href="https://mobbin.com/screens/7071365d-8de3-4587-bfb5-065632afb6d2">screen</a></td><td>JSON-schema visual editor; success criteria on Configuration</td><td>Nothing</td><td class="gap">Schema / field-list editor pattern.</td></tr>
+            <tr><td>Save / publish</td><td>Drafts; side-by-side diff with a version note; branches with traffic %; "Sync now" banner. <a href="https://mobbin.com/screens/ff16450b-9de9-4c60-8738-770be8df0a5c">diff</a> · <a href="https://mobbin.com/screens/cefd7b8a-df77-4216-9475-8a8b0fab8264">banner</a></td><td>No drafts or versions. Unsaved bar → diff dialog → live. Global settings and prompts each have their own diff dialog.</td><td>One line on form actions</td><td class="gap">Unsaved bar + review-diff pattern (7 product files, 3 flows).</td></tr>
+            <tr><td>AI assist <span class="chip ok">Sarj ahead</span></td><td>AI-improve on the prompt</td><td>Scenario Copilot sheet: decisions, action required, opportunities, apply/dismiss</td><td>Nothing</td><td class="gap">Suggestion card pattern.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-scenarios">
+        <h3>Scenarios index</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>List</td><td>Name, Created by, Created at; Creator and Archived filters. <a href="https://mobbin.com/screens/02042d42-1cb8-47ba-89d5-c8c99e719d7c">screen</a></td><td>Name, Languages, Status, Created, Last update, Success criteria</td><td><code>index-page</code>, <code>tables</code>, row actions</td><td class="gap">Covered; the product breaks the language-chip rule (3 renderings).</td></tr>
+            <tr><td>Retire</td><td>Archive, with an Archived filter</td><td>Delete → Recently deleted → Restore / Delete permanently</td><td>Nothing</td><td class="gap">Soft delete and restore.</td></tr>
+            <tr><td>Create</td><td>Template band + gallery previewing each template's structure, then a 3-step wizard. <a href="https://mobbin.com/screens/ebc17c84-6c86-44ce-9e2b-5345f71d69f1">screen</a></td><td>AI generator → generating screen; or Industry → Use case → Name</td><td><code>multi-step-create</code>, <code>stepper</code>; product has no Stepper</td><td class="gap">Template gallery; AI-generating progress.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-personas">
+        <h3>Personas</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>Voice</td><td>A list on the agent (primary + additional); Voice Design auditions 3 candidates. <a href="https://mobbin.com/screens/7f50c3a2-42a9-4dae-9939-d48ea5fcd1ca">screen</a></td><td>One voice, filtered by language and gender; speed slider when supported</td><td>add-voice, personas-depth mockups</td><td class="gap">Voice option row and audio preview button (3 hand-rolled <code>new Audio()</code> in the product).</td></tr>
+            <tr><td>Pronunciation <span class="chip ok">Sarj ahead</span></td><td>Uploaded <code>.pls</code> dictionaries (docs)</td><td>Word → replacement table, search, bulk upload</td><td>persona-pronunciation mockup</td><td class="gap">File dropzone (4 in the product).</td></tr>
+            <tr><td>Behaviour <span class="chip ok">Sarj ahead</span></td><td>Soft-timeout filler</td><td>Backchannel, filler words, background noise, end on silence</td><td>listener-cues, phrase-mappings mockups</td><td class="gap">Settings row (22 product files, two shapes).</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-kb">
+        <h3>Knowledge bases</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>Add content</td><td>Add URL / Add files / Create text / Create folder. URL: single, sitemap or whole site. Storage meter. <a href="https://mobbin.com/screens/67e87818-fd79-43a6-a0e3-cc6d795f7478">screen</a></td><td>Files (.pdf/.docx/.txt/.md, with read warnings) and text. No URL source.</td><td>knowledge-base mockup; <code>FileCard</code></td><td class="gap">Dropzone, usage meter, processing status in the status system.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-playground">
+        <h3>Playground</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>Live test</td><td>Full-screen orb, mute, live transcript, end state with New conversation / View details, history drawer. <a href="https://mobbin.com/screens/5de031ac-ea60-46c7-869a-32b443d38647">screen</a></td><td>LiveKit voice ↔ chat, variable input form, live transcript, thumbs rating. No latency panel.</td><td>Nothing; no playground mockup</td><td class="gap">Live-call state: connecting, live + elapsed, ended, failed.</td></tr>
+            <tr><td>Automated tests</td><td>Simulated conversations, pass/fail with reason, tool parameters, retry failed / all. <a href="https://mobbin.com/screens/d9cd8778-5d88-4b16-92a0-c548cd1e67b6">screen</a></td><td>None</td><td>Nothing</td><td class="gap">A product decision first; it would reuse transcript and evaluation patterns.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="sub" id="s-settings">
+        <h3>Integrations and settings</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Aspect</th><th>ElevenLabs</th><th>Sarj product</th><th>Design system</th><th>Gap to close</th></tr></thead>
+          <tbody>
+            <tr><td>Phone numbers</td><td>Import from Twilio / SIP in a sheet; assigned agent; Outbound call. <a href="https://mobbin.com/screens/9bbe934b-020d-4da6-a9e8-f0d8c94d171f">screen</a></td><td>Read-only for org users; 6-step SIP wizard, trunks, call activity for admins</td><td>phone-numbers mockup</td><td class="gap">Phone display rule: format and <code>dir="ltr"</code>. Only messaging formats today.</td></tr>
+            <tr><td>Integrations</td><td>Alpha; integration tools appear in the tool library</td><td>Cards + modal; Salla automations; Zoho webhooks</td><td>connected-apps mockup</td><td>Covered.</td></tr>
+            <tr><td>Credentials</td><td>—</td><td>API keys shown once; auth connections with test / rotate; secret variables</td><td>connected-apps token table</td><td class="gap">Secret value rule: masked, reveal, copy, never in a toast.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <div class="sec-head"><span class="eyebrow">4 · Component matrix</span><h2>The product against the design system</h2></div>
+      <p>The core of the audit. "Shared" is <code>src/components/shared</code>, which holds only <code>icon</code>, <code>data-table</code> and <code>figure</code>.</p>
+
+      <figure class="specimen">
+        <figcaption>Control heights · system vs product</figcaption>
+        <div class="body">
+          <div class="scale-group"><h4>Design system (radix-nova)</h4>
+            <div class="scale">
+              <div class="ctl"><i style="block-size:24px">xs</i><small>24</small></div>
+              <div class="ctl"><i style="block-size:28px">sm</i><small>28</small></div>
+              <div class="ctl"><i style="block-size:32px">default</i><small>32</small></div>
+              <div class="ctl"><i style="block-size:36px">lg</i><small>36</small></div>
+            </div></div>
+          <div class="scale-group"><h4>Product (new-york)</h4>
+            <div class="scale">
+              <div class="ctl p"><i style="block-size:24px">xs</i><small>24</small></div>
+              <div class="ctl p"><i style="block-size:32px">sm</i><small>32</small></div>
+              <div class="ctl p"><i style="block-size:36px">default</i><small>36</small></div>
+              <div class="ctl p"><i style="block-size:40px">lg</i><small>40</small></div>
+            </div></div>
+        </div>
+      </figure>
+
+      <div class="sub">
+        <h3>Shared primitives that behave differently</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Primitive</th><th>Product</th><th>Design system</th><th>What matters</th></tr></thead>
+          <tbody>
+            <tr><td>Button</td><td><code>h-9</code>, sm <code>h-8</code>, lg <code>h-10</code>; destructive solid; outline has <code>shadow-xs</code></td><td><code>h-8</code>, <code>h-7</code>, <code>h-9</code>; destructive a <code>/10</code> tint</td><td class="gap">The whole scale is one step apart.</td></tr>
+            <tr><td>Input, Select</td><td><code>h-9</code>, <code>rounded-md</code>, <code>px-3</code></td><td><code>h-8</code>, <code>rounded-lg</code>, <code>px-2.5</code></td><td class="gap">Same.</td></tr>
+            <tr><td>Badge</td><td>success / warning / info / error / primary on raw Tailwind colours; 70 files</td><td>No intent variants, though <code>--*-tint</code> exists</td><td class="gap">Ship intent variants on the tint tokens.</td></tr>
+            <tr><td>Dialog, Popover, Menu</td><td><code>p-6 rounded-lg</code> · <code>p-4 rounded-md</code> · item <code>py-1.5</code></td><td><code>p-4 rounded-xl</code> · <code>p-2.5 rounded-lg</code> · item <code>py-1</code></td><td>Density differs throughout.</td></tr>
+            <tr><td>Sheet</td><td>Widths ad hoc: 6xl, 4xl, lg, <code>w-80</code></td><td>384px, built on <code>Drawer</code>, which the product lacks</td><td class="gap">Pick Sheet or Drawer; define two widths.</td></tr>
+            <tr><td>Field vs Form</td><td><code>form.tsx</code> in 24 files; <code>field.tsx</code> in 0</td><td>Teaches <code>Field</code> only</td><td class="gap">The system documents a form layer the product never uses.</td></tr>
+            <tr><td>Engine</td><td>22 of 41 shared primitives are Base UI (<code>render</code>)</td><td>Radix (<code>asChild</code>)</td><td>Known; the registry install breaks on it.</td></tr>
+          </tbody>
+        </table></div>
+        <p><code>table.tsx</code> and <code>empty.tsx</code> are identical on both sides.</p>
+      </div>
+
+      <div class="sub">
+        <h3>Primitives only one side has</h3>
+        <ul>
+          <li><b>Product only (12).</b> <code>segmented-control</code> (7 files), <code>multi-select</code> (6), <code>timezone-select</code> (5), <code>time-picker</code> (4), <code>animated-tabs</code> (3), plus date-time and range pickers, filter-chip, labeled-toggle, waveform-player, siri-orb and form. The first six are repeated needs the system has no answer for.</li>
+          <li><b>System only (33).</b> Includes <code>drawer</code>, <code>stepper</code>, <code>pagination</code> and <code>combobox</code>, which its own topics are built on and the product does not have. Eleven more are imported by nothing: animated-beam, currency-sky-background, direction, fluid-orb, mesh-orb, multi-step-loader, message-scroller, orbkit-core, shdr-31, shdr-31-sarj, text-inline-chip-reveal.</li>
+        </ul>
+      </div>
+
+      <div class="sub">
+        <h3>Patterns with no owner on either side</h3>
+        <p>Ranked by how many times the product builds them. Counts are greps.</p>
+        <div class="tw"><table>
+          <thead><tr><th>Pattern</th><th>Product</th><th>Mockups</th><th>ElevenLabs</th><th>Proposed</th></tr></thead>
+          <tbody>
+            <tr><td>Filter bar</td><td>~16 files</td><td>conversations-revamp hand-rolls one</td><td>"+ filter" chips</td><td><span class="chip brand">topic + block</span></td></tr>
+            <tr><td>Copy button</td><td>14 sites, 5 own copy/check state</td><td>—</td><td>Yes</td><td><span class="chip brand">block</span></td></tr>
+            <tr><td>Status badge</td><td>7 components + ~6 inline maps, 5 paint systems</td><td>3 StatusBadges + severity, priority, sentiment</td><td>Yes</td><td><span class="chip brand">variants + topic + block</span></td></tr>
+            <tr><td>Value formatting</td><td>~10 date formatters; 3 duration formats; "—" ×24, "-" ×13, "N/A" ×4</td><td>4 date formats, 7 formatters</td><td>—</td><td><span class="chip brand">foundation + lib/format.ts</span></td></tr>
+            <tr><td>Searchable picker</td><td>8 implementations</td><td>—</td><td>—</td><td><span class="chip brand">document Combobox</span></td></tr>
+            <tr><td>Empty state usage</td><td>~12 hand-rolled despite <code>Empty</code></td><td>14 files use <code>Empty</code></td><td>Icon, title, reason, action</td><td><span class="chip">enforce existing</span></td></tr>
+            <tr><td>Settings row</td><td>~22 files, two shapes</td><td>Several</td><td>Yes</td><td><span class="chip brand">topic</span></td></tr>
+            <tr><td>Transcript</td><td>5 renderers</td><td>2 forks</td><td>With latency</td><td><span class="chip brand">voice topic + block</span></td></tr>
+            <tr><td>Code / JSON block</td><td>10 <code>&lt;pre&gt;</code> + json-data-display</td><td>—</td><td>Diff, tool params</td><td><span class="chip brand">block</span></td></tr>
+            <tr><td>Review diff</td><td>7 files, 3 flows</td><td>roles-permissions confirm</td><td>Yes</td><td><span class="chip brand">topic</span></td></tr>
+            <tr><td>Page header</td><td>19 <code>&lt;h1&gt;</code> at 3 sizes</td><td>Shell title</td><td>Yes</td><td><span class="chip brand">topic</span></td></tr>
+            <tr><td>Table container</td><td>~5 header treatments, 4 radii</td><td><code>DataTable</code> ×10</td><td>—</td><td><span class="chip">ship to product</span></td></tr>
+            <tr><td>Time-range filter</td><td>4 variants</td><td>—</td><td>Before / after chips</td><td><span class="chip">in filter bar</span></td></tr>
+            <tr><td>File dropzone</td><td>4</td><td>—</td><td>Yes</td><td><span class="chip brand">block</span></td></tr>
+            <tr><td>Recording player</td><td>1 player + 3 preview buttons</td><td>2 forks</td><td>Yes</td><td><span class="chip brand">voice topic + block</span></td></tr>
+            <tr><td>Stat tile</td><td>7 tiles on 2 pages, with shadows</td><td>—</td><td>—</td><td><span class="chip">in charts topic</span></td></tr>
+            <tr><td>Language display</td><td>3 renderings</td><td>3 <code>dir</code> heuristics; Urdu left LTR</td><td>Default + additional</td><td><span class="chip">Arabic content page</span></td></tr>
+            <tr><td>Variable token</td><td>3 parsers + Lexical node</td><td>variable-mentions</td><td><code>{{</code> inserts</td><td><span class="chip brand">topic + real token</span></td></tr>
+            <tr><td>Multi-step wizard</td><td>2 flows, no stepper</td><td>personas-depth</td><td>3-step create</td><td><span class="chip">topic exists</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><p><b>Not a pattern today: bulk row selection.</b> No product table has select-all or an indeterminate state, so the system should not add one until a ticket asks.</p></div>
+      </div>
+
+      <div class="sub">
+        <h3>Status, painted five ways in the product</h3>
+        <div class="paint">
+          <div class="paint-row"><code>&lt;Badge variant="success"&gt;</code><span>Badge variant on raw <code>green-50</code> / <code>amber-50</code> / <code>blue-50</code> / <code>red-50</code></span></div>
+          <div class="paint-row"><code>bg-success/10 text-success</code><span>Class override on a neutral badge (<code>scenario-view-edit.tsx:338</code>)</span></div>
+          <div class="paint-row"><code>bg-pink-100 text-pink-700</code><span>Raw Tailwind colours, not a Badge at all (<code>issue-type-badge.tsx:38</code>)</span></div>
+          <div class="paint-row"><code>variant="destructive"</code><span>Solid red with white text</span></div>
+          <div class="paint-row"><code>variant="outline"</code><span>Outline with a coloured icon</span></div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Tokens</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Token</th><th>Product</th><th>Design system</th></tr></thead>
+          <tbody>
+            <tr><td>Core palette, <code>--radius</code></td><td>Same values</td><td>Same values</td></tr>
+            <tr><td><code>--*-tint</code>, <code>--info*</code></td><td class="gap">Missing; Badge fills the gap with raw colours</td><td>Defined</td></tr>
+            <tr><td><code>--z-*</code></td><td class="gap">Missing; <code>z-40</code> ×30, <code>z-10</code> ×26, <code>z-[9999]</code> ×1</td><td>9 layers + a lint rule</td></tr>
+            <tr><td><code>--chart-1…6</code></td><td>Stock shadcn: orange, teal, blue, yellow, amber</td><td>Primary first, then five separate hues</td></tr>
+            <tr><td><code>--ease-out-cubic</code></td><td><code>cubic-bezier(0.33,1,0.68,1)</code></td><td><code>cubic-bezier(0.215,0.61,0.355,1)</code></td></tr>
+            <tr><td>Shadows</td><td class="gap">92 <code>shadow-*</code> outside <code>ui/</code></td><td>Banned by lint</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="itself">
+      <div class="sec-head"><span class="eyebrow">5 · Internal consistency</span><h2>The design system against itself</h2></div>
+      <div class="sub">
+        <h3>Where the docs contradict the code</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Topic</th><th>The docs say</th><th>The code says</th></tr></thead>
+          <tbody>
+            <tr><td>Charts</td><td>"One purple ramp, never a rainbow" — AGENTS.md:182, <code>sarj-lint:54</code>, <code>sarj-mockup:145,290</code>, <code>sarj-no-slop:34</code>, <code>sarj-brand:294</code></td><td><code>globals.css:79-108</code>: six separate hues since DES-174</td></tr>
+            <tr><td>Help text</td><td>Drawer help is an (i) tooltip — <code>data.ts:438-441</code>, <code>sarj-no-slop:111-116,303</code></td><td>AGENTS.md and <code>ui-review:24</code>: inline <code>FieldDescription</code>. The AGENTS.md note blaming ui-review is stale.</td></tr>
+            <tr><td>Scrollbars</td><td>"One width and one token" (<code>data.ts:57-62</code>)</td><td><code>globals.css</code> hides every scrollbar</td></tr>
+            <tr><td>Shadows</td><td>"One shared set" (<code>data.ts:44</code>); sarj-brand prescribes <code>shadow-xs</code></td><td><code>no-shadow</code> bans them all</td></tr>
+            <tr><td>Radius</td><td>Buttons and inputs are <code>rounded-md</code></td><td>Button, Input and Select use <code>rounded-lg</code></td></tr>
+            <tr><td>Count</td><td>"61 shadcn primitives"</td><td>74 files in <code>src/components/ui</code></td></tr>
+            <tr><td>Control height</td><td>Inputs 36px (<code>sarj-brand:230</code>)</td><td><code>control-scale</code>: 32px</td></tr>
+            <tr><td>Colour list</td><td>"There are no others"</td><td>Omits <code>info</code> and <code>*-tint</code>; raw-hex <code>manafa-*</code>, <code>tailwind-black</code>, <code>variable</code> in <code>@theme</code></td></tr>
+            <tr><td>Motion</td><td>≤300 ms, two curves, reduced motion always</td><td><code>fade-in</code> 500 ms, a third curve, <code>.highlight-pulse</code> 1 s with no guard. CSS is not linted.</td></tr>
+            <tr><td>Destructive</td><td>Confirm every time (<code>ui-review:38</code>)</td><td>model-catalog deactivates with an undo toast by design</td></tr>
+            <tr><td>Drawer</td><td>One surface</td><td>Mockups use Sheet ×4 and <code>Drawer direction="right"</code> ×4, a physical side</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="sub">
+        <h3>Mockup code that should be shared</h3>
+        <div class="tw"><table>
+          <thead><tr><th>Block</th><th>Duplicated in</th></tr></thead>
+          <tbody>
+            <tr><td>RecordingPlayer</td><td><code>behavioral-alerts/recording-player.tsx</code>, <code>conversations-revamp/drawer/recording-player.tsx</code></td></tr>
+            <tr><td>TranscriptPanel</td><td><code>behavioral-alerts/transcript-panel.tsx</code>, <code>conversations-revamp/drawer/transcript-views.tsx</code></td></tr>
+            <tr><td>Section register</td><td><code>behavioral-alerts/section-register.tsx</code> (668 lines) vs <code>conversations-revamp/drawer/section-register.tsx</code> (764)</td></tr>
+            <tr><td>CallHeader</td><td><code>behavioral-alerts/call-drawer.tsx:264</code>, <code>conversations-revamp/drawer/call-shell.tsx:44</code></td></tr>
+            <tr><td>StatusBadge</td><td>connected-apps, knowledge-base, conversations-revamp, behavioral-alerts, call-turn-timing</td></tr>
+            <tr><td>Language → dir</td><td>scenario-single-screen (ar + ur), variable-mentions (ar only, so Urdu stays LTR, a bug), v2 prompt-builder (a prop)</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="sub">
+        <h3>Holes that are not voice-specific</h3>
+        <ul>
+          <li><b>Toasts.</b> Nothing says when to use a toast rather than inline feedback, or covers copy, duration or undo. One mockup puts a secret in a toast (<code>connected-apps/create-token-dialog.tsx:228</code>).</li>
+          <li><b>Accessibility.</b> The page has two rows. Missing: contrast per token pair, the 24px hit-target floor (17 <code>icon-xs</code> buttons), icon-button naming, heading levels, live regions for call status, and audio keyboard controls.</li>
+          <li><b>Content.</b> Lives only in the <code>sarj-no-slop</code> skill; the written system has no Content section.</li>
+          <li><b>Arabic content.</b> <code>ui-review:15</code> waives RTL entirely. For an Arabic-first product, the waiver should cover UI mirroring only. There is nothing on <code>dir="auto"</code>, bidi isolation, the Arabic fallback font (Nunito has no Arabic glyphs, inferred), or numerals.</li>
+          <li><b>Pagination.</b> Written, but no mockup shows it and the primitive is unused.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="fixes">
+      <div class="sec-head"><span class="eyebrow">6 · Recommendations</span><h2>Design-system fixes, in order</h2></div>
+      <p>Ranked by reach × how fast it drifts ÷ effort. Each is sized as one ticket.</p>
+      <div class="ranked">
+        <div class="rk"><span class="n">1</span><div><h4>Correct the documentation contradictions</h4><p>Chart wording, help-text rule, scrollbars, shadows, radius, primitive count, token list.</p><p class="why">Agents follow these skills today and build monochrome charts and (i) tooltips against the rules.</p></div><span class="chip">S</span></div>
+        <div class="rk"><span class="n">2</span><div><h4>Decide the control scale</h4><p>The system moves to a 36px default, or the product migrates to 32px. Record it in <code>control-scale</code>. Needs a design-lead decision.</p><p class="why">Every registry install is off by one step until this is settled.</p></div><span class="chip warn">decision</span></div>
+        <div class="rk"><span class="n">3</span><div><h4>Intent Badge and a Status topic</h4><p>success / warning / info variants on the tint tokens. One status map (call, live call, batch, flag, source, token, connection, report) with icon rules and a live signal: a dot plus elapsed time, safe under reduced motion. Ship the tint tokens to the product.</p><p class="why">Five paint systems in the product, four in mockups.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">4</span><div><h4>Formatting foundation and <code>src/lib/format.ts</code></h4><p>One date format with relative-time rules; <code>m:ss</code> / <code>h:mm:ss</code>; latency in ms under 1 s and one decimal above; counts; file size; phone with <code>dir="ltr"</code>; one empty-value glyph; <code>tabular-nums</code> on numeric columns.</p><p class="why">~10 formatters in the product, 7 in mockups, two disagreeing on the same ticket.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">5</span><div><h4>Voice pattern group and shared blocks</h4><p><code>RecordingPlayer</code> (flag and alert markers, speed, keyboard, unavailable state), <code>Transcript</code> (speaker roles, tool rows, per-turn latency, search, seek, follow the playhead), <code>CallHeader</code>, a metadata key-value list. Promoted from the two mockup forks with one data model.</p><p class="why">The core surface, the largest block of duplicated UI, and where ElevenLabs is visibly ahead.</p></div><span class="chip bad">L</span></div>
+        <div class="rk"><span class="n">6</span><div><h4>Filter bar, time range, copy button, page header</h4><p>Shared blocks and topics.</p><p class="why">The top two repeated patterns in the product.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">7</span><div><h4>Review-diff pattern</h4><p>Unsaved-changes bar, review dialog (added, removed, modified), optional note, concurrent-edit banner. Versioning stays a product call; the pattern is needed either way.</p><p class="why">7 product files, 3 flows.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">8</span><div><h4>Arabic content page</h4><p><code>dir="auto"</code> for user content, one <code>languageDir()</code> (ar, ur → rtl), bidi isolation, fallback font and line height, numerals. Narrow the ui-review waiver to UI mirroring.</p><p class="why">An Arabic-first product with no Arabic rule, and a live Urdu bug.</p></div><span class="chip">S</span></div>
+        <div class="rk"><span class="n">9</span><div><h4>Charts and stat tiles</h4><p>Which chart for volume, outcomes and latency distribution; axes on <code>border</code> and <code>muted-foreground</code>; empty and partial charts; tile anatomy.</p><p class="why">Six chart tokens, no rules; the product's tiles use shadows.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">10</span><div><h4>Forms decision and the settings row</h4><p>Document <code>Form</code> beside <code>Field</code>, or state that <code>Field</code> replaces it. Add the settings-row shape: label, description, control; slider plus number.</p><p class="why">The system teaches a form layer the product never uses.</p></div><span class="chip">S</span></div>
+        <div class="rk"><span class="n">11</span><div><h4>Pickers</h4><p>Combobox for single and multi; time, timezone and date-range as primitives or documented compositions.</p><p class="why">Six product-only primitives exist because the system has no answer.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">12</span><div><h4>Destructive actions and toasts</h4><p>Confirm vs undo, dialog copy formula, toast types, no secrets in toasts.</p><p class="why">Two rules already conflict.</p></div><span class="chip">S</span></div>
+        <div class="rk"><span class="n">13</span><div><h4>Editors</h4><p>Long-prompt editor, <code>{{variable}}</code> chip on a real token, code / JSON block, key-value editor.</p><p class="why">Three editors and three variable parsers in the product.</p></div><span class="chip">M</span></div>
+        <div class="rk"><span class="n">14</span><div><h4>Hygiene</h4><p>Delete or document the 11 dead primitives; lint motion in <code>globals.css</code>; pick Sheet or Drawer with a logical side; give scenario-single-screen a ticket or drop v1.</p></div><span class="chip">S</span></div>
+        <div class="rk"><span class="n">15</span><div><h4>Accessibility and Content sections</h4><p>Expanded as in §5.</p><p class="why">Needed before any external audit.</p></div><span class="chip">M</span></div>
+      </div>
+    </section>
+
+    <section id="reference">
+      <div class="sec-head"><span class="eyebrow">7 · Reference</span><h2>What to take from ElevenLabs</h2></div>
+      <p>Structure and behaviour only, and only when a ticket calls for the surface. Never its visual style.</p>
+      <div class="two">
+        <div class="note key"><span class="eyebrow">Take</span>
+          <p>Per-turn latency chips and inline tool rows in the transcript · evaluation criteria with pass/fail and a reason each · analysis definitions and results on one screen · a setting that changes one field sits on that field · system tools as one toggle list with per-tool config · review diff before publish, with live/draft in the header · a template gallery that previews structure · the uniform empty state: icon, title, reason, action.</p></div>
+        <div class="note"><span class="eyebrow">Don't take</span>
+          <p>The monochrome style, type and radii · promo cards inside working screens · ten editor tabs mixing deployment with agent config · long filter-chip rows with no grouping · features the ticket did not ask for (tests, branches, traffic split, URL crawling).</p></div>
+      </div>
+      <p>The same reference, per surface, is the <code>sarj-elevenlabs</code> skill in this repo.</p>
+    </section>
+
+    <section id="unchecked">
+      <div class="sec-head"><span class="eyebrow">8 · Limits</span><h2>What was not checked</h2></div>
+      <ul>
+        <li><b>The ElevenLabs app itself.</b> Not walked in a signed-in browser yet. Not seen anywhere: in-editor voice settings (stability, speed), the Users page, parts of Advanced, Settings, Developers, WhatsApp. Mobbin captures date from Mar–Apr 2026 and may have changed.</li>
+        <li>No route was rendered in either repo, and no lint, typecheck or screenshot was run. UI claims come from source.</li>
+        <li>The product audit reads code; it does not know which admin screens real users see most.</li>
+        <li>Whether a single product screen mixes inline help with (i) tooltips was not checked screen by screen.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>
