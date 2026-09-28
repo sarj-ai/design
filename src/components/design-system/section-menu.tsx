@@ -19,7 +19,7 @@ import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
 import { cn } from "@/lib/utils"
 
 /** Topics whose demo is a whole page, shown at the sheet's full width. */
-const FULL_WIDTH_TOPICS = new Set(["index"])
+const FULL_WIDTH_TOPICS = new Set(["index", "admin-view"])
 
 /**
  * The five sections as a menu that opens into a grid — after Codrops' "Menu

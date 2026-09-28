@@ -247,9 +247,13 @@ function NavGroup({
 /** Breadcrumb start, account end — the row every page in the app sits under. */
 export function AppHeader({
   actions,
+  scope,
   trail,
   showSettings,
 }: {
+  /** Sits first in the header's right-hand row — the admin view a
+   *  superadmin is reading the page as. */
+  scope?: React.ReactNode
   /** Replaces the account row entirely. The design-system page uses it to
    *  carry the way back to the index; a mockup leaves it off and gets the
    *  row the app itself shows. */
@@ -282,6 +286,7 @@ export function AppHeader({
       </Breadcrumb>
 
       <div className="flex shrink-0 items-center gap-2">
+        {scope}
         {actions ?? (
           <>
             <Button size="sm" variant="outline">
@@ -329,6 +334,7 @@ export function AppHeader({
 
 export function AppShell({
   active,
+  scope,
   breadcrumb,
   hiddenItems,
   onNavigate,
@@ -336,6 +342,8 @@ export function AppShell({
 }: {
   /** Title of the sidebar item this screen lives under, e.g. "Personas". */
   active: string
+  /** The admin view, in the top bar. Only a superadmin sees one. */
+  scope?: React.ReactNode
   /** Crumbs after Home; a bare string is a single one. Defaults to `active`. */
   breadcrumb?: string | readonly string[]
   /**
@@ -420,6 +428,7 @@ export function AppShell({
 
       <SidebarInset className="min-w-0 overflow-hidden">
         <AppHeader
+          scope={scope}
           trail={
             breadcrumb === undefined
               ? [active]

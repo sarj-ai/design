@@ -3,13 +3,6 @@
 import * as React from "react"
 
 import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -17,48 +10,53 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { OrganisationIcon } from "@/components/design-system/icons"
+import { ConversationsPage } from "@/components/mockups/conversations-revamp/list/conversations-page"
 
 const ORGANISATIONS = ["Sarj.ai", "Rawabi Holding", "Tamimi Markets"]
 
 /**
- * The organisation a superadmin is reading a page as, and the control that
- * changes it — as the product draws it today, above an index page's list: a
- * warning-tinted band, because every row under it belongs to someone else's
- * organisation and that should never be missed.
+ * The organisation a superadmin is reading a page as, in the top bar.
  *
- * On its own page while where it belongs is being worked out.
+ * It is the scope of the whole screen, not of one list, so it sits with the
+ * app's own controls rather than in a band above the page's content — and it
+ * stays in the same place on every page. Tinted with warning, because every
+ * row under it may belong to someone else's organisation.
  */
-export function AdminViewPreview() {
+export function AdminViewSwitcher() {
   const [organisation, setOrganisation] = React.useState(ORGANISATIONS[0])
 
   return (
-    <Item
-      variant="outline"
-      className="border-warning/30 bg-warning-tint text-warning-tint-foreground"
-    >
-      <ItemMedia variant="icon">
+    <Select value={organisation} onValueChange={setOrganisation}>
+      <SelectTrigger
+        aria-label="Admin view"
+        size="sm"
+        className="border-warning/30 bg-warning-tint text-warning-tint-foreground"
+      >
         <OrganisationIcon />
-      </ItemMedia>
-      <ItemContent className="flex-none">
-        <ItemTitle>Admin view</ItemTitle>
-      </ItemContent>
-      <ItemActions>
-        <Select value={organisation} onValueChange={setOrganisation}>
-          <SelectTrigger
-            aria-label="Organisation"
-            className="w-56 bg-background"
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="popper">
-            {ORGANISATIONS.map((name) => (
-              <SelectItem key={name} value={name}>
-                {name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </ItemActions>
-    </Item>
+        <span className="font-medium">Admin view:</span>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent position="popper" align="end">
+        {ORGANISATIONS.map((name) => (
+          <SelectItem key={name} value={name}>
+            {name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
+
+/**
+ * The conversations index, as the mockup ships it, with the admin view in
+ * its top bar. Framed so the app's sidebar and drawers stay inside the demo:
+ * `translate-x-0` makes the frame the containing block for their fixed
+ * positioning.
+ */
+export function AdminViewPagePreview() {
+  return (
+    <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
+      <ConversationsPage scope={<AdminViewSwitcher />} />
+    </div>
   )
 }

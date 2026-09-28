@@ -27,7 +27,7 @@ import { FoundationTable } from "@/components/design-system/foundation-tables"
 import { FormDemo } from "@/components/design-system/form-demo"
 import { LanguageNotes } from "@/components/design-system/language-notes"
 import { IndexPageDemo } from "@/components/design-system/index-page-demo"
-import { AdminViewPreview } from "@/components/design-system/admin-view-preview"
+import { AdminViewPagePreview } from "@/components/design-system/admin-view-preview"
 import { IndexPagePreview } from "@/components/design-system/page-preview"
 import { RowActionNotes } from "@/components/design-system/row-action-notes"
 import { MotionTable } from "@/components/design-system/motion-tables"
@@ -365,15 +365,7 @@ export default async function DesignSystemPage({
         ),
 
         index: <IndexPageDemo />,
-        "admin-view": (
-          <Card>
-            {/* The same stage height as the other component demos, with the
-                band centred in it rather than hugging the top edge. */}
-            <CardContent className="flex min-h-48 items-center">
-              <AdminViewPreview />
-            </CardContent>
-          </Card>
-        ),
+        "admin-view": <AdminViewPagePreview />,
         "orb-avatar": (
           <div className="flex flex-col gap-4">
             {/* One height per row: the grid stretches each card to the
