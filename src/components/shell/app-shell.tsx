@@ -248,9 +248,14 @@ function NavGroup({
 export function AppHeader({
   actions,
   scope,
+  developers,
   trail,
   showSettings,
 }: {
+  /** Swaps "Developer Doc" for a Developers button that opens the
+   *  Developers page — "open" when that page is the one showing. Off, the
+   *  header is the one the app ships today. */
+  developers?: "link" | "open"
   /** Sits first in the header's right-hand row — the admin view a
    *  superadmin is reading the page as. */
   scope?: React.ReactNode
@@ -289,10 +294,21 @@ export function AppHeader({
         {scope}
         {actions ?? (
           <>
-            <Button size="sm" variant="outline">
-              <DeveloperDocsIcon />
-              Developer Doc
-            </Button>
+            {developers ? (
+              <Button
+                aria-current={developers === "open" ? "page" : undefined}
+                size="sm"
+                variant={developers === "open" ? "secondary" : "outline"}
+              >
+                <DeveloperDocsIcon />
+                Developers
+              </Button>
+            ) : (
+              <Button size="sm" variant="outline">
+                <DeveloperDocsIcon />
+                Developer Doc
+              </Button>
+            )}
             {/* The same allowlist the nav reads. The app has this gear on its own
             check today, which is how an admin gets a second dead end to the
             page the sidebar already sent them to. */}
@@ -335,6 +351,7 @@ export function AppHeader({
 export function AppShell({
   active,
   scope,
+  developers,
   underShell = true,
   breadcrumb,
   hiddenItems,
@@ -345,6 +362,8 @@ export function AppShell({
   active: string
   /** The admin view, in the top bar. Only a superadmin sees one. */
   scope?: React.ReactNode
+  /** The Developers button in the top bar, in place of "Developer Doc". */
+  developers?: "link" | "open"
   /** Whether the mockup shell's header sits above, which the sidebar has to
    *  clear. Off when the app is shown inside a frame on its own. */
   underShell?: boolean
@@ -436,6 +455,7 @@ export function AppShell({
 
       <SidebarInset className="min-w-0 overflow-hidden">
         <AppHeader
+          developers={developers}
           scope={scope}
           trail={
             breadcrumb === undefined

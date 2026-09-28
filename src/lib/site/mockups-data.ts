@@ -14,6 +14,7 @@ import {
   LayoutTable01Icon,
   Message01Icon,
   ShieldKeyIcon,
+  SourceCodeIcon,
   SparklesIcon,
   TelephoneIcon,
   Timer01Icon,
@@ -303,6 +304,16 @@ export const MOCKUPS: Mockup[] = [
       "Flag this call: a pop-up that files a moment of a call under one of the ten DIS-50 parent categories and any number of its subcategories. The first row ticked commits the flag to its parent and every other group dims; ticking a row in another group moves the flag there and drops the old ticks. The footer reads the flag back before it is saved. Latency carries a Not sure row because its subcategories are optional; the four parents with none are plain rows under the divider.",
     icon: Flag02Icon,
     tickets: ["DES-167"],
+  },
+  {
+    href: "/developers",
+    title: "Developers",
+    meta: "Page · exploration",
+    surface: null,
+    description:
+      "One place for building on Sarj: a quickstart that places a call through the public API, API keys, webhooks and variables as tabs of one page.",
+    icon: SourceCodeIcon,
+    tickets: [],
   },
   // `npm run new` appends new mockups above this line.
 ]

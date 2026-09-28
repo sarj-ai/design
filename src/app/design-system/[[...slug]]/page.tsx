@@ -22,6 +22,8 @@ import { PatternAnatomy } from "@/components/design-system/pattern-anatomy"
 import { ButtonSizes } from "@/components/design-system/button-sizes"
 import { ChipNotes, ChipTable } from "@/components/design-system/chip-notes"
 import { DrawerPreview } from "@/components/design-system/drawer-preview"
+import { DevelopersPage } from "@/components/mockups/developers/developers-page"
+import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
 import { EmptyValueNotes } from "@/components/design-system/empty-value-notes"
 import { FoundationTable } from "@/components/design-system/foundation-tables"
 import { FormDemo } from "@/components/design-system/form-demo"
@@ -365,7 +367,21 @@ export default async function DesignSystemPage({
         ),
 
         index: <IndexPageDemo />,
+        "drawer-anatomy": (
+          <Card>
+            <CardContent>
+              <DrawerAnatomyPreview />
+            </CardContent>
+          </Card>
+        ),
         "admin-view": <AdminViewPagePreview />,
+        developers: (
+          /* Framed like the admin view: `translate-x-0` makes the frame the
+             containing block for the app's fixed sidebar. */
+          <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
+            <DevelopersPage framed />
+          </div>
+        ),
         "orb-avatar": (
           <div className="flex flex-col gap-4">
             {/* One height per row: the grid stretches each card to the

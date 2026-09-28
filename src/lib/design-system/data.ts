@@ -688,6 +688,20 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
     sarj: true,
   },
   {
+    id: "drawer-anatomy",
+    title: "Drawer",
+    description:
+      "A panel from the side for configuring or reading one thing while the page behind stays in reach.",
+    sarj: true,
+  },
+  {
+    id: "developers",
+    title: "Developers",
+    description:
+      "Everything for building on Sarj on one page: a quickstart that places a call through the public API, then keys, webhooks and variables.",
+    sarj: true,
+  },
+  {
     id: "admin-view",
     title: "Admin view",
     description:
