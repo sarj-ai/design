@@ -18,6 +18,9 @@ import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system/data"
 import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
 import { cn } from "@/lib/utils"
 
+/** Topics whose demo is a whole page, shown at the sheet's full width. */
+const FULL_WIDTH_TOPICS = new Set(["index"])
+
 /**
  * The five sections as a menu that opens into a grid — after Codrops' "Menu
  * to Grid" (tympanus.net/Development/MenuToGrid), rebuilt on motion/react
@@ -644,7 +647,17 @@ export function SectionMenu({
                       initial={{ opacity: 0, y: 8 }}
                       transition={{ duration: reduced ? 0 : 0.3, ease: ARRIVE }}
                     >
-                      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 pt-14 pb-16">
+                      <div
+                        className={cn(
+                          "mx-auto flex w-full flex-col gap-8 px-6 pt-14 pb-16",
+                          /* A page demo is shown at a page's width — an index
+                             squeezed into the reading column is not what the
+                             product looks like. */
+                          FULL_WIDTH_TOPICS.has(openTopic.id)
+                            ? "max-w-none sm:px-10"
+                            : "max-w-3xl",
+                        )}
+                      >
                         <header className="flex flex-col gap-1">
                           <TextHighlightWave
                             as="p"

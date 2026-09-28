@@ -14,30 +14,83 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
+        "avatar",
         "badge",
+        "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
         "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
-        "textarea"
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/transfer-routing/page.tsx",
           "type": "registry:page",
           "target": "app/transfer-routing/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/transfer-routing/case-field.tsx",
@@ -65,6 +118,11 @@
           "target": "@components/sarj/mockups/transfer-routing/transfer-tool-drawer.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -80,6 +138,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -88,6 +151,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -210,31 +278,84 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
+        "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
         "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
+        "select",
         "separator",
+        "sheet",
         "sidebar",
-        "table"
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/knowledge-base/page.tsx",
           "type": "registry:page",
           "target": "app/knowledge-base/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/knowledge-base/icons.tsx",
@@ -257,9 +378,19 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
         },
         {
           "path": "src/components/shell/app-shell-icons.tsx",
@@ -282,6 +413,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -290,6 +426,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -410,23 +551,67 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
         "empty",
+        "field",
+        "hover-card",
+        "input",
+        "input-group",
+        "input-otp",
         "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
         "tooltip"
       ],
       "files": [
@@ -434,6 +619,16 @@
           "path": "src/app/(mockups)/call-turn-timing/page.tsx",
           "type": "registry:page",
           "target": "app/call-turn-timing/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/call-turn-timing/icons.tsx",
@@ -449,6 +644,11 @@
           "path": "src/components/mockups/call-turn-timing/turn-detection-section.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/call-turn-timing/turn-detection-section.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -476,6 +676,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -484,6 +689,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -606,37 +816,68 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "react-resizable-panels",
         "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
         "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
         "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
+        "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
         "popover",
+        "progress",
+        "radio-group",
         "resizable",
+        "scroll-area",
         "select",
         "separator",
         "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
         "table",
         "textarea",
+        "toggle",
+        "toggle-group",
         "tooltip"
       ],
       "files": [
@@ -644,6 +885,16 @@
           "path": "src/app/(mockups)/conversations-revamp/page.tsx",
           "type": "registry:page",
           "target": "app/conversations-revamp/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/conversations-revamp/drawer/call-shell.tsx",
@@ -741,6 +992,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -766,6 +1022,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -774,6 +1035,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -902,37 +1168,66 @@
         "conversation",
         "conversations",
         "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
         "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
         "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
         "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
         "skeleton",
         "slider",
+        "spinner",
         "switch",
         "table",
         "tabs",
         "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -941,6 +1236,16 @@
           "path": "src/app/(mockups)/personas-depth/page.tsx",
           "type": "registry:page",
           "target": "app/personas-depth/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/personas-depth/icons.tsx",
@@ -983,6 +1288,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1008,6 +1318,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -1016,6 +1331,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -1136,35 +1456,84 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
         "drawer",
         "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
+        "input",
+        "input-group",
+        "input-otp",
         "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
         "slider",
+        "spinner",
         "switch",
-        "toggle-group"
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/listener-cues/page.tsx",
           "type": "registry:page",
           "target": "app/listener-cues/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/listener-cues/backchannel-settings.tsx",
@@ -1185,6 +1554,11 @@
           "path": "src/components/mockups/listener-cues/listener-cues-drawer.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/listener-cues/listener-cues-drawer.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -1212,6 +1586,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -1220,6 +1599,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -1340,6 +1724,8 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
@@ -1347,25 +1733,57 @@
         "accordion",
         "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
         "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
         "drawer",
+        "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
+        "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
         "slider",
         "spinner",
         "switch",
+        "table",
+        "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -1374,6 +1792,16 @@
           "path": "src/app/(mockups)/phrase-mappings/page.tsx",
           "type": "registry:page",
           "target": "app/phrase-mappings/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/phrase-mappings/backchannel-settings.tsx",
@@ -1411,6 +1839,11 @@
           "target": "@components/sarj/mockups/phrase-mappings/trigger-field.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1436,6 +1869,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -1444,6 +1882,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -1564,32 +2007,67 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
         "skeleton",
+        "slider",
         "spinner",
+        "switch",
         "table",
         "tabs",
         "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -1598,6 +2076,16 @@
           "path": "src/app/(mockups)/model-catalog/page.tsx",
           "type": "registry:page",
           "target": "app/model-catalog/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/model-catalog/add-model-dialog.tsx",
@@ -1613,6 +2101,11 @@
           "path": "src/components/mockups/model-catalog/icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/model-catalog/icons.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -1640,6 +2133,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -1648,6 +2146,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -1769,24 +2272,65 @@
         "conversation",
         "conversations",
         "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
+        "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
+        "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
+        "table",
+        "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -1795,6 +2339,16 @@
           "path": "src/app/(mockups)/eou-timing/page.tsx",
           "type": "registry:page",
           "target": "app/eou-timing/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/eou-timing/global-turn-detection.tsx",
@@ -1815,6 +2369,11 @@
           "path": "src/components/mockups/eou-timing/wait-window.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/eou-timing/wait-window.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -1842,6 +2401,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -1850,6 +2414,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -1970,42 +2539,84 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
         "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
         "drawer",
+        "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
         "radio-group",
+        "resizable",
         "scroll-area",
         "select",
         "separator",
         "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
         "table",
         "textarea",
-        "toggle-group"
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/scenario-single-screen/page.tsx",
           "type": "registry:page",
           "target": "app/scenario-single-screen/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/scenario-single-screen/config-drawers.tsx",
@@ -2078,6 +2689,11 @@
           "target": "@components/sarj/mockups/scenario-single-screen/v2/setting-sheet.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2103,6 +2719,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -2111,6 +2732,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -2236,34 +2862,66 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
         "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
         "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
         "radio-group",
+        "resizable",
         "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
         "spinner",
+        "switch",
         "table",
         "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -2272,6 +2930,16 @@
           "path": "src/app/(mockups)/connected-apps/page.tsx",
           "type": "registry:page",
           "target": "app/connected-apps/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/connected-apps/app-detail.tsx",
@@ -2314,6 +2982,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2339,6 +3012,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -2347,6 +3025,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -2527,27 +3210,66 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
+        "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
         "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
+        "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
         "radio-group",
+        "resizable",
         "scroll-area",
+        "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
         "table",
+        "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -2556,6 +3278,16 @@
           "path": "src/app/(mockups)/roles-permissions/page.tsx",
           "type": "registry:page",
           "target": "app/roles-permissions/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/roles-permissions/create-role-dialog.tsx",
@@ -2583,6 +3315,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2608,6 +3345,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -2616,6 +3358,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -2736,39 +3483,68 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "react-resizable-panels",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
         "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
         "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
         "dropdown-menu",
         "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
         "popover",
+        "progress",
+        "radio-group",
         "resizable",
+        "scroll-area",
         "select",
         "separator",
         "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
         "spinner",
         "switch",
         "table",
         "tabs",
         "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -2777,6 +3553,16 @@
           "path": "src/app/(mockups)/behavioral-alerts/page.tsx",
           "type": "registry:page",
           "target": "app/behavioral-alerts/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/behavioral-alerts/alert-detections.tsx",
@@ -2874,6 +3660,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2899,6 +3690,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -2907,6 +3703,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -3032,34 +3833,84 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
         "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
         "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
+        "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
         "sidebar",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
-        "toggle-group"
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/call-retry/page.tsx",
           "type": "registry:page",
           "target": "app/call-retry/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/call-retry/batch-retry.tsx",
@@ -3092,6 +3943,11 @@
           "target": "@components/sarj/mockups/call-retry/wait-duration-field.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3117,6 +3973,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -3125,6 +3986,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -3245,22 +4111,67 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
+        "avatar",
         "badge",
+        "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
+        "card",
+        "carousel",
+        "chart",
         "checkbox",
+        "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
+        "dialog",
+        "drawer",
         "dropdown-menu",
         "empty",
+        "field",
+        "hover-card",
+        "input",
         "input-group",
+        "input-otp",
+        "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
         "table",
         "tabs",
+        "textarea",
+        "toggle",
+        "toggle-group",
         "tooltip"
       ],
       "files": [
@@ -3268,6 +4179,16 @@
           "path": "src/app/(mockups)/phone-numbers/page.tsx",
           "type": "registry:page",
           "target": "app/phone-numbers/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/phone-numbers/call-activity-tab.tsx",
@@ -3295,6 +4216,11 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3310,6 +4236,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -3318,6 +4249,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -3438,21 +4374,66 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
+        "card",
+        "carousel",
+        "chart",
+        "checkbox",
+        "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
+        "input-group",
+        "input-otp",
         "item",
+        "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
         "popover",
+        "progress",
         "radio-group",
+        "resizable",
+        "scroll-area",
         "select",
         "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
         "tooltip"
       ],
       "files": [
@@ -3460,6 +4441,16 @@
           "path": "src/app/(mockups)/add-voice/page.tsx",
           "type": "registry:page",
           "target": "app/add-voice/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/add-voice/add-voice-dialog.tsx",
@@ -3477,6 +4468,11 @@
           "target": "@components/sarj/mockups/add-voice/icons.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3492,6 +4488,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -3500,6 +4501,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -3620,25 +4626,66 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
         "avatar",
+        "badge",
         "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
         "card",
+        "carousel",
+        "chart",
+        "checkbox",
         "collapsible",
+        "combobox",
         "command",
+        "context-menu",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "hover-card",
+        "input",
         "input-group",
+        "input-otp",
+        "item",
         "kbd",
         "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
         "popover",
+        "progress",
+        "radio-group",
+        "resizable",
+        "scroll-area",
+        "select",
         "separator",
+        "sheet",
         "sidebar",
         "skeleton",
+        "slider",
+        "spinner",
         "switch",
+        "table",
+        "textarea",
+        "toggle",
         "toggle-group",
         "tooltip"
       ],
@@ -3647,6 +4694,16 @@
           "path": "src/app/(mockups)/variable-mentions/page.tsx",
           "type": "registry:page",
           "target": "app/variable-mentions/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/variable-mentions/chip-treatment.ts",
@@ -3667,6 +4724,11 @@
           "path": "src/components/mockups/variable-mentions/scenario-prompt.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/variable-mentions/scenario-prompt.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -3694,6 +4756,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -3702,6 +4769,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -3824,31 +4896,83 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
+        "avatar",
         "badge",
+        "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
+        "card",
+        "carousel",
+        "chart",
+        "checkbox",
+        "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
         "input",
         "input-group",
+        "input-otp",
         "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
         "radio-group",
+        "resizable",
         "scroll-area",
         "select",
         "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "spinner",
         "switch",
         "table",
-        "textarea"
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/persona-pronunciation/page.tsx",
           "type": "registry:page",
           "target": "app/persona-pronunciation/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
         },
         {
           "path": "src/components/mockups/persona-pronunciation/edit-persona-dialog.tsx",
@@ -3866,6 +4990,11 @@
           "target": "@components/sarj/mockups/persona-pronunciation/pronunciation-terms.tsx"
         },
         {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3881,6 +5010,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -3889,6 +5023,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",
@@ -4009,17 +5148,67 @@
         "clsx",
         "conversation",
         "conversations",
+        "motion",
+        "sonner",
         "tailwind-merge",
         "voice"
       ],
       "registryDependencies": [
+        "accordion",
+        "alert",
+        "alert-dialog",
+        "aspect-ratio",
+        "attachment",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "bubble",
         "button",
+        "button-group",
+        "calendar",
+        "card",
+        "carousel",
+        "chart",
         "checkbox",
+        "collapsible",
+        "combobox",
+        "command",
+        "context-menu",
         "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
         "field",
+        "hover-card",
+        "input",
+        "input-group",
+        "input-otp",
+        "item",
+        "kbd",
+        "label",
+        "marker",
+        "menubar",
+        "message",
+        "native-select",
         "navigation-menu",
+        "pagination",
+        "popover",
+        "progress",
+        "radio-group",
+        "resizable",
         "scroll-area",
-        "separator"
+        "select",
+        "separator",
+        "sheet",
+        "skeleton",
+        "slider",
+        "spinner",
+        "switch",
+        "table",
+        "textarea",
+        "toggle",
+        "toggle-group",
+        "tooltip"
       ],
       "files": [
         {
@@ -4028,9 +5217,29 @@
           "target": "app/call-flagging/page.tsx"
         },
         {
+          "path": "src/components/design-system/component-catalog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/component-catalog.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
           "path": "src/components/mockups/call-flagging/flag-call-dialog.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/call-flagging/flag-call-dialog.tsx"
+        },
+        {
+          "path": "src/components/shared/figure.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/figure.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
         },
         {
           "path": "src/components/shell/mockup-shell.tsx",
@@ -4043,6 +5252,11 @@
           "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
+          "path": "src/components/shell/nav-search.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/nav-search.tsx"
+        },
+        {
           "path": "src/components/shell/sarj-mark.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/sarj-mark.tsx"
@@ -4051,6 +5265,11 @@
           "path": "src/components/shell/site-nav.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/site-nav.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
         },
         {
           "path": "src/lib/design-system/data.ts",

@@ -10,6 +10,8 @@ import {
   ArrowUp01Icon,
   ArrowUpRight01Icon,
   BookOpen02Icon,
+  Building02Icon,
+  CallOutgoing01Icon,
   BubbleChatIcon,
   Calendar03Icon,
   Cancel01Icon,
@@ -26,13 +28,16 @@ import {
   Delete02Icon,
   Download01Icon,
   EaseCurveControlPointsIcon,
+  FileValidationIcon,
   FilterIcon,
   Home01Icon,
   InformationCircleIcon,
   MoreHorizontalIcon,
   PencilEdit02Icon,
   PlayIcon,
+  PlusSignIcon,
   RefreshIcon,
+  Robot01Icon,
   Search01Icon,
   SearchRemoveIcon,
   Tick02Icon,
@@ -130,3 +135,15 @@ export const ShadcnComponentsIcon = icon(ComponentIcon, "ShadcnComponentsIcon")
 /* The Icons tile's subject: one everyday glyph from the set the product draws
    from, set on its construction sheet by the tile's drawing. */
 export const IconsTopicGlyph = icon(Home01Icon, "IconsTopicGlyph")
+
+/* The index-page demo's header action. */
+export const StartCallIcon = icon(CallOutgoing01Icon, "StartCallIcon")
+
+/* The scenarios index: its two header tiles, the admin scope, and the row's
+   one icon action. */
+export const CreateScenarioIcon = icon(PlusSignIcon, "CreateScenarioIcon")
+export const PlaygroundIcon = icon(Robot01Icon, "PlaygroundIcon")
+export const OrganisationIcon = icon(Building02Icon, "OrganisationIcon")
+export const CreateTemplateIcon = icon(FileValidationIcon, "CreateTemplateIcon")
+export const ActiveIcon = icon(CheckmarkCircle02Icon, "ActiveIcon")
+export const DeletedIcon = icon(Delete02Icon, "DeletedIcon")

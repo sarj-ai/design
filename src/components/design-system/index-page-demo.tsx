@@ -1,13 +1,17 @@
 "use client"
 
-import { CallTable } from "@/components/design-system/call-table"
+import * as React from "react"
+
+import { IndexPagePreview } from "@/components/design-system/page-preview"
 import {
   EmptyStatePreview,
   ErrorStatePreview,
   LoadingPreview,
   NoResultsPreview,
 } from "@/components/design-system/state-previews"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent } from "@/components/ui/card"
+import { TabsContent } from "@/components/ui/tabs"
+import { PrimaryTabs } from "@/components/design-system/tabs-preview"
 
 /**
  * The index page, whole: the populated page and the four states it can be in
@@ -19,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
  * are one page in five states, not five pages.
  */
 const STATES = [
-  { id: "populated", label: "Populated", view: <CallTable /> },
+  { id: "populated", label: "Populated", view: <IndexPagePreview /> },
   { id: "loading", label: "Loading", view: <LoadingPreview /> },
   { id: "empty", label: "Empty", view: <EmptyStatePreview /> },
   { id: "no-results", label: "No results", view: <NoResultsPreview /> },
@@ -27,20 +31,19 @@ const STATES = [
 ]
 
 export function IndexPageDemo() {
+  const [state, setState] = React.useState(STATES[0].id)
+
+  /* The state switch sits above the page, not inside it: it is a control on
+     the demo, and inside the card it read as part of the index page. */
   return (
-    <Tabs className="gap-6" defaultValue="populated">
-      <TabsList>
-        {STATES.map((state) => (
-          <TabsTrigger key={state.id} value={state.id}>
-            {state.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-      {STATES.map((state) => (
-        <TabsContent key={state.id} value={state.id}>
-          {state.view}
+    <PrimaryTabs items={STATES} value={state} onValueChange={setState}>
+      {STATES.map((entry) => (
+        <TabsContent key={entry.id} value={entry.id}>
+          <Card>
+            <CardContent>{entry.view}</CardContent>
+          </Card>
         </TabsContent>
       ))}
-    </Tabs>
+    </PrimaryTabs>
   )
 }

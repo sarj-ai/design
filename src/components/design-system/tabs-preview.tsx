@@ -204,11 +204,9 @@ function useMarker(active: string) {
 
   React.useEffect(() => {
     const measure = () => {
-      const nodes = VIEWS.flatMap(
-        (entry) => triggers.current.get(entry.id) ?? [],
-      )
+      const nodes = Array.from(triggers.current.values())
       const current = triggers.current.get(active)
-      if (!current || nodes.length !== VIEWS.length) return
+      if (!current || !nodes.length) return
       const base = Math.max(...nodes.map((node) => node.offsetWidth))
       setMarker({
         base,
@@ -325,17 +323,29 @@ export function TabsPreview() {
  * Geometry goes in `style` because it is measured; every class here is on the
  * scale.
  */
-function PrimaryTabs({
+export type TabItem = {
+  id: string
+  label: string
+  Icon?: React.ComponentType
+}
+
+export function PrimaryTabs({
+  items = VIEWS,
   onValueChange,
   value,
+  children,
 }: {
+  /** The views. Defaults to this topic's own three. */
+  items?: TabItem[]
   onValueChange: (value: string) => void
   value: string
+  /** The panels, as `TabsContent`. */
+  children?: React.ReactNode
 }) {
   const { triggers, marker } = useMarker(value)
 
   return (
-    <Tabs onValueChange={onValueChange} value={value}>
+    <Tabs className="gap-4" onValueChange={onValueChange} value={value}>
       <div className="flex w-fit flex-col gap-2">
         <TabsList className="relative gap-1 bg-transparent p-0">
           {marker ? (
@@ -348,7 +358,7 @@ function PrimaryTabs({
               }}
             />
           ) : null}
-          {VIEWS.map((entry) => (
+          {items.map((entry) => (
             /* The pill behind is the only background drawn, so the trigger's
                own active background would sit on top of it and hide the
                travel, and its active shadow would be cast by a box with
@@ -367,13 +377,15 @@ function PrimaryTabs({
               ref={triggerRef(triggers, entry.id)}
               value={entry.id}
             >
-              <entry.Icon />
+              {entry.Icon ? <entry.Icon /> : null}
               {entry.label}
             </TabsTrigger>
           ))}
         </TabsList>
         <Separator />
       </div>
+
+      {children}
     </Tabs>
   )
 }
@@ -393,11 +405,14 @@ function PrimaryTabs({
  * under the primitive's own variant prefix so the two classes merge, the same
  * reason the shadow is.
  */
-function SecondaryTabs({
+export function SecondaryTabs({
+  items = VIEWS,
   children,
   onValueChange,
   value,
 }: {
+  /** The views. Defaults to this topic's own three. */
+  items?: TabItem[]
   children: React.ReactNode
   onValueChange: (value: string) => void
   value: string
@@ -408,14 +423,14 @@ function SecondaryTabs({
     <Tabs className="gap-4" onValueChange={onValueChange} value={value}>
       <div className="relative flex w-fit flex-col gap-2">
         <TabsList className="gap-1 p-0" variant="line">
-          {VIEWS.map((entry) => (
+          {items.map((entry) => (
             <TabsTrigger
               className="flex-none gap-2 px-3 group-data-[variant=line]/tabs-list:data-active:after:opacity-0"
               key={entry.id}
               ref={triggerRef(triggers, entry.id)}
               value={entry.id}
             >
-              <entry.Icon />
+              {entry.Icon ? <entry.Icon /> : null}
               {entry.label}
             </TabsTrigger>
           ))}

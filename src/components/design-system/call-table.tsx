@@ -118,24 +118,19 @@ export function CallTable() {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* The control row: one line above the table, never inside it. */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <InputGroup className="w-full sm:w-72">
-          <InputGroupAddon>
-            <SearchIcon />
-          </InputGroupAddon>
-          <InputGroupInput
-            aria-label="Search calls"
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search calls"
-            value={query}
-          />
-        </InputGroup>
-        {/* The page's own action, on the row it acts on. Default size, the
-            same height as the search field beside it and the sidebar rows
-            behind it — a list header has one button height, not three. */}
-        <Button>Start call</Button>
-      </div>
+      {/* Search runs the full width, on its own line above the table. The
+          page's actions live in the header over it, as tiles. */}
+      <InputGroup>
+        <InputGroupAddon>
+          <SearchIcon />
+        </InputGroupAddon>
+        <InputGroupInput
+          aria-label="Search calls"
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search calls"
+          value={query}
+        />
+      </InputGroup>
 
       <DataTable>
         <TableHeader>
@@ -292,7 +287,7 @@ function CallTableRow({ row }: { row: CallRow }) {
  * the ragged left edge of the next column instead of the data. Two or three
  * two-letter codes cost less width than the header word above them.
  */
-function LanguageChip({ languages }: { languages: string[] }) {
+export function LanguageChip({ languages }: { languages: string[] }) {
   return (
     <span className="flex flex-nowrap items-center gap-1 whitespace-nowrap">
       {languages.map((code) => (
@@ -316,7 +311,7 @@ function LanguageChip({ languages }: { languages: string[] }) {
  * A number that does not exist yet. An em dash rather than 0 or a blank: zero
  * is a measurement, and a blank cell reads as a rendering fault.
  */
-function NotApplicable() {
+export function NotApplicable() {
   return <span className="text-muted-foreground">—</span>
 }
 

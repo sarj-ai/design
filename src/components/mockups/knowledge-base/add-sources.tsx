@@ -4,13 +4,6 @@ import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
-import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -22,6 +15,7 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { ActionTile } from "@/components/shared/page-header"
 import {
   AddFilesIcon,
   AddTextIcon,
@@ -40,54 +34,23 @@ export type AddKind = "files" | "url" | "text"
 
 export function AddSources({ onOpen }: { onOpen: (kind: AddKind) => void }) {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <AddCard
+    <>
+      <ActionTile
         icon={<AddFilesIcon />}
-        title="Add files"
-        detail="PDF, DOCX, TXT or Markdown"
+        label="Add files"
         onClick={() => onOpen("files")}
       />
-      <AddCard
+      <ActionTile
         icon={<AddUrlIcon />}
-        title="Add a URL"
-        detail="Imports that one page"
+        label="Add a URL"
         onClick={() => onOpen("url")}
       />
-      <AddCard
+      <ActionTile
         icon={<AddTextIcon />}
-        title="Add text"
-        detail="Type or paste it in"
+        label="Add text"
         onClick={() => onOpen("text")}
       />
-    </div>
-  )
-}
-
-function AddCard({
-  icon,
-  title,
-  detail,
-  onClick,
-}: {
-  icon: React.ReactNode
-  title: string
-  detail: string
-  onClick: () => void
-}) {
-  return (
-    <Item variant="outline" asChild>
-      <button
-        type="button"
-        onClick={onClick}
-        className="text-start hover:bg-muted"
-      >
-        <ItemMedia variant="icon">{icon}</ItemMedia>
-        <ItemContent>
-          <ItemTitle>{title}</ItemTitle>
-          <ItemDescription>{detail}</ItemDescription>
-        </ItemContent>
-      </button>
-    </Item>
+    </>
   )
 }
 

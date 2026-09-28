@@ -43,8 +43,10 @@ import {
   type KnowledgeBaseRow,
 } from "@/lib/mockups/knowledge-base-data"
 import { AppShell } from "@/components/shell/app-shell"
+import { ActionTile, PageHeader } from "@/components/shared/page-header"
 import { NewKnowledgeBaseDialog } from "@/components/mockups/knowledge-base/new-knowledge-base-dialog"
 import {
+  NewKnowledgeBaseIcon,
   RowMenuIcon,
   SearchIcon,
 } from "@/components/mockups/knowledge-base/icons"
@@ -72,30 +74,29 @@ export function KnowledgeBaseIndex({
   return (
     <AppShell active="Knowledge Bases">
       <div className="flex flex-col gap-6 p-3 lg:p-4">
-        <header>
-          <h1 className="text-2xl font-semibold">Knowledge Bases</h1>
-        </header>
+        <PageHeader
+          title="Knowledge Bases"
+          actions={
+            <ActionTile
+              icon={<NewKnowledgeBaseIcon />}
+              label="New knowledge base"
+              onClick={() => setCreating(true)}
+            />
+          }
+        />
 
-        {/* Search sits outside the card rather than in a band inside it, sharing
-          a row with the action that adds to the table — so the card can hold
-          only the table, and the gap here is tighter than the page's own so the
-          two still read as one thing. */}
+        {/* Search runs the full width under the header, on its own line, and
+          the card below holds only the table. */}
         <section className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <InputGroup className="max-w-80">
-              <InputGroupAddon>
-                <SearchIcon />
-              </InputGroupAddon>
-              <InputGroupInput
-                placeholder="Search knowledge bases..."
-                aria-label="Search knowledge bases"
-              />
-            </InputGroup>
-
-            <Button onClick={() => setCreating(true)}>
-              New Knowledge Base
-            </Button>
-          </div>
+          <InputGroup>
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder="Search knowledge bases..."
+              aria-label="Search knowledge bases"
+            />
+          </InputGroup>
 
           {/* `--card-spacing: 0` is how Card is told its content reaches the
             edge — the table draws its own header band and row rules, so the

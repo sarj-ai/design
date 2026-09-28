@@ -27,6 +27,7 @@ import { FoundationTable } from "@/components/design-system/foundation-tables"
 import { FormDemo } from "@/components/design-system/form-demo"
 import { LanguageNotes } from "@/components/design-system/language-notes"
 import { IndexPageDemo } from "@/components/design-system/index-page-demo"
+import { AdminViewPreview } from "@/components/design-system/admin-view-preview"
 import { IndexPagePreview } from "@/components/design-system/page-preview"
 import { RowActionNotes } from "@/components/design-system/row-action-notes"
 import { MotionTable } from "@/components/design-system/motion-tables"
@@ -363,10 +364,11 @@ export default async function DesignSystemPage({
           ]),
         ),
 
-        index: (
+        index: <IndexPageDemo />,
+        "admin-view": (
           <Card>
             <CardContent>
-              <IndexPageDemo />
+              <AdminViewPreview />
             </CardContent>
           </Card>
         ),

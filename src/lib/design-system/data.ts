@@ -145,15 +145,35 @@ export const DEMO_RECORDINGS = [
 
 /** The anatomy of the index page, named part by part. */
 export const INDEX_PAGE_PARTS: Rule[] = [
-  { label: "Header", detail: "Title, optional description, primary action." },
+  {
+    label: "Header",
+    detail:
+      "Title on the left. One line of description under it only when the title does not say enough — most pages have none. Page state, such as a quota or a sync status, sits on the right, level with the title. Never an action there.",
+  },
+  {
+    label: "Actions",
+    detail:
+      "Buttons at the end of the search row: secondary ones first, outlined; the create action last and the only filled one. When a page has several ways of adding content (a knowledge base: files, a URL, text), those become a row of tiles under the title instead — an icon over a verb. PageHeader and ActionTile from shared/page-header.",
+  },
+  {
+    label: "Views",
+    detail:
+      "Two lists of the same object — Active and Recently deleted — are the system's secondary tabs, directly under the title. They pick the list, so they come before the search and filters that narrow it. Not two pages, and not a filter.",
+  },
   {
     label: "Controls",
-    detail: "Search, filters, sort — only the ones this collection needs.",
+    detail:
+      'Search at the start of the row, the page\'s buttons at its end. Filters on the line under it, as chips from shared/filter-bar: an unset filter is "+ Field", a set one reads its value ("Language: English", or a count past one) with an × to clear it, and Clear all appears once two are set. Three or four chips at most; the rest sit behind + Filter. Dates are one range chip with presets, never an after and a before.',
   },
   { label: "Content", detail: "Table, list, grid or cards." },
   {
-    label: "Actions",
+    label: "Row actions",
     detail: "Per row, overflow, destructive, and bulk once selection exists.",
+  },
+  {
+    label: "Footer",
+    detail:
+      'Under the table: "1–10 of 12" at the start; the page size ("10 / page") and First, Previous and Next as a joined group of icons at the end. No labels. ListFooter from shared/list-footer.',
   },
   { label: "States", detail: "Loading, empty, no results, error, populated." },
 ]
@@ -665,6 +685,13 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
     title: "Index page",
     description:
       "A collection of one kind of object, and the four states it can be in instead of full.",
+    sarj: true,
+  },
+  {
+    id: "admin-view",
+    title: "Admin view",
+    description:
+      "The organisation a superadmin is reading a page as, and the control that switches it.",
     sarj: true,
   },
   {
@@ -1343,7 +1370,7 @@ export const PAGINATION_RULES: Rule[] = [
   {
     label: "Cursor, not page numbers",
     detail:
-      "Previous and Next. A jump-to-page control over a list that is being written to is a promise the data cannot keep.",
+      "First, Previous and Next. A jump-to-page control over a list that is being written to is a promise the data cannot keep; First only returns to the start.",
   },
   {
     label: "The page size sits beside the controls",
@@ -1353,7 +1380,7 @@ export const PAGINATION_RULES: Rule[] = [
   {
     label: "Under the table, inside its width",
     detail:
-      "One row, page size at the start, cursor controls at the end. Never above the table, and never in the page header.",
+      'One row: where you are ("1–10 of 12") at the start, the page size and the cursor at the end. Never above the table, and never in the page header.',
   },
   {
     label: "A list either has both or neither",

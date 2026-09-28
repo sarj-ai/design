@@ -16,13 +16,14 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { Button } from "@/components/ui/button"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   KNOWLEDGE_BASE,
   SOURCE_LABELS,
@@ -31,6 +32,7 @@ import {
   type SourceKind,
 } from "@/lib/mockups/knowledge-base-data"
 import { AppShell } from "@/components/shell/app-shell"
+import { PageHeader } from "@/components/shared/page-header"
 import {
   AddSourceDialog,
   AddSources,
@@ -38,7 +40,12 @@ import {
 } from "@/components/mockups/knowledge-base/add-sources"
 import { SourceTable } from "@/components/mockups/knowledge-base/source-table"
 import { SummaryField } from "@/components/mockups/knowledge-base/summary-field"
-import { KnowledgeIcon, SearchIcon } from "@/components/mockups/knowledge-base/icons"
+import {
+  AddFilterIcon,
+  KnowledgeIcon,
+  SearchIcon,
+  SortIcon,
+} from "@/components/mockups/knowledge-base/icons"
 
 /**
  * One knowledge base: what it covers, and what it is made of.
@@ -62,16 +69,27 @@ export function KnowledgeBaseDetail({
   const [dialog, setDialog] = React.useState<AddKind | null>(initialDialog)
   const [query, setQuery] = React.useState("")
   const [kind, setKind] = React.useState<SourceKind | "all">("all")
+  const [creator, setCreator] = React.useState<string>("all")
+  const [sort, setSort] = React.useState<SortKey>("added")
 
   const filePicker = React.useRef<HTMLInputElement>(null)
 
-  const visible = sources.filter(
+  const creators = Array.from(new Set(sources.map((source) => source.addedBy)))
+
+  const matched = sources.filter(
     (source) =>
       (kind === "all" || source.kind === kind) &&
+      (creator === "all" || source.addedBy === creator) &&
       `${source.name} ${source.url ?? ""}`
         .toLowerCase()
         .includes(query.trim().toLowerCase()),
   )
+  /* Sources are stored newest first, so "Date added" is the order they came
+     in and only "Title" needs sorting. */
+  const visible =
+    sort === "title"
+      ? [...matched].sort((a, b) => a.name.localeCompare(b.name))
+      : matched
 
   function openAdd(next: AddKind) {
     if (next === "files") {
@@ -118,30 +136,19 @@ export function KnowledgeBaseDetail({
   }
 
   return (
-    <AppShell active="Knowledge Bases" breadcrumb={["Knowledge Bases", base.name]}>
+    <AppShell
+      active="Knowledge Bases"
+      breadcrumb={["Knowledge Bases", base.name]}
+    >
       <div className="flex flex-col gap-6 p-3 lg:p-4">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold">{base.name}</h1>
-        <p className="text-sm text-muted-foreground">
-          Last updated {base.updatedAt} by {base.updatedBy}
-        </p>
-      </header>
+        <PageHeader
+          title={base.name}
+          description={`Last updated ${base.updatedAt} by ${base.updatedBy}`}
+          actions={<AddSources onOpen={openAdd} />}
+        />
 
-      {/* On a card, like everything else on the page — it was the one band
-          sitting bare on the background. */}
-      <Card>
-        <CardContent>
-          <SummaryField value={base.summary} />
-        </CardContent>
-      </Card>
-
-      <section className="flex flex-col gap-4">
-        <h2 className="text-base font-medium">Content</h2>
-
-        <AddSources onOpen={openAdd} />
-
-        {/* The browser's own picker. Never shown — the cards above are the
-            affordance; this only exists to receive the chosen files. */}
+        {/* The browser's own picker. Never shown — the Add files tile is the
+          affordance; this only exists to receive the chosen files. */}
         <Input
           ref={filePicker}
           type="file"
@@ -154,43 +161,75 @@ export function KnowledgeBaseDetail({
           }}
         />
 
-        {sources.length ? (
-          /* `--card-spacing: 0` is how Card is told its content reaches the
-             edge — the table draws its own header band and row rules. The
-             filter row sits inside the same card, above them, on its own
-             border so it reads as this table's controls. */
-          <Card className="[--card-spacing:0px]">
-            <div className="flex flex-wrap items-center gap-3 border-b p-4">
-              <InputGroup className="max-w-80">
-                <InputGroupAddon>
-                  <SearchIcon />
-                </InputGroupAddon>
-                <InputGroupInput
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search this knowledge base..."
-                  aria-label="Search this knowledge base"
-                />
-              </InputGroup>
+        {/* On a card, like everything else on the page — it was the one band
+          sitting bare on the background. */}
+        <Card>
+          <CardContent>
+            <SummaryField value={base.summary} />
+          </CardContent>
+        </Card>
 
-              <Select
-                value={kind}
-                onValueChange={(next) => setKind(next as SourceKind | "all")}
-              >
-                <SelectTrigger className="w-40" aria-label="Filter by type">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All types</SelectItem>
-                  {(Object.keys(SOURCE_LABELS) as SourceKind[]).map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {SOURCE_LABELS[item]}
-                    </SelectItem>
+        <section className="flex flex-col gap-2">
+          {/* Search runs the full width, with the sort beside it at the end of
+            the same line. Filters sit under it as chips, each naming the field
+            it narrows. */}
+          <div className="flex items-center gap-2">
+            <InputGroup>
+              <InputGroupAddon>
+                <SearchIcon />
+              </InputGroupAddon>
+              <InputGroupInput
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search this knowledge base..."
+                aria-label="Search this knowledge base"
+              />
+            </InputGroup>
+
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" aria-label="Sort">
+                  <SortIcon />
+                  {SORT_LABELS[sort]}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuRadioGroup
+                  value={sort}
+                  onValueChange={(next) => setSort(next as SortKey)}
+                >
+                  {(Object.keys(SORT_LABELS) as SortKey[]).map((item) => (
+                    <DropdownMenuRadioItem key={item} value={item}>
+                      {SORT_LABELS[item]}
+                    </DropdownMenuRadioItem>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
+          <div className="flex flex-wrap gap-2">
+            <FilterChip
+              field="Type"
+              value={kind}
+              options={(Object.keys(SOURCE_LABELS) as SourceKind[]).map(
+                (item) => ({ value: item, label: SOURCE_LABELS[item] }),
+              )}
+              onChange={(next) => setKind(next as SourceKind | "all")}
+            />
+            <FilterChip
+              field="Creator"
+              value={creator}
+              options={creators.map((item) => ({ value: item, label: item }))}
+              onChange={setCreator}
+            />
+          </div>
+        </section>
+
+        {visible.length ? (
+          /* `--card-spacing: 0` is how Card is told its content reaches the
+           edge — the table draws its own header band and row rules. */
+          <Card className="[--card-spacing:0px]">
             <div className="overflow-x-auto">
               <SourceTable
                 sources={visible}
@@ -203,32 +242,84 @@ export function KnowledgeBaseDetail({
             </div>
           </Card>
         ) : (
-          <Card>
-            <CardContent>
-              <Empty>
-                <EmptyHeader>
-                  <EmptyMedia variant="icon">
-                    <KnowledgeIcon />
-                  </EmptyMedia>
-                  <EmptyTitle>Nothing in here yet</EmptyTitle>
-                  <EmptyDescription>
-                    Add a file, a page address, or type something in. Until then
-                    the agent has nothing to look up and won&apos;t call this
-                    knowledge base.
-                  </EmptyDescription>
-                </EmptyHeader>
-              </Empty>
-            </CardContent>
-          </Card>
+          /* One panel for both empties — nothing added, and nothing matching.
+           Only the line under the title changes. */
+          <Empty className="border border-solid bg-muted/50">
+            <EmptyHeader>
+              <EmptyMedia
+                variant="icon"
+                className="size-10 border bg-background"
+              >
+                <KnowledgeIcon />
+              </EmptyMedia>
+              <EmptyTitle>No documents found</EmptyTitle>
+              <EmptyDescription>
+                {sources.length
+                  ? "Nothing here matches the search or filters."
+                  : "You don't have any documents yet."}
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         )}
-      </section>
 
-      <AddSourceDialog
-        kind={dialog}
-        onOpenChange={(open) => setDialog(open ? dialog : null)}
-        onAdd={addTyped}
-      />
+        <AddSourceDialog
+          kind={dialog}
+          onOpenChange={(open) => setDialog(open ? dialog : null)}
+          onAdd={addTyped}
+        />
       </div>
     </AppShell>
+  )
+}
+
+type SortKey = "added" | "title"
+
+const SORT_LABELS: Record<SortKey, string> = {
+  added: "Date added",
+  title: "Title",
+}
+
+/**
+ * A filter that names its field until it is set, then names the value —
+ * "+ Type", then "Type: PDF". Choosing "All" puts it back.
+ */
+function FilterChip({
+  field,
+  value,
+  options,
+  onChange,
+}: {
+  field: string
+  value: string
+  options: { value: string; label: string }[]
+  onChange: (value: string) => void
+}) {
+  const chosen = options.find((option) => option.value === value)
+
+  return (
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="xs">
+          {chosen ? (
+            `${field}: ${chosen.label}`
+          ) : (
+            <>
+              <AddFilterIcon />
+              {field}
+            </>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
+          <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+          {options.map((option) => (
+            <DropdownMenuRadioItem key={option.value} value={option.value}>
+              {option.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

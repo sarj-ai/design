@@ -16,6 +16,7 @@ import {
   File01Icon,
   FileUploadIcon,
   Flag02Icon,
+  FolderAddIcon,
   Key01Icon,
   Layout01Icon,
   Link02Icon,
@@ -24,6 +25,7 @@ import {
   Message02Icon,
   MoreHorizontalIcon,
   PlayIcon,
+  PlusSignIcon,
   PlugSocketIcon,
   Search01Icon,
   Settings01Icon,
@@ -44,6 +46,7 @@ import { icon } from "@/components/shared/icon"
 export const AddFilesIcon = icon(FileUploadIcon, "AddFilesIcon")
 export const AddUrlIcon = icon(Link02Icon, "AddUrlIcon")
 export const AddTextIcon = icon(TextFontIcon, "AddTextIcon")
+export const NewKnowledgeBaseIcon = icon(FolderAddIcon, "NewKnowledgeBaseIcon")
 
 /* A document's state after extraction has run, or not yet. */
 export const ReadyIcon = icon(CheckmarkCircle02Icon, "ReadyIcon")
@@ -53,6 +56,8 @@ export const FailedIcon = icon(Alert02Icon, "FailedIcon")
 /* Row and toolbar actions. */
 export const DocumentIcon = icon(File01Icon, "DocumentIcon")
 export const SearchIcon = icon(Search01Icon, "SearchIcon")
+export const AddFilterIcon = icon(PlusSignIcon, "AddFilterIcon")
+export const SortIcon = icon(TextFontIcon, "SortIcon")
 export const RemoveIcon = icon(Delete02Icon, "RemoveIcon")
 export const DownloadIcon = icon(Download01Icon, "DownloadIcon")
 export const RowMenuIcon = icon(MoreHorizontalIcon, "RowMenuIcon")
