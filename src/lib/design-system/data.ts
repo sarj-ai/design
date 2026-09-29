@@ -190,12 +190,12 @@ export const SURFACE_CHOICES: SurfaceChoice[] = [
     criterion:
       "A decision about something that cannot be undone, or that takes something live down.",
     avoid:
-      "anything Undo could cover, and any field beyond the name typed to confirm.",
+      "anything Undo could cover, any field beyond the name typed to confirm, and reviewing changes before a save — that is the Unsaved changes review drawer.",
     shape: [
       "384px; Esc and Cancel close it, an outside click does not",
       "The title names the thing; the body says what goes, what stops, what stays",
       "Cancel, then the verb — red only when it destroys",
-      "Typing the name only when it takes something live down",
+      "Typing the name only when it is final and something live goes with it",
     ],
     examples:
       "Delete a persona, disconnect an integration, deactivate a number.",
@@ -207,16 +207,18 @@ export const SURFACE_CHOICES: SurfaceChoice[] = [
     sits: "Beside the page",
     size: "448px",
     criterion:
-      "Configuring a group of settings, or creating something with more than four fields or rows that grow, while the page stays in view.",
-    avoid: "a quick decision, a whole object's configuration, and steps.",
+      "Configuring a group of settings while the page stays in view — and creating a list item that is edited in this same drawer later, so create and edit are one form.",
+    avoid:
+      "a quick decision, a whole object's configuration, and making a main object — that is the creation flow.",
     shape: [
       "448px from the right, full height",
       "Title and Close; only the body scrolls; Cancel and Save stay at the foot",
       "Save is off until something changes; every exit asks before it drops them",
       "Needs a new thing midway? One level deeper inside, with Back",
+      "Add and Edit are the same drawer; only the title and the button change",
     ],
     examples:
-      "Configure a tool, batch settings, register a number, add a messaging configuration.",
+      "Configure a tool, batch settings, add a webhook, register a number.",
     seenIn: "ElevenLabs (Add webhook, Import number), HubSpot, Supabase",
   },
   {
@@ -241,8 +243,9 @@ export const SURFACE_CHOICES: SurfaceChoice[] = [
     sits: "Instead of the page",
     size: "Full screen",
     criterion:
-      "Configuring a whole object, or creating one in steps where a later answer depends on an earlier one.",
-    avoid: "a handful of settings, which is a drawer, and any quick decision.",
+      "Configuring a whole object, or making one — a scenario, a persona, a batch — in the creation flow, which lands on its page.",
+    avoid:
+      "a handful of settings or a list item, which is a drawer, and any quick decision.",
     shape: [
       "Creating in steps is the creation flow: one question a screen, full screen",
       "Back and Close at the top, the step dots at the foot, a name and Create at the end",
@@ -303,7 +306,7 @@ export const SURFACE_RULES: SurfaceRule[] = [
     id: "guard",
     label: "One guard on every way out",
     detail:
-      "Once something has changed, Esc, Close, Cancel and an outside click all ask the same thing: discard changes? Keep editing, or Discard.",
+      "In a drawer or a page, once something has changed, Esc, Close, Cancel and an outside click all ask the same thing: discard changes? Keep editing, or Discard. A dialog is short enough to type again, so it does not ask.",
     seenIn: "Primer, Fluent, Apple",
   },
   {
@@ -315,7 +318,7 @@ export const SURFACE_RULES: SurfaceRule[] = [
   },
   {
     id: "undo-first",
-    label: "Ask only when it cannot be undone",
+    label: "Ask only when it cannot be undone, or something live goes down",
     detail:
       "Everything else happens on the click, with Undo in the toast. A confirm on every action trains people to press through the one that matters.",
     seenIn: "NN/g, Apple",
@@ -336,9 +339,9 @@ export const SURFACE_RULES: SurfaceRule[] = [
   },
   {
     id: "typed",
-    label: "Type the name when something live goes down",
+    label: "Type the name only when it is final and live",
     detail:
-      "An organisation, a number that takes calls, a persona on a live number. Nothing else asks for typing.",
+      "When it cannot be undone and something live goes with it: deleting an organisation, releasing a number, deleting a persona on a live number. Anything Activate or Link brings back does not ask for typing.",
     seenIn: "Linear, Vercel, NN/g",
   },
   {

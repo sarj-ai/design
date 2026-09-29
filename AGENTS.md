@@ -209,7 +209,7 @@ dry run live at `/design-system/product-components/surfaces`
 | The reader is | How much | Surface |
 |---|---|---|
 | Configuring | one value / ≤ 4 fields / more, or it grows / the whole object | Inline / Dialog / Drawer / Page |
-| Creating | ≤ 4 fields / more, or it grows / several steps | Dialog / Drawer / Page (full-screen focus view) |
+| Creating | ≤ 4 fields / a list item, edited in a drawer later / a main object with its own page | Dialog / the same Drawer it is edited in / the creation flow, landing on its page |
 | Picking | — | Popover, with "Create …" at its foot |
 | Reading a record from a list | — | Record drawer: 1024px, ↑ ↓, in the URL, no footer |
 | Confirming | can be undone / cannot, or takes something live down | Undo toast, no surface / Confirm |
@@ -217,11 +217,12 @@ dry run live at `/design-system/product-components/surfaces`
 Widths: confirm 384, dialog 448, drawer 448, record 1024, page full. One
 overlay at a time — only a confirm stacks; a drawer needing a new thing goes one
 level deeper inside itself, with Back. Header and footer stay, the body
-scrolls. Once dirty, every way out asks "Discard changes?". The footer is
+scrolls. In a drawer or a page, once dirty, every way out asks "Discard
+changes?". The footer is
 Cancel, then a verb naming the result — never Done, OK, Yes or Got it. A confirm
 names the thing ("Delete Reservations?") and says what goes, what stops and
-what stays — never "Are you sure"; red only when it destroys; typed only when
-something live goes down.
+what stays — never "Are you sure"; red only when it destroys; typed only when it is final and something live
+goes with it.
 
 **A drawer header is a title, a description and a Close button. No icon tile.**
 The platform does not put one there, and a glyph beside a title the title

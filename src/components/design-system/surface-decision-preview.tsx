@@ -97,10 +97,10 @@ const TASKS: { id: Task; label: string }[] = [
 type Answer = { id: string; label: string; surface: SurfaceId }
 
 /**
- * The second question, where the first does not settle it. Configuring and
- * creating ask the same thing — how much is there — because size is what
- * separates a dialog from a drawer from a page; Carbon's line of four fields
- * is the only number any system commits to, and ElevenLabs keeps to it.
+ * The second question, where the first does not settle it. Configuring asks
+ * how much there is; creating asks what is being made. Carbon's line of four
+ * fields is the only number any system commits to, and it still separates a
+ * dialog from everything bigger.
  */
 const FOLLOW_UP: Partial<
   Record<Task, { question: string; answers: Answer[] }>
@@ -114,12 +114,25 @@ const FOLLOW_UP: Partial<
       { id: "whole", label: "The whole object", surface: "page" },
     ],
   },
+  /* Creating asks what is being made, not how many fields it has. A main
+     object gets its own page afterwards, so it is made in the creation flow
+     and lands there. A list item is edited later in a drawer, so it is made
+     in that same drawer — one form for both. Field count only decides the
+     small case. */
   creating: {
-    question: "How big is it?",
+    question: "What are you making?",
     answers: [
       { id: "few", label: "Up to four fields", surface: "dialog" },
-      { id: "more", label: "More, or it grows", surface: "drawer" },
-      { id: "steps", label: "Several steps", surface: "page" },
+      {
+        id: "item",
+        label: "A list item, edited in a drawer",
+        surface: "drawer",
+      },
+      {
+        id: "object",
+        label: "A main object, with its own page",
+        surface: "page",
+      },
     ],
   },
   confirming: {
@@ -149,7 +162,7 @@ const LEADS_TO: Record<SurfaceId, { task: Task; answer?: string }> = {
   confirm: { task: "confirming", answer: "no" },
   drawer: { task: "configuring", answer: "more" },
   record: { task: "reading" },
-  page: { task: "creating", answer: "steps" },
+  page: { task: "creating", answer: "object" },
 }
 
 /* -------------------------------------------------------------------------
@@ -215,7 +228,7 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
   const [task, setTask] = React.useState<Task>("configuring")
   const [answers, setAnswers] = React.useState<Partial<Record<Task, string>>>({
     configuring: "more",
-    creating: "steps",
+    creating: "object",
     confirming: "no",
   })
 

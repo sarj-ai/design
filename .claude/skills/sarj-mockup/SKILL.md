@@ -302,7 +302,7 @@ Mock data goes in a `const` array above the component. Keep it realistic — rea
 - Sibling cards in a row with different header structures → make them identical
 - Four type levels on one surface, or a size jump used where muted color would do
 - A `<SelectContent>` without `position="popper"` → the list opens over the trigger; add it
-- A surface the decision did not pick → run it through `/design-system/product-components/surfaces` (what the reader is doing × how much there is). Dialog ≤ 4 fields; more or growing is a drawer; steps or a whole object is a page
+- A surface the decision did not pick → run it through `/design-system/product-components/surfaces` (what the reader is doing × how much there is). Dialog ≤ 4 fields; a list item is created in the drawer it is edited in; a main object (scenario, persona, batch) is made in the creation flow
 - A dialog or drawer opened from inside another one → one overlay at a time; only a confirm stacks. Go one level deeper inside, with Back
 - A dialog whose body scrolls, or a footer that scrolls away → it was a drawer; pin header and footer
 - A width other than confirm 384 · dialog 448 · drawer 448 (`sm:max-w-md!`) · record 1024 (`sm:max-w-5xl!`) · page full, or a `max-w-*` without `sm:`
