@@ -4,7 +4,9 @@ import * as React from "react"
 
 import { toast } from "sonner"
 
-import { MultiStepCreateDialog } from "@/components/design-system/multi-step-dialog"
+import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
+import { FieldHint } from "@/components/design-system/field-hint"
+import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview"
 
 import {
   AlertDialog,
@@ -17,34 +19,56 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemGroup,
-  ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -52,28 +76,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { CloseIcon } from "@/components/design-system/icons"
 import {
-  DEMO_RECORDINGS,
-  DEMO_VOICES,
-  type SurfaceChoice,
-} from "@/lib/design-system/data"
+  ArchiveIcon,
+  CloseIcon,
+  CopyKeyIcon,
+  CreateInListIcon,
+  NextRecordIcon,
+  PreviousRecordIcon,
+} from "@/components/design-system/icons"
+import { DEMO_VOICES, type SurfaceId } from "@/lib/design-system/data"
 
 /**
- * The four surfaces, opened rather than described.
+ * The eight surfaces, opened rather than described.
  *
- * The diagram above each one says where the surface sits; this says what it
- * feels like to be in it — which is the half a reader cannot get from a
- * criterion. Same object throughout so the comparison is about the surface and
- * not about the content: picking a voice is inline, tuning one is a drawer,
- * deleting one is a pop-up, and making one runs across steps.
+ * The diagram says where a surface sits; this says what being in it is like,
+ * which is the half a criterion cannot carry. Each demo is a real Sarj task
+ * the decision sends to that surface, and each keeps the surface's shape —
+ * the widths, the footer, the guard — so the demo is also the reference.
  */
-export function SurfaceDemo({ variant }: { variant: SurfaceChoice["id"] }) {
-  if (variant === "inline") return <InlineDemo />
-  if (variant === "drawer") return <DrawerDemo />
-  if (variant === "multi-step") return <CreateVoiceDialog />
-  return <PopupDemo />
+export function SurfaceDemo({ variant }: { variant: SurfaceId }) {
+  switch (variant) {
+    case "inline":
+      return <InlineDemo />
+    case "popover":
+      return <AttachKnowledgeDemo />
+    case "undo":
+      return <ArchiveDemo />
+    case "dialog":
+      return <CreateApiKeyDialog />
+    case "confirm":
+      return <DeletePersonaDialog />
+    case "drawer":
+      return <DrawerAnatomyPreview />
+    case "record":
+      return <CallRecordDemo />
+    case "page":
+      return <CreationFlowPreview />
+  }
 }
 
 /**
@@ -146,324 +185,581 @@ function InlineDemo() {
 }
 
 /**
- * Drawer: the agent page is still the subject, so it stays legible behind the
- * panel — which is the whole argument for the surface.
+ * Popover: attaching knowledge bases to a scenario, the platform's own picker.
+ * Anchored to the button that asked, searchable, no footer — and the way to
+ * make a new one at its foot, which closes the popover, opens a dialog in its
+ * place, and comes back with the new one attached.
  */
-function DrawerDemo() {
-  const [confirm, setConfirm] = React.useState(true)
-  const [timeout, setTimeout] = React.useState("20")
+const KNOWLEDGE_BASES = [
+  { id: "returns", label: "Returns policy", language: "AR" },
+  { id: "pricing", label: "Pricing 2026", language: "EN" },
+  { id: "branches", label: "Branch hours", language: "AR" },
+  { id: "card-faq", label: "Card FAQ", language: "AR" },
+]
 
-  return (
-    <Drawer direction="right">
-      {/* The row keeps the trigger at its own width — a stretched button in a
-          card column reads as the card's primary action, which it is not. */}
-      <DrawerTrigger asChild>
-        <Button className="self-start" size="sm" variant="outline">
-          Configure tool
-        </Button>
-      </DrawerTrigger>
-
-      <DrawerContent>
-        <DrawerHeader className="flex flex-row items-start justify-between gap-4 border-b">
-          <div className="flex flex-col gap-0.5">
-            <DrawerTitle>Book appointment</DrawerTitle>
-            <DrawerDescription>
-              One tool on the agent behind this panel.
-            </DrawerDescription>
-          </div>
-          <DrawerClose asChild>
-            <Button aria-label="Close" size="icon-sm" variant="ghost">
-              <CloseIcon />
-            </Button>
-          </DrawerClose>
-        </DrawerHeader>
-
-        <div className="flex flex-col gap-6 p-4">
-          <Field orientation="horizontal">
-            <FieldContent>
-              <FieldLabel htmlFor="surface-drawer-confirm">
-                Read the booking back
-              </FieldLabel>
-              <FieldDescription>
-                The agent repeats the date and time before it commits.
-              </FieldDescription>
-            </FieldContent>
-            <Switch
-              checked={confirm}
-              id="surface-drawer-confirm"
-              onCheckedChange={setConfirm}
-            />
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="surface-drawer-timeout">Timeout</FieldLabel>
-            <FieldDescription>
-              How long the booking system has to answer before the agent moves
-              on.
-            </FieldDescription>
-            <Select onValueChange={setTimeout} value={timeout}>
-              <SelectTrigger className="w-full" id="surface-drawer-timeout">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent position="popper">
-                <SelectItem value="10">10 seconds</SelectItem>
-                <SelectItem value="20">20 seconds</SelectItem>
-                <SelectItem value="30">30 seconds</SelectItem>
-              </SelectContent>
-            </Select>
-          </Field>
-        </div>
-
-        <DrawerFooter className="flex-row justify-end border-t">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-          <DrawerClose asChild>
-            <Button>Save</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
-/**
- * Pop-up: the one thing it is for. A decision the reader has to finish before
- * the page means anything again — which is why it takes the page rather than
- * sitting beside it, and why it is over in one screen.
- */
-function PopupDemo() {
-  return <DeleteAgentDialog />
-}
-
-/**
- * Multi-step: creating a voice, on the shared multi-step shell.
- *
- * It sits under its own surface rather than beside the delete dialog, where it
- * used to be: both open over the page, but one is answered in a sentence and
- * the other is three screens of work, and putting them in one cell was the
- * reason the comparison never named the second.
- *
- * It was a hand-rolled three-step dialog with its own step counter, its own
- * Back and its own footer — written before that shell existed, and the reason
- * the shell exists. Rebuilt on it, the flow gains the review step the pattern
- * requires and cannot lose Back or the submitting state, because it no longer
- * owns them.
- *
- * The second step's field depends on the first step's answer, which is why the
- * steps are built rather than declared: a caller composes the array, so a
- * branch is a normal conditional and not a feature the shell has to grow.
- */
-function CreateVoiceDialog() {
-  const [source, setSource] = React.useState("clone")
-  const [recording, setRecording] = React.useState(DEMO_RECORDINGS[0].id)
-  const [library, setLibrary] = React.useState(DEMO_VOICES[0].id)
+function AttachKnowledgeDemo() {
+  const [bases, setBases] = React.useState(KNOWLEDGE_BASES)
+  const [picked, setPicked] = React.useState<string[]>(["returns"])
+  const [open, setOpen] = React.useState(false)
+  const [creating, setCreating] = React.useState(false)
   const [name, setName] = React.useState("")
 
-  const recordingLabel = DEMO_RECORDINGS.find(
-    (entry) => entry.id === recording,
-  )?.label
-  const libraryLabel = DEMO_VOICES.find((entry) => entry.id === library)?.label
-  const cloning = source === "clone"
+  const toggle = (id: string) =>
+    setPicked((current) =>
+      current.includes(id)
+        ? current.filter((entry) => entry !== id)
+        : [...current, id],
+    )
 
   return (
-    <MultiStepCreateDialog
-      onCreated={() =>
-        toast(`${name.trim() || "The voice"} is being created`, {
-          description: `${
-            cloning
-              ? `Cloned from ${recordingLabel}`
-              : `Started from ${libraryLabel}`
-          }. It appears in the picker once it is ready.`,
-        })
-      }
-      steps={[
-        {
-          title: "Source",
-          description: "Where does the voice come from?",
-          content: (
-            <RadioGroup onValueChange={setSource} value={source}>
-              <ItemGroup className="gap-2">
-                <Item size="sm" variant="outline">
-                  <ItemMedia>
-                    <RadioGroupItem id="surface-source-clone" value="clone" />
-                  </ItemMedia>
-                  <ItemContent>
-                    <ItemTitle>
-                      <Label htmlFor="surface-source-clone">
-                        Clone from a recording
-                      </Label>
-                    </ItemTitle>
-                    <ItemDescription>
-                      Uses a call the agent has already taken.
-                    </ItemDescription>
-                  </ItemContent>
-                </Item>
+    <div className="flex flex-col items-start gap-3">
+      <Popover onOpenChange={setOpen} open={open}>
+        <PopoverTrigger asChild>
+          <Button size="sm" variant="outline">
+            <CreateInListIcon />
+            Attach knowledge base
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="gap-0 p-0">
+          <Command>
+            <CommandInput placeholder="Search knowledge bases" />
+            <CommandList>
+              <CommandEmpty>No knowledge base matches.</CommandEmpty>
+              <CommandGroup>
+                {bases.map((base) => (
+                  <CommandItem
+                    data-checked={picked.includes(base.id)}
+                    key={base.id}
+                    onSelect={() => toggle(base.id)}
+                    value={base.label}
+                  >
+                    <span className="flex-1">{base.label}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {base.language}
+                    </span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+          <div className="border-t p-1">
+            <Button
+              className="w-full justify-start"
+              onClick={() => {
+                setOpen(false)
+                setCreating(true)
+              }}
+              size="sm"
+              variant="ghost"
+            >
+              <CreateInListIcon />
+              Create knowledge base
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
 
-                <Item size="sm" variant="outline">
-                  <ItemMedia>
-                    <RadioGroupItem
-                      id="surface-source-library"
-                      value="library"
-                    />
-                  </ItemMedia>
-                  <ItemContent>
-                    <ItemTitle>
-                      <Label htmlFor="surface-source-library">
-                        Start from a library voice
-                      </Label>
-                    </ItemTitle>
-                    <ItemDescription>
-                      Ready immediately, and tuned afterwards.
-                    </ItemDescription>
-                  </ItemContent>
-                </Item>
-              </ItemGroup>
-            </RadioGroup>
-          ),
-        },
-        cloning
-          ? {
-              title: "Recording",
-              description: "Pick the call to clone it from.",
-              content: (
-                <Field>
-                  <FieldLabel htmlFor="surface-create-recording">
-                    Recording
-                  </FieldLabel>
-                  <FieldDescription>
-                    Thirty seconds of the customer-facing side is enough.
-                  </FieldDescription>
-                  <Select onValueChange={setRecording} value={recording}>
-                    <SelectTrigger
-                      className="w-full"
-                      id="surface-create-recording"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      {DEMO_RECORDINGS.map((entry) => (
-                        <SelectItem key={entry.id} value={entry.id}>
-                          {entry.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              ),
-            }
-          : {
-              title: "Library voice",
-              description: "Pick the voice to start from.",
-              content: (
-                <Field>
-                  <FieldLabel htmlFor="surface-create-library">
-                    Library voice
-                  </FieldLabel>
-                  <FieldDescription>
-                    Speed and pitch stay editable after it is created.
-                  </FieldDescription>
-                  <Select onValueChange={setLibrary} value={library}>
-                    <SelectTrigger
-                      className="w-full"
-                      id="surface-create-library"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent position="popper">
-                      {DEMO_VOICES.map((entry) => (
-                        <SelectItem key={entry.id} value={entry.id}>
-                          {entry.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              ),
-            },
-        {
-          title: "Name",
-          description: "What it is called in the voice picker.",
-          content: (
+      <div className="flex flex-wrap gap-1.5">
+        {picked.map((id) => (
+          <Badge key={id} variant="secondary">
+            {bases.find((base) => base.id === id)?.label}
+          </Badge>
+        ))}
+      </div>
+
+      {/* Replaces the popover rather than stacking on it, and returns with
+          the new knowledge base already attached. */}
+      <Dialog
+        onOpenChange={(next) => {
+          setCreating(next)
+          if (!next) setName("")
+        }}
+        open={creating}
+      >
+        <DialogContent className="sm:max-w-md">
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(event) => {
+              event.preventDefault()
+              const label = name.trim() || "Untitled knowledge base"
+              const id = `kb-${bases.length}`
+              setBases((current) => [...current, { id, label, language: "AR" }])
+              setPicked((current) => [...current, id])
+              setCreating(false)
+              setName("")
+              toast(`${label} created and attached`)
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle>Create knowledge base</DialogTitle>
+            </DialogHeader>
             <Field>
-              <FieldLabel htmlFor="surface-create-name">Name</FieldLabel>
-              <FieldDescription>
-                What it is called in the voice picker.
-              </FieldDescription>
+              <FieldLabel htmlFor="surface-kb-name">Name</FieldLabel>
               <Input
-                id="surface-create-name"
+                id="surface-kb-name"
                 onChange={(event) => setName(event.target.value)}
-                placeholder="Reservations — Gulf"
+                placeholder="Warranty terms"
                 value={name}
               />
             </Field>
-          ),
-        },
-      ]}
-      submit={async () => {
-        await new Promise((resolve) => setTimeout(resolve, 600))
-        return null
-      }}
-      submitLabel="Create voice"
-      submittingLabel="Creating voice"
-      summary={[
-        {
-          term: "Source",
-          value: cloning
-            ? `Cloned from ${recordingLabel}`
-            : `Started from ${libraryLabel}`,
-        },
-        { term: "Name", value: name.trim() || "Not set" },
-      ]}
-      title="Create voice"
-    >
-      <Button size="sm" variant="outline">
-        Create voice
-      </Button>
-    </MultiStepCreateDialog>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit">Create and attach</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }
 
 /**
- * The decision: one question, and the consequence spelled out rather than
- * "are you sure". An AlertDialog rather than a Dialog because there is nothing
- * to fill in — the reader is answering, not working.
+ * Undo: archiving a scenario, which the platform does today on one click
+ * with no word at all. Nothing asks first; the toast says what happened and
+ * Undo puts it back in its place.
  */
-function DeleteAgentDialog() {
+const SCENARIO_NAMES = [
+  "Appointment booking",
+  "Delivery confirmation",
+  "Renewal follow-up",
+]
+
+function ArchiveDemo() {
+  const [rows, setRows] = React.useState(SCENARIO_NAMES)
+
+  const archive = (name: string) => {
+    setRows((current) => current.filter((entry) => entry !== name))
+    toast(`${name} moved to Recently deleted`, {
+      action: {
+        label: "Undo",
+        onClick: () =>
+          setRows((current) =>
+            SCENARIO_NAMES.filter(
+              (entry) => entry === name || current.includes(entry),
+            ),
+          ),
+      },
+    })
+  }
+
+  if (!rows.length) {
+    return (
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-sm text-muted-foreground">
+          All three archived.
+        </span>
+        <Button
+          onClick={() => setRows(SCENARIO_NAMES)}
+          size="sm"
+          variant="outline"
+        >
+          Restore all
+        </Button>
+      </div>
+    )
+  }
+
   return (
-    <AlertDialog>
+    <ItemGroup className="gap-2">
+      {rows.map((name) => (
+        <Item key={name} size="sm" variant="outline">
+          <ItemContent>
+            <ItemTitle>{name}</ItemTitle>
+          </ItemContent>
+          <ItemActions>
+            <Button
+              aria-label={`Archive ${name}`}
+              onClick={() => archive(name)}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <ArchiveIcon />
+            </Button>
+          </ItemActions>
+        </Item>
+      ))}
+    </ItemGroup>
+  )
+}
+
+/**
+ * Dialog: creating an API key. One field, so it is a dialog; the platform
+ * asks "Create API key?" instead, a confirm about something harmless. The key
+ * is shown once, in the same dialog after the create — a second dialog would
+ * be two overlays for one task.
+ */
+const DEMO_KEY = "sk_live_4f9a2c7e1b8d3a60e5c1"
+
+function CreateApiKeyDialog() {
+  const [open, setOpen] = React.useState(false)
+  const [name, setName] = React.useState("")
+  const [missing, setMissing] = React.useState(false)
+  const [created, setCreated] = React.useState(false)
+
+  return (
+    <Dialog
+      onOpenChange={(next) => {
+        setOpen(next)
+        if (!next) {
+          setName("")
+          setMissing(false)
+          setCreated(false)
+        }
+      }}
+      open={open}
+    >
+      <DialogTrigger asChild>
+        <Button className="self-start" size="sm" variant="outline">
+          Create API key
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-md">
+        {created ? (
+          <>
+            <DialogHeader>
+              <DialogTitle>{name.trim()} is ready</DialogTitle>
+              <DialogDescription>
+                Copy it now. Once this closes it cannot be shown again.
+              </DialogDescription>
+            </DialogHeader>
+            <InputGroup>
+              <InputGroupInput
+                aria-label="API key"
+                className="font-mono text-xs"
+                readOnly
+                value={DEMO_KEY}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  aria-label="Copy key"
+                  onClick={() => toast("Key copied")}
+                  size="icon-xs"
+                >
+                  <CopyKeyIcon />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Close</Button>
+              </DialogClose>
+              <Button
+                onClick={() => {
+                  toast("Key copied")
+                  setOpen(false)
+                }}
+              >
+                Copy and close
+              </Button>
+            </DialogFooter>
+          </>
+        ) : (
+          /* Create stays on and says what is missing when pressed, rather
+             than sitting disabled with no reason given. */
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (!name.trim()) {
+                setMissing(true)
+                return
+              }
+              setCreated(true)
+            }}
+          >
+            <DialogHeader>
+              <DialogTitle>Create API key</DialogTitle>
+            </DialogHeader>
+            <Field data-invalid={missing}>
+              <FieldHint
+                hint="Tells this key apart when it is time to revoke one."
+                htmlFor="surface-key-name"
+              >
+                Name
+              </FieldHint>
+              <Input
+                aria-invalid={missing}
+                id="surface-key-name"
+                onChange={(event) => {
+                  setName(event.target.value)
+                  setMissing(false)
+                }}
+                placeholder="Zoho sync"
+                value={name}
+              />
+              {missing ? <FieldError>Give the key a name.</FieldError> : null}
+            </Field>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit">Create key</Button>
+            </DialogFooter>
+          </form>
+        )}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+/**
+ * Confirm: deleting a persona that answers a live number, so the one case
+ * where the name is typed. The title names it; the body says what goes, what
+ * stops and what stays; the button is the verb, in red because it destroys.
+ * No warning icon — the sentence is the warning.
+ */
+const PERSONA = "Reservations"
+
+function DeletePersonaDialog() {
+  const [typed, setTyped] = React.useState("")
+
+  return (
+    <AlertDialog onOpenChange={(next) => (next ? null : setTyped(""))}>
       <AlertDialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          Delete agent
+        <Button className="self-start" size="sm" variant="outline">
+          Delete persona
         </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete the Reservations agent?</AlertDialogTitle>
+          <AlertDialogTitle>Delete {PERSONA}?</AlertDialogTitle>
           <AlertDialogDescription>
-            Its scenarios and its phone number mapping go with it, and the
-            number stops answering. Calls it has already taken keep their
-            transcripts under the workspace.
+            It answers +966 11 234 5678, which stops taking calls the moment it
+            goes. Its four scenarios move to your default persona; past calls
+            keep their transcripts.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
+        <Field>
+          <FieldLabel htmlFor="surface-confirm-name">
+            Type {PERSONA} to confirm
+          </FieldLabel>
+          <Input
+            autoComplete="off"
+            id="surface-confirm-name"
+            onChange={(event) => setTyped(event.target.value)}
+            value={typed}
+          />
+        </Field>
+
         <AlertDialogFooter>
-          {/* Named for what it does rather than "Cancel", which beside a delete
-              is a second word for the same button. */}
-          <AlertDialogCancel>Keep agent</AlertDialogCancel>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            disabled={typed !== PERSONA}
             onClick={() =>
-              toast("Reservations agent deleted", {
-                description: "Its number no longer answers.",
+              toast(`${PERSONA} deleted`, {
+                description: "+966 11 234 5678 no longer answers.",
               })
             }
             variant="destructive"
           >
-            Delete agent
+            Delete persona
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  )
+}
+
+/**
+ * Record: a call opened from the list. Wide enough for the transcript and a
+ * details column, narrow enough that the list stays at the edge; ↑ and ↓ (the
+ * buttons or the keys) move through the list without closing it. No footer —
+ * nothing here is being saved.
+ */
+/**
+ * ↑ and ↓ step through the list while a record is open, wherever focus is —
+ * except in a field, where the arrows belong to the text.
+ */
+export function useRecordKeys(active: boolean, step: (by: number) => void) {
+  const latest = React.useRef(step)
+  React.useEffect(() => {
+    latest.current = step
+  })
+  React.useEffect(() => {
+    if (!active) return
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null
+      if (target?.closest("input, textarea, [contenteditable]")) return
+      if (event.key === "ArrowDown") latest.current(1)
+      if (event.key === "ArrowUp") latest.current(-1)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [active])
+}
+
+type DemoCall = {
+  id: string
+  caller: string
+  scenario: string
+  outcome: string
+  duration: string
+  started: string
+  turns: { speaker: "Agent" | "Caller"; text: string }[]
+}
+
+const DEMO_CALLS: DemoCall[] = [
+  {
+    id: "CL-8840",
+    caller: "+966 55 201 7734",
+    scenario: "Appointment booking",
+    outcome: "Booked",
+    duration: "3:12",
+    started: "28 Sep 2026, 10:11",
+    turns: [
+      { speaker: "Agent", text: "Hello, this is the clinic. How can I help?" },
+      { speaker: "Caller", text: "I need to see a dentist this week." },
+      { speaker: "Agent", text: "Thursday at 4:30 is free. Shall I book it?" },
+      { speaker: "Caller", text: "Yes, please." },
+    ],
+  },
+  {
+    id: "CL-8841",
+    caller: "+966 50 118 4420",
+    scenario: "Delivery confirmation",
+    outcome: "Rescheduled",
+    duration: "1:48",
+    started: "28 Sep 2026, 10:26",
+    turns: [
+      {
+        speaker: "Agent",
+        text: "Your order arrives tomorrow between 2 and 6.",
+      },
+      { speaker: "Caller", text: "I won't be home. Can it come Saturday?" },
+      { speaker: "Agent", text: "Saturday morning it is." },
+    ],
+  },
+  {
+    id: "CL-8842",
+    caller: "+966 56 930 0215",
+    scenario: "Renewal follow-up",
+    outcome: "No answer",
+    duration: "0:31",
+    started: "28 Sep 2026, 10:40",
+    turns: [
+      {
+        speaker: "Agent",
+        text: "Hello, I'm calling about your policy renewal.",
+      },
+    ],
+  },
+]
+
+function CallRecordDemo() {
+  const [open, setOpen] = React.useState(false)
+  const [index, setIndex] = React.useState(0)
+  const call = DEMO_CALLS[index]
+
+  const step = (by: number) =>
+    setIndex((current) =>
+      Math.min(DEMO_CALLS.length - 1, Math.max(0, current + by)),
+    )
+  useRecordKeys(open, step)
+
+  return (
+    <>
+      <ItemGroup className="gap-2">
+        {DEMO_CALLS.map((entry, position) => (
+          <Item
+            asChild
+            className="text-start transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
+            key={entry.id}
+            size="sm"
+            variant="outline"
+          >
+            <button
+              onClick={() => {
+                setIndex(position)
+                setOpen(true)
+              }}
+              type="button"
+            >
+              <ItemContent>
+                <ItemTitle>{entry.caller}</ItemTitle>
+                <ItemDescription>
+                  {entry.scenario} · {entry.duration}
+                </ItemDescription>
+              </ItemContent>
+            </button>
+          </Item>
+        ))}
+      </ItemGroup>
+
+      <Drawer direction="right" onOpenChange={setOpen} open={open}>
+        {/* 1024: the one record width. `!` because the primitive pins its
+            width on a data-attribute variant. */}
+        <DrawerContent className="sm:max-w-5xl!">
+          <DrawerHeader className="flex flex-row items-center justify-between gap-4 border-b">
+            <div className="flex flex-col gap-0.5">
+              <DrawerTitle>{call.caller}</DrawerTitle>
+              <DrawerDescription>
+                {call.id} · {call.started}
+              </DrawerDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {index + 1} of {DEMO_CALLS.length}
+              </span>
+              <ButtonGroup>
+                <Button
+                  aria-label="Previous call"
+                  disabled={index === 0}
+                  onClick={() => step(-1)}
+                  size="icon-sm"
+                  variant="outline"
+                >
+                  <PreviousRecordIcon />
+                </Button>
+                <Button
+                  aria-label="Next call"
+                  disabled={index === DEMO_CALLS.length - 1}
+                  onClick={() => step(1)}
+                  size="icon-sm"
+                  variant="outline"
+                >
+                  <NextRecordIcon />
+                </Button>
+              </ButtonGroup>
+              <DrawerClose asChild>
+                <Button aria-label="Close" size="icon-sm" variant="ghost">
+                  <CloseIcon />
+                </Button>
+              </DrawerClose>
+            </div>
+          </DrawerHeader>
+
+          <div className="flex min-h-0 flex-1">
+            <ol className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
+              {call.turns.map((turn, position) => (
+                <li className="flex flex-col gap-0.5" key={position}>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {turn.speaker}
+                  </span>
+                  <span className="text-sm">{turn.text}</span>
+                </li>
+              ))}
+            </ol>
+            <dl className="flex w-72 shrink-0 flex-col gap-4 border-s p-4">
+              {[
+                ["Scenario", call.scenario],
+                ["Outcome", call.outcome],
+                ["Duration", call.duration],
+                ["Started", call.started],
+              ].map(([term, value]) => (
+                <div className="flex flex-col gap-0.5" key={term}>
+                  <dt className="text-xs text-muted-foreground">{term}</dt>
+                  <dd className="text-sm">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </>
   )
 }

@@ -106,6 +106,48 @@ export const COLOUR_GROUPS: ColourGroup[] = [
     ],
   },
   {
+    title: "New colours",
+    note: "New to the palette: the brand purple and five hues to sit beside it.",
+    tokens: [
+      {
+        name: "chart-1",
+        value: "var(--primary)",
+        swatch: "bg-chart-1",
+        use: "First series. Follows --primary, so it stays branded.",
+      },
+      {
+        name: "chart-2",
+        value: "oklch(0.5 0.13 250)",
+        swatch: "bg-chart-2",
+        use: "Second series, and the single-series default.",
+      },
+      {
+        name: "chart-3",
+        value: "oklch(0.66 0.08 178)",
+        swatch: "bg-chart-3",
+        use: "Third series.",
+      },
+      {
+        name: "chart-4",
+        value: "oklch(0.62 0.13 72)",
+        swatch: "bg-chart-4",
+        use: "Fourth series.",
+      },
+      {
+        name: "chart-5",
+        value: "oklch(0.46 0.08 350)",
+        swatch: "bg-chart-5",
+        use: "Fifth series.",
+      },
+      {
+        name: "chart-6",
+        value: "oklch(0.66 0.18 300)",
+        swatch: "bg-chart-6",
+        use: "Sixth series, and the mute for de-emphasised bars.",
+      },
+    ],
+  },
+  {
     title: "Brand",
     note: "Sarj purple. --primary is the whitelabel hook: change it and the ramp follows.",
     tokens: [
@@ -276,48 +318,6 @@ export const COLOUR_GROUPS: ColourGroup[] = [
         value: "oklch(0.708 0 0)",
         swatch: "bg-ring",
         use: "The focus ring.",
-      },
-    ],
-  },
-  {
-    title: "Charts",
-    note: "One purple ramp, darkest first. Never a rainbow, and never for ranked steps.",
-    tokens: [
-      {
-        name: "chart-1",
-        value: "var(--primary)",
-        swatch: "bg-chart-1",
-        use: "First series. Follows --primary, so it stays branded.",
-      },
-      {
-        name: "chart-2",
-        value: "oklch(0.5 0.13 250)",
-        swatch: "bg-chart-2",
-        use: "Second series, and the single-series default.",
-      },
-      {
-        name: "chart-3",
-        value: "oklch(0.66 0.08 178)",
-        swatch: "bg-chart-3",
-        use: "Third series.",
-      },
-      {
-        name: "chart-4",
-        value: "oklch(0.62 0.13 72)",
-        swatch: "bg-chart-4",
-        use: "Fourth series.",
-      },
-      {
-        name: "chart-5",
-        value: "oklch(0.46 0.08 350)",
-        swatch: "bg-chart-5",
-        use: "Fifth series.",
-      },
-      {
-        name: "chart-6",
-        value: "oklch(0.66 0.18 300)",
-        swatch: "bg-chart-6",
-        use: "Sixth series, and the mute for de-emphasised bars.",
       },
     ],
   },

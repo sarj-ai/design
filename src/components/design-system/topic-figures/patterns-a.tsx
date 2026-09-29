@@ -213,7 +213,7 @@ export const PATTERNS_A_FIGURES: Record<
   surfaces: SurfacesFigure,
   "multi-step-create": MultiStepCreateFigure,
   tabs: TabsFigure,
-  drawer: DrawerFigure,
+  "drawer-anatomy": DrawerFigure,
   stepper: StepperFigure,
   selection: SelectionFigure,
 }

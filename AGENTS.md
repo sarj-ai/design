@@ -200,6 +200,29 @@ second icon set.
 Lint cannot see these. They are the answers to questions that came up in review
 and should not be re-decided per mockup.
 
+**Where a task goes is decided, not chosen per screen.** Researched against
+ElevenLabs, Vapi, Stripe, Linear, Vercel and seven design systems, and dry-run
+against all 115 overlays in the platform — the full decision, its rules and the
+dry run live at `/design-system/product-components/surfaces`
+(`SURFACE_CHOICES`, `SURFACE_RULES`, `surface-audit.ts`).
+
+| The reader is | How much | Surface |
+|---|---|---|
+| Configuring | one value / ≤ 4 fields / more, or it grows / the whole object | Inline / Dialog / Drawer / Page |
+| Creating | ≤ 4 fields / more, or it grows / several steps | Dialog / Drawer / Page (full-screen focus view) |
+| Picking | — | Popover, with "Create …" at its foot |
+| Reading a record from a list | — | Record drawer: 1024px, ↑ ↓, in the URL, no footer |
+| Confirming | can be undone / cannot, or takes something live down | Undo toast, no surface / Confirm |
+
+Widths: confirm 384, dialog 448, drawer 448, record 1024, page full. One
+overlay at a time — only a confirm stacks; a drawer needing a new thing goes one
+level deeper inside itself, with Back. Header and footer stay, the body
+scrolls. Once dirty, every way out asks "Discard changes?". The footer is
+Cancel, then a verb naming the result — never Done, OK, Yes or Got it. A confirm
+names the thing ("Delete Reservations?") and says what goes, what stops and
+what stays — never "Are you sure"; red only when it destroys; typed only when
+something live goes down.
+
 **A drawer header is a title, a description and a Close button. No icon tile.**
 The platform does not put one there, and a glyph beside a title the title
 already names is decoration. The shape is fixed:
@@ -220,12 +243,15 @@ An icon *does* belong in `ItemMedia variant="icon"` on a settings row — there 
 distinguishes one row from the next in a list. A drawer has no list to be
 distinguished within.
 
-**One explanation language per screen.** A field either carries an inline
-description or an `(i)` tooltip — never both on one screen. **Default to the
-inline description** (`FieldDescription` under the label, above the control).
-Note that `ui-review` records the opposite house rule from Aug 2026; the
-inline-description direction is the later call, from review on DES phrase
-mappings. Whichever a screen uses, it uses for every field on it.
+**One explanation language per screen, picked by the surface.** A form or a
+page explains inline (`FieldDescription` under the label, above the control).
+A drawer or a dialog explains with a small `(i)` after the label —
+`FieldHint` in `src/components/design-system/field-hint.tsx`, 14px, muted
+until pointed at, opening on hover or focus. Only fields that need it get
+one, and a hard limit stays visible as a reading beside the label, never only
+behind the hover. Never both languages on one screen. (Vansh, 29 Sep 2026,
+on the drawer demo — it supersedes the inline-everywhere call from DES phrase
+mappings for drawers and dialogs.)
 
 **One read-only language per screen: grey it out.** When a scope is inheriting
 and nothing is editable, keep every control on screen and disable it — switches

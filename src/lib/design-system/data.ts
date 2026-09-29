@@ -68,60 +68,299 @@ export const GLOBAL_RULES: GlobalRule[] = [
   },
 ]
 
-/** One of the four places a piece of configuration or creation can live. */
+/**
+ * The eight answers to "where does this go?".
+ *
+ * Researched in September 2026 against ElevenLabs Agents (about 45 overlays on
+ * Mobbin), Vapi, Stripe, Linear, Vercel, Attio, HubSpot and Supabase, and the
+ * written guidance of NN/g, Carbon, Atlassian, Polaris, Primer, Fluent and
+ * Apple — then dry-run against every overlay in the Sarj platform
+ * (`surface-audit.ts`). Carbon gave the only hard numbers (a modal for up to
+ * four fields and never one that scrolls); ElevenLabs gave the rest by doing
+ * it: small creates in a modal, growing ones in a drawer, records in a wide
+ * sheet with arrows, the agent as a page, steps full screen.
+ */
+export type SurfaceId =
+  | "inline"
+  | "popover"
+  | "undo"
+  | "dialog"
+  | "confirm"
+  | "drawer"
+  | "record"
+  | "page"
+
 export type SurfaceChoice = {
-  id: "inline" | "drawer" | "popup" | "multi-step"
+  id: SurfaceId
   title: string
+  /** Where it sits relative to the page the reader was on. */
+  sits: string
+  /** How big it is: a width, or where it lives when it has none. */
+  size: string
   /** What this surface is for. */
   criterion: string
   /** What it is never for. The exclusions are the half that gets argued. */
   avoid: string
+  /** Its fixed shape — width, chrome, how it closes. Not a menu of options. */
+  shape: string[]
+  /** Where the Sarj platform should use it. */
   examples: string
+  /** Products seen doing it, so a reader can go and look. */
+  seenIn: string
 }
 
-/**
- * The decision the rest of the system hangs off. Two questions, in order: is
- * the reader deciding, or configuring? A decision is a pop-up. Configuration
- * stays inline while it fits beside the value it changes, and becomes a drawer
- * when there is enough of it to crowd the page.
- */
 export const SURFACE_CHOICES: SurfaceChoice[] = [
   {
     id: "inline",
     title: "Inline",
+    sits: "In the page",
+    size: "In place",
     criterion:
-      "Changing or configuring something the page is already about, with room for the control where the value sits.",
-    avoid: "deciding anything, and creating anything.",
+      "Changing one value on something the page is already about, where that value is shown.",
+    avoid:
+      "a group of settings that would push the page around, and any decision.",
+    shape: [
+      "The value turns into its control, in place",
+      "Save and Cancel sit with the field, or the page's save bar takes them",
+      "Saves on its own only for a switch or a single pick",
+    ],
     examples:
-      "Agent model, agent instructions, voice selection, project settings.",
+      "A knowledge base's description, a variable's row, a number's direction.",
+    seenIn: "Attio, Linear, Stripe, Vercel",
+  },
+  {
+    id: "popover",
+    title: "Popover",
+    sits: "In the page",
+    size: "Anchored",
+    criterion:
+      "Picking one or several things from a list, filtering, or a quick look at a value too long for its cell.",
+    avoid:
+      "a form with a Save, which is a dialog, and anything read for more than a moment.",
+    shape: [
+      "Anchored to the button that opened it",
+      "A search once the list passes eight",
+      "“Create …” at its foot when the list can be empty",
+      "An outside click closes it; there is no footer",
+    ],
+    examples: "Attach knowledge bases, add a tool, every filter.",
+    seenIn: "ElevenLabs (add tool), Vapi (filters), Attio",
+  },
+  {
+    id: "undo",
+    title: "Undo",
+    sits: "No surface",
+    size: "A toast",
+    criterion:
+      "An action that can be taken back: archive, stop and resume, set a default, remove from a list.",
+    avoid:
+      "deleting for good, and anything that takes something live down — that is a confirm.",
+    shape: [
+      "It happens on the click; nothing asks first",
+      "A toast says what happened and offers Undo",
+      "Undo puts it back exactly, in its place in the list",
+    ],
+    examples: "Archive a scenario, stop a batch, set the default persona.",
+    seenIn: "Linear (Recently deleted), NN/g, Apple",
+  },
+  {
+    id: "dialog",
+    title: "Dialog",
+    sits: "Over the page",
+    size: "448px",
+    criterion:
+      "A short task on one screen: up to four fields, or an action that needs a few answers before it runs.",
+    avoid:
+      "anything that scrolls, grows rows, or has tabs or steps — that is a drawer or a page.",
+    shape: [
+      "448px, and never taller than its content",
+      "Title and Close; the body does not scroll",
+      "Cancel, then a verb that names the result",
+      "A secret shown once appears in the same dialog, after the create",
+    ],
+    examples:
+      "Create a knowledge base, create an API key, send a test call, rename from a list.",
+    seenIn: "ElevenLabs (Add URL, Outbound call), Vapi, Stripe",
+  },
+  {
+    id: "confirm",
+    title: "Confirm",
+    sits: "Over the page",
+    size: "384px",
+    criterion:
+      "A decision about something that cannot be undone, or that takes something live down.",
+    avoid:
+      "anything Undo could cover, and any field beyond the name typed to confirm.",
+    shape: [
+      "384px; Esc and Cancel close it, an outside click does not",
+      "The title names the thing; the body says what goes, what stops, what stays",
+      "Cancel, then the verb — red only when it destroys",
+      "Typing the name only when it takes something live down",
+    ],
+    examples:
+      "Delete a persona, disconnect an integration, deactivate a number.",
+    seenIn: "ElevenLabs, Linear, Vercel, Stripe",
   },
   {
     id: "drawer",
     title: "Drawer",
+    sits: "Beside the page",
+    size: "448px",
     criterion:
-      "Enough to configure, or enough to read, that it would crowd the page — and the page behind it still matters.",
-    avoid: "a single quick decision, which does not need a panel.",
-    examples: "Agent page → Tools → configure one tool.",
+      "Configuring a group of settings, or creating something with more than four fields or rows that grow, while the page stays in view.",
+    avoid: "a quick decision, a whole object's configuration, and steps.",
+    shape: [
+      "448px from the right, full height",
+      "Title and Close; only the body scrolls; Cancel and Save stay at the foot",
+      "Save is off until something changes; every exit asks before it drops them",
+      "Needs a new thing midway? One level deeper inside, with Back",
+    ],
+    examples:
+      "Configure a tool, batch settings, register a number, add a messaging configuration.",
+    seenIn: "ElevenLabs (Add webhook, Import number), HubSpot, Supabase",
   },
   {
-    id: "popup",
-    title: "Pop-up",
+    id: "record",
+    title: "Record",
+    sits: "Beside the page",
+    size: "1024px",
     criterion:
-      "A quick decision, and only that: deleting, confirming, or making something that fits on one screen.",
-    avoid: "configuration, and anything with more to read — that is a drawer.",
-    examples: "Delete agent, import voice, create API key.",
+      "Reading one record opened from a list — a call, a conversation, a file — and moving to the next without going back.",
+    avoid: "a record's settings, and anything not opened from a list.",
+    shape: [
+      "1024px from the right; the list stays visible at the edge",
+      "↑ and ↓ step through the list; the open record is in the URL",
+      "Actions in the header, and no footer",
+    ],
+    examples: "A call, a messaging session, a knowledge base file.",
+    seenIn: "ElevenLabs (Conversations), Vapi (Calls), Linear",
   },
   {
-    /* The fourth surface, and the one that gets skipped: a creation too long
-       for a pop-up is usually built as a pop-up anyway, with a scrollbar. It
-       is here so the comparison names the point where that stops working. */
-    id: "multi-step",
-    title: "Multi-step creation",
+    id: "page",
+    title: "Page",
+    sits: "Instead of the page",
+    size: "Full screen",
     criterion:
-      "Creating one object that does not fit on one screen, or where a later answer depends on an earlier one.",
-    avoid:
-      "editing what already exists — a made object is configured inline or in a drawer.",
-    examples: "Create voice, connect a telephony endpoint.",
+      "Configuring a whole object, or creating one in steps where a later answer depends on an earlier one.",
+    avoid: "a handful of settings, which is a drawer, and any quick decision.",
+    shape: [
+      "Creating in steps is the creation flow: one question a screen, full screen",
+      "Back and Close at the top, the step dots at the foot, a name and Create at the end",
+      "An object with sections is its own page, with tabs and a save bar",
+      "Leaving part-way asks first",
+    ],
+    examples:
+      "A scenario, a persona, creating a scenario, connecting a SIP trunk.",
+    seenIn: "ElevenLabs (New agent), Stripe (focus view), Vapi, PlayAI",
+  },
+]
+
+/** A rule every surface keeps, whichever one the decision picked. */
+export type SurfaceRuleId =
+  | "one-at-a-time"
+  | "pinned"
+  | "widths"
+  | "guard"
+  | "footer"
+  | "undo-first"
+  | "confirm-copy"
+  | "red"
+  | "typed"
+  | "feedback"
+  | "record-url"
+  | "picker"
+
+export type SurfaceRule = {
+  id: SurfaceRuleId
+  label: string
+  detail: string
+  seenIn: string
+}
+
+export const SURFACE_RULES: SurfaceRule[] = [
+  {
+    id: "one-at-a-time",
+    label: "One overlay at a time",
+    detail:
+      "A confirm may sit on anything, and a popover may open inside anything. Nothing else stacks: a drawer that needs a new thing goes one level deeper inside itself, with Back, and returns with it selected.",
+    seenIn: "Atlassian, Fluent, Polaris, Apple",
+  },
+  {
+    id: "pinned",
+    label: "Header and footer stay; the body scrolls",
+    detail:
+      "A footer that scrolls away hides the only way to finish. A dialog whose body needs to scroll was a drawer.",
+    seenIn: "Carbon, Fluent, Primer",
+  },
+  {
+    id: "widths",
+    label: "Four widths and the screen",
+    detail:
+      "Confirm 384, dialog 448, drawer 448, record 1024, page full. Always sm:max-w-* — without the prefix the primitive's own sm:max-w-lg wins and every dialog is 512.",
+    seenIn: "Primer, Carbon",
+  },
+  {
+    id: "guard",
+    label: "One guard on every way out",
+    detail:
+      "Once something has changed, Esc, Close, Cancel and an outside click all ask the same thing: discard changes? Keep editing, or Discard.",
+    seenIn: "Primer, Fluent, Apple",
+  },
+  {
+    id: "footer",
+    label: "Cancel, then the verb",
+    detail:
+      "At the trailing edge. The verb names the result — Create persona, Save, Delete webhook — never Done, OK, Yes, Submit or Got it. Save is off until something changes; Create stays on and says what is missing.",
+    seenIn: "NN/g, Carbon, Polaris, Apple",
+  },
+  {
+    id: "undo-first",
+    label: "Ask only when it cannot be undone",
+    detail:
+      "Everything else happens on the click, with Undo in the toast. A confirm on every action trains people to press through the one that matters.",
+    seenIn: "NN/g, Apple",
+  },
+  {
+    id: "confirm-copy",
+    label: "Name it, then say what happens",
+    detail:
+      "“Delete Reservations?”, then what goes with it, what stops and what is kept. Never “Are you sure”, and no warning icon — the words are the warning.",
+    seenIn: "Polaris, Linear, Stripe",
+  },
+  {
+    id: "red",
+    label: "Red is for destroying",
+    detail:
+      "Only on a confirm's button, and only when pressing it destroys something. Transfer, retry and create anyway are primary.",
+    seenIn: "Carbon, Apple",
+  },
+  {
+    id: "typed",
+    label: "Type the name when something live goes down",
+    detail:
+      "An organisation, a number that takes calls, a persona on a live number. Nothing else asks for typing.",
+    seenIn: "Linear, Vercel, NN/g",
+  },
+  {
+    id: "feedback",
+    label: "Failure stays, success leaves",
+    detail:
+      "A failure is a callout inside the surface, which stays open. Success closes it and says so in a toast; a create adds View.",
+    seenIn: "ElevenLabs, Stripe",
+  },
+  {
+    id: "record-url",
+    label: "A record lives in the URL",
+    detail:
+      "Opened from a list, it can be shared and reloaded, and ↑ ↓ reach the next one without closing it.",
+    seenIn: "Vapi, Linear, ElevenLabs",
+  },
+  {
+    id: "picker",
+    label: "Picking is a popover",
+    detail:
+      "Anchored to the button that asked. A dialog for one choice covers the page the choice is for.",
+    seenIn: "ElevenLabs, Attio",
   },
 ]
 
@@ -458,7 +697,7 @@ export const FORM_RULES: Rule[] = [
   {
     label: "Help text in a drawer or a dialog",
     detail:
-      "An (i) beside the label, on hover. A panel is 384px and a dialog step is two columns, so a sentence under every label is a paragraph under every label and the settings stop being scannable. These surfaces are read many times and answered once. The cost is real — a constraint behind a hover is one a reader can set wrong — so put a hard limit in the label where it matters and the rest in the hint.",
+      "A small (i) after the label — the label's size, muted until pointed at — that opens the sentence on hover or focus. A drawer or dialog is read many times, so a line under every label turns the panel into prose. Only fields that need it get one, and a hard limit never hides there: it stays on screen as a reading beside the label (“~6s of 20s”).",
   },
   {
     label: "One language per screen",
@@ -632,6 +871,13 @@ export type DocsSection = DocsPage & { groups: DocsGroup[] }
 
 /** The Components section: ours, built for this product. */
 export const PRODUCT_COMPONENTS: DocsPage[] = [
+  {
+    id: "colour",
+    title: "Colour",
+    description:
+      "The 44 tokens a screen is built from, and what each one is for.",
+    sarj: true,
+  },
   /* `index` rather than `index-page`: that id is the pattern's, and a topic
      id has to be unique across every section. */
   {
@@ -639,6 +885,13 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
     title: "Index page",
     description:
       "A collection of one kind of object, and the four states it can be in instead of full.",
+    sarj: true,
+  },
+  {
+    id: "surfaces",
+    title: "Choosing a surface",
+    description:
+      "Where a task goes — in the page, over it, beside it, or instead of it — decided by what the reader is doing and how much there is. Dry-run against every overlay in the platform.",
     sarj: true,
   },
   {
@@ -653,6 +906,34 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
     title: "Integration card",
     description:
       "A service the organisation can connect: who it is, whether it is connected, and the one thing to do next.",
+    sarj: true,
+  },
+  {
+    id: "section-card",
+    title: "Section card",
+    description:
+      "One block of a settings page: its title, what it is for, the one control it needs, and what it holds.",
+    sarj: true,
+  },
+  {
+    id: "creation-flow",
+    title: "Creation flow",
+    description:
+      "Making something new on its own screen: pick how to start, answer one question a screen, and finish on a name.",
+    sarj: true,
+  },
+  {
+    id: "json-view",
+    title: "JSON",
+    description:
+      "A value read rather than dumped: folds, Copy, and two values compared key by key with only the differences tinted.",
+    sarj: true,
+  },
+  {
+    id: "alert",
+    title: "Alert",
+    description:
+      "Four intents, one recipe each, and every shape the platform needs — plus the alerts that should be something else.",
     sarj: true,
   },
   {
@@ -702,13 +983,6 @@ const SARJ_FOUNDATIONS = new Set([
 ])
 
 const FOUNDATION_PAGES: DocsPage[] = [
-  {
-    id: "colour",
-    title: "Colour",
-    description:
-      "All 57 tokens in globals.css. A colour that is not on this page does not exist.",
-    sarj: true,
-  },
   /* Beside colour rather than under Motion, where the lint rule that enforces
      it lives: a layer is a token like any other, and the reason it was being
      guessed at is that nothing listed the names. */
@@ -820,13 +1094,6 @@ const PATTERN_PAGES: DocsPage[] = [
     sarj: true,
   },
   {
-    id: "surfaces",
-    title: "Choosing a surface",
-    description:
-      "Deciding gets a pop-up and creating gets steps. Configuring stays inline while it fits, and moves to a drawer when it does not.",
-    sarj: true,
-  },
-  {
     id: PATTERNS[0].id,
     title: PATTERNS[0].title,
     description: PATTERNS[0].description,
@@ -837,13 +1104,6 @@ const PATTERN_PAGES: DocsPage[] = [
     title: "Tabs",
     description:
       "One object, several views of it. Never steps in a flow, and never two different objects.",
-    sarj: true,
-  },
-  {
-    id: "drawer",
-    title: "Drawer",
-    description:
-      "Configuring one thing, or showing one thing, beside the page it belongs to.",
     sarj: true,
   },
   {

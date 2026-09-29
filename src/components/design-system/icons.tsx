@@ -2,6 +2,7 @@
 
 import {
   Alert02Icon,
+  Archive02Icon,
   ArrowDataTransferVerticalIcon,
   ArrowDown01Icon,
   ArrowDownLeft01Icon,
@@ -21,6 +22,7 @@ import {
   Coins01Icon,
   ColorsIcon,
   ComponentIcon,
+  Copy01Icon,
   CopyLinkIcon as CopyLinkGlyph,
   CpuIcon,
   CubeIcon,
@@ -46,6 +48,17 @@ import {
   TextIcon,
   FolderAddIcon,
   FolderSyncIcon,
+  ArrowLeft02Icon,
+  ArrowRight02Icon,
+  BankIcon,
+  DashedLineCircleIcon,
+  Hospital01Icon,
+  RealEstate01Icon,
+  Restaurant01Icon,
+  ShoppingBag01Icon,
+  SmartPhone01Icon,
+  SparklesIcon,
+  AlertCircleIcon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
@@ -110,6 +123,9 @@ export const CostIcon = icon(Coins01Icon, "CostIcon")
 export const CopyLinkIcon = icon(CopyLinkGlyph, "CopyLinkIcon")
 export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")
 
+/* Copies a whole section out as a skill file. */
+export const CopySkillIcon = icon(Copy01Icon, "CopySkillIcon")
+
 /* The three states that are not the populated one, each named for the state
    rather than the glyph: nothing here yet, nothing matched, and it broke. */
 export const NoResultsIcon = icon(SearchRemoveIcon, "NoResultsIcon")
@@ -159,3 +175,31 @@ export const AddFilesIcon = icon(File01Icon, "AddFilesIcon")
 export const AddTextIcon = icon(TextIcon, "AddTextIcon")
 export const CreateFolderIcon = icon(FolderAddIcon, "CreateFolderIcon")
 export const SyncDocumentsIcon = icon(FolderSyncIcon, "SyncDocumentsIcon")
+
+/* Surfaces: the demos under Components › Choosing a surface. */
+export const ArchiveIcon = icon(Archive02Icon, "ArchiveIcon")
+export const PreviousRecordIcon = icon(ArrowUp01Icon, "PreviousRecordIcon")
+export const NextRecordIcon = icon(ArrowDown01Icon, "NextRecordIcon")
+export const CreateInListIcon = icon(PlusSignIcon, "CreateInListIcon")
+export const CopyKeyIcon = icon(Copy01Icon, "CopyKeyIcon")
+
+/* Creation flow: the ways to start a scenario, and the industries its
+   templates are filed under. */
+export const StartBlankIcon = icon(DashedLineCircleIcon, "StartBlankIcon")
+export const ChooseStartIcon = icon(ArrowRight02Icon, "ChooseStartIcon")
+export const StepBackIcon = icon(ArrowLeft02Icon, "StepBackIcon")
+export const BuildWithAiIcon = icon(SparklesIcon, "BuildWithAiIcon")
+export const HealthcareIcon = icon(Hospital01Icon, "HealthcareIcon")
+export const TelecomIcon = icon(SmartPhone01Icon, "TelecomIcon")
+export const BankingIcon = icon(BankIcon, "BankingIcon")
+export const RestaurantsIcon = icon(Restaurant01Icon, "RestaurantsIcon")
+export const RetailIcon = icon(ShoppingBag01Icon, "RetailIcon")
+export const RealEstateIcon = icon(RealEstate01Icon, "RealEstateIcon")
+
+/* JSON: the fold toggle on an object's opening line, and copy. */
+export const FoldIcon = icon(ArrowRight01Icon, "FoldIcon")
+export const CopyJsonIcon = icon(Copy01Icon, "CopyJsonIcon")
+
+/* Alerts: the error intent's glyph. Neutral, success and warning reuse
+   HintIcon, CompletedIcon and WarningIcon. */
+export const ErrorAlertIcon = icon(AlertCircleIcon, "ErrorAlertIcon")

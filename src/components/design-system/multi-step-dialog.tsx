@@ -1,25 +1,41 @@
 "use client"
 
 import * as React from "react"
+import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { MultiStepForm } from "@/components/design-system/multi-step-form"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
 /**
- * The one shell every multi-step creation uses.
+ * The one shell every multi-step creation uses, as a focus view: the steps
+ * take the whole screen.
  *
- * Creation is a modal — "you do not need the page behind it", the same rule
- * that puts create voice and create API key in one. Multi-step creation is
- * that rule plus a step count, so it is the same surface, not a new one.
+ * It was a 672px dialog, on the reasoning that creation does not need the page
+ * behind it. The surfaces research overturned the size, not the reasoning:
+ * nobody measured runs steps in a medium modal. ElevenLabs' new agent,
+ * Stripe's subscription and pricing table, PlayAI's agent builder and the
+ * platform's own scenario and SIP wizards all take the screen, and Atlassian,
+ * Primer and NN/g all say a task with its own navigation is a page. So the
+ * page goes, and the form sits alone in the middle of the screen.
+ *
+ * It is built on the Radix primitive rather than `DialogContent`, whose box —
+ * centred, capped, rounded — is the thing being replaced. Radix still gives
+ * the focus trap, Esc and the portal.
+ *
+ * Leaving part-way asks first. Esc, the Close button and a stray click would
+ * otherwise drop three screens of answers on the floor.
  *
  * The chrome — header, progress, animated body, footer — is `MultiStepForm`.
  * This file is the part that component deliberately does not have: the state
@@ -72,6 +88,7 @@ export function MultiStepCreateDialog({
   title: string
 }) {
   const [open, setOpen] = React.useState(false)
+  const [leaving, setLeaving] = React.useState(false)
   const [step, setStep] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
   const [failure, setFailure] = React.useState<CreateFailure | null>(null)
@@ -120,85 +137,126 @@ export function MultiStepCreateDialog({
     onCreated()
   }
 
+  /* Every way out comes through here. Past the first step there are answers
+     to lose, so it asks; on the first there is nothing yet. */
+  const requestClose = () => {
+    if (step > 0 && !submitting) {
+      setLeaving(true)
+      return
+    }
+    setOpen(false)
+    reset()
+  }
+
   return (
-    <Dialog
-      onOpenChange={(next) => {
-        setOpen(next)
-        if (!next) reset()
-      }}
+    <DialogPrimitive.Root
+      onOpenChange={(next) => (next ? setOpen(true) : requestClose())}
       open={open}
     >
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogPrimitive.Trigger asChild>{children}</DialogPrimitive.Trigger>
 
-      <DialogContent className="p-0 sm:max-w-2xl" showCloseButton={false}>
-        <DialogTitle className="sr-only">{title}</DialogTitle>
-        <DialogDescription className="sr-only">{description}</DialogDescription>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Content className="fixed inset-0 z-modal overflow-y-auto bg-muted duration-200 ease-out-cubic outline-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none">
+          <DialogPrimitive.Title className="sr-only">
+            {title}
+          </DialogPrimitive.Title>
+          <DialogPrimitive.Description className="sr-only">
+            {description}
+          </DialogPrimitive.Description>
 
-        <MultiStepForm
-          currentStep={step + 1}
-          description={description}
-          nextButtonText={
-            onReview ? (
-              submitting ? (
-                <>
-                  <Spinner />
-                  {submittingLabel}
-                </>
-              ) : (
-                submitLabel
-              )
-            ) : (
-              "Next step"
-            )
-          }
-          nextDisabled={submitting}
-          notice={
-            /* Which step broke, and the way back to it — never a bare toast.
+          <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-6 py-16">
+            <MultiStepForm
+              currentStep={step + 1}
+              description={description}
+              nextButtonText={
+                onReview ? (
+                  submitting ? (
+                    <>
+                      <Spinner />
+                      {submittingLabel}
+                    </>
+                  ) : (
+                    submitLabel
+                  )
+                ) : (
+                  "Next step"
+                )
+              }
+              nextDisabled={submitting}
+              notice={
+                /* Which step broke, and the way back to it — never a bare toast.
                On the tint rather than the plain card: at the foot of a form it
                has to register as a refusal at a glance, and red text on white
                reads as a caption. */
-            failure ? (
-              <Alert className="bg-destructive-tint" variant="destructive">
-                <AlertTitle>{failure.title}</AlertTitle>
-                <AlertDescription className="flex flex-col items-start gap-3">
-                  <span>{failure.message}</span>
-                  <Button
-                    onClick={() => goTo(failure.stepIndex)}
-                    size="sm"
-                    variant="outline"
-                  >
-                    Back to {steps[failure.stepIndex].title.toLowerCase()}
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            ) : null
-          }
-          onBack={() => goTo(step - 1)}
-          /* The stepper counts from 1, the state from 0. */
-          onStepSelect={(selected) => goTo(selected - 1)}
-          onClose={() => setOpen(false)}
-          onNext={() => (onReview ? void create() : goTo(step + 1))}
-          title={title}
-          totalSteps={total}
-        >
-          <div className="flex flex-col gap-6">
-            {onReview ? (
-              <dl className="flex flex-col gap-3">
-                {summary.map((row) => (
-                  <div className="flex flex-col gap-0.5" key={row.term}>
-                    <dt className="text-sm text-muted-foreground">
-                      {row.term}
-                    </dt>
-                    <dd className="text-sm">{row.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            ) : (
-              current.content
-            )}
+                failure ? (
+                  <Alert className="bg-destructive-tint" variant="destructive">
+                    <AlertTitle>{failure.title}</AlertTitle>
+                    <AlertDescription className="flex flex-col items-start gap-3">
+                      <span>{failure.message}</span>
+                      <Button
+                        onClick={() => goTo(failure.stepIndex)}
+                        size="sm"
+                        variant="outline"
+                      >
+                        Back to {steps[failure.stepIndex].title.toLowerCase()}
+                      </Button>
+                    </AlertDescription>
+                  </Alert>
+                ) : null
+              }
+              onBack={() => goTo(step - 1)}
+              /* The stepper counts from 1, the state from 0. */
+              onStepSelect={(selected) => goTo(selected - 1)}
+              onClose={requestClose}
+              onNext={() => (onReview ? void create() : goTo(step + 1))}
+              title={title}
+              totalSteps={total}
+            >
+              <div className="flex flex-col gap-6">
+                {onReview ? (
+                  <dl className="flex flex-col gap-3">
+                    {summary.map((row) => (
+                      <div className="flex flex-col gap-0.5" key={row.term}>
+                        <dt className="text-sm text-muted-foreground">
+                          {row.term}
+                        </dt>
+                        <dd className="text-sm">{row.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : (
+                  current.content
+                )}
+              </div>
+            </MultiStepForm>
           </div>
-        </MultiStepForm>
-      </DialogContent>
-    </Dialog>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+
+      {/* A confirm is the one overlay allowed over another. */}
+      <AlertDialog onOpenChange={setLeaving} open={leaving}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Discard your answers?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Nothing has been created yet. Leaving now keeps nothing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setLeaving(false)
+                setOpen(false)
+                reset()
+              }}
+              variant="destructive"
+            >
+              Discard
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </DialogPrimitive.Root>
   )
 }

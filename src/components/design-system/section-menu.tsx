@@ -9,6 +9,10 @@ import {
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 
+import {
+  CopySkillButton,
+  FoundationsSheet,
+} from "@/components/design-system/foundations-sheet"
 import { CloseIcon } from "@/components/design-system/icons"
 import { SECTION_FIGURES } from "@/components/design-system/section-figures"
 import { TOPIC_FIGURES } from "@/components/design-system/topic-figures"
@@ -20,11 +24,16 @@ import { cn } from "@/lib/utils"
 
 /** Topics whose demo is a whole page, shown at the sheet's full width. */
 const FULL_WIDTH_TOPICS = new Set([
+  "colour",
   "index",
   "admin-view",
   "developers",
   "unsaved-changes",
+  "creation-flow",
+  "json-view",
+  "alert",
   "integration-card",
+  "surfaces",
 ])
 
 /**
@@ -221,6 +230,9 @@ export function SectionMenu({
   const openSection = open
     ? (DOCS_SECTIONS.find((section) => section.id === open.id) ?? null)
     : null
+  /* Foundations is short enough to read whole: one sheet, not a grid of
+     tiles that each open one topic. */
+  const sheet = openSection?.id === "foundations"
   /* The page's contents follow it in as the spring is settling, rather than
      after it has finished — waiting for the last fraction of a spring
      leaves a blank page on screen for a beat. */
@@ -435,8 +447,13 @@ export function SectionMenu({
               </Button>
             </motion.div>
 
-            <div className="relative mx-auto flex min-h-full w-full max-w-5xl flex-col justify-center gap-10 px-6 py-16">
-              <div className="flex flex-col gap-2">
+            <div
+              className={cn(
+                "relative mx-auto flex min-h-full w-full max-w-5xl flex-col gap-10 px-6 py-16",
+                !sheet && "justify-center",
+              )}
+            >
+              <div className="flex flex-col items-start gap-2">
                 {/* The page's reveal: a highlight washing across the name,
                     then the line under it, a letter at a time. Each sits in a
                     wrapper that fades on close, since the wave itself has no
@@ -468,112 +485,127 @@ export function SectionMenu({
                     text={openSection.description}
                   />
                 </motion.div>
+                {sheet ? (
+                  <div className="pt-4">
+                    <CopySkillButton />
+                  </div>
+                ) : null}
               </div>
 
-              <ul className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-6">
-                {topicsOf(openSection).map((topic, i) => {
-                  const TopicFigure = TOPIC_FIGURES[topic.id]
-                  return (
-                    <li key={topic.id}>
-                      <Link
-                        /* No outline on the link: it drew a box around tile
+              {sheet ? (
+                <FoundationsSheet section={openSection} views={views} />
+              ) : (
+                <ul className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-6">
+                  {topicsOf(openSection).map((topic, i) => {
+                    const TopicFigure = TOPIC_FIGURES[topic.id]
+                    return (
+                      <li key={topic.id}>
+                        <Link
+                          /* No outline on the link: it drew a box around tile
                            and caption, and stayed after a click. Keyboard
                            focus lights the tile's own ring instead, the one
                            hover uses. */
-                        className="group flex flex-col gap-2 outline-none"
-                        data-no-transition
-                        href={docsHref(topic.id)}
-                        onClick={(event) => {
-                          if (
-                            event.metaKey ||
-                            event.ctrlKey ||
-                            event.shiftKey ||
-                            event.altKey
-                          )
-                            return
-                          event.preventDefault()
-                          window.history.pushState(null, "", docsHref(topic.id))
-                          depth.current = 2
-                          setLanded(false)
-                          setLastTopic(topic.id)
-                          setTopic({ id: topic.id })
-                        }}
-                      >
-                        <motion.span
-                          animate={{ opacity: 1, scale: 1, y: "0%" }}
-                          className={cn(
-                            "relative aspect-square w-full rounded-lg ring-2 ring-transparent transition-colors duration-150 ease-out-cubic group-hover:ring-primary-foreground group-focus-visible:ring-primary-foreground motion-reduce:transition-none",
-                            lastTopic === topic.id && "z-raised",
-                            /* Hidden outright while its page is open, rather
+                          className="group flex flex-col gap-2 outline-none"
+                          data-no-transition
+                          href={docsHref(topic.id)}
+                          onClick={(event) => {
+                            if (
+                              event.metaKey ||
+                              event.ctrlKey ||
+                              event.shiftKey ||
+                              event.altKey
+                            )
+                              return
+                            event.preventDefault()
+                            window.history.pushState(
+                              null,
+                              "",
+                              docsHref(topic.id),
+                            )
+                            depth.current = 2
+                            setLanded(false)
+                            setLastTopic(topic.id)
+                            setTopic({ id: topic.id })
+                          }}
+                        >
+                          <motion.span
+                            animate={{ opacity: 1, scale: 1, y: "0%" }}
+                            className={cn(
+                              "relative aspect-square w-full rounded-lg ring-2 ring-transparent transition-colors duration-150 ease-out-cubic group-hover:ring-primary-foreground group-focus-visible:ring-primary-foreground motion-reduce:transition-none",
+                              lastTopic === topic.id && "z-raised",
+                              /* Hidden outright while its page is open, rather
                              than trusting the shared-layout handoff to hide
                              it — that let the tile and its number show
                              through the page. It reappears on close, which
                              is the moment it takes the surface back. */
-                            openTopic?.id === topic.id && "invisible",
-                          )}
-                          exit={{
-                            opacity: 0,
-                            scale: 0,
-                            transition: {
-                              duration: reduced ? 0 : 0.5,
-                              delay: reduced ? 0 : i * 0.04,
-                              ease: CROSS,
-                            },
-                          }}
-                          initial={{ opacity: 0, scale: 0, y: `${lift(i)}%` }}
-                          transition={cross(0.3 + i * 0.04)}
-                        >
-                          {/* The tile's surface, and the same element as the
+                              openTopic?.id === topic.id && "invisible",
+                            )}
+                            exit={{
+                              opacity: 0,
+                              scale: 0,
+                              transition: {
+                                duration: reduced ? 0 : 0.5,
+                                delay: reduced ? 0 : i * 0.04,
+                                ease: CROSS,
+                              },
+                            }}
+                            initial={{ opacity: 0, scale: 0, y: `${lift(i)}%` }}
+                            transition={cross(0.3 + i * 0.04)}
+                          >
+                            {/* The tile's surface, and the same element as the
                             page it opens into: shared by `layoutId`, so
                             motion moves it between the two boxes with
                             transforms and corrects its corners as it goes. */}
-                          <motion.span
-                            className="absolute inset-0 bg-card"
-                            layoutId={`topic-page-${topic.id}`}
-                            style={{ borderRadius: 10 }}
-                            transition={{
-                              layout: reduced ? { duration: 0 } : GROW,
-                            }}
-                          />
-                          {/* The topic's drawing, from `topic-figures/`. Quiet
+                            <motion.span
+                              className="absolute inset-0 bg-card"
+                              layoutId={`topic-page-${topic.id}`}
+                              style={{ borderRadius: 10 }}
+                              transition={{
+                                layout: reduced ? { duration: 0 } : GROW,
+                              }}
+                            />
+                            {/* The topic's drawing, from `topic-figures/`. Quiet
                             at rest, brand ink under the pointer. */}
-                          {TopicFigure ? (
-                            <TopicFigure className="pointer-events-none absolute inset-0 h-full text-muted-foreground/60 transition-colors duration-150 ease-out-cubic group-hover:text-primary motion-reduce:transition-none" />
-                          ) : null}
-                          <motion.span
-                            animate={{ opacity: 1 }}
-                            className="absolute start-3 top-3 text-xs tabular-nums text-muted-foreground"
-                            initial={{ opacity: 0 }}
-                            transition={{
-                              duration: reduced ? 0 : 0.3,
-                              delay: reduced ? 0 : 0.9 + i * 0.04,
+                            {TopicFigure ? (
+                              <TopicFigure className="pointer-events-none absolute inset-0 h-full text-muted-foreground/60 transition-colors duration-150 ease-out-cubic group-hover:text-primary motion-reduce:transition-none" />
+                            ) : null}
+                            <motion.span
+                              animate={{ opacity: 1 }}
+                              className="absolute start-3 top-3 text-xs tabular-nums text-muted-foreground"
+                              initial={{ opacity: 0 }}
+                              transition={{
+                                duration: reduced ? 0 : 0.3,
+                                delay: reduced ? 0 : 0.9 + i * 0.04,
+                              }}
+                            >
+                              {ordinal(i)}
+                            </motion.span>
+                          </motion.span>
+                          <motion.div
+                            exit={{
+                              opacity: 0,
+                              transition: { duration: reduced ? 0 : 0.2 },
                             }}
                           >
-                            {ordinal(i)}
-                          </motion.span>
-                        </motion.span>
-                        <motion.div
-                          exit={{
-                            opacity: 0,
-                            transition: { duration: reduced ? 0 : 0.2 },
-                          }}
-                        >
-                          <TextHighlightWave
-                            as="p"
-                            charStagger={0.02}
-                            className="text-sm leading-normal font-medium tracking-normal text-primary-foreground sm:text-sm"
-                            delay={0.8 + i * 0.04}
-                            text={topic.title}
-                          />
-                        </motion.div>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
+                            <TextHighlightWave
+                              as="p"
+                              charStagger={0.02}
+                              className="text-sm leading-normal font-medium tracking-normal text-primary-foreground sm:text-sm"
+                              delay={0.8 + i * 0.04}
+                              text={topic.title}
+                            />
+                          </motion.div>
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
 
-              {/* The shelf's drawing, as the sheet the grid is laid out on. */}
-              {SECTION_FIGURES[openSection.id] ? (
+              {/* The shelf's drawing, as the sheet the grid is laid out on.
+                  Not under the one-page sheet, which has no grid to sit
+                  under and ends on its content. */}
+              {!sheet && SECTION_FIGURES[openSection.id] ? (
                 <motion.div
                   animate={{ opacity: 1 }}
                   exit={{

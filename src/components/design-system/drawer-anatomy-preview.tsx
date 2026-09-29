@@ -34,6 +34,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { FieldHint } from "@/components/design-system/field-hint"
 import { CloseIcon } from "@/components/design-system/icons"
 
 /**
@@ -137,7 +138,11 @@ export function DrawerAnatomyPreview() {
       </div>
 
       <Drawer direction="right" open={open} onOpenChange={requestClose}>
-        <DrawerContent>
+        {/* 448, the one drawer width. 384 wrapped the three retry fields;
+            every reference measured sits at 460–620. The `!` is needed: the
+            primitive pins its width on a data-attribute variant, which a
+            plain `sm:max-w-md` loses to. */}
+        <DrawerContent className="sm:max-w-md!">
           {/* Title and Close. The button that opened this already named
               it, so a description would say it twice. */}
           <DrawerHeader className="flex flex-row items-center justify-between gap-4 border-b">
@@ -157,7 +162,9 @@ export function DrawerAnatomyPreview() {
                 orientation="horizontal"
                 className="items-center justify-between"
               >
-                <FieldLabel htmlFor="vm-enabled">Detect voicemail</FieldLabel>
+                <FieldLabel className="flex-1" htmlFor="vm-enabled">
+                  Detect voicemail
+                </FieldLabel>
                 <Switch
                   id="vm-enabled"
                   checked={draft.enabled}
@@ -185,9 +192,12 @@ export function DrawerAnatomyPreview() {
                     </Select>
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="vm-instructions">
+                    <FieldHint
+                      hint="What counts as voicemail. Written for the agent — the caller never hears it."
+                      htmlFor="vm-instructions"
+                    >
                       Agent instructions
-                    </FieldLabel>
+                    </FieldHint>
                     <Textarea
                       id="vm-instructions"
                       rows={3}
@@ -225,7 +235,12 @@ export function DrawerAnatomyPreview() {
                   <>
                     <Field>
                       <div className="flex items-baseline justify-between gap-2">
-                        <FieldLabel htmlFor="vm-message">Message</FieldLabel>
+                        <FieldHint
+                          hint="Spoken after the beep, in the persona's voice. Most voicemail boxes cut off at 20 seconds."
+                          htmlFor="vm-message"
+                        >
+                          Message
+                        </FieldHint>
                         <span
                           className={cn(
                             "text-xs tabular-nums",
@@ -275,7 +290,7 @@ export function DrawerAnatomyPreview() {
                   orientation="horizontal"
                   className="items-center justify-between"
                 >
-                  <FieldLabel htmlFor="vm-retry">
+                  <FieldLabel className="flex-1" htmlFor="vm-retry">
                     Call back after voicemail
                   </FieldLabel>
                   <Switch

@@ -70,7 +70,7 @@ Crop with PIL before reading when only one region matters. `npm run lint` and
 5. The topic card on the section page is blank until someone draws a figure
    for it (`sarj-figure` skill, `topic-figures/`). Mention it; don't block on it.
 
-Current topics: **Index page** · **Drawer** · **Integration card** ·
+Current topics: **Index page** · **Choosing a surface** · **Drawer** (448px) · **Integration card** ·
 **Unsaved changes** · **Developers** · **Admin view** · **Avatar**.
 
 ### Showing the real app inside a topic
@@ -128,12 +128,32 @@ Error) is `PrimaryTabs`, **outside** the card.
   like a table header row — not a hairline + grey label (he called that shitty).
 - A switch the rest depends on is one row: label left, switch right. Dependent
   fields are **absent** while it is off, not greyed.
-- No explainer line under every field. A limit becomes a live reading
-  ("~6s of 20s", red past the limit).
+- Explanations are a small (i) after the label (`FieldHint`, 14px, muted,
+  hover or focus opens it, tooltip aligned to the icon so it stays inside the
+  drawer) — only on fields that need one, never a line under every label.
+  A limit stays visible as a live reading ("~6s of 20s", red past the limit).
 - Footer stays put: Cancel, then Save (disabled until dirty). Every exit
   (Close, Cancel, Esc, outside click) routes through one guard that asks
   "Discard your changes?" when dirty.
-- 384px for settings; `sm:max-w-3xl!` for records you read.
+- 448px (`sm:max-w-md!`) for settings and forms; `sm:max-w-5xl!` (1024) for a
+  record you read, with ↑ ↓ and no footer. Which surface a task gets at all is
+  the Surfaces decision below — not this topic.
+
+**Choosing a surface** (Components › `surfaces`, URL
+`/design-system/product-components/surfaces`; `surface-decision-preview.tsx`,
+`surface-demos.tsx`, `surface-diagram.tsx`, data in `SURFACE_CHOICES`,
+`SURFACE_RULES` and `src/lib/design-system/surface-audit.ts`) — the decision
+Vansh called the most important in the system. Three tabs: **Decide** (what the
+reader is doing × how much → one of eight surfaces: inline, popover, undo,
+dialog, confirm, drawer, record, page — with its shape and a live demo),
+**Rules** (12, each with how many platform overlays break it, linking into the
+dry run), **Dry run** (all 115 overlays in `sarj-ai/platform` with a verdict,
+opened as a record drawer). Researched from ElevenLabs on Mobbin, Vapi, Stripe,
+Linear, Vercel, Attio, HubSpot, Supabase and NN/g, Carbon, Atlassian, Polaris,
+Primer, Fluent, Apple. The Page surface's demo is the Creation flow topic
+(`creation-flow-preview.tsx`) — creating in steps means that flow. The older
+multi-step shell is a full-screen focus view too (`multi-step-dialog.tsx`), and the old Patterns › Drawer topic is retired. When
+the platform changes, update `surface-audit.ts` — paths are checked to exist.
 
 **Unsaved changes** (topic `unsaved-changes`; `save-bar-preview.tsx`) — five
 variants as tabs, all sharing `useDraft` and a line-level `LineDiff`

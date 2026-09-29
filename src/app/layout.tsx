@@ -37,7 +37,17 @@ export default function RootLayout({
         <TooltipProvider>
           <PageTransition>{children}</PageTransition>
         </TooltipProvider>
-        <Toaster theme="light" dir="ltr" />
+        <Toaster
+          dir="ltr"
+          theme="light"
+          /* Sonner centres the icon on the whole toast, so under a
+             description it floats between the two lines. Pinned to the
+             title's line instead. Replaces the primitive's toastOptions
+             outright, so its own class is carried over. */
+          toastOptions={{
+            classNames: { toast: "cn-toast", icon: "mt-0.5 self-start" },
+          }}
+        />
         {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>

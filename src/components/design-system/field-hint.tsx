@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { HintIcon } from "@/components/design-system/icons"
-import { Label } from "@/components/ui/label"
+import { FieldLabel } from "@/components/ui/field"
 import {
   Tooltip,
   TooltipContent,
@@ -15,16 +15,18 @@ import { cn } from "@/lib/utils"
  * A label and the (i) that explains it, on one line.
  *
  * What decides between this and an inline `FieldDescription` is the surface. A
- * form is full width and met once, so it explains inline. A drawer is 384px
- * and a dialog step is two columns, and both are read many times and answered
- * once — there a sentence under every label is a paragraph under every label,
- * and the panel stops being a list of settings you can scan.
+ * form or a page is met once, so it explains inline. A drawer or a dialog is a
+ * settings panel read many times and answered once — there a sentence under
+ * every label is a paragraph under every label, and the panel stops being a
+ * list you can scan. Vansh's call, 29 September 2026, over the drawer demo.
  *
- * One screen uses one of the two for every field on it. The cost of this one
- * is that a constraint behind a hover is a constraint a reader can set wrong,
- * so a hard limit belongs in the label rather than only in the hint.
+ * Only on a field that needs it: a label that already says everything gets
+ * no (i). And a hard limit never hides here — a reader sets it wrong behind a
+ * hover — so it stays on screen as a reading beside the label ("~6s of 20s").
  *
- * Shared rather than copied so the boundary is enforced in one place.
+ * The icon is sized to the label, not to the icon scale: 14px beside 14px
+ * text, muted until it is pointed at, so the row reads as a label first. It is
+ * a real button, so the hint opens on keyboard focus as well as on hover.
  */
 export function FieldHint({
   children,
@@ -41,20 +43,31 @@ export function FieldHint({
   htmlFor: string
 }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <Label htmlFor={htmlFor}>{children}</Label>
+    <div className={cn("flex items-center gap-1.5", className)}>
+      {/* FieldLabel, not Label: the same line height as an unhinted
+          label, so a hinted field lines up with its neighbours in a row. */}
+      <FieldLabel htmlFor={htmlFor}>{children}</FieldLabel>
       <Tooltip>
-        {/* size-4 explicitly: the shadcn primitives size icons through their
-            own `[&_svg]:size-4`, and TooltipTrigger is not one of them, so
-            HugeiconsIcon falls through at its 24px default — beside 14px text
-            that reads as a bug. */}
+        {/* Opens from the icon toward the panel's inside edge rather than
+            centred on it, so it never hangs off a drawer's start edge.
+            The size is set here because TooltipTrigger does not size its
+            icon the way the shadcn primitives do, and HugeIcons falls through
+            to 24px. */}
         <TooltipTrigger
           aria-label={`About ${children?.toString().toLowerCase()}`}
-          className="text-muted-foreground"
+          className="rounded-full text-muted-foreground/70 transition-colors duration-150 ease-out-cubic outline-none hover:text-foreground focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
+          type="button"
         >
-          <HintIcon className="size-4" />
+          <HintIcon className="size-3.5" />
         </TooltipTrigger>
-        <TooltipContent>{hint}</TooltipContent>
+        <TooltipContent
+          align="start"
+          className="text-balance"
+          side="top"
+          sideOffset={4}
+        >
+          {hint}
+        </TooltipContent>
       </Tooltip>
     </div>
   )

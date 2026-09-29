@@ -1,10 +1,5 @@
 import { ButtonRoles } from "@/components/design-system/button-roles"
 import { ColourTable } from "@/components/design-system/colour-table"
-import {
-  ReferenceLabel,
-  ReferenceNote,
-  ReferenceTable,
-} from "@/components/design-system/reference-table"
 import { OrbAnatomy } from "@/components/design-system/orb-anatomy"
 import { OrbAvatar } from "@/components/shared/orb-avatar"
 import { ORB_TONES } from "@/components/shared/orb-tones"
@@ -17,9 +12,12 @@ import { DesignSystemDocs } from "@/components/design-system/docs-shell"
 import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
 import { PatternAnatomy } from "@/components/design-system/pattern-anatomy"
 import { ButtonSizes } from "@/components/design-system/button-sizes"
-import { ChipNotes, ChipTable } from "@/components/design-system/chip-notes"
-import { DrawerPreview } from "@/components/design-system/drawer-preview"
+import { ChipNotes } from "@/components/design-system/chip-notes"
 import { SaveBarPreview } from "@/components/design-system/save-bar-preview"
+import { SectionCardPreview } from "@/components/design-system/section-card-preview"
+import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview"
+import { JsonViewPreview } from "@/components/design-system/json-view-preview"
+import { AlertPreview } from "@/components/design-system/alert-preview"
 import { IntegrationCardPreview } from "@/components/design-system/integration-card-preview"
 import { DevelopersPage } from "@/components/mockups/developers/developers-page"
 import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
@@ -36,8 +34,7 @@ import { RuleList } from "@/components/design-system/rule-list"
 import { StepperPreview } from "@/components/design-system/stepper-preview"
 import { SelectionPreview } from "@/components/design-system/selection-preview"
 import { TabsPreview } from "@/components/design-system/tabs-preview"
-import { SurfaceDemo } from "@/components/design-system/surface-demos"
-import { SurfaceDiagram } from "@/components/design-system/surface-diagram"
+import { SurfaceDecisionPreview } from "@/components/design-system/surface-decision-preview"
 import { ControlScale } from "@/components/design-system/control-scale"
 import { LayerTable } from "@/components/design-system/layer-table"
 import { LintRules } from "@/components/design-system/lint-rules"
@@ -49,7 +46,7 @@ import {
   NoResultsPreview,
 } from "@/components/design-system/state-previews"
 import { TableAnatomy } from "@/components/design-system/table-anatomy"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import {
   EMPTY_STATE_RULES,
@@ -60,7 +57,6 @@ import {
   MOTION_RULES,
   NO_RESULTS_RULES,
   PATTERNS,
-  SURFACE_CHOICES,
 } from "@/lib/design-system/data"
 import { docsParams, resolveDocs } from "@/lib/design-system/nav"
 import { notFound } from "next/navigation"
@@ -113,28 +109,7 @@ export default async function DesignSystemPage({
       section={location.section}
       views={{
         /* Foundations — what is fixed. */
-        colour: (
-          <div className="flex flex-col gap-8">
-            <ColourTable />
-
-            {/* The five tints the chips are painted with are rows in the
-                  table above, but a token name does not tell you it is the
-                  Completed chip. Same data as the key on the index page —
-                  the rows are one component, so they cannot drift apart. */}
-            <section className="flex flex-col gap-3">
-              <div className="flex flex-col gap-0.5">
-                <h2 className="text-base font-medium">In use — status chips</h2>
-                <p className="text-sm text-muted-foreground">
-                  Where the intent tints actually land. A chip is its own
-                  swatch, so this is the tint shown doing its job rather than a
-                  second square of it.
-                </p>
-              </div>
-
-              <ChipTable />
-            </section>
-          </div>
-        ),
+        colour: <ColourTable />,
         ...Object.fromEntries(
           GLOBAL_RULES.map((rule) => [
             rule.id,
@@ -162,61 +137,8 @@ export default async function DesignSystemPage({
         ),
 
         /* Patterns — what the decisions produce. */
-        surfaces: (
-          /* Four rows rather than four cards: the choice between them is
-               a comparison, and the criteria only answer it side by side.
-               The diagram says where the surface sits and the demo says what
-               being in it is like, so both stay — as columns. */
-          <div className="flex flex-col gap-6">
-            <ReferenceTable
-              columns={[
-                { header: "Surface", width: "w-32" },
-                { header: "Where it sits", width: "w-56" },
-                { header: "Reach for it when", width: "w-80" },
-                { header: "Examples" },
-              ]}
-              rows={SURFACE_CHOICES.map((choice) => ({
-                key: choice.id,
-                cells: [
-                  <ReferenceLabel key="title">{choice.title}</ReferenceLabel>,
-                  <SurfaceDiagram key="diagram" variant={choice.id} />,
-                  <div className="flex flex-col gap-1.5" key="criterion">
-                    <ReferenceNote>{choice.criterion}</ReferenceNote>
-                    {/* The exclusion is the half that gets argued, so it is
-                        written beside the rule rather than inferred from it. */}
-                    <ReferenceNote>
-                      <span className="font-medium text-foreground">
-                        Never for{" "}
-                      </span>
-                      {choice.avoid}
-                    </ReferenceNote>
-                  </div>,
-                  <ReferenceNote key="examples">
-                    {choice.examples}
-                  </ReferenceNote>,
-                ],
-              }))}
-            />
-
-            {/* The demos were a fifth column, which left a whole form — a
-                  label, a value and a button — about 120px to render in once
-                  the four fixed columns had taken their width. They are the
-                  half of the page a reader cannot get from a criterion, so
-                  they get room instead of a cell. */}
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {SURFACE_CHOICES.map((choice) => (
-                <Card key={choice.id} size="sm">
-                  <CardHeader>
-                    <CardTitle>{choice.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <SurfaceDemo variant={choice.id} />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ),
+        /* The choice is two questions, so the page asks them. */
+        surfaces: <SurfaceDecisionPreview />,
 
         /* Named by Abdulrahman alongside the index page: the other shape a
              product this size actually needs written down. */
@@ -245,17 +167,6 @@ export default async function DesignSystemPage({
           <Card>
             <CardContent>
               <SelectionPreview />
-            </CardContent>
-          </Card>
-        ),
-
-        /* Its own topic, and pointedly not a variant of the one above: a
-             drawer keeps the page behind it, which is the opposite of what a
-             creation flow wants, so it never carries steps. */
-        drawer: (
-          <Card>
-            <CardContent className="flex flex-col">
-              <DrawerPreview />
             </CardContent>
           </Card>
         ),
@@ -367,6 +278,10 @@ export default async function DesignSystemPage({
           </Card>
         ),
         "admin-view": <AdminViewPagePreview />,
+        "section-card": <SectionCardPreview />,
+        "creation-flow": <CreationFlowPreview />,
+        "json-view": <JsonViewPreview />,
+        alert: <AlertPreview />,
         "unsaved-changes": <SaveBarPreview />,
         "integration-card": <IntegrationCardPreview />,
         developers: (

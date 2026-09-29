@@ -30,6 +30,7 @@ These came from actual feedback by Fatma, Fatema Janahi (PM), Mamdouh, Abdulrahm
 
 ### Hard bans
 - **Never country flags for languages, anywhere.** (Abdulrahman, DES-149: "I will never accept seeing flags")
+- **The surface follows the decision** (`/design-system/product-components/surfaces`). Flag: a picker in a dialog, a dialog over 4 fields or that scrolls, an overlay opened from another overlay (only a confirm may stack), a width off the four (384 · 448 · 448 · 1024), a form with no discard guard, "Are you sure" / Done / OK / Got it, red on a button that does not destroy, and a confirm on something Undo could cover.
 - **A select opens below its trigger, never over it.** Every `SelectContent` carries `position="popper"`; the primitive's `item-aligned` default covers the control with the list. Flag any dropdown that opens on top of what was clicked.
 - **No affordance for unsupported capabilities**: if the backend rejects a file type or action, the picker/control must not offer it; an "unsupported" label on an offered option is not a fix. (Fatema, DES-149)
 
