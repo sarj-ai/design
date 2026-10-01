@@ -10,9 +10,14 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import {
+  AddFilter,
+  ChoiceFilter,
   DateFilter,
   FilterBar,
+  RangeFilter,
   SelectFilter,
+  ToggleFilter,
+  type Range,
   type DateRange,
 } from "@/components/shared/filter-bar"
 import { ListFooter } from "@/components/shared/list-footer"
@@ -67,6 +72,35 @@ const SCENARIO_OPTIONS = Array.from(
   new Set(CALLS.map((call) => call.scenario)),
 ).map((scenario) => ({ value: scenario, label: scenario }))
 
+const DIRECTION_OPTIONS = [
+  { value: "inbound", label: "Inbound" },
+  { value: "outbound", label: "Outbound" },
+]
+
+const MORE_FILTERS = [
+  { id: "direction", label: "Direction" },
+  { id: "duration", label: "Duration" },
+  { id: "scheduled", label: "Scheduled only" },
+]
+
+/* The bands the platform's "Any duration" select offers, in minutes. */
+const DURATION_PRESETS: Range[] = [{ max: 1 }, { min: 1, max: 5 }, { min: 5 }]
+
+/** m:ss as minutes. */
+function minutes(duration: string) {
+  const [m, s] = duration.split(":").map(Number)
+  return (m || 0) + (s || 0) / 60
+}
+
+function inDuration(duration: string, range: Range | null) {
+  if (!range) return true
+  const value = minutes(duration)
+  return (
+    (range.min === undefined || value >= range.min) &&
+    (range.max === undefined || value <= range.max)
+  )
+}
+
 function inRange(stamp: string, range: DateRange | undefined) {
   if (!range?.from) return true
   const at = new Date(stamp.replace(/, (\d)/, " $1")).getTime()
@@ -82,6 +116,12 @@ export function ConversationsIndexPreview() {
   const [outcomes, setOutcomes] = React.useState<string[]>([])
   const [scenarios, setScenarios] = React.useState<string[]>([])
   const [date, setDate] = React.useState<DateRange | undefined>()
+  const [direction, setDirection] = React.useState<string | null>(null)
+  const [duration, setDuration] = React.useState<Range | null>(null)
+  const [scheduledOnly, setScheduledOnly] = React.useState(false)
+  /* The three filters people reach for less wait behind + Filter, and join
+     the row once picked — the index page rule. */
+  const [added, setAdded] = React.useState<string[]>([])
   const [pageSize, setPageSize] = React.useState(25)
 
   const activeCount = [
@@ -89,6 +129,9 @@ export function ConversationsIndexPreview() {
     outcomes.length,
     scenarios.length,
     date?.from,
+    direction,
+    duration,
+    scheduledOnly,
   ].filter(Boolean).length
 
   const digits = query.replace(/\D/g, "")
@@ -99,7 +142,10 @@ export function ConversationsIndexPreview() {
       (!statuses.length || statuses.includes(call.status)) &&
       (!outcomes.length || outcomes.includes(call.outcome)) &&
       (!scenarios.length || scenarios.includes(call.scenario)) &&
-      inRange(call.createdAt, date),
+      inRange(call.createdAt, date) &&
+      (!direction || call.direction === direction) &&
+      inDuration(call.duration, duration) &&
+      (!scheduledOnly || call.status === "scheduled"),
   )
   /* Unfiltered, the page stands for the whole history; filtered, the mock
      rows are all there is. */
@@ -139,6 +185,9 @@ export function ConversationsIndexPreview() {
             setOutcomes([])
             setScenarios([])
             setDate(undefined)
+            setDirection(null)
+            setDuration(null)
+            setScheduledOnly(false)
           }}
         >
           <SelectFilter
@@ -164,6 +213,34 @@ export function ConversationsIndexPreview() {
             options={SCENARIO_OPTIONS}
             value={scenarios}
             onChange={setScenarios}
+          />
+          {added.includes("direction") ? (
+            <ChoiceFilter
+              field="Direction"
+              options={DIRECTION_OPTIONS}
+              value={direction}
+              onChange={setDirection}
+            />
+          ) : null}
+          {added.includes("duration") ? (
+            <RangeFilter
+              field="Duration"
+              unit="min"
+              presets={DURATION_PRESETS}
+              value={duration}
+              onChange={setDuration}
+            />
+          ) : null}
+          {added.includes("scheduled") ? (
+            <ToggleFilter
+              field="Scheduled only"
+              value={scheduledOnly}
+              onChange={setScheduledOnly}
+            />
+          ) : null}
+          <AddFilter
+            fields={MORE_FILTERS.filter((field) => !added.includes(field.id))}
+            onAdd={(id) => setAdded((list) => [...list, id])}
           />
         </FilterBar>
       </div>
