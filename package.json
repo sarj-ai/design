@@ -47,7 +47,7 @@
     "prettier": "^3.9.6",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4.129.0"
+    "wrangler": "^4.147.0"
   },
   "scripts": {
     "dev": "next dev",
