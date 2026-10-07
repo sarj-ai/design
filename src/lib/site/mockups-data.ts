@@ -18,6 +18,7 @@ import {
   SparklesIcon,
   TelephoneIcon,
   Timer01Icon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons"
 import type { IconSvgElement } from "@hugeicons/react"
 
@@ -324,6 +325,16 @@ export const MOCKUPS: Mockup[] = [
       "What the voice does when a caller changes language mid-call: keep it, or hand off to a persona for the new language.",
     icon: LanguageSkillIcon,
     tickets: ["DES-199"],
+  },
+  {
+    href: "/org-access",
+    title: "Invite-only organization access",
+    meta: "Page + dialogs · exploration",
+    surface: "Settings",
+    description:
+      "People join an organization only by invite: members and pending invites, an optional invite link, Sarj creating an organization with its owner, and what the invited person sees.",
+    icon: UserGroupIcon,
+    tickets: ["DES-197"],
   },
   // `npm run new` appends new mockups above this line.
 ]
