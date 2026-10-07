@@ -13,6 +13,14 @@ const nextConfig: NextConfig = {
     // them at 75 is a second lossy pass over a lossy source.
     qualities: [75, 100],
   },
+  turbopack: {
+    rules: {
+      // A markdown import is the file's text. The reels page hands its skill
+      // file to a copy button this way; reading it from disk at runtime fails
+      // on the Worker, which has no file system to read from.
+      "*.md": { type: "raw" },
+    },
+  },
 }
 
 export default nextConfig

@@ -1,25 +1,24 @@
-import { readFileSync } from "node:fs"
-import { join } from "node:path"
-
 import Image from "next/image"
 
 import { REELS } from "@/lib/site/reels-data"
 import posters from "@/lib/site/reel-posters.json"
 import { SiteNav } from "@/components/shell/site-nav"
 import { CopySkillButton } from "@/components/reels/copy-skill-button"
+import SKILL from "../../../.claude/skills/sarj-reel/SKILL.md"
 
 /**
- * The skill that builds a reel, read once while this page is prerendered.
+ * The skill that builds a reel, bundled into the page as a string.
  *
- * The route is static, so the read happens during the build and the file
- * travels inside the page — `node:fs` never runs on the Worker, and the
- * button needs no round trip. Reading it rather than keeping a copy is the
- * point: a copy would be a second version of the skill, wrong the first time
- * anybody edited the real one. If the file moves, the build fails here rather
- * than the page shipping a stale one.
+ * `next.config.ts` gives `.md` files the `raw` module type, so the import is
+ * the file's text, resolved at build time. It used to be a `readFileSync` at
+ * module scope, on the theory that a static route only ever renders during
+ * the build. On Cloudflare that is not true: with no incremental cache the
+ * Worker renders the page on request, finds no file system there, and every
+ * visit was a 500. Importing the real file rather than keeping a copy still
+ * means the button can never hand out a stale skill, and a moved file still
+ * fails the build.
  */
 const SKILL_PATH = ".claude/skills/sarj-reel/SKILL.md"
-const SKILL = readFileSync(join(process.cwd(), SKILL_PATH), "utf8")
 
 export const metadata = {
   title: "Reels showcase",
