@@ -174,6 +174,14 @@ normal, new ones stop being visible.
 | `motion-reduce` | any `transition-*` or `animate-*` on its own | pair it with `motion-reduce:transition-none` / `motion-reduce:animate-none` |
 | `no-layout-animation` | `transition-all`, `transition-[width]`, `transition-[height]` | animate transform and opacity only |
 
+**Seventeen more rules enforce the design system's own decisions**, not just
+its tokens. They cover surface widths, one overlay at a time, the dialog
+shape, Cancel-then-verb footers, header icons, red buttons, Select position,
+form labels, the table shape, empty states, the pagination block, nested
+cards, banned copy, sentence case, scrollbars and type weights. The full
+table, what each one enforces, and the `LEGACY` exemption list in
+`eslint.config.mjs` are in `sj-design`.
+
 **Colour tokens — there are no others.** Surfaces `background` `card` `popover`
 `muted` `secondary` `accent` `sidebar` · Text `foreground` `muted-foreground`
 plus every surface's `-foreground` · Brand `primary` `primary-tint`
@@ -364,13 +372,14 @@ fabricate what a reference app does.
 
 ## Skills — what each one is for
 
-Ten skills are installed at `.claude/skills/`. Load them with the Skill tool
+Ten skills are installed at `.claude/skills/`, plus `sj-design`, which is global (`~/.claude/skills/sj-design`). Load them with the Skill tool
 (or read the `SKILL.md`). They are deep reference, deliberately not inlined here
 — this file is what you need to act; they are what you need to get a specific
 thing exactly right.
 
 | Skill | What is in it | Load it when |
 |---|---|---|
+| **`sj-design`** | The map of `/design-system`: every section and topic, the rule each states, the file that holds it, the shared block to reuse, which `sarj/*` rule enforces it, all 27 lint rules, how to add a topic or a rule, and the open contradictions between sources | Building or reviewing a screen against the system, asking "where does this live" or "is this enforced", or changing a design-system topic, rule or lint rule |
 | **`sarj-mockup`** | The build procedure: the three laws, the full primitive inventory mapped to what you need, the page skeleton, layout rhythm, visual hierarchy, the reject list, a self-check | **Before writing any page, screen, or component in this repo.** The default first move for any build request. |
 | **`sarj-no-slop`** | The tells lint cannot see: ALL CAPS and Title Case, paragraphs where a label belongs, a heading over every block, launch-page copy, token-coloured gradients and glass, an icon per line, pills on everything, motion that answers nothing, over-designed empty states, the default dashboard | **While writing any copy or screen**, alongside `sarj-mockup`, and as a pass before a ticket moves to In Review. It lists what the lint rules already kill, so it never re-litigates those. |
 | **`sarj-reel`** | The reel system end to end: the one rule, the animation kernel, framing a screenshot, the scripted-cursor tour, reel copy, and what lint still enforces on a video | **Before writing or editing any reel.** The default first move for a release video, feature demo or product tour. |

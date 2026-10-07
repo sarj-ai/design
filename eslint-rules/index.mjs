@@ -20,6 +20,24 @@ import noRawColor from "./rules/no-raw-color.mjs"
 import noShadow from "./rules/no-shadow.mjs"
 import useUiPrimitives from "./rules/use-ui-primitives.mjs"
 import zIndexTokens from "./rules/z-index-tokens.mjs"
+// The design system's own rules — surfaces, copy, forms, tables, type
+import copyConventions from "./rules/copy-conventions.mjs"
+import destructiveVariant from "./rules/destructive-variant.mjs"
+import dialogShape from "./rules/dialog-shape.mjs"
+import emptyState from "./rules/empty-state.mjs"
+import footerActions from "./rules/footer-actions.mjs"
+import formLabels from "./rules/form-labels.mjs"
+import iconButtonLabel from "./rules/icon-button-label.mjs"
+import noHeaderIcon from "./rules/no-header-icon.mjs"
+import noNestedCard from "./rules/no-nested-card.mjs"
+import noScrollbarStyle from "./rules/no-scrollbar-style.mjs"
+import oneOverlay from "./rules/one-overlay.mjs"
+import selectPosition from "./rules/select-position.mjs"
+import sentenceCase from "./rules/sentence-case.mjs"
+import sharedBlocks from "./rules/shared-blocks.mjs"
+import surfaceWidth from "./rules/surface-width.mjs"
+import tableShape from "./rules/table-shape.mjs"
+import typeScale from "./rules/type-scale.mjs"
 
 const plugin = {
   meta: { name: "eslint-plugin-sarj", version: "1.0.0" },
@@ -38,6 +56,27 @@ const plugin = {
     "motion-tokens": motionTokens,
     "motion-reduce": motionReduce,
     "no-layout-animation": noLayoutAnimation,
+    // Foundations
+    "type-scale": typeScale,
+    "no-scrollbar-style": noScrollbarStyle,
+    "icon-button-label": iconButtonLabel,
+    // Surfaces — /design-system/product-components/surfaces
+    "surface-width": surfaceWidth,
+    "one-overlay": oneOverlay,
+    "dialog-shape": dialogShape,
+    "footer-actions": footerActions,
+    "no-header-icon": noHeaderIcon,
+    "destructive-variant": destructiveVariant,
+    "select-position": selectPosition,
+    // Patterns — forms, tables, states, cards
+    "form-labels": formLabels,
+    "table-shape": tableShape,
+    "empty-state": emptyState,
+    "shared-blocks": sharedBlocks,
+    "no-nested-card": noNestedCard,
+    // Copy
+    "copy-conventions": copyConventions,
+    "sentence-case": sentenceCase,
   },
 }
 

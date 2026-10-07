@@ -16,7 +16,7 @@ import {
 export const FOUNDATIONS_SKILL = [
   "---",
   "name: sarj-foundations",
-  "description: The fixed half of the Sarj design system — colour tokens, layers, the global rules, control heights and the ten lint rules. Use before writing any Sarj UI.",
+  "description: The fixed half of the Sarj design system — colour tokens, layers, the global rules, control heights and the enforced lint rules. Use before writing any Sarj UI.",
   "---",
   "",
   "# Sarj foundations",

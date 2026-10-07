@@ -6,10 +6,10 @@ import {
 import { LINT_RULES } from "@/lib/design-system/data"
 
 /**
- * The ten rules that are errors rather than advice.
+ * The rules that are errors rather than advice.
  *
  * The rest of this site is a set of decisions a reader can disagree with in
- * review. These ten are checked by `npm run lint` and fail the build, and the
+ * review. These are checked by `npm run lint` and fail the build, and the
  * only way to learn them was to break one and read the message — which is a
  * poor way to find out that a colour literal was never an option.
  *

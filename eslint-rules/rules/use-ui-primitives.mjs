@@ -21,6 +21,9 @@ const RAW_ELEMENTS = {
   dialog: "`<Dialog>` from @/components/ui/dialog",
   progress: "`<Progress>` from @/components/ui/progress",
   hr: "`<Separator>` from @/components/ui/separator",
+  label:
+    "`<FieldLabel>` inside a Field, or `<Label>` from @/components/ui/label — both carry the size, weight and disabled state a label needs",
+  kbd: "`<Kbd>` from @/components/ui/kbd",
 }
 
 /** A div with a radius, an edge, and padding is a Card with extra steps. */

@@ -74,7 +74,7 @@ export function DesignSystemHero({
             charStagger={0.008}
             className="max-w-sm text-start text-base leading-normal font-normal tracking-normal text-pretty text-muted-foreground sm:text-base"
             delay={0.6}
-            text="The tokens, primitives and patterns the product is built from, and the ten lint rules that keep a screen from drifting off them."
+            text="The tokens, primitives and patterns the product is built from, and the lint rules that keep a screen from drifting off them."
           />
         </div>
       </ContourMapBackground>

@@ -1012,13 +1012,13 @@ const FOUNDATION_PAGES: DocsPage[] = [
       "Four heights, shared by every control. A button is pinned to the field it sits next to, which is what makes a filter bar line up instead of stepping.",
     sarj: true,
   },
-  /* Last, because it is the one page that is about the others: ten of the
-     rules above are not advice, and a reader is better off knowing which. */
+  /* Last, because it is the one page that is about the others: much of the
+     system above is not advice, and a reader is better off knowing which. */
   {
     id: "enforcement",
     title: "Enforcement",
     description:
-      "Ten rules npm run lint fails you for. Everything else on this site is a decision; these are errors.",
+      "Twenty-seven rules npm run lint fails you for. Everything else on this site is a decision; these are errors.",
     sarj: true,
   },
 ]
@@ -1028,7 +1028,7 @@ const FOUNDATION_PAGES: DocsPage[] = [
  *
  * They live in `eslint-rules/rules/motion-*.mjs` and were unwritten here, so
  * the only way to learn them was to break one and read the error. Three of the
- * ten enforced rules are motion rules; none of them had a page.
+ * enforced rules are motion rules; none of them had a page.
  */
 export type MotionRule = {
   id:
@@ -1197,7 +1197,7 @@ export const DOCS_SECTIONS: DocsSection[] = [
       "The fixed half of the system. Nothing here is a judgement call, which is what stops the decisions further down from being re-argued.",
     groups: [{ pages: FOUNDATION_PAGES }],
   },
-  /* Its own section rather than a page under Foundations: three of the ten
+  /* Its own section rather than a page under Foundations: three of the
      enforced rules are motion rules, and each one is a different question —
      which curve, how long, what may move, and who has asked not to see it. */
   {
@@ -1330,8 +1330,9 @@ export const CONTROL_STEPS: ControlStep[] = [
 ]
 
 /* ---------------------------------------------------------------------------
- * The ten enforced rules, from `eslint-rules/`. Named here so the reference
- * says which of its own pages are errors rather than advice.
+ * The enforced rules, from `eslint-rules/`. Named here so the reference says
+ * which of its own pages are errors rather than advice. Ten police tokens,
+ * primitives and motion; the rest police the decisions written on this site.
  * ------------------------------------------------------------------------ */
 
 export type LintRule = {
@@ -1367,7 +1368,7 @@ export const LINT_RULES: LintRule[] = [
   },
   {
     id: "use-ui-primitives",
-    bans: "Raw button, input, select, table; a div with radius and edge and padding",
+    bans: "Raw button, input, select, table, label, kbd; a div with radius and edge and padding",
     instead: "The primitive. A raw element is still fine as an asChild child.",
   },
   {
@@ -1389,15 +1390,113 @@ export const LINT_RULES: LintRule[] = [
   },
   {
     id: "motion-reduce",
-    bans: "A transition-* or animate-* on its own",
+    bans: "A transition-* or animate-* on its own; a Skeleton without its escape",
     instead:
-      "Pair it with motion-reduce:transition-none or motion-reduce:animate-none. No exception for opacity.",
+      "Pair it with motion-reduce:transition-none or motion-reduce:animate-none. No exception for opacity, or for a Skeleton's pulse.",
   },
   {
     id: "no-layout-animation",
     bans: "transition-all, transition-[width], transition-[height]",
     instead:
       "Transform and opacity. They are the only two the browser hands to the compositor.",
+  },
+  /* The design system's own decisions, enforced since 7 October 2026. Files
+     that broke one that day are listed in eslint.config.mjs and exempt from
+     that rule only, until they are migrated. */
+  {
+    id: "type-scale",
+    bans: "font-bold, font-black, font-light, font-thin; font-serif, font-[…], fontFamily",
+    instead:
+      "Three weights — semibold, medium, normal — and two faces: Nunito, and font-mono for code.",
+  },
+  {
+    id: "no-scrollbar-style",
+    bans: "scrollbar-*, a ::-webkit-scrollbar variant, scrollbarWidth in style",
+    instead:
+      "Nothing. globals.css hides every bar, and everything still scrolls.",
+  },
+  {
+    id: "icon-button-label",
+    bans: 'A Button size="icon*" with no aria-label and no text',
+    instead:
+      "aria-label naming what it does. A tooltip is a description, not a name.",
+  },
+  {
+    id: "surface-width",
+    bans: "max-w-* without sm:, a width that is not one of the four, a drawer width without !",
+    instead:
+      "Confirm sm:max-w-sm, dialog sm:max-w-md, drawer sm:max-w-md!, record sm:max-w-5xl!.",
+  },
+  {
+    id: "one-overlay",
+    bans: "A Dialog, Sheet or Drawer inside another overlay's content",
+    instead:
+      "Go one level deeper inside the drawer, with Back. Only a confirm or a popover stacks.",
+  },
+  {
+    id: "dialog-shape",
+    bans: "Tabs, Stepper, ScrollArea or overflow-y-auto inside a dialog",
+    instead: "A drawer for what scrolls or grows; a page for tabs and steps.",
+  },
+  {
+    id: "footer-actions",
+    bans: "Done, OK, Yes, Submit, Got it; Cancel after the verb or not outline; two filled buttons; a ButtonGroup in a footer",
+    instead: "Cancel (outline), then one verb that names the result.",
+  },
+  {
+    id: "no-header-icon",
+    bans: "An icon, ItemMedia or AlertDialogMedia in a dialog, drawer or confirm header",
+    instead: "Title, description, Close. The words are the warning.",
+  },
+  {
+    id: "destructive-variant",
+    bans: 'variant="destructive" on an action that destroys nothing, or in a table row',
+    instead:
+      "Red only for delete, remove, revoke, disconnect, discard. A row's delete is ghost with text-destructive.",
+  },
+  {
+    id: "select-position",
+    bans: 'A SelectContent without position="popper"',
+    instead:
+      'position="popper", so it opens under its trigger like every popover.',
+  },
+  {
+    id: "form-labels",
+    bans: "text-muted-foreground on a FieldLabel, Label or FieldLegend",
+    instead:
+      "Full-strength labels. The (optional) marker is the one muted span inside.",
+  },
+  {
+    id: "table-shape",
+    bans: "A muted TableHead, a header band without its hover, onClick on a TableHead",
+    instead:
+      "DataTable, DataTableHeaderRow and DataTableHead from shared/data-table.",
+  },
+  {
+    id: "empty-state",
+    bans: "An Empty with no EmptyTitle; two actions in EmptyContent",
+    instead: "A title that is the state, and the one action that changes it.",
+  },
+  {
+    id: "shared-blocks",
+    bans: "ui/pagination",
+    instead: "ListFooter — cursor and page size under the table.",
+  },
+  {
+    id: "no-nested-card",
+    bans: "A Card inside a Card",
+    instead: "A bg-muted inset, Separator or ItemSeparator.",
+  },
+  {
+    id: "copy-conventions",
+    bans: "Are you sure; Something went wrong as the message; Unavailable, N/A; Required in a label; No … found",
+    instead:
+      "Name the thing; name what failed; —, Not set or Not analysed; mark the minority; No API keys yet.",
+  },
+  {
+    id: "sentence-case",
+    bans: "The uppercase class; Title Case in a title, label, tab, button or heading",
+    instead: "Sentence case. Acronyms stay; proper nouns go in an expression.",
   },
 ]
 

@@ -1,4 +1,11 @@
 import { createAttributeVisitor } from "../lib/classes.mjs"
+import {
+  classesOf,
+  getAttr,
+  isOpaqueClassName,
+  jsxName,
+  trackUiImports,
+} from "../lib/jsx.mjs"
 
 /**
  * Every animated element carries its own reduced-motion escape. No exceptions.
@@ -14,7 +21,13 @@ import { createAttributeVisitor } from "../lib/classes.mjs"
  *
  * Applies to opacity and colour fades too. "It's only a fade" is the same
  * argument made once per element, and the sum is a page that still moves.
+ *
+ * `<Skeleton>` pulses from inside the primitive, where no className of ours
+ * can see it — so a Skeleton is checked by name, and needs the escape too.
  */
+
+/** Primitives that animate on their own, from inside src/components/ui. */
+const SELF_ANIMATED = new Set(["Skeleton"])
 
 const ANIMATED = /^(transition|animate)(-|$)/
 const INERT = new Set([
@@ -33,13 +46,17 @@ const motionReduce = {
     },
     schema: [],
     messages: {
+      primitive:
+        "`<{{name}}>` animates from inside the primitive. Add `motion-reduce:animate-none` to its className — the pulse is movement too.",
       missing:
         "`{{cls}}` animates with no reduced-motion escape. Add `motion-reduce:{{fix}}` to the same className. This is not optional and there is no exception for opacity or colour — a user with `prefers-reduced-motion` on has already told the OS that unrequested movement makes them ill.",
     },
   },
 
   create(context) {
-    return createAttributeVisitor(({ classes }) => {
+    const imports = trackUiImports()
+
+    const classVisitor = createAttributeVisitor(({ classes }) => {
       const hasEscape = classes.some(({ variants }) =>
         variants.includes("motion-reduce"),
       )
@@ -63,6 +80,28 @@ const motionReduce = {
         return
       }
     })
+
+    return {
+      ...imports.visitor,
+      ...classVisitor,
+      JSXOpeningElement(opening) {
+        const name = imports.ui(jsxName(opening))
+        if (!SELF_ANIMATED.has(name)) return
+        /* `className={cellWidth(i)}` may well carry the escape; lint cannot
+           see into the function, so it does not guess. */
+        if (isOpaqueClassName(getAttr(opening, "className"))) return
+        const escaped = classesOf(opening).some(({ variants }) =>
+          variants.includes("motion-reduce"),
+        )
+        if (!escaped) {
+          context.report({
+            node: opening,
+            messageId: "primitive",
+            data: { name },
+          })
+        }
+      },
+    }
   },
 }
 

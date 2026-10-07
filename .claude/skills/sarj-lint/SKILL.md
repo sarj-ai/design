@@ -5,6 +5,11 @@ description: The ten enforced design-system rules in this repo — colour and sp
 
 # Sarj lint rules
 
+> Seventeen more `sarj/*` rules enforce the design system's own decisions
+> (surfaces, footers, copy, forms, tables, type). They are listed with the
+> rule each one enforces in the `sj-design` skill. This file covers
+> the original ten.
+
 Ten rules run on every file in `src/`, enforced by `npm run lint`. They are the
 machine-checkable half of `sarj-mockup`. Write code that passes them the first
 time — do not write it loosely and clean up after the linter.
