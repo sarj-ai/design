@@ -315,6 +315,16 @@ export const MOCKUPS: Mockup[] = [
     icon: SourceCodeIcon,
     tickets: [],
   },
+  {
+    href: "/language-switching",
+    title: "Language switching",
+    meta: "Scenario setting · in progress",
+    surface: "Scenario Edit",
+    description:
+      "What the voice does when a caller changes language mid-call: keep it, or hand off to a persona for the new language.",
+    icon: LanguageSkillIcon,
+    tickets: ["DES-199"],
+  },
   // `npm run new` appends new mockups above this line.
 ]
 
