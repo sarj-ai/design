@@ -22,9 +22,11 @@ permissions:
 
 jobs:
   preview:
-    # A fork's pull request cannot see the Cloudflare secrets, and a job that
-    # fails on missing credentials is a red X that says nothing about the code.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Forks and Dependabot runs cannot see the Actions Cloudflare credentials.
+    # Their normal CI checks still validate the code without uploading a preview.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
