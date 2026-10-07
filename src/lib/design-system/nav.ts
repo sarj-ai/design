@@ -60,6 +60,11 @@ export function docsHref(id: string): string {
   return sectionId ? `${DOCS_ROOT}/${sectionId}/${id}` : DOCS_ROOT
 }
 
+/** One topic by id, or undefined if no section files it. */
+export function docsPage(id: string): DocsPage | undefined {
+  return PAGE_OF.get(id)
+}
+
 /** The URL for one section's index. */
 export function sectionHref(id: string): string {
   return SECTION_BY_ID.has(id) ? `${DOCS_ROOT}/${id}` : DOCS_ROOT

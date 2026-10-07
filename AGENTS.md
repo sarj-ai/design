@@ -83,6 +83,7 @@ public/reels/<slug>/                     that reel's screenshots
 src/app/design-system/[[...slug]]/page.tsx  the written system, one URL per topic
 src/lib/design-system/data.ts            its content — the rail tree and every rule
 src/lib/design-system/nav.ts             slug <-> topic, and generateStaticParams
+src/lib/design-system/changelog.ts       every design-system change, newest first — /changelog renders it
 src/app/globals.css                      every token: colour, z-layers, motion
 src/app/page.tsx                         the index — renders the registry, nothing else
 src/lib/utils.ts                         shadcn's cn(), the one loose file — primitives import it from here
@@ -403,6 +404,9 @@ thing exactly right.
   index card renders blank without it
 - `sarj-no-slop` self-check — no `uppercase`, no explainer under every setting, delete 30% and see if it reads clearer
 - `ui-review` on the route if the ticket is about to move to In Review
+- A changelog entry at the top of `src/lib/design-system/changelog.ts` if you changed the
+  design system — a rule, token, topic, shared component or lint rule. Same commit as the
+  change. The title says what is different now; each line is one fact
 - List anything you built that the ticket, PRD, or a screenshot did not name
 - Say what you referenced, in one line
 

@@ -29,7 +29,6 @@
         "input",
         "input-group",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "switch",
@@ -67,11 +66,6 @@
           "target": "@components/sarj/mockups/transfer-routing/transfer-tool-drawer.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -80,11 +74,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -245,7 +234,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "separator",
         "sidebar",
         "table"
@@ -277,11 +265,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -305,11 +288,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -466,7 +444,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -494,11 +471,6 @@
           "target": "@components/sarj/mockups/call-turn-timing/turn-detection-section.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -517,11 +489,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -687,7 +654,6 @@
         "item",
         "kbd",
         "label",
-        "navigation-menu",
         "popover",
         "resizable",
         "select",
@@ -801,11 +767,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -824,11 +785,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -998,7 +954,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "scroll-area",
         "select",
         "separator",
@@ -1059,11 +1014,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1082,11 +1032,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -1246,7 +1191,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -1281,11 +1225,6 @@
           "target": "@components/sarj/mockups/listener-cues/listener-cues-drawer.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1304,11 +1243,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -1471,7 +1405,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "separator",
         "sidebar",
         "slider",
@@ -1522,11 +1455,6 @@
           "target": "@components/sarj/mockups/phrase-mappings/trigger-field.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1545,11 +1473,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -1709,7 +1632,6 @@
         "input",
         "input-group",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -1743,11 +1665,6 @@
           "target": "@components/sarj/mockups/model-catalog/icons.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1766,11 +1683,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -1926,7 +1838,6 @@
         "input-group",
         "kbd",
         "label",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -1961,11 +1872,6 @@
           "target": "@components/sarj/mockups/eou-timing/wait-window.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -1984,11 +1890,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -2150,7 +2051,6 @@
         "item",
         "kbd",
         "label",
-        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -2239,11 +2139,6 @@
           "target": "@components/sarj/mockups/scenario-single-screen/v2/setting-sheet.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2262,11 +2157,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -2433,7 +2323,6 @@
         "input",
         "input-group",
         "kbd",
-        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -2492,11 +2381,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2515,11 +2399,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -2738,7 +2617,6 @@
         "input",
         "input-group",
         "kbd",
-        "navigation-menu",
         "radio-group",
         "scroll-area",
         "separator",
@@ -2779,11 +2657,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -2802,11 +2675,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -2970,7 +2838,6 @@
         "item",
         "kbd",
         "label",
-        "navigation-menu",
         "popover",
         "resizable",
         "select",
@@ -3087,11 +2954,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3110,11 +2972,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -3278,7 +3135,6 @@
         "item",
         "kbd",
         "label",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -3322,11 +3178,6 @@
           "target": "@components/sarj/mockups/call-retry/wait-duration-field.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3345,11 +3196,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -3504,7 +3350,6 @@
         "input-group",
         "kbd",
         "label",
-        "navigation-menu",
         "select",
         "separator",
         "table",
@@ -3543,11 +3388,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3556,11 +3396,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -3715,7 +3550,6 @@
         "item",
         "kbd",
         "label",
-        "navigation-menu",
         "popover",
         "radio-group",
         "select",
@@ -3744,11 +3578,6 @@
           "target": "@components/sarj/mockups/add-voice/icons.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3757,11 +3586,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -3916,7 +3740,6 @@
         "input-group",
         "kbd",
         "label",
-        "navigation-menu",
         "popover",
         "separator",
         "sidebar",
@@ -3952,11 +3775,6 @@
           "target": "@components/sarj/mockups/variable-mentions/scenario-prompt.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3975,11 +3793,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -4136,7 +3949,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "radio-group",
         "scroll-area",
         "select",
@@ -4167,11 +3979,6 @@
           "target": "@components/sarj/mockups/persona-pronunciation/pronunciation-terms.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -4180,11 +3987,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -4337,7 +4139,6 @@
         "field",
         "input-group",
         "kbd",
-        "navigation-menu",
         "scroll-area",
         "separator"
       ],
@@ -4353,11 +4154,6 @@
           "target": "@components/sarj/mockups/call-flagging/flag-call-dialog.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -4366,11 +4162,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -4529,7 +4320,6 @@
         "input-group",
         "item",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -4558,11 +4348,6 @@
           "target": "@components/sarj/shared/data-table.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -4586,11 +4371,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",
@@ -4746,7 +4526,6 @@
         "input",
         "input-group",
         "kbd",
-        "navigation-menu",
         "select",
         "separator",
         "sidebar",
@@ -4792,11 +4571,6 @@
           "target": "@components/sarj/mockups/language-switching/persona-picker.tsx"
         },
         {
-          "path": "src/components/shared/figure.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/figure.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -4815,11 +4589,6 @@
           "path": "src/components/shell/mockup-shell.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/mockup-shell.tsx"
-        },
-        {
-          "path": "src/components/shell/nav-figures.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shell/nav-figures.tsx"
         },
         {
           "path": "src/components/shell/nav-search.tsx",

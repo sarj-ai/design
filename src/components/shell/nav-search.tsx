@@ -78,7 +78,7 @@ const HAYSTACK: Hit[] = [
     title: entry.title,
   })),
   ...REELS.map((entry) => ({
-    group: "Reels",
+    group: "Reels showcase",
     href: entry.href,
     title: entry.title,
   })),

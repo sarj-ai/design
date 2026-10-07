@@ -61,7 +61,8 @@ const IN_PLACE = ["/design-system"]
 /** What the curtain calls the place a link goes to. */
 function labelFor(path: string, link: HTMLAnchorElement): string {
   if (path === "/") return "Design lab"
-  if (path === "/reels") return "Reels"
+  if (path === "/reels") return "Reels showcase"
+  if (path === "/changelog") return "Changelog"
   if (path.startsWith("/design-system")) return "Design system"
   const mockup = MOCKUPS.find((entry) => entry.href === path)
   if (mockup) return mockup.title
