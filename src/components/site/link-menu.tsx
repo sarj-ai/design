@@ -1,6 +1,6 @@
 "use client"
 
-import { GooMenu } from "@/components/site/goo-menu"
+import { CopyMenu } from "@/components/site/copy-menu"
 import { useCopy } from "@/components/site/use-copy"
 import { linearIssueUrl } from "@/lib/site/linear"
 import { mockupUrl } from "@/lib/site/registry"
@@ -19,9 +19,7 @@ import { ShareLinkIcon } from "@/components/shell/workspace-icons"
  * the other half of the same job: one is for going there, one is for handing
  * it to someone else.
  *
- * The mockup's own link leads, then a drop per ticket. Three columns of wider
- * drops, because a ticket ID is longer than a package manager's name and a
- * card can answer four tickets.
+ * The mockup's own link leads, then one row per ticket.
  */
 export function LinkMenu({
   slug,
@@ -32,17 +30,14 @@ export function LinkMenu({
   tickets: string[]
   title: string
 }) {
-  const { copied, copy } = useCopy()
+  const { copy } = useCopy()
   const page = mockupUrl(slug)
 
   return (
-    <GooMenu
+    <CopyMenu
       label={`Copy links for ${title}`}
       menuLabel="Copy links"
       icon={<ShareLinkIcon />}
-      copiedId={copied}
-      cols={3}
-      dropWidth={64}
       items={[
         {
           id: "mockup",

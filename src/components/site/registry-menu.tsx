@@ -1,6 +1,6 @@
 "use client"
 
-import { GooMenu } from "@/components/site/goo-menu"
+import { CopyMenu } from "@/components/site/copy-menu"
 import { useCopy } from "@/components/site/use-copy"
 import { INSTALL_COMMANDS, registryUrl } from "@/lib/site/registry"
 import { RegistryIcon } from "@/components/shell/workspace-icons"
@@ -10,8 +10,7 @@ import { RegistryIcon } from "@/components/shell/workspace-icons"
  *
  * Every mockup here is published as a shadcn registry item, so taking one is
  * a command rather than a copy-paste of a dozen files. The menu carries all
- * four package managers because the repo it lands in is not this one. Four
- * short words, so two columns of narrow drops.
+ * four package managers because the repo it lands in is not this one.
  */
 export function RegistryMenu({
   slug,
@@ -23,15 +22,14 @@ export function RegistryMenu({
   /** Set on the first card only — see `hey-click.tsx`. */
   tour?: string
 }) {
-  const { copied, copy } = useCopy()
+  const { copy } = useCopy()
   const url = registryUrl(slug)
 
   return (
-    <GooMenu
+    <CopyMenu
       label={`Install commands for ${title}`}
       menuLabel="Install commands"
       icon={<RegistryIcon />}
-      copiedId={copied}
       tour={tour}
       items={INSTALL_COMMANDS.map((manager) => ({
         id: manager.id,

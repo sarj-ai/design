@@ -13,13 +13,13 @@
  * selector.
  */
 
-/* One marker, two targets: the index puts `data-tour` on the install menu of
-   whichever card is first after the search, and both the trigger and the
-   drops it throws are addressable from it. `:not([inert])` is what makes the
-   third beat wait — `GooMenu` marks its drops inert while they are parked
-   inside the pill, so until they are really out there is nothing to point at
-   and the coach keeps riding the pointer. */
+/* The index marks the install menu of whichever card is first after the
+   search. The trigger carries `data-tour`; the open menu is portalled out of
+   the card, so it carries `data-tour-menu` instead. Until the menu is open
+   its rows are not in the DOM, so there is nothing to point at and the coach
+   keeps riding the pointer. */
 const INSTALL = '[data-tour="install"]'
+const INSTALL_ROWS = '[data-tour-menu="install"] [role="menuitem"]'
 
 export type Beat = {
   id: string
@@ -33,11 +33,9 @@ export type Beat = {
    */
   target?: string
   /**
-   * What moves it on. `reach` is the pointer arriving — the install menu
-   * opens on hover, so arriving *is* doing it, and asking for a click there
-   * would be asking for a click the menu does not need. `click` is a real
-   * click on the target. `button` is the coach's own, for a beat with nothing
-   * on the page to press.
+   * What moves it on. `reach` is the pointer arriving, for a target that
+   * acts on hover. `click` is a real click on the target. `button` is the
+   * coach's own, for a beat with nothing on the page to press.
    */
   advance: "reach" | "click" | "button"
   /** The button's words, when the coach's own button is what advances it. */
@@ -53,14 +51,14 @@ export const TOUR: Beat[] = [
   },
   {
     id: "open",
-    say: "Every card carries the command for its own screen. Bring your pointer to this one.",
+    say: "Every card carries the command for its own screen. Click this one.",
     target: INSTALL,
-    advance: "reach",
+    advance: "click",
   },
   {
     id: "pick",
     say: "Same install, four ways to run it. Click yours and it lands on your clipboard.",
-    target: `${INSTALL} [role="group"]:not([inert]) button`,
+    target: INSTALL_ROWS,
     advance: "click",
   },
   {
