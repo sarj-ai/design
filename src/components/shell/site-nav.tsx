@@ -10,6 +10,7 @@ import { NavSearch } from "@/components/shell/nav-search"
 import { SarjMark } from "@/components/shell/sarj-mark"
 import { DOCS_ROOT } from "@/lib/design-system/nav"
 import { MOCKUPS } from "@/lib/site/mockups-data"
+import { cn } from "@/lib/utils"
 
 /**
  * One piece of chrome for the whole lab: a pill that floats over every page.
@@ -19,9 +20,10 @@ import { MOCKUPS } from "@/lib/site/mockups-data"
  * a reader had to open a menu to find out where a link went, and the index
  * pages those menus opened already list the same things.
  *
- * Floating rather than a bar: the row is `pointer-events-none` and only the
- * pill takes the pointer back, so a page underneath scrolls the full width
- * and nothing has to leave a strip of itself unused.
+ * The pill floats in a band of its own. The band is the page's background,
+ * so at the top of a page it is invisible; once the page scrolls, content
+ * passes under the band rather than around the pill, and a hairline marks
+ * where the band ends.
  */
 
 const PLACES = [
@@ -44,20 +46,30 @@ export function SiteNav({
   title,
   eyebrow,
   actions,
+  className,
 }: {
   /** What this page is, when it is one thing — a mockup, or a reel. */
   title?: string
   eyebrow?: string
   /** This page's own controls, on the end of the pill. */
   actions?: React.ReactNode
+  /** The band's surface, when the page under it is not `bg-background`. */
+  className?: string
 }) {
   const active = placeOf(usePathname())
+  const scrolled = useScrolled()
 
   return (
-    <div className="pointer-events-none sticky top-0 z-nav flex justify-center p-4">
+    <div
+      className={cn(
+        "sticky top-0 z-nav flex justify-center border-b bg-background p-4 transition-colors duration-150 ease-out-cubic motion-reduce:transition-none",
+        !scrolled && "border-transparent",
+        className,
+      )}
+    >
       <nav
         aria-label="Design lab"
-        className="pointer-events-auto flex max-w-full items-center gap-1 rounded-2xl bg-background/90 p-1.5 ring-1 ring-foreground/15 backdrop-blur-sm"
+        className="flex max-w-full items-center gap-1 rounded-2xl bg-background p-1.5 ring-1 ring-foreground/15"
       >
         <Link
           aria-label="Design lab"
@@ -145,4 +157,18 @@ export function SiteNav({
       </nav>
     </div>
   )
+}
+
+/** Whether the window has scrolled off its top. */
+function useScrolled() {
+  const [scrolled, setScrolled] = React.useState(false)
+
+  React.useEffect(() => {
+    const update = () => setScrolled(window.scrollY > 0)
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    return () => window.removeEventListener("scroll", update)
+  }, [])
+
+  return scrolled
 }

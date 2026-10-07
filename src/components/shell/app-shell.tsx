@@ -393,10 +393,11 @@ export function AppShell({
       className="min-h-0 flex-1"
       style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
     >
-      {/* The sidebar pins to the viewport as it does in the app, so it clears
-          the mockup shell's own header rather than sliding under it. */}
+      {/* The sidebar pins to the viewport as it does in the app, so it
+          starts below the nav's band (84px: 16px of padding either side of
+          the 52px pill, plus its 1px rule) rather than sliding under it. */}
       <Sidebar
-        className={underShell ? "pt-12" : undefined}
+        className={underShell ? "pt-21" : undefined}
         collapsible="icon"
         variant="inset"
       >
