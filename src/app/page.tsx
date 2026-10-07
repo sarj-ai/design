@@ -59,7 +59,7 @@ export default function Home() {
         actions={<HeyClick />}
       />
 
-      <main className="mx-auto flex w-full max-w-350 flex-col gap-8 px-8 pb-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-8 pb-8">
         {          groups.map(({ surface, mockups }, group) => (
             <section
               key={surfaceId(surface)}
