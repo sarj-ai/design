@@ -1,6 +1,8 @@
 {
   "fingerprints": {
-    "callback-tool": "8c161b9e27e6ad6d"
+    "callback-tool": "8c161b9e27e6ad6d",
+    "release-32": "220ca45d0d3b7db6",
+    "sarj-motion": "cd33f0a4ee563b6d"
   },
   "height": 720,
   "width": 1280
