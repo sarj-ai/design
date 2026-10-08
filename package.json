@@ -47,7 +47,9 @@
     "prettier": "^3.9.6",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4.148.0"
+    "wrangler": "^4.148.0",
+    "braces": "3.0.3",
+    "patch-package": "8.0.1"
   },
   "scripts": {
     "dev": "next dev",
@@ -67,7 +69,9 @@
     "registry": "node scripts/build-registry.mjs && shadcn build",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare deploy"
+    "cf:deploy": "opennextjs-cloudflare deploy",
+    "postinstall": "patch-package --error-on-fail",
+    "test:security": "node --test --test-timeout=10000 scripts/braces-depth-guard.test.mjs"
   },
   "overrides": {
     "@tailwindcss/typography": {
