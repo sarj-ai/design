@@ -44,6 +44,10 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - run: npm ci
+      - name: Audit the complete dependency graph for critical vulnerabilities
+        run: npm audit --audit-level=critical
+      - name: Verify the braces security backport
+        run: npm run test:security
 
       # The same three gates AGENTS.md puts before a commit, in the same
       # order: lint is the design system, typecheck is the types, and the
