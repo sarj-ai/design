@@ -12,6 +12,7 @@ import {
   LanguageSkillIcon,
   Layers01Icon,
   LayoutTable01Icon,
+  LiveStreaming02Icon,
   Message01Icon,
   ShieldKeyIcon,
   SourceCodeIcon,
@@ -335,6 +336,16 @@ export const MOCKUPS: Mockup[] = [
       "People join an organization only by invite: members and pending invites, an optional invite link, Sarj creating an organization with its owner, and what the invited person sees.",
     icon: UserGroupIcon,
     tickets: ["DES-197"],
+  },
+  {
+    href: "/live-scenarios",
+    title: "Live scenario status and change warning",
+    meta: "Editor + index · in progress",
+    surface: "Scenario Edit",
+    description:
+      "A manual Live switch on the scenario editor, a Live chip wherever a scenario's status shows (editor, scenarios index with a Live filter, playground list), and the save review that warns before a change reaches the next call.",
+    icon: LiveStreaming02Icon,
+    tickets: ["DES-203"],
   },
   // `npm run new` appends new mockups above this line.
 ]
