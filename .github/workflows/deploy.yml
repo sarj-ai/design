@@ -15,13 +15,14 @@ on:
   # So a deploy can be re-run from the Actions tab without an empty commit.
   workflow_dispatch:
 
-# A newer push supersedes one still building; never let two deploys race.
+# Finish each active deployment and its Access check before another can start.
 concurrency:
   group: deploy-main
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -60,6 +61,16 @@ jobs:
 
       - name: Build for Workers
         run: npm run cf:build
+
+      - name: Require the current main revision before deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          main_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')"
+          if [ "$main_sha" != "$GITHUB_SHA" ]; then
+            echo "::error::main has advanced; deploy its current revision instead."
+            exit 1
+          fi
 
       - name: Deploy
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3
