@@ -45,7 +45,7 @@ type Surface = (typeof SURFACES)[number]["id"]
 export default function LiveScenariosPage() {
   const [surface, setSurface] = React.useState<Surface>("editor")
   const [caseId, setCaseId] = React.useState(EDITOR_CASES[0].id)
-  const [header, setHeader] = React.useState<HeaderVariant>("strip")
+  const [header, setHeader] = React.useState<HeaderVariant>("menu")
   const editorCase =
     EDITOR_CASES.find((entry) => entry.id === caseId) ?? EDITOR_CASES[0]
 

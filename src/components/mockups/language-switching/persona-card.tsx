@@ -5,7 +5,7 @@ import * as React from "react"
 import { PrimaryTabs } from "@/components/design-system/tabs-preview"
 import { LanguageSwitchSetting } from "@/components/mockups/language-switching/language-switch-setting"
 import { PersonaPicker } from "@/components/mockups/language-switching/persona-picker"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Separator } from "@/components/ui/separator"
 import { TabsContent } from "@/components/ui/tabs"
@@ -35,6 +35,7 @@ export function PersonaCard({
   onConfigChange,
   onLanguagesChange,
   start,
+  footer,
 }: {
   config: SwitchConfig
   invalid: Set<LanguageCode>
@@ -42,6 +43,8 @@ export function PersonaCard({
   onConfigChange: (next: SwitchConfig) => void
   onLanguagesChange: (next: ScenarioLanguage[]) => void
   start: LanguageCode
+  /** The card's own actions — Save sits inside the card, as on the platform. */
+  footer?: React.ReactNode
 }) {
   const [tab, setTab] = React.useState<string>(start)
 
@@ -94,6 +97,9 @@ export function PersonaCard({
           </>
         ) : null}
       </CardContent>
+      {footer ? (
+        <CardFooter className="justify-end">{footer}</CardFooter>
+      ) : null}
     </Card>
   )
 }

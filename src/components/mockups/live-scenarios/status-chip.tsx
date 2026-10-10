@@ -1,8 +1,23 @@
 import { Badge } from "@/components/ui/badge"
 
 /**
- * A scenario's status, one rule everywhere it shows — the editor, the
- * scenarios index and the playground list: a live scenario's chip says Live.
+ * Live as a pill, for the playground list: there it sits among the
+ * language chips on a card's second line, so it takes their shape.
+ */
+export function LiveBadge() {
+  return (
+    <Badge
+      className="bg-success-tint text-success-tint-foreground"
+      variant="secondary"
+    >
+      <span aria-hidden className="size-1.5 rounded-full bg-success" />
+      Live
+    </Badge>
+  )
+}
+
+/**
+ * A scenario's status on the index: a live scenario's chip says Live.
  *
  * Live takes the success tint and a dot, because it is the state the reader
  * has to notice before touching anything. Active drops to muted: it is what
@@ -24,17 +39,7 @@ export function StatusChip({
     )
   }
 
-  if (live) {
-    return (
-      <Badge
-        className="bg-success-tint text-success-tint-foreground"
-        variant="secondary"
-      >
-        <span aria-hidden className="size-1.5 rounded-full bg-success" />
-        Live
-      </Badge>
-    )
-  }
+  if (live) return <LiveBadge />
 
   return (
     <Badge className="bg-muted text-muted-foreground" variant="secondary">

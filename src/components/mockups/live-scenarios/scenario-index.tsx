@@ -44,7 +44,7 @@ import {
   DataTableHead,
   DataTableHeaderRow,
 } from "@/components/shared/data-table"
-import { FilterBar, ToggleFilter } from "@/components/shared/filter-bar"
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
 import { ListFooter } from "@/components/shared/list-footer"
 import { PageHeader } from "@/components/shared/page-header"
 import { PrimaryTabs } from "@/components/design-system/tabs-preview"
@@ -64,13 +64,19 @@ import {
 } from "@/lib/mockups/live-scenarios-data"
 
 /**
- * The scenarios index with what DES-203 adds: the Status column says Live
- * for a live scenario, and a Live filter narrows the list to them.
+ * The scenarios index with what DES-203 asks for — "badge, filter":
  *
- * The filter is a chip under the search, as every index filter is. It is an
- * on/off chip because there is nothing to choose — "not live" is everything
- * else in the list.
+ *  - The badge: a live scenario's Status chip says Live instead of Active.
+ *  - The filter: a chip under the search, as every index filter is in the
+ *    design system — "+ Live status", then "Live status: Live". Never a
+ *    dropdown: filters are chips. It is the Active view's alone, because a
+ *    deleted scenario is never live.
  */
+
+const LIVE_OPTIONS = [
+  { value: "live", label: "Live" },
+  { value: "not-live", label: "Not live" },
+]
 
 const VIEWS = [
   { id: "active", label: "Active", Icon: ActiveViewIcon },
@@ -80,11 +86,11 @@ const VIEWS = [
 export function ScenarioIndex() {
   const [view, setView] = React.useState("active")
   const [query, setQuery] = React.useState("")
-  const [liveOnly, setLiveOnly] = React.useState(false)
+  const [liveStatus, setLiveStatus] = React.useState<string | null>(null)
 
   const matches = (row: ScenarioRow) =>
     row.name.toLowerCase().includes(query.trim().toLowerCase()) &&
-    (!liveOnly || row.live !== null)
+    (liveStatus === null || (liveStatus === "live") === (row.live !== null))
 
   return (
     <main className="mx-auto flex w-full max-w-350 flex-col gap-4 p-8">
@@ -116,14 +122,13 @@ export function ScenarioIndex() {
             </div>
           </div>
 
-          {/* Deleted scenarios are never live, so the chip is the Active
-              view's alone. */}
           {view === "active" ? (
-            <FilterBar activeCount={liveOnly ? 1 : 0}>
-              <ToggleFilter
-                field="Live"
-                value={liveOnly}
-                onChange={setLiveOnly}
+            <FilterBar activeCount={liveStatus ? 1 : 0}>
+              <ChoiceFilter
+                field="Live status"
+                options={LIVE_OPTIONS}
+                value={liveStatus}
+                onChange={setLiveStatus}
               />
             </FilterBar>
           ) : null}
@@ -133,11 +138,16 @@ export function ScenarioIndex() {
           <ScenarioList
             rows={SCENARIOS.filter(matches)}
             deleted={false}
-            onClearLive={liveOnly ? () => setLiveOnly(false) : undefined}
+            onClearFilter={liveStatus ? () => setLiveStatus(null) : undefined}
           />
         </TabsContent>
         <TabsContent value="deleted">
-          <ScenarioList rows={DELETED.filter(matches)} deleted />
+          <ScenarioList
+            rows={DELETED.filter((row) =>
+              row.name.toLowerCase().includes(query.trim().toLowerCase()),
+            )}
+            deleted
+          />
         </TabsContent>
       </PrimaryTabs>
     </main>
@@ -147,12 +157,12 @@ export function ScenarioIndex() {
 function ScenarioList({
   rows,
   deleted,
-  onClearLive,
+  onClearFilter,
 }: {
   rows: ScenarioRow[]
   deleted: boolean
-  /** Set while the Live filter is on, for the no-results way out. */
-  onClearLive?: () => void
+  /** Set while a filter is on, for the no-results way out. */
+  onClearFilter?: () => void
 }) {
   const [pageSize, setPageSize] = React.useState(10)
   const [page, setPage] = React.useState(0)
@@ -176,13 +186,11 @@ function ScenarioList({
     return (
       <Empty>
         <EmptyHeader>
-          <EmptyTitle>
-            {onClearLive ? "No live scenarios" : "No scenarios match"}
-          </EmptyTitle>
+          <EmptyTitle>No scenarios match</EmptyTitle>
         </EmptyHeader>
-        {onClearLive ? (
+        {onClearFilter ? (
           <EmptyContent>
-            <Button variant="outline" onClick={onClearLive}>
+            <Button variant="outline" onClick={onClearFilter}>
               Clear filter
             </Button>
           </EmptyContent>

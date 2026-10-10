@@ -26,6 +26,23 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-10",
+    title: "A card's Save sits inside the card",
+    summary:
+      "A Save under a card reads as the page's, not the card's; the platform keeps every action in its box.",
+    changes: [
+      {
+        kind: "changed",
+        text: "Form actions: when a form is a card, its Cancel and Save go in the card's own CardFooter, end-aligned.",
+      },
+      {
+        kind: "fixed",
+        text: "The language-switching mockup's Save moved from under the persona card into its footer.",
+      },
+    ],
+    topics: ["forms"],
+  },
+  {
     date: "2026-10-07",
     title: "Lint enforces the system's own decisions",
     summary:

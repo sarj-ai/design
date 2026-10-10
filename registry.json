@@ -2651,6 +2651,7 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "react-day-picker",
         "sonner",
         "tailwind-merge"
       ],
@@ -2660,8 +2661,11 @@
         "badge",
         "breadcrumb",
         "button",
+        "button-group",
+        "calendar",
         "card",
         "collapsible",
+        "command",
         "dialog",
         "dropdown-menu",
         "empty",
@@ -2669,12 +2673,14 @@
         "input",
         "input-group",
         "item",
+        "popover",
         "select",
         "separator",
         "sidebar",
         "skeleton",
         "switch",
         "table",
+        "tabs",
         "tooltip"
       ],
       "files": [
@@ -2692,6 +2698,16 @@
           "path": "src/components/design-system/icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
         },
         {
           "path": "src/components/mockups/org-access/icons.tsx",
@@ -2717,6 +2733,11 @@
           "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
         },
         {
           "path": "src/components/shared/icon.tsx",
@@ -2772,12 +2793,16 @@
       "cssVars": {
         "theme": {
           "color-warning": "var(--warning)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
           "color-orb-deep": "var(--orb-deep)",
           "color-orb-body": "var(--orb-body)",
           "color-orb-light": "var(--orb-light)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
           "orb-deep": "oklch(0.499 0.265 287.9)",
           "orb-body": "oklch(0.67 0.172 295.3)",
           "orb-light": "oklch(0.825 0.086 302.1)"

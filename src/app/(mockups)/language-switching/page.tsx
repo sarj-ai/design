@@ -98,10 +98,8 @@ function ScenarioPersona({ preset }: { preset: Preset }) {
           onConfigChange={setConfig}
           onLanguagesChange={setLanguages}
           start={preset.start}
+          footer={<Button onClick={save}>Save</Button>}
         />
-        <div className="flex justify-end">
-          <Button onClick={save}>Save</Button>
-        </div>
       </div>
     </div>
   )

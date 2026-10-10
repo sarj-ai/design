@@ -51,8 +51,8 @@ import { cn } from "@/lib/utils"
  */
 
 export const HEADER_VARIANTS = [
-  { id: "strip", label: "Status strip" },
   { id: "menu", label: "Status menu" },
+  { id: "strip", label: "Status strip" },
 ] as const
 
 export type HeaderVariant = (typeof HEADER_VARIANTS)[number]["id"]

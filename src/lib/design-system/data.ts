@@ -735,7 +735,7 @@ export const FORM_RULES: Rule[] = [
   {
     label: "Form actions",
     detail:
-      "An end-aligned footer: Cancel as outline, then the primary. A long editor swaps the footer for a bar that appears only once something is dirty.",
+      "An end-aligned footer: Cancel as outline, then the primary. When the form is a card, the footer is the card's own CardFooter, inside the box — never a loose button under it, which reads as belonging to the page rather than to that card. A long editor swaps the footer for a bar that appears only once something is dirty.",
   },
   {
     label: "Disabled and read-only",

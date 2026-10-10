@@ -9,17 +9,16 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import { Item, ItemContent, ItemTitle } from "@/components/ui/item"
-import { StatusChip } from "@/components/mockups/live-scenarios/status-chip"
+import { LiveBadge } from "@/components/mockups/live-scenarios/status-chip"
 import { SearchScenariosIcon } from "@/components/mockups/live-scenarios/icons"
 import { SCENARIOS } from "@/lib/mockups/live-scenarios-data"
 import { cn } from "@/lib/utils"
 
 /**
  * The playground's scenario list — the column the product shows beside the
- * call — with the Live chip on a live scenario, as Kidus asked for on
- * PROD-234. A test call from here runs the scenario callers hear, so the
- * chip is worth seeing before picking one. Only a live scenario carries a
- * chip: every scenario in this list is active, so "Active" would say nothing.
+ * call — with a Live pill on a live scenario's second line, before its languages, as Kidus asked for on
+ * PROD-234. A test call from here runs the scenario callers hear, so it is
+ * worth seeing before picking one.
  *
  * The call panel to the right, and the rest of the column, are unchanged
  * and left out.
@@ -75,7 +74,7 @@ export function PlaygroundList() {
               <ItemContent>
                 <ItemTitle className="truncate">{row.name}</ItemTitle>
                 <span className="flex items-center gap-1">
-                  {row.live ? <StatusChip live /> : null}
+                  {row.live ? <LiveBadge /> : null}
                   {row.languages.map((code) => (
                     <Badge
                       key={code}
