@@ -17,8 +17,10 @@ import {
 } from "@/components/ui/command"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Field, FieldLabel } from "@/components/ui/field"
@@ -185,8 +187,10 @@ const SEARCH_FROM = 8
 
 /**
  * The one list every select filter opens, many-value or one-value, so the two
- * cannot drift apart: same popover, same width, same rows, the tick on the
- * right. A long list searches; a set many-value list ends in Clear.
+ * cannot drift apart: same rows, the tick on the right. A short list is the
+ * standard dropdown menu, so it looks like every other dropdown in the
+ * product; a long one needs a search box, so it is a command list. A set
+ * many-value list ends in Clear.
  */
 function OptionList({
   button,
@@ -210,6 +214,38 @@ function OptionList({
   /* Ticked ones float to the top of a long list, so they are never scrolled
      out of sight — but only when it opens, not under the pointer. */
   const [order, setOrder] = React.useState(options)
+
+  if (options.length < SEARCH_FROM) {
+    return (
+      <DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>{button}</DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="start"
+          className="w-auto min-w-(--radix-dropdown-menu-trigger-width)"
+        >
+          {options.map((option) => (
+            <DropdownMenuCheckboxItem
+              checked={selected.includes(option.value)}
+              key={option.value}
+              onSelect={(event) => {
+                /* A many-value list stays open while ticking. */
+                if (!closeOnSelect) event.preventDefault()
+                onSelect(option.value)
+              }}
+            >
+              {option.label}
+            </DropdownMenuCheckboxItem>
+          ))}
+          {onClear && selected.length ? (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={onClear}>Clear</DropdownMenuItem>
+            </>
+          ) : null}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
 
   return (
     <Popover

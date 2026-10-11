@@ -19,7 +19,9 @@ import {
   SparklesIcon,
   TelephoneIcon,
   Timer01Icon,
+  UserEdit01Icon,
   UserGroupIcon,
+  VoiceIdIcon,
 } from "@hugeicons/core-free-icons"
 import type { IconSvgElement } from "@hugeicons/react"
 
@@ -78,6 +80,12 @@ export type Mockup = {
   /** Linear IDs the mockup answers, e.g. "DES-149". */
   tickets: string[]
   /**
+   * When it joined the index, as an ISO timestamp — the index sorts on it,
+   * newest first. Taken from the commit that added the entry; the first
+   * sixteen arrived together in one import, so they share one.
+   */
+  added: string
+  /**
    * Where `npm run registry` starts following imports for this mockup, as a
    * path under `src/`. Defaults to the route, which pulls the workspace
    * chrome in with it — right for a screen, wrong for a mockup whose
@@ -96,6 +104,7 @@ export const MOCKUPS: Mockup[] = [
       "The Transfer tool configured with more than one destination: a card per route with its own cases, number and keypad key, an overlap warning when two routes read alike, and the shared settings each route can override.",
     icon: CallOutgoing01Icon,
     tickets: ["DES-161"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/knowledge-base",
@@ -108,6 +117,7 @@ export const MOCKUPS: Mockup[] = [
     /* Both have this page attached in Linear: DES-136, and DES-149, the KB
        experience upgrade this design answers. */
     tickets: ["DES-136", "DES-149"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/call-turn-timing",
@@ -118,6 +128,7 @@ export const MOCKUPS: Mockup[] = [
       "The turn detection panel on a call's Model Settings tab: which detection path actually ran, the minimum and maximum wait that applied and where each came from, and how many turns reached the maximum — including the first one.",
     icon: Timer01Icon,
     tickets: ["DES-173"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/conversations-revamp",
@@ -131,6 +142,7 @@ export const MOCKUPS: Mockup[] = [
        card: the index page and the drawer are the same screen, and the
        scheduling and status work both land inside it. */
     tickets: ["DES-110", "DES-134", "DES-147", "DES-157"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/personas-depth",
@@ -141,6 +153,7 @@ export const MOCKUPS: Mockup[] = [
       "Depth pass on the personas surface: index with search, filters and grouping, restructured create/edit, voice library with previews, and scenario assignment.",
     icon: SparklesIcon,
     tickets: ["DES-117", "DES-135"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     /* Under Personas rather than Settings, and directly after the index: what
@@ -157,6 +170,7 @@ export const MOCKUPS: Mockup[] = [
       "Mid-turn listener cues configured beside the existing post-turn filler words: a weighted cue mix that always totals 100%, an exact response-frequency slider with the recommended range marked, timing limits, per-language approved clips, and the inherit-then-override lifecycle across global settings and one persona.",
     icon: AudioWave01Icon,
     tickets: ["DIS-63", "DES-172"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     /* Beside listener-cues, and for the same reason: this is the persona
@@ -172,6 +186,7 @@ export const MOCKUPS: Mockup[] = [
       "Phrase-response mappings inside the existing Filler words drawer: several caller phrases map to one deterministic acknowledgment, kept exactly as typed so the voice pronounces it right. Priority ordering, whole-utterance or within-utterance matching, conflict validation, and a persona override that replaces the global set.",
     icon: Message01Icon,
     tickets: ["DES-171", "DIS-21"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/model-catalog",
@@ -182,6 +197,7 @@ export const MOCKUPS: Mockup[] = [
       "The model catalog Sarj staff use to add an LLM without an engineer: a table per modality, a two-path add flow that fetches a provider's live model list where one exists and falls back to a manual ID plus connection test where it does not, and deactivate-reactivate that never breaks an org already configured to a model. TTS is activate-only — no add flow — and STT is not here at all.",
     icon: SparklesIcon,
     tickets: ["DES-169"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/eou-timing",
@@ -192,6 +208,7 @@ export const MOCKUPS: Mockup[] = [
       "Minimum and maximum wait as configurable values: the global default shown beside the detection model that uses them, and the persona that inherits until it overrides. Bounded ranges, plain-language help and the out-of-band warning, scoped to the PRD's requirements.",
     icon: Timer01Icon,
     tickets: ["DES-173"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/scenario-single-screen",
@@ -202,6 +219,7 @@ export const MOCKUPS: Mockup[] = [
       "The scenario editor with no tabs: the prompt and first message as the page, every other setting a one-line summary in a rail that opens a drawer to edit.",
     icon: Layers01Icon,
     tickets: [],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/connected-apps",
@@ -212,6 +230,7 @@ export const MOCKUPS: Mockup[] = [
       "An organization's own custom integrations as connected apps, and the access tokens each one authenticates with: scoped presets over the real permission enum, an expiry, and the one-time secret reveal that is the only moment the token can be copied.",
     icon: Key01Icon,
     tickets: ["DES-146", "DIS-24"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/configure-report",
@@ -222,6 +241,7 @@ export const MOCKUPS: Mockup[] = [
       "The approved Configure Report dialog: a template picker with save and set-as-default, and three groups of export columns as reorderable chips — each group's Add opening a searchable checkbox list with Select all, so a group is filled in one pass instead of one column per reopen.",
     icon: DocumentAttachmentIcon,
     tickets: ["PROD-289", "DES-155"],
+    added: "2026-09-07T18:56+05:30",
     /* The dialog is the deliverable. Installing it should not also install a
        Reports page and the app sidebar the consumer already has. */
     registryEntry:
@@ -236,6 +256,7 @@ export const MOCKUPS: Mockup[] = [
       "The three roles redefined as distinct permission bundles over the platform's real 39-scope taxonomy: a matrix a Sarj super admin edits in place, with what each change costs before it applies.",
     icon: ShieldKeyIcon,
     tickets: ["DES-170", "DIS-15"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/behavioral-alerts",
@@ -246,6 +267,7 @@ export const MOCKUPS: Mockup[] = [
       "Behavioural and emotional flags an admin defines per scenario, and the post-call analyst's detections beside a caller-experience card on the call detail.",
     icon: Alert02Icon,
     tickets: ["DES-187"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/call-retry",
@@ -256,6 +278,7 @@ export const MOCKUPS: Mockup[] = [
       "One retry configuration owned by the scenario — how many attempts a call gets, how long between them, and the retry window with its timezone — plus the batch-calls override that inherits every value until it is switched on.",
     icon: ArrowReloadHorizontalIcon,
     tickets: ["DES-145", "DIS-18"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/phone-numbers",
@@ -266,6 +289,7 @@ export const MOCKUPS: Mockup[] = [
       "The phone numbers admin index and its three tabs — call activity, outbound trunk assignments and provisioned numbers — with every table on the platform-consistency pattern the revamp only reached one of them with.",
     icon: TelephoneIcon,
     tickets: ["DES-188", "INT-78"],
+    added: "2026-09-07T18:56+05:30",
   },
   {
     href: "/add-voice",
@@ -276,6 +300,7 @@ export const MOCKUPS: Mockup[] = [
       "A voice entering the global library carries the voice it falls back to, so a provider outage swaps the voice instead of dropping the call to silence. Display name, vibe, language and gender, then the TTS provider config that renders it, then the fallback that covers it.",
     icon: AiVoiceIcon,
     tickets: ["DES-159"],
+    added: "2026-09-10T10:26+05:30",
   },
   {
     href: "/variable-mentions",
@@ -286,6 +311,7 @@ export const MOCKUPS: Mockup[] = [
       "The @ mention flow that replaces typed {{brackets}}: a caret-anchored picker grouped by where a value comes from, the inserted variable as an inline chip, and three chip colour treatments side by side so the direction can be picked on the live editor.",
     icon: AtIcon,
     tickets: ["DES-185"],
+    added: "2026-09-14T14:37+05:30",
   },
   {
     href: "/persona-pronunciation",
@@ -296,6 +322,7 @@ export const MOCKUPS: Mockup[] = [
       "The edit persona dialog rebuilt so pronunciation gets room: identity, voice cards, behavior toggles and end-call-on-silence up top, then a searchable pronunciation table with an always-visible add row, per-term playback, inline edit, delete and bulk upload.",
     icon: LanguageSkillIcon,
     tickets: ["DES-148"],
+    added: "2026-09-15T14:36+05:30",
   },
   {
     href: "/call-flagging",
@@ -306,6 +333,7 @@ export const MOCKUPS: Mockup[] = [
       "Flag this call: a pop-up that files a moment of a call under one of the ten DIS-50 parent categories and any number of its subcategories. The first row ticked commits the flag to its parent and every other group dims; ticking a row in another group moves the flag there and drops the old ticks. The footer reads the flag back before it is saved. Latency carries a Not sure row because its subcategories are optional; the four parents with none are plain rows under the divider.",
     icon: Flag02Icon,
     tickets: ["DES-167"],
+    added: "2026-09-17T10:35+05:30",
   },
   {
     href: "/developers",
@@ -316,6 +344,7 @@ export const MOCKUPS: Mockup[] = [
       "One place for building on Sarj: a quickstart that places a call through the public API, API keys, webhooks and variables as tabs of one page.",
     icon: SourceCodeIcon,
     tickets: [],
+    added: "2026-09-28T19:43+05:30",
   },
   {
     href: "/language-switching",
@@ -326,6 +355,7 @@ export const MOCKUPS: Mockup[] = [
       "What the voice does when a caller changes language mid-call: keep it, or hand off to a persona for the new language.",
     icon: LanguageSkillIcon,
     tickets: ["DES-199"],
+    added: "2026-10-07T13:54+05:30",
   },
   {
     href: "/org-access",
@@ -336,6 +366,7 @@ export const MOCKUPS: Mockup[] = [
       "People join an organization only by invite: members and pending invites, an optional invite link, Sarj creating an organization with its owner, and what the invited person sees.",
     icon: UserGroupIcon,
     tickets: ["DES-197"],
+    added: "2026-10-07T16:09+05:30",
   },
   {
     href: "/live-scenarios",
@@ -346,6 +377,29 @@ export const MOCKUPS: Mockup[] = [
       "A manual Live switch on the scenario editor, a Live chip wherever a scenario's status shows (editor, scenarios index with a Live filter, playground list), and the save review that warns before a change reaches the next call.",
     icon: LiveStreaming02Icon,
     tickets: ["DES-203"],
+    added: "2026-10-08T09:48+05:30",
+  },
+  {
+    href: "/persona-name-required",
+    title: "Blank persona name on save",
+    meta: "Dialog · ready for dev",
+    surface: "Personas",
+    description:
+      "Saving the edit persona dialog with a blank name keeps it open: the name field turns red, takes focus, and shows Agent name is required above it until a name is typed.",
+    icon: UserEdit01Icon,
+    tickets: ["PROD-581"],
+    added: "2026-10-10T10:27:06.570Z",
+  },
+  {
+    href: "/voice-cloning",
+    title: "Voice cloning on the platform",
+    meta: "Flow · in progress",
+    surface: "Personas",
+    description:
+      "Clone a voice from a 6–20 second sample: record or upload, check the transcript, hear the clone before naming it, consent, and pick it on a persona. Pending publish, failure and delete-while-in-use states included.",
+    icon: VoiceIdIcon,
+    tickets: ["DES-198", "INT-191", "PLT-4472"],
+    added: "2026-10-11T06:44:51.851Z",
   },
   // `npm run new` appends new mockups above this line.
 ]
@@ -467,4 +521,38 @@ export function groupBySurface(
         (a, b) => mockups.indexOf(a.mockups[0]) - mockups.indexOf(b.mockups[0]),
       )
     : groups
+}
+
+/** How the index lays the list out: by time, flat, or grouped by section. */
+export type Order = "newest" | "oldest" | "section"
+
+/**
+ * The list in time order. Mockups that share a timestamp keep their place in
+ * `MOCKUPS`, later meaning newer.
+ */
+export function sortByAdded(
+  mockups: Mockup[],
+  order: "newest" | "oldest",
+): Mockup[] {
+  const sign = order === "newest" ? -1 : 1
+  return [...mockups].sort(
+    (a, b) =>
+      sign *
+      (Date.parse(a.added) - Date.parse(b.added) ||
+        MOCKUPS.indexOf(a) - MOCKUPS.indexOf(b)),
+  )
+}
+
+/**
+ * The date a card shows, e.g. "8 Oct 2026". The order uses the full time;
+ * the card only needs the day. The zone is fixed so the prerendered page and
+ * the browser print the same day.
+ */
+export function addedLabel(mockup: Mockup) {
+  return new Date(mockup.added).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Riyadh",
+  })
 }

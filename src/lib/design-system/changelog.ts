@@ -43,6 +43,22 @@ export const CHANGELOG: ChangelogEntry[] = [
     topics: ["forms"],
   },
   {
+    date: "2026-10-10",
+    title: "A filter chip's short list opens as the standard dropdown",
+    summary:
+      "Its list used a command list's padding, so it looked unlike every other dropdown in the product.",
+    changes: [
+      {
+        kind: "changed",
+        text: "Under eight options, a select filter's list is the dropdown menu primitive: same rows, padding and tick as Select.",
+      },
+      {
+        kind: "changed",
+        text: "Eight options or more keep the command list, because they need the search box.",
+      },
+    ],
+  },
+  {
     date: "2026-10-07",
     title: "Lint enforces the system's own decisions",
     summary:

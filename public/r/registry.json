@@ -2998,6 +2998,330 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "persona-name-required",
+      "type": "registry:block",
+      "title": "Blank persona name on save",
+      "description": "Saving the edit persona dialog with a blank name keeps it open: the name field turns red, takes focus, and shows Agent name is required above it until a name is typed.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "dialog",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "radio-group",
+        "scroll-area",
+        "select",
+        "switch",
+        "table",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/persona-name-required/page.tsx",
+          "type": "registry:page",
+          "target": "app/persona-name-required/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-name-required/edit-persona-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-name-required/edit-persona-dialog.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-name-required/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-name-required/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/persona-name-required/pronunciation-terms.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/persona-name-required/pronunciation-terms.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/persona-name-required-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/persona-name-required-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "voice-cloning",
+      "type": "registry:block",
+      "title": "Voice cloning on the platform",
+      "description": "Clone a voice from a 6–20 second sample: record or upload, check the transcript, hear the clone before naming it, consent, and pick it on a persona. Pending publish, failure and delete-while-in-use states included.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "class-variance-authority",
+        "clsx",
+        "motion",
+        "radix-ui",
+        "react-day-picker",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "calendar",
+        "card",
+        "checkbox",
+        "collapsible",
+        "command",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "popover",
+        "progress",
+        "radio-group",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "spinner",
+        "stepper",
+        "switch",
+        "table",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/voice-cloning/page.tsx",
+          "type": "registry:page",
+          "target": "app/voice-cloning/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/call-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/call-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-hint.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-hint.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/multi-step-form.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/multi-step-form.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/audio.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/audio.ts"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/clone-voice-flow.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/clone-voice-flow.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/details-step.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/details-step.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/persona-voice.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/persona-voice.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/sample-step.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/sample-step.tsx"
+        },
+        {
+          "path": "src/components/mockups/voice-cloning/voice-library.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/voice-cloning/voice-library.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/list-footer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/list-footer.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/design-system/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/design-system/data.ts"
+        },
+        {
+          "path": "src/lib/mockups/voice-cloning-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/voice-cloning-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-success-foreground": "var(--success-foreground)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-foreground": "oklch(0.985 0 0)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-base": {
+          "z-index": "var(--z-base)"
+        },
+        "@utility z-raised": {
+          "z-index": "var(--z-raised)"
+        },
+        "@utility z-sticky": {
+          "z-index": "var(--z-sticky)"
+        },
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        "@utility z-overlay": {
+          "z-index": "var(--z-overlay)"
+        },
+        "@utility z-modal": {
+          "z-index": "var(--z-modal)"
+        },
+        "@utility z-popover": {
+          "z-index": "var(--z-popover)"
+        },
+        "@utility z-toast": {
+          "z-index": "var(--z-toast)"
+        },
+        "@utility z-tooltip": {
+          "z-index": "var(--z-tooltip)"
+        },
+        ":root": {
+          "--z-base": "0",
+          "--z-raised": "10",
+          "--z-sticky": "20",
+          "--z-nav": "30",
+          "--z-overlay": "40",
+          "--z-modal": "50",
+          "--z-popover": "60",
+          "--z-toast": "70",
+          "--z-tooltip": "80"
+        }
+      }
     }
   ]
 }

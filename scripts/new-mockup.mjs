@@ -148,6 +148,7 @@ function registryEntry({
       "${description}",
     icon: ${icon},
     tickets: [${list}],
+    added: "${new Date().toISOString()}",
   },
 `
 }
