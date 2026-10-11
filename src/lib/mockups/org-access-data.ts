@@ -112,6 +112,9 @@ export const ELSEWHERE: Record<string, string> = {
 export const LINK_EXPIRY = ["1 day", "7 days", "30 days"] as const
 export type LinkExpiry = (typeof LINK_EXPIRY)[number]
 
+export const RETENTIONS = ["2 years", "5 years", "10 years"] as const
+export type Retention = (typeof RETENTIONS)[number]
+
 export type Organization = {
   id: string
   name: string
@@ -121,31 +124,41 @@ export type Organization = {
   owner: string | null
   ownerPending?: boolean
   members: number
+  /** How long its calls are kept, as the platform labels it. */
+  retention: Retention
+  /** Whether it overrides the global settings. */
+  customSettings: boolean
   /** Who could be made owner, for an organization without one. */
   candidates?: { name: string; group: Group }[]
 }
 
 export const ORGANIZATIONS: Organization[] = [
   {
-    id: "o1",
+    id: "3f9c2a71-5b0e-4d8a-9e21-7c4f0b6d1a92",
     name: "Zain KSA",
     domain: "sa.zain.com",
     owner: "Fatimah Al-Qahtani",
     members: 6,
+    retention: "5 years",
+    customSettings: true,
   },
   {
-    id: "o2",
+    id: "8a1d4e06-2c7b-4f39-b1e5-0d9a6c3f7e48",
     name: "Yaqoot",
     domain: "sa.zain.com",
     owner: "Abdullah Al-Rashid",
     members: 3,
+    retention: "2 years",
+    customSettings: false,
   },
   {
-    id: "o3",
+    id: "c27e9b54-6f1a-4b83-8d0c-e5a2f4719b36",
     name: "Saudia",
     domain: "saudia.com",
     owner: null,
     members: 81,
+    retention: "10 years",
+    customSettings: true,
     candidates: [
       { name: "Turki Al-Shammari", group: "Org Admin" },
       { name: "Hind Al-Subaie", group: "Org Admin" },
@@ -153,22 +166,47 @@ export const ORGANIZATIONS: Organization[] = [
     ],
   },
   {
-    id: "o4",
+    id: "e5b03f82-9d4c-47a1-a6e8-1f7c2b0d5e94",
     name: "Al Rajhi Bank",
     domain: "alrajhibank.com.sa",
     owner: null,
     members: 23,
+    retention: "10 years",
+    customSettings: true,
     candidates: [
       { name: "Abeer Al-Juhani", group: "Org Admin" },
       { name: "Saad Al-Amri", group: "Editor" },
     ],
   },
   {
-    id: "o5",
+    id: "1d6a8c39-4e2f-4b70-95d3-a8e0c7f2b615",
     name: "Rawabi Holding",
     domain: "rawabi.com",
     owner: "Huda Al-Saleh",
     members: 9,
+    retention: "2 years",
+    customSettings: false,
+  },
+]
+
+/** People with an account and no organization, as Sarj's admin page
+    lists them. */
+export type UnassignedUser = {
+  id: string
+  email: string
+  role: Group
+}
+
+export const UNASSIGNED_USERS: UnassignedUser[] = [
+  {
+    id: "7b2e0c94-1a5d-4f83-b6c7-2d9e8f1a0c35",
+    email: "a.alotaibi@stc.com.sa",
+    role: "Editor",
+  },
+  {
+    id: "f40a6d18-8c3e-4b29-a7d1-5e6b9c2f0a83",
+    email: "m.alqahtani@flynas.com",
+    role: "Viewer",
   },
 ]
 

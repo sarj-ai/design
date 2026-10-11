@@ -1,12 +1,14 @@
 "use client"
 
 import {
+  Building02Icon,
   Copy01Icon,
   Link04Icon,
   MoreHorizontalIcon,
   PlusSignIcon,
   Search01Icon,
   UserAdd01Icon,
+  UserQuestion01Icon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
@@ -27,3 +29,11 @@ export const CreateOrganizationIcon = icon(
   PlusSignIcon,
   "CreateOrganizationIcon",
 )
+
+/* Sarj's organizations list: its two views, and copying a row's ID. */
+export const OrganizationsTabIcon = icon(Building02Icon, "OrganizationsTabIcon")
+export const UnassignedUsersIcon = icon(
+  UserQuestion01Icon,
+  "UnassignedUsersIcon",
+)
+export const CopyIdIcon = icon(Copy01Icon, "CopyIdIcon")
