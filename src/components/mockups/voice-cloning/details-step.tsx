@@ -2,18 +2,17 @@
 
 import * as React from "react"
 
-import { FieldHint } from "@/components/design-system/field-hint"
+import { errorId, FieldHeader } from "@/components/design-system/field-header"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -95,8 +94,13 @@ export function DetailsStep({
 
   return (
     <div className="flex flex-col gap-6">
-      <Item variant="muted">
-        <ItemMedia>
+      {/* The same shape as Script on step 1 — a label, then the words in a
+          muted panel — so the reader sees the line they read become the
+          line the clone says. One line of text beside the button, so they
+          centre on each other. */}
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium">Preview</span>
+        <div className="flex items-center gap-4 rounded-lg bg-muted p-4">
           <Button
             aria-label={playback.playing ? "Pause preview" : "Play preview"}
             onClick={playback.toggle}
@@ -104,18 +108,19 @@ export function DetailsStep({
           >
             {playback.playing ? <PauseVoiceIcon /> : <PlayVoiceIcon />}
           </Button>
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle>Preview</ItemTitle>
-          <ItemDescription dir="auto">{PREVIEW_LINE}</ItemDescription>
-        </ItemContent>
-      </Item>
+          <p className="flex-1 text-base leading-relaxed" dir="rtl">
+            {PREVIEW_LINE}
+          </p>
+        </div>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field>
-          <FieldLabel htmlFor="clone-name">Name</FieldLabel>
-          {errors?.name ? <FieldError>{errors.name}</FieldError> : null}
+          <FieldHeader error={errors?.name} htmlFor="clone-name">
+            Name
+          </FieldHeader>
           <Input
+            aria-describedby={errors?.name ? errorId("clone-name") : undefined}
             aria-invalid={errors?.name ? true : undefined}
             dir="auto"
             id="clone-name"
@@ -211,13 +216,15 @@ export function DetailsStep({
             id="clone-publish"
             onCheckedChange={(checked) => set("publish", checked)}
           />
-          <FieldHint
-            className="flex-1"
-            hint="Sends a request. The voice stays in Sarj, usable, until someone with publish access approves it."
-            htmlFor="clone-publish"
-          >
-            Request for all organizations
-          </FieldHint>
+          <FieldContent>
+            <FieldLabel htmlFor="clone-publish">
+              Request for all organizations
+            </FieldLabel>
+            <FieldDescription>
+              Sends a request. The voice stays in Sarj, usable, until someone
+              with publish access approves it.
+            </FieldDescription>
+          </FieldContent>
         </Field>
       ) : null}
 

@@ -3090,7 +3090,6 @@
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
-        "class-variance-authority",
         "clsx",
         "motion",
         "radix-ui",
@@ -3125,7 +3124,6 @@
         "sidebar",
         "skeleton",
         "spinner",
-        "stepper",
         "switch",
         "table",
         "textarea",
@@ -3144,6 +3142,16 @@
           "target": "@components/sarj/design-system/call-table.tsx"
         },
         {
+          "path": "src/components/design-system/creation-flow.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/creation-flow.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-header.tsx"
+        },
+        {
           "path": "src/components/design-system/field-hint.tsx",
           "type": "registry:component",
           "target": "@components/sarj/design-system/field-hint.tsx"
@@ -3152,11 +3160,6 @@
           "path": "src/components/design-system/icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/design-system/icons.tsx"
-        },
-        {
-          "path": "src/components/design-system/multi-step-form.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/design-system/multi-step-form.tsx"
         },
         {
           "path": "src/components/mockups/voice-cloning/audio.ts",
@@ -3219,6 +3222,11 @@
           "target": "@components/sarj/shared/page-header.tsx"
         },
         {
+          "path": "src/components/shared/recording-indicator.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/recording-indicator.tsx"
+        },
+        {
           "path": "src/components/shell/app-shell-icons.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shell/app-shell-icons.tsx"
@@ -3258,7 +3266,6 @@
         "theme": {
           "color-warning": "var(--warning)",
           "color-success": "var(--success)",
-          "color-success-foreground": "var(--success-foreground)",
           "color-primary-tint": "var(--primary-tint)",
           "color-primary-tint-foreground": "var(--primary-tint-foreground)",
           "color-success-tint": "var(--success-tint)",
@@ -3271,7 +3278,6 @@
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
           "success": "oklch(0.627 0.17 149.2)",
-          "success-foreground": "oklch(0.985 0 0)",
           "primary-tint": "oklch(0.948 0.019 291.8)",
           "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
           "success-tint": "oklch(0.945 0.045 149.2)",

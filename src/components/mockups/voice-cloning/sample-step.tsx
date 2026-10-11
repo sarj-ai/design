@@ -2,22 +2,27 @@
 
 import * as React from "react"
 
-import { FieldHint } from "@/components/design-system/field-hint"
+import { errorId, FieldHeader } from "@/components/design-system/field-header"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Field, FieldError } from "@/components/ui/field"
+import { Field, FieldDescription, FieldError } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
+  ItemFooter,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  RecordingIndicator,
+  useMicrophoneLevels,
+} from "@/components/shared/recording-indicator"
 import {
   formatSeconds,
   playTone,
@@ -89,9 +94,27 @@ export function SampleStep({
 }) {
   const fileInput = React.useRef<HTMLInputElement>(null)
 
-  /* 3, 2, 1, then the start tone and capture. */
+  /* The microphone opens with the countdown, not with the first recorded
+     frame, so the browser's permission prompt never eats into the take. */
+  const mic = useMicrophoneLevels(
+    capture.kind === "countdown" || capture.kind === "recording",
+  )
+
+  /* No microphone, or the reader said no: back to the two choices, with the
+     way that needs no microphone still open. */
   React.useEffect(() => {
-    if (capture.kind !== "countdown") return
+    if (mic.state !== "unavailable") return
+    setCapture({
+      kind: "idle",
+      error:
+        "The microphone is off. Allow it in your browser to record, or upload a file.",
+    })
+  }, [mic.state, setCapture])
+
+  /* 3, 2, 1 — counted only once the microphone is live — then the start
+     tone and capture. */
+  React.useEffect(() => {
+    if (capture.kind !== "countdown" || mic.state !== "live") return
     const timer = setTimeout(() => {
       if (capture.count > 1) {
         setCapture({ kind: "countdown", count: capture.count - 1 })
@@ -101,7 +124,7 @@ export function SampleStep({
       setCapture({ kind: "recording", startedAt: Date.now(), elapsed: 0 })
     }, 1000)
     return () => clearTimeout(timer)
-  }, [capture, setCapture])
+  }, [capture, mic.state, setCapture])
 
   const finish = React.useCallback(
     (elapsed: number) => {
@@ -150,14 +173,18 @@ export function SampleStep({
   }, [capture, finish, setCapture])
 
   /* Transcription comes back a moment after the take lands. */
-  const transcribing = capture.kind === "take" && capture.take.transcript === null
+  const transcribing =
+    capture.kind === "take" && capture.take.transcript === null
   React.useEffect(() => {
     if (!transcribing) return
     const timer = setTimeout(
       () =>
         setCapture((current) =>
           current.kind === "take"
-            ? { kind: "take", take: { ...current.take, transcript: TRANSCRIPT } }
+            ? {
+                kind: "take",
+                take: { ...current.take, transcript: TRANSCRIPT },
+              }
             : current,
         ),
       1200,
@@ -186,7 +213,8 @@ export function SampleStep({
     if (seconds === null) {
       setCapture({
         kind: "idle",
-        error: "That file couldn’t be played. Upload a WAV, MP3, FLAC or OGG file.",
+        error:
+          "That file couldn’t be played. Upload a WAV, MP3, FLAC or OGG file.",
       })
       return
     }
@@ -239,6 +267,9 @@ export function SampleStep({
             </p>
           </div>
 
+          {/* Every capture state is one row of the same shape — two choices,
+              then the countdown, then the take in progress, then the take —
+              so the card never changes height while the reader speaks. */}
           {capture.kind === "idle" ? (
             <div className="flex flex-col gap-2">
               {capture.error || showErrors ? (
@@ -246,69 +277,76 @@ export function SampleStep({
                   {capture.error ?? "Record or upload a sample first."}
                 </FieldError>
               ) : null}
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  onClick={() =>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {/* Each limit sits on the choice it limits: length on
+                    recording, format and size on a file. */}
+                <SourceChoice
+                  description={`${SAMPLE_LIMITS.minSeconds}–${SAMPLE_LIMITS.maxSeconds} seconds, 6–10 is best`}
+                  icon={<RecordIcon />}
+                  onSelect={() =>
                     setCapture({ kind: "countdown", count: COUNTDOWN_FROM })
                   }
-                  size="lg"
-                >
-                  <RecordIcon />
-                  Start recording
-                </Button>
-                <Button
-                  onClick={() => fileInput.current?.click()}
-                  size="lg"
-                  variant="outline"
-                >
-                  <UploadSampleIcon />
-                  Upload a file
-                </Button>
-                <Input
-                  accept={ACCEPT}
-                  aria-label="Upload a sample"
-                  className="sr-only"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0]
-                    event.target.value = ""
-                    if (file) void upload(file)
-                  }}
-                  ref={fileInput}
-                  tabIndex={-1}
-                  type="file"
+                  title="Record"
+                />
+                <SourceChoice
+                  description={`WAV, MP3, FLAC or OGG · ${SAMPLE_LIMITS.maxMegabytes} MB`}
+                  icon={<UploadSampleIcon />}
+                  onSelect={() => fileInput.current?.click()}
+                  title="Upload a file"
                 />
               </div>
-              <p className="text-sm text-muted-foreground">
-                {SAMPLE_LIMITS.minSeconds} to {SAMPLE_LIMITS.maxSeconds}{" "}
-                seconds, 6 to 10 is best. Files: WAV, MP3, FLAC or OGG, up to{" "}
-                {SAMPLE_LIMITS.maxMegabytes} MB.
-              </p>
+              <Input
+                accept={ACCEPT}
+                aria-label="Upload a sample"
+                className="sr-only"
+                onChange={(event) => {
+                  const file = event.target.files?.[0]
+                  event.target.value = ""
+                  if (file) void upload(file)
+                }}
+                ref={fileInput}
+                tabIndex={-1}
+                type="file"
+              />
             </div>
           ) : null}
 
           {capture.kind === "countdown" ? (
-            <div className="flex items-center gap-4">
-              <span
-                aria-live="assertive"
-                className="w-8 text-2xl font-semibold tabular-nums"
-              >
-                {capture.count}
-              </span>
-              <span className="flex-1 text-sm text-muted-foreground">
-                Recording starts after the tone
-              </span>
-              <Button
-                onClick={() => setCapture(EMPTY_CAPTURE)}
-                variant="outline"
-              >
-                Cancel
-              </Button>
-            </div>
+            <Item variant="outline">
+              <ItemMedia className="group-has-data-[slot=item-description]/item:translate-y-0 group-has-data-[slot=item-description]/item:self-center">
+                <span
+                  aria-live="assertive"
+                  className="flex size-8 items-center justify-center rounded-full bg-primary-tint text-sm font-semibold text-primary-tint-foreground tabular-nums"
+                >
+                  {mic.state === "live" ? capture.count : "…"}
+                </span>
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle>
+                  {mic.state === "live" ? "Get ready" : "Allow the microphone"}
+                </ItemTitle>
+                <ItemDescription>
+                  {mic.state === "live"
+                    ? "Start reading after the tone"
+                    : "Your browser is asking to use it"}
+                </ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Button
+                  onClick={() => setCapture(EMPTY_CAPTURE)}
+                  size="sm"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+              </ItemActions>
+            </Item>
           ) : null}
 
           {capture.kind === "recording" ? (
             <RecordingView
               elapsed={capture.elapsed}
+              levels={mic.levels}
               onStop={() => finish(capture.elapsed)}
             />
           ) : null}
@@ -318,49 +356,91 @@ export function SampleStep({
   )
 }
 
+function SourceChoice({
+  title,
+  description,
+  icon,
+  onSelect,
+}: {
+  title: string
+  description: string
+  icon: React.ReactNode
+  onSelect: () => void
+}) {
+  return (
+    <Item
+      asChild
+      className="cursor-pointer hover:bg-muted/50"
+      variant="outline"
+    >
+      <button onClick={onSelect} type="button">
+        {/* Centred on title and description together, in a tinted square:
+            the primitive pins media to the first line, which on a two-line
+            tile leaves the glyph floating above the block it labels. */}
+        <ItemMedia
+          className="size-8 group-has-data-[slot=item-description]/item:translate-y-0 group-has-data-[slot=item-description]/item:self-center rounded-md bg-primary-tint text-primary-tint-foreground"
+          variant="icon"
+        >
+          {icon}
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>{title}</ItemTitle>
+          <ItemDescription>{description}</ItemDescription>
+        </ItemContent>
+      </button>
+    </Item>
+  )
+}
+
 function RecordingView({
   elapsed,
+  levels,
   onStop,
 }: {
   elapsed: number
+  /** The live microphone's four bands. */
+  levels: readonly number[]
   onStop: () => void
 }) {
   const short = elapsed < SAMPLE_LIMITS.minSeconds
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-4">
-        <span className="flex items-center gap-2 text-sm font-medium">
-          <span
-            aria-hidden
-            className="size-2 animate-pulse rounded-full bg-destructive motion-reduce:animate-none"
-          />
-          Recording
-        </span>
-        <span className="flex-1 text-sm tabular-nums">
-          {formatSeconds(elapsed)}
-          <span className="text-muted-foreground">
-            {" "}
-            / {formatSeconds(SAMPLE_LIMITS.maxSeconds)}
+    <Item variant="outline">
+      <ItemMedia className="group-has-data-[slot=item-description]/item:translate-y-0 group-has-data-[slot=item-description]/item:self-center">
+        <RecordingIndicator levels={levels} />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle className="tabular-nums">
+          <span>
+            Recording {formatSeconds(elapsed)}
+            <span className="font-normal text-muted-foreground">
+              {" "}
+              / {formatSeconds(SAMPLE_LIMITS.maxSeconds)}
+            </span>
           </span>
-        </span>
-        <Button onClick={onStop}>
+        </ItemTitle>
+        {/* The one moving fact the reader needs while speaking: whether
+            stopping now keeps the take. */}
+        <ItemDescription aria-live="polite">
+          {short
+            ? `Keep going — ${SAMPLE_LIMITS.minSeconds} seconds minimum`
+            : `Stops on its own at ${SAMPLE_LIMITS.maxSeconds} seconds`}
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions>
+        <Button onClick={onStop} size="sm">
           <StopRecordingIcon />
           Stop
         </Button>
-      </div>
-      <Progress
-        aria-label="Recording length"
-        value={(elapsed / SAMPLE_LIMITS.maxSeconds) * 100}
-      />
-      {/* The one moving fact the reader needs while speaking: whether
-          stopping now keeps the take. */}
-      <p className="text-sm text-muted-foreground" aria-live="polite">
-        {short
-          ? `Keep going — ${SAMPLE_LIMITS.minSeconds} seconds minimum`
-          : `Stops on its own at ${SAMPLE_LIMITS.maxSeconds} seconds`}
-      </p>
-    </div>
+      </ItemActions>
+      <ItemFooter>
+        <Progress
+          aria-label="Recording length"
+          className="flex-1"
+          value={(elapsed / SAMPLE_LIMITS.maxSeconds) * 100}
+        />
+      </ItemFooter>
+    </Item>
   )
 }
 
@@ -418,15 +498,18 @@ function TakeView({
       </div>
 
       <Field>
-        <FieldHint
-          hint="The clone is built from this text and the audio together. Fix any word that doesn’t match what was said."
+        <FieldHeader
+          error={transcriptMissing ? "Add what was said." : null}
           htmlFor="clone-transcript"
         >
           Transcript
-        </FieldHint>
-        {transcriptMissing ? (
-          <FieldError>Add what was said in the sample.</FieldError>
-        ) : null}
+        </FieldHeader>
+        {/* A page explains inline, under the label (a drawer would use an
+            (i)). */}
+        <FieldDescription>
+          The clone is built from this text and the audio together. Fix any word
+          that doesn’t match what was said.
+        </FieldDescription>
         {take.transcript === null ? (
           <div
             aria-label="Transcribing"
@@ -438,6 +521,9 @@ function TakeView({
           </div>
         ) : (
           <Textarea
+            aria-describedby={
+              transcriptMissing ? errorId("clone-transcript") : undefined
+            }
             aria-invalid={transcriptMissing || undefined}
             dir="auto"
             id="clone-transcript"
@@ -467,4 +553,3 @@ function readDuration(file: File): Promise<number | null> {
     audio.src = url
   })
 }
-

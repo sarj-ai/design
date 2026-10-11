@@ -1,4 +1,5 @@
 import {
+  ArrowRight01Icon,
   CheckmarkCircle02Icon,
   Delete02Icon,
   Mic01Icon,
@@ -29,3 +30,5 @@ export const EditVoiceIcon = icon(PencilEdit02Icon, "EditVoiceIcon")
 export const DeleteVoiceIcon = icon(Delete02Icon, "DeleteVoiceIcon")
 /** The Active status chip, as the platform's voice table draws it. */
 export const ActiveVoiceIcon = icon(CheckmarkCircle02Icon, "ActiveVoiceIcon")
+/** Goes to a persona that still speaks with a voice being deleted. */
+export const OpenPersonaIcon = icon(ArrowRight01Icon, "OpenPersonaIcon")

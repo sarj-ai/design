@@ -1,9 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Dialog as DialogPrimitive } from "radix-ui"
 
-import { MultiStepForm } from "@/components/design-system/multi-step-form"
+import { CreationFlow } from "@/components/design-system/creation-flow"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   AlertDialog,
@@ -36,34 +35,31 @@ import {
 } from "@/lib/mockups/voice-cloning-data"
 
 /**
- * The clone flow: two steps, one surface — Sample, then Preview and details.
+ * The clone flow, on the design system's creation flow — the surface the
+ * surfaces page gives "creating in steps": the whole screen, Back and Close at
+ * the top, one question a screen under "Clone a voice", the step dots at the
+ * foot, and each screen's primary button where its answer ends.
  *
- * It is the design system's multi-step creation focus view (the steps take
- * the screen, the form sits alone in the middle) with one deliberate
- * difference: no appended Review step. `MultiStepCreateDialog` adds one
- * because a creation flow should show what it is about to make; here step 2
- * already is that — the reader hears the voice before naming it — and the
- * PRD fixes the flow at two steps.
+ * Two screens, as the PRD fixes it: record or upload a sample, then hear the
+ * clone and name it. Clone voice on the first screen is where the clone
+ * happens (register the profile, render the preview), so it carries the
+ * working state and the one failure the TTS service can return — which keeps
+ * the take, so the reader retries rather than re-records.
  *
- * Next on step 1 is where the clone happens (register the profile, render the
- * preview), so it carries the submitting state and the one failure the TTS
- * service can return. The failure keeps the take: the reader retries, not
- * re-records.
- *
- * The same component opens from the Voice library and from the persona voice
- * picker; from a persona it starts on the persona's language and gender, so
- * the new voice lands in the cards that persona shows.
+ * The same flow opens from the Voice library and from a persona; from a
+ * persona it starts on the persona's language and gender, so the new voice
+ * lands in the cards that persona shows.
  */
 
 const STEPS = [
   {
-    title: "Sample",
-    description:
-      "Read the script in a quiet room, at your natural pace. Background noise is cloned with the voice.",
+    key: "sample",
+    question:
+      "Read the script aloud in a quiet room. Background noise is cloned with the voice.",
   },
   {
-    title: "Preview and details",
-    description: "Listen to the clone, then name it.",
+    key: "details",
+    question: "Listen to the clone, then name it.",
   },
 ] as const
 
@@ -176,95 +172,93 @@ export function CloneVoiceFlow({
   }
 
   const onSample = step === 0
-  const nextLabel = busy ? (
-    <>
-      <Spinner />
-      {onSample ? "Cloning voice…" : "Creating voice…"}
-    </>
-  ) : onSample ? (
-    "Next step"
-  ) : (
-    "Create voice"
-  )
 
   return (
-    <DialogPrimitive.Root
-      onOpenChange={(next) => (next ? onOpenChange(true) : requestClose())}
-      open={open}
-    >
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Content className="fixed inset-0 z-modal overflow-y-auto bg-muted duration-200 ease-out-cubic outline-none data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none">
-          <DialogPrimitive.Title className="sr-only">
-            Clone a voice
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description className="sr-only">
-            {STEPS[step].description}
-          </DialogPrimitive.Description>
-
-          <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col justify-center px-6 py-16">
-            <MultiStepForm
-              currentStep={step + 1}
-              description={STEPS[step].description}
-              nextButtonText={nextLabel}
-              nextDisabled={busy}
-              notice={
-                failed && onSample ? (
-                  <Alert className="bg-destructive-tint" variant="destructive">
-                    <AlertTitle>Couldn’t clone this sample</AlertTitle>
-                    <AlertDescription className="flex flex-col items-start gap-3">
-                      <span>
-                        The voice service didn’t answer. Your sample is kept, so
-                        trying again is safe.
-                      </span>
-                      <Button
-                        onClick={() => void clone()}
-                        size="sm"
-                        variant="outline"
-                      >
-                        Try again
-                      </Button>
-                    </AlertDescription>
-                  </Alert>
-                ) : null
-              }
-              onBack={() => {
+    <>
+      <CreationFlow
+        direction={onSample ? -1 : 1}
+        onBack={
+          onSample || busy
+            ? null
+            : () => {
                 setShowErrors(false)
                 setStep(0)
+              }
+        }
+        onClose={requestClose}
+        open={open}
+        question={STEPS[step].question}
+        step={step}
+        stepKey={STEPS[step].key}
+        steps={STEPS.length}
+        title="Clone a voice"
+      >
+        {onSample ? (
+          <div className="flex flex-col gap-6">
+            <SampleStep
+              capture={capture}
+              noisy={outcome === "noisy"}
+              setCapture={(next) => {
+                setFailed(false)
+                setCapture(next)
               }}
-              onClose={requestClose}
-              onNext={() => void (onSample ? clone() : create())}
-              /* Forward is earned by cloning, so only going back is a jump. */
-              onStepSelect={(selected) => {
-                if (selected === 1 && !busy) {
-                  setShowErrors(false)
-                  setStep(0)
-                }
-              }}
-              title="Clone a voice"
-              totalSteps={STEPS.length}
-            >
-              {onSample ? (
-                <SampleStep
-                  capture={capture}
-                  noisy={outcome === "noisy"}
-                  setCapture={(next) => {
-                    setFailed(false)
-                    setCapture(next)
-                  }}
-                  showErrors={showErrors}
-                />
-              ) : (
-                <DetailsStep
-                  canPublish={canPublish}
-                  details={details}
-                  setDetails={setDetails}
-                  showErrors={showErrors}
-                />
-              )}
-            </MultiStepForm>
+              showErrors={showErrors}
+            />
+
+            {/* Which step broke, and the way to retry it — never a bare
+                toast. */}
+            {failed ? (
+              <Alert className="bg-destructive-tint" variant="destructive">
+                <AlertTitle>Couldn’t clone this sample</AlertTitle>
+                <AlertDescription>
+                  The voice service didn’t answer. Your sample is kept, so
+                  trying again is safe.
+                </AlertDescription>
+              </Alert>
+            ) : null}
+
+            {/* Only once there is a take to clone: before that, the two
+                choices above are the step. */}
+            {capture.kind === "take" ? (
+              <div className="flex justify-end">
+                <Button disabled={busy} onClick={() => void clone()}>
+                  {busy ? (
+                    <>
+                      <Spinner />
+                      Cloning voice…
+                    </>
+                  ) : failed ? (
+                    "Try again"
+                  ) : (
+                    "Clone voice"
+                  )}
+                </Button>
+              </div>
+            ) : null}
           </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
+        ) : (
+          <div className="flex flex-col gap-6">
+            <DetailsStep
+              canPublish={canPublish}
+              details={details}
+              setDetails={setDetails}
+              showErrors={showErrors}
+            />
+            <div className="flex justify-end">
+              <Button disabled={busy} onClick={() => void create()}>
+                {busy ? (
+                  <>
+                    <Spinner />
+                    Creating voice…
+                  </>
+                ) : (
+                  "Create voice"
+                )}
+              </Button>
+            </div>
+          </div>
+        )}
+      </CreationFlow>
 
       {/* A confirm is the one overlay allowed over another. */}
       <AlertDialog onOpenChange={setLeaving} open={leaving}>
@@ -276,7 +270,7 @@ export function CloneVoiceFlow({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogCancel>Keep going</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 setLeaving(false)
@@ -289,6 +283,6 @@ export function CloneVoiceFlow({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </DialogPrimitive.Root>
+    </>
   )
 }

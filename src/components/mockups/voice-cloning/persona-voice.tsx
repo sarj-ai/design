@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -31,8 +32,8 @@ import { cn } from "@/lib/utils"
  *    clone sits where its owner looks for it, and a catalog voice is never
  *    mistaken for one. The first group is absent until the organization has
  *    a voice of this language and gender.
- *  - Clone a voice at the foot, the design system's "Create … at the foot of
- *    a picker". It opens the same flow as the Voice library and comes back
+ *  - Clone a voice in the card's footer — a card's actions get their own
+ *    band, end-aligned (Forms › Form actions). It opens the same flow as the Voice library and comes back
  *    with the new voice selected — no sample to a voice on the persona in
  *    one sitting.
  *
@@ -73,11 +74,9 @@ export function PersonaVoice({
       <Card>
         <CardHeader>
           <CardTitle>Voice</CardTitle>
-          <CardDescription>
-            {PERSONA.name} · Arabic · Female
-          </CardDescription>
+          <CardDescription>{PERSONA.name} · Arabic · Female</CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-6">
+        <CardContent>
           <RadioGroup
             aria-label="Voice"
             className="flex flex-col gap-6"
@@ -101,14 +100,15 @@ export function PersonaVoice({
               </div>
             ))}
           </RadioGroup>
-
-          <div>
-            <Button onClick={onClone} variant="outline">
-              <RecordIcon />
-              Clone a voice
-            </Button>
-          </div>
         </CardContent>
+        {/* The card's action gets its own band, end-aligned — the Forms
+            rule for a card's actions, as /language-switching's Save. */}
+        <CardFooter className="justify-end">
+          <Button onClick={onClone} variant="outline">
+            <RecordIcon />
+            Clone a voice
+          </Button>
+        </CardFooter>
       </Card>
     </main>
   )

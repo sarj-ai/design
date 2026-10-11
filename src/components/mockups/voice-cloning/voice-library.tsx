@@ -17,6 +17,13 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item"
+import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
@@ -27,7 +34,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { LanguageChip, NotApplicable } from "@/components/design-system/call-table"
+import {
+  LanguageChip,
+  NotApplicable,
+} from "@/components/design-system/call-table"
 import {
   DataTable,
   DataTableHead,
@@ -42,6 +52,7 @@ import {
   AddVoiceIcon,
   DeleteVoiceIcon,
   EditVoiceIcon,
+  OpenPersonaIcon,
   PauseVoiceIcon,
   PlayVoiceIcon,
   RecordIcon,
@@ -279,7 +290,11 @@ function VoiceRow({ voice, onDelete }: { voice: Voice; onDelete: () => void }) {
       </TableCell>
       <TableCell className="py-1.5 text-end">
         <span className="flex items-center justify-end gap-1">
-          <Button aria-label={`Edit ${voice.name}`} size="icon-sm" variant="ghost">
+          <Button
+            aria-label={`Edit ${voice.name}`}
+            size="icon-sm"
+            variant="ghost"
+          >
             <EditVoiceIcon />
           </Button>
           {voice.cloned ? (
@@ -358,28 +373,31 @@ function DeleteVoiceConfirm({
           <AlertDialogTitle>
             {inUse ? `${shown?.name} is in use` : `Delete ${shown?.name}?`}
           </AlertDialogTitle>
-          <AlertDialogDescription asChild>
-            {inUse ? (
-              <div className="flex flex-col gap-2">
-                <span>
-                  Switch{" "}
-                  {shown?.usedBy.length === 1 ? "this persona" : "these personas"}{" "}
-                  to another voice first:
-                </span>
-                <ul className="flex flex-col gap-1 text-foreground">
-                  {shown?.usedBy.map((persona) => (
-                    <li key={persona}>{persona}</li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <p>
-                It’s removed from your voice library for good. The sample
-                isn’t kept, so it can’t be cloned back.
-              </p>
-            )}
+          <AlertDialogDescription>
+            {inUse
+              ? `${shown?.usedBy.length === 1 ? "A persona speaks" : `${shown?.usedBy.length} personas speak`} with this voice. Give ${shown?.usedBy.length === 1 ? "it" : "each one"} another voice, then delete it.`
+              : "It’s removed from your voice library for good. The sample isn’t kept, so it can’t be cloned back."}
           </AlertDialogDescription>
         </AlertDialogHeader>
+        {/* What the reader has to do next is open each of these, so each is
+            a row with the way there — not a list to remember and go find. */}
+        {inUse ? (
+          <ItemGroup className="gap-2">
+            {shown?.usedBy.map((persona) => (
+              <Item key={persona} size="sm" variant="outline">
+                <ItemContent>
+                  <ItemTitle>{persona}</ItemTitle>
+                </ItemContent>
+                <ItemActions>
+                  <Button size="xs" variant="ghost">
+                    Open
+                    <OpenPersonaIcon className="rtl:rotate-180" />
+                  </Button>
+                </ItemActions>
+              </Item>
+            ))}
+          </ItemGroup>
+        ) : null}
         <AlertDialogFooter>
           <AlertDialogCancel>{inUse ? "Close" : "Cancel"}</AlertDialogCancel>
           {inUse ? null : (
