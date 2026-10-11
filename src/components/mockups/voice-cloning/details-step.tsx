@@ -1,0 +1,243 @@
+"use client"
+
+import * as React from "react"
+
+import { FieldHint } from "@/components/design-system/field-hint"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "@/components/ui/item"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
+import { usePlayback } from "@/components/mockups/voice-cloning/audio"
+import {
+  PauseVoiceIcon,
+  PlayVoiceIcon,
+} from "@/components/mockups/voice-cloning/icons"
+import {
+  DIALECTS,
+  GENDER_OPTIONS,
+  type Gender,
+  LANGUAGE_OPTIONS,
+  type LanguageCode,
+  PREVIEW_LINE,
+} from "@/lib/mockups/voice-cloning-data"
+
+/**
+ * Step 2: hear the clone, then describe it.
+ *
+ * The preview leads and plays on arrival — the PRD's "preview precedes
+ * metadata". It stays at the top while the fields below are filled, so a
+ * second listen is one click and never a step back.
+ *
+ * Only the five fields the PRD makes user-set. Provider, model, steps and
+ * format are system-set and never shown: a cloned voice is always Sarj Omni.
+ *
+ * Most fields are required, so the one that is not carries "(optional)".
+ * Errors appear on Create, under the label and above the control.
+ */
+
+export type Details = {
+  name: string
+  vibe: string
+  language: LanguageCode
+  dialect: string
+  gender: Gender
+  publish: boolean
+  consent: boolean
+}
+
+export function detailsErrors(details: Details) {
+  return {
+    name: details.name.trim() === "" ? "Name the voice." : null,
+    consent: details.consent
+      ? null
+      : "Confirm you have the right to use this voice.",
+  }
+}
+
+export function DetailsStep({
+  details,
+  setDetails,
+  canPublish,
+  showErrors,
+}: {
+  details: Details
+  setDetails: React.Dispatch<React.SetStateAction<Details>>
+  /** Sarj users only: client organizations can never publish. */
+  canPublish: boolean
+  showErrors: boolean
+}) {
+  const playback = usePlayback(4)
+  const { play } = playback
+  const errors = showErrors ? detailsErrors(details) : null
+
+  React.useEffect(() => {
+    play()
+  }, [play])
+
+  const set = <Key extends keyof Details>(key: Key, value: Details[Key]) =>
+    setDetails((current) => ({ ...current, [key]: value }))
+
+  return (
+    <div className="flex flex-col gap-6">
+      <Item variant="muted">
+        <ItemMedia>
+          <Button
+            aria-label={playback.playing ? "Pause preview" : "Play preview"}
+            onClick={playback.toggle}
+            size="icon"
+          >
+            {playback.playing ? <PauseVoiceIcon /> : <PlayVoiceIcon />}
+          </Button>
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>Preview</ItemTitle>
+          <ItemDescription dir="auto">{PREVIEW_LINE}</ItemDescription>
+        </ItemContent>
+      </Item>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field>
+          <FieldLabel htmlFor="clone-name">Name</FieldLabel>
+          {errors?.name ? <FieldError>{errors.name}</FieldError> : null}
+          <Input
+            aria-invalid={errors?.name ? true : undefined}
+            dir="auto"
+            id="clone-name"
+            onChange={(event) => set("name", event.target.value)}
+            placeholder="Khalid"
+            value={details.name}
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="clone-vibe">
+            Vibe <span className="text-muted-foreground">(optional)</span>
+          </FieldLabel>
+          <Input
+            dir="auto"
+            id="clone-vibe"
+            onChange={(event) => set("vibe", event.target.value)}
+            placeholder="Calm, reassuring"
+            value={details.vibe}
+          />
+        </Field>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Field>
+          <FieldLabel htmlFor="clone-language">Language</FieldLabel>
+          <Select
+            onValueChange={(value) => {
+              const language = value as LanguageCode
+              setDetails((current) => ({
+                ...current,
+                language,
+                dialect: DIALECTS[language][0],
+              }))
+            }}
+            value={details.language}
+          >
+            <SelectTrigger className="w-full" id="clone-language">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {LANGUAGE_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="clone-dialect">Dialect</FieldLabel>
+          <Select
+            onValueChange={(value) => set("dialect", value)}
+            value={details.dialect}
+          >
+            <SelectTrigger className="w-full" id="clone-dialect">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {DIALECTS[details.language].map((dialect) => (
+                <SelectItem key={dialect} value={dialect}>
+                  {dialect}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="clone-gender">Gender</FieldLabel>
+          <Select
+            onValueChange={(value) => set("gender", value as Gender)}
+            value={details.gender}
+          >
+            <SelectTrigger className="w-full" id="clone-gender">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              {GENDER_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+      </div>
+
+      <Separator />
+
+      {canPublish ? (
+        <Field orientation="horizontal">
+          <Switch
+            checked={details.publish}
+            id="clone-publish"
+            onCheckedChange={(checked) => set("publish", checked)}
+          />
+          <FieldHint
+            className="flex-1"
+            hint="Sends a request. The voice stays in Sarj, usable, until someone with publish access approves it."
+            htmlFor="clone-publish"
+          >
+            Request for all organizations
+          </FieldHint>
+        </Field>
+      ) : null}
+
+      {/* The error sits above the row, like every other field here; the
+          label stays its own colour — it is not the thing that is wrong. */}
+      <Field>
+        {errors?.consent ? <FieldError>{errors.consent}</FieldError> : null}
+        <div className="flex items-start gap-3">
+          <Checkbox
+            aria-invalid={errors?.consent ? true : undefined}
+            checked={details.consent}
+            id="clone-consent"
+            onCheckedChange={(checked) => set("consent", checked === true)}
+          />
+          <FieldLabel className="font-normal" htmlFor="clone-consent">
+            I have the right to use this voice, and won’t use it for unlawful,
+            fraudulent or misleading purposes.
+          </FieldLabel>
+        </div>
+      </Field>
+    </div>
+  )
+}
