@@ -151,8 +151,9 @@ dry run), **Dry run** (all 115 overlays in `sarj-ai/platform` with a verdict,
 opened as a record drawer). Researched from ElevenLabs on Mobbin, Vapi, Stripe,
 Linear, Vercel, Attio, HubSpot, Supabase and NN/g, Carbon, Atlassian, Polaris,
 Primer, Fluent, Apple. The Page surface's demo is the Creation flow topic
-(`creation-flow-preview.tsx`) — creating in steps means that flow. The older
-multi-step shell is a full-screen focus view too (`multi-step-dialog.tsx`), and the old Patterns › Drawer topic is retired. When
+(`creation-flow-preview.tsx`) — creating in steps means that flow. Its chrome is the shared
+`CreationFlow` (`design-system/creation-flow.tsx`). The old Multi-step creation card (`multi-step-dialog.tsx`) was removed on
+11 Oct 2026 — a pop-up with steps is ruled out — and the old Patterns › Drawer topic is retired. When
 the platform changes, update `surface-audit.ts` — paths are checked to exist.
 
 **Unsaved changes** (topic `unsaved-changes`; `save-bar-preview.tsx`) — five

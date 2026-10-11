@@ -107,6 +107,7 @@ Specifics that trip people up in this repo:
 
 - **`Card` owns its own padding** via `--card-spacing` (16px; 12px with `size="sm"`). Never add `p-*` to `Card`. Use `size="sm"` for dense tiles — and then every card in that group uses it.
 - **`Card` uses `ring-1 ring-foreground/10`, not `border`.** Don't add a border.
+- **A card's own action goes in its `CardFooter`, end-aligned** — Save, or one like "Clone a voice". Never a loose button at the bottom of `CardContent` or under the card. `FORM_RULES` → "Form actions"; `/language-switching` is the example.
 - **`CardTitle` is `text-base font-medium`.** Don't upgrade it to `text-lg font-bold`, don't color it purple. One title per card.
 - **`Button` sizes are `xs | sm | default | lg` + `icon-xs | icon-sm | icon | icon-lg`.** Never set `h-*` or `px-*` yourself.
 - **`Button`/`Badge` `variant="destructive"` is a soft tint** (`bg-destructive/10 text-destructive`), not solid red. That's intentional — don't "fix" it.
@@ -298,6 +299,7 @@ Mock data goes in a `const` array above the component. Keep it realistic — rea
 - `ml-`/`pr-`/`text-left` → logical properties
 - A 32–40px icon `items-start` beside a two-line title block → center icon and text together
 - A trailing action (close, menu, button) centered on a multi-line block → pin it to the title line
+- A card's button loose in its body or under the card → the card's `CardFooter`, end-aligned
 - Title→description gap the same size as block→block gap → tighten the inner one
 - Sibling cards in a row with different header structures → make them identical
 - Four type levels on one surface, or a size jump used where muted color would do

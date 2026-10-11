@@ -1,24 +1,22 @@
 "use client"
 
 import * as React from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { toast } from "sonner"
 
 import {
   BankingIcon,
   BuildWithAiIcon,
   ChooseStartIcon,
-  CloseIcon,
   CreateScenarioIcon,
   HealthcareIcon,
   RealEstateIcon,
   RestaurantsIcon,
   RetailIcon,
   StartBlankIcon,
-  StepBackIcon,
   StepDoneIcon,
   TelecomIcon,
 } from "@/components/design-system/icons"
+import { CreationFlow } from "@/components/design-system/creation-flow"
 import { OrbAvatar } from "@/components/shared/orb-avatar"
 import {
   AlertDialog,
@@ -310,29 +308,6 @@ const QUESTIONS: Record<Step, string> = {
   name: "Name your scenario",
 }
 
-/** power3.out, the motion scale's ease-out-cubic. */
-const EASE = [0.215, 0.61, 0.355, 1] as const
-
-/* ─────────────────────────────────────────────────────────
- * STEP DOTS
- *
- *   the active dot stretches 6 → 24px and darkens
- *   the dots beside it slide aside to make room
- *   one spring drives the stretch, the slide and the fade,
- *   so all three land on the same frame
- *
- *   a dot joining or leaving the row (the paths are 2, 3
- *   or 4 steps long) grows in from half size
- * ───────────────────────────────────────────────────────── */
-const DOT = {
-  /** How far the dots you are not on recede. */
-  rest: 0.15,
-  enter: 0.5,
-  radius: 9999,
-  /** No bounce: it is moving, not arriving. */
-  spring: { type: "spring", visualDuration: 0.35, bounce: 0 },
-} as const
-
 export function CreationFlowPreview() {
   const [open, setOpen] = React.useState(true)
   const [leaving, setLeaving] = React.useState(false)
@@ -422,197 +397,116 @@ export function CreationFlowPreview() {
     close()
   }
 
-  const reduced = useReducedMotion() ?? false
   const dots = PATHS[path ?? "describe"]
   const at = Math.max(0, dots.indexOf(step))
 
   return (
-    /* The frame stands in for the screen: the real flow is fixed to the
-       viewport, and translate-x-0 makes this box its containing block. */
-    <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border bg-background">
+    <div className="relative">
       {open ? (
-        <>
-          <div className="flex h-16 shrink-0 items-center justify-between px-5">
-            {trail.length > 1 && step !== "build" ? (
-              <Button onClick={back} size="sm" variant="ghost">
-                <StepBackIcon />
-                Back
-              </Button>
-            ) : (
-              <span />
-            )}
-            <Button
-              aria-label="Close"
-              onClick={requestClose}
-              size="icon"
-              variant="outline"
-            >
-              <CloseIcon />
-            </Button>
-          </div>
+        <CreationFlow
+          direction={direction}
+          framed
+          /* The build screen is a wait, so it has no Back. */
+          onBack={trail.length > 1 && step !== "build" ? back : null}
+          onClose={requestClose}
+          question={QUESTIONS[step]}
+          step={at}
+          stepKey={step}
+          steps={dots.length}
+          title="New scenario"
+        >
+          {step === "start" ? (
+            <StartStep
+              onBlank={() => {
+                setPath("blank")
+                setTemplateId(null)
+                setName("")
+                go("name")
+              }}
+              onDescribe={() => {
+                setPath("describe")
+                go("describe")
+              }}
+              onIndustry={(id) => {
+                setPath("template")
+                setIndustryId(id)
+                go("use-case")
+              }}
+            />
+          ) : null}
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-6 pt-6 pb-12">
-              <AnimatePresence custom={direction} initial={false} mode="wait">
-                <motion.div
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex flex-col gap-8"
-                  custom={direction}
-                  exit="exit"
-                  initial="enter"
-                  key={step}
-                  transition={{ duration: reduced ? 0 : 0.2, ease: EASE }}
-                  variants={{
-                    enter: (d: number) => ({
-                      opacity: 0,
-                      x: reduced ? 0 : d * 24,
-                    }),
-                    exit: (d: number) => ({
-                      opacity: 0,
-                      x: reduced ? 0 : d * -24,
-                    }),
-                  }}
-                >
-                  <header className="flex flex-col gap-1">
-                    <h3 className="text-2xl font-semibold tracking-tight">
-                      New scenario
-                    </h3>
-                    <p className="text-base text-muted-foreground">
-                      {QUESTIONS[step]}
-                    </p>
-                  </header>
+          {step === "describe" ? (
+            <DescribeStep
+              languages={languages}
+              onBuild={build}
+              onLanguages={setLanguages}
+              onPrompt={(value, from) => {
+                setPrompt(value)
+                setQuickStart(from)
+              }}
+              prompt={prompt}
+            />
+          ) : null}
 
-                  {step === "start" ? (
-                    <StartStep
-                      onBlank={() => {
-                        setPath("blank")
-                        setTemplateId(null)
-                        setName("")
-                        go("name")
-                      }}
-                      onDescribe={() => {
-                        setPath("describe")
-                        go("describe")
-                      }}
-                      onIndustry={(id) => {
-                        setPath("template")
-                        setIndustryId(id)
-                        go("use-case")
-                      }}
-                    />
-                  ) : null}
+          {step === "build" ? (
+            <BuildStep prompt={prompt} stage={stage} />
+          ) : null}
 
-                  {step === "describe" ? (
-                    <DescribeStep
-                      languages={languages}
-                      onBuild={build}
-                      onLanguages={setLanguages}
-                      onPrompt={(value, from) => {
-                        setPrompt(value)
-                        setQuickStart(from)
-                      }}
-                      prompt={prompt}
-                    />
-                  ) : null}
+          {step === "use-case" && industry ? (
+            <UseCaseStep
+              industry={industry}
+              onDescribe={() => {
+                setPath("describe")
+                go("describe")
+              }}
+              onTemplate={(t) => {
+                setTemplateId(t.id)
+                setName(t.name)
+                go("name")
+              }}
+            />
+          ) : null}
 
-                  {step === "build" ? (
-                    <BuildStep prompt={prompt} stage={stage} />
-                  ) : null}
-
-                  {step === "use-case" && industry ? (
-                    <UseCaseStep
-                      industry={industry}
-                      onDescribe={() => {
-                        setPath("describe")
-                        go("describe")
-                      }}
-                      onTemplate={(t) => {
-                        setTemplateId(t.id)
-                        setName(t.name)
-                        go("name")
-                      }}
-                    />
-                  ) : null}
-
-                  {step === "name" ? (
-                    <NameStep
-                      name={name}
-                      onChange={() =>
-                        backTo(
-                          path === "template"
-                            ? "use-case"
-                            : path === "describe"
-                              ? "describe"
-                              : "start",
-                        )
-                      }
-                      onCreate={create}
-                      onName={setName}
-                      source={
-                        path === "template" && industry && template ? (
-                          <Source
-                            description={`${industry.name} template`}
-                            media={<industry.Icon />}
-                            title={template.name}
-                          />
-                        ) : path === "describe" ? (
-                          <Source
-                            description={prompt.replace(/\s+/g, " ")}
-                            media={<OrbAvatar name={prompt} size="sm" />}
-                            title="Built from your description"
-                          />
-                        ) : (
-                          <Source
-                            description="Starts empty"
-                            media={<StartBlankIcon />}
-                            title="Blank scenario"
-                          />
-                        )
-                      }
-                    />
-                  ) : null}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-
-          {/* Where you are, and nothing to click: Back is the way back, and
-              a dot you could jump forward to would skip a question. */}
-          <div className="flex h-14 shrink-0 items-center justify-center">
-            <span className="sr-only">
-              Step {at + 1} of {dots.length}
-            </span>
-            {/* popLayout takes a leaving dot out of the row at once, so the
-                others close the gap on the same spring instead of waiting
-                for it to fade. */}
-            <div aria-hidden className="relative flex items-center gap-1.5">
-              <AnimatePresence initial={false} mode="popLayout">
-                {dots.map((_, i) => (
-                  <motion.span
-                    animate={{ opacity: i === at ? 1 : DOT.rest, scale: 1 }}
-                    className={cn(
-                      "h-1.5 bg-foreground",
-                      i === at ? "w-6" : "w-1.5",
-                    )}
-                    exit={{ opacity: 0, scale: DOT.enter }}
-                    initial={{ opacity: 0, scale: DOT.enter }}
-                    /* By position, not by step: picking a path keeps the
-                       dots already there and only adds or drops the tail. */
-                    key={i}
-                    layout
-                    /* In style rather than rounded-full, so motion can
-                       counter-scale it while the width springs — a class
-                       radius squashes the ends mid-stretch. */
-                    style={{ borderRadius: DOT.radius }}
-                    transition={reduced ? { duration: 0 } : DOT.spring}
+          {step === "name" ? (
+            <NameStep
+              name={name}
+              onChange={() =>
+                backTo(
+                  path === "template"
+                    ? "use-case"
+                    : path === "describe"
+                      ? "describe"
+                      : "start",
+                )
+              }
+              onCreate={create}
+              onName={setName}
+              source={
+                path === "template" && industry && template ? (
+                  <Source
+                    description={`${industry.name} template`}
+                    media={<industry.Icon />}
+                    title={template.name}
                   />
-                ))}
-              </AnimatePresence>
-            </div>
-          </div>
-        </>
+                ) : path === "describe" ? (
+                  <Source
+                    description={prompt.replace(/\s+/g, " ")}
+                    media={<OrbAvatar name={prompt} size="sm" />}
+                    title="Built from your description"
+                  />
+                ) : (
+                  <Source
+                    description="Starts empty"
+                    media={<StartBlankIcon />}
+                    title="Blank scenario"
+                  />
+                )
+              }
+            />
+          ) : null}
+        </CreationFlow>
       ) : (
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex h-180 items-center justify-center rounded-xl border bg-background">
           <Button onClick={() => setOpen(true)}>
             <CreateScenarioIcon />
             New scenario

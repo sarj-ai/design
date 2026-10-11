@@ -96,20 +96,6 @@ function SurfacesFigure({ className }: FigureProps) {
   )
 }
 
-/* Three steps joined by a line, and the one screen they fill. */
-function MultiStepCreateFigure({ className }: FigureProps) {
-  return (
-    <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
-      <path {...LINE} d="M76 96H164" opacity={0.6} />
-      <circle cx={76} cy={96} fill="currentColor" r={6} />
-      <circle {...LINE} cx={120} cy={96} r={6} />
-      <circle {...LINE} cx={164} cy={96} opacity={0.6} r={6} />
-      <rect {...LINE} height={72} rx={10} width={144} x={48} y={124} />
-      <path {...LINE} d="M64 146H124M64 166H148" opacity={0.6} />
-    </Figure>
-  )
-}
-
 /* A tab strip with the first view underlined, over the panel it shows. */
 function TabsFigure({ className }: FigureProps) {
   return (
@@ -211,7 +197,6 @@ export const PATTERNS_A_FIGURES: Record<
   buttons: ButtonsFigure,
   forms: FormsFigure,
   surfaces: SurfacesFigure,
-  "multi-step-create": MultiStepCreateFigure,
   tabs: TabsFigure,
   "drawer-anatomy": DrawerFigure,
   stepper: StepperFigure,

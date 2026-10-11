@@ -710,7 +710,7 @@ export const FORM_RULES: Rule[] = [
   {
     label: "Error messages",
     detail:
-      "Under the label with the help text, above the control, saying what to do rather than what went wrong. Nothing sits below a control — the box is the last thing in every field, so a column of fields keeps one rhythm instead of growing a line under whichever one is in trouble. The control's border carries the state and the label does not turn — the field's name is not the thing that is wrong, and a column of labels that changes colour is the one stable thing you were scanning to find the error. A failed submit goes to a toast.",
+      "On the label's line, at its end, saying what to do rather than what went wrong — a few words, so it fits. It takes no height, so the box never moves: a row of fields stays in line when one goes wrong, and the form does not jump when it is submitted. Nothing sits below a control — the box is the last thing in every field. `FieldHeader` draws the line. The control's border carries the state and the label does not turn — the field's name is not the thing that is wrong, and a column of labels that changes colour is the one stable thing you were scanning to find the error. A failed submit goes to a toast.",
   },
   {
     label: "Validation timing",
@@ -735,7 +735,7 @@ export const FORM_RULES: Rule[] = [
   {
     label: "Form actions",
     detail:
-      "An end-aligned footer: Cancel as outline, then the primary. When the form is a card, the footer is the card's own CardFooter, inside the box — never a loose button under it, which reads as belonging to the page rather than to that card. A long editor swaps the footer for a bar that appears only once something is dirty.",
+      "An end-aligned footer: Cancel as outline, then the primary. When the form is a card, the footer is the card's own CardFooter, inside the box — never a loose button under it, which reads as belonging to the page rather than to that card. The same goes for any card's own action, not only Save: Clone a voice under a voice picker sits in that card's footer band, end-aligned, never loose at the bottom of the body. A long editor swaps the footer for a bar that appears only once something is dirty.",
   },
   {
     label: "Disabled and read-only",
@@ -791,45 +791,53 @@ export type PatternAnatomy = {
   optional: Rule[]
 }
 
+/* One pattern left with an anatomy: the creation flow. There used to be a
+   second, "Multi-step creation" — the same steps in a card on a grey screen,
+   which read as a pop-up with steps. The surfaces page rules that shape out
+   (a dialog never has steps; creating in steps is the creation flow), so it
+   was removed on 11 Oct 2026 and the rules worth keeping moved here. */
 export const PATTERNS: PatternAnatomy[] = [
   {
-    id: "multi-step-create",
-    title: "Multi-step creation",
+    id: "creation-flow",
+    title: "Creation flow",
     description:
-      "Making one object across several screens, because it will not fit on one.",
+      "Making something new on its own screen: one question a screen, ending on a name.",
     required: [
       {
-        label: "Step indicator",
-        detail: "Which step this is, and how many there are.",
+        label: "Step dots",
+        detail:
+          "Where you are and how many screens there are. Not clickable: Back is the way back.",
       },
       {
-        label: "One decision per step",
-        detail: "A step that asks nothing is a step to delete.",
+        label: "One question a screen",
+        detail:
+          "A screen that asks nothing is a screen to delete. A wait has no Back.",
       },
       {
         label: "Back",
         detail:
-          "Every step after the first is leavable without losing what is in it.",
+          "Every screen after the first is leavable without losing what is in it.",
       },
       {
-        label: "Review",
+        label: "Ends on what is made",
         detail:
-          "The last step shows what is about to be created, before it is.",
+          "The last screen shows what is about to be created — its name, its preview — before Create.",
       },
       {
-        label: "Submitting state",
+        label: "Working state",
         detail: "The primary disables and says what is happening.",
       },
       {
         label: "Failure state",
         detail:
-          "Which step broke, and the way back to it — never a bare toast.",
+          "On the screen that broke, with the way to retry it — never a bare toast.",
+      },
+      {
+        label: "Leaving asks",
+        detail:
+          "Past the first screen, Close and Esc ask to discard; nothing is created yet.",
       },
     ],
-    /* Deliberately empty. The four that were here — named steps, jumping
-       back, saved draft, running summary — were removed as noise; the shell
-       enforces the required list and the rest was read as a menu of things to
-       add. `PatternAnatomy` drops the whole section when this is empty. */
     optional: [],
   },
 ]
@@ -967,6 +975,13 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
       "A shader orb for anyone without a photo. The name moves the light, so the same name always gets the same orb.",
     sarj: true,
   },
+  {
+    id: "recording",
+    title: "Recording",
+    description:
+      "The mark for a live microphone: bars that grow from the centre with the voice and fall flat when it stops.",
+    sarj: true,
+  },
 ]
 
 /** Colour leads, then the seven rules in the order the source document has
@@ -1094,12 +1109,6 @@ const PATTERN_PAGES: DocsPage[] = [
     title: "Forms",
     description:
       "Every decision settled, and all of them visible in the form beside them.",
-    sarj: true,
-  },
-  {
-    id: PATTERNS[0].id,
-    title: PATTERNS[0].title,
-    description: PATTERNS[0].description,
     sarj: true,
   },
   {

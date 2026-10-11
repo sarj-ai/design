@@ -26,6 +26,99 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-11",
+    title: "Any card's action sits in its footer band",
+    summary:
+      "The rule named only Save, so a card's other actions ended up loose at the bottom of its body.",
+    changes: [
+      {
+        kind: "changed",
+        text: "Form actions: a card's own action — Save, or one like Clone a voice — goes in its CardFooter, end-aligned.",
+      },
+      {
+        kind: "fixed",
+        text: "Voice cloning's persona voice card: Clone a voice moved from the body into the footer.",
+      },
+    ],
+    topics: ["forms"],
+  },
+  {
+    date: "2026-10-11",
+    title: "Multi-step creation is removed; creating in steps is the creation flow",
+    summary:
+      "Two components did one job, and the card one read as a pop-up with steps — a shape the surfaces page rules out.",
+    changes: [
+      {
+        kind: "removed",
+        text: "The Patterns › Multi-step creation topic, MultiStepCreateDialog and MultiStepForm. Nothing in the lab used them.",
+      },
+      {
+        kind: "changed",
+        text: "Its rules — step indicator, Back, working state, failure on the screen that broke, ask before leaving — now sit under the Creation flow demo as its anatomy.",
+      },
+    ],
+    topics: ["creation-flow"],
+  },
+  {
+    date: "2026-10-11",
+    title: "The creation flow is one shared component",
+    summary:
+      "Its chrome lived inside the scenario demo, so a flow built on it had to copy the layout and drifted into the multi-step card instead.",
+    changes: [
+      {
+        kind: "added",
+        text: "CreationFlow in components/design-system: full screen, Back and Close at the top, title and one question a screen, step dots at the foot.",
+      },
+      {
+        kind: "changed",
+        text: "The scenario demo on this topic renders through it, as does voice cloning, so a change here reaches both.",
+      },
+    ],
+    topics: ["creation-flow"],
+  },
+  {
+    date: "2026-10-11",
+    title: "A field's error sits on its label's line",
+    summary:
+      "On a line of its own it pushed the box down, so a field in trouble fell out of line with its neighbours.",
+    changes: [
+      {
+        kind: "changed",
+        text: "The error moves from its own line between label and control to the end of the label's line.",
+      },
+      {
+        kind: "added",
+        text: "FieldHeader in components/design-system: label, optional (i) hint, and the error, on one line.",
+      },
+    ],
+    topics: ["forms"],
+  },
+  {
+    date: "2026-10-11",
+    title: "A live microphone shows level bars that follow the voice",
+    summary:
+      "A pulsing dot said only that something was happening; the bars say whether the microphone is hearing you.",
+    changes: [
+      {
+        kind: "added",
+        text: "RecordingIndicator in components/shared: five bars in the recording red, inside a tinted disc, tallest in the middle and mirrored, so a voice grows the mark from its centre.",
+      },
+      {
+        kind: "added",
+        text: "useMicrophoneLevels reads those bands from the real microphone; the countdown waits until the microphone is live, and a refused one falls back to upload.",
+      },
+      {
+        kind: "added",
+        text: "Silence keeps a sliver of every bar, so a quiet room never reads as recording having stopped.",
+      },
+      {
+        kind: "added",
+        text: "Reduced motion holds the bars in one still shape.",
+      },
+    ],
+    topics: ["recording"],
+  },
+  {
     date: "2026-10-10",
     title: "A card's Save sits inside the card",
     summary:

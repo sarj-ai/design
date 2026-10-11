@@ -9,7 +9,6 @@ import {
   AvatarGroupCount,
 } from "@/components/ui/avatar"
 import { DesignSystemDocs } from "@/components/design-system/docs-shell"
-import { MultiStepPreview } from "@/components/design-system/multi-step-preview"
 import { PatternAnatomy } from "@/components/design-system/pattern-anatomy"
 import { ButtonSizes } from "@/components/design-system/button-sizes"
 import { ChipNotes } from "@/components/design-system/chip-notes"
@@ -18,6 +17,7 @@ import { SectionCardPreview } from "@/components/design-system/section-card-prev
 import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview"
 import { JsonViewPreview } from "@/components/design-system/json-view-preview"
 import { AlertPreview } from "@/components/design-system/alert-preview"
+import { RecordingPreview } from "@/components/design-system/recording-preview"
 import { IntegrationCardPreview } from "@/components/design-system/integration-card-preview"
 import { DevelopersPage } from "@/components/mockups/developers/developers-page"
 import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
@@ -140,18 +140,6 @@ export default async function DesignSystemPage({
         /* The choice is two questions, so the page asks them. */
         surfaces: <SurfaceDecisionPreview />,
 
-        /* Named by Abdulrahman alongside the index page: the other shape a
-             product this size actually needs written down. */
-        [PATTERNS[0].id]: (
-          <Card>
-            <CardContent className="flex flex-col gap-6">
-              <MultiStepPreview />
-
-              <Separator />
-              <PatternAnatomy pattern={PATTERNS[0]} />
-            </CardContent>
-          </Card>
-        ),
         tabs: (
           <Card>
             <CardContent>
@@ -279,9 +267,20 @@ export default async function DesignSystemPage({
         ),
         "admin-view": <AdminViewPagePreview />,
         "section-card": <SectionCardPreview />,
-        "creation-flow": <CreationFlowPreview />,
+        /* The flow, then the parts it cannot ship without. */
+        "creation-flow": (
+          <div className="flex flex-col gap-4">
+            <CreationFlowPreview />
+            <Card>
+              <CardContent>
+                <PatternAnatomy pattern={PATTERNS[0]} />
+              </CardContent>
+            </Card>
+          </div>
+        ),
         "json-view": <JsonViewPreview />,
         alert: <AlertPreview />,
+        recording: <RecordingPreview />,
         "unsaved-changes": <SaveBarPreview />,
         "integration-card": <IntegrationCardPreview />,
         developers: (

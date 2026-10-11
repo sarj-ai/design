@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button"
 import {
   Field,
   FieldDescription,
-  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field"
+import { errorId, FieldHeader } from "@/components/design-system/field-header"
 import { Input } from "@/components/ui/input"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Switch } from "@/components/ui/switch"
@@ -29,7 +29,9 @@ export function FormDemo() {
   return (
     <form className="flex max-w-xl flex-col gap-6">
       <FieldSet>
-        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">Voice</FieldLegend>
+        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">
+          Voice
+        </FieldLegend>
 
         <FieldGroup>
           {/* Most of this form is required, so the few that are not are what
@@ -77,19 +79,24 @@ export function FormDemo() {
             />
           </Field>
 
-          {/* Everything a field says, it says above its control: label, then
-              help, then the error, then the box. The control is the last thing
-              in every field, so a column of them keeps one rhythm instead of
-              growing a line under whichever box happens to be in trouble.
+          {/* Everything a field says, it says above its control, and the
+              error says it on the label's own line, at its end. The box never
+              moves: a column keeps one rhythm, and a row of fields stays in
+              line when one of them goes wrong — see `FieldHeader`.
 
-              The label stays the colour it always is — the border and this
-              line carry the state. The placeholder is an example of the shape,
-              and it is gone by the second keystroke, so nothing needed while
-              typing is in it. */}
+              The label stays the colour it always is — the border and the
+              message carry the state. The placeholder is an example of the
+              shape, and it is gone by the second keystroke, so nothing needed
+              while typing is in it. */}
           <Field>
-            <FieldLabel htmlFor="form-demo-sample">Sample script</FieldLabel>
-            <FieldError>Add a line for the voice to read.</FieldError>
+            <FieldHeader
+              error="Add a line for the voice to read."
+              htmlFor="form-demo-sample"
+            >
+              Sample script
+            </FieldHeader>
             <Textarea
+              aria-describedby={errorId("form-demo-sample")}
               aria-invalid
               id="form-demo-sample"
               placeholder="Good morning, this is Layla from Rawabi Holding."
@@ -112,7 +119,9 @@ export function FormDemo() {
       <FieldSeparator />
 
       <FieldSet>
-        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">Availability</FieldLegend>
+        <FieldLegend className="mb-4 font-semibold data-[variant=legend]:text-sm">
+          Availability
+        </FieldLegend>
 
         <FieldGroup>
           {/* The one horizontal case: a switch, label start, control end. */}
