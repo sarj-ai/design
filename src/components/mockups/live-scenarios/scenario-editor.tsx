@@ -31,7 +31,7 @@ import {
   EditorHeader,
   type HeaderVariant,
 } from "@/components/mockups/live-scenarios/editor-header"
-import { LineDiff } from "@/components/mockups/live-scenarios/line-diff"
+import { LineDiff } from "@/components/shared/line-diff"
 import { CloseReviewIcon } from "@/components/mockups/live-scenarios/icons"
 import {
   PROMPT_FIELDS,

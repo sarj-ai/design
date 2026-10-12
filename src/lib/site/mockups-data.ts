@@ -21,6 +21,7 @@ import {
   Timer01Icon,
   UserGroupIcon,
   VoiceIdIcon,
+  WorkHistoryIcon,
 } from "@hugeicons/core-free-icons"
 import type { IconSvgElement } from "@hugeicons/react"
 
@@ -388,6 +389,17 @@ export const MOCKUPS: Mockup[] = [
     icon: VoiceIdIcon,
     tickets: ["DES-198", "INT-191", "PLT-4472"],
     added: "2026-10-11T06:44:51.851Z",
+  },
+  {
+    href: "/config-versioning",
+    title: "Configuration versioning: save, publish, history, rollback",
+    meta: "Page · in progress",
+    surface: "Scenario Edit",
+    description:
+      "Every save is a version. On a live scenario and the global prompt, saving no longer reaches callers until you publish; history shows who changed what, compares any two versions, and moves live back to an earlier one or edits from it.",
+    icon: WorkHistoryIcon,
+    tickets: ["DES-202", "INT-253", "PLT-4477"],
+    added: "2026-10-12T02:36:18.960Z",
   },
   // `npm run new` appends new mockups above this line.
 ]

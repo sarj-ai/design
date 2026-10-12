@@ -2894,11 +2894,6 @@
           "target": "@components/sarj/mockups/live-scenarios/icons.tsx"
         },
         {
-          "path": "src/components/mockups/live-scenarios/line-diff.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/mockups/live-scenarios/line-diff.tsx"
-        },
-        {
           "path": "src/components/mockups/live-scenarios/playground-list.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/live-scenarios/playground-list.tsx"
@@ -2932,6 +2927,11 @@
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/line-diff.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/line-diff.tsx"
         },
         {
           "path": "src/components/shared/list-footer.tsx",
@@ -3243,6 +3243,148 @@
           "--z-popover": "60",
           "--z-toast": "70",
           "--z-tooltip": "80"
+        }
+      }
+    },
+    {
+      "name": "config-versioning",
+      "type": "registry:block",
+      "title": "Configuration versioning: save, publish, history, rollback",
+      "description": "Every save is a version. On a live scenario and the global prompt, saving no longer reaches callers until you publish; history shows who changed what, compares any two versions, and moves live back to an earlier one or edits from it.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "drawer",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "item",
+        "label",
+        "popover",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "spinner",
+        "switch",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/config-versioning/page.tsx",
+          "type": "registry:page",
+          "target": "app/config-versioning/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/editor-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/editor-header.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/history-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/history-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/save-review.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/save-review.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/versioned-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/versioned-editor.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/line-diff.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/line-diff.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/config-versioning-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/config-versioning-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
         }
       }
     }
