@@ -19,7 +19,6 @@ import {
   SparklesIcon,
   TelephoneIcon,
   Timer01Icon,
-  UserEdit01Icon,
   UserGroupIcon,
   VoiceIdIcon,
 } from "@hugeicons/core-free-icons"
@@ -378,17 +377,6 @@ export const MOCKUPS: Mockup[] = [
     icon: LiveStreaming02Icon,
     tickets: ["DES-203"],
     added: "2026-10-08T09:48+05:30",
-  },
-  {
-    href: "/persona-name-required",
-    title: "Blank persona name on save",
-    meta: "Dialog · ready for dev",
-    surface: "Personas",
-    description:
-      "Saving the edit persona dialog with a blank name keeps it open: the name field turns red, takes focus, and shows Agent name is required above it until a name is typed.",
-    icon: UserEdit01Icon,
-    tickets: ["PROD-581"],
-    added: "2026-10-10T10:27:06.570Z",
   },
   {
     href: "/voice-cloning",
