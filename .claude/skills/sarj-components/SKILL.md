@@ -71,7 +71,7 @@ Crop with PIL before reading when only one region matters. `npm run lint` and
    for it (`sarj-figure` skill, `topic-figures/`). Mention it; don't block on it.
 
 Current topics: **Index page** · **Choosing a surface** · **Drawer** (448px) · **Integration card** ·
-**Unsaved changes** · **Developers** · **Admin view** · **Avatar**.
+**Unsaved changes** · **Developers** · **Admin view** · **Notifications** · **Avatar**.
 
 ### Showing the real app inside a topic
 

@@ -6,6 +6,7 @@ import {
   AudioWave01Icon,
   BookBookmark01Icon,
   CallOutgoing01Icon,
+  CheckmarkBadge01Icon,
   DocumentAttachmentIcon,
   Flag02Icon,
   Key01Icon,
@@ -400,6 +401,17 @@ export const MOCKUPS: Mockup[] = [
     icon: WorkHistoryIcon,
     tickets: ["DES-202", "INT-253", "PLT-4477"],
     added: "2026-10-12T02:36:18.960Z",
+  },
+  {
+    href: "/publish-approval",
+    title: "Publish approval for live scenario changes",
+    meta: "Page · in progress",
+    surface: "Scenario Edit",
+    description:
+      "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes live only on approval.",
+    icon: CheckmarkBadge01Icon,
+    tickets: ["DES-204", "INT-253", "PLT-4477"],
+    added: "2026-10-12T18:17:16.610Z",
   },
   // `npm run new` appends new mockups above this line.
 ]

@@ -969,6 +969,13 @@ export const PRODUCT_COMPONENTS: DocsPage[] = [
     sarj: true,
   },
   {
+    id: "notifications",
+    title: "Notifications",
+    description:
+      "A bell in the top bar with a dot for unread, opening a list where each notice leads to the thing it is about.",
+    sarj: true,
+  },
+  {
     id: "orb-avatar",
     title: "Avatar",
     description:

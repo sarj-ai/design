@@ -29,6 +29,7 @@ import {
   SidebarInset,
   SidebarMenu,
   SidebarMenuAction,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
@@ -78,9 +79,11 @@ import {
  * you visit once and then leave alone.
  */
 
-interface NavItem {
+export interface NavItem {
   /** Label for the hover "+", on the two things you create most. */
   action?: string
+  /** A count beside the label — what is waiting on the viewer there. */
+  badge?: number
   icon: React.ComponentType
   title: string
 }
@@ -181,6 +184,7 @@ function NavLink({
           <NewItemIcon />
         </SidebarMenuAction>
       ) : null}
+      {item.badge ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
     </SidebarMenuItem>
   )
 }
@@ -355,6 +359,7 @@ export function AppShell({
   underShell = true,
   breadcrumb,
   hiddenItems,
+  addedItems,
   onNavigate,
   children,
 }: {
@@ -375,6 +380,12 @@ export function AppShell({
    * every other mockup wants.
    */
   hiddenItems?: readonly string[]
+  /**
+   * Nav items a mockup proposes, each placed after an existing one. Only the
+   * mockup that designs the page passes it, so every other nav stays the one
+   * the app ships.
+   */
+  addedItems?: readonly { after: string; item: NavItem }[]
   /** Called with a nav item's title when it is clicked, so a mockup can make
    * the destinations it covers actually switch. Items it ignores stay inert. */
   onNavigate?: (title: string) => void
@@ -383,7 +394,14 @@ export function AppShell({
   const hidden = new Set(hiddenItems ?? [])
   const groups = NAV.map((group) => ({
     ...group,
-    items: group.items.filter((item) => !hidden.has(item.title)),
+    items: group.items
+      .flatMap((item) => [
+        item,
+        ...(addedItems ?? [])
+          .filter((added) => added.after === item.title)
+          .map((added) => added.item),
+      ])
+      .filter((item) => !hidden.has(item.title)),
   })).filter((group) => group.items.length > 0)
 
   return (

@@ -27,6 +27,7 @@ import { FormDemo } from "@/components/design-system/form-demo"
 import { LanguageNotes } from "@/components/design-system/language-notes"
 import { IndexPageDemo } from "@/components/design-system/index-page-demo"
 import { AdminViewPagePreview } from "@/components/design-system/admin-view-preview"
+import { NotificationsPreview } from "@/components/design-system/notifications-preview"
 import { IndexPagePreview } from "@/components/design-system/page-preview"
 import { RowActionNotes } from "@/components/design-system/row-action-notes"
 import { MotionTable } from "@/components/design-system/motion-tables"
@@ -266,6 +267,7 @@ export default async function DesignSystemPage({
           </Card>
         ),
         "admin-view": <AdminViewPagePreview />,
+        notifications: <NotificationsPreview />,
         "section-card": <SectionCardPreview />,
         /* The flow, then the parts it cannot ship without. */
         "creation-flow": (

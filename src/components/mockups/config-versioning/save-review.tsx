@@ -36,6 +36,7 @@ export function SaveReview({
   draft,
   rival,
   onSave,
+  liveLine,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -46,6 +47,9 @@ export function SaveReview({
   /** A version someone else saved after this page loaded. */
   rival: Version | null
   onSave: () => void
+  /** What a save means for callers on a live item, when something other
+   *  than a publish puts it on calls — DES-204's approval. */
+  liveLine?: string
 }) {
   const newest = subject.versions[0]
   const next = newest.n + 1
@@ -89,7 +93,8 @@ export function SaveReview({
           <p className="text-sm text-muted-foreground">
             {base !== newest.n && !rival ? `From v${base}. ` : ""}
             {live
-              ? `Saving makes v${next}. Callers keep hearing v${subject.marker} until you publish it.`
+              ? (liveLine ??
+                `Saving makes v${next}. Callers keep hearing v${subject.marker} until you publish it.`)
               : `Saving makes v${next}, and it runs from the next call.`}
           </p>
 

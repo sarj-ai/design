@@ -27,6 +27,7 @@ const FULL_WIDTH_TOPICS = new Set([
   "colour",
   "index",
   "admin-view",
+  "notifications",
   "developers",
   "unsaved-changes",
   "creation-flow",

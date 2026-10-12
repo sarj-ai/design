@@ -3255,6 +3255,7 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "react-day-picker",
         "sonner",
         "tailwind-merge"
       ],
@@ -3265,13 +3266,17 @@
         "badge",
         "breadcrumb",
         "button",
+        "button-group",
+        "calendar",
         "card",
         "collapsible",
+        "command",
         "drawer",
         "dropdown-menu",
         "empty",
         "field",
         "input",
+        "input-group",
         "item",
         "label",
         "popover",
@@ -3317,6 +3322,11 @@
           "target": "@components/sarj/mockups/config-versioning/versioned-editor.tsx"
         },
         {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
+        },
+        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3325,6 +3335,16 @@
           "path": "src/components/shared/line-diff.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/line-diff.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-avatar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-avatar.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-tones.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-tones.ts"
         },
         {
           "path": "src/components/shell/app-shell-icons.tsx",
@@ -3366,7 +3386,10 @@
           "color-warning-tint": "var(--warning-tint)",
           "color-warning-tint-foreground": "var(--warning-tint-foreground)",
           "color-destructive-tint": "var(--destructive-tint)",
-          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
+          "color-orb-deep": "var(--orb-deep)",
+          "color-orb-body": "var(--orb-body)",
+          "color-orb-light": "var(--orb-light)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
@@ -3376,7 +3399,278 @@
           "warning-tint": "oklch(0.955 0.055 70.08)",
           "warning-tint-foreground": "oklch(0.402 0.086 55)",
           "destructive-tint": "oklch(0.948 0.028 27.325)",
-          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)",
+          "orb-deep": "oklch(0.499 0.265 287.9)",
+          "orb-body": "oklch(0.67 0.172 295.3)",
+          "orb-light": "oklch(0.825 0.086 302.1)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "publish-approval",
+      "type": "registry:block",
+      "title": "Publish approval for live scenario changes",
+      "description": "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes live only on approval.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "react-day-picker",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "calendar",
+        "card",
+        "collapsible",
+        "command",
+        "dialog",
+        "drawer",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "label",
+        "popover",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "spinner",
+        "switch",
+        "table",
+        "tabs",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/publish-approval/page.tsx",
+          "type": "registry:page",
+          "target": "app/publish-approval/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-header.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-hint.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-hint.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/editor-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/editor-header.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/history-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/history-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/save-review.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/save-review.tsx"
+        },
+        {
+          "path": "src/components/mockups/live-scenarios/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/live-scenarios/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/live-scenarios/scenario-index.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/live-scenarios/scenario-index.tsx"
+        },
+        {
+          "path": "src/components/mockups/live-scenarios/status-chip.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/live-scenarios/status-chip.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/approval-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/approval-editor.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/approvals-page.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/approvals-page.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/request-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/request-dialog.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/review-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/review-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/status-badge.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/status-badge.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/line-diff.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/line-diff.tsx"
+        },
+        {
+          "path": "src/components/shared/list-footer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/list-footer.tsx"
+        },
+        {
+          "path": "src/components/shared/notifications.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/notifications.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-avatar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-avatar.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-tones.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-tones.ts"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/config-versioning-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/config-versioning-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/live-scenarios-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/live-scenarios-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/publish-approval-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/publish-approval-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
+          "color-orb-deep": "var(--orb-deep)",
+          "color-orb-body": "var(--orb-body)",
+          "color-orb-light": "var(--orb-light)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)",
+          "orb-deep": "oklch(0.499 0.265 287.9)",
+          "orb-body": "oklch(0.67 0.172 295.3)",
+          "orb-light": "oklch(0.825 0.086 302.1)"
         }
       },
       "css": {

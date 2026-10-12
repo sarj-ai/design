@@ -26,6 +26,27 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-13",
+    title: "Notifications have a home: a bell in the top bar",
+    summary:
+      "Publish approval (DES-204) is the first thing the product notifies about, and the PRD asks for it inside the platform as well as by email.",
+    changes: [
+      {
+        kind: "added",
+        text: "Components › Notifications: the bell sits first in the top bar's right-hand row and opens a list of notices. Each notice is what happened, then where and when, and leads to the thing it is about.",
+      },
+      {
+        kind: "added",
+        text: "Notifications, a shared component in shared/notifications.tsx. Mark all read shows only while something is unread, and the foot leads to the page that holds everything.",
+      },
+      {
+        kind: "changed",
+        text: "Unread is a dot on the bell, not a numbered pill. The count stays in the button's label and the list.",
+      },
+    ],
+    topics: ["notifications"],
+  },
+  {
     date: "2026-10-11",
     title: "Any card's action sits in its footer band",
     summary:

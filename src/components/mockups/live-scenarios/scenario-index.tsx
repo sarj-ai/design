@@ -83,7 +83,15 @@ const VIEWS = [
   { id: "deleted", label: "Recently deleted", Icon: DeletedViewIcon },
 ]
 
-export function ScenarioIndex() {
+export function ScenarioIndex({
+  rows = SCENARIOS,
+  marker,
+}: {
+  /** The rows of the Active view. Defaults to DES-203's own. */
+  rows?: ScenarioRow[]
+  /** A second chip after the status, for a later ticket's state on a row. */
+  marker?: (row: ScenarioRow) => React.ReactNode
+} = {}) {
   const [view, setView] = React.useState("active")
   const [query, setQuery] = React.useState("")
   const [liveStatus, setLiveStatus] = React.useState<string | null>(null)
@@ -136,8 +144,9 @@ export function ScenarioIndex() {
 
         <TabsContent value="active">
           <ScenarioList
-            rows={SCENARIOS.filter(matches)}
+            rows={rows.filter(matches)}
             deleted={false}
+            marker={marker}
             onClearFilter={liveStatus ? () => setLiveStatus(null) : undefined}
           />
         </TabsContent>
@@ -157,10 +166,12 @@ export function ScenarioIndex() {
 function ScenarioList({
   rows,
   deleted,
+  marker,
   onClearFilter,
 }: {
   rows: ScenarioRow[]
   deleted: boolean
+  marker?: (row: ScenarioRow) => React.ReactNode
   /** Set while a filter is on, for the no-results way out. */
   onClearFilter?: () => void
 }) {
@@ -233,7 +244,10 @@ function ScenarioList({
                 </span>
               </TableCell>
               <TableCell>
-                <StatusChip live={row.live !== null} deleted={deleted} />
+                <span className="flex items-center gap-1">
+                  <StatusChip live={row.live !== null} deleted={deleted} />
+                  {marker?.(row)}
+                </span>
               </TableCell>
               <TableCell className="text-muted-foreground tabular-nums">
                 {row.created}
