@@ -200,11 +200,16 @@ export function VersionedEditor({
   }
 
   function toggleLive(on: boolean) {
-    const before = { marker: subject.marker, published: subject.published }
+    const before = {
+      marker: subject.marker,
+      published: subject.published,
+      toggled: subject.toggled,
+    }
     setSubject((current) => ({
       ...current,
       marker: on ? current.versions[0].n : null,
       published: on ? { by: "You", at: "Just now" } : null,
+      toggled: { by: "You", at: "just now" },
       versions: on
         ? current.versions.map((version, index) =>
             index === 0 ? { ...version, everLive: true } : version,
@@ -224,6 +229,7 @@ export function VersionedEditor({
               ...current,
               marker: before.marker,
               published: before.published,
+              toggled: before.toggled,
             })),
         },
       },
@@ -231,7 +237,7 @@ export function VersionedEditor({
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8 pb-28">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8 pb-28">
       <EditorHeader
         base={base}
         canEdit={canEdit}
@@ -254,6 +260,7 @@ export function VersionedEditor({
           </ItemContent>
           <ItemActions>
             <Button
+              disabled={!canEdit}
               onClick={() =>
                 setHistory({ n: newest.n, against: subject.marker })
               }
@@ -362,7 +369,7 @@ export function VersionedEditor({
             : subject
         }
       />
-    </main>
+    </div>
   )
 }
 

@@ -75,9 +75,22 @@ export function EditorHeader({
           <span className="text-foreground">
             {editingFrom ? `Editing from v${base}` : `Editing v${base}`}
           </span>
-          {live && subject.published
-            ? ` · v${subject.marker} is live, published by ${subject.published.by}, ${subject.published.at}`
-            : ` · saved by ${newest.author}, ${newest.at}`}
+          {" · "}
+          {/* Each phrase wraps as a unit, never mid-name. */}
+          {live && subject.published ? (
+            <>
+              <span className="whitespace-nowrap">
+                v{subject.marker} is live,
+              </span>{" "}
+              <span className="whitespace-nowrap">
+                published by {subject.published.by}, {subject.published.at}
+              </span>
+            </>
+          ) : (
+            <span className="whitespace-nowrap">
+              saved by {newest.author}, {newest.at}
+            </span>
+          )}
         </p>
       </div>
 
@@ -89,6 +102,7 @@ export function EditorHeader({
             marker={subject.marker}
             newest={newest.n}
             onToggle={onToggleLive}
+            toggled={subject.toggled}
           />
         ) : null}
         <Button onClick={onOpenHistory} variant="outline">
@@ -135,12 +149,14 @@ function LiveMenu({
   newest,
   canToggle,
   onToggle,
+  toggled,
 }: {
   live: boolean
   marker: number | null
   newest: number
   canToggle: boolean
   onToggle: (on: boolean) => void
+  toggled: Subject["toggled"]
 }) {
   const [confirming, setConfirming] = React.useState(false)
   const behind = live && marker !== null && marker < newest
@@ -163,7 +179,15 @@ function LiveMenu({
         </PopoverTrigger>
         <PopoverContent align="end" className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-4">
-            <Label htmlFor="live-switch">Live</Label>
+            <div className="flex flex-col gap-0.5">
+              <Label htmlFor="live-switch">Live</Label>
+              {/* Toggling makes no version, so the record of it lives here. */}
+              {toggled ? (
+                <span className="text-xs text-muted-foreground">
+                  Turned {live ? "on" : "off"} by {toggled.by}, {toggled.at}
+                </span>
+              ) : null}
+            </div>
             <Switch
               checked={live}
               disabled={!canToggle}

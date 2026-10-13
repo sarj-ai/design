@@ -24,6 +24,10 @@ not-live scenario: `Editing v14 · saved by You, today 14:02`. After Edit from
 here: `Editing from v11`. History sits beside the Live button. The global
 prompt has no Live button (always live) — only History.
 
+**Live menu.** Under the Live switch: "Turned on by Nouf Al-Harbi, 28 Sep"
+(or "Turned off by …"). Toggling makes no version, so this is where the PRD's
+record of who toggled it and when shows.
+
 **Unpublished row.** On a live item whose newest version is ahead of the marker:
 "v13 to v14 aren't live yet · Callers hear v12" with **Review and publish**.
 Absent when there is nothing to publish.
@@ -57,7 +61,7 @@ live. Toast "v14 is live" with Undo (moves the marker back). Rollback toast:
 | Concurrent save | In the save review: "Ahmad Khalil saved v15 while you were editing. Saving now makes v16 from v14, without their change: '…' Both stay in history." The diff is against v15, so their change shows as removed. Button becomes Save v16. |
 | History fails to load | Empty state in the drawer: "Couldn't load versions" + Try again. |
 | Publish fails | Alert in the pane: "Couldn't publish v14. Callers still hear v12." The button becomes Try again. |
-| View only | Fields greyed; Publish, Roll back and Edit from here greyed with a tooltip "You can view versions but not change them". History stays readable. |
+| View only | Fields greyed; Review and publish, Publish, Roll back and Edit from here greyed with a tooltip "You can view versions but not change them". History stays readable. |
 | Loading | Skeleton list and pane while versions load. |
 
 ## Acceptance criteria this design maps to

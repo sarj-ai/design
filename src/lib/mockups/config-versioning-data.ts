@@ -39,6 +39,9 @@ export type Subject = {
   /** The version callers hear; null on a not-live scenario. */
   marker: number | null
   published: { by: string; at: string } | null
+  /** Who last turned live on or off, and when. Scenarios only; toggling
+      makes no version, so this is where the PRD's record of it shows. */
+  toggled: { by: string; at: string } | null
 }
 
 /* -------------------------------------------------------------- scenario */
@@ -169,6 +172,7 @@ export const LIVE_SCENARIO: Subject = {
   versions: scenarioVersions(),
   marker: 12,
   published: { by: "Sami Rahman", at: "Yesterday, 16:40" },
+  toggled: { by: "Nouf Al-Harbi", at: "28 Sep" },
 }
 
 export const TEST_SCENARIO: Subject = {
@@ -181,6 +185,7 @@ export const TEST_SCENARIO: Subject = {
   })),
   marker: null,
   published: null,
+  toggled: null,
 }
 
 /* --------------------------------------------------------- global prompt */
@@ -244,6 +249,7 @@ export const GLOBAL_PROMPT: Subject = {
   ],
   marker: 30,
   published: { by: "Nasr Maswood", at: "9 Oct, 12:05" },
+  toggled: null,
 }
 
 /* ----------------------------------------------------------------- cases */
