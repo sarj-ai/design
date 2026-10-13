@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,29 +14,40 @@ import {
 } from "@/components/ui/card"
 import {
   Item,
+  ItemActions,
   ItemContent,
   ItemDescription,
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
+import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { RecordIcon } from "@/components/mockups/voice-cloning/icons"
+import {
+  DeleteVoiceIcon,
+  RecordIcon,
+} from "@/components/mockups/voice-cloning/icons"
+import { DeleteVoiceConfirm } from "@/components/mockups/voice-cloning/voice-library"
 import { PERSONA, type Voice } from "@/lib/mockups/voice-cloning-data"
 import { cn } from "@/lib/utils"
 
 /**
  * The Voice section of the persona form, as `VoiceSelector` renders it on the
  * platform — radio cards, filtered to the persona's language and gender —
- * with two changes for DES-198:
+ * with three changes for DES-198:
  *
  *  - Two groups: the organization's own voices first, then Sarj's catalog. A
  *    clone sits where its owner looks for it, and a catalog voice is never
  *    mistaken for one. The first group is absent until the organization has
  *    a voice of this language and gender.
  *  - Clone a voice in the card's footer — a card's actions get their own
- *    band, end-aligned (Forms › Form actions). It opens the same flow as the Voice library and comes back
- *    with the new voice selected — no sample to a voice on the persona in
- *    one sitting.
+ *    band, end-aligned (Forms › Form actions). This is where a client
+ *    organization clones: the Voice library is super admin only. It opens the
+ *    same flow and comes back with the new voice selected — no sample to a
+ *    voice on the persona in one sitting.
+ *  - Delete on each of the organization's own voices, for the same reason:
+ *    with no library to go to, this is the only place a client sees its
+ *    clones. It opens the library's confirm — final, and blocked while a
+ *    persona speaks with the voice.
  *
  * Only the voice section is drawn; the rest of the persona form is unchanged
  * by this ticket (DES-148 owns it). Inactive voices are not offered, as today.
@@ -46,12 +58,15 @@ export function PersonaVoice({
   voiceId,
   onVoiceChange,
   onClone,
+  onDelete,
 }: {
   voices: Voice[]
   voiceId: string
   onVoiceChange: (id: string) => void
   onClone: () => void
+  onDelete: (voice: Voice) => void
 }) {
+  const [deleting, setDeleting] = React.useState<Voice | null>(null)
   const offered = voices.filter(
     (voice) =>
       voice.language === PERSONA.language &&
@@ -92,6 +107,11 @@ export function PersonaVoice({
                   {group.voices.map((voice) => (
                     <VoiceCard
                       key={voice.id}
+                      onDelete={
+                        voice.scope === "org" && voice.cloned
+                          ? () => setDeleting(voice)
+                          : null
+                      }
                       selected={voice.id === voiceId}
                       voice={voice}
                     />
@@ -110,31 +130,70 @@ export function PersonaVoice({
           </Button>
         </CardFooter>
       </Card>
+
+      <DeleteVoiceConfirm
+        onConfirm={(voice) => {
+          onDelete(voice)
+          toast(`${voice.name} deleted`)
+        }}
+        onOpenChange={(open) => {
+          if (!open) setDeleting(null)
+        }}
+        voice={deleting}
+      />
     </main>
   )
 }
 
-function VoiceCard({ voice, selected }: { voice: Voice; selected: boolean }) {
+/**
+ * The whole card selects its voice: the label is stretched over it, and the
+ * delete button sits above that so it never selects as it deletes.
+ */
+function VoiceCard({
+  voice,
+  selected,
+  onDelete,
+}: {
+  voice: Voice
+  selected: boolean
+  onDelete: (() => void) | null
+}) {
   return (
     <Item
-      asChild
       className={cn(
-        "cursor-pointer hover:bg-muted/50",
+        "relative cursor-pointer hover:bg-muted/50",
         selected && "border-primary ring-1 ring-primary",
       )}
       variant="outline"
     >
-      <label htmlFor={`persona-voice-${voice.id}`}>
-        <ItemMedia>
-          <RadioGroupItem id={`persona-voice-${voice.id}`} value={voice.id} />
-        </ItemMedia>
-        <ItemContent>
-          <ItemTitle dir="auto">{voice.name}</ItemTitle>
-          <ItemDescription dir="auto">
-            {voice.vibe ?? voice.provider}
-          </ItemDescription>
-        </ItemContent>
-      </label>
+      <ItemMedia>
+        <RadioGroupItem id={`persona-voice-${voice.id}`} value={voice.id} />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle dir="auto">
+          <Label
+            className="cursor-pointer after:absolute after:inset-0"
+            htmlFor={`persona-voice-${voice.id}`}
+          >
+            {voice.name}
+          </Label>
+        </ItemTitle>
+        <ItemDescription dir="auto">
+          {voice.vibe ?? voice.provider}
+        </ItemDescription>
+      </ItemContent>
+      {onDelete ? (
+        <ItemActions className="relative z-raised">
+          <Button
+            aria-label={`Delete ${voice.name}`}
+            onClick={onDelete}
+            size="icon-sm"
+            variant="ghost"
+          >
+            <DeleteVoiceIcon />
+          </Button>
+        </ItemActions>
+      ) : null}
     </Item>
   )
 }

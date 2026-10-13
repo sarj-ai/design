@@ -61,7 +61,6 @@ import {
 import {
   GENDER_OPTIONS,
   LANGUAGE_OPTIONS,
-  type Viewer,
   type Voice,
   type VoiceStatus,
 } from "@/lib/mockups/voice-cloning-data"
@@ -69,12 +68,13 @@ import {
 /**
  * `/admin/voices` as the platform ships it on the index-page revamp branch —
  * search with the page's actions at its end, filter chips under it, the same
- * eight columns — plus what DES-198 adds:
+ * eight columns — plus what DES-198 adds. The page is super admin only, as
+ * it is today; a client organization clones and deletes its voices from a
+ * persona instead (persona-voice.tsx).
  *
- *  - Clone voice beside Add voice, two buttons and not a chooser (PRD). Clone
- *    leads: it is the one every user has. Add voice registers an external
- *    voice by provider ID, an engineer's task, so a client organization does
- *    not see it.
+ *  - Clone voice beside Add voice, two buttons and not a chooser (PRD). Add
+ *    voice stays as the platform has it, registering an external voice by
+ *    provider ID.
  *  - Pending, the third status the PRD asks for: a Sarj voice whose request
  *    to be offered to every organization is waiting on approval.
  *  - Delete, only on cloned voices. A native voice cannot be deleted, so the
@@ -92,12 +92,10 @@ const PROVIDER_OPTIONS = ["Sarj Omni", "ElevenLabs", "Hamsa", "Cartesia"].map(
 )
 
 export function VoiceLibrary({
-  viewer,
   voices,
   onClone,
   onDelete,
 }: {
-  viewer: Viewer
   voices: Voice[]
   onClone: () => void
   onDelete: (voice: Voice) => void
@@ -140,12 +138,10 @@ export function VoiceLibrary({
             />
           </InputGroup>
           <div className="flex items-center gap-2">
-            {viewer === "sarj" ? (
-              <Button variant="outline">
-                <AddVoiceIcon />
-                Add voice
-              </Button>
-            ) : null}
+            <Button variant="outline">
+              <AddVoiceIcon />
+              Add voice
+            </Button>
             <Button onClick={onClone}>
               <RecordIcon />
               Clone voice
@@ -350,9 +346,10 @@ function StatusChip({ status }: { status: VoiceStatus }) {
  * Deleting a clone is final — the reference audio is not kept, so it cannot
  * be cloned back. That makes it a confirm, not an undo toast. A voice a
  * persona still speaks with is not deletable at all: the confirm names those
- * personas and offers no Delete until they have switched.
+ * personas and offers no Delete until they have switched. Shared with the
+ * persona's voice section, where a client organization deletes its clones.
  */
-function DeleteVoiceConfirm({
+export function DeleteVoiceConfirm({
   voice,
   onOpenChange,
   onConfirm,
@@ -376,7 +373,7 @@ function DeleteVoiceConfirm({
           <AlertDialogDescription>
             {inUse
               ? `${shown?.usedBy.length === 1 ? "A persona speaks" : `${shown?.usedBy.length} personas speak`} with this voice. Give ${shown?.usedBy.length === 1 ? "it" : "each one"} another voice, then delete it.`
-              : "It’s removed from your voice library for good. The sample isn’t kept, so it can’t be cloned back."}
+              : "It’s removed for good. The sample isn’t kept, so it can’t be cloned back."}
           </AlertDialogDescription>
         </AlertDialogHeader>
         {/* What the reader has to do next is open each of these, so each is

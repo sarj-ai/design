@@ -31,14 +31,17 @@ import {
  * "Voice cloning on the platform" (DIS-71).
  *
  * Two places the flow starts from, one flow:
- *  - Voice library: Clone voice beside Add voice, the new Pending status, and
- *    delete on cloned voices (blocked while a persona uses one).
- *  - Persona: the voice picker, own voices above Sarj's, Clone a voice at its
- *    foot; the new voice comes back selected.
+ *  - Persona, where a client organization clones: the voice picker, own
+ *    voices above Sarj's, Clone a voice at its foot, delete on each own
+ *    voice. The new voice comes back selected. The page opens here.
+ *  - Voice library, super admin only as on the platform: Clone voice beside
+ *    Add voice, the new Pending status, and delete on cloned voices (blocked
+ *    while a persona uses one).
  *
  * The bar holds what a reviewer needs to reach every state: the surface, who
- * is looking (only Sarj users get the publish request, and Add voice), and
- * how the sample turns out — clean, noisy, or a clone that fails once.
+ * is looking on a persona (only a super admin gets the publish request; the
+ * library has no client view, so the toggle is locked there), and how the
+ * sample turns out — clean, noisy, or a clone that fails once.
  */
 
 const SURFACES = [
@@ -50,25 +53,41 @@ type Surface = (typeof SURFACES)[number]["id"]
 
 const VIEWERS: { id: Viewer; label: string }[] = [
   { id: "client", label: "Client org" },
-  { id: "sarj", label: "Sarj" },
+  { id: "sarj", label: "Super admin" },
 ]
 
 export default function VoiceCloningPage() {
-  const [surface, setSurface] = React.useState<Surface>("library")
+  const [surface, setSurface] = React.useState<Surface>("persona")
   const [viewer, setViewer] = React.useState<Viewer>("client")
   const [outcome, setOutcome] = React.useState<SampleOutcome>("clean")
-  const [voices, setVoices] = React.useState<Voice[]>(() => voicesFor("client"))
+  const [voices, setVoices] = React.useState<Record<Viewer, Voice[]>>(() => ({
+    client: voicesFor("client"),
+    sarj: voicesFor("sarj"),
+  }))
   const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId)
   const [cloning, setCloning] = React.useState(false)
 
+  /* The library is super admin only, whoever was picked for the persona. */
+  const looking: Viewer = surface === "library" ? "sarj" : viewer
+
   const changeViewer = (next: Viewer) => {
     setViewer(next)
-    setVoices(voicesFor(next))
     setVoiceId(PERSONA.voiceId)
   }
 
+  const deleted = (voice: Voice) => {
+    setVoices((current) => ({
+      ...current,
+      [looking]: current[looking].filter((entry) => entry.id !== voice.id),
+    }))
+    if (voice.id === voiceId) setVoiceId(PERSONA.voiceId)
+  }
+
   const created = (voice: Voice) => {
-    setVoices((current) => [voice, ...current])
+    setVoices((current) => ({
+      ...current,
+      [looking]: [voice, ...current[looking]],
+    }))
     if (surface === "persona") {
       if (
         voice.language === PERSONA.language &&
@@ -106,12 +125,13 @@ export default function VoiceCloningPage() {
           </Select>
           <ToggleGroup
             aria-label="Viewer"
+            disabled={surface === "library"}
             onValueChange={(next) => {
               if (next) changeViewer(next as Viewer)
             }}
             size="sm"
             type="single"
-            value={viewer}
+            value={looking}
             variant="outline"
           >
             {VIEWERS.map((entry) => (
@@ -145,22 +165,24 @@ export default function VoiceCloningPage() {
           <AppShell active="Voice Library">
             <VoiceLibrary
               onClone={() => setCloning(true)}
-              onDelete={(voice) =>
-                setVoices((current) =>
-                  current.filter((entry) => entry.id !== voice.id),
-                )
-              }
-              viewer={viewer}
-              voices={voices}
+              onDelete={deleted}
+              voices={voices.sarj}
             />
           </AppShell>
         ) : (
-          <AppShell active="Personas" breadcrumb={["Personas", PERSONA.name]}>
+          <AppShell
+            active="Personas"
+            breadcrumb={["Personas", PERSONA.name]}
+            /* The voice library is super admin only, so a client's nav
+               doesn't list it. */
+            hiddenItems={viewer === "client" ? ["Voice Library"] : undefined}
+          >
             <PersonaVoice
               onClone={() => setCloning(true)}
+              onDelete={deleted}
               onVoiceChange={setVoiceId}
               voiceId={voiceId}
-              voices={voices}
+              voices={voices[viewer]}
             />
           </AppShell>
         )}
@@ -169,9 +191,9 @@ export default function VoiceCloningPage() {
             clone lands in that persona's cards. Keyed so switching surface or
             viewer opens a fresh flow. */}
         <CloneVoiceFlow
-          canPublish={viewer === "sarj"}
+          canPublish={looking === "sarj"}
           defaults={{ language: PERSONA.language, gender: PERSONA.gender }}
-          key={`${surface}-${viewer}`}
+          key={`${surface}-${looking}`}
           onCreated={created}
           onOpenChange={setCloning}
           open={cloning}
