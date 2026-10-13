@@ -3255,7 +3255,6 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
-        "react-day-picker",
         "sonner",
         "tailwind-merge"
       ],
@@ -3266,17 +3265,13 @@
         "badge",
         "breadcrumb",
         "button",
-        "button-group",
-        "calendar",
         "card",
         "collapsible",
-        "command",
         "drawer",
         "dropdown-menu",
         "empty",
         "field",
         "input",
-        "input-group",
         "item",
         "label",
         "popover",
@@ -3286,6 +3281,8 @@
         "skeleton",
         "spinner",
         "switch",
+        "table",
+        "tabs",
         "textarea",
         "toggle-group",
         "tooltip"
@@ -3295,6 +3292,21 @@
           "path": "src/app/(mockups)/config-versioning/page.tsx",
           "type": "registry:page",
           "target": "app/config-versioning/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
         },
         {
           "path": "src/components/mockups/config-versioning/editor-header.tsx",
@@ -3322,11 +3334,6 @@
           "target": "@components/sarj/mockups/config-versioning/versioned-editor.tsx"
         },
         {
-          "path": "src/components/shared/filter-bar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/filter-bar.tsx"
-        },
-        {
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
@@ -3335,16 +3342,6 @@
           "path": "src/components/shared/line-diff.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/line-diff.tsx"
-        },
-        {
-          "path": "src/components/shared/orb-avatar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/orb-avatar.tsx"
-        },
-        {
-          "path": "src/components/shared/orb-tones.ts",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/orb-tones.ts"
         },
         {
           "path": "src/components/shell/app-shell-icons.tsx",
@@ -3386,10 +3383,7 @@
           "color-warning-tint": "var(--warning-tint)",
           "color-warning-tint-foreground": "var(--warning-tint-foreground)",
           "color-destructive-tint": "var(--destructive-tint)",
-          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
-          "color-orb-deep": "var(--orb-deep)",
-          "color-orb-body": "var(--orb-body)",
-          "color-orb-light": "var(--orb-light)"
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
@@ -3399,10 +3393,7 @@
           "warning-tint": "oklch(0.955 0.055 70.08)",
           "warning-tint-foreground": "oklch(0.402 0.086 55)",
           "destructive-tint": "oklch(0.948 0.028 27.325)",
-          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)",
-          "orb-deep": "oklch(0.499 0.265 287.9)",
-          "orb-body": "oklch(0.67 0.172 295.3)",
-          "orb-light": "oklch(0.825 0.086 302.1)"
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {
@@ -3588,16 +3579,6 @@
           "target": "@components/sarj/shared/notifications.tsx"
         },
         {
-          "path": "src/components/shared/orb-avatar.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/orb-avatar.tsx"
-        },
-        {
-          "path": "src/components/shared/orb-tones.ts",
-          "type": "registry:component",
-          "target": "@components/sarj/shared/orb-tones.ts"
-        },
-        {
           "path": "src/components/shared/page-header.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/page-header.tsx"
@@ -3653,10 +3634,7 @@
           "color-warning-tint": "var(--warning-tint)",
           "color-warning-tint-foreground": "var(--warning-tint-foreground)",
           "color-destructive-tint": "var(--destructive-tint)",
-          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
-          "color-orb-deep": "var(--orb-deep)",
-          "color-orb-body": "var(--orb-body)",
-          "color-orb-light": "var(--orb-light)"
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
         },
         "light": {
           "warning": "oklch(0.769 0.188 70.08)",
@@ -3667,10 +3645,7 @@
           "warning-tint": "oklch(0.955 0.055 70.08)",
           "warning-tint-foreground": "oklch(0.402 0.086 55)",
           "destructive-tint": "oklch(0.948 0.028 27.325)",
-          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)",
-          "orb-deep": "oklch(0.499 0.265 287.9)",
-          "orb-body": "oklch(0.67 0.172 295.3)",
-          "orb-light": "oklch(0.825 0.086 302.1)"
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
         }
       },
       "css": {

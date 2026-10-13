@@ -20,7 +20,7 @@ export type Field = { id: string; label: string; multiline: boolean }
 export type Version = {
   n: number
   author: string
-  /** The viewer's own, for the "Only mine" filter. */
+  /** Saved by the person looking. */
   mine: boolean
   at: string
   editedFrom: number | null

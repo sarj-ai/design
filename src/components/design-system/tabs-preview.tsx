@@ -407,12 +407,16 @@ export function PrimaryTabs({
  */
 export function SecondaryTabs({
   items = VIEWS,
+  aside,
   children,
   onValueChange,
   value,
 }: {
   /** The views. Defaults to this topic's own three. */
   items?: TabItem[]
+  /** Sits at the end of the tab row — a control that scopes every tab,
+   *  such as what a diff is compared with. */
+  aside?: React.ReactNode
   children: React.ReactNode
   onValueChange: (value: string) => void
   value: string
@@ -421,34 +425,40 @@ export function SecondaryTabs({
 
   return (
     <Tabs className="gap-4" onValueChange={onValueChange} value={value}>
-      <div className="relative flex w-fit flex-col gap-2">
-        <TabsList className="gap-1 p-0" variant="line">
-          {items.map((entry) => (
-            <TabsTrigger
-              className="flex-none gap-2 px-3 group-data-[variant=line]/tabs-list:data-active:after:opacity-0"
-              key={entry.id}
-              ref={triggerRef(triggers, entry.id)}
-              value={entry.id}
-            >
-              {entry.Icon ? <entry.Icon /> : null}
-              {entry.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-        <Separator />
+      <div className="flex items-center justify-between gap-4">
+        {/* No gap above the rule: the trigger's own height already leaves
+            room under the words, and a gap on top of it floated the bar
+            away from the label it belongs to. */}
+        <div className="relative flex w-fit flex-col">
+          <TabsList className="gap-1 p-0" variant="line">
+            {items.map((entry) => (
+              <TabsTrigger
+                className="flex-none gap-2 px-3 group-data-[variant=line]/tabs-list:data-active:after:opacity-0"
+                key={entry.id}
+                ref={triggerRef(triggers, entry.id)}
+                value={entry.id}
+              >
+                {entry.Icon ? <entry.Icon /> : null}
+                {entry.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <Separator />
 
-        {/* Sits on the rule rather than under it: the bar is the part of the
-            rule the open tab owns, not a second line below it. */}
-        {marker ? (
-          <div
-            aria-hidden
-            className="absolute bottom-0 left-0 h-0.5 origin-left rounded-full bg-primary transition-transform duration-200 ease-out-cubic motion-reduce:transition-none"
-            style={{
-              width: marker.base,
-              transform: `translateX(${marker.x}px) scaleX(${marker.scale})`,
-            }}
-          />
-        ) : null}
+          {/* Sits on the rule rather than under it: the bar is the part of the
+              rule the open tab owns, not a second line below it. */}
+          {marker ? (
+            <div
+              aria-hidden
+              className="absolute bottom-0 left-0 h-0.5 origin-left rounded-full bg-primary transition-transform duration-200 ease-out-cubic motion-reduce:transition-none"
+              style={{
+                width: marker.base,
+                transform: `translateX(${marker.x}px) scaleX(${marker.scale})`,
+              }}
+            />
+          ) : null}
+        </div>
+        {aside}
       </div>
 
       {children}

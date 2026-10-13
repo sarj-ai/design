@@ -30,15 +30,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
 import { Item } from "@/components/ui/item"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { DiffStat, diffStat, FoldedDiff } from "@/components/shared/line-diff"
-import { ToggleFilter } from "@/components/shared/filter-bar"
-import { OrbAvatar } from "@/components/shared/orb-avatar"
+import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import {
   CloseIcon,
   EditFromIcon,
@@ -159,7 +157,6 @@ function HistoryBody({
 }) {
   const [load, setLoad] = React.useState<Load>("loading")
   const [attempt, setAttempt] = React.useState(0)
-  const [only, setOnly] = React.useState<"all" | "mine">("all")
   const [selected, setSelected] = React.useState(initial.n)
   const [against, setAgainst] = React.useState<number | null>(initial.against)
 
@@ -204,9 +201,7 @@ function HistoryBody({
     )
   }
 
-  const shown = subject.versions.filter(
-    (version) => only === "all" || version.mine,
-  )
+  const shown = subject.versions
   const version =
     subject.versions.find((item) => item.n === selected) ?? subject.versions[0]
   /* Against the version it was edited from — the summary's own basis — or,
@@ -222,45 +217,22 @@ function HistoryBody({
   return (
     <div className="flex min-h-0 flex-1">
       <aside className="flex w-80 shrink-0 flex-col border-e">
-        <div className="border-b p-3">
-          {/* A filter, so a chip like every other one — "All" is only the
-              chip switched off, and needs no button of its own. */}
-          <ToggleFilter
-            field="Only mine"
-            onChange={(on) => setOnly(on ? "mine" : "all")}
-            value={only === "mine"}
-          />
-        </div>
-
         <div className="min-h-0 flex-1 overflow-y-auto p-2">
           <ol className="flex flex-col gap-1">
-            {shown.length === 0 ? (
-              <Empty>
-                <EmptyHeader>
-                  <EmptyTitle>No versions of yours yet</EmptyTitle>
-                </EmptyHeader>
-                <EmptyContent>
-                  <Button onClick={() => setOnly("all")} variant="outline">
-                    Show all
-                  </Button>
-                </EmptyContent>
-              </Empty>
-            ) : (
-              shown.map((item, index) => (
-                <VersionRow
-                  key={item.n}
-                  last={index === shown.length - 1}
-                  live={subject.marker !== null}
-                  marker={subject.marker}
-                  onSelect={() => {
-                    setSelected(item.n)
-                    setAgainst(null)
-                  }}
-                  selected={item.n === version.n}
-                  version={item}
-                />
-              ))
-            )}
+            {shown.map((item, index) => (
+              <VersionRow
+                key={item.n}
+                last={index === shown.length - 1}
+                live={subject.marker !== null}
+                marker={subject.marker}
+                onSelect={() => {
+                  setSelected(item.n)
+                  setAgainst(null)
+                }}
+                selected={item.n === version.n}
+                version={item}
+              />
+            ))}
           </ol>
         </div>
       </aside>
@@ -488,24 +460,21 @@ function VersionPane({
   return (
     <section className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto p-6">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <OrbAvatar name={version.author} />
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <h2 className="flex items-center gap-2 text-lg font-semibold tabular-nums">
-              v{version.n}
-              {isLive ? (
-                <Badge
-                  className="bg-success-tint text-success-tint-foreground"
-                  variant="secondary"
-                >
-                  Live
-                </Badge>
-              ) : null}
-            </h2>
-            <p className="text-sm text-muted-foreground tabular-nums">
-              {version.author} · {version.at}
-            </p>
-          </div>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <h2 className="flex items-center gap-2 text-lg font-semibold tabular-nums">
+            v{version.n}
+            {isLive ? (
+              <Badge
+                className="bg-success-tint text-success-tint-foreground"
+                variant="secondary"
+              >
+                Live
+              </Badge>
+            ) : null}
+          </h2>
+          <p className="text-sm text-muted-foreground tabular-nums">
+            {version.author} · {version.at}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {version.n === editing ? null : (
@@ -581,83 +550,93 @@ function VersionPane({
 
       {against ? (
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Changes from</span>
-              <Select
-                onValueChange={(value) => onAgainst(Number(value))}
-                value={String(against.n)}
-              >
-                <SelectTrigger aria-label="Changes from" size="sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {subject.versions
-                    .filter((item) => item.n !== version.n)
-                    .map((item) => (
-                      <SelectItem key={item.n} value={String(item.n)}>
-                        v{item.n}
-                        {item.n === marker ? " · live" : ""}
-                        {item.n === version.editedFrom ? " · edited from" : ""}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {/* One setting with two states: a joined segmented control, a
-                step down from the comparison it serves. */}
-            <ToggleGroup
-              aria-label="Diff layout"
-              onValueChange={(value) => {
-                if (value) setLayout(value as "split" | "unified")
-              }}
-              size="sm"
-              spacing={0}
-              type="single"
-              value={layout}
-              variant="outline"
-            >
-              <ToggleGroupItem value="split">Split</ToggleGroupItem>
-              <ToggleGroupItem value="unified">Unified</ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-
-          {/* Every field gets a band, so an unchanged one still says so —
-              the reader sees the whole scenario's shape, and only the
-              changed ones open into a diff. */}
-          {subject.fields.map((field) => {
-            const before = against.body[field.id]
-            const after = version.body[field.id]
-            const same = before === after
-            return (
-              <div className="overflow-hidden rounded-lg border" key={field.id}>
-                <div
-                  className={cn(
-                    "flex items-center justify-between gap-3 bg-muted/60 px-3 py-2 text-xs font-medium",
-                    !same && "border-b",
-                  )}
+          {/* Split or unified is a view of the same changes, inside a
+              drawer — the design system's secondary (line) tabs, with
+              what they are compared with at the end of the same row. */}
+          <SecondaryTabs
+            aside={
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  Compared with
+                </span>
+                <Select
+                  onValueChange={(value) => onAgainst(Number(value))}
+                  value={String(against.n)}
                 >
-                  <span>{field.label}</span>
-                  {same ? (
-                    <span className="font-normal text-muted-foreground">
-                      Unchanged
-                    </span>
-                  ) : (
-                    <DiffStat {...diffStat(before, after)} />
-                  )}
-                </div>
-                {same ? null : (
-                  <FoldedDiff
-                    after={after}
-                    bare
-                    before={before}
-                    key={`${against.n}-${layout}`}
-                    layout={layout}
-                  />
-                )}
+                  <SelectTrigger aria-label="Changes from" size="sm">
+                    {/* The trigger names the version; what it is (live,
+                      edited from) is said in the list. */}
+                    <SelectValue>v{against.n}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {subject.versions
+                      .filter((item) => item.n !== version.n)
+                      .map((item) => (
+                        <SelectItem key={item.n} value={String(item.n)}>
+                          <span className="tabular-nums">v{item.n}</span>
+                          {item.n === marker ? (
+                            <span className="text-muted-foreground">Live</span>
+                          ) : null}
+                          {item.n === version.editedFrom ? (
+                            <span className="text-muted-foreground">
+                              Edited from
+                            </span>
+                          ) : null}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
               </div>
-            )
-          })}
+            }
+            items={[
+              { id: "split", label: "Split" },
+              { id: "unified", label: "Unified" },
+            ]}
+            onValueChange={(value) => setLayout(value as "split" | "unified")}
+            value={layout}
+          >
+            <div className="flex flex-col gap-3">
+              {/* Every field gets a band, so an unchanged one still says so —
+                the reader sees the whole scenario's shape, and only the
+                changed ones open into a diff. */}
+              {subject.fields.map((field) => {
+                const before = against.body[field.id]
+                const after = version.body[field.id]
+                const same = before === after
+                return (
+                  <div
+                    className="overflow-hidden rounded-lg border"
+                    key={field.id}
+                  >
+                    <div
+                      className={cn(
+                        "flex items-center justify-between gap-3 bg-muted/60 px-3 py-2 text-xs font-medium",
+                        !same && "border-b",
+                      )}
+                    >
+                      <span>{field.label}</span>
+                      {same ? (
+                        <span className="font-normal text-muted-foreground">
+                          Unchanged
+                        </span>
+                      ) : (
+                        <DiffStat {...diffStat(before, after)} />
+                      )}
+                    </div>
+                    {same ? null : (
+                      <FoldedDiff
+                        after={after}
+                        bare
+                        before={before}
+                        key={`${against.n}-${layout}`}
+                        layout={layout}
+                      />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </SecondaryTabs>
         </div>
       ) : null}
     </section>

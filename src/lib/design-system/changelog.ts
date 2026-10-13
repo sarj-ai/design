@@ -27,6 +27,23 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: "2026-10-13",
+    title: "Secondary tabs can carry a control at the end of their row",
+    summary:
+      "Version history's Split and Unified tabs needed their comparison picker on the same line, not stacked above it.",
+    changes: [
+      {
+        kind: "added",
+        text: "SecondaryTabs takes an aside: a control that scopes every tab, such as what a diff is compared with, at the end of the tab row.",
+      },
+      {
+        kind: "changed",
+        text: "Secondary tabs sit closer to their rule: the 8px gap between the labels and the line is gone, so the bar reads as part of the tab it marks.",
+      },
+    ],
+    topics: ["tabs"],
+  },
+  {
+    date: "2026-10-13",
     title: "Notifications have a home: a bell in the top bar",
     summary:
       "Publish approval (DES-204) is the first thing the product notifies about, and the PRD asks for it inside the platform as well as by email.",

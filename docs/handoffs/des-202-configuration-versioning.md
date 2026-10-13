@@ -36,7 +36,9 @@ line that says what the save does:
 
 **History** — record drawer, 1024px. List newest first: number, author, time,
 summary; on live items a **Live** badge on the marker and **Was live** on any
-version that has been live. Filter: All / Only mine. The pane compares the
+version that has been live. No filter: the PRD's "filterable to your own
+versions" was cut on 13 Oct 2026, since every row already names its author
+and a scenario's history is short — confirm with the PM. The pane compares the
 selected version side by side with the version it was edited from (default),
 or any version picked in "Compared with". Unchanged fields are listed in one
 line, not drawn.
@@ -57,7 +59,6 @@ live. Toast "v14 is live" with Undo (moves the marker back). Rollback toast:
 | Publish fails | Alert in the pane: "Couldn't publish v14. Callers still hear v12." The button becomes Try again. |
 | View only | Fields greyed; Publish, Roll back and Edit from here greyed with a tooltip "You can view versions but not change them". History stays readable. |
 | Loading | Skeleton list and pane while versions load. |
-| Only mine, none | "No versions of yours yet" + Show all. |
 
 ## Acceptance criteria this design maps to
 
