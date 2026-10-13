@@ -36,6 +36,12 @@ import {
  * The editor for anything versioned — a scenario's Scenario tab, or the
  * global prompt — cut to what DES-202 changes.
  *
+ * The editor names two versions and never numbers them: the live version
+ * (what callers hear) and the latest (the newest save). Numbers live in
+ * History, where you pick one. Review on 13 Oct 2026 found a screen with
+ * v9, v12, v13 and v14 on it at once unreadable; Langfuse's production and
+ * latest labels are the model.
+ *
  *  - Save makes a version. Live or not, the save review says what the save
  *    does to callers (save-review.tsx).
  *  - On a live item with saves ahead of the marker, one row under the header
@@ -138,9 +144,9 @@ export function VersionedEditor({
     setBase(n)
     setRival(null)
     setReviewing(false)
-    toast.success(`Saved as v${n}`, {
+    toast.success("Saved", {
       description: live
-        ? `Callers still hear v${subject.marker}.`
+        ? "Callers keep hearing the live version until you publish."
         : "It runs from the next call.",
     })
   }
@@ -220,8 +226,8 @@ export function VersionedEditor({
       on ? `${subject.name} is live` : `${subject.name} is no longer live`,
       {
         description: on
-          ? `v${newest.n} is the live version. Saves wait for a publish.`
-          : `v${newest.n} runs from the next call. Saves apply straight away.`,
+          ? "The latest version is now live. Saves wait for a publish."
+          : "The latest version runs from the next call. Saves apply straight away.",
         action: {
           label: "Undo",
           onClick: () =>
@@ -239,7 +245,6 @@ export function VersionedEditor({
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8 pb-28">
       <EditorHeader
-        base={base}
         canEdit={canEdit}
         onOpenHistory={() => setHistory({ n: newest.n, against: null })}
         onToggleLive={toggleLive}
@@ -249,13 +254,11 @@ export function VersionedEditor({
       {ahead.length > 0 ? (
         <Item variant="outline">
           <ItemContent>
-            <ItemTitle className="tabular-nums">
-              {ahead.length === 1
-                ? `v${ahead[0].n} isn’t live yet`
-                : `v${ahead[ahead.length - 1].n} to v${ahead[0].n} aren’t live yet`}
-            </ItemTitle>
+            <ItemTitle>Unpublished changes</ItemTitle>
             <ItemDescription className="tabular-nums">
-              Callers hear v{subject.marker}.
+              {ahead.length === 1
+                ? "1 save since the live version. Callers don’t hear it yet."
+                : `${ahead.length} saves since the live version. Callers don’t hear them yet.`}
             </ItemDescription>
           </ItemContent>
           <ItemActions>
@@ -273,15 +276,15 @@ export function VersionedEditor({
 
       {editingFrom ? (
         <Alert>
-          <AlertTitle className="tabular-nums">Editing from v{base}</AlertTitle>
-          <AlertDescription className="tabular-nums">
-            {baseVersion.author}, {baseVersion.at}. Saving makes v{newest.n + 1}{" "}
-            with this content; v{newest.n} stays in history.
+          <AlertTitle>Editing an older version</AlertTitle>
+          <AlertDescription>
+            {baseVersion.author}, {baseVersion.at}. Saving makes it the latest;
+            nothing is lost.
           </AlertDescription>
           <AlertAction>
             <Button onClick={discard} size="sm" variant="outline">
               <BackToNewestIcon />
-              Back to v{newest.n}
+              Back to latest
             </Button>
           </AlertAction>
         </Alert>

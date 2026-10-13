@@ -23,10 +23,11 @@ import type { Subject, Version } from "@/lib/mockups/config-versioning-data"
  *    call" warning moves to publishing, where it is now true.
  *  - Not-live scenario: the save makes a version and that version runs.
  *
- * The verb names the result: Save v15. The concurrent-edit warning (PRD:
- * "told a newer version exists and that saving now will not include those
- * changes") sits above the diff, and the verb moves on to the number the
- * save will really get.
+ * No version numbers here — the review names "the live version", not v12
+ * (review, 13 Oct 2026). The concurrent-edit warning (PRD: "told a newer
+ * version exists and that saving now will not include those changes") sits
+ * above the diff, and the verb becomes Save anyway, the choice the PRD asks
+ * the editor to make.
  */
 export function SaveReview({
   open,
@@ -52,7 +53,6 @@ export function SaveReview({
   liveLine?: string
 }) {
   const newest = subject.versions[0]
-  const next = newest.n + 1
   const changed = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
   )
@@ -81,21 +81,21 @@ export function SaveReview({
           {rival ? (
             <Alert className="bg-warning-tint text-warning-tint-foreground">
               <AlertTitle>
-                {rival.author} saved v{rival.n} while you were editing
+                {rival.author} saved a newer version while you were editing
               </AlertTitle>
               <AlertDescription className="text-warning-tint-foreground">
-                Saving now makes v{next} from v{base}, without their change: “
-                {rival.summary}” Both stay in history.
+                Saving now leaves out their change: “{rival.summary}” Both stay
+                in history.
               </AlertDescription>
             </Alert>
           ) : null}
 
           <p className="text-sm text-muted-foreground">
-            {base !== newest.n && !rival ? `From v${base}. ` : ""}
+            {base !== newest.n && !rival ? "From an older version. " : ""}
             {live
               ? (liveLine ??
-                `Saving makes v${next}. Callers keep hearing v${subject.marker} until you publish it.`)
-              : `Saving makes v${next}, and it runs from the next call.`}
+                "Callers keep hearing the live version until you publish.")
+              : "It runs from the next call."}
           </p>
 
           {changed.map((field) => (
@@ -113,7 +113,7 @@ export function SaveReview({
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
-          <Button onClick={onSave}>Save v{next}</Button>
+          <Button onClick={onSave}>{rival ? "Save anyway" : "Save"}</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

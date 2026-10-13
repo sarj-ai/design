@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { toast } from "sonner"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -40,6 +41,7 @@ import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import {
   CloseIcon,
   EditFromIcon,
+  TestVersionIcon,
 } from "@/components/mockups/config-versioning/icons"
 import type {
   CaseId,
@@ -97,7 +99,10 @@ export function HistoryDrawer({
         <DrawerHeader className="flex flex-row items-start justify-between gap-4 border-b">
           <div className="flex flex-col gap-0.5">
             <DrawerTitle>Version history</DrawerTitle>
-            <DrawerDescription>{subject.name}</DrawerDescription>
+            <DrawerDescription className="tabular-nums">
+              {subject.name}
+              {subject.marker !== null ? ` · Live: v${subject.marker}` : ""}
+            </DrawerDescription>
           </div>
           <DrawerClose asChild>
             <Button aria-label="Close" size="icon-sm" variant="ghost">
@@ -223,6 +228,7 @@ function HistoryBody({
               <VersionRow
                 key={item.n}
                 last={index === shown.length - 1}
+                latest={item.n === subject.versions[0].n}
                 live={subject.marker !== null}
                 marker={subject.marker}
                 onSelect={() => {
@@ -264,6 +270,7 @@ function VersionRow({
   version,
   marker,
   live,
+  latest,
   last,
   selected,
   onSelect,
@@ -271,6 +278,8 @@ function VersionRow({
   version: Version
   marker: number | null
   live: boolean
+  /** The newest save — the editor's "latest". */
+  latest: boolean
   /** The rail stops at the last dot. */
   last: boolean
   selected: boolean
@@ -320,6 +329,10 @@ function VersionRow({
                 >
                   Live
                 </Badge>
+              ) : live && latest ? (
+                /* Named only while it differs from live: the two words the
+                   editor uses, so History is where they meet a number. */
+                <Badge variant="outline">Latest</Badge>
               ) : live && version.everLive ? (
                 <Badge className="text-muted-foreground" variant="outline">
                   Was live
@@ -444,7 +457,7 @@ function VersionPane({
           sub: "The newest version, from the next call",
         }
       : {
-          label: "Callers hear",
+          label: "Live version",
           value: `v${marker}`,
           sub: isLive
             ? "This version"
@@ -477,6 +490,20 @@ function VersionPane({
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          {/* Review, 13 Oct 2026: try a version on a call without putting it
+              on callers. Not in the PRD; it makes no version and moves no
+              marker, so a viewer can use it too. */}
+          <Button
+            onClick={() =>
+              toast(`v${version.n} opened in the Playground`, {
+                description: "Nothing changes for callers.",
+              })
+            }
+            variant="outline"
+          >
+            <TestVersionIcon />
+            {"Test in Playground"}
+          </Button>
           {version.n === editing ? null : (
             <Permission allowed={canEdit}>
               <Button

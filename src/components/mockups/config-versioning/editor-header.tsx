@@ -40,9 +40,10 @@ import { cn } from "@/lib/utils"
  * The top of the editor: DES-203's status-menu header, which was picked
  * there, with versioning added in the two places it fits.
  *
- *  - The line under the title says which version is open and, on anything
- *    live, which version callers hear and who published it. That is the
- *    ticket's "at a glance" — no menu to open.
+ *  - The line under the title says who published the live version and
+ *    when, or on a not-live scenario who saved last. No version numbers:
+ *    the editor speaks of "the live version" and "the latest" (review,
+ *    13 Oct 2026), and History is where numbers are.
  *  - History sits beside the Live button. The page's other actions are
  *    DES-203's, unchanged.
  *
@@ -51,44 +52,37 @@ import { cn } from "@/lib/utils"
  */
 export function EditorHeader({
   subject,
-  base,
   canEdit,
   onOpenHistory,
   onToggleLive,
 }: {
   subject: Subject
-  /** The version open in the editor. */
-  base: number
+  /** No longer shown — the header names no version. Kept so DES-204's
+   *  editor, which passes it, still compiles. */
+  base?: number
   canEdit: boolean
   onOpenHistory: () => void
   onToggleLive: (on: boolean) => void
 }) {
   const newest = subject.versions[0]
   const live = subject.marker !== null
-  const editingFrom = base !== newest.n
 
   return (
     <header className="flex items-start justify-between gap-6">
-      <div className="flex min-w-0 flex-col gap-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         <h1 className="text-2xl font-semibold">{subject.name}</h1>
-        <p className="text-sm text-muted-foreground tabular-nums">
-          <span className="text-foreground">
-            {editingFrom ? `Editing from v${base}` : `Editing v${base}`}
-          </span>
-          {" · "}
+        <p className="text-sm text-muted-foreground">
           {/* Each phrase wraps as a unit, never mid-name. */}
           {live && subject.published ? (
             <>
               <span className="whitespace-nowrap">
-                v{subject.marker} is live,
+                Live version published by {subject.published.by},
               </span>{" "}
-              <span className="whitespace-nowrap">
-                published by {subject.published.by}, {subject.published.at}
-              </span>
+              <span className="whitespace-nowrap">{subject.published.at}</span>
             </>
           ) : (
             <span className="whitespace-nowrap">
-              saved by {newest.author}, {newest.at}
+              Saved by {newest.author}, {newest.at}
             </span>
           )}
         </p>
@@ -206,7 +200,7 @@ function LiveMenu({
               ? "You don't have permission to change this."
               : live
                 ? "Saving makes a version; publishing puts it on calls."
-                : `Turning it on makes v${newest} the live version.`}
+                : "Turning it on makes the latest version live."}
           </p>
         </PopoverContent>
       </Popover>
@@ -216,8 +210,8 @@ function LiveMenu({
           <AlertDialogHeader>
             <AlertDialogTitle>Turn off live?</AlertDialogTitle>
             <AlertDialogDescription>
-              v{newest} starts running instead of v{marker} from the next call,
-              without a publish. Every version stays in history.
+              The latest version starts running instead of the live one from the
+              next call, without a publish. Every version stays in history.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
