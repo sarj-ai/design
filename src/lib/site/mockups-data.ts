@@ -23,6 +23,7 @@ import {
   UserGroupIcon,
   VoiceIdIcon,
   WorkHistoryIcon,
+  Wrench01Icon,
 } from "@hugeicons/core-free-icons"
 import type { IconSvgElement } from "@hugeicons/react"
 
@@ -412,6 +413,17 @@ export const MOCKUPS: Mockup[] = [
     icon: CheckmarkBadge01Icon,
     tickets: ["DES-204", "INT-253", "PLT-4477"],
     added: "2026-10-12T18:17:16.610Z",
+  },
+  {
+    href: "/tool-calls-transcript",
+    title: "Tool calls in the call transcript",
+    meta: "Panel · exploration",
+    surface: "Conversations",
+    description:
+      "Each tool call and its result as one row in the call transcript: the tool, what it returned, and a failure that can never read as a success.",
+    icon: Wrench01Icon,
+    tickets: ["DES-205"],
+    added: "2026-10-15T04:24:13.803Z",
   },
   // `npm run new` appends new mockups above this line.
 ]

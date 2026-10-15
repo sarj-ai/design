@@ -3656,6 +3656,74 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "tool-calls-transcript",
+      "type": "registry:block",
+      "title": "Tool calls in the call transcript",
+      "description": "Each tool call and its result as one row in the call transcript: the tool, what it returned, and a failure that can never read as a success.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "collapsible",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/tool-calls-transcript/page.tsx",
+          "type": "registry:page",
+          "target": "app/tool-calls-transcript/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/tool-calls-transcript/call-transcript.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/tool-calls-transcript/call-transcript.tsx"
+        },
+        {
+          "path": "src/components/mockups/tool-calls-transcript/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/tool-calls-transcript/icons.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/tool-calls-transcript-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/tool-calls-transcript-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }
