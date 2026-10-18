@@ -12,6 +12,7 @@ import {
   CallerIcon,
   ExpandIcon,
   HumanAgentIcon,
+  ToolCompletedIcon,
   ToolFailedIcon,
   ToolIcon,
 } from "@/components/mockups/tool-calls-transcript/icons"
@@ -34,11 +35,14 @@ import { cn } from "@/lib/utils"
  * had to match them up by eye. The row sits where the call was made and
  * carries its result, so whatever was said while the tool ran reads after it.
  *
- * There is no success state. The UI only knows `isError`; everything else —
- * a connected transfer, an instruction to retry, an empty output — is the tool
- * returning, and what it returned is printed on the row. Only a failure gets
- * colour, an icon of its own and the word "Failed", so it cannot be read as
- * anything else, in colour or without it.
+ * The UI only knows `isError`, so a failure is the one state it can name from
+ * the flag: colour, an icon of its own and the word "Failed", so it cannot be
+ * read as anything else, in colour or without it. A tool that returned text —
+ * an availability check, an instruction to retry — prints that text and no
+ * status word, because "Transfer NOT COMPLETED" comes back without the flag.
+ * A tool that returned nothing and no error finished with nothing to add —
+ * a transfer that handed off, an end_call — and reads "Completed". That is
+ * the only case a check can mark without contradicting what it says.
  */
 
 type Call = Extract<TranscriptMessage, { type: "function_call" }>
@@ -193,11 +197,14 @@ function SpeechTurn({
 
 /* -------------------------------------------------------------------- tool */
 
-/** The first line of what the tool returned, or why there is nothing to show. */
+/**
+ * The first line of what the tool returned, or why there is nothing to show.
+ * Null when the status word already says it all.
+ */
 function summary(call?: Call, result?: Result) {
-  if (!result) return call ? "No result recorded" : ""
-  if (result.output.trim() === "") return "No output"
-  return result.output.split("\n")[0] ?? ""
+  if (!result) return call ? "No result recorded" : null
+  if (result.output.trim() !== "") return result.output.split("\n")[0] ?? null
+  return result.isError ? "No output" : null
 }
 
 /** 640 ms · 4.2 s · 1 min 12 s. Never "0 ms" for a duration nobody measured. */
@@ -246,15 +253,16 @@ function ToolRow({
 }) {
   const toolName = call?.toolName ?? result?.toolName ?? ""
   const failed = result?.isError === true
+  const output = result?.output.trim() ?? ""
+  const completed = result !== undefined && !failed && output === ""
   const duration = formatDuration(result?.durationMs)
   const calledAt = call?.startAt ?? result?.startAt
   const hasArguments = call !== undefined && !isEmptyArguments(call.arguments)
-  const output = result?.output.trim() ?? ""
+  const line = summary(call, result)
 
   /* Every row with something in it opens, so the chevron means the same on
-     every row. The summary line stays put while open — hiding it made the
-     header jump while the body animated — so a one-line output shows twice
-     when open, which is the lesser cost. Only an empty row stays shut. */
+     every row. Open, the summary line steps aside for the full output below
+     it, so the text is never on screen twice. Only an empty row stays shut. */
   const showOutput = output !== ""
   const canOpen = hasArguments || showOutput
 
@@ -263,10 +271,20 @@ function ToolRow({
       <span
         className={cn(
           "flex h-4 shrink-0 items-center [&_svg]:size-4",
-          failed ? "text-destructive" : "text-muted-foreground",
+          failed
+            ? "text-destructive"
+            : completed
+              ? "text-success"
+              : "text-muted-foreground",
         )}
       >
-        {failed ? <ToolFailedIcon /> : <ToolIcon />}
+        {failed ? (
+          <ToolFailedIcon />
+        ) : completed ? (
+          <ToolCompletedIcon />
+        ) : (
+          <ToolIcon />
+        )}
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="flex items-center gap-2">
@@ -276,6 +294,9 @@ function ToolRow({
           {failed ? (
             <span className="font-medium text-destructive">Failed</span>
           ) : null}
+          {completed ? (
+            <span className="font-medium text-foreground">Completed</span>
+          ) : null}
           <span className="ms-auto flex items-center gap-3 text-muted-foreground tabular-nums">
             {duration ? <span>{duration}</span> : null}
             {calledAt !== undefined ? (
@@ -283,11 +304,23 @@ function ToolRow({
             ) : null}
           </span>
         </span>
-        {/* Output is English written for the model; pin it left-to-right so
-            an Arabic page does not reorder its punctuation. */}
-        <span className="truncate text-muted-foreground" dir="ltr">
-          {summary(call, result)}
-        </span>
+        {/* Output is English written for the model, capitals for emphasis
+            included. Monospace, like the payload it previews, so it reads as
+            what the model was told and not as the page talking. Pinned
+            left-to-right so an Arabic page does not reorder its punctuation.
+            "No result recorded" and "No output" are the page talking, so they
+            stay in the page's type. */}
+        {line !== null ? (
+          <span
+            className={cn(
+              "truncate text-muted-foreground group-data-[state=open]/tool:hidden",
+              showOutput && "font-mono",
+            )}
+            dir="ltr"
+          >
+            {line}
+          </span>
+        ) : null}
       </span>
     </>
   )

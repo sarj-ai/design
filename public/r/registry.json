@@ -3033,6 +3033,7 @@
         "input",
         "input-group",
         "item",
+        "label",
         "popover",
         "progress",
         "radio-group",
@@ -3716,6 +3717,14 @@
           "target": "@lib/utils.ts"
         }
       ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)"
+        }
+      },
       "css": {
         "@utility z-nav": {
           "z-index": "var(--z-nav)"
