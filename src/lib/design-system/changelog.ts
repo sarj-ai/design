@@ -26,6 +26,27 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-19",
+    title: "Integration cards show what each connection does",
+    summary:
+      "The product's card only says whether a service is connected; a reader wants which events start calls, where call results go, and whether it is still working.",
+    changes: [
+      {
+        kind: "added",
+        text: "A flow concept: each automation drawn as a line between the service and Sarj, pointing in when an event starts a call and out when a result goes back.",
+      },
+      {
+        kind: "added",
+        text: "An activity concept: a week of events as bars, when the last one arrived, how many automations run on it, and the one thing about to break.",
+      },
+      {
+        kind: "added",
+        text: "A layout concept: each connected service gets a wide panel listing its automations, and services that are not connected shrink to a shelf of chips.",
+      },
+    ],
+    topics: ["integration-card"],
+  },
+  {
     date: "2026-10-13",
     title: "Secondary tabs can carry a control at the end of their row",
     summary:
