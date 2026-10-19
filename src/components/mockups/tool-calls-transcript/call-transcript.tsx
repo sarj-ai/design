@@ -16,6 +16,7 @@ import {
   ToolFailedIcon,
   ToolIcon,
 } from "@/components/mockups/tool-calls-transcript/icons"
+import { Separator } from "@/components/ui/separator"
 import type {
   TranscriptMessage,
   TranscriptRole,
@@ -25,24 +26,26 @@ import { cn } from "@/lib/utils"
 /**
  * The call transcript with tool calls — DES-205.
  *
- * The speech is drawn the way the reviewed call drawer draws it
+ * Drawn the way the reviewed call drawer draws a transcript
  * (`/conversations-revamp`): a tinted avatar, a bubble with the speaker and the
- * time into the call on its first line. The design system has no transcript
- * pattern of its own yet, so that drawer is the reference.
+ * time into the call on its first line, and a tool as a pill on a rule between
+ * the turns. The design system has no transcript pattern of its own yet, so
+ * that drawer is the reference.
  *
- * A call and its result are one row. They arrive as two items linked by
+ * A call and its result are one pill. They arrive as two items linked by
  * `toolCallId`, often with speech between them, and as two pills the reader
- * had to match them up by eye. The row sits where the call was made and
+ * had to match them up by eye. The pill sits where the call was made and
  * carries its result, so whatever was said while the tool ran reads after it.
  *
  * The UI only knows `isError`, so a failure is the one state it can name from
  * the flag: colour, an icon of its own and the word "Failed", so it cannot be
  * read as anything else, in colour or without it. A tool that returned text —
- * an availability check, an instruction to retry — prints that text and no
- * status word, because "Transfer NOT COMPLETED" comes back without the flag.
- * A tool that returned nothing and no error finished with nothing to add —
- * a transfer that handed off, an end_call — and reads "Completed". That is
- * the only case a check can mark without contradicting what it says.
+ * an availability check, an instruction to retry — keeps the plain wrench and
+ * no status word, because "Transfer NOT COMPLETED" comes back without the
+ * flag; its text is one click away. A tool that returned nothing and no error
+ * finished with nothing to add — a transfer that handed off, an end_call —
+ * and reads "Completed". That is the only case a check can mark without
+ * contradicting what it says.
  */
 
 type Call = Extract<TranscriptMessage, { type: "function_call" }>
@@ -177,35 +180,24 @@ function SpeechTurn({
             : "bg-muted text-foreground",
         )}
       >
-        {/* The call is usually Arabic and the UI English: each line picks its
-            own direction from its first strong character. */}
-        <p className="text-sm" dir="auto">
-          {message.content}
-        </p>
-        {/* What was said leads; who and when sit under it, because the side,
-            the avatar and the colour already say who. */}
+        {/* Who and when on the first line, as the call drawer has it. */}
         <span className="flex items-center gap-4 text-xs opacity-70">
           <span className="font-medium">{speaker.label}</span>
           <span className="ms-auto tabular-nums">
             {formatOffset(message.startAt, startedAt)}
           </span>
         </span>
+        {/* The call is usually Arabic and the UI English: each line picks its
+            own direction from its first strong character. */}
+        <p className="text-sm" dir="auto">
+          {message.content}
+        </p>
       </div>
     </div>
   )
 }
 
 /* -------------------------------------------------------------------- tool */
-
-/**
- * The first line of what the tool returned, or why there is nothing to show.
- * Null when the status word already says it all.
- */
-function summary(call?: Call, result?: Result) {
-  if (!result) return call ? "No result recorded" : null
-  if (result.output.trim() !== "") return result.output.split("\n")[0] ?? null
-  return result.isError ? "No output" : null
-}
 
 /** 640 ms · 4.2 s · 1 min 12 s. Never "0 ms" for a duration nobody measured. */
 function formatDuration(ms: number | null | undefined) {
@@ -258,101 +250,84 @@ function ToolRow({
   const duration = formatDuration(result?.durationMs)
   const calledAt = call?.startAt ?? result?.startAt
   const hasArguments = call !== undefined && !isEmptyArguments(call.arguments)
-  const line = summary(call, result)
 
-  /* Every row with something in it opens, so the chevron means the same on
-     every row. Open, the summary line steps aside for the full output below
-     it, so the text is never on screen twice. Only an empty row stays shut. */
+  /* Every pill with something in it opens, so the chevron means the same on
+     every pill. Only an empty one stays shut. */
   const showOutput = output !== ""
   const canOpen = hasArguments || showOutput
 
-  const header = (
+  const pill = (
     <>
-      <span
-        className={cn(
-          "flex h-4 shrink-0 items-center [&_svg]:size-4",
-          failed
-            ? "text-destructive"
-            : completed
-              ? "text-success"
-              : "text-muted-foreground",
-        )}
-      >
-        {failed ? (
-          <ToolFailedIcon />
-        ) : completed ? (
-          <ToolCompletedIcon />
-        ) : (
-          <ToolIcon />
-        )}
+      {failed ? (
+        <ToolFailedIcon className="size-3 shrink-0" />
+      ) : completed ? (
+        <ToolCompletedIcon className="size-3 shrink-0 text-success" />
+      ) : (
+        <ToolIcon className="size-3 shrink-0" />
+      )}
+      <span className="font-mono" dir="ltr">
+        {toolName}
       </span>
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-        <span className="flex items-center gap-2">
-          <span className="font-mono font-medium text-foreground" dir="ltr">
-            {toolName}
-          </span>
-          {failed ? (
-            <span className="font-medium text-destructive">Failed</span>
-          ) : null}
-          {completed ? (
-            <span className="font-medium text-foreground">Completed</span>
-          ) : null}
-          <span className="ms-auto flex items-center gap-3 text-muted-foreground tabular-nums">
-            {duration ? <span>{duration}</span> : null}
-            {calledAt !== undefined ? (
-              <span>{formatOffset(calledAt, startedAt)}</span>
-            ) : null}
-          </span>
+      {failed ? <span className="font-medium">Failed</span> : null}
+      {completed ? <span className="font-medium">Completed</span> : null}
+      {/* The call went out and nothing came back — not a state the tool
+          reported, so it is the page talking, in the page's quiet voice. */}
+      {result === undefined ? (
+        <span className="text-muted-foreground">No result</span>
+      ) : null}
+      {duration ? (
+        <span className="text-muted-foreground tabular-nums">{duration}</span>
+      ) : null}
+      {calledAt !== undefined ? (
+        <span className="text-muted-foreground tabular-nums">
+          {formatOffset(calledAt, startedAt)}
         </span>
-        {/* Output is English written for the model, capitals for emphasis
-            included. Monospace, like the payload it previews, so it reads as
-            what the model was told and not as the page talking. Pinned
-            left-to-right so an Arabic page does not reorder its punctuation.
-            "No result recorded" and "No output" are the page talking, so they
-            stay in the page's type. */}
-        {line !== null ? (
-          <span
-            className={cn(
-              "truncate text-muted-foreground group-data-[state=open]/tool:hidden",
-              showOutput && "font-mono",
-            )}
-            dir="ltr"
-          >
-            {line}
-          </span>
-        ) : null}
-      </span>
+      ) : null}
+      {canOpen ? (
+        <ExpandIcon className="size-3 transition-transform duration-150 ease-out-cubic group-data-[state=open]/tool:rotate-180 motion-reduce:transition-none" />
+      ) : null}
     </>
   )
 
-  const surface = cn(
-    "ms-11 rounded-lg",
-    failed ? "bg-destructive/10" : "bg-muted",
+  /* A pill on a rule, as the call drawer draws a tool: it sits between the
+     turns as something that happened on the call, not as a fourth speaker.
+     It carries only what fits on one short line; what the tool returned is
+     one click away, below it. */
+  const pillClass = cn(
+    "flex items-center gap-2 rounded-4xl px-3 py-1 text-xs",
+    failed
+      ? "bg-destructive/10 text-destructive"
+      : "bg-secondary text-secondary-foreground",
   )
 
   if (!canOpen) {
     return (
-      <div className={surface}>
-        <div className="flex items-start gap-2 px-3 py-2 text-xs">
-          {header}
-          {/* Holds the chevron's column so every row's numbers line up. */}
-          <span className="size-4 shrink-0" />
-        </div>
+      <div className="flex items-center gap-2">
+        <Separator className="flex-1" />
+        <div className={pillClass}>{pill}</div>
+        <Separator className="flex-1" />
       </div>
     )
   }
 
   return (
-    <Collapsible className={surface}>
-      <CollapsibleTrigger className="group/tool flex w-full items-start gap-2 rounded-lg px-3 py-2 text-start text-xs outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
-        {header}
-        <span className="flex h-4 shrink-0 items-center text-muted-foreground [&_svg]:size-4">
-          <ExpandIcon className="transition-transform duration-150 ease-out-cubic group-data-[state=open]/tool:rotate-180 motion-reduce:transition-none" />
-        </span>
-      </CollapsibleTrigger>
+    <Collapsible className="flex flex-col">
+      <div className="flex items-center gap-2">
+        <Separator className="flex-1" />
+        <CollapsibleTrigger
+          className={cn(
+            pillClass,
+            "group/tool outline-none transition-colors duration-150 ease-out-cubic focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
+            failed ? "hover:bg-destructive/20" : "hover:bg-accent",
+          )}
+        >
+          {pill}
+        </CollapsibleTrigger>
+        <Separator className="flex-1" />
+      </div>
 
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
-        <div className="flex flex-col gap-3 px-3 pt-1 pb-3">
+        <div className="mt-2 flex flex-col gap-3 rounded-lg bg-muted p-3">
           {hasArguments ? (
             <Payload label="Arguments" value={call.arguments} />
           ) : null}
