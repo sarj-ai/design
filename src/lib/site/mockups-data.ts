@@ -7,6 +7,7 @@ import {
   BookBookmark01Icon,
   CallOutgoing01Icon,
   CheckmarkBadge01Icon,
+  DashboardSquare01Icon,
   DocumentAttachmentIcon,
   Flag02Icon,
   Key01Icon,
@@ -424,6 +425,17 @@ export const MOCKUPS: Mockup[] = [
     icon: Wrench01Icon,
     tickets: ["DES-205"],
     added: "2026-10-15T04:24:13.803Z",
+  },
+  {
+    href: "/dashboard",
+    title: "Dashboard in line with the design system",
+    meta: "Page · exploration",
+    surface: null,
+    description:
+      "The dashboard's six number cards and the call volume chart, rebuilt on the system: neutral changes, one comparison label for the page, numbers on the type scale, no decorative icons or shadows, and chart colours that follow the brand.",
+    icon: DashboardSquare01Icon,
+    tickets: ["PROD-600"],
+    added: "2026-10-20T08:57:18.871Z",
   },
   // `npm run new` appends new mockups above this line.
 ]

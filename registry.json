@@ -3776,6 +3776,121 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "dashboard",
+      "type": "registry:block",
+      "title": "Dashboard in line with the design system",
+      "description": "The dashboard's six number cards and the call volume chart, rebuilt on the system: neutral changes, one comparison label for the page, numbers on the type scale, no decorative icons or shadows, and chart colours that follow the brand.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "react-day-picker",
+        "recharts",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "calendar",
+        "card",
+        "chart",
+        "collapsible",
+        "popover",
+        "separator",
+        "sidebar",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/dashboard/page.tsx",
+          "type": "registry:page",
+          "target": "app/dashboard/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/dashboard/call-volume-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/dashboard/call-volume-chart.tsx"
+        },
+        {
+          "path": "src/components/mockups/dashboard/dashboard-page.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/dashboard/dashboard-page.tsx"
+        },
+        {
+          "path": "src/components/mockups/dashboard/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/dashboard/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/dashboard/period-selector.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/dashboard/period-selector.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/dashboard-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/dashboard-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)",
+          "color-chart-6": "var(--chart-6)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--chart-6": "oklch(0.66 0.18 300)",
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }
