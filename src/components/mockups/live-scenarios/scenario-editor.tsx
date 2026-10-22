@@ -3,16 +3,6 @@
 import * as React from "react"
 import { toast } from "sonner"
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -48,10 +38,12 @@ import {
  * that there and renames the verb. No extra click, and nothing to suppress:
  * a "don't show again" would switch off the only thing Live is for.
  *
- * Every write to a live scenario goes through one of two doors here: Save
- * (which also carries Import and the AI notes, since both only fill the
- * form) and Delete. Transfer ownership is the third, super-admin only, and
- * its existing confirm takes the same line — not drawn.
+ * Save is the one door the warning guards (it also carries Import and the
+ * AI notes, since both only fill the form). Delete is not: the TDD leaves
+ * deleting a live scenario to a later release, and today a deleted
+ * scenario is only archived and still answers calls (TDD 7), so a warning
+ * that callers stop reaching it would be untrue. Delete works as on any
+ * scenario: it moves to Recently deleted, with Undo.
  */
 export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   const [live, setLive] = React.useState<LiveRecord | null>(editorCase.live)
@@ -63,7 +55,6 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   const [saved, setSaved] = React.useState(PROMPT_FIELDS)
   const [draft, setDraft] = React.useState(PROMPT_FIELDS)
   const [reviewing, setReviewing] = React.useState(false)
-  const [confirmingDelete, setConfirmingDelete] = React.useState(false)
 
   const changed = draft.filter(
     (field, index) => field.body !== saved[index].body,
@@ -123,10 +114,6 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   }
 
   function remove() {
-    if (live) {
-      setConfirmingDelete(true)
-      return
-    }
     toast(`${editorCase.scenario} moved to Recently deleted`, {
       action: { label: "Undo", onClick: () => {} },
     })
@@ -185,29 +172,6 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
         saved={saved}
         onSave={save}
       />
-
-      <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete {editorCase.scenario}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              It&apos;s live, so callers routed to it stop reaching it. It moves
-              to Recently deleted, where it can be restored.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() =>
-                toast(`${editorCase.scenario} moved to Recently deleted`)
-              }
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </main>
   )
 }
