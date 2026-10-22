@@ -5,17 +5,15 @@ import {
   BotIcon,
   CancelCircleIcon,
   CheckmarkCircle02Icon,
-  HeadsetIcon,
-  UserIcon,
+  Copy01Icon,
+  Tick02Icon,
   Wrench01Icon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
 
-/* Who is speaking — the same three glyphs the call page uses today. */
+/* The AI agent — the same glyph the call page uses today. People get an orb. */
 export const AgentIcon = icon(BotIcon, "AgentIcon")
-export const CallerIcon = icon(UserIcon, "CallerIcon")
-export const HumanAgentIcon = icon(HeadsetIcon, "HumanAgentIcon")
 
 /* A tool row: a tool ran and said what happened, finished with nothing to add,
    or failed. */
@@ -27,3 +25,7 @@ export const ToolCompletedIcon = icon(
 export const ToolFailedIcon = icon(CancelCircleIcon, "ToolFailedIcon")
 
 export const ExpandIcon = icon(ArrowDown01Icon, "ExpandIcon")
+
+/* Copying a payload, and the moment after. */
+export const CopyIcon = icon(Copy01Icon, "CopyIcon")
+export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")

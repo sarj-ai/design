@@ -1,6 +1,7 @@
 "use client"
 
-import type * as React from "react"
+import * as React from "react"
+import { toast } from "sonner"
 
 import {
   Collapsible,
@@ -9,14 +10,17 @@ import {
 } from "@/components/ui/collapsible"
 import {
   AgentIcon,
-  CallerIcon,
+  CopiedIcon,
+  CopyIcon,
   ExpandIcon,
-  HumanAgentIcon,
   ToolCompletedIcon,
   ToolFailedIcon,
   ToolIcon,
 } from "@/components/mockups/tool-calls-transcript/icons"
-import { Separator } from "@/components/ui/separator"
+import { JsonView } from "@/components/design-system/json-view-preview"
+import { OrbAvatar } from "@/components/shared/orb-avatar"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import type {
   TranscriptMessage,
   TranscriptRole,
@@ -28,9 +32,10 @@ import { cn } from "@/lib/utils"
  *
  * Drawn the way the reviewed call drawer draws a transcript
  * (`/conversations-revamp`): a tinted avatar, a bubble with the speaker and the
- * time into the call on its first line, and a tool as a line on a rule between
- * the turns. The design system has no transcript pattern of its own yet, so
- * that drawer is the reference.
+ * time into the call on its first line. The design system has no transcript
+ * pattern of its own yet, so that drawer is the reference. A tool is a quiet
+ * line inside the agent's turn, the way ElevenLabs keeps it there, rather than
+ * the drawer's rule across the transcript, which read as a section break.
  *
  * A call and its result are one line. They arrive as two items linked by
  * `toolCallId`, often with speech between them, and as two pills the reader
@@ -89,6 +94,38 @@ function toRows(messages: TranscriptMessage[]): Row[] {
   return rows
 }
 
+/**
+ * Gathers each tool into the agent turn it belongs to: the agent message just
+ * before it ("I'll transfer you now", then the transfer), or failing that the
+ * one it leads into (the invoice lookup, then the answer it gave). A tool with
+ * no agent message either side stands on its own.
+ */
+function toTurns(rows: Row[]): Row[][] {
+  const turns: Row[][] = []
+  const isAgent = (row?: Row) =>
+    row?.kind === "tool" ||
+    (row?.kind === "speech" && row.message.role === "assistant")
+
+  for (const row of rows) {
+    const last = turns.at(-1)
+
+    if (row.kind === "tool" && last && isAgent(last.at(-1))) {
+      last.push(row)
+    } else if (
+      row.kind === "speech" &&
+      row.message.role === "assistant" &&
+      last &&
+      !last.some((item) => item.kind === "speech")
+    ) {
+      last.push(row)
+    } else {
+      turns.push([row])
+    }
+  }
+
+  return turns
+}
+
 export function CallTranscript({
   messages,
   startedAt,
@@ -97,67 +134,39 @@ export function CallTranscript({
   startedAt: number
 }) {
   return (
+    /* Two distances: turns sit apart, and a tool sits tight against the
+       agent message it belongs to, so it reads as part of that turn. */
     <div className="flex flex-col gap-4">
-      {toRows(messages).map((row) =>
-        row.kind === "speech" ? (
-          <SpeechTurn
-            key={row.key}
-            message={row.message}
-            startedAt={startedAt}
-          />
-        ) : (
-          <ToolRow
-            call={row.call}
-            key={row.key}
-            result={row.result}
-            startedAt={startedAt}
-          />
-        ),
-      )}
+      {toTurns(toRows(messages)).map((turn) => (
+        <div className="flex flex-col gap-1.5" key={turn[0].key}>
+          {turn.map((row) =>
+            row.kind === "speech" ? (
+              <SpeechTurn
+                key={row.key}
+                message={row.message}
+                startedAt={startedAt}
+              />
+            ) : (
+              <ToolRow
+                call={row.call}
+                key={row.key}
+                result={row.result}
+                startedAt={startedAt}
+              />
+            ),
+          )}
+        </div>
+      ))}
     </div>
   )
 }
 
 /* ------------------------------------------------------------------ speech */
 
-const SPEAKERS: Record<
-  TranscriptRole,
-  { icon: React.ReactNode; label: string; isCaller: boolean }
-> = {
-  assistant: {
-    icon: <AgentIcon className="size-4" />,
-    label: "Agent",
-    isCaller: false,
-  },
-  user: {
-    icon: <CallerIcon className="size-4" />,
-    label: "Customer",
-    isCaller: true,
-  },
-  "human agent": {
-    icon: <HumanAgentIcon className="size-4" />,
-    label: "Human agent",
-    isCaller: false,
-  },
-}
-
-function SpeakerAvatar({
-  isCaller,
-  icon,
-}: {
-  isCaller: boolean
-  icon: React.ReactNode
-}) {
-  return (
-    <span
-      className={cn(
-        "flex size-8 shrink-0 items-center justify-center rounded-4xl",
-        isCaller ? "bg-muted text-foreground" : "bg-primary/10 text-primary",
-      )}
-    >
-      {icon}
-    </span>
-  )
+const SPEAKERS: Record<TranscriptRole, { label: string; isCaller: boolean }> = {
+  assistant: { label: "Agent", isCaller: false },
+  user: { label: "Customer", isCaller: true },
+  "human agent": { label: "Human agent", isCaller: false },
 }
 
 function SpeechTurn({
@@ -171,7 +180,19 @@ function SpeechTurn({
 
   return (
     <div className={cn("flex gap-3", speaker.isCaller && "flex-row-reverse")}>
-      <SpeakerAvatar icon={speaker.icon} isCaller={speaker.isCaller} />
+      {/* People get the design system's orb, the avatar for anyone without
+          a photo, seeded by the speaker so each keeps the same orb down the
+          call. The AI agent is not a person, so it keeps the bot mark the
+          call page gives it today. */}
+      {message.role === "assistant" ? (
+        <Avatar>
+          <AvatarFallback className="bg-primary/10 text-primary">
+            <AgentIcon className="size-4" />
+          </AvatarFallback>
+        </Avatar>
+      ) : (
+        <OrbAvatar name={speaker.label} />
+      )}
       <div
         className={cn(
           "flex max-w-[80%] flex-col gap-1 rounded-lg px-4 py-2.5",
@@ -244,24 +265,6 @@ function humanize(name: string) {
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
-/**
- * {"account_number":"4471 0928"} → Account number · 4471 0928, when every
- * value is a plain one. Anything nested stays as the JSON it is.
- */
-function plainFields(value: string): [string, string][] | null {
-  const json = parseJson(value)
-  if (json === null || typeof json !== "object" || Array.isArray(json)) {
-    return null
-  }
-  const entries = Object.entries(json)
-  if (
-    entries.some(([, field]) => field !== null && typeof field === "object")
-  ) {
-    return null
-  }
-  return entries.map(([key, field]) => [humanize(key), String(field)])
-}
-
 function ToolRow({
   call,
   result,
@@ -280,79 +283,77 @@ function ToolRow({
   const hasArguments = call !== undefined && !isEmptyArguments(call.arguments)
   const label = humanize(toolName)
 
-  /* One quiet line on a rule: what the agent did, in words, and when. It sits
-     between the turns as something that happened on the call, not as a
-     fourth speaker, and it is set lighter than the speech so the
+  /* One quiet line on the agent's side: what the agent did, in words, and
+     when. A tool is something the agent does, so it sits in the agent's
+     column, under the avatars, where its speech is. A rule across the whole
+     transcript read as a section break, as if the turns either side were two
+     different conversations. It is set lighter than the speech so the
      conversation stays the thing being read. Everything technical — what was
      sent, what came back, how long it took, the tool's own name — is one
      click away, below it. */
   return (
-    <Collapsible className="flex flex-col">
-      <div className="flex items-center gap-3">
-        <Separator className="flex-1" />
-        <CollapsibleTrigger
-          className={cn(
-            "group/tool flex items-center gap-1.5 rounded-sm text-xs outline-none transition-colors duration-150 ease-out-cubic focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
-            failed
-              ? "text-destructive"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {failed ? (
-            <ToolFailedIcon className="size-3.5 shrink-0" />
-          ) : completed ? (
-            <ToolCompletedIcon className="size-3.5 shrink-0 text-success" />
-          ) : (
-            <ToolIcon className="size-3.5 shrink-0" />
-          )}
-          <span>
-            {failed
-              ? `${label} failed`
-              : completed
-                ? `${label} completed`
-                : label}
+    <Collapsible className="ms-11 flex flex-col items-start">
+      {/* Plain muted text — no fill, no outline. Any shape around it drew the
+          eye away from the speech, which is what the reader came for. Only
+          the status carries colour: the icon, and the word when it failed. */}
+      <CollapsibleTrigger className="group/tool -mx-2 -my-1 flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground outline-none transition-colors duration-150 ease-out-cubic hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none">
+        {failed ? (
+          <ToolFailedIcon className="size-3.5 shrink-0 text-destructive" />
+        ) : completed ? (
+          <ToolCompletedIcon className="size-3.5 shrink-0 text-success" />
+        ) : (
+          <ToolIcon className="size-3.5 shrink-0" />
+        )}
+        <span>
+          {label}
+          {failed ? <span className="text-destructive"> failed</span> : null}
+          {completed ? " completed" : null}
+        </span>
+        {/* The call went out and nothing came back. */}
+        {result === undefined ? <span>· No result</span> : null}
+        {calledAt !== undefined ? (
+          <span className="tabular-nums">
+            · {formatOffset(calledAt, startedAt)}
           </span>
-          {/* The call went out and nothing came back. */}
-          {result === undefined ? <span>· No result</span> : null}
-          {calledAt !== undefined ? (
-            <span className="tabular-nums">
-              · {formatOffset(calledAt, startedAt)}
-            </span>
-          ) : null}
-          <ExpandIcon className="size-3.5 transition-transform duration-150 ease-out-cubic group-data-[state=open]/tool:rotate-180 motion-reduce:transition-none" />
-        </CollapsibleTrigger>
-        <Separator className="flex-1" />
-      </div>
+        ) : null}
+        <ExpandIcon className="size-3.5 transition-transform duration-150 ease-out-cubic group-data-[state=open]/tool:rotate-180 motion-reduce:transition-none" />
+      </CollapsibleTrigger>
 
-      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
-        <div className="mt-2 flex flex-col gap-2.5 rounded-lg bg-muted p-3 text-xs">
+      <CollapsibleContent className="self-stretch overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
+        {/* Laid out as ElevenLabs lays out its tool details: what went in,
+            the facts, what came back, each payload in the design system's
+            code block with its own Copy. */}
+        <div className="mt-3 flex flex-col gap-4 rounded-lg bg-muted p-4">
           {hasArguments ? (
-            <Detail label="Called with">
+            <Section label="Called with">
               <Payload value={call.arguments} />
-            </Detail>
+            </Section>
           ) : null}
+          <div className="flex gap-8">
+            {duration ? (
+              <Fact label="Duration">
+                <span className="tabular-nums">{duration}</span>
+              </Fact>
+            ) : null}
+            <Fact label="Tool">
+              <span className="font-mono" dir="ltr">
+                {toolName}
+              </span>
+            </Fact>
+          </div>
           {output !== "" ? (
-            <Detail label="Returned">
+            <Section label="Returned">
               <Payload value={output} />
-            </Detail>
+            </Section>
           ) : null}
-          {duration ? (
-            <Detail label="Took">
-              <span className="tabular-nums">{duration}</span>
-            </Detail>
-          ) : null}
-          <Detail label="Tool">
-            <span className="font-mono" dir="ltr">
-              {toolName}
-            </span>
-          </Detail>
         </div>
       </CollapsibleContent>
     </Collapsible>
   )
 }
 
-function Detail({
+/** A payload under its own label, open by default and folded by its label. */
+function Section({
   children,
   label,
 }: {
@@ -360,43 +361,79 @@ function Detail({
   label: string
 }) {
   return (
-    <div className="flex gap-4">
-      <span className="w-20 shrink-0 text-muted-foreground">{label}</span>
-      <div className="min-w-0 flex-1 text-foreground">{children}</div>
+    <Collapsible className="flex flex-col gap-2" defaultOpen>
+      <CollapsibleTrigger className="group/section -mx-1 flex w-fit items-center gap-1 rounded-sm px-1 text-xs text-muted-foreground outline-none transition-colors duration-150 ease-out-cubic hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none">
+        <ExpandIcon className="size-3.5 transition-transform duration-150 ease-out-cubic group-data-[state=closed]/section:-rotate-90 motion-reduce:transition-none" />
+        {label}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
+/** A label over its value, as ElevenLabs shows the execution time. */
+function Fact({
+  children,
+  label,
+}: {
+  children: React.ReactNode
+  label: string
+}) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-sm text-foreground">{children}</span>
     </div>
   )
 }
 
 /**
- * What went to the tool or came back. Plain fields read as a short list in
- * the page's type. Anything else is shown verbatim in monospace, JSON
- * pretty-printed, so it reads as what the model saw, capitals included, and
- * not as the page talking. Pinned left-to-right so an Arabic page does not
- * reorder its punctuation.
+ * What went to the tool or came back, verbatim. JSON goes in the design
+ * system's JSON view: line numbers, folds and Copy. Anything else — the
+ * English instructions written for the model, capitals included — sits in the
+ * same bordered block in monospace, with the same Copy in the same corner, so
+ * it reads as what the model saw and not as the page talking. Pinned
+ * left-to-right so an Arabic page does not reorder its punctuation.
  */
 function Payload({ value }: { value: string }) {
-  const fields = plainFields(value)
+  const json = parseJson(value)
+  const [copied, setCopied] = React.useState(false)
 
-  if (fields) {
+  if (json !== null) {
     return (
-      <span className="flex flex-col gap-0.5" dir="ltr">
-        {fields.map(([key, field]) => (
-          <span key={key}>
-            <span className="text-muted-foreground">{key}</span> {field}
-          </span>
-        ))}
-      </span>
+      <div className="rounded-lg bg-background" dir="ltr">
+        <JsonView value={json} />
+      </div>
     )
   }
 
-  const json = parseJson(value)
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(value)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1500)
+    } catch {
+      toast.error("Could not copy — select the text instead")
+    }
+  }
 
   return (
-    <pre
-      className="max-h-64 overflow-auto font-mono text-xs leading-relaxed whitespace-pre-wrap"
-      dir="ltr"
-    >
-      {json !== null ? JSON.stringify(json, null, 2) : value}
-    </pre>
+    <div className="relative rounded-lg border bg-background" dir="ltr">
+      <pre className="max-h-64 overflow-auto py-3 ps-3 pe-12 font-mono text-xs leading-relaxed whitespace-pre-wrap text-foreground">
+        {value}
+      </pre>
+      <div className="absolute end-2 top-2">
+        <Button
+          aria-label={copied ? "Copied" : "Copy"}
+          onClick={() => void copy()}
+          size="icon-sm"
+          variant="ghost"
+        >
+          {copied ? <CopiedIcon /> : <CopyIcon />}
+        </Button>
+      </div>
+    </div>
   )
 }

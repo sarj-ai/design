@@ -64,13 +64,15 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "مرحباً، معك المساعد الآلي لخدمة العملاء. كيف أقدر أساعدك اليوم؟",
+        content:
+          "Hi, you're through to the customer service assistant. How can I help today?",
         startAt: T0 + 1,
       },
       {
         type: "message",
         role: "user",
-        content: "فاتورة شهر سبتمبر فيها مبلغ ما أعرفه، أبغى أفهم وش هو.",
+        content:
+          "There's a charge on my September bill I don't recognise. What is it?",
         startAt: T0 + 6,
       },
       {
@@ -94,13 +96,13 @@ export const CALL_CASES: CallCase[] = [
         type: "message",
         role: "assistant",
         content:
-          "المبلغ الإضافي ١١٣٫٥٠ ريال رسوم تجوال في الإمارات. تبغى أحولك لموظف يراجعها معك؟",
+          "The extra 113.50 SAR is a roaming charge from the UAE. Shall I transfer you to someone who can review it with you?",
         startAt: T0 + 14,
       },
       {
         type: "message",
         role: "user",
-        content: "إيه لو سمحت، ما سافرت الإمارات أصلاً.",
+        content: "Yes please, I haven't even been to the UAE.",
         startAt: T0 + 22,
       },
       {
@@ -122,7 +124,8 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "تمام، بحولك الحين لأحد الموظفين. لحظة من فضلك.",
+        content:
+          "Okay, transferring you to a colleague now. One moment please.",
         startAt: T0 + 27,
       },
       {
@@ -135,7 +138,7 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "user",
-        content: "طيب، بس قل له إن الرقم مسجل باسم أخوي.",
+        content: "Okay, but tell them the number is registered to my brother.",
         startAt: T0 + 34,
       },
       {
@@ -151,7 +154,7 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "أبشر، بوصل له المعلومة. بحاول أحولك مرة ثانية.",
+        content: "Sure, I'll pass that on. Let me try the transfer again.",
         startAt: T0 + 37,
       },
       {
@@ -173,14 +176,20 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "للأسف ما رد أحد من الموظفين. تبغى أحاول مرة ثانية؟",
+        content: "Sorry, no one picked up. Would you like me to try again?",
         startAt: T0 + 73,
       },
       {
         type: "message",
         role: "user",
-        content: "إيه جرب مرة ثانية.",
+        content: "Yes, try again.",
         startAt: T0 + 79,
+      },
+      {
+        type: "message",
+        role: "assistant",
+        content: "Sure, one moment while I transfer you again.",
+        startAt: T0 + 80,
       },
       {
         type: "function_call",
@@ -210,13 +219,15 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "مرحباً، معك المساعد الآلي لخدمة العملاء. كيف أقدر أساعدك اليوم؟",
+        content:
+          "Hi, you're through to the customer service assistant. How can I help today?",
         startAt: T0 + 1,
       },
       {
         type: "message",
         role: "user",
-        content: "الشريحة الجديدة ما تفعلت من أمس، أبغى أكلم موظف.",
+        content:
+          "My new SIM hasn't activated since yesterday. I'd like to speak to someone.",
         startAt: T0 + 5,
       },
       {
@@ -238,7 +249,7 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "assistant",
-        content: "أكيد، لحظة بحولك لأحد الموظفين.",
+        content: "Of course, one moment while I transfer you to a colleague.",
         startAt: T0 + 11,
       },
       {
@@ -260,13 +271,14 @@ export const CALL_CASES: CallCase[] = [
       {
         type: "message",
         role: "human agent",
-        content: "هلا، معك خدمة العملاء. شفت ملاحظة المساعد عن الشريحة، أبشر.",
+        content:
+          "Hi, customer service here. I saw the assistant's note about your SIM, I'll sort it out.",
         startAt: T0 + 28,
       },
       {
         type: "message",
         role: "user",
-        content: "الله يعافيك. الرقم ينتهي بـ ٤٤٧١.",
+        content: "Thank you. The number ends in 4471.",
         startAt: T0 + 34,
       },
     ],

@@ -3667,20 +3667,46 @@
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
         "clsx",
+        "sonner",
         "tailwind-merge"
       ],
       "registryDependencies": [
+        "avatar",
         "button",
         "card",
         "collapsible",
+        "label",
         "select",
-        "separator"
+        "separator",
+        "switch",
+        "table",
+        "tabs"
       ],
       "files": [
         {
           "path": "src/app/(mockups)/tool-calls-transcript/page.tsx",
           "type": "registry:page",
           "target": "app/tool-calls-transcript/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/json-view-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/json-view-preview.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
         },
         {
           "path": "src/components/mockups/tool-calls-transcript/call-transcript.tsx",
@@ -3696,6 +3722,16 @@
           "path": "src/components/shared/icon.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-avatar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-avatar.tsx"
+        },
+        {
+          "path": "src/components/shared/orb-tones.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/orb-tones.ts"
         },
         {
           "path": "src/components/shell/mockup-shell.tsx",
@@ -3720,10 +3756,16 @@
       ],
       "cssVars": {
         "theme": {
-          "color-success": "var(--success)"
+          "color-success": "var(--success)",
+          "color-orb-deep": "var(--orb-deep)",
+          "color-orb-body": "var(--orb-body)",
+          "color-orb-light": "var(--orb-light)"
         },
         "light": {
-          "success": "oklch(0.627 0.17 149.2)"
+          "success": "oklch(0.627 0.17 149.2)",
+          "orb-deep": "oklch(0.499 0.265 287.9)",
+          "orb-body": "oklch(0.67 0.172 295.3)",
+          "orb-light": "oklch(0.825 0.086 302.1)"
         }
       },
       "css": {
