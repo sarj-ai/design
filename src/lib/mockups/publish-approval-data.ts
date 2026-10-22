@@ -1,15 +1,18 @@
 /**
  * Mock data for DES-204, publish approval. The model is the "Publish
- * approval" requirements doc (Taynam Alzamel), on top of DES-202's versions:
+ * approval" requirements doc (Taynam Alzamel), on top of DES-202's versions,
+ * as the TDD "Live scenarios and configuration versioning" (22 Oct 2026)
+ * leaves it: approval is its own feature, shipped after live and versioning,
+ * and the first release has none.
  *
- *  - Every publish needs an approval, and publishing exists only on live
- *    scenarios and the global prompt, so those are the only things gated.
- *  - A live scenario is approved by its client; the global prompt, which
- *    has no owning organization, by a super admin.
+ *  - Only live scenarios are gated. The global prompt has no versions in
+ *    the first releases, so there is nothing to approve there yet.
+ *  - A live scenario is approved by its client. Turning a scenario live
+ *    needs only the live permission, never an approval (TDD 3.1).
  *  - A request is pinned to one version, carries the requester's note (the
  *    why) and a summary of the effect on callers (the what), and waits
  *    until someone acts. It never expires and never publishes on its own.
- *  - Approving publishes. There is no override and no bypass.
+ *  - Approving puts the version in use. There is no override and no bypass.
  *
  * Assumed, because the access model (INT-93, INT-32) has no approval concept
  * yet: a client approver is a member of the client organization who holds
@@ -17,14 +20,13 @@
  */
 
 import {
-  GLOBAL_PROMPT,
   LIVE_SCENARIO,
   type Subject,
 } from "@/lib/mockups/config-versioning-data"
 
 /* --------------------------------------------------------------- viewers */
 
-export type ViewerId = "requester" | "approver" | "admin"
+export type ViewerId = "requester" | "approver"
 
 export type Viewer = {
   id: ViewerId
@@ -34,7 +36,6 @@ export type Viewer = {
   sarj: boolean
   /** The organization whose changes this person approves. */
   approves: string | null
-  superAdmin: boolean
 }
 
 export const VIEWERS: Viewer[] = [
@@ -44,7 +45,6 @@ export const VIEWERS: Viewer[] = [
     label: "Ahmad Khalil, requester (Sarj)",
     sarj: true,
     approves: null,
-    superAdmin: false,
   },
   {
     id: "approver",
@@ -52,15 +52,6 @@ export const VIEWERS: Viewer[] = [
     label: "Yusuf Al-Amri, approver (Riyad Bank)",
     sarj: false,
     approves: "Riyad Bank",
-    superAdmin: false,
-  },
-  {
-    id: "admin",
-    name: "Nasr Maswood",
-    label: "Nasr Maswood, super admin (Sarj)",
-    sarj: true,
-    approves: null,
-    superAdmin: true,
   },
 ]
 
@@ -78,12 +69,11 @@ export type Change = { label: string; before: string; after: string }
 
 export type ApprovalRequest = {
   id: string
-  kind: "scenario" | "global"
   item: string
-  /** The client organization; null for the global prompt. */
-  org: string | null
+  /** The client organization, which decides. */
+  org: string
   version: number
-  /** What callers heard when the request was raised. */
+  /** The version in use when the request was raised. */
   live: number
   by: string
   raised: string
@@ -95,15 +85,8 @@ export type ApprovalRequest = {
   decision: { by: string; at: string; reason?: string } | null
 }
 
-/** Who decides, in words: the client, or a super admin. */
-export function decider(request: ApprovalRequest) {
-  return request.org ?? "A super admin"
-}
-
 export function canDecide(request: ApprovalRequest, viewer: Viewer) {
-  return request.kind === "global"
-    ? viewer.superAdmin
-    : viewer.approves === request.org
+  return viewer.approves === request.org
 }
 
 export function canSee(request: ApprovalRequest, viewer: Viewer) {
@@ -133,13 +116,14 @@ export function forViewer(subject: Subject, viewer: Viewer): Subject {
       author: who(version.author, viewer),
       mine: version.author === viewer.name,
     })),
-    published: subject.published
-      ? { ...subject.published, by: who(subject.published.by, viewer) }
-      : null,
+    log: subject.log.map((entry) => ({
+      ...entry,
+      by: who(entry.by, viewer),
+    })),
   }
 }
 
-/** The changes between what callers hear and the version requested. */
+/** The changes between the version in use and the version requested. */
 export function changesBetween(
   subject: Subject,
   live: number,
@@ -191,7 +175,6 @@ export function mainRequest(
 ): ApprovalRequest {
   return {
     id: `bvs-${version}`,
-    kind: "scenario",
     item: LIVE_SCENARIO.name,
     org: SCENARIO_ORG,
     version,
@@ -207,36 +190,10 @@ export function mainRequest(
   }
 }
 
-const IDENTITY = GLOBAL_PROMPT.fields[1]
-
 /** Everything else on the Approvals page, newest first. */
 export const OTHER_REQUESTS: ApprovalRequest[] = [
   {
-    id: "global-31",
-    kind: "global",
-    item: "Global prompt",
-    org: null,
-    version: 31,
-    live: 30,
-    by: "Ahmad Khalil",
-    raised: "Today, 13:20",
-    waiting: "1 hour",
-    note: "Two clients had callers ask who was calling before the agent said. This makes the agent say it first.",
-    summary:
-      "On every call in every organization, the agent names the organization it is calling for in its first sentence.",
-    changes: [
-      {
-        label: IDENTITY.label,
-        before: GLOBAL_PROMPT.versions[1].body[IDENTITY.id],
-        after: GLOBAL_PROMPT.versions[0].body[IDENTITY.id],
-      },
-    ],
-    status: "pending",
-    decision: null,
-  },
-  {
     id: "qfc-41",
-    kind: "scenario",
     item: "Customer care",
     org: "Quara Finance",
     version: 41,
@@ -261,7 +218,6 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
   },
   {
     id: "inv-8",
-    kind: "scenario",
     item: "Invoices awaiting payment (outbound)",
     org: SCENARIO_ORG,
     version: 8,
@@ -286,7 +242,6 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
   },
   {
     id: "inb-22",
-    kind: "scenario",
     item: "Inbound agent",
     org: SCENARIO_ORG,
     version: 22,
@@ -309,7 +264,6 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
   },
   {
     id: "wel-5",
-    kind: "scenario",
     item: "Welcome and onboarding (outbound)",
     org: SCENARIO_ORG,
     version: 5,
@@ -338,7 +292,6 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
   },
   {
     id: "debt-3",
-    kind: "scenario",
     item: "Debt collection (standard posture)",
     org: SCENARIO_ORG,
     version: 3,
@@ -404,8 +357,7 @@ export function withV15(subject: Subject): Subject {
         mine: v14.mine,
         at: "Today, 14:12",
         editedFrom: 14,
-        summary: "First message: names Riyad Bank.",
-        everLive: false,
+        note: "Bank name in the greeting",
         body: { ...v14.body, "first-message": V15_GREETING },
       },
       ...subject.versions,

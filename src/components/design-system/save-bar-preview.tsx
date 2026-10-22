@@ -31,6 +31,7 @@ import { Kbd } from "@/components/ui/kbd"
 import { TabsContent } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { PageHeader } from "@/components/shared/page-header"
+import { SaveBar } from "@/components/shared/save-bar"
 import { CloseIcon } from "@/components/design-system/icons"
 import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import { cn } from "@/lib/utils"
@@ -281,33 +282,11 @@ function PillVariant({
   onReview: () => void
 }) {
   return (
-    <div
-      className={cn(
-        "pointer-events-none sticky bottom-4 flex justify-center transition duration-200 ease-out-cubic motion-reduce:transition-none",
-        state.dirty ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-      )}
-    >
-      <div className="pointer-events-auto flex items-center gap-1 rounded-xl bg-foreground py-1 ps-4 pe-1 text-background">
-        <span className="me-2 text-sm tabular-nums">
-          {count(state.changed.length)}
-        </span>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="text-background hover:bg-background/10 hover:text-background"
-          onClick={state.discard}
-        >
-          Discard
-        </Button>
-        <Button
-          size="sm"
-          className="bg-background text-foreground hover:bg-background/90"
-          onClick={onReview}
-        >
-          Save
-        </Button>
-      </div>
-    </div>
+    <SaveBar
+      changes={state.changed.length}
+      onDiscard={state.discard}
+      onSave={onReview}
+    />
   )
 }
 

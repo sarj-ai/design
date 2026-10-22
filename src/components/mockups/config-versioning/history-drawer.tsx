@@ -1,9 +1,18 @@
 "use client"
 
 import * as React from "react"
-import { toast } from "sonner"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -41,29 +50,39 @@ import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import {
   CloseIcon,
   EditFromIcon,
-  TestVersionIcon,
 } from "@/components/mockups/config-versioning/icons"
-import type {
-  CaseId,
-  Subject,
-  Version,
+import {
+  type CaseId,
+  DELETED_REFERENCE,
+  type Subject,
+  type Version,
 } from "@/lib/mockups/config-versioning-data"
 import { cn } from "@/lib/utils"
 
+/** How many versions a page of history holds before Load more (TDD 3.6). */
+const PAGE = 5
+
+/** What applying or publishing came to. */
+export type ApplyResult = "ok" | "failed" | "blocked"
+
 /**
  * Version history as a record drawer — 1024px, the surfaces page's answer
- * for reading records opened from a list — because the PRD's compare is
- * side by side, and two columns of prompt do not fit in 448.
+ * for reading records opened from a list — because compare is side by side,
+ * and two columns of prompt do not fit in 448.
  *
- * The list is newest first: number, author, time, summary, and on anything
- * live whether each version has ever been live, with Live on the current
- * one. The pane on the right is the selected version against the one it
- * was edited from (the summary's own basis), or any other version picked.
+ * The list is newest first, a page at a time with Load more: number, who,
+ * when, and the version it was edited from. The note, if one was left, is
+ * read in the right pane, not the list (feedback, 22 Oct 2026). The
+ * version callers get is marked "In use", never "Live" — live is only the
+ * scenario's switch and badge (TDD 3.6). The pane on the right is the
+ * selected version against the one it was edited from, or any other.
  *
- * Publishing happens here, with the comparison on screen, so the review is
- * the history: Publish for a version newer than live, Roll back for an older
- * one (marker movement, no new version), and Edit from here to start a new
- * version from an earlier one. On a not-live scenario only the last exists.
+ * Applying happens here, with the comparison on screen. On a live scenario
+ * a version newer than the one in use is published and an older one is
+ * applied, both after the extra warning (TDD 3.4); on a scenario that is
+ * not live any version is applied straight away. Neither makes a version
+ * (TDD 3.7). Edit from here copies a version into the editor; saving makes
+ * a new one on top.
  */
 export function HistoryDrawer({
   open,
@@ -73,7 +92,7 @@ export function HistoryDrawer({
   caseId,
   canEdit,
   editing,
-  onPublish,
+  onApply,
   onEditFrom,
   approval,
 }: {
@@ -86,10 +105,10 @@ export function HistoryDrawer({
   canEdit: boolean
   /** The version open in the editor — Edit from here is absent for it. */
   editing: number
-  /** Resolves false when publishing failed. */
-  onPublish: (n: number) => Promise<boolean>
+  /** Puts a version in use. */
+  onApply: (n: number) => Promise<ApplyResult>
   onEditFrom: (n: number) => void
-  /** DES-204: publishing a live item needs an approval, so the marker
+  /** DES-204: publishing a live item needs an approval, so the apply
    *  action becomes a request. */
   approval?: Approval
 }) {
@@ -100,8 +119,7 @@ export function HistoryDrawer({
           <div className="flex flex-col gap-0.5">
             <DrawerTitle>Version history</DrawerTitle>
             <DrawerDescription className="tabular-nums">
-              {subject.name}
-              {subject.marker !== null ? ` · Live: v${subject.marker}` : ""}
+              {subject.name} · In use: v{subject.inUse}
             </DrawerDescription>
           </div>
           <DrawerClose asChild>
@@ -121,8 +139,8 @@ export function HistoryDrawer({
             editing={editing}
             initial={initial}
             key={`${initial.n}-${initial.against}`}
+            onApply={onApply}
             onEditFrom={onEditFrom}
-            onPublish={onPublish}
             subject={subject}
           />
         ) : null}
@@ -134,7 +152,7 @@ export function HistoryDrawer({
 type Load = "loading" | "failed" | "ready"
 
 type Approval = {
-  /** Who approves, in words — the client, or "A super admin". */
+  /** Who approves, in words — the client. */
   by: string
   /** The version already waiting, if one is. One request at a time. */
   pending: number | null
@@ -148,7 +166,7 @@ function HistoryBody({
   caseId,
   canEdit,
   editing,
-  onPublish,
+  onApply,
   onEditFrom,
 }: {
   approval?: Approval
@@ -157,13 +175,19 @@ function HistoryBody({
   caseId: CaseId
   canEdit: boolean
   editing: number
-  onPublish: (n: number) => Promise<boolean>
+  onApply: (n: number) => Promise<ApplyResult>
   onEditFrom: (n: number) => void
 }) {
   const [load, setLoad] = React.useState<Load>("loading")
   const [attempt, setAttempt] = React.useState(0)
   const [selected, setSelected] = React.useState(initial.n)
   const [against, setAgainst] = React.useState<number | null>(initial.against)
+  /* Enough pages that the version asked for is on screen. */
+  const [count, setCount] = React.useState(() => {
+    const index = subject.versions.findIndex((item) => item.n === initial.n)
+    return Math.max(PAGE, Math.ceil((index + 1) / PAGE) * PAGE)
+  })
+  const [loadingMore, setLoadingMore] = React.useState(false)
 
   React.useEffect(() => {
     const timer = setTimeout(
@@ -185,7 +209,7 @@ function HistoryBody({
           <EmptyHeader>
             <EmptyTitle>Couldn’t load versions</EmptyTitle>
             <EmptyDescription>
-              Nothing changed. The scenario and what callers hear are as they
+              Nothing changed. The scenario and the version in use are as they
               were.
             </EmptyDescription>
           </EmptyHeader>
@@ -193,7 +217,7 @@ function HistoryBody({
             <Button
               onClick={() => {
                 setLoad("loading")
-                setAttempt((count) => count + 1)
+                setAttempt((current) => current + 1)
               }}
               size="lg"
               variant="outline"
@@ -206,11 +230,12 @@ function HistoryBody({
     )
   }
 
-  const shown = subject.versions
+  const shown = subject.versions.slice(0, count)
+  const more = subject.versions.length - shown.length
   const version =
     subject.versions.find((item) => item.n === selected) ?? subject.versions[0]
-  /* Against the version it was edited from — the summary's own basis — or,
-     when that one is older than the list goes, the next one down. */
+  /* Against the version it was edited from, or the next one down when it
+     has none. */
   const find = (n: number | null) =>
     subject.versions.find((item) => item.n === n) ?? null
   const compare =
@@ -226,11 +251,10 @@ function HistoryBody({
           <ol className="flex flex-col gap-1">
             {shown.map((item, index) => (
               <VersionRow
+                inUse={item.n === subject.inUse}
                 key={item.n}
                 last={index === shown.length - 1}
                 latest={item.n === subject.versions[0].n}
-                live={subject.marker !== null}
-                marker={subject.marker}
                 onSelect={() => {
                   setSelected(item.n)
                   setAgainst(null)
@@ -240,6 +264,23 @@ function HistoryBody({
               />
             ))}
           </ol>
+          {more > 0 ? (
+            <Button
+              className="mt-2 w-full"
+              disabled={loadingMore}
+              onClick={() => {
+                setLoadingMore(true)
+                setTimeout(() => {
+                  setCount((current) => current + PAGE)
+                  setLoadingMore(false)
+                }, 500)
+              }}
+              variant="ghost"
+            >
+              {loadingMore ? <Spinner /> : null}
+              Load more
+            </Button>
+          ) : null}
         </div>
       </aside>
 
@@ -250,8 +291,8 @@ function HistoryBody({
         editing={editing}
         key={version.n}
         onAgainst={setAgainst}
+        onApply={onApply}
         onEditFrom={onEditFrom}
-        onPublish={onPublish}
         subject={subject}
         version={version}
       />
@@ -261,23 +302,20 @@ function HistoryBody({
 
 /**
  * One version on the timeline. A rail runs down the list with a dot per
- * version, filled green on the one callers hear, so the reader sees at a
- * glance which saves sit above live and which below it. No box per row: the
- * selected one is a muted fill, as in a nav, and the summary is muted text
- * under the number rather than a paragraph competing with it.
+ * version, filled green on the one in use, so the reader sees at a glance
+ * which saves sit above it and which below. No box per row: the selected one
+ * is a muted fill, as in a nav.
  */
 function VersionRow({
   version,
-  marker,
-  live,
+  inUse,
   latest,
   last,
   selected,
   onSelect,
 }: {
   version: Version
-  marker: number | null
-  live: boolean
+  inUse: boolean
   /** The newest save — the editor's "latest". */
   latest: boolean
   /** The rail stops at the last dot. */
@@ -285,7 +323,6 @@ function VersionRow({
   selected: boolean
   onSelect: () => void
 }) {
-  const isLive = version.n === marker
   return (
     <li className="relative">
       {/* This row's stretch of the rail: from its dot to the next one, which
@@ -311,7 +348,7 @@ function VersionRow({
             <span
               className={cn(
                 "relative size-2 rounded-full",
-                isLive
+                inUse
                   ? "bg-success"
                   : selected
                     ? "bg-foreground"
@@ -322,64 +359,32 @@ function VersionRow({
           <span className="flex min-w-0 flex-1 flex-col gap-0.5">
             <span className="flex items-center gap-2 font-medium tabular-nums">
               v{version.n}
-              {isLive ? (
+              {inUse ? (
                 <Badge
                   className="bg-success-tint text-success-tint-foreground"
                   variant="secondary"
                 >
-                  Live
+                  In use
                 </Badge>
-              ) : live && latest ? (
-                /* Named only while it differs from live: the two words the
-                   editor uses, so History is where they meet a number. */
+              ) : latest ? (
+                /* Named only while it differs from the one in use: the two
+                   words the editor uses, so History is where they meet a
+                   number. */
                 <Badge variant="outline">Latest</Badge>
-              ) : live && version.everLive ? (
-                <Badge className="text-muted-foreground" variant="outline">
-                  Was live
-                </Badge>
               ) : null}
               <span className="ms-auto text-xs font-normal text-muted-foreground">
                 {version.at}
               </span>
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-muted-foreground tabular-nums">
               {version.author}
+              {version.editedFrom ? ` · from v${version.editedFrom}` : ""}
             </span>
-            <Summary
-              className="line-clamp-2 text-muted-foreground"
-              version={version}
-            />
           </span>
         </button>
       </Item>
     </li>
   )
-}
-
-/** A version's summary, or where it is: still being written, or not made. */
-function Summary({
-  version,
-  className,
-}: {
-  version: Version
-  className?: string
-}) {
-  if (version.summary === null) {
-    return (
-      <span className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Spinner className="size-3.5" />
-        Writing summary
-      </span>
-    )
-  }
-  if (version.summary === "failed") {
-    return (
-      <span className="text-sm text-muted-foreground">
-        No summary — compare to see the change
-      </span>
-    )
-  }
-  return <p className={cn("text-sm", className)}>{version.summary}</p>
 }
 
 function VersionPane({
@@ -390,7 +395,7 @@ function VersionPane({
   onAgainst,
   canEdit,
   editing,
-  onPublish,
+  onApply,
   onEditFrom,
 }: {
   approval?: Approval
@@ -400,114 +405,89 @@ function VersionPane({
   onAgainst: (n: number) => void
   canEdit: boolean
   editing: number
-  onPublish: (n: number) => Promise<boolean>
+  onApply: (n: number) => Promise<ApplyResult>
   onEditFrom: (n: number) => void
 }) {
-  const [publishing, setPublishing] = React.useState(false)
-  const [failed, setFailed] = React.useState(false)
-  const marker = subject.marker
-  const isLive = version.n === marker
+  const [busy, setBusy] = React.useState(false)
+  const [result, setResult] = React.useState<ApplyResult | null>(null)
+  const [confirming, setConfirming] = React.useState(false)
+  const inUse = subject.inUse
+  const isInUse = version.n === inUse
 
-  /* Publish moves the marker forward, Roll back moves it back. Neither
-     makes a version (PRD). Absent on a not-live scenario, and on the live
-     version itself. */
-  const markerAction =
-    marker === null || isLive || (approval && approval.pending !== null)
+  /* Publish for a version newer than the one in use on a live scenario,
+     Apply for everything else. Neither makes a version. Absent on the
+     version in use, and while a request is waiting (DES-204). */
+  const verb = subject.live && version.n > inUse ? "Publish" : "Apply"
+  const action =
+    isInUse || (approval && approval.pending !== null)
       ? null
       : approval
         ? "Request approval"
-        : version.n > marker
-          ? `Publish v${version.n}`
-          : `Roll back to v${version.n}`
+        : `${verb} v${version.n}`
 
-  const publish = async () => {
+  async function apply() {
     if (approval) {
       approval.onRequest(version.n)
       return
     }
-    setPublishing(true)
-    setFailed(false)
-    const ok = await onPublish(version.n)
-    setPublishing(false)
-    if (!ok) setFailed(true)
+    setConfirming(false)
+    setBusy(true)
+    setResult(null)
+    const outcome = await onApply(version.n)
+    setBusy(false)
+    if (outcome !== "ok") setResult(outcome)
   }
 
-  const [layout, setLayout] = React.useState<"split" | "unified">("split")
-  const changed = subject.fields.filter(
-    (field) => against && against.body[field.id] !== version.body[field.id],
+  const [view, setView] = React.useState<"changes" | "version">("changes")
+  /* Every time this version was put in use, newest first (TDD 3.2). A save
+     that put it in use is left out: who saved it and when is the line
+     above. */
+  const record = subject.log.filter(
+    (entry) => entry.n === version.n && entry.how !== "saved",
   )
-  const totals = changed.reduce(
-    (sum, field) => {
-      const stat = diffStat(against!.body[field.id], version.body[field.id])
-      return {
-        added: sum.added + stat.added,
-        removed: sum.removed + stat.removed,
-      }
-    },
-    { added: 0, removed: 0 },
-  )
-
-  /* What callers hear, and what this version would change about it — the
-     line that used to be a sentence under the header. */
-  const hearing =
-    marker === null
-      ? {
-          label: "Runs",
-          value: `v${subject.versions[0].n}`,
-          sub: "The newest version, from the next call",
-        }
-      : {
-          label: "Live version",
-          value: `v${marker}`,
-          sub: isLive
-            ? "This version"
-            : approval
-              ? approval.pending !== null
-                ? `v${approval.pending} is waiting for approval`
-                : `v${version.n} once ${approval.by} approves`
-              : version.n > marker
-                ? `v${version.n} once you publish`
-                : `v${version.n} on rollback, no new version`,
-        }
 
   return (
     <section className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto p-6">
+      {/* The version, its note, who saved it, and who put it in use. What
+          is in use now and what changed are said once each — by the badge
+          and by the comparison below — not again in a strip of facts. */}
       <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 flex-col gap-0.5">
+        <div className="flex min-w-0 flex-col gap-1">
           <h2 className="flex items-center gap-2 text-lg font-semibold tabular-nums">
             v{version.n}
-            {isLive ? (
+            {isInUse ? (
               <Badge
                 className="bg-success-tint text-success-tint-foreground"
                 variant="secondary"
               >
-                Live
+                In use
               </Badge>
             ) : null}
           </h2>
+          {version.note ? <p className="text-sm">{version.note}</p> : null}
           <p className="text-sm text-muted-foreground tabular-nums">
             {version.author} · {version.at}
           </p>
+          {record.map((entry) => (
+            <p
+              className="text-sm text-muted-foreground tabular-nums"
+              key={`${entry.how}-${entry.at}`}
+            >
+              {entry.how === "published" ? "Published" : "Applied"} by{" "}
+              {entry.by === "You" ? "you" : entry.by}, {entry.at}
+            </p>
+          ))}
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          {/* Review, 13 Oct 2026: try a version on a call without putting it
-              on callers. Not in the PRD; it makes no version and moves no
-              marker, so a viewer can use it too. */}
-          <Button
-            onClick={() =>
-              toast(`v${version.n} opened in the Playground`, {
-                description: "Nothing changes for callers.",
-              })
-            }
-            variant="outline"
-          >
-            <TestVersionIcon />
-            {"Test in Playground"}
-          </Button>
+          {approval && approval.pending !== null && !isInUse ? (
+            <span className="text-sm text-muted-foreground tabular-nums">
+              v{approval.pending} is waiting for approval
+            </span>
+          ) : null}
           {version.n === editing ? null : (
             <Permission allowed={canEdit}>
               <Button
-                disabled={!canEdit || publishing}
+                disabled={!canEdit || busy}
                 onClick={() => onEditFrom(version.n)}
                 variant="outline"
               >
@@ -516,72 +496,58 @@ function VersionPane({
               </Button>
             </Permission>
           )}
-          {markerAction ? (
+          {action ? (
             <Permission allowed={canEdit}>
-              <Button disabled={!canEdit || publishing} onClick={publish}>
-                {publishing ? <Spinner /> : null}
-                {failed ? "Try again" : markerAction}
+              <Button
+                disabled={!canEdit || busy || result === "blocked"}
+                onClick={() => {
+                  /* The extra warning is for live scenarios only (TDD
+                     3.4); a retry after a failure has had it already. */
+                  if (subject.live && !approval && result === null) {
+                    setConfirming(true)
+                    return
+                  }
+                  void apply()
+                }}
+              >
+                {busy ? <Spinner /> : null}
+                {result === "failed" ? "Try again" : action}
               </Button>
             </Permission>
           ) : null}
         </div>
       </div>
 
-      {failed ? (
+      {result === "failed" ? (
         <Alert className="bg-destructive-tint" variant="destructive">
-          <AlertTitle>Couldn’t publish v{version.n}</AlertTitle>
+          <AlertTitle>
+            Couldn’t {verb.toLowerCase()} v{version.n}
+          </AlertTitle>
           <AlertDescription>
-            Callers still hear v{marker}. Nothing else changed.
+            v{inUse} is still in use. Nothing else changed.
+          </AlertDescription>
+        </Alert>
+      ) : result === "blocked" ? (
+        <Alert className="bg-destructive-tint" variant="destructive">
+          <AlertTitle>
+            Can’t {verb.toLowerCase()} v{version.n}
+          </AlertTitle>
+          <AlertDescription>
+            It uses {DELETED_REFERENCE}, which was deleted from this scenario. v
+            {inUse} is still in use. To keep this version’s wording, edit from
+            here and save.
           </AlertDescription>
         </Alert>
       ) : null}
 
-      <dl className="grid grid-cols-3 divide-x rounded-lg border">
-        <Fact label="Edited from">
-          {version.editedFrom ? `v${version.editedFrom}` : "—"}
-        </Fact>
-        <Fact
-          label={hearing.label}
-          sub={hearing.sub}
-          value={
-            <span className="flex items-center gap-2">
-              <span
-                aria-hidden
-                className={cn(
-                  "size-2 rounded-full",
-                  marker === null ? "bg-muted-foreground/40" : "bg-success",
-                )}
-              />
-              {hearing.value}
-            </span>
-          }
-        />
-        <Fact
-          label="Changed"
-          sub={
-            against
-              ? `${changed.length} of ${subject.fields.length} fields, against v${against.n}`
-              : undefined
-          }
-          value={against ? <DiffStat {...totals} /> : "First version"}
-        />
-      </dl>
-
-      {version.summary === null || version.summary === "failed" ? (
-        <Summary version={version} />
-      ) : (
-        <p className="rounded-lg bg-muted px-4 py-3 text-sm">
-          {version.summary}
-        </p>
-      )}
-
+      {/* Changes against another version (the edited-from one unless
+          picked), or the version whole, as it was (TDD 3.6). One diff
+          layout — split, as the platform's change summary has it. The very
+          first version has nothing to compare, so it is only shown whole. */}
       {against ? (
-        <div className="flex flex-col gap-3">
-          {/* Split or unified is a view of the same changes, inside a
-              drawer — the design system's secondary (line) tabs, with
-              what they are compared with at the end of the same row. */}
-          <SecondaryTabs
-            aside={
+        <SecondaryTabs
+          aside={
+            view === "changes" ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
                   Compared with
@@ -591,8 +557,8 @@ function VersionPane({
                   value={String(against.n)}
                 >
                   <SelectTrigger aria-label="Changes from" size="sm">
-                    {/* The trigger names the version; what it is (live,
-                      edited from) is said in the list. */}
+                    {/* The trigger names the version; what it is (in use,
+                        edited from) is said in the list. */}
                     <SelectValue>v{against.n}</SelectValue>
                   </SelectTrigger>
                   <SelectContent position="popper">
@@ -601,8 +567,10 @@ function VersionPane({
                       .map((item) => (
                         <SelectItem key={item.n} value={String(item.n)}>
                           <span className="tabular-nums">v{item.n}</span>
-                          {item.n === marker ? (
-                            <span className="text-muted-foreground">Live</span>
+                          {item.n === inUse ? (
+                            <span className="text-muted-foreground">
+                              In use
+                            </span>
                           ) : null}
                           {item.n === version.editedFrom ? (
                             <span className="text-muted-foreground">
@@ -614,18 +582,19 @@ function VersionPane({
                   </SelectContent>
                 </Select>
               </div>
-            }
-            items={[
-              { id: "split", label: "Split" },
-              { id: "unified", label: "Unified" },
-            ]}
-            onValueChange={(value) => setLayout(value as "split" | "unified")}
-            value={layout}
-          >
+            ) : undefined
+          }
+          items={[
+            { id: "changes", label: "Changes" },
+            { id: "version", label: "Full version" },
+          ]}
+          onValueChange={(value) => setView(value as "changes" | "version")}
+          value={view}
+        >
+          {view === "changes" ? (
             <div className="flex flex-col gap-3">
-              {/* Every field gets a band, so an unchanged one still says so —
-                the reader sees the whole scenario's shape, and only the
-                changed ones open into a diff. */}
+              {/* Every field gets a band, so an unchanged one still says so,
+                  and only the changed ones open into a diff. */}
               {subject.fields.map((field) => {
                 const before = against.body[field.id]
                 const after = version.body[field.id]
@@ -635,13 +604,7 @@ function VersionPane({
                     className="overflow-hidden rounded-lg border"
                     key={field.id}
                   >
-                    <div
-                      className={cn(
-                        "flex items-center justify-between gap-3 bg-muted/60 px-3 py-2 text-xs font-medium",
-                        !same && "border-b",
-                      )}
-                    >
-                      <span>{field.label}</span>
+                    <FieldBand label={field.label} open={!same}>
                       {same ? (
                         <span className="font-normal text-muted-foreground">
                           Unchanged
@@ -649,46 +612,97 @@ function VersionPane({
                       ) : (
                         <DiffStat {...diffStat(before, after)} />
                       )}
-                    </div>
+                    </FieldBand>
                     {same ? null : (
                       <FoldedDiff
                         after={after}
                         bare
                         before={before}
-                        key={`${against.n}-${layout}`}
-                        layout={layout}
+                        key={against.n}
+                        layout="split"
                       />
                     )}
                   </div>
                 )
               })}
             </div>
-          </SecondaryTabs>
-        </div>
-      ) : null}
+          ) : (
+            <FullVersion subject={subject} version={version} />
+          )}
+        </SecondaryTabs>
+      ) : (
+        <FullVersion subject={subject} version={version} />
+      )}
+
+      {/* The extra warning on a live scenario (TDD 3.4). It names the
+          version, what callers get and when, and that the prompt and first
+          message travel together (TDD 3.5). */}
+      <AlertDialog onOpenChange={setConfirming} open={confirming}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {verb} v{version.n}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {subject.name} is live. Callers get v{version.n}’s prompt and
+              first message from the next call. Calls already running finish on
+              v{inUse}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void apply()}>
+              {verb} v{version.n}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   )
 }
 
-/** One cell of the facts strip: a small label, the value, a muted line. */
-function Fact({
+/** A field's title band, with what it says about the field at the end. */
+function FieldBand({
   label,
-  value,
-  sub,
+  open,
   children,
 }: {
   label: string
-  value?: React.ReactNode
-  sub?: string
+  /** Something sits under it, so it draws its bottom edge. */
+  open: boolean
   children?: React.ReactNode
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-1 px-4 py-3">
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="text-sm font-medium tabular-nums">{value ?? children}</dd>
-      {sub ? (
-        <dd className="text-xs text-muted-foreground tabular-nums">{sub}</dd>
-      ) : null}
+    <div
+      className={cn(
+        "flex items-center justify-between gap-3 bg-muted/60 px-3 py-2 text-xs font-medium",
+        open && "border-b",
+      )}
+    >
+      <span>{label}</span>
+      {children}
+    </div>
+  )
+}
+
+/** The version whole, as it was: each field read-only, in full. */
+function FullVersion({
+  subject,
+  version,
+}: {
+  subject: Subject
+  version: Version
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      {subject.fields.map((field) => (
+        <div className="overflow-hidden rounded-lg border" key={field.id}>
+          <FieldBand label={field.label} open />
+          <p className="px-3 py-2 text-xs whitespace-pre-wrap" dir="auto">
+            {version.body[field.id]}
+          </p>
+        </div>
+      ))}
     </div>
   )
 }

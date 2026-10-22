@@ -1,18 +1,18 @@
 /**
- * Mock data for DES-202, configuration versioning. The model is the
- * "Configuration versioning" requirements doc (Taynam Alzamel):
+ * Mock data for DES-202, configuration versioning. The model is the TDD,
+ * "Live scenarios and configuration versioning" (Fatma Moanes, 22 Oct 2026):
  *
- *  - One shared timeline per item; versions are immutable, never deleted.
- *  - A version is made only by a save, and records the version it was edited
- *    from — usually the one before, the earlier one after "Edit from here".
- *  - A live scenario and the global prompt carry a marker: the version
- *    callers hear. Saving does not move it; publishing does. Rollback is
- *    moving it back, and makes no version.
- *  - A not-live scenario has no marker: its newest version is what runs.
- *
- * Decided with Vansh on 12 Oct 2026, for the handoff: a scenario is versioned
- * as one item. One save is one version number for the whole scenario; the
- * summary says which parts changed.
+ *  - Scenarios only. The global prompt gets versions in a later release.
+ *  - A version is the prompt and the first message, saved together and
+ *    always restored together. Every save makes one, with an optional note,
+ *    and records the version it was edited from. Versions are never edited
+ *    or deleted.
+ *  - Every scenario has a version in use: what the next call runs. On a live
+ *    scenario a save does not move it; publishing does. On a scenario that
+ *    is not live a save moves it straight away. Applying an older version
+ *    points back at it and makes no new version.
+ *  - Live is a switch and a badge. Turning it on or off changes nothing
+ *    about which version runs.
  */
 
 export type Field = { id: string; label: string; multiline: boolean }
@@ -24,23 +24,35 @@ export type Version = {
   mine: boolean
   at: string
   editedFrom: number | null
-  /** Null while it is still being written; "failed" if generation gave up. */
-  summary: string | null | "failed"
-  /** Has the marker ever pointed here. */
-  everLive: boolean
+  /** The optional note left on save. */
+  note: string | null
   body: Record<string, string>
 }
 
+/** One time a version was put in use: by a save on a scenario that is not
+    live, by publishing, or by applying an older one. */
+export type InUseEntry = {
+  n: number
+  by: string
+  at: string
+  how: "saved" | "published" | "applied"
+}
+
 export type Subject = {
-  kind: "scenario" | "global"
   name: string
   fields: Field[]
+  /** Newest first. */
   versions: Version[]
-  /** The version callers hear; null on a not-live scenario. */
-  marker: number | null
-  published: { by: string; at: string } | null
-  /** Who last turned live on or off, and when. Scenarios only; toggling
-      makes no version, so this is where the PRD's record of it shows. */
+  /** The switch and the badge. Moving it changes no version. */
+  live: boolean
+  /** The version in use: what the next call runs. */
+  inUse: number
+  /** Every time a version was put in use, newest first, so the first is
+      the version in use now. History reads it to say who applied each
+      version and when (TDD 3.2). */
+  log: InUseEntry[]
+  /** Who last turned live on or off, and when. Toggling makes no version,
+      so this is where the record of it shows. */
   toggled: { by: string; at: string } | null
 }
 
@@ -51,50 +63,65 @@ const SCENARIO_FIELDS: Field[] = [
   { id: "prompt", label: "Instruction prompt", multiline: true },
 ]
 
+const GREETING_0 =
+  "Hello, this is Sara from the branch team. Do you have two minutes for a short survey?"
 const GREETING_A =
   "Hello {{name}}, this is Sara from the branch team. Do you have two minutes for a short survey?"
 const GREETING_B =
   "Hello {{name}}, this is Sara from the branch team. Do you have a minute for a quick survey?"
 
-const PROMPT_A = [
-  "You are a friendly voice assistant calling about a recent branch visit.",
+const lines = (...rows: string[]) => rows.join("\n")
+
+const INTRO =
+  "You are a friendly voice assistant calling about a recent branch visit."
+const CLOSE = "Thank the customer and end the call."
+const RECORDING = "This call may be recorded for quality purposes."
+const RETRY =
+  "If the customer does not answer, ask once more, then thank them and end the call."
+
+const PROMPT_5 = lines(INTRO, "Ask how the visit went.", CLOSE)
+const PROMPT_6 = lines(INTRO, "Ask how the visit went.", RECORDING, CLOSE)
+const PROMPT_7 = lines(
+  INTRO,
+  "Ask how the visit went and what could be better.",
+  RECORDING,
+  CLOSE,
+)
+const PROMPT_A = lines(
+  INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
-  "This call may be recorded for quality purposes.",
-  "Thank the customer and end the call.",
-].join("\n")
-
-const PROMPT_B = [
-  "You are a friendly voice assistant calling about a recent branch visit.",
+  RECORDING,
+  CLOSE,
+)
+const PROMPT_B = lines(
+  INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
-  "Thank the customer and end the call.",
-].join("\n")
-
-const PROMPT_C = [
-  "You are a friendly voice assistant calling about a recent branch visit.",
+  CLOSE,
+)
+const PROMPT_C = lines(
+  INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
-  "If the customer does not answer, ask once more, then thank them and end the call.",
-  "Thank the customer and end the call.",
-].join("\n")
-
-const PROMPT_D = [
-  "You are a friendly voice assistant calling about a recent branch visit.",
+  RETRY,
+  CLOSE,
+)
+const PROMPT_D = lines(
+  INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 5, where 5 is excellent.",
-  "If the customer does not answer, ask once more, then thank them and end the call.",
-  "Thank the customer and end the call.",
-].join("\n")
-
-const PROMPT_E = [
-  "You are a friendly voice assistant calling about a recent branch visit.",
+  RETRY,
+  CLOSE,
+)
+const PROMPT_E = lines(
+  INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 5, where 5 is excellent.",
   "If the rating is 2 or lower, ask what went wrong and offer a callback from the branch manager.",
-  "If the customer does not answer, ask once more, then thank them and end the call.",
-  "Thank the customer and end the call.",
-].join("\n")
+  RETRY,
+  CLOSE,
+)
 
 function scenarioVersions(): Version[] {
   return [
@@ -104,9 +131,7 @@ function scenarioVersions(): Version[] {
       mine: true,
       at: "Today, 14:02",
       editedFrom: 13,
-      summary:
-        "Instruction prompt: offers a callback from the branch manager when the rating is 2 or lower.",
-      everLive: false,
+      note: "Callback offer for low ratings",
       body: { "first-message": GREETING_B, prompt: PROMPT_E },
     },
     {
@@ -115,9 +140,7 @@ function scenarioVersions(): Version[] {
       mine: false,
       at: "Today, 11:40",
       editedFrom: 12,
-      summary:
-        "Instruction prompt: the rating is now 1 to 5 instead of 1 to 10.",
-      everLive: false,
+      note: null,
       body: { "first-message": GREETING_B, prompt: PROMPT_D },
     },
     {
@@ -126,9 +149,7 @@ function scenarioVersions(): Version[] {
       mine: false,
       at: "Yesterday, 16:25",
       editedFrom: 11,
-      summary:
-        "Instruction prompt: asks once more when the customer does not answer.",
-      everLive: true,
+      note: "Ask again when there's no answer",
       body: { "first-message": GREETING_B, prompt: PROMPT_C },
     },
     {
@@ -136,10 +157,8 @@ function scenarioVersions(): Version[] {
       author: "Nouf Al-Harbi",
       mine: false,
       at: "8 Oct, 10:12",
-      editedFrom: 10,
-      summary:
-        "First message: asks for a minute instead of two. Instruction prompt: drops the recording notice.",
-      everLive: true,
+      editedFrom: 9,
+      note: "Shorter greeting, recording notice removed",
       body: { "first-message": GREETING_B, prompt: PROMPT_B },
     },
     {
@@ -148,8 +167,7 @@ function scenarioVersions(): Version[] {
       mine: true,
       at: "2 Oct, 09:30",
       editedFrom: 9,
-      summary: "Instruction prompt: fixed a typo in the closing line.",
-      everLive: false,
+      note: null,
       body: { "first-message": GREETING_A, prompt: PROMPT_A },
     },
     {
@@ -158,118 +176,100 @@ function scenarioVersions(): Version[] {
       mine: false,
       at: "28 Sep, 15:04",
       editedFrom: 8,
-      summary: "First message: greets the customer by name.",
-      everLive: true,
+      note: "Greet by name",
       body: { "first-message": GREETING_A, prompt: PROMPT_A },
+    },
+    {
+      n: 8,
+      author: "Sami Rahman",
+      mine: false,
+      at: "24 Sep, 11:18",
+      editedFrom: 7,
+      note: "Ask for a rating",
+      body: { "first-message": GREETING_0, prompt: PROMPT_A },
+    },
+    {
+      n: 7,
+      author: "Sami Rahman",
+      mine: false,
+      at: "24 Sep, 10:55",
+      editedFrom: 6,
+      note: null,
+      body: { "first-message": GREETING_0, prompt: PROMPT_7 },
+    },
+    {
+      n: 6,
+      author: "Nouf Al-Harbi",
+      mine: false,
+      at: "21 Sep, 09:40",
+      editedFrom: 5,
+      note: "Recording notice",
+      body: { "first-message": GREETING_0, prompt: PROMPT_6 },
+    },
+    {
+      n: 5,
+      author: "Nouf Al-Harbi",
+      mine: false,
+      at: "20 Sep, 16:02",
+      editedFrom: null,
+      note: "First version",
+      body: { "first-message": GREETING_0, prompt: PROMPT_5 },
     },
   ]
 }
 
 export const LIVE_SCENARIO: Subject = {
-  kind: "scenario",
   name: "Branch visit survey",
   fields: SCENARIO_FIELDS,
   versions: scenarioVersions(),
-  marker: 12,
-  published: { by: "Sami Rahman", at: "Yesterday, 16:40" },
+  live: true,
+  inUse: 12,
+  /* v10 went out and was taken back to v9 the next day; v11 was edited
+     from v9. */
+  log: [
+    { n: 12, by: "Sami Rahman", at: "yesterday 16:40", how: "published" },
+    { n: 11, by: "Nouf Al-Harbi", at: "8 Oct, 10:30", how: "published" },
+    { n: 9, by: "Nouf Al-Harbi", at: "3 Oct, 08:15", how: "applied" },
+    { n: 10, by: "You", at: "2 Oct, 09:45", how: "published" },
+    { n: 9, by: "Nouf Al-Harbi", at: "28 Sep, 15:10", how: "published" },
+  ],
   toggled: { by: "Nouf Al-Harbi", at: "28 Sep" },
 }
 
 export const TEST_SCENARIO: Subject = {
-  kind: "scenario",
   name: "Branch visit survey (test)",
   fields: SCENARIO_FIELDS,
-  versions: scenarioVersions().map((version) => ({
-    ...version,
-    everLive: false,
-  })),
-  marker: null,
-  published: null,
-  toggled: null,
-}
-
-/* --------------------------------------------------------- global prompt */
-
-const GLOBAL_FIELDS: Field[] = [
-  { id: "safety", label: "Safety", multiline: true },
-  { id: "identity", label: "Identity", multiline: true },
-]
-
-const SAFETY_A = [
-  "Never ask for a card number, PIN or password.",
-  "If the caller is distressed, offer to transfer them to a person.",
-].join("\n")
-
-const SAFETY_B = [
-  "Never ask for a card number, PIN, password or one-time code.",
-  "If the caller is distressed, offer to transfer them to a person.",
-].join("\n")
-
-const IDENTITY_A =
-  "You are an assistant calling on behalf of {{organization_name}}."
-const IDENTITY_B =
-  "You are an assistant calling on behalf of {{organization_name}}. Say so in your first sentence."
-
-export const GLOBAL_PROMPT: Subject = {
-  kind: "global",
-  name: "Global prompt",
-  fields: GLOBAL_FIELDS,
-  versions: [
-    {
-      n: 31,
-      author: "You",
-      mine: true,
-      at: "Today, 13:15",
-      editedFrom: 30,
-      summary:
-        "Identity: the agent names the organization in its first sentence.",
-      everLive: false,
-      body: { safety: SAFETY_B, identity: IDENTITY_B },
-    },
-    {
-      n: 30,
-      author: "Nasr Maswood",
-      mine: false,
-      at: "9 Oct, 12:00",
-      editedFrom: 29,
-      summary: "Safety: one-time codes join the things never to ask for.",
-      everLive: true,
-      body: { safety: SAFETY_B, identity: IDENTITY_A },
-    },
-    {
-      n: 29,
-      author: "Nouf Al-Harbi",
-      mine: false,
-      at: "21 Sep, 08:45",
-      editedFrom: 28,
-      summary: "Safety: offers a transfer when the caller is distressed.",
-      everLive: true,
-      body: { safety: SAFETY_A, identity: IDENTITY_A },
-    },
-  ],
-  marker: 30,
-  published: { by: "Nasr Maswood", at: "9 Oct, 12:05" },
+  versions: scenarioVersions(),
+  live: false,
+  inUse: 14,
+  log: [{ n: 14, by: "You", at: "today 14:02", how: "saved" }],
   toggled: null,
 }
 
 /* ----------------------------------------------------------------- cases */
 
-/** What a reviewer can force, so every state the ticket names is reachable. */
+/** What a reviewer can force, so every state the TDD names is reachable. */
 export type CaseId =
   | "normal"
   | "conflict"
-  | "summary-pending"
+  | "save-fails"
   | "history-fails"
   | "view-only"
+  | "no-live-permission"
   | "publish-fails"
+  | "apply-blocked"
+  | "apply-skips"
 
 export const CASES: { id: CaseId; label: string }[] = [
   { id: "normal", label: "Normal" },
   { id: "conflict", label: "Someone saves while you edit" },
-  { id: "summary-pending", label: "Summary still writing" },
+  { id: "save-fails", label: "Save fails" },
   { id: "history-fails", label: "History fails to load" },
   { id: "view-only", label: "View only" },
+  { id: "no-live-permission", label: "Can edit, can't turn live on or off" },
   { id: "publish-fails", label: "Publish fails" },
+  { id: "apply-blocked", label: "Version uses something deleted" },
+  { id: "apply-skips", label: "Version has a removed block" },
 ]
 
 /** The version someone else saves while you are editing, in the conflict case. */
@@ -277,6 +277,18 @@ export const RIVAL: Omit<Version, "n" | "editedFrom" | "body"> = {
   author: "Ahmad Khalil",
   mine: false,
   at: "Today, 14:20",
-  summary: "First message: adds the branch name.",
-  everLive: false,
+  note: "Branch name in the greeting",
+}
+
+/** What the two apply cases name: a tool the version's prompt calls that
+    was since deleted from the scenario, and a block the product dropped. */
+export const DELETED_REFERENCE = "the tool “Book callback”"
+export const REMOVED_BLOCK = "Sentiment tags"
+
+/** The call the conversation-details surface shows: it ran on v12. */
+export const CONVERSATION = {
+  scenario: LIVE_SCENARIO.name,
+  version: 12,
+  phoneNumber: "+966 55 012 4471",
+  startedAt: "Today, 13:48",
 }

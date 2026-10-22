@@ -272,9 +272,7 @@ function RequestTable({
                   v{row.version}
                 </span>
               </TableCell>
-              {viewer.sarj ? (
-                <TableCell>{row.org ?? "Super admin"}</TableCell>
-              ) : null}
+              {viewer.sarj ? <TableCell>{row.org}</TableCell> : null}
               <TableCell>{who(row.by, viewer)}</TableCell>
               <TableCell className="text-muted-foreground tabular-nums">
                 {row.raised}

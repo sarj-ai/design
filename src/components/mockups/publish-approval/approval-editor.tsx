@@ -39,8 +39,9 @@ import {
  * request. Only the row under the header changes, and it carries every
  * approval state the editor has:
  *
- *  - Saves ahead of live, nothing asked: which versions aren't live, and
- *    Request approval — where DES-202 had Review and publish.
+ *  - Saves ahead of the version in use, nothing asked: which versions
+ *    aren't in use, and Request approval — where DES-202 had Review and
+ *    publish.
  *  - Waiting: which version, who asked, how long it has waited. View
  *    request opens the same record the approver reads; the approver sees
  *    "waiting for your approval" and Review.
@@ -48,8 +49,8 @@ import {
  *    was raised for — the client approves exactly what they read — and the
  *    row says the newer one isn't in it, with Request v15 instead.
  *  - Rejected: who, and their reason, until the next request.
- *  - Approved: nothing. The header already says the version is live and
- *    who published it.
+ *  - Approved: nothing. The header already says who published the version
+ *    in use.
  */
 export function ApprovalEditor({
   subject,
@@ -67,7 +68,11 @@ export function ApprovalEditor({
   caseId: CaseId
   /** This scenario's requests, newest first. */
   requests: ApprovalRequest[]
-  onSave: (body: Record<string, string>, editedFrom: number) => number
+  onSave: (
+    body: Record<string, string>,
+    editedFrom: number,
+    note: string,
+  ) => number
   onToggleLive: (on: boolean) => void
   /** Resolves false when sending failed. */
   onRequest: (request: {
@@ -85,24 +90,23 @@ export function ApprovalEditor({
   const [requestFor, setRequestFor] = React.useState<number | null>(null)
 
   const canEdit = caseId !== "view-only"
-  const marker = subject.marker
+  const inUse = subject.inUse
   const pending = requests.find((request) => request.status === "pending")
   const rejected =
     !pending && requests[0]?.status === "rejected" ? requests[0] : null
-  const ahead =
-    marker === null ? [] : subject.versions.filter((v) => v.n > marker)
+  const ahead = subject.live ? subject.versions.filter((v) => v.n > inUse) : []
   const changes = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
   ).length
 
-  function save() {
-    const n = onSave(draft, base)
+  function save(note: string) {
+    const n = onSave(draft, base, note)
     setBase(n)
     setReviewing(false)
     toast.success(`Saved as v${n}`, {
       description: pending
-        ? `It isn’t in the request for v${pending.version}. Callers still hear v${marker}.`
-        : `Callers still hear v${marker}.`,
+        ? `It isn’t in the request for v${pending.version}. Callers still hear v${inUse}.`
+        : `Callers still hear v${inUse}.`,
     })
   }
 
@@ -136,7 +140,8 @@ export function ApprovalEditor({
       <StatusRow
         ahead={ahead}
         canRequest={canEdit}
-        marker={marker}
+        inUse={inUse}
+        live={subject.live}
         newest={newest.n}
         onOpenRequest={onOpenRequest}
         onRequest={setRequestFor}
@@ -192,8 +197,8 @@ export function ApprovalEditor({
         draft={draft}
         liveLine={
           pending
-            ? `Saving makes v${newest.n + 1}. It isn’t added to the request for v${pending.version}, and callers keep hearing v${marker}.`
-            : `Saving makes v${newest.n + 1}. Callers keep hearing v${marker} until ${SCENARIO_ORG} approves a newer version.`
+            ? `Saving makes v${newest.n + 1}. It isn’t added to the request for v${pending.version}, and callers keep hearing v${inUse}.`
+            : `Saving makes v${newest.n + 1}. Callers keep hearing v${inUse} until ${SCENARIO_ORG} approves a newer version.`
         }
         onOpenChange={setReviewing}
         onSave={save}
@@ -216,7 +221,7 @@ export function ApprovalEditor({
         editing={base}
         initial={{
           n: newest.n,
-          against: marker === newest.n ? null : marker,
+          against: inUse === newest.n ? null : inUse,
         }}
         onEditFrom={(n) => {
           const version = subject.versions.find((item) => item.n === n)
@@ -226,14 +231,14 @@ export function ApprovalEditor({
           setHistory(false)
         }}
         onOpenChange={setHistory}
-        onPublish={async () => false}
+        onApply={async () => "failed"}
         open={history}
         subject={subject}
       />
 
       <RequestDialog
         caseId={caseId}
-        live={marker ?? newest.n}
+        live={inUse}
         onOpenChange={(open) => {
           if (!open) setRequestFor(null)
         }}
@@ -249,7 +254,8 @@ export function ApprovalEditor({
 
 function StatusRow({
   ahead,
-  marker,
+  inUse,
+  live,
   newest,
   pending,
   rejected,
@@ -259,7 +265,8 @@ function StatusRow({
   onOpenRequest,
 }: {
   ahead: Version[]
-  marker: number | null
+  inUse: number
+  live: boolean
   newest: number
   pending: ApprovalRequest | null
   rejected: ApprovalRequest | null
@@ -268,7 +275,7 @@ function StatusRow({
   onRequest: (n: number) => void
   onOpenRequest: (id: string) => void
 }) {
-  if (marker === null) return null
+  if (!live) return null
 
   const request = (label: string, n: number) => (
     <RequestButton allowed={canRequest} onClick={() => onRequest(n)}>
@@ -288,8 +295,8 @@ function StatusRow({
           </ItemTitle>
           <ItemDescription className="tabular-nums">
             {newer
-              ? `v${newest} was saved after the request and isn’t in it. Callers hear v${marker}.`
-              : `Requested by ${who(pending.by, viewer, true)}, ${pending.raised} · waiting ${pending.waiting}. Callers hear v${marker}.`}
+              ? `v${newest} was saved after the request and isn’t in it. Callers hear v${inUse}.`
+              : `Requested by ${who(pending.by, viewer, true)}, ${pending.raised} · waiting ${pending.waiting}. Callers hear v${inUse}.`}
           </ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -315,7 +322,7 @@ function StatusRow({
             {who(rejected.decision.by, viewer)} rejected v{rejected.version}
           </ItemTitle>
           <ItemDescription className="tabular-nums" dir="auto">
-            “{rejected.decision.reason}” Callers hear v{marker}.
+            “{rejected.decision.reason}” Callers hear v{inUse}.
           </ItemDescription>
         </ItemContent>
         <ItemActions>
@@ -335,11 +342,11 @@ function StatusRow({
       <ItemContent>
         <ItemTitle className="tabular-nums">
           {ahead.length === 1
-            ? `v${ahead[0].n} isn’t live yet`
-            : `v${ahead[ahead.length - 1].n} to v${ahead[0].n} aren’t live yet`}
+            ? `v${ahead[0].n} isn’t in use yet`
+            : `v${ahead[ahead.length - 1].n} to v${ahead[0].n} aren’t in use yet`}
         </ItemTitle>
         <ItemDescription className="tabular-nums">
-          Callers hear v{marker} until {SCENARIO_ORG} approves a newer version.
+          Callers hear v{inUse} until {SCENARIO_ORG} approves a newer version.
         </ItemDescription>
       </ItemContent>
       <ItemActions>{request("Request approval", newest)}</ItemActions>

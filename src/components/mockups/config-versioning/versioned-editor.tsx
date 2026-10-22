@@ -10,7 +10,6 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
@@ -21,56 +20,69 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { Textarea } from "@/components/ui/textarea"
+import { SaveBar } from "@/components/shared/save-bar"
 import { EditorHeader } from "@/components/mockups/config-versioning/editor-header"
-import { HistoryDrawer } from "@/components/mockups/config-versioning/history-drawer"
+import {
+  type ApplyResult,
+  HistoryDrawer,
+} from "@/components/mockups/config-versioning/history-drawer"
 import { BackToNewestIcon } from "@/components/mockups/config-versioning/icons"
 import { SaveReview } from "@/components/mockups/config-versioning/save-review"
 import {
   type CaseId,
+  REMOVED_BLOCK,
   RIVAL,
   type Subject,
   type Version,
 } from "@/lib/mockups/config-versioning-data"
 
 /**
- * The editor for anything versioned — a scenario's Scenario tab, or the
- * global prompt — cut to what DES-202 changes.
+ * A scenario's editor, cut to what DES-202 changes, as the TDD has it.
  *
- * The editor names two versions and never numbers them: the live version
- * (what callers hear) and the latest (the newest save). Numbers live in
- * History, where you pick one. Review on 13 Oct 2026 found a screen with
- * v9, v12, v13 and v14 on it at once unreadable; Langfuse's production and
- * latest labels are the model.
+ * The editor names two versions and never numbers them: the version in use
+ * (what the next call runs) and the latest (the newest save). Numbers live
+ * in History, where you pick one. Review on 13 Oct 2026 found a screen with
+ * v9, v12, v13 and v14 on it at once unreadable.
  *
- *  - Save makes a version. Live or not, the save review says what the save
- *    does to callers (save-review.tsx).
- *  - On a live item with saves ahead of the marker, one row under the header
- *    says which versions are not live and offers Review and publish. It is
- *    the ticket's draft indicator, unpublished state and publish action in
- *    one place, and it is absent when there is nothing to publish.
- *  - History (history-drawer.tsx) is where publishing, rolling back and
- *    "edit from here" happen, with the comparison on screen.
- *  - Edit from here opens an earlier version as the starting point, says so
- *    above the fields, and saves as a new version on top (PRD).
+ *  - Save makes a version, live or not. On a live scenario callers keep
+ *    getting the version in use until someone publishes; on one that is not
+ *    live the new version is in use from the next call (TDD 3.3).
+ *  - With saves ahead of the version in use, one row under the header says
+ *    so and offers Review and publish. Turning live off greys the button
+ *    rather than removing the row, so the page does not jump when the
+ *    switch flips; the row is absent only when there is nothing ahead.
+ *  - History (history-drawer.tsx) is where publishing, applying an older
+ *    version and "edit from here" happen, with the comparison on screen.
+ *    After applying, the editor opens on that version, and saving from there
+ *    makes the next one (TDD 3.7).
+ *  - Live is a switch and a badge with its own permission. Turning it on or
+ *    off changes nothing about which version runs (TDD 3.1).
  */
 export function VersionedEditor({
   initial,
   caseId,
+  openAt,
 }: {
   initial: Subject
   caseId: CaseId
+  /** Opens History on this version — the link from a call's details. */
+  openAt?: number
 }) {
   const [subject, setSubject] = React.useState(initial)
   const [base, setBase] = React.useState(initial.versions[0].n)
   const [draft, setDraft] = React.useState(initial.versions[0].body)
   const [reviewing, setReviewing] = React.useState(false)
+  /* Each review opens with an empty note. */
+  const [reviewKey, setReviewKey] = React.useState(0)
+  const [saveFailed, setSaveFailed] = React.useState(false)
   const [history, setHistory] = React.useState<{
     n: number
     against: number | null
-  } | null>(null)
+  } | null>(openAt ? { n: openAt, against: null } : null)
   const [rival, setRival] = React.useState<Version | null>(null)
 
   const canEdit = caseId !== "view-only"
+  const canToggle = canEdit && caseId !== "no-live-permission"
   const newest = subject.versions[0]
   const baseVersion =
     subject.versions.find((version) => version.n === base) ?? newest
@@ -78,30 +90,9 @@ export function VersionedEditor({
   const changes = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
   ).length
-  const live = subject.marker !== null
-  const ahead = live
-    ? subject.versions.filter((v) => v.n > subject.marker!)
-    : []
-
-  /* A summary for a fresh save arrives a moment later (PRD: generation never
-     blocks the save). In the pending case it never does. */
-  React.useEffect(() => {
-    if (caseId === "summary-pending") return
-    if (newest.summary !== null) return
-    const timer = setTimeout(
-      () =>
-        setSubject((current) => ({
-          ...current,
-          versions: current.versions.map((version) =>
-            version.summary === null
-              ? { ...version, summary: summarise(current, version) }
-              : version,
-          ),
-        })),
-      2500,
-    )
-    return () => clearTimeout(timer)
-  }, [caseId, newest.summary])
+  const ahead = subject.versions.filter(
+    (version) => version.n > subject.inUse,
+  )
 
   function openReview() {
     /* The conflict case: someone else's save lands after this page opened. */
@@ -122,10 +113,17 @@ export function VersionedEditor({
         versions: [theirs, ...current.versions],
       }))
     }
+    setSaveFailed(false)
+    setReviewKey((current) => current + 1)
     setReviewing(true)
   }
 
-  function save() {
+  function save(note: string) {
+    /* The save-fails case: the first attempt writes nothing (TDD 5.4). */
+    if (caseId === "save-fails" && !saveFailed) {
+      setSaveFailed(true)
+      return
+    }
     const n = subject.versions[0].n + 1
     const made: Version = {
       n,
@@ -133,21 +131,31 @@ export function VersionedEditor({
       mine: true,
       at: "Just now",
       editedFrom: base,
-      summary: null,
-      everLive: false,
+      note: note || null,
       body: draft,
     }
     setSubject((current) => ({
       ...current,
       versions: [made, ...current.versions],
+      /* Not live: a save is in use from the next call. */
+      ...(current.live
+        ? {}
+        : {
+            inUse: n,
+            log: [
+              { n, by: "You", at: "just now", how: "saved" as const },
+              ...current.log,
+            ],
+          }),
     }))
     setBase(n)
     setRival(null)
+    setSaveFailed(false)
     setReviewing(false)
     toast.success("Saved", {
-      description: live
-        ? "Callers keep hearing the live version until you publish."
-        : "It runs from the next call.",
+      description: subject.live
+        ? "Callers keep getting the version in use until you publish."
+        : "It’s in use from the next call.",
     })
   }
 
@@ -166,35 +174,43 @@ export function VersionedEditor({
     })
   }
 
-  async function publish(n: number): Promise<boolean> {
+  async function apply(n: number): Promise<ApplyResult> {
     await new Promise((resolve) => setTimeout(resolve, 900))
-    if (caseId === "publish-fails") return false
-    const before = { marker: subject.marker, published: subject.published }
+    if (caseId === "publish-fails") return "failed"
+    if (caseId === "apply-blocked") return "blocked"
+    const version = subject.versions.find((item) => item.n === n)
+    if (!version) return "failed"
+    const before = { inUse: subject.inUse, log: subject.log }
+    const how = subject.live && n > before.inUse ? "published" : "applied"
     setSubject((current) => ({
       ...current,
-      marker: n,
-      published: { by: "You", at: "Just now" },
-      versions: current.versions.map((version) =>
-        version.n === n ? { ...version, everLive: true } : version,
-      ),
+      inUse: n,
+      log: [{ n, by: "You", at: "just now", how }, ...current.log],
     }))
+    /* The editor opens on the version just applied (TDD 3.7). */
+    setBase(n)
+    setDraft(version.body)
     setHistory(null)
-    toast.success(`v${n} is live`, {
+    toast.success(`v${n} is in use`, {
       description:
-        before.marker !== null && n < before.marker
-          ? `Rolled back from v${before.marker}. No version was made.`
-          : "Callers hear it from the next call.",
-      action: {
-        label: "Undo",
-        onClick: () =>
-          setSubject((current) => ({
-            ...current,
-            marker: before.marker,
-            published: before.published,
-          })),
-      },
+        caseId === "apply-skips"
+          ? `${REMOVED_BLOCK} was skipped. It’s no longer in the product.`
+          : "Callers get it from the next call. No version was made.",
+      /* A live scenario asked first; a scenario that is not live applies
+         at once, so it can take it back. */
+      action: subject.live
+        ? undefined
+        : {
+            label: "Undo",
+            onClick: () =>
+              setSubject((current) => ({
+                ...current,
+                inUse: before.inUse,
+                log: before.log,
+              })),
+          },
     })
-    return true
+    return "ok"
   }
 
   function editFrom(n: number) {
@@ -206,35 +222,24 @@ export function VersionedEditor({
   }
 
   function toggleLive(on: boolean) {
-    const before = {
-      marker: subject.marker,
-      published: subject.published,
-      toggled: subject.toggled,
-    }
+    const before = { live: subject.live, toggled: subject.toggled }
     setSubject((current) => ({
       ...current,
-      marker: on ? current.versions[0].n : null,
-      published: on ? { by: "You", at: "Just now" } : null,
+      live: on,
       toggled: { by: "You", at: "just now" },
-      versions: on
-        ? current.versions.map((version, index) =>
-            index === 0 ? { ...version, everLive: true } : version,
-          )
-        : current.versions,
     }))
     toast(
       on ? `${subject.name} is live` : `${subject.name} is no longer live`,
       {
         description: on
-          ? "The latest version is now live. Saves wait for a publish."
-          : "The latest version runs from the next call. Saves apply straight away.",
+          ? "The version in use doesn’t change. Saves now wait for a publish."
+          : "The version in use doesn’t change. Saves now apply straight away.",
         action: {
           label: "Undo",
           onClick: () =>
             setSubject((current) => ({
               ...current,
-              marker: before.marker,
-              published: before.published,
+              live: before.live,
               toggled: before.toggled,
             })),
         },
@@ -243,9 +248,10 @@ export function VersionedEditor({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8 pb-28">
+    <div className="mx-auto flex min-h-full w-full max-w-3xl flex-col gap-6 p-8 pb-4">
       <EditorHeader
         canEdit={canEdit}
+        canToggle={canToggle}
         onOpenHistory={() => setHistory({ n: newest.n, against: null })}
         onToggleLive={toggleLive}
         subject={subject}
@@ -257,15 +263,15 @@ export function VersionedEditor({
             <ItemTitle>Unpublished changes</ItemTitle>
             <ItemDescription className="tabular-nums">
               {ahead.length === 1
-                ? "1 save since the live version. Callers don’t hear it yet."
-                : `${ahead.length} saves since the live version. Callers don’t hear them yet.`}
+                ? "1 save since the version in use. Callers don’t get it yet."
+                : `${ahead.length} saves since the version in use. Callers don’t get them yet.`}
             </ItemDescription>
           </ItemContent>
           <ItemActions>
             <Button
-              disabled={!canEdit}
+              disabled={!canEdit || !subject.live}
               onClick={() =>
-                setHistory({ n: newest.n, against: subject.marker })
+                setHistory({ n: newest.n, against: subject.inUse })
               }
             >
               Review and publish
@@ -326,25 +332,13 @@ export function VersionedEditor({
         ))}
       </FieldGroup>
 
-      {changes > 0 ? (
-        <Card className="sticky bottom-4" size="sm">
-          <CardContent className="flex items-center gap-3">
-            <span className="text-sm tabular-nums">
-              {changes === 1 ? "1 change" : `${changes} changes`}
-            </span>
-            <div className="ms-auto flex items-center gap-2">
-              <Button onClick={discard} variant="ghost">
-                Discard
-              </Button>
-              <Button onClick={openReview}>Review and save</Button>
-            </div>
-          </CardContent>
-        </Card>
-      ) : null}
+      <SaveBar changes={changes} onDiscard={discard} onSave={openReview} />
 
       <SaveReview
         base={base}
         draft={draft}
+        failed={saveFailed}
+        key={reviewKey}
         onOpenChange={setReviewing}
         onSave={save}
         open={reviewing}
@@ -357,11 +351,11 @@ export function VersionedEditor({
         caseId={caseId}
         editing={base}
         initial={history ?? { n: newest.n, against: null }}
+        onApply={apply}
         onEditFrom={editFrom}
         onOpenChange={(open) => {
           if (!open) setHistory(null)
         }}
-        onPublish={publish}
         open={history !== null}
         subject={
           caseId === "view-only"
@@ -374,17 +368,4 @@ export function VersionedEditor({
       />
     </div>
   )
-}
-
-/** A stand-in for the generated summary: which parts the save touched. */
-function summarise(subject: Subject, version: Version) {
-  const parent = subject.versions.find((item) => item.n === version.editedFrom)
-  const touched = subject.fields
-    .filter(
-      (field) => parent && parent.body[field.id] !== version.body[field.id],
-    )
-    .map((field) => field.label)
-  return touched.length
-    ? `${touched.join(" and ")}: edited${version.editedFrom ? ` from v${version.editedFrom}` : ""}.`
-    : `Same content as v${version.editedFrom}.`
 }

@@ -12,33 +12,35 @@ import {
 } from "@/components/ui/select"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { ConversationVersion } from "@/components/mockups/config-versioning/conversation-version"
 import { VersionedEditor } from "@/components/mockups/config-versioning/versioned-editor"
 import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
 import {
   CASES,
   type CaseId,
-  GLOBAL_PROMPT,
   LIVE_SCENARIO,
   TEST_SCENARIO,
 } from "@/lib/mockups/config-versioning-data"
 
 /**
- * Configuration versioning — DES-202, under INT-253, for PLT-4477. The spec
- * is the "Configuration versioning" requirements doc; it builds on DES-203's
- * live status (/live-scenarios) and leaves approval to DES-204.
+ * Configuration versioning — DES-202, for PLT-4477, to the TDD "Live
+ * scenarios and configuration versioning" (22 Oct 2026). It builds on
+ * DES-203's live status (/live-scenarios); approval is DES-204, a separate
+ * feature after both.
  *
- * The three things the PRD versions, one per surface: a live scenario (save,
- * then publish), a not-live scenario (save is what runs), and the global
- * prompt (always live). The select reaches the states the ticket names:
- * a concurrent save, a summary still being written, history failing to load,
- * view-only, and a publish that fails.
+ * Scenarios only: a live one (save, then publish) and one that is not live
+ * (save is in use from the next call), plus a call's details, which show
+ * the version it ran with and open it in history. The select reaches the
+ * states the TDD names: a concurrent save, a failed save, history failing
+ * to load, view-only, no permission to turn live on or off, a failed
+ * publish, and the two ways applying an old version can go wrong.
  */
 
 const SURFACES = [
   { id: "live", label: "Live scenario" },
   { id: "test", label: "Not-live scenario" },
-  { id: "global", label: "Global prompt" },
+  { id: "conversation", label: "Conversation details" },
 ] as const
 
 type Surface = (typeof SURFACES)[number]["id"]
@@ -46,30 +48,15 @@ type Surface = (typeof SURFACES)[number]["id"]
 export default function ConfigVersioningPage() {
   const [surface, setSurface] = React.useState<Surface>("live")
   const [caseId, setCaseId] = React.useState<CaseId>("normal")
+  /* The version a call's details asked to open, in the live scenario. */
+  const [openAt, setOpenAt] = React.useState<number | undefined>()
 
   /* A toast belongs to the surface and case that raised it. */
   React.useEffect(() => {
     toast.dismiss()
   }, [surface, caseId])
 
-  const subject =
-    surface === "live"
-      ? LIVE_SCENARIO
-      : surface === "test"
-        ? TEST_SCENARIO
-        : GLOBAL_PROMPT
-
-  /* In the summary case the newest version's summary is still being
-     written when the page opens. */
-  const initial =
-    caseId === "summary-pending"
-      ? {
-          ...subject,
-          versions: subject.versions.map((version, index) =>
-            index === 0 ? { ...version, summary: null } : version,
-          ),
-        }
-      : subject
+  const subject = surface === "test" ? TEST_SCENARIO : LIVE_SCENARIO
 
   return (
     <MockupShell
@@ -93,7 +80,9 @@ export default function ConfigVersioningPage() {
           <ToggleGroup
             aria-label="Surface"
             onValueChange={(next) => {
-              if (next) setSurface(next as Surface)
+              if (!next) return
+              setSurface(next as Surface)
+              setOpenAt(undefined)
             }}
             size="sm"
             type="single"
@@ -108,23 +97,34 @@ export default function ConfigVersioningPage() {
           </ToggleGroup>
         </>
       }
-      title="Configuration versioning: save, publish, history, rollback"
+      title="Configuration versioning: save, publish, history, apply"
     >
       <TooltipProvider>
         <AppShell
-          active={surface === "global" ? "Global Prompts" : "Scenarios"}
+          active={surface === "conversation" ? "Conversations" : "Scenarios"}
           breadcrumb={
-            surface === "global"
-              ? "Global Prompts"
+            surface === "conversation"
+              ? "Conversations"
               : ["Scenarios", subject.name]
           }
         >
-          {/* Keyed so each surface and case opens as the page would find it. */}
-          <VersionedEditor
-            caseId={caseId}
-            initial={initial}
-            key={`${surface}-${caseId}`}
-          />
+          {surface === "conversation" ? (
+            <ConversationVersion
+              onOpenVersion={(n) => {
+                setSurface("live")
+                setOpenAt(n)
+              }}
+            />
+          ) : (
+            /* Keyed so each surface and case opens as the page would find
+               it. */
+            <VersionedEditor
+              caseId={caseId}
+              initial={subject}
+              key={`${surface}-${caseId}-${openAt ?? ""}`}
+              openAt={openAt}
+            />
+          )}
         </AppShell>
       </TooltipProvider>
     </MockupShell>

@@ -1,17 +1,5 @@
 "use client"
 
-import * as React from "react"
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -21,38 +9,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import {
   HistoryIcon,
   MoreActionsIcon,
   RunScenarioIcon,
-  StatusMenuIcon,
 } from "@/components/mockups/config-versioning/icons"
 import type { Subject } from "@/lib/mockups/config-versioning-data"
-import { cn } from "@/lib/utils"
 
 /**
  * The top of the editor: DES-203's status-menu header, which was picked
  * there, with versioning added in the two places it fits.
  *
- *  - The line under the title says who published the live version and
- *    when, or on a not-live scenario who saved last. No version numbers:
- *    the editor speaks of "the live version" and "the latest" (review,
- *    13 Oct 2026), and History is where numbers are.
- *  - History sits beside the Live button. The page's other actions are
+ *  - The line under the title says who put the version in use there, and
+ *    how: published, applied, or (on a scenario that is not live) saved. No
+ *    version numbers: the editor speaks of "the version in use" and "the
+ *    latest" (review, 13 Oct 2026), and History is where numbers are.
+ *  - History sits beside the Live switch. The page's other actions are
  *    DES-203's, unchanged.
- *
- * The global prompt is always live and has no switch (PRD), so it gets the
- * line and History only.
  */
 export function EditorHeader({
   subject,
   canEdit,
+  canToggle = canEdit,
   onOpenHistory,
   onToggleLive,
 }: {
@@ -61,11 +45,13 @@ export function EditorHeader({
    *  editor, which passes it, still compiles. */
   base?: number
   canEdit: boolean
+  /** Turning live on or off is its own permission (TDD 3.1), separate from
+   *  editing. Defaults to the edit permission. */
+  canToggle?: boolean
   onOpenHistory: () => void
   onToggleLive: (on: boolean) => void
 }) {
-  const newest = subject.versions[0]
-  const live = subject.marker !== null
+  const [applied] = subject.log
 
   return (
     <header className="flex items-start justify-between gap-6">
@@ -73,155 +59,101 @@ export function EditorHeader({
         <h1 className="text-2xl font-semibold">{subject.name}</h1>
         <p className="text-sm text-muted-foreground">
           {/* Each phrase wraps as a unit, never mid-name. */}
-          {live && subject.published ? (
-            <>
-              <span className="whitespace-nowrap">
-                Live version published by {subject.published.by},
-              </span>{" "}
-              <span className="whitespace-nowrap">{subject.published.at}</span>
-            </>
-          ) : (
-            <span className="whitespace-nowrap">
-              Saved by {newest.author}, {newest.at}
-            </span>
-          )}
+          <span className="whitespace-nowrap">
+            Version in use {applied.how} by {applied.by},
+          </span>{" "}
+          <span className="whitespace-nowrap">{applied.at}</span>
         </p>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        {subject.kind === "scenario" ? (
-          <LiveMenu
-            canToggle={canEdit}
-            live={live}
-            marker={subject.marker}
-            newest={newest.n}
-            onToggle={onToggleLive}
-            toggled={subject.toggled}
-          />
-        ) : null}
+        <LiveSwitch
+          canToggle={canToggle}
+          live={subject.live}
+          onToggle={onToggleLive}
+          toggled={subject.toggled}
+        />
         <Button onClick={onOpenHistory} variant="outline">
           <HistoryIcon />
           History
         </Button>
-        {subject.kind === "scenario" ? (
-          <>
-            <Button>
-              <RunScenarioIcon />
-              Run scenario
+        <Button>
+          <RunScenarioIcon />
+          Run scenario
+        </Button>
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button aria-label="More actions" size="icon" variant="outline">
+              <MoreActionsIcon />
             </Button>
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button aria-label="More actions" size="icon" variant="outline">
-                  <MoreActionsIcon />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Export scenario</DropdownMenuItem>
-                <DropdownMenuItem>Import scenario</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
-        ) : null}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Export scenario</DropdownMenuItem>
+            <DropdownMenuItem>Import scenario</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   )
 }
 
 /**
- * DES-203's Live button and popover. One case is new: turning live off while
- * the marker sits behind newer saves would quietly start running the newest
- * version (the PRD's open question), so that one asks first and names both
- * versions.
+ * Live, as a switch in the header: one click, asks nothing (TDD 3.1). It was
+ * DES-203's button opening a popover with the switch inside — two clicks for
+ * one value (feedback, 22 Oct 2026). What the popover said moves out:
+ *
+ *  - Who turned it on or off is the switch's tooltip. Toggling makes no
+ *    version, so this is the only record of it.
+ *  - What live means for saves is the toast that follows a toggle, said
+ *    once at the moment it changes rather than on every visit.
  */
-function LiveMenu({
+function LiveSwitch({
   live,
-  marker,
-  newest,
   canToggle,
   onToggle,
   toggled,
 }: {
   live: boolean
-  marker: number | null
-  newest: number
   canToggle: boolean
   onToggle: (on: boolean) => void
   toggled: Subject["toggled"]
 }) {
-  const [confirming, setConfirming] = React.useState(false)
-  const behind = live && marker !== null && marker < newest
+  const hint = !canToggle
+    ? "You don't have permission to turn this on or off."
+    : toggled
+      ? `Turned ${live ? "on" : "off"} by ${toggled.by}, ${toggled.at}`
+      : null
+
+  /* The switch sits in an outline chip the height of the buttons beside
+     it, so the row reads as one set of controls. The whole chip is the
+     label: a click anywhere on it flips the switch. */
+  const control = (
+    <Button
+      asChild
+      className={canToggle ? "cursor-pointer" : "cursor-not-allowed"}
+      variant="outline"
+    >
+      <Label htmlFor="live-switch">
+        Live
+        <Switch
+          checked={live}
+          disabled={!canToggle}
+          id="live-switch"
+          onCheckedChange={onToggle}
+          size="sm"
+        />
+      </Label>
+    </Button>
+  )
+
+  if (!hint) return control
 
   return (
-    <>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="outline">
-            <span
-              aria-hidden
-              className={cn(
-                "size-2 shrink-0 rounded-full",
-                live ? "bg-success" : "bg-muted-foreground/40",
-              )}
-            />
-            {live ? "Live" : "Not live"}
-            <StatusMenuIcon />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="end" className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex flex-col gap-0.5">
-              <Label htmlFor="live-switch">Live</Label>
-              {/* Toggling makes no version, so the record of it lives here. */}
-              {toggled ? (
-                <span className="text-xs text-muted-foreground">
-                  Turned {live ? "on" : "off"} by {toggled.by}, {toggled.at}
-                </span>
-              ) : null}
-            </div>
-            <Switch
-              checked={live}
-              disabled={!canToggle}
-              id="live-switch"
-              onCheckedChange={(on) => {
-                if (!on && behind) {
-                  setConfirming(true)
-                  return
-                }
-                onToggle(on)
-              }}
-            />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {!canToggle
-              ? "You don't have permission to change this."
-              : live
-                ? "Saving makes a version; publishing puts it on calls."
-                : "Turning it on makes the latest version live."}
-          </p>
-        </PopoverContent>
-      </Popover>
-
-      <AlertDialog onOpenChange={setConfirming} open={confirming}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Turn off live?</AlertDialogTitle>
-            <AlertDialogDescription>
-              The latest version starts running instead of the live one from the
-              next call, without a publish. Every version stays in history.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => onToggle(false)}>
-              Turn off live
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+    <Tooltip>
+      <TooltipTrigger asChild>{control}</TooltipTrigger>
+      <TooltipContent>{hint}</TooltipContent>
+    </Tooltip>
   )
 }

@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,24 +12,27 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
+import { Field, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 import { LineDiff } from "@/components/shared/line-diff"
 import { CloseIcon } from "@/components/mockups/config-versioning/icons"
 import type { Subject, Version } from "@/lib/mockups/config-versioning-data"
 
 /**
- * DES-203's save review — what changed, line by line, then Save — with the
- * one fact versioning changes put at the top:
+ * DES-203's save review — what changed, line by line, then Save — with what
+ * versioning adds:
  *
- *  - Live scenario or global prompt: the save makes a version and callers
- *    keep hearing the live one. DES-203's "callers hear this from the next
- *    call" warning moves to publishing, where it is now true.
- *  - Not-live scenario: the save makes a version and that version runs.
+ *  - One line on what the save does to callers. Live: it makes a version and
+ *    callers keep getting the version in use until a publish. Not live: the
+ *    new version is in use from the next call (TDD 3.3).
+ *  - An optional note (TDD 3.3), shown on the version's row in History.
+ *  - The concurrent-save warning (TDD 3.4) above the diff: the save still
+ *    goes through, as the next version, so the verb becomes Save anyway.
+ *  - A failed save writes nothing (TDD 5.4); the drawer says so and the
+ *    person saves again.
  *
- * No version numbers here — the review names "the live version", not v12
- * (review, 13 Oct 2026). The concurrent-edit warning (PRD: "told a newer
- * version exists and that saving now will not include those changes") sits
- * above the diff, and the verb becomes Save anyway, the choice the PRD asks
- * the editor to make.
+ * No version numbers here — the review names "the version in use", not v12
+ * (review, 13 Oct 2026).
  */
 export function SaveReview({
   open,
@@ -36,6 +41,7 @@ export function SaveReview({
   base,
   draft,
   rival,
+  failed = false,
   onSave,
   liveLine,
 }: {
@@ -47,19 +53,28 @@ export function SaveReview({
   draft: Record<string, string>
   /** A version someone else saved after this page loaded. */
   rival: Version | null
-  onSave: () => void
+  /** The last attempt failed and nothing was written. */
+  failed?: boolean
+  onSave: (note: string) => void
   /** What a save means for callers on a live item, when something other
    *  than a publish puts it on calls — DES-204's approval. */
   liveLine?: string
 }) {
+  const [note, setNote] = React.useState("")
   const newest = subject.versions[0]
   const changed = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
   )
-  const live = subject.marker !== null
 
   return (
-    <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
+    <Drawer
+      direction="right"
+      onOpenChange={(next) => {
+        if (!next) setNote("")
+        onOpenChange(next)
+      }}
+      open={open}
+    >
       <DrawerContent className="sm:max-w-md!">
         <DrawerHeader className="flex flex-row items-start justify-between gap-4 border-b">
           <DrawerTitle>
@@ -78,24 +93,31 @@ export function SaveReview({
           className="flex flex-1 flex-col gap-5 overflow-y-auto p-4"
           data-vaul-no-drag
         >
-          {rival ? (
+          {failed ? (
+            <Alert className="bg-destructive-tint" variant="destructive">
+              <AlertTitle>Couldn’t save</AlertTitle>
+              <AlertDescription>
+                Nothing was written. Your changes are still here.
+              </AlertDescription>
+            </Alert>
+          ) : rival ? (
             <Alert className="bg-warning-tint text-warning-tint-foreground">
               <AlertTitle>
                 {rival.author} saved a newer version while you were editing
               </AlertTitle>
               <AlertDescription className="text-warning-tint-foreground">
-                Saving now leaves out their change: “{rival.summary}” Both stay
-                in history.
+                Saving now leaves out their change
+                {rival.note ? `: “${rival.note}”` : ""}. Both stay in history.
               </AlertDescription>
             </Alert>
           ) : null}
 
           <p className="text-sm text-muted-foreground">
             {base !== newest.n && !rival ? "From an older version. " : ""}
-            {live
+            {subject.live
               ? (liveLine ??
-                "Callers keep hearing the live version until you publish.")
-              : "It runs from the next call."}
+                "Callers keep getting the version in use until you publish.")
+              : "It’s in use from the next call."}
           </p>
 
           {changed.map((field) => (
@@ -107,13 +129,35 @@ export function SaveReview({
               />
             </div>
           ))}
+
+          <Field>
+            <FieldLabel htmlFor="save-note">
+              Note
+              <span className="font-normal text-muted-foreground">
+                (optional)
+              </span>
+            </FieldLabel>
+            <Input
+              id="save-note"
+              maxLength={80}
+              onChange={(event) => setNote(event.target.value)}
+              placeholder="Callback offer for low ratings"
+              value={note}
+            />
+          </Field>
         </div>
 
         <DrawerFooter className="flex-row justify-end border-t">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
           </DrawerClose>
-          <Button onClick={onSave}>{rival ? "Save anyway" : "Save"}</Button>
+          <Button
+            onClick={() => {
+              onSave(note.trim())
+            }}
+          >
+            {failed ? "Try again" : rival ? "Save anyway" : "Save"}
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

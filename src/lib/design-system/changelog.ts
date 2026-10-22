@@ -26,6 +26,17 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-22",
+    title: "The save bar is a shared component",
+    changes: [
+      {
+        kind: "added",
+        text: "SaveBar in shared/: the floating pill from Unsaved changes, so a mockup uses the same bar the topic shows.",
+      },
+    ],
+    topics: ["unsaved-changes"],
+  },
+  {
     date: "2026-10-19",
     title: "Integration cards show what each connection does",
     summary:

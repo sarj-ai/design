@@ -395,11 +395,11 @@ export const MOCKUPS: Mockup[] = [
   },
   {
     href: "/config-versioning",
-    title: "Configuration versioning: save, publish, history, rollback",
+    title: "Configuration versioning: save, publish, history, apply",
     meta: "Page · in progress",
     surface: "Scenario Edit",
     description:
-      "Every save is a version. On a live scenario and the global prompt, saving no longer reaches callers until you publish; history shows who changed what, compares any two versions, and moves live back to an earlier one or edits from it.",
+      "Every save of a scenario's prompt and first message is a version, with an optional note. On a live scenario a save waits for a publish; history compares any two versions, applies an older one or copies it to edit, and a call's details show the version it ran on.",
     icon: WorkHistoryIcon,
     tickets: ["DES-202", "INT-253", "PLT-4477"],
     added: "2026-10-12T02:36:18.960Z",
@@ -410,7 +410,7 @@ export const MOCKUPS: Mockup[] = [
     meta: "Page · in progress",
     surface: "Scenario Edit",
     description:
-      "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes live only on approval.",
+      "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes in use only on approval. A feature of its own, after live and versioning ship.",
     icon: CheckmarkBadge01Icon,
     tickets: ["DES-204", "INT-253", "PLT-4477"],
     added: "2026-10-12T18:17:16.610Z",

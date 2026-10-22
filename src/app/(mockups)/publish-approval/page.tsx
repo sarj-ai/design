@@ -49,11 +49,13 @@ import {
  * Publish approval — DES-204, under INT-253, for PLT-4477. The spec is the
  * "Publish approval" requirements doc and its two mockups (the Approvals
  * page and the bell); it sits on DES-202's versions (/config-versioning).
+ * The TDD (22 Oct 2026) makes it a feature of its own, after live and
+ * versioning ship; the first release has no approval.
  *
- * One state, three people. The reviewer switches between the requester
- * (Sarj), the client's approver and a super admin, and the same request
- * moves between them: send it as Ahmad, approve or reject it as Yusuf, see
- * the outcome as Ahmad. The views are the three places approval shows up —
+ * One state, two people. The reviewer switches between the requester
+ * (Sarj) and the client's approver, and the same request moves between
+ * them: send it as Ahmad, approve or reject it as Yusuf, see the outcome as
+ * Ahmad. The views are the three places approval shows up —
  * the scenario editor, the scenarios index and Approvals — and the state
  * select reaches the cases the ticket names directly.
  */
@@ -150,11 +152,8 @@ export default function PublishApprovalPage() {
   const notices: Notice[] = [
     ...waitingOnMe.map((request) => ({
       id: request.id,
-      title:
-        request.kind === "global"
-          ? `Global prompt v${request.version} is waiting for your review`
-          : `${who(request.by, viewer)} wants to publish v${request.version}`,
-      detail: request.org ? request.item : "Every organization",
+      title: `${who(request.by, viewer)} wants to publish v${request.version}`,
+      detail: request.item,
       at: request.raised,
     })),
     ...visible
@@ -184,7 +183,11 @@ export default function PublishApprovalPage() {
     }))
   }
 
-  function save(body: Record<string, string>, editedFrom: number) {
+  function save(
+    body: Record<string, string>,
+    editedFrom: number,
+    note: string,
+  ) {
     const n = subject.versions[0].n + 1
     setWorld((current) => ({
       ...current,
@@ -197,8 +200,7 @@ export default function PublishApprovalPage() {
             mine: true,
             at: "Just now",
             editedFrom,
-            summary: "Saved just now.",
-            everLive: false,
+            note: note || null,
             body,
           },
           ...current.subject.versions,
@@ -214,10 +216,9 @@ export default function PublishApprovalPage() {
     note: string
   }) {
     await new Promise((resolve) => setTimeout(resolve, 900))
-    const live = subject.marker ?? input.version
+    const live = subject.inUse
     const made: ApprovalRequest = {
       id: `bvs-${input.version}-${requests.length}`,
-      kind: "scenario",
       item: subject.name,
       org: "Riyad Bank",
       version: input.version,
@@ -265,24 +266,28 @@ export default function PublishApprovalPage() {
             }
           : item,
       ),
-      /* Approving publishes: the marker moves, and no version is made. */
+      /* Approving publishes: the version goes in use, and no version is
+         made. */
       subject:
         target.item === current.subject.name
           ? {
               ...current.subject,
-              marker: target.version,
-              published: { by: viewer.name, at: "Just now" },
-              versions: current.subject.versions.map((version) =>
-                version.n === target.version
-                  ? { ...version, everLive: true }
-                  : version,
-              ),
+              inUse: target.version,
+              log: [
+                {
+                  n: target.version,
+                  by: viewer.name,
+                  at: "just now",
+                  how: "published",
+                },
+                ...current.subject.log,
+              ],
             }
           : current.subject,
     }))
     setOpen(null)
-    toast.success(`v${target.version} is live`, {
-      description: `Callers of ${target.item} hear it from the next call.`,
+    toast.success(`v${target.version} is in use`, {
+      description: `Callers of ${target.item} get it from the next call.`,
       action: { label: "Undo", onClick: () => setWorld(before) },
     })
     return true
@@ -315,13 +320,15 @@ export default function PublishApprovalPage() {
     })
   }
 
+  /* Live is a switch and a badge with its own permission, never an
+     approval, and the version in use does not change (TDD 3.1). */
   function toggleLive(on: boolean) {
     setWorld((current) => ({
       ...current,
       subject: {
         ...current.subject,
-        marker: on ? current.subject.versions[0].n : null,
-        published: on ? { by: viewer.name, at: "Just now" } : null,
+        live: on,
+        toggled: { by: viewer.name, at: "just now" },
       },
     }))
   }

@@ -53,7 +53,7 @@ import {
  * then what it affects; the exact changes last, on expand.
  *
  * Who sees what:
- *  - The client's approver (or a super admin, for the global prompt):
+ *  - The client's approver:
  *    Reject and Approve and publish. Approving publishes — there is no
  *    second step that could be forgotten, and no bypass (PRD).
  *  - The requester: Withdraw.
@@ -155,7 +155,7 @@ function Review({
   const pending = request.status === "pending"
   const decides = canDecide(request, viewer)
   const mine = request.by === viewer.name
-  const where = request.org ?? "Every organization"
+  const where = request.org
 
   async function approve() {
     setApproving(true)
@@ -213,9 +213,7 @@ function Review({
                 </span>
               </TooltipTrigger>
               <TooltipContent>
-                {request.org
-                  ? `Only ${request.org}’s approvers can decide`
-                  : "Only a super admin can decide"}
+                {`Only ${request.org}’s approvers can decide`}
               </TooltipContent>
             </Tooltip>
           ) : null}
@@ -292,11 +290,7 @@ function Review({
 
           <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
             <dt className="text-muted-foreground">Affects</dt>
-            <dd>
-              {request.kind === "global"
-                ? "Every call, in every organization"
-                : `Every call to ${request.item}`}
-            </dd>
+            <dd>{`Every call to ${request.item}`}</dd>
             <dt className="text-muted-foreground">Version</dt>
             <dd className="tabular-nums">
               v{request.live} → v{request.version}

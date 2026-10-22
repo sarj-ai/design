@@ -3250,8 +3250,8 @@
     {
       "name": "config-versioning",
       "type": "registry:block",
-      "title": "Configuration versioning: save, publish, history, rollback",
-      "description": "Every save is a version. On a live scenario and the global prompt, saving no longer reaches callers until you publish; history shows who changed what, compares any two versions, and moves live back to an earlier one or edits from it.",
+      "title": "Configuration versioning: save, publish, history, apply",
+      "description": "Every save of a scenario's prompt and first message is a version, with an optional note. On a live scenario a save waits for a publish; history compares any two versions, applies an older one or copies it to edit, and a call's details show the version it ran on.",
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
@@ -3275,7 +3275,6 @@
         "input",
         "item",
         "label",
-        "popover",
         "select",
         "separator",
         "sidebar",
@@ -3308,6 +3307,11 @@
           "path": "src/components/design-system/tabs-preview.tsx",
           "type": "registry:component",
           "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/config-versioning/conversation-version.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/config-versioning/conversation-version.tsx"
         },
         {
           "path": "src/components/mockups/config-versioning/editor-header.tsx",
@@ -3343,6 +3347,11 @@
           "path": "src/components/shared/line-diff.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/line-diff.tsx"
+        },
+        {
+          "path": "src/components/shared/save-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/save-bar.tsx"
         },
         {
           "path": "src/components/shell/app-shell-icons.tsx",
@@ -3410,7 +3419,7 @@
       "name": "publish-approval",
       "type": "registry:block",
       "title": "Publish approval for live scenario changes",
-      "description": "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes live only on approval.",
+      "description": "On a live scenario, publishing becomes a request: the requester writes why, the client approver reads an effect-first summary and approves or rejects, and the version goes in use only on approval. A feature of its own, after live and versioning ship.",
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
