@@ -36,12 +36,20 @@ jobs:
           # or a dependency's install script, could reach.
           persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        id: node
         with:
           # Matches deploy.yml. The build that gates a merge and the build
           # that ships should not be on different runtimes.
           node-version: 22
           cache: npm
           cache-dependency-path: package-lock.json
+
+      - name: Cache Next.js compiler state
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .next/cache/turbopack
+          key: next-turbopack-v1-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**') }}-${{ github.sha }}
+          restore-keys: next-turbopack-v1-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**') }}-
 
       - run: npm ci
       - name: Audit the complete dependency graph for critical vulnerabilities
