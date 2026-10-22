@@ -8,13 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { LiveSwitch } from "@/components/shared/live-switch"
 import {
   HistoryIcon,
   MoreActionsIcon,
@@ -23,8 +17,9 @@ import {
 import type { Subject } from "@/lib/mockups/config-versioning-data"
 
 /**
- * The top of the editor: DES-203's status-menu header, which was picked
- * there, with versioning added in the two places it fits.
+ * The top of the editor: DES-203's header — title, the Live switch (shared
+ * with DES-203, so the two never drift), Run scenario and the more menu —
+ * with versioning added in the two places it fits.
  *
  *  - The line under the title says who put the version in use there, and
  *    how: published, applied, or (on a scenario that is not live) saved. No
@@ -96,64 +91,5 @@ export function EditorHeader({
         </DropdownMenu>
       </div>
     </header>
-  )
-}
-
-/**
- * Live, as a switch in the header: one click, asks nothing (TDD 3.1). It was
- * DES-203's button opening a popover with the switch inside — two clicks for
- * one value (feedback, 22 Oct 2026). What the popover said moves out:
- *
- *  - Who turned it on or off is the switch's tooltip. Toggling makes no
- *    version, so this is the only record of it.
- *  - What live means for saves is the toast that follows a toggle, said
- *    once at the moment it changes rather than on every visit.
- */
-function LiveSwitch({
-  live,
-  canToggle,
-  onToggle,
-  toggled,
-}: {
-  live: boolean
-  canToggle: boolean
-  onToggle: (on: boolean) => void
-  toggled: Subject["toggled"]
-}) {
-  const hint = !canToggle
-    ? "You don't have permission to turn this on or off."
-    : toggled
-      ? `Turned ${live ? "on" : "off"} by ${toggled.by}, ${toggled.at}`
-      : null
-
-  /* The switch sits in an outline chip the height of the buttons beside
-     it, so the row reads as one set of controls. The whole chip is the
-     label: a click anywhere on it flips the switch. */
-  const control = (
-    <Button
-      asChild
-      className={canToggle ? "cursor-pointer" : "cursor-not-allowed"}
-      variant="outline"
-    >
-      <Label htmlFor="live-switch">
-        Live
-        <Switch
-          checked={live}
-          disabled={!canToggle}
-          id="live-switch"
-          onCheckedChange={onToggle}
-          size="sm"
-        />
-      </Label>
-    </Button>
-  )
-
-  if (!hint) return control
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>{control}</TooltipTrigger>
-      <TooltipContent>{hint}</TooltipContent>
-    </Tooltip>
   )
 }

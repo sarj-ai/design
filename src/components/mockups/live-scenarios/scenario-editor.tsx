@@ -27,10 +27,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  EditorHeader,
-  type HeaderVariant,
-} from "@/components/mockups/live-scenarios/editor-header"
+import { EditorHeader } from "@/components/mockups/live-scenarios/editor-header"
 import { LineDiff } from "@/components/shared/line-diff"
 import { CloseReviewIcon } from "@/components/mockups/live-scenarios/icons"
 import {
@@ -41,9 +38,9 @@ import {
 } from "@/lib/mockups/live-scenarios-data"
 
 /**
- * The scenario editor, cut to what DES-203 changes: the Live status and its
- * switch at the top of the page (three takes, in editor-header.tsx), and the
- * save review, which on a live scenario is the warning.
+ * The scenario editor, cut to what DES-203 changes: the Live switch at the
+ * top of the page (editor-header.tsx), and the save review, which on a live
+ * scenario is the warning.
  *
  * Why the warning lives in the review and not in its own dialog: the product
  * already stops every save on a review of what changed. A live scenario adds
@@ -56,13 +53,7 @@ import {
  * form) and Delete. Transfer ownership is the third, super-admin only, and
  * its existing confirm takes the same line — not drawn.
  */
-export function ScenarioEditor({
-  editorCase,
-  header,
-}: {
-  editorCase: EditorCase
-  header: HeaderVariant
-}) {
+export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   const [live, setLive] = React.useState<LiveRecord | null>(editorCase.live)
   const [pending, setPending] = React.useState(false)
   /* The goes-live case: true once the review has found that someone else
@@ -91,7 +82,7 @@ export function ScenarioEditor({
         return
       }
       const before = live
-      const next = on ? { by: "You", at: "Just now" } : null
+      const next = on ? { by: "You", at: "just now" } : null
       setLive(next)
       toast(
         on
@@ -144,7 +135,6 @@ export function ScenarioEditor({
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8 pb-28">
       <EditorHeader
-        variant={header}
         scenario={editorCase.scenario}
         live={live}
         pending={pending}

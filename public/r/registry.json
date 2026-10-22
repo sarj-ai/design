@@ -2939,6 +2939,11 @@
           "target": "@components/sarj/shared/list-footer.tsx"
         },
         {
+          "path": "src/components/shared/live-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/live-switch.tsx"
+        },
+        {
           "path": "src/components/shared/page-header.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/page-header.tsx"
@@ -3349,6 +3354,11 @@
           "target": "@components/sarj/shared/line-diff.tsx"
         },
         {
+          "path": "src/components/shared/live-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/live-switch.tsx"
+        },
+        {
           "path": "src/components/shared/save-bar.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/save-bar.tsx"
@@ -3582,6 +3592,11 @@
           "path": "src/components/shared/list-footer.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/list-footer.tsx"
+        },
+        {
+          "path": "src/components/shared/live-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/live-switch.tsx"
         },
         {
           "path": "src/components/shared/notifications.tsx",

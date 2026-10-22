@@ -11,10 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import {
-  HEADER_VARIANTS,
-  type HeaderVariant,
-} from "@/components/mockups/live-scenarios/editor-header"
 import { PlaygroundList } from "@/components/mockups/live-scenarios/playground-list"
 import { ScenarioEditor } from "@/components/mockups/live-scenarios/scenario-editor"
 import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index"
@@ -28,9 +24,8 @@ import { EDITOR_CASES } from "@/lib/mockups/live-scenarios-data"
  * (the switch and the warning), the scenarios index (the chip and the
  * filter), and the playground list (the chip).
  *
- * The bar's last switch picks the surface. On the editor, the first picks
- * one of two takes on the top of the page, and the select picks which
- * scenario the page opens on — live, not live, one that someone turns
+ * The bar's last switch picks the surface. On the editor, the select picks
+ * which scenario the page opens on — live, not live, one that someone turns
  * live while you edit, one you may not switch, and one whose switch fails.
  */
 
@@ -45,7 +40,6 @@ type Surface = (typeof SURFACES)[number]["id"]
 export default function LiveScenariosPage() {
   const [surface, setSurface] = React.useState<Surface>("editor")
   const [caseId, setCaseId] = React.useState(EDITOR_CASES[0].id)
-  const [header, setHeader] = React.useState<HeaderVariant>("menu")
   const editorCase =
     EDITOR_CASES.find((entry) => entry.id === caseId) ?? EDITOR_CASES[0]
 
@@ -59,23 +53,6 @@ export default function LiveScenariosPage() {
       title="Live scenario status and change warning"
       actions={
         <>
-          {surface === "editor" ? (
-            <ToggleGroup
-              onValueChange={(next) => {
-                if (next) setHeader(next as HeaderVariant)
-              }}
-              size="sm"
-              type="single"
-              value={header}
-              variant="outline"
-            >
-              {HEADER_VARIANTS.map((entry) => (
-                <ToggleGroupItem key={entry.id} value={entry.id}>
-                  {entry.label}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          ) : null}
           {surface === "editor" ? (
             <Select value={caseId} onValueChange={setCaseId}>
               <SelectTrigger aria-label="Scenario" size="sm">
@@ -114,11 +91,7 @@ export default function LiveScenariosPage() {
           breadcrumb={["Scenarios", editorCase.scenario]}
         >
           {/* Keyed so each case opens as the page would find it. */}
-          <ScenarioEditor
-            key={editorCase.id}
-            editorCase={editorCase}
-            header={header}
-          />
+          <ScenarioEditor key={editorCase.id} editorCase={editorCase} />
         </AppShell>
       ) : null}
       {surface === "index" ? (

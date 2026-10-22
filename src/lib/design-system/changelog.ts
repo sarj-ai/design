@@ -27,6 +27,26 @@ export type ChangelogEntry = {
 export const CHANGELOG: ChangelogEntry[] = [
   {
     date: "2026-10-22",
+    title: "A scenario's Live switch is one shared control",
+    summary:
+      "Live status (DES-203) and versioning (DES-202) are one TDD and drew Live two ways; they now import the same switch.",
+    changes: [
+      {
+        kind: "added",
+        text: "LiveSwitch in shared/: a Live label and a switch in an outline control the height of the header's buttons. One click, nothing asked.",
+      },
+      {
+        kind: "changed",
+        text: "Who last turned it on or off is its tooltip; what live means for saves is the toast after a toggle.",
+      },
+      {
+        kind: "removed",
+        text: "DES-203's popover behind a status button, and its status strip take.",
+      },
+    ],
+  },
+  {
+    date: "2026-10-22",
     title: "The save bar is a shared component",
     changes: [
       {

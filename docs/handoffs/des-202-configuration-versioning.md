@@ -28,16 +28,25 @@ jumps to each case listed under States.
 
 ## What the user sees
 
-**Editor header** (DES-203's status-menu take). Under the title:
+**Editor header.** Under the title:
 `Version in use published by Sami Rahman, yesterday 16:40`. The verb follows
-how it got there: published, applied, or (not live) saved. History sits beside
-the Live button.
+how it got there: published, applied, or (not live) saved. On the right: the
+Live switch, History, Run scenario and the more menu.
 
-**Live menu.** The switch, "Turned on by Nouf Al-Harbi, 28 Sep" under it, and
-one line: live "Saving makes a version. Publishing puts it in use." / not live
-"Saving puts the new version in use straight away." Without the live
-permission: "You don't have permission to turn this on or off.", switch greyed.
-Toggling shows a toast that says the version in use doesn't change, with Undo.
+**Live switch.** A "Live" label and a switch in an outline control the height
+of the buttons beside it, right in the header: one click, nothing asked (TDD
+3.1). It is the same control as DES-203's (`shared/live-switch.tsx`), so
+live and versioning ship one switch. It replaced DES-203's popover, which took
+two clicks for one value (feedback, 22 Oct).
+
+- Hovering it shows who last turned it on or off: "Turned on by Nouf
+  Al-Harbi, 28 Sep". Toggling makes no version, so this is its only record.
+- Without the live permission it is greyed, and the hover says "You don't
+  have permission to turn this on or off."
+- Toggling shows a toast with Undo: "Branch visit survey is live · The
+  version in use doesn't change. Saves now wait for a publish." Turning it off:
+  "… is no longer live · The version in use doesn't change. Saves now apply
+  straight away."
 
 **Unpublished row** (live only). When saves sit ahead of the version in use:
 "Unpublished changes · 2 saves since the version in use. Callers don't get
