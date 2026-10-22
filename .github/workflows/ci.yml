@@ -44,12 +44,13 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
+      # Stylesheet edits need a cold cache until vercel/next.js#100326 is fixed.
       - name: Cache Next.js compiler state
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .next/cache/turbopack
-          key: next-turbopack-v1-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**') }}-${{ github.sha }}
-          restore-keys: next-turbopack-v1-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**') }}-
+          key: next-turbopack-v2-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', '**/*.css', '**/*.scss', '**/*.sass', '**/*.less', '**/*.styl', '!**/node_modules/**', '!**/.next/**', '!**/.open-next/**') }}-${{ github.sha }}
+          restore-keys: next-turbopack-v2-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', '**/*.css', '**/*.scss', '**/*.sass', '**/*.less', '**/*.styl', '!**/node_modules/**', '!**/.next/**', '!**/.open-next/**') }}-
 
       - run: npm ci
       - name: Audit the complete dependency graph for critical vulnerabilities
