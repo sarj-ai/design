@@ -57,9 +57,11 @@ jobs:
       - name: Restore Next.js compiler state
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: .next/cache/turbopack
-          key: next-turbopack-v3-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-${{ github.sha }}
-          restore-keys: next-turbopack-v3-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-
+          path: |
+            .next/cache/turbopack
+            tsconfig.tsbuildinfo
+          key: next-compiler-v4-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-${{ github.sha }}
+          restore-keys: next-compiler-v4-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-
 
       - run: npm ci
 
