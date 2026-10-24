@@ -37,6 +37,17 @@ npm run typecheck
 npm run shots      # every route
 ```
 
+Before deploying, test the Cloudflare bundle in the local Workers runtime:
+
+```bash
+npm run cf:build
+npm run cf:smoke
+```
+
+The smoke test checks the index, design system, reels, a mockup, the 404 page,
+and MCP initialization. CI, preview uploads, and production deploys run it
+because a successful Next.js build alone cannot catch adapter runtime errors.
+
 `npm run shots` writes `screenshots/<route>.png`. Narrow it while you work:
 
 ```bash
