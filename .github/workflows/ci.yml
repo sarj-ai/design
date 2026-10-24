@@ -60,12 +60,12 @@ jobs:
       - name: Verify the braces security backport
         run: npm run test:security
 
-      # The same three gates AGENTS.md puts before a commit, in the same
-      # order: lint is the design system, typecheck is the types, and the
-      # build is the only one that catches a route that cannot render.
+      # The Workers build includes next build. Exercise its output too: a
+      # successful Next.js build does not prove the adapter can serve requests.
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm run build
+      - run: npm run cf:build
+      - run: npm run cf:smoke
 
   dependency-review:
     # Nothing to compare on a push — the action diffs a pull request's

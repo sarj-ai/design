@@ -62,6 +62,9 @@ jobs:
       - name: Build for Workers
         run: npm run cf:build
 
+      - name: Smoke test the built Worker
+        run: npm run cf:smoke
+
       - name: Upload a preview version
         id: upload
         env:

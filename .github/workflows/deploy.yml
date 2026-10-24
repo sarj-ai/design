@@ -72,6 +72,9 @@ jobs:
       - name: Build for Workers
         run: npm run cf:build
 
+      - name: Smoke test the built Worker
+        run: npm run cf:smoke
+
       - name: Require the current main revision before deployment
         env:
           GH_TOKEN: ${{ github.token }}
