@@ -54,6 +54,9 @@ jobs:
           key: next-compiler-v4-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-${{ github.sha }}
           restore-keys: next-compiler-v4-${{ runner.os }}-${{ runner.arch }}-node${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json', 'next.config.*', 'tsconfig.json', 'postcss.config.*', 'patches/**', 'src/**/*.css', 'src/**/*.scss', 'src/**/*.sass', 'public/**/*.css', '*.css', '*.scss', '*.sass') }}-
 
+      - name: Install the pinned npm release
+        run: npm install --global npm@12.2.1
+
       - run: npm ci
       - name: Audit the complete dependency graph for critical vulnerabilities
         run: npm audit --audit-level=critical
