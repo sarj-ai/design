@@ -20,48 +20,15 @@ import { MOCKUPS } from "@/lib/site/mockups-data"
 import { REELS } from "@/lib/site/reels-data"
 import { cn } from "@/lib/utils"
 
-/**
- * The lab's search, folded into the nav as an icon until it is wanted.
- *
- * It replaces the field that lived in the design system's sidebar rail and went
- * with it. A permanent input in a floating pill would cost that width on every
- * page to serve the few visits that are a search; an icon costs one control and
- * opens into the same field.
- *
- * **Width is the animated property, deliberately.** The house rule is transform
- * and opacity only, and the usual substitute — `scaleX` on a pill — is wrong
- * here: this control grows about seven times its collapsed size, and a uniform
- * scale drags the corner radius out with it, so a 12px radius arrives as an
- * 84px lozenge that snaps back on settle. The reflow is confined to one leaf
- * inside a pill that is already `position: sticky` on its own layer, which is
- * the case the rule's own carve-out describes. Everything else here is opacity.
- *
- * The spring is the long-travel one rather than the snappy one: over 200px a
- * lightly damped spring overshoots far enough to read as a bounce, and a search
- * field that wobbles reads as a toy.
- */
-
-/**
- * Collapsed to the icon button, and opened to the field. In pixels.
- *
- * `COLLAPSED` is `InputGroup`'s own `h-8`, so the closed control is a square
- * and reads as one icon button among the others in the pill rather than as a
- * field that has been squashed.
- */
+/* `COLLAPSED` matches `InputGroup`'s `h-8`. Width is animated on purpose:
+   scaleX would stretch the corner radius over a ~7x growth. */
 const COLLAPSED = 32
 const EXPANDED = 268
 
-/** Nothing below this is worth a panel; nothing above it is worth reading. */
 const MAX_RESULTS = 7
 
 type Hit = { group: string; href: string; title: string }
 
-/**
- * Everything addressable in the lab, flattened once.
- *
- * Built at module scope: the four sources are static imports, so rebuilding
- * this per keystroke would be recomputing a constant.
- */
 const HAYSTACK: Hit[] = [
   ...DOCS_SECTIONS.flatMap((section) =>
     section.groups.flatMap((group) =>
@@ -88,8 +55,6 @@ function search(term: string): Hit[] {
   const needle = term.trim().toLowerCase()
   if (!needle) return []
 
-  /* Titles that start with the term first: typing "to" should reach Tooltip
-     before it reaches "Empty and zero states", which merely contains a "to". */
   return HAYSTACK.filter((hit) => hit.title.toLowerCase().includes(needle))
     .sort((a, b) => {
       const lead =
@@ -100,16 +65,9 @@ function search(term: string): Hit[] {
     .slice(0, MAX_RESULTS)
 }
 
-/** The keyboard never changes under us, so there is nothing to subscribe to. */
 const NEVER_CHANGES = () => () => {}
 
-/**
- * Which modifier to print in the shortcut hint.
- *
- * It depends on the reader's keyboard, which the server cannot know, so the
- * hint is empty until hydration rather than rendering one modifier and
- * correcting itself to the other in front of the reader.
- */
+/** Empty until hydration: the server cannot know the reader's keyboard. */
 function useModifierKey() {
   return React.useSyncExternalStore(
     NEVER_CHANGES,
@@ -138,13 +96,7 @@ export function NavSearch() {
     setActive(0)
   }, [])
 
-  /* Opened from the keyboard, because the one thing a search behind an icon
-     loses is that you can no longer just start typing at it.
-
-     ⌘F over the browser's own find bar, which is the trade the index made
-     before this replaced its field: find-in-page searches the cards already
-     on screen, not the pages a query would reach. ⌘K as well, since it costs
-     nothing and is what most people try first. */
+  // ⌘F deliberately overrides the browser's find bar.
   React.useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase()
@@ -161,8 +113,7 @@ export function NavSearch() {
     return () => window.removeEventListener("keydown", onKey)
   }, [])
 
-  /* A click anywhere else puts it away. `pointerdown` rather than `click` so it
-     closes on the press that starts an interaction elsewhere, not after it. */
+  // `pointerdown` rather than `click` so it closes on the press that starts an interaction elsewhere.
   React.useEffect(() => {
     if (!open) return
 
@@ -181,13 +132,7 @@ export function NavSearch() {
 
   return (
     <div className="relative shrink-0" ref={rootRef}>
-      {/* `clip`, not `hidden`. Both hide the field while it is a 32px square,
-          but `overflow: hidden` makes this a scroll container — so focusing
-          the input scrolls it, and the browser leaves it scrolled. The field
-          then sits a pixel or more to the left of the box clipping it, which
-          shaves its left border and its rounded corner and opens a gap on the
-          right. `overflow: clip` is not scrollable, so there is nothing for
-          focus to shift. */}
+      {/* `clip`, not `hidden`: `overflow: hidden` makes a scroll container, and focusing the input would scroll it out of line. */}
       <motion.div
         animate={{ width: open ? EXPANDED : COLLAPSED }}
         className="overflow-clip"
@@ -198,10 +143,7 @@ export function NavSearch() {
             : { damping: 26, mass: 1, stiffness: 300, type: "spring" }
         }
       >
-        {/* No focus ring. This sits inside a pill that already draws a ring
-            of its own, so the control's own ring lands a second edge a
-            hair inside the first. Focus still reads: the field is only this
-            wide because it was opened, and it holds the caret. */}
+        {/* No focus ring: the pill around it already draws one. */}
         <InputGroup className="has-[[data-slot=input-group-control]:focus-visible]:border-input has-[[data-slot=input-group-control]:focus-visible]:ring-0">
           <InputGroupAddon>
             <InputGroupButton
@@ -251,15 +193,10 @@ export function NavSearch() {
             }}
             placeholder="Search"
             ref={inputRef}
-            /* Out of the tab order while it is a 36px sliver — the button
-               beside it is the control at that width. */
             tabIndex={open ? 0 : -1}
             value={term}
           />
 
-          {/* The hint the index's field carried. A search folded into an icon
-              is a shortcut nobody can discover, so it says so while it is
-              open and empty, and gets out of the way once there is a query. */}
           {open && !term ? (
             <InputGroupAddon align="inline-end">
               <Kbd>{modifier}F</Kbd>

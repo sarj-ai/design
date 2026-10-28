@@ -47,22 +47,13 @@ import {
   SortIcon,
 } from "@/components/mockups/knowledge-base/icons"
 
-/**
- * One knowledge base: what it covers, and what it is made of.
- *
- * The order is deliberate. The summary comes first because it is the only part
- * that still reaches the agent's prompt — everything under it is content the
- * agent fetches on demand and never carries.
- */
 export function KnowledgeBaseDetail({
   base = KNOWLEDGE_BASE,
   initialSources,
   initialDialog = null,
 }: {
-  /** Which knowledge base this is — a populated one, or one just created. */
   base?: typeof KNOWLEDGE_BASE
   initialSources: Source[]
-  /** Opens with the add dialog already showing, for reviewing that state. */
   initialDialog?: AddKind | null
 }) {
   const [sources, setSources] = React.useState(initialSources)
@@ -84,8 +75,7 @@ export function KnowledgeBaseDetail({
         .toLowerCase()
         .includes(query.trim().toLowerCase()),
   )
-  /* Sources are stored newest first, so "Date added" is the order they came
-     in and only "Title" needs sorting. */
+  /* Sources are stored newest first, so only "Title" needs sorting. */
   const visible =
     sort === "title"
       ? [...matched].sort((a, b) => a.name.localeCompare(b.name))
@@ -110,7 +100,6 @@ export function KnowledgeBaseDetail({
         kind: next === "url" ? "url" : "text",
         url: source.url,
         body: source.body,
-        // Neither needs extraction, so both are usable immediately.
         status: "ready",
         size: "—",
         addedBy: "talzamel@sarj.ai",
@@ -147,8 +136,6 @@ export function KnowledgeBaseDetail({
           actions={<AddSources onOpen={openAdd} />}
         />
 
-        {/* The browser's own picker. Never shown — the Add files tile is the
-          affordance; this only exists to receive the chosen files. */}
         <Input
           ref={filePicker}
           type="file"
@@ -161,8 +148,6 @@ export function KnowledgeBaseDetail({
           }}
         />
 
-        {/* On a card, like everything else on the page — it was the one band
-          sitting bare on the background. */}
         <Card>
           <CardContent>
             <SummaryField value={base.summary} />
@@ -170,9 +155,6 @@ export function KnowledgeBaseDetail({
         </Card>
 
         <section className="flex flex-col gap-2">
-          {/* Search runs the full width, with the sort beside it at the end of
-            the same line. Filters sit under it as chips, each naming the field
-            it narrows. */}
           <div className="flex items-center gap-2">
             <InputGroup>
               <InputGroupAddon>
@@ -227,8 +209,7 @@ export function KnowledgeBaseDetail({
         </section>
 
         {visible.length ? (
-          /* `--card-spacing: 0` is how Card is told its content reaches the
-           edge — the table draws its own header band and row rules. */
+          /* `--card-spacing: 0` runs the table to the card's edge. */
           <Card className="[--card-spacing:0px]">
             <div className="overflow-x-auto">
               <SourceTable
@@ -242,8 +223,6 @@ export function KnowledgeBaseDetail({
             </div>
           </Card>
         ) : (
-          /* One panel for both empties — nothing added, and nothing matching.
-           Only the line under the title changes. */
           <Empty className="border border-solid bg-muted/50">
             <EmptyHeader>
               <EmptyMedia
@@ -279,10 +258,6 @@ const SORT_LABELS: Record<SortKey, string> = {
   title: "Title",
 }
 
-/**
- * A filter that names its field until it is set, then names the value —
- * "+ Type", then "Type: PDF". Choosing "All" puts it back.
- */
 function FilterChip({
   field,
   value,

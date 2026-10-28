@@ -30,13 +30,6 @@ export type WaitWindowValue = {
   minWaitSeconds: number
 }
 
-/**
- * Minimum and maximum wait — PRD requirements 4, 5 and 6.
- *
- * Each control says in plain language what it does and what raising or lowering
- * it means for the caller. Both are bounded, and a maximum outside the
- * recommended band warns.
- */
 export function WaitWindow({
   disabled = false,
   idPrefix,
@@ -95,14 +88,6 @@ export function WaitWindow({
   )
 }
 
-/**
- * One wait field: the number, with its explanation parked on a hover target
- * inside the input rather than printed under it.
- *
- * The copy is the same either way — PRD requirement 4 asks each control to say
- * what it does — but a tooltip only says it to someone who goes looking. Worth
- * knowing that this trades always-visible guidance for a tighter form.
- */
 function WaitField({
   disabled,
   help,
@@ -116,8 +101,7 @@ function WaitField({
   help: string
   id: string
   label: string
-  /** The field said as prose, for the help button's screen-reader name — the
-   * visible label carries "(seconds)", which reads as noise when spoken. */
+  /** Spoken name for the help button; the visible label's "(seconds)" is noise when read aloud. */
   name: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   value: number
@@ -155,7 +139,7 @@ function WaitField({
   )
 }
 
-/** Shipped copy, kept word for word so the mockup does not fork the warning. */
+/** Shipped copy, word for word. */
 function BandWarning({
   aboveCeiling,
   belowFloor,

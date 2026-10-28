@@ -22,7 +22,6 @@ import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system/data"
 import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
 import { cn } from "@/lib/utils"
 
-/** Topics whose demo is a whole page, shown at the sheet's full width. */
 const FULL_WIDTH_TOPICS = new Set([
   "colour",
   "index",
@@ -37,41 +36,11 @@ const FULL_WIDTH_TOPICS = new Set([
   "surfaces",
 ])
 
-/**
- * The five sections as a menu that opens into a grid — after Codrops' "Menu
- * to Grid" (tympanus.net/Development/MenuToGrid), rebuilt on motion/react
- * rather than GSAP + Flip.
- *
- * A row is a section's name, and its drawing on the end. Clicking the row
- * grows a purple cover out of it to fill the screen, sends the other names off the
- * top and bottom, and rises a grid of every topic on that shelf into it —
- * each one a link to its page. Close runs it backwards.
- *
- * Every row is still a real link to `/design-system/<section>`: the click is
- * only intercepted when it is a plain one, so a middle-click or a new tab
- * gets the section page, and so does a browser without the script.
- *
- * Opening a section or a topic in place still moves the address bar to its
- * own URL, with a history entry each. So the link can be copied from the bar,
- * a reload lands on that page, and Back closes one layer rather than leaving
- * the design system. The overlay follows the history, not the other way
- * round: Close steps back, and a popstate sets what is open.
- *
- * The timings are the reference's, not the house tokens. These are JS-driven
- * and choreographed across a whole screen, which is what the 300ms cap on
- * class-driven motion is not written for; under reduced motion every one of
- * them is zero.
- */
-
-/** The tile-to-page move: a critically damped spring, so it leaves the tile
-    quickly and eases into place with no overshoot — the curve a surface
-    growing under a finger has. */
 const GROW = { type: "spring", bounce: 0, duration: 0.55 } as const
 
-/** power4.inOut — the reference's curve for everything that crosses the
-    screen. */
+/** power4.inOut */
 const CROSS = [0.77, 0, 0.175, 1] as const
-/** power3.out — the tile names arriving. */
+/** power3.out */
 const ARRIVE = [0.215, 0.61, 0.355, 1] as const
 
 type Rect = { top: number; bottom: number }
@@ -80,13 +49,11 @@ function topicsOf(section: DocsSection) {
   return section.groups.flatMap((group) => group.pages)
 }
 
-/** How far below its cell a tile starts, as a percentage of its height. The
-    reference picks at random; a fixed scatter keeps render pure. */
+/** How far below its cell a tile starts, as a percentage of its height. Fixed, not random, to keep render pure. */
 function lift(index: number) {
   return (index * 67) % 200
 }
 
-/** Where a row sits now, for the cover to grow out of. */
 function rowRect(id: string): Rect {
   const box = document
     .querySelector(`[data-section-row="${id}"]`)
@@ -94,7 +61,6 @@ function rowRect(id: string): Rect {
   return { top: box?.top ?? 0, bottom: box?.bottom ?? 0 }
 }
 
-/** Two digits, so a column of numbers lines up. */
 function ordinal(index: number) {
   return String(index + 1).padStart(2, "0")
 }
@@ -104,16 +70,13 @@ export function SectionMenu({
   initialSection = null,
   initialTopic = null,
 }: {
-  /** Topic id → what its page renders, shown when a tile opens in place. */
   views: Record<string, React.ReactNode>
-  /** Open on load — the page was reached by a section or topic URL. */
   initialSection?: string | null
   initialTopic?: string | null
 }) {
   const reduced = useReducedMotion() ?? false
   const [hovered, setHovered] = useState<string | null>(null)
-  /* How many times each row has been entered. The name's reveal is keyed on
-     it, so every hover remounts it and the glow plays again. */
+  /* Keys the name's reveal, so every hover remounts it and replays the glow. */
   const [turns, setTurns] = useState<Record<string, number>>({})
   const enter = (id: string) => {
     setHovered(id)
@@ -122,11 +85,7 @@ export function SectionMenu({
   const [open, setOpen] = useState<{ id: string; rect: Rect } | null>(
     initialSection ? { id: initialSection, rect: { top: 0, bottom: 0 } } : null,
   )
-  /* The topic zoomed open inside the section. `landed` holds its contents
-     back until the page has finished growing, so the move animates one
-     surface rather than a surface with a long table inside it. `lastTopic`
-     outlives the page, so the tile it shrinks back into stays above its
-     neighbours until it lands. */
+  /* `landed` holds the contents back until the page has grown; `lastTopic` outlives the page so its tile stays above its neighbours until it lands. */
   const [topic, setTopic] = useState<{ id: string } | null>(
     initialTopic ? { id: initialTopic } : null,
   )
@@ -139,14 +98,10 @@ export function SectionMenu({
     topicRef.current = topic
   })
 
-  /* How deep the page loaded — 0 on the overview, 1 on a section URL, 2 on a
-     topic — and how deep it is now. Close steps back through entries this
-     page pushed, and only rewrites the address when it has to go shallower
-     than it loaded, since there is no entry behind that to step back to. */
+  /* Close steps back through history entries this page pushed, and only rewrites the address when it must go shallower than it loaded. */
   const base = initialTopic ? 2 : initialSection ? 1 : 0
   const depth = useRef(base)
 
-  /* Back and Forward: whatever the address now names is what is open. */
   useEffect(() => {
     const sync = () => {
       const [sectionId, topicId] = window.location.pathname
@@ -209,15 +164,12 @@ export function SectionMenu({
     ease: CROSS,
   })
 
-  /* While the grid is up the page underneath must not scroll, and Escape is
-     the close button. */
   useEffect(() => {
     if (!open) return
     const { overflow } = document.body.style
     document.body.style.overflow = "hidden"
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return
-      /* One layer at a time: a topic's page first, then the section. */
       if (topic) closers.current.topic()
       else closers.current.section()
     }
@@ -231,12 +183,7 @@ export function SectionMenu({
   const openSection = open
     ? (DOCS_SECTIONS.find((section) => section.id === open.id) ?? null)
     : null
-  /* Foundations is short enough to read whole: one sheet, not a grid of
-     tiles that each open one topic. */
   const sheet = openSection?.id === "foundations"
-  /* The page's contents follow it in as the spring is settling, rather than
-     after it has finished — waiting for the last fraction of a spring
-     leaves a blank page on screen for a beat. */
   useEffect(() => {
     if (!topic) return
     const timer = window.setTimeout(() => setLanded(true), reduced ? 0 : 300)
@@ -251,13 +198,8 @@ export function SectionMenu({
     ? DOCS_SECTIONS.findIndex((section) => section.id === open.id)
     : -1
 
-  /* The cover's resting shape, as a clip of the whole viewport: the row it
-     grew out of. */
-  /* The cover's resting shape, as a clip of the whole viewport: the row it
-     grew out of. */
   const rowClip = (rect: Rect) =>
     `inset(${rect.top}px 0px calc(100% - ${rect.bottom}px) 0px)`
-  /* Where it ends on the way out: no height at all, at the row's middle. */
   const rowLine = (rect: Rect) => {
     const middle = (rect.top + rect.bottom) / 2
     return `inset(${middle}px 0px calc(100% - ${middle}px) 0px)`
@@ -271,8 +213,6 @@ export function SectionMenu({
           const isHovered = hovered === section.id && !open
           const isOpen = open?.id === section.id
 
-          /* The other names leave the way the reference sends them: rows
-             above the opened one go up, rows below go down. */
           const away =
             open && !isOpen ? (index < openIndex ? "-100%" : "100%") : "0%"
 
@@ -281,9 +221,6 @@ export function SectionMenu({
               <Link
                 className={cn(
                   "grid grid-cols-[auto_1fr] items-center gap-12 px-6 py-6 transition-colors duration-200 ease-out-cubic motion-reduce:transition-none lg:px-12",
-                  /* Pointed at, the row turns brand purple — the same surface
-                     the cover opens with, so a click reads as the row
-                     growing rather than something new arriving. */
                   isHovered && "bg-primary text-primary-foreground",
                 )}
                 data-no-transition
@@ -309,11 +246,7 @@ export function SectionMenu({
                   })
                 }}
                 onFocus={() => enter(section.id)}
-                /* On movement, not on enter. Closing the grid takes the
-                   overlay out from under a pointer that has not moved, and
-                   the browser reports that as the pointer entering whichever
-                   row was behind the close button — which then turned purple
-                   and replayed its name for a hover nobody made. */
+                /* On pointer move, not enter: closing the grid makes the browser report an enter on whichever row was under the close button. */
                 onPointerMove={() => {
                   if (hovered !== section.id) enter(section.id)
                 }}
@@ -329,8 +262,6 @@ export function SectionMenu({
                         : {
                             duration: reduced ? 0 : 0.5,
                             ease: CROSS,
-                            /* Back in as a ripple out from the row that
-                               was open, the reference's `stagger.from`. */
                             delay: reduced
                               ? 0
                               : 0.4 +
@@ -338,10 +269,6 @@ export function SectionMenu({
                           }
                     }
                   >
-                    {/* A highlight washes across the name a letter at a
-                        time, lifting each one out of a dimmed rest. It runs
-                        down the list as it scrolls into view, and again on
-                        every hover. */}
                     <TextHighlightWave
                       as="h3"
                       className={cn(
@@ -357,14 +284,8 @@ export function SectionMenu({
                   </motion.span>
                 </span>
 
-                {/* The shelf's drawing, where the reference shows its
-                    thumbnails. Held back to `border` ink and lifted on hover,
-                    so it is texture until the row is the thing pointed at. */}
                 {SectionFigure ? (
                   <span aria-hidden="true" className="flex justify-end">
-                    {/* Boxed, so the drawing reads as a plate set into the
-                        row rather than lines floating beside the name — and
-                        its guides end on the box's edge instead of in air. */}
                     <span
                       className={cn(
                         "block w-80 overflow-hidden rounded-lg ring-1 transition-colors duration-200 ease-out-cubic motion-reduce:transition-none",
@@ -390,8 +311,6 @@ export function SectionMenu({
         })}
       </ul>
 
-      {/* No entrance on load: a page reached by its URL opens already
-          covered, rather than growing a cover out of a row nobody clicked. */}
       <AnimatePresence initial={!initialSection}>
         {open && openSection ? (
           <motion.div
@@ -401,16 +320,9 @@ export function SectionMenu({
             aria-label={openSection.title}
             aria-modal="true"
           >
-            {/* The cover: grows out of the row to the whole screen, and back
-                into it on the way out. A clip rather than a height, so it
-                costs a repaint and no layout. */}
             <motion.div
               animate={{ clipPath: "inset(0px 0px 0px 0px)" }}
               className="fixed inset-0 bg-primary"
-              /* Back into the row and on down to a line through its middle,
-                 fading as it goes, rather than stopping at the row's full
-                 height and vanishing — that last frame read as a snap from a
-                 purple row to a white one. */
               exit={{
                 clipPath: rowLine(open.rect),
                 opacity: 0,
@@ -455,10 +367,6 @@ export function SectionMenu({
               )}
             >
               <div className="flex flex-col items-start gap-2">
-                {/* The page's reveal: a highlight washing across the name,
-                    then the line under it, a letter at a time. Each sits in a
-                    wrapper that fades on close, since the wave itself has no
-                    way out. */}
                 <motion.div
                   exit={{
                     opacity: 0,
@@ -502,10 +410,6 @@ export function SectionMenu({
                     return (
                       <li key={topic.id}>
                         <Link
-                          /* No outline on the link: it drew a box around tile
-                           and caption, and stayed after a click. Keyboard
-                           focus lights the tile's own ring instead, the one
-                           hover uses. */
                           className="group flex flex-col gap-2 outline-none"
                           data-no-transition
                           href={docsHref(topic.id)}
@@ -534,11 +438,7 @@ export function SectionMenu({
                             className={cn(
                               "relative aspect-square w-full rounded-lg ring-2 ring-transparent transition-colors duration-150 ease-out-cubic group-hover:ring-primary-foreground group-focus-visible:ring-primary-foreground motion-reduce:transition-none",
                               lastTopic === topic.id && "z-raised",
-                              /* Hidden outright while its page is open, rather
-                             than trusting the shared-layout handoff to hide
-                             it — that let the tile and its number show
-                             through the page. It reappears on close, which
-                             is the moment it takes the surface back. */
+                              /* Hidden outright while its page is open: the shared-layout handoff alone let the tile show through. */
                               openTopic?.id === topic.id && "invisible",
                             )}
                             exit={{
@@ -553,10 +453,6 @@ export function SectionMenu({
                             initial={{ opacity: 0, scale: 0, y: `${lift(i)}%` }}
                             transition={cross(0.3 + i * 0.04)}
                           >
-                            {/* The tile's surface, and the same element as the
-                            page it opens into: shared by `layoutId`, so
-                            motion moves it between the two boxes with
-                            transforms and corrects its corners as it goes. */}
                             <motion.span
                               className="absolute inset-0 bg-card"
                               layoutId={`topic-page-${topic.id}`}
@@ -565,8 +461,6 @@ export function SectionMenu({
                                 layout: reduced ? { duration: 0 } : GROW,
                               }}
                             />
-                            {/* The topic's drawing, from `topic-figures/`. Quiet
-                            at rest, brand ink under the pointer. */}
                             {TopicFigure ? (
                               <TopicFigure className="pointer-events-none absolute inset-0 h-full text-muted-foreground/60 transition-colors duration-150 ease-out-cubic group-hover:text-primary motion-reduce:transition-none" />
                             ) : null}
@@ -603,9 +497,6 @@ export function SectionMenu({
                 </ul>
               )}
 
-              {/* The shelf's drawing, as the sheet the grid is laid out on.
-                  Not under the one-page sheet, which has no grid to sit
-                  under and ends on its content. */}
               {!sheet && SECTION_FIGURES[openSection.id] ? (
                 <motion.div
                   animate={{ opacity: 1 }}
@@ -631,19 +522,15 @@ export function SectionMenu({
               ) : null}
             </div>
 
-            {/* A topic, zoomed out of its tile into a page over the section. */}
             <AnimatePresence>
               {topic && openTopic && openSection ? (
                 <div
                   aria-label={openTopic.title}
                   aria-modal="true"
-                  /* Above the section's raised tile, so its number cannot
-                     show through the page. */
+                  /* Above the section's raised tile, so its number cannot show through the page. */
                   className="fixed inset-0 z-overlay"
                   role="dialog"
                 >
-                  {/* The section behind, dimmed in the gap the page leaves
-                      around itself. */}
                   <motion.div
                     animate={{ opacity: 1 }}
                     className="fixed inset-0 bg-foreground/40"
@@ -662,11 +549,6 @@ export function SectionMenu({
                     }}
                   />
 
-                  {/* The page: the tile's own surface, grown to the screen
-                      less a gap at the top and sides, standing on the bottom
-                      edge with its upper corners rounded — a sheet risen
-                      over the section. Closing unmounts it and the tile
-                      takes the surface back, shrinking into its slot. */}
                   <motion.div
                     className="fixed inset-x-4 top-4 bottom-0 bg-background"
                     layoutId={`topic-page-${topic.id}`}
@@ -674,11 +556,7 @@ export function SectionMenu({
                     transition={{ layout: reduced ? { duration: 0 } : GROW }}
                   />
 
-                  {/* The topic, once the page has nearly landed: a fade and a
-                      short rise, scrolling inside the page's own shape —
-                      `inset-x-4 top-4` and `rounded-t-3xl` match the page. Not in
-                      an AnimatePresence of its own — its exit has to run with
-                      the page's, or it lingers over the tile shrinking home. */}
+                  {/* Not in its own AnimatePresence: its exit must run with the page's, or it lingers over the shrinking tile. */}
                   {landed ? (
                     <motion.div
                       animate={{ opacity: 1, y: 0 }}
@@ -693,9 +571,6 @@ export function SectionMenu({
                       <div
                         className={cn(
                           "mx-auto flex w-full flex-col gap-8 px-6 pt-14 pb-16",
-                          /* A page demo is shown at a page's width — an index
-                             squeezed into the reading column is not what the
-                             product looks like. */
                           FULL_WIDTH_TOPICS.has(openTopic.id)
                             ? "max-w-none sm:px-10"
                             : "max-w-3xl",

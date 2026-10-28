@@ -30,12 +30,6 @@ import {
 } from "@/components/mockups/conversations-revamp/list/icons"
 import { StatusFilter } from "@/components/mockups/conversations-revamp/list/status-filter"
 
-/**
- * The filter row above the table: phone search, Status and Outcome
- * multi-selects, a time range, the scenario picker, and Fields — then the list
- * actions at the end, being refresh, the toggle that opens Call Direction and
- * Call Duration underneath, and Export.
- */
 export function SearchFilters({
   columns,
   onColumnsChange,
@@ -43,7 +37,6 @@ export function SearchFilters({
 }: {
   columns: ColumnSetting[]
   onColumnsChange: (columns: ColumnSetting[]) => void
-  /** Opens the Status list on load, for the link that shows that dropdown. */
   statusOpen?: boolean
 }) {
   const [showMoreFilters, setShowMoreFilters] = React.useState(false)
@@ -64,7 +57,6 @@ export function SearchFilters({
 
           <StatusFilter defaultOpen={statusOpen} />
 
-          {/* Outcome is the same multi-select in the app; its trigger only. */}
           <Button
             aria-label="Select Outcome"
             className="w-35 justify-between bg-card font-normal text-muted-foreground"
@@ -95,14 +87,9 @@ export function SearchFilters({
             <ChevronDownIcon className="text-muted-foreground" />
           </Button>
 
-          {/* The Default View / Detailed View picker used to sit here. Fields
-              replaced it: the same decision, made a column at a time instead of
-              two-at-a-time. */}
           <FieldsDropdown columns={columns} onChange={onColumnsChange} />
         </div>
 
-        {/* Actions on the list rather than filters on it, so they sit together
-            at the end of the row instead of in the filter flow. */}
         <div className="flex shrink-0 items-center gap-2">
           <Button aria-label="Refresh calls" size="sm" variant="outline">
             <RefreshIcon />
@@ -139,11 +126,8 @@ export function SearchFilters({
       </div>
 
       {showMoreFilters ? (
-        /* A margin, not a gap: this and the filter row are siblings inside a
-           fragment, and the page div that holds them is block, so no gap
-           reaches them. 12px rather than the page's 16px on purpose — the panel
-           belongs to the bar whose toggle opened it, so it has to sit closer to
-           that bar than to the result count under it. */
+        // Margin, not gap: this and the filter row are fragment siblings inside
+        // a block parent.
         <div className="mt-3 rounded-lg bg-muted">
           <div className="flex flex-col gap-4 p-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

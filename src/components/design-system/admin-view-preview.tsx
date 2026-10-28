@@ -15,14 +15,6 @@ import { ConversationsIndexPreview } from "@/components/design-system/conversati
 
 const ORGANISATIONS = ["Sarj.ai", "Rawabi Holding", "Tamimi Markets"]
 
-/**
- * The organisation a superadmin is reading a page as, in the top bar.
- *
- * It is the scope of the whole screen, not of one list, so it sits with the
- * app's own controls rather than in a band above the page's content — and it
- * stays in the same place on every page. Tinted with warning, because every
- * row under it may belong to someone else's organisation.
- */
 export function AdminViewSwitcher() {
   const [organisation, setOrganisation] = React.useState(ORGANISATIONS[0])
 
@@ -48,12 +40,7 @@ export function AdminViewSwitcher() {
   )
 }
 
-/**
- * The conversations index, laid out by the index page rules, with the admin
- * view in its top bar. Framed so the app's sidebar and drawers stay inside the demo:
- * `translate-x-0` makes the frame the containing block for their fixed
- * positioning.
- */
+/** `translate-x-0` makes this frame the containing block for the app's fixed sidebar and drawers. */
 export function AdminViewPagePreview() {
   return (
     <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">

@@ -5,18 +5,6 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * A dialog is a short task on one screen.
- *
- * Up to four fields, or an action that needs a few answers before it runs.
- * Anything that scrolls, grows rows, or has tabs or steps is a drawer or a
- * page — and a dialog whose body needs to scroll was a drawer. So inside a
- * DialogContent: no Tabs, no Stepper, no ScrollArea, and no overflow scroll.
- *
- * AlertDialogContent is held to the same, and harder: a confirm is a sentence
- * and two buttons.
- */
-
 const BANNED_INSIDE = {
   Tabs: "Tabs in a dialog are several screens pretending to be one. Several views of one object is a page with tabs; settings that grow are a drawer.",
   Stepper:

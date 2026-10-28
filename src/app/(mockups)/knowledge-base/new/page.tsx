@@ -3,7 +3,6 @@
 import { MockupShell } from "@/components/shell/mockup-shell"
 import { KnowledgeBaseIndex } from "@/components/mockups/knowledge-base/knowledge-base-index"
 
-/** The index with the create dialog open — what New Knowledge Base opens. */
 export default function KnowledgeBaseNewPage() {
   return (
     <MockupShell

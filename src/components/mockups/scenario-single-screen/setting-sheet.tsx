@@ -13,20 +13,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 
-/**
- * The one shape every setting drawer takes: a title and the sentence that
- * explains the setting, the depth in a scroller, and a single way out.
- *
- * There is no Cancel. Edits here land on the scenario the same way the prompt
- * on the page does, and the save bar at the bottom of the page is what commits
- * them — so a second commit point inside the drawer would be a second, quieter
- * meaning of "saved".
- *
- * `sm:max-w-xl!` is not a gratuitous override. `SheetContent` pins a right-side
- * panel to `sm:max-w-sm` through a `data-[side=right]:` variant, and an
- * attribute variant outranks a plain utility — the important modifier is the
- * documented way past it.
- */
+/** `sm:max-w-xl!`: SheetContent's `data-[side=right]:sm:max-w-sm` outranks a plain utility. */
 export function SettingSheet({
   children,
   description,
@@ -69,12 +56,6 @@ export function SettingSheet({
   )
 }
 
-/**
- * A titled block inside a drawer. Drawers hold two or three related things —
- * languages and the timezone they are read against, extraction fields and
- * where they are sent — and this keeps the second one from reading as a
- * continuation of the first.
- */
 export function SheetSection({
   children,
   description,

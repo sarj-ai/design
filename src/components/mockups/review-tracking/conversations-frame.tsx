@@ -38,16 +38,6 @@ function sentence(value: string) {
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
-/**
- * The Conversations page as it ships after the index revamp: title, search
- * with refresh and export at its end, filter chips under it, the table in a
- * card, the shared footer. Every idea sits inside this frame and adds only
- * what it needs — a button in the search row, a chip in the filter row, a
- * line above the table.
- *
- * The status, outcome and scenario chips really filter, because one idea (a
- * review session) starts from a filtered list.
- */
 export function ConversationsFrame({
   calls,
   searchExtras,
@@ -59,17 +49,13 @@ export function ConversationsFrame({
   children,
 }: {
   calls: CallRow[]
-  /** Buttons an idea adds to the search row, before Export. Given the rows
-      on screen, for an action that works on them. */
+  /** Buttons added to the search row before Export, given the rows on screen. */
   searchExtras?: Slot
-  /** Chips an idea adds after the page's own. */
   filterExtras?: React.ReactNode
-  /** How many of those extra chips are set. */
   extraActive?: number
   onClearExtras?: () => void
   /** A line between the filters and the table. */
   above?: Slot
-  /** An idea's own narrowing of the filtered rows. */
   narrow?: (rows: CallRow[]) => CallRow[]
   children: (rows: CallRow[]) => React.ReactNode
 }) {
@@ -88,8 +74,6 @@ export function ConversationsFrame({
   const activeCount =
     [statuses.length, outcomes.length, scenarios.length].filter(Boolean)
       .length + extraActive
-  /* Unfiltered, the page stands for the whole history; narrowed in any
-     way, the rows on screen are all there is. */
   const total =
     activeCount || rows.length !== calls.length ? rows.length : TOTAL_CALLS
 

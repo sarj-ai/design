@@ -1,15 +1,4 @@
-/**
- * Mock data for DES-203 — live scenario status and the change warning.
- *
- * Live is a manual switch on the scenario (PROD-234, Kidus Asmare: "Manual
- * switch; add badge on the playground index and scenario index page"). It is
- * off for a new scenario, it is not content, and who flipped it and when is
- * recorded — the Configuration versioning doc (INT-253) builds its publish
- * step on exactly this switch, so nothing here infers live from traffic.
- */
-
 export type LiveRecord = {
-  /** Who flipped the switch on, and when. */
   by: string
   at: string
 }
@@ -157,19 +146,12 @@ export const DELETED: ScenarioRow[] = [
   },
 ]
 
-/* ----------------------------------------------------------------- editor */
-
 export type PromptField = {
   id: "first-message" | "instruction"
   label: string
   body: string
 }
 
-/**
- * The two prompt fields of the editor's Scenario tab — enough of the editor
- * to make a change and save it. The rest of the editor is unchanged by this
- * ticket and left out.
- */
 export const PROMPT_FIELDS: PromptField[] = [
   {
     id: "first-message",
@@ -189,24 +171,13 @@ export const PROMPT_FIELDS: PromptField[] = [
   },
 ]
 
-/**
- * The editor cases the reviewer can open. Each is one scenario as the page
- * finds it — the switch in the mockup shell picks the case, not a state the
- * product would show.
- */
 export type EditorCase = {
   id: string
   label: string
   scenario: string
   live: LiveRecord | null
-  /** The reader may flip the switch. */
   canToggle: boolean
-  /** Turning the switch fails on the server. */
   toggleFails: boolean
-  /**
-   * Someone else turns the scenario live after this page loaded; the save
-   * review is the first place that finds out.
-   */
   turnedLiveElsewhere: LiveRecord | null
 }
 

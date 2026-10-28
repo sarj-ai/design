@@ -6,21 +6,6 @@ import {
 import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens"
 import { cn } from "@/lib/utils"
 
-/**
- * Every colour in the system, read as a list rather than as a wall of chips.
- *
- * A grid of swatches answers "what does it look like" and nothing else. The
- * questions people actually arrive with — what is this one called, what is it
- * for, is it the same as that one — are all comparisons down a column, so the
- * shape is a table, and the same table the rest of the page uses.
- *
- * The swatch keeps a ring at every row: half of these are white or near-white
- * and would otherwise be an invisible cell.
- *
- * The sidebar's own set and the Tailwind-only aliases stay in the data — the
- * copied skill still lists them — but not on the page: nobody picks either
- * when building a screen.
- */
 const OFF_PAGE = new Set(["Sidebar", "Defined only as a Tailwind alias"])
 
 export function ColourTable() {

@@ -5,17 +5,9 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-/*
- * The line diff from the design system's Unsaved changes topic
- * (save-bar-preview.tsx), shared because three places need it: the live
- * scenario save review (DES-203), and configuration versioning's save,
- * publish and compare (DES-202). FoldedDiff, below, is the reading version
- * for history and approval: numbered, aligned, untouched lines folded.
- */
-
 type DiffLine = { kind: "same" | "removed" | "added"; text: string }
 
-/** Line-level diff by longest common subsequence — prompts are short. */
+/** Line-level diff by longest common subsequence; quadratic, fine for short prompts. */
 function diffLines(before: string, after: string): DiffLine[] {
   const a = before.split("\n")
   const b = after.split("\n")
@@ -52,7 +44,6 @@ const LINE = "flex gap-2 px-3 py-1 whitespace-pre-wrap"
 const REMOVED = "bg-destructive-tint text-destructive-tint-foreground"
 const ADDED = "bg-success-tint text-success-tint-foreground"
 
-/** Unchanged lines stay muted; only what changed carries colour. */
 export function LineDiff({ before, after }: { before: string; after: string }) {
   return (
     <div className="overflow-hidden rounded-lg border text-xs">
@@ -77,12 +68,6 @@ export function LineDiff({ before, after }: { before: string; after: string }) {
   )
 }
 
-/**
- * The same diff as two columns — the older text on the start side, the
- * newer on the end — for comparing two versions where there is room. A line
- * that went is tinted on its side, a line that came on the other; unchanged
- * lines sit level in both so the eye can run across.
- */
 export function SideBySideDiff({
   before,
   after,
@@ -129,7 +114,6 @@ export function SideBySideDiff({
   )
 }
 
-/** How many lines a change adds and removes — the "+2 −1" on a field. */
 export function diffStat(before: string, after: string) {
   const lines = diffLines(before, after)
   return {
@@ -138,7 +122,6 @@ export function diffStat(before: string, after: string) {
   }
 }
 
-/** "+2 −1", each half in its own colour, zero halves muted. */
 export function DiffStat({
   added,
   removed,
@@ -161,11 +144,6 @@ export function DiffStat({
 type Side = { text: string; n: number; changed: boolean } | null
 type Row = { changed: boolean; left: Side; right: Side }
 
-/**
- * The diff as aligned rows: an unchanged line sits level on both sides, and
- * a run of removed lines pairs off against the run of added lines that
- * replaces it, so a split view never drifts out of line.
- */
 function alignedRows(before: string, after: string): Row[] {
   const rows: Row[] = []
   let oldN = 0
@@ -202,7 +180,6 @@ function alignedRows(before: string, after: string): Row[] {
   return rows
 }
 
-/** Unified rows: removed lines then added ones, numbered on their own side. */
 function unifiedRows(before: string, after: string) {
   let oldN = 0
   let newN = 0
@@ -218,10 +195,6 @@ function unifiedRows(before: string, after: string) {
   })
 }
 
-/**
- * Which rows to draw: every change and `context` lines either side of it.
- * The rest fold into one "n unchanged lines" row each, which opens in place.
- */
 function fold<T extends { changed: boolean }>(rows: T[], context: number) {
   const near = rows.map((_, index) =>
     rows
@@ -238,7 +211,6 @@ function fold<T extends { changed: boolean }>(rows: T[], context: number) {
     if (last && "hidden" in last) last.hidden.push(row)
     else out.push({ hidden: [row], id: index })
   })
-  /* Folding one line saves nothing and costs a click: show it instead. */
   return out.flatMap((piece) =>
     "hidden" in piece && piece.hidden.length === 1
       ? [{ row: piece.hidden[0] }]
@@ -249,15 +221,6 @@ function fold<T extends { changed: boolean }>(rows: T[], context: number) {
 const NUMBER =
   "w-7 shrink-0 text-end text-muted-foreground/60 tabular-nums select-none"
 
-/**
- * A field's diff for reading a version: line numbers in the gutter, only
- * what changed in colour, and the untouched stretches folded so a
- * one-line change in a forty-line prompt reads as one line, not forty.
- *
- * `split` puts the older text on the start side and the newer on the end,
- * row-aligned; `unified` stacks them, − above +. `bare` drops the frame for
- * a diff that sits inside a block with its own.
- */
 export function FoldedDiff({
   before,
   after,

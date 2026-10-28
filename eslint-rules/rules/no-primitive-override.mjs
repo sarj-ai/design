@@ -1,28 +1,6 @@
 import { collectStrings, parseClasses } from "../lib/classes.mjs"
 
-/**
- * Don't reach past a primitive to restyle the box it owns.
- *
- * `<Button className="h-10 rounded-md px-4">` does not customise the button, it
- * forks it: the override freezes while the primitive keeps evolving, and the
- * two drift until this one button no longer matches any other button in the
- * app. If a primitive needs to look different, it needs a `variant` or a
- * `size`, not a className.
- *
- * Deliberately narrow. It polices only the primitives that own their own
- * geometry, and only the properties they own:
- *
- *  - Colour is not checked here at all. `bg-primary-tint` on an `<Item>` is the
- *    sanctioned selected-row surface, and `text-muted-foreground` on a
- *    `<TableCell>` is the sanctioned secondary text. Tokens are the vocabulary;
- *    `sarj/no-raw-color` already catches the colours that aren't tokens.
- *  - Layout wrappers (ScrollArea, CollapsibleContent, TabsContent, Dialog and
- *    Sheet content) are not checked. They exist to be laid out — `h-60` on a
- *    ScrollArea is required, not a violation.
- *
- * Layout on any primitive stays legal: col-span, w-full, max-w-*, flex, grid,
- * gap-*, mx-auto, items-*, justify-*, self-*, and every margin.
- */
+// Only geometry a primitive owns is checked; colour and layout classes are deliberately left alone.
 
 const PADDING = /^p[xytrbles]?-/
 const RADIUS = /^rounded(-|$)/
@@ -33,10 +11,7 @@ const TEXT_SIZE = /^text-(xs|sm|base|lg|xl|[2-9]xl|\[)/
 const FONT_WEIGHT =
   /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/
 
-/**
- * Primitives that own their geometry, and which of it they own.
- * Everything not listed here is a layout wrapper and goes unchecked.
- */
+// Anything not listed is a layout wrapper and goes unchecked.
 const OWNED = {
   Card: { padding: true, radius: true, border: true },
   CardHeader: { padding: true },
@@ -50,7 +25,6 @@ const OWNED = {
   InputGroup: { padding: true, radius: true, height: true },
 }
 
-/** Primitives with a fixed rung on the type ladder. */
 const TYPE_ROLE = new Set([
   "CardTitle",
   "CardDescription",
@@ -98,7 +72,6 @@ const noPrimitiveOverride = {
   },
 
   create(context) {
-    /** Local JSX names imported from @/components/ui/*. */
     const primitives = new Set()
 
     return {

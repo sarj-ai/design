@@ -1,27 +1,11 @@
-/**
- * JSX helpers for the `sarj/*` rules that read structure rather than classes.
- *
- * The class rules (`lib/classes.mjs`) only need strings. The design-system
- * rules added after them need to know which primitive an element is, what it
- * is nested in, and what its label says — "a Dialog inside a DrawerContent",
- * "a Cancel after the primary", "an icon in a DrawerHeader". These helpers
- * answer those three questions once.
- *
- * Every structural rule keys off names imported from `@/components/ui/*`, never
- * off the bare JSX name: a mockup is free to define its own `Button` or
- * `Empty`, and the rules are about the shadcn primitives, not the word.
- */
+// Structural rules key off names imported from `@/components/ui/*`, never the bare JSX name:
+// a mockup may define its own `Button`.
 
 import { collectStrings, parseClasses } from "./classes.mjs"
 
 const UI_SOURCE = /^@\/components\/ui\//
 
-/**
- * Track the primitives a file imports. Returns a visitor to merge into the
- * rule's own, and `ui(name)`, which maps a local JSX name back to the
- * primitive it was imported as — so `import { Button as Btn }` still reads as
- * `Button`. Anything not imported from `@/components/ui/*` maps to null.
- */
+/** `ui(name)` maps a local JSX name to the primitive it was imported as, or null. */
 export function trackUiImports() {
   const local = new Map()
 
@@ -41,7 +25,6 @@ export function trackUiImports() {
   }
 }
 
-/** `Button` for `<Button>`, `Foo.Bar` for `<Foo.Bar>`, null for anything else. */
 export function jsxName(opening) {
   const name = opening?.name
   if (!name) return null
@@ -59,23 +42,17 @@ export function jsxName(opening) {
   return null
 }
 
-/** The named attribute on an opening element, if it is there. */
 export function getAttr(opening, name) {
   return opening.attributes.find(
     (attr) => attr.type === "JSXAttribute" && attr.name?.name === name,
   )
 }
 
-/** A `{...props}` spread could be carrying anything, so some rules stand down. */
 export function hasSpread(opening) {
   return opening.attributes.some((attr) => attr.type === "JSXSpreadAttribute")
 }
 
-/**
- * The value of an attribute when it is a plain string — `size="sm"`,
- * `size={"sm"}`, or a template with no expressions. Null when it is computed,
- * so a rule never guesses at a value it cannot see.
- */
+/** A plain-string attribute value, or null when it is computed. */
 export function attrString(attr) {
   const value = attr?.value
   if (!value) return null
@@ -94,7 +71,6 @@ export function attrString(attr) {
   return null
 }
 
-/** Every Tailwind class on an element's `className`, as `{ raw, base, variants, node }`. */
 export function classesOf(opening) {
   const attr = getAttr(opening, "className")
   if (!attr) return []
@@ -103,12 +79,7 @@ export function classesOf(opening) {
   )
 }
 
-/**
- * What an element says: its text children, string literals inside `{}`, and
- * the same from every element nested in it — so `<Button><PlusIcon /> Create
- * persona</Button>` reads "Create persona". `dynamic` is true when any part of
- * it is computed; a rule that judges wording should skip those.
- */
+/** Text of an element and its descendants; `dynamic` is true when any part is computed. */
 export function textOf(element) {
   const parts = []
   let dynamic = false
@@ -140,11 +111,6 @@ export function textOf(element) {
   return { text: parts.join(" ").replace(/\s+/g, " ").trim(), dynamic }
 }
 
-/**
- * Walk up from a node through its enclosing JSX elements, nearest first.
- * Yields each ancestor's `JSXElement`. Stops at a function boundary, because
- * a component defined in the same file is not nested where it is declared.
- */
 export function* jsxAncestors(node) {
   let cursor = node.parent
   while (cursor) {
@@ -153,9 +119,7 @@ export function* jsxAncestors(node) {
       cursor.type === "FunctionExpression" ||
       cursor.type === "ArrowFunctionExpression"
     ) {
-      /* An inline render prop (`render={() => …}`, `.map(row => …)`) is still
-         nested where it is written, so keep climbing through those. Only a
-         named component declaration ends the walk. */
+      /* Inline render props are still nested where written; only a named component declaration ends the walk. */
       if (cursor.type === "FunctionDeclaration") return
       const holder = cursor.parent
       if (holder?.type === "VariableDeclarator") return
@@ -165,7 +129,6 @@ export function* jsxAncestors(node) {
   }
 }
 
-/** Every JSX element under `element`, in source order, depth first. */
 export function* jsxDescendants(element) {
   for (const child of element.children ?? []) {
     if (child.type === "JSXElement") {
@@ -179,7 +142,6 @@ export function* jsxDescendants(element) {
   }
 }
 
-/** JSX elements reachable inside an expression: `cond && <X/>`, `a ? <X/> : <Y/>`, `list.map(() => <X/>)`. */
 function* jsxInExpression(expr) {
   if (!expr || typeof expr !== "object") return
   if (expr.type === "JSXElement") {
@@ -208,11 +170,7 @@ function* jsxInExpression(expr) {
 
 const CLASS_FNS = new Set(["cn", "clsx", "classNames", "twMerge"])
 
-/**
- * True when a `className` holds something lint cannot read — a variable, a
- * prop passed through, a helper's return value. A rule asking "is X among
- * the classes?" should not answer no when it cannot see them all.
- */
+/** True when a `className` holds something lint cannot read, so a rule must not answer "absent". */
 export function isOpaqueClassName(attr) {
   if (!attr?.value || attr.value.type === "Literal") return false
   let opaque = false

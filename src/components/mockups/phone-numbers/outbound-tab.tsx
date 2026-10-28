@@ -37,8 +37,7 @@ const ASSIGNED_FORMAT = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 })
 
-/* Defaults first, then the most-assigned, then alphabetical — the order the
-   platform sorts them in. */
+/* The platform's sort: defaults, then most-assigned, then alphabetical. */
 const SORTED = TRUNKS.toSorted((a, b) => {
   if (a.isGlobalDefault !== b.isGlobalDefault) return a.isGlobalDefault ? -1 : 1
   const assigned =
@@ -72,9 +71,6 @@ export function OutboundTab() {
         ) : (
           SORTED.map((trunk) => (
             <TableRow key={trunk.sipTrunkId}>
-              {/* The trunk id under the numbers rather than beside them: it is
-                  what you copy when something is wrong, and it is the only
-                  thing that identifies a trunk carrying four numbers. */}
               <TableCell className="whitespace-nowrap">
                 <span className="flex flex-col gap-0.5">
                   <span className="font-medium">

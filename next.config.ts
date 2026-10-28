@@ -1,23 +1,15 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
-  // the dev-tools badge sits over the bottom-start corner of every mockup and
-  // shows up in review screenshots
   devIndicators: false,
   images: {
-    // Next 16 dropped the default from "any quality" to [75], and a `quality`
-    // prop outside this list is silently coerced to the nearest entry rather
-    // than erroring. The route captures are already webp q82, so re-encoding
-    // them at 75 is a second lossy pass over a lossy source.
+    // A `quality` prop outside this list is silently coerced to the nearest entry.
     qualities: [75, 100],
   },
   turbopack: {
     rules: {
-      // A markdown import is the file's text. The reels page hands its skill
-      // file to a copy button this way; reading it from disk at runtime fails
-      // on the Worker, which has no file system to read from.
+      // Raw import: the Worker has no file system, so .md cannot be read from disk at runtime.
       "*.md": { type: "raw" },
     },
   },

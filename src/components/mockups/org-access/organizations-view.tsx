@@ -70,19 +70,6 @@ import {
   type UnassignedUser,
 } from "@/lib/mockups/org-access-data"
 
-/**
- * Sarj's admin Organizations page, as the platform ships it, with who owns
- * each organization added.
- *
- * Everything but Owner and Members is the platform's page today: the two
- * views, Create user beside Create organization, the Settings filter, and the
- * ID, domain, data retention and settings columns. Owner is the column this
- * ticket adds. Migration leaves every existing organization without one until
- * Sarj names it, so "No owner" with Set owner beside it is the migration pass,
- * done row by row from the list Sarj already works in. Zain KSA and Yaqoot
- * both carry sa.zain.com: a domain grants nothing now, so sharing one needs no
- * special state.
- */
 export function OrganizationsView({
   onOpen,
 }: {
@@ -367,7 +354,6 @@ const SETTINGS_OPTIONS = [
   { label: "Global", value: "global" },
 ]
 
-/** The row a search or filter leaves empty, with the way back. */
 function NoResults({
   colSpan,
   noun,
@@ -397,12 +383,6 @@ function NoResults({
   )
 }
 
-/**
- * A person with an account and no organization, as the platform lists them:
- * change their role, add them to an organization, or impersonate them. The
- * platform's Remove is left out — it is always disabled for someone with no
- * organization to be removed from.
- */
 function UnassignedUserRow({
   user,
   orgs,
@@ -483,7 +463,6 @@ function UnassignedUserRow({
   )
 }
 
-/** The platform's Create user: an account with no organization yet. */
 function CreateUserDialog({
   open,
   onOpenChange,
@@ -555,15 +534,6 @@ function CreateUserDialog({
   )
 }
 
-/**
- * The one flow the doc gives Sarj: name the organization, record its domain,
- * name its owner. The owner gets an invite; nobody else is added here.
- *
- * The domain is optional — a client on personal addresses has none — and is
- * explained once, behind the (i): it is a record, not a gate. A domain that
- * another organization already carries is said plainly under the field, since
- * that is the moment Sarj might be about to make a duplicate by mistake.
- */
 function CreateOrganizationDialog({
   open,
   onOpenChange,
@@ -693,11 +663,6 @@ function CreateOrganizationDialog({
   )
 }
 
-/**
- * The migration pass for one organization: pick its owner from the people
- * already in it. An owner is an Org Admin, so picking someone who is not one
- * says so before it happens.
- */
 function SetOwnerDialog({
   org,
   onOpenChange,

@@ -40,18 +40,6 @@ const PRESETS: { id: Preset; label: string; help: string }[] = [
   },
 ]
 
-/**
- * Scopes as three presets with the real permissions behind the third.
- *
- * Almost every token is one of the first two, and making that the fast path
- * keeps the long list out of the way — but the list is the thing an engineer
- * debugging a 403 needs, so it is one click away rather than a support ticket.
- *
- * The permissions are grouped by resource rather than listed flat: read and
- * write is the only axis anyone reasons about, and twenty-one loose checkboxes
- * is a wall. Resources the platform only exposes for reading leave the write
- * cell empty rather than dropping it, so both columns hold one vertical line.
- */
 export function ScopePicker({
   onChange,
   scopes,
@@ -65,8 +53,6 @@ export function ScopePicker({
     setPreset(next)
     if (next === "read-only") onChange(READ_ONLY_SCOPES)
     if (next === "full") onChange(ALL_SCOPES)
-    /* Custom keeps whatever the preset had selected, so the reader edits a
-       starting point rather than an empty list. */
   }
 
   function toggle(permission: Permission, granted: boolean) {
@@ -79,8 +65,7 @@ export function ScopePicker({
 
   return (
     <Field>
-      {/* FieldTitle, not FieldLabel: the control below is a radio group and a
-          grid of checkboxes, so there is no single id to point at. */}
+      {/* FieldTitle, not FieldLabel: a radio group and a checkbox grid have no single id. */}
       <FieldTitle>Scopes</FieldTitle>
 
       <RadioGroup
@@ -102,8 +87,6 @@ export function ScopePicker({
       </RadioGroup>
 
       {preset === "custom" ? (
-        /* Radius and padding, no edge — an inset panel rather than a second
-           card inside the dialog. */
         <div className="flex flex-col gap-3 rounded-lg bg-muted p-3">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium tabular-nums">
@@ -132,9 +115,7 @@ export function ScopePicker({
                 <React.Fragment key={group.read}>
                   <span className="text-sm">{group.label}</span>
 
-                  {/* The permission string is the accessible name, so the
-                      exact scope reaches a screen reader as well as the
-                      tooltip on the row it ends up in. */}
+                  {/* The exact permission string is the accessible name. */}
                   <Checkbox
                     aria-label={group.read}
                     checked={scopes.includes(group.read)}

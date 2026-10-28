@@ -1,18 +1,9 @@
-/**
- * Mock data for the personas depth pass (DES-117).
- *
- * Shapes mirror the product: a persona owns a voice (provider and model come
- * with the voice, never picked separately), exactly one persona per language
- * is the default, and a scenario holds one persona per language.
- */
-
 export type PersonaLanguage = "Arabic" | "English" | "Urdu"
 export type PersonaGender = "Female" | "Male"
 
 type Voice = {
   id: string
   name: string
-  /** Short personality blurb shown wherever the voice is listed. */
   vibe: string
   language: PersonaLanguage
   gender: PersonaGender
@@ -213,13 +204,6 @@ export const VOICES: Voice[] = [
     provider: "ElevenLabs",
     active: true,
   },
-
-  /* The other five combinations, filled to the depth Arabic Female already had.
-     Only that one combo held a real list; the rest had one or two voices, so
-     five of the six paths through the picker showed a search box with nothing
-     to search and a scroll window with nothing to scroll. The comment at the
-     top of VoicePicker already says production combos hold dozens — this is the
-     data catching up with it. */
 
   {
     id: "v-khalid",

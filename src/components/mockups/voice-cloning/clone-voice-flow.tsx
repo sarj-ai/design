@@ -34,23 +34,6 @@ import {
   type Voice,
 } from "@/lib/mockups/voice-cloning-data"
 
-/**
- * The clone flow, on the design system's creation flow — the surface the
- * surfaces page gives "creating in steps": the whole screen, Back and Close at
- * the top, one question a screen under "Clone a voice", the step dots at the
- * foot, and each screen's primary button where its answer ends.
- *
- * Two screens, as the PRD fixes it: record or upload a sample, then hear the
- * clone and name it. Clone voice on the first screen is where the clone
- * happens (register the profile, render the preview), so it carries the
- * working state and the one failure the TTS service can return — which keeps
- * the take, so the reader retries rather than re-records.
- *
- * The same flow opens from the Voice library and from a persona; from a
- * persona it starts on the persona's language and gender, so the new voice
- * lands in the cards that persona shows.
- */
-
 const STEPS = [
   {
     key: "sample",
@@ -115,7 +98,6 @@ export function CloneVoiceFlow({
     reset()
   }
 
-  /* A take is something to lose, so every way out asks once one exists. */
   const requestClose = () => {
     if (busy) return
     if (capture.kind === "take" || step > 0) {

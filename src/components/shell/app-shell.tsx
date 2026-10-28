@@ -68,19 +68,8 @@ import {
   WebhooksIcon,
 } from "@/components/shell/app-shell-icons"
 
-/**
- * The app around any mockup screen, shared by every mockup that wants the
- * product chrome: an inset sidebar over a tinted page, and a header carrying
- * the breadcrumb and the account. Pass `active` to highlight the nav item the
- * screen lives under.
- *
- * Playground sits above the groups rather than inside one — it is the entry
- * point, not a build step. Configuration starts closed because it is the group
- * you visit once and then leave alone.
- */
-
 interface NavItem {
-  /** Label for the hover "+", on the two things you create most. */
+  /** Label for the hover "+". */
   action?: string
   /** A count beside the label — what is waiting on the viewer there. */
   badge?: number
@@ -126,12 +115,8 @@ const NAV: { defaultOpen: boolean; items: NavItem[]; label: string }[] = [
       { icon: IntegrationsIcon, title: "Integrations" },
       { icon: DeveloperDocsIcon, title: "Developer Docs" },
       { icon: BuildingIcon, title: "Organizations" },
-      /* DES-170. Roles are platform-wide and Sarj-only in Phase 1, so they sit
-         beside Organizations rather than inside one. */
       { icon: RolesIcon, title: "Roles" },
       { icon: MobileIcon, title: "Phone Numbers" },
-      /* DES-169. The catalog needs a home in the nav, and Configuration is
-         where the other platform-wide, Sarj-staff-only surfaces already sit. */
       { icon: ModelsIcon, title: "Models" },
       { icon: TelephonyIcon, title: "Telephony" },
       { icon: SettingsIcon, title: "Global Settings" },
@@ -152,30 +137,17 @@ function NavLink({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
-        /* Two differences from the primitive's defaults, both as the app has
-           them: hover lands on the neutral `accent` rather than the purple
-           `sidebar-accent`, and the active item carries a hairline of its own
-           foreground so the filled pill reads as a border, not just a wash. */
         className="border border-transparent hover:bg-accent hover:text-accent-foreground data-active:border-sidebar-accent-foreground/10"
         isActive={active}
         tooltip={item.title}
         onClick={() => onNavigate?.(item.title)}
       >
         <item.icon />
-        {/* Closing to the rail fades the label out rather than clipping it. */}
         <span className="truncate transition-opacity duration-200 ease-out-cubic group-data-[collapsible=icon]:opacity-0 motion-reduce:transition-none">
           {item.title}
         </span>
       </SidebarMenuButton>
-      {/* `rounded-sm` in place of the primitive's `rounded-md` and `right-2` in
-          place of `right-1`, both as the app has them.
-
-          The glyph size is deliberately NOT the app's `[&>svg]:size-full`. That
-          class works there because its plus is a hand-drawn 20×20 icon whose
-          path spans only 6.5→13.5, so filling the box still draws a 7px plus.
-          Ours is HugeIcons' PlusSignIcon, whose ink fills 16 of its 24 viewBox
-          units — the same class drew a 12px plus, nearly twice the app's.
-          `size-2.5` renders it at 10px, putting the drawn plus at 6.7px. */}
+      {/* `size-2.5` on purpose: the app's `size-full` would draw this HugeIcons plus at 12px. */}
       {item.action ? (
         <SidebarMenuAction
           aria-label={item.action}
@@ -189,11 +161,7 @@ function NavLink({
   )
 }
 
-/**
- * Collapsed to the icon rail there is no room for a section label, so the
- * groups are forced open and the label — the only thing that could close them —
- * is disabled.
- */
+/** Collapsed to the icon rail there is no room for a label, so groups are forced open and the label disabled. */
 function NavGroup({
   active,
   defaultOpen,
@@ -248,7 +216,6 @@ function NavGroup({
   )
 }
 
-/** Breadcrumb start, account end — the row every page in the app sits under. */
 function AppHeader({
   actions,
   scope,
@@ -256,16 +223,11 @@ function AppHeader({
   trail,
   showSettings,
 }: {
-  /** Swaps "Developer Doc" for a Developers button that opens the
-   *  Developers page — "open" when that page is the one showing. Off, the
-   *  header is the one the app ships today. */
+  /** Swaps "Developer Doc" for a Developers button; "open" when that page is showing. */
   developers?: "link" | "open"
-  /** Sits first in the header's right-hand row — the admin view a
-   *  superadmin is reading the page as. */
+  /** The admin view a superadmin is reading the page as. */
   scope?: React.ReactNode
-  /** Replaces the account row entirely. The design-system page uses it to
-   *  carry the way back to the index; a mockup leaves it off and gets the
-   *  row the app itself shows. */
+  /** Replaces the account row entirely. */
   actions?: React.ReactNode
   /** Crumbs after Home. The last is the page; earlier ones are links. */
   trail: readonly string[]
@@ -313,9 +275,6 @@ function AppHeader({
                 Developer Doc
               </Button>
             )}
-            {/* The same allowlist the nav reads. The app has this gear on its own
-            check today, which is how an admin gets a second dead end to the
-            page the sidebar already sent them to. */}
             {showSettings ? (
               <Button
                 aria-label="Global settings"
@@ -325,23 +284,11 @@ function AppHeader({
                 <SettingsIcon />
               </Button>
             ) : null}
-            {/* Wrapped, rather than given `self-center`: the primitive ships
-            `data-vertical:self-stretch`, and an attribute variant outranks a
-            plain utility, so the rule stretched to the 28px row, got held to
-            h-4, and settled at the top of it — 6px above the centre the buttons
-            and the avatar share. Inside a wrapper of its own the flex line is
-            the rule's own height, so stretching changes nothing and the wrapper
-            is what the header centres. */}
+            {/* Wrapped rather than `self-center`: the primitive's `data-vertical:self-stretch` outranks a plain utility. */}
             <div className="flex items-center">
               <Separator className="mx-1 h-4" orientation="vertical" />
             </div>
-            {/* A rounded square at the same radius and height as the two buttons,
-            not a circle. The app's account button is Clerk's, and Clerk does not
-            inherit the app's CSS vars — so the real header sets its avatar
-            radius to a 0.625rem literal, which is `--radius`, which is
-            `rounded-lg`. A circle here is the one thing in this row that would
-            not be in the app. `after:` and the fallback carry the primitive's
-            own `rounded-full`, so both have to be squared off with it. */}
+            {/* Squared to `rounded-lg` to match the app's Clerk avatar; `after:` and the fallback carry the primitive's `rounded-full` too. */}
             <Avatar className="size-7 rounded-lg after:rounded-lg">
               <AvatarFallback className="rounded-lg">TA</AvatarFallback>
             </Avatar>
@@ -365,29 +312,19 @@ export function AppShell({
 }: {
   /** Title of the sidebar item this screen lives under, e.g. "Personas". */
   active: string
-  /** The admin view, in the top bar. Only a superadmin sees one. */
+  /** The admin view, in the top bar. */
   scope?: React.ReactNode
-  /** The Developers button in the top bar, in place of "Developer Doc". */
   developers?: "link" | "open"
   /** Whether the mockup shell's header sits above, which the sidebar has to
    *  clear. Off when the app is shown inside a frame on its own. */
   underShell?: boolean
   /** Crumbs after Home; a bare string is a single one. Defaults to `active`. */
   breadcrumb?: string | readonly string[]
-  /**
-   * Nav item titles this viewer's role cannot open, so the menu holds only
-   * what they can reach. Omit it and the nav is the full one, which is what
-   * every other mockup wants.
-   */
+  /** Nav item titles this viewer's role cannot open. */
   hiddenItems?: readonly string[]
-  /**
-   * Nav items a mockup proposes, each placed after an existing one. Only the
-   * mockup that designs the page passes it, so every other nav stays the one
-   * the app ships.
-   */
+  /** Nav items a mockup proposes, each placed after an existing one. */
   addedItems?: readonly { after: string; item: NavItem }[]
-  /** Called with a nav item's title when it is clicked, so a mockup can make
-   * the destinations it covers actually switch. Items it ignores stay inert. */
+  /** Called with a nav item's title on click. Items the mockup ignores stay inert. */
   onNavigate?: (title: string) => void
   children: React.ReactNode
 }) {
@@ -405,15 +342,12 @@ export function AppShell({
   })).filter((group) => group.items.length > 0)
 
   return (
-    /* The app sizes its sidebar at 15rem; the shadcn primitive ships 16rem.
-       Set here rather than in the primitive, which is generated. */
+    // The app's sidebar is 15rem; shadcn ships 16rem. Set here because the primitive is generated.
     <SidebarProvider
       className="min-h-0 flex-1"
       style={{ "--sidebar-width": "15rem" } as React.CSSProperties}
     >
-      {/* The sidebar pins to the viewport as it does in the app, so it
-          starts below the mockup shell's 48px bar rather than sliding under
-          it. */}
+      {/* Starts below the mockup shell's 48px bar. */}
       <Sidebar
         className={underShell ? "pt-12" : undefined}
         collapsible="icon"
@@ -449,16 +383,11 @@ export function AppShell({
 
           {groups.map((group, index) => (
             <React.Fragment key={group.label}>
-              {/* The rail hides section labels, so a rule stands in for the
-                  grouping those labels carry when the nav is open. */}
               {index > 0 ? (
                 <div className="mx-2 my-1 hidden h-px shrink-0 bg-sidebar-border group-data-[collapsible=icon]:block" />
               ) : null}
               <NavGroup
                 active={active}
-                /* A closed group hiding the item the screen is on reads as the
-                   nav having lost its place, so the active item's group opens
-                   regardless of where the group would otherwise start. */
                 defaultOpen={
                   group.defaultOpen ||
                   group.items.some((item) => item.title === active)
@@ -485,7 +414,6 @@ export function AppShell({
           }
           showSettings={!hidden.has("Global Settings")}
         />
-        {/* No gutter here: the page owns its p-3 lg:p-4, matching the header. */}
         <div className="min-h-0 flex-1 overflow-auto">{children}</div>
       </SidebarInset>
     </SidebarProvider>

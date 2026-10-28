@@ -1,26 +1,3 @@
-/**
- * Addresses for the design system.
- *
- * Every topic in `DOCS_SECTIONS` is a real URL rather than a client-side tab,
- * so a page can be sent to someone. There are three shapes:
- *
- *   /design-system                       the overview — the five sections
- *   /design-system/<section>             one section — every topic on it
- *   /design-system/<section>/<page>      one topic
- *
- * A section is a real page because the overview cards and the nav menu both
- * open one, and a reader who clicks Patterns wants every pattern, not
- * whichever topic happens to be filed first.
- *
- * Nested rather than flat because a bare `/design-system/data` does not say
- * whether it is the shadcn shelf or something about tables, and a link is read
- * before it is opened. The section segment answers that in the address bar.
- *
- * Derived from `DOCS_SECTIONS` rather than listed again here: the rail and the
- * routes are the same tree, and two copies of it would drift the first time a
- * topic moved between sections.
- */
-
 import {
   DOCS_SECTIONS,
   type DocsPage,
@@ -29,7 +6,6 @@ import {
 
 export const DOCS_ROOT = "/design-system"
 
-/** Topic id → the section it is filed under. */
 const SECTION_OF = new Map<string, string>(
   DOCS_SECTIONS.flatMap((section) =>
     section.groups.flatMap((group) =>
@@ -38,7 +14,6 @@ const SECTION_OF = new Map<string, string>(
   ),
 )
 
-/** Topic id → the topic, for turning a slug back into a title. */
 const PAGE_OF = new Map<string, DocsPage>(
   DOCS_SECTIONS.flatMap((section) =>
     section.groups.flatMap((group) =>
@@ -51,41 +26,26 @@ const SECTION_BY_ID = new Map<string, DocsSection>(
   DOCS_SECTIONS.map((section) => [section.id, section]),
 )
 
-/** The URL for one topic. */
 export function docsHref(id: string): string {
   const sectionId = SECTION_OF.get(id)
 
-  /* A topic with no section cannot be addressed, so it falls back to the
-     overview rather than minting a URL that 404s. */
   return sectionId ? `${DOCS_ROOT}/${sectionId}/${id}` : DOCS_ROOT
 }
 
-/** One topic by id, or undefined if no section files it. */
 export function docsPage(id: string): DocsPage | undefined {
   return PAGE_OF.get(id)
 }
 
-/** The URL for one section's index. */
 export function sectionHref(id: string): string {
   return SECTION_BY_ID.has(id) ? `${DOCS_ROOT}/${id}` : DOCS_ROOT
 }
 
-/** What a URL resolves to. `page` is null on the overview and on a section. */
 type DocsLocation = {
   section: DocsSection | null
   page: DocsPage | null
-  /** What the pane is keyed on: a topic id, a section id, or "" on the
-      overview. */
   activeId: string
 }
 
-/**
- * Turn the catch-all segments into a location, or null if they name nothing.
- *
- * A null is a 404 rather than a redirect to the overview: a link that silently
- * lands somewhere else is worse than one that says it is broken, because the
- * sender never finds out they sent the wrong thing.
- */
 export function resolveDocs(slug?: string[]): DocsLocation | null {
   if (!slug?.length) return { activeId: "", page: null, section: null }
 
@@ -97,9 +57,7 @@ export function resolveDocs(slug?: string[]): DocsLocation | null {
 
   if (!pageId) return { activeId: section.id, page: null, section }
 
-  /* The topic has to be under this section, not merely exist: without the
-     check, `/design-system/motion/colour` would render the colour page under
-     a heading that says Motion. */
+  // The topic must be filed under this section, or /motion/colour would render colour under Motion.
   if (SECTION_OF.get(pageId) !== sectionId) return null
 
   const page = PAGE_OF.get(pageId)
@@ -108,7 +66,6 @@ export function resolveDocs(slug?: string[]): DocsLocation | null {
   return { activeId: page.id, page, section }
 }
 
-/** Every address the docs answer to, for `generateStaticParams`. */
 export function docsParams(): { slug: string[] | undefined }[] {
   return [
     { slug: undefined },

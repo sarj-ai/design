@@ -52,10 +52,6 @@ import type { PreviewState } from "@/components/mockups/personas-depth/personas-
 
 const PROVIDERS = [...new Set(VOICES.map((voice) => voice.provider))]
 
-/**
- * The voice library as a browsing surface: every voice with its metadata and
- * a sample one click away, filterable the same way personas are.
- */
 export function VoiceLibrary({ state }: { state: PreviewState }) {
   const [search, setSearch] = React.useState("")
   const [language, setLanguage] = React.useState("all")

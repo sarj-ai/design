@@ -93,18 +93,6 @@ import {
   type Member,
 } from "@/lib/mockups/org-access-data"
 
-/**
- * One organization's members, as Sarj staff see it on the organization page.
- *
- * Pending invites sit in the same list as members, tagged Pending, rather
- * than on a tab of their own: an invite is a person who is not in yet, and
- * the admin looking for "is Lama in?" should find the answer in one place.
- *
- * Owner is a tag beside the name, not a fifth group — per the requirements
- * doc it is a designation on an Org Admin's membership. The last owner can be
- * neither removed nor demoted, so those two menu rows are disabled with the
- * reason in place of a silent no.
- */
 export type MembersState = "ready" | "loading" | "error" | "no-access"
 
 export function MembersView({ state = "ready" }: { state?: MembersState }) {
@@ -148,8 +136,6 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
     )
   }
 
-  /* A member without member_manage who opens this page. Per the access
-     model, the page names what is missing and who can grant it. */
   if (state === "no-access") {
     return (
       <div className="flex flex-col gap-6 p-3 lg:p-4">
@@ -268,8 +254,6 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
                   <TableRow key={invite.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {/* No orb until they join: the orb stands for a person,
-                        and this is still only an address. */}
                         <Avatar size="sm">
                           <AvatarFallback>
                             {invite.email[0].toUpperCase()}
@@ -340,8 +324,6 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
                           member.addedBy ? undefined : "text-muted-foreground"
                         }
                       >
-                        {/* Auto-enrolled before invites existed. Migration keeps
-                        them, so the list says how they got in. */}
                         {member.addedBy ?? "Joined by domain"}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
@@ -359,9 +341,6 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="w-56">
-                            {/* The last owner keeps both rows, disabled, with the
-                            reason above them at full strength — a disabled
-                            row's own text is too faint to carry it. */}
                             {lastOwner ? (
                               <>
                                 <DropdownMenuLabel className="font-normal text-muted-foreground">
@@ -464,14 +443,6 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
   )
 }
 
-/**
- * Invite one person by email, into one group.
- *
- * Any address is accepted, personal ones included — the doc's goal is that a
- * person with any email can be given access. What is refused is named: someone
- * already here, already invited, or already in another organization (V1 keeps
- * a person in one). Checked on Send, then live as the address is corrected.
- */
 function InviteDialog({
   open,
   onOpenChange,
@@ -584,11 +555,6 @@ function InviteDialog({
   )
 }
 
-/**
- * The shareable invite link: off by default, and it expires — both from the
- * requirements doc. Anyone who opens it joins in the group set here, so the
- * group is chosen with the link rather than defaulted silently.
- */
 function InviteLinkDialog({
   open,
   onOpenChange,

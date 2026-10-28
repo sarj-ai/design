@@ -28,19 +28,6 @@ import {
 import type { PersonaDraft } from "@/components/mockups/personas-depth/persona-dialog"
 import { VoicePicker } from "@/components/mockups/personas-depth/voice-picker"
 
-/**
- * Creating a persona as a run of single decisions — type, click, click,
- * click, Enter — with segment bars up top filling as each step lands.
- * Option steps advance themselves; only typing steps have a Continue.
- * Editing stays in the tabbed dialog; this is the fast path in.
- */
-
-/**
- * The height morph between steps. Faster than a hover-to-expand spring, because
- * this fires on a committed action — you have already picked, and the dialog
- * catching up should feel like it is keeping pace, not performing. Just enough
- * bounce to read as physical; not enough to overshoot a body of text twice.
- */
 const STEP_SPRING = {
   type: "spring",
   visualDuration: 0.26,
@@ -115,14 +102,7 @@ function WizardBody({
     setStepIndex((index) => Math.max(index - 1, 0))
   }
 
-  /**
-   * Lets the picked card paint its selected state before the step flips.
-   *
-   * 120ms, not 200ms: the hold used to be the whole delay before anything
-   * moved, and now it sits in front of a 260ms height spring, so the two
-   * stacked to 460ms from click to settled. 120ms is still long enough for the
-   * selected border to register and takes a third off the felt latency.
-   */
+  /** The delay lets the picked card paint its selected state before the step flips. */
   function pickAndAdvance(apply: () => void) {
     apply()
     window.setTimeout(next, 120)
@@ -319,25 +299,7 @@ function WizardBody({
   )
 }
 
-/**
- * The step body, springing between step heights instead of snapping.
- *
- * A wrapper measuring its child with a ResizeObserver and animating `height` is
- * the one layout animation the house rules allow, and this is the case they
- * describe: a container morphing to fit new content, on an interaction that
- * happens six times per persona rather than constantly. Motion drives it so the
- * spring is interruptible — stepping back before the previous step settles
- * redirects from wherever it got to, which a CSS transition cannot do.
- *
- * `height: auto` until the first measurement, so the first paint is the real
- * height rather than zero.
- *
- * The clip is on only while the height is actually moving. `overflow-hidden`
- * kept permanently is what cuts a focus ring off at the wrapper's edge — the
- * ring is drawn outside the element's box, so a settled step must not clip at
- * all. During the morph it has to, or the taller step's content spills past a
- * container that has not grown to hold it yet.
- */
+/** Clips only while the height moves: a permanent overflow-hidden cuts off focus rings. */
 function StepBody({ children }: { children: React.ReactNode }) {
   const reduce = useReducedMotion()
   const innerRef = React.useRef<HTMLDivElement>(null)
@@ -357,8 +319,6 @@ function StepBody({ children }: { children: React.ReactNode }) {
 
   return (
     <motion.div
-      /* No entry animation — the dialog already has its own open transition,
-         and a height spring on top of it reads as two things arriving. */
       initial={false}
       animate={{ height }}
       transition={reduce ? { duration: 0 } : STEP_SPRING}

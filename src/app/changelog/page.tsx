@@ -28,7 +28,6 @@ const DATE = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 })
 
-/** Entries that share a date, in the order the log lists them. */
 function byDate(entries: ChangelogEntry[]) {
   const days: { date: string; entries: ChangelogEntry[] }[] = []
   for (const entry of entries) {
@@ -39,13 +38,6 @@ function byDate(entries: ChangelogEntry[]) {
   return days
 }
 
-/**
- * The design system's changelog.
- *
- * One column of dates, one of what changed. Every line starts with its kind
- * in a fixed-width column, so a reader can run down Added or Fixed without
- * reading the sentences, and each entry links the topics it touched.
- */
 export default function ChangelogPage() {
   return (
     <>

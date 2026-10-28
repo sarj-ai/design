@@ -1,14 +1,3 @@
-/**
- * Every mockup, as one record an agent working in another repo can act on.
- *
- * Answering "install the design for DES-173" needs both of this repo's
- * sources and neither is enough alone. The index knows which Linear ticket a
- * mockup answers and what surface it redesigns; the generated registry knows
- * what installing it actually does — which files, which primitives, which
- * tokens. They join on the slug, which is the one identifier everything here
- * already keys off.
- */
-
 import { linearIssueUrl } from "@/lib/site/linear"
 import { MOCKUPS, searchMockups, surfaceLabel } from "@/lib/site/mockups-data"
 import { DEFAULT_CWD } from "@/lib/site/registry"
@@ -16,9 +5,7 @@ import thumbnails from "@/lib/site/thumbnails.json"
 
 import registryJson from "../../../registry.json"
 
-/* The install target lives in site/registry.ts so the index cards can carry
-   the same `--cwd` as the MCP brief without pulling the registry into the
-   client bundle. Re-exported so the MCP tools keep one import. */
+/* Lives in site/registry.ts so index cards can use it without bundling the registry. */
 export { DEFAULT_CWD }
 
 type RegistryFile = {
@@ -41,10 +28,7 @@ export type RegistryItem = {
   css?: Record<string, Record<string, string>>
 }
 
-/* Cast rather than trust inference: TypeScript reads the generated file as a
-   union of the shapes it happens to contain, and `cssVars` is optional, so
-   every item that carries one would widen the type into something nothing can
-   be read off. */
+/* Cast: inference reads the generated JSON as a union, and optional `cssVars` widens it into something unreadable. */
 const ITEMS = (registryJson as unknown as { items: RegistryItem[] }).items
 
 const FINGERPRINTS: Record<string, string> = thumbnails.fingerprints
@@ -57,22 +41,13 @@ export type Design = {
   meta: string
   surface: string
   tickets: { id: string; url: string }[]
-  /** The live mockup, for a reader who wants to look before installing. */
   page: string
   thumbnail: string | null
-  /** The registry item, which is also the install URL. */
   registry: string
   item: RegistryItem | null
 }
 
-/**
- * The join, done once per request against the origin the request arrived on.
- *
- * The origin is passed in rather than read from a constant so that a server
- * running on localhost hands out localhost URLs. An install command that
- * silently points at production is the kind of thing you only notice after
- * wondering why your edits had no effect.
- */
+/** The origin is passed in so a localhost server hands out localhost URLs, not production ones. */
 export function designs(origin: string): Design[] {
   return MOCKUPS.map((mockup) => {
     const slug = mockup.href.replace(/^\//, "")
@@ -99,14 +74,6 @@ export function getDesign(slug: string, origin: string): Design | undefined {
   return designs(origin).find((design) => design.slug === slug)
 }
 
-/**
- * Resolve whatever an engineer said into designs.
- *
- * A Linear identifier and a slug are exact and win outright — asked for
- * DES-173 you want DES-173, not the four designs that mention it in passing.
- * Everything else falls through to the same weighted search the index uses,
- * so the MCP and the landing page rank alike.
- */
 export function findDesigns(query: string, origin: string): Design[] {
   const all = designs(origin)
   const needle = query.trim().toLowerCase()
@@ -127,18 +94,7 @@ export function findDesigns(query: string, origin: string): Design[] {
   })
 }
 
-/**
- * The command that installs a design.
- *
- * One command, because the whole point is that nobody assembles it by hand.
- *
- * The `yes n` is load-bearing, not decoration. shadcn asks before touching any
- * file the project already has, once per file, and a mockup lists every
- * primitive it uses — so an unattended run meets a dozen prompts, answers none
- * of them, and exits having written nothing. Answering no to all of them is
- * the behaviour you want anyway: keep the consumer's components, write only
- * what is new.
- */
+/** `yes n` is load-bearing: unattended, shadcn's per-file overwrite prompts otherwise go unanswered and nothing is written. */
 export function installCommand(
   design: Design,
   cwd: string = DEFAULT_CWD,
@@ -146,12 +102,6 @@ export function installCommand(
   return `yes n | npx shadcn@latest add ${design.registry} --cwd ${cwd} --yes`
 }
 
-/**
- * Everything this repo's designs need on top of a stock shadcn palette.
- *
- * Derived by unioning what the items carry rather than re-reading globals.css:
- * a token no design uses is a token nobody installing a design needs.
- */
 export function addedTokens() {
   const light: Record<string, string> = {}
   const theme: Record<string, string> = {}
@@ -162,9 +112,7 @@ export function addedTokens() {
     Object.assign(theme, item.cssVars?.theme ?? {})
 
     for (const [selector, block] of Object.entries(item.css ?? {})) {
-      /* Merge the block rather than replace it: every item that uses a
-         stacking layer declares its own `:root`, and assigning them over each
-         other keeps only the last item's layers. */
+      /* Merge, don't replace: every item declares its own `:root`. */
       css[selector] = { ...(css[selector] ?? {}), ...block }
     }
   }

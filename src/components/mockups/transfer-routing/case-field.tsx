@@ -11,14 +11,6 @@ import {
 import { cn } from "@/lib/utils"
 import { RemoveCaseIcon } from "@/components/mockups/transfer-routing/icons"
 
-/**
- * The cases that send a caller down this route.
- *
- * Free text, one chip each, because the agent interprets them live on the call
- * — there is no condition builder to fill in. Chips and the field they are
- * added from share one box: two nested boxes read as two controls, and this is
- * one. A chip goes amber when another route claims something that reads alike.
- */
 export function CaseField({
   cases,
   overlapping,

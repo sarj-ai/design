@@ -1,54 +1,17 @@
-/**
- * Mock data for the model catalog (DES-169 / DIS-9).
- *
- * Shapes mirror the platform: the providers and model IDs here are the ones
- * the platform's own enums carry today — `LLMConfig`, `TTSVoice` and the model lists
- * hardcoded in `admin/models/{llm,tts}.tsx` — so the catalog reads as the same
- * platform rather than an invented one.
- *
- * The columns are the PRD's five and nothing else: Provider, Model, Display
- * name, Status, and the deactivate/reactivate action.
- */
-
 export type Modality = "llm" | "tts"
 
-/**
- * LLM and TTS.
- *
- * STT is gone. It is not hidden behind a flag or filtered out of a list that
- * still knows about it — the modality, its providers and its catalog rows are
- * all deleted, so nothing here can put an STT row back on screen.
- *
- * EOU was never here either. The PRD's Q&A answers that one directly: choosing
- * between Sarj's classifier and LiveKit's is already self-service through the
- * existing turn detection control in Global Settings, and onboarding a new EOU
- * model is an ONNX export plus an image rebuild — a deploy pipeline no form
- * can reach.
- */
 export const MODALITIES: { id: Modality; label: string }[] = [
   { id: "llm", label: "LLM" },
   { id: "tts", label: "TTS" },
 ]
 
-/**
- * A provider we already hold credentials for.
- *
- * `listsModels` is the whole reason the add flow has two shapes. Where a
- * provider exposes its own model-listing endpoint, the key we already call it
- * with can fetch that list, so onboarding is "pick one". Where it does not, the
- * admin types the model ID and proves it with a test instead.
- */
 type Provider = {
   id: string
   name: string
   modalities: Modality[]
-  /** Whether the provider publishes a live model-listing endpoint. */
   listsModels: boolean
 }
 
-/* The four that publish a list are the four the PRD names: OpenAI, Gemini,
-   Groq and ElevenLabs. Speechmatics is not here any more — it only ever did
-   STT, so removing the modality removed the provider with it. */
 export const PROVIDERS: Provider[] = [
   {
     id: "openai",
@@ -76,15 +39,7 @@ export const PROVIDERS: Provider[] = [
   { id: "hamsa", name: "Hamsa", modalities: ["tts"], listsModels: false },
 ]
 
-/**
- * What a provider's live list comes back with, keyed by provider then modality.
- * Only the providers with `listsModels` have one — the rest reach the manual
- * path, and so does any provider whose fetch fails.
- */
-const LIVE_MODELS: Record<
-  string,
-  Partial<Record<Modality, string[]>>
-> = {
+const LIVE_MODELS: Record<string, Partial<Record<Modality, string[]>>> = {
   openai: {
     llm: [
       "gpt-5.6",
@@ -117,16 +72,8 @@ export type CatalogEntry = {
   id: string
   modality: Modality
   providerId: string
-  /** The identifier sent to the provider verbatim, e.g. `gpt-5.4-mini`. */
   modelId: string
-  /** What this model is called in the Global and Org Settings pickers. */
   displayName: string
-  /**
-   * The one optional free-text field the PRD asks for. TTS carries
-   * compatibility baggage a plain string cannot express — which voices and
-   * which languages — and the PRD is explicit that this is one notes field,
-   * not a schema per provider.
-   */
   notes: null | string
   active: boolean
 }
@@ -226,17 +173,6 @@ export const CATALOG: CatalogEntry[] = [
   },
 ]
 
-/**
- * Whether a modality can be onboarded from this screen.
- *
- * TTS is activate-only: the models are fixed and the one thing staff do to one
- * is turn it on or off. So the Add button is *absent* on that tab rather than
- * present and disabled — a control with nothing to act on is not disabled, it
- * is absent, and a disabled Add would invite a click that can never work.
- *
- * The rule lives here rather than in the JSX so there is one place to change
- * it, and so the tab list and the empty state cannot disagree about it.
- */
 export function canOnboard(modality: Modality): boolean {
   return modality === "llm"
 }
@@ -245,7 +181,6 @@ export function providerById(id: string): Provider | undefined {
   return PROVIDERS.find((provider) => provider.id === id)
 }
 
-/** What the live list comes back with for a provider in a given modality. */
 export function liveModelsFor(
   providerId: string,
   modality: Modality,

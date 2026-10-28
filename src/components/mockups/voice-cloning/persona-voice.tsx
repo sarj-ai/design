@@ -30,29 +30,6 @@ import { DeleteVoiceConfirm } from "@/components/mockups/voice-cloning/voice-lib
 import { PERSONA, type Voice } from "@/lib/mockups/voice-cloning-data"
 import { cn } from "@/lib/utils"
 
-/**
- * The Voice section of the persona form, as `VoiceSelector` renders it on the
- * platform — radio cards, filtered to the persona's language and gender —
- * with three changes for DES-198:
- *
- *  - Two groups: the organization's own voices first, then Sarj's catalog. A
- *    clone sits where its owner looks for it, and a catalog voice is never
- *    mistaken for one. The first group is absent until the organization has
- *    a voice of this language and gender.
- *  - Clone a voice in the card's footer — a card's actions get their own
- *    band, end-aligned (Forms › Form actions). This is where a client
- *    organization clones: the Voice library is super admin only. It opens the
- *    same flow and comes back with the new voice selected — no sample to a
- *    voice on the persona in one sitting.
- *  - Delete on each of the organization's own voices, for the same reason:
- *    with no library to go to, this is the only place a client sees its
- *    clones. It opens the library's confirm — final, and blocked while a
- *    persona speaks with the voice.
- *
- * Only the voice section is drawn; the rest of the persona form is unchanged
- * by this ticket (DES-148 owns it). Inactive voices are not offered, as today.
- */
-
 export function PersonaVoice({
   voices,
   voiceId,
@@ -145,10 +122,7 @@ export function PersonaVoice({
   )
 }
 
-/**
- * The whole card selects its voice: the label is stretched over it, and the
- * delete button sits above that so it never selects as it deletes.
- */
+/** The label is stretched over the card; Delete sits above it so deleting never selects. */
 function VoiceCard({
   voice,
   selected,

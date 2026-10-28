@@ -7,14 +7,6 @@ import { MockupShell } from "@/components/shell/mockup-shell"
 import { Button } from "@/components/ui/button"
 import { ConfigureReportDialog } from "@/components/mockups/configure-report/configure-report-dialog"
 
-/**
- * The Configure Report dialog — PROD-289, rebuilding the design DES-155 got
- * approved.
- *
- * The dialog is the deliverable, so the page behind it is only what opens it:
- * the Reports screen's own generate action, and nothing else drawn in to give
- * it somewhere to sit.
- */
 export default function ConfigureReportPage() {
   const [open, setOpen] = React.useState(true)
 

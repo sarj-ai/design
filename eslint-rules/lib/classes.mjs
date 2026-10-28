@@ -1,21 +1,6 @@
-/**
- * Shared helpers for the `sarj/*` lint rules.
- *
- * Tailwind classes reach the AST in three shapes:
- *
- *   className="flex gap-4"                      → a plain string literal
- *   className={cn("flex", open && "gap-4")}     → strings scattered in a call
- *   cva("h-9 px-4", { variants: { … } })        → strings inside a variant map
- *
- * Rather than teach every rule about all three, these helpers walk the whole
- * subtree of a node and hand back each string inside it together with the AST
- * node to report against, so error locations stay precise.
- */
-
 const CLASS_ATTRS = new Set(["className", "class"])
 const CLASS_FNS = new Set(["cn", "clsx", "classNames", "cva", "twMerge", "tv"])
 
-/** Collect every string-bearing node in an arbitrary AST subtree. */
 export function collectStrings(node, out = []) {
   if (!node || typeof node !== "object") return out
 
@@ -42,13 +27,7 @@ export function collectStrings(node, out = []) {
   return out
 }
 
-/**
- * Split one Tailwind class into its variant prefixes and its base utility.
- *
- * Splits on `:` only at bracket depth 0, so `data-[state=open]:animate-in` and
- * `supports-[display:grid]:grid` survive intact. Strips the `!` important
- * marker from either end.
- */
+// Splits on `:` only at bracket depth 0, so `data-[state=open]:animate-in` survives.
 function splitVariants(cls) {
   const segments = []
   let depth = 0
@@ -72,7 +51,6 @@ function splitVariants(cls) {
   return { variants: segments, base }
 }
 
-/** Parse a whitespace-separated class string into structured classes. */
 export function parseClasses(value) {
   return value
     .split(/\s+/)
@@ -80,20 +58,12 @@ export function parseClasses(value) {
     .map((raw) => ({ raw, ...splitVariants(raw) }))
 }
 
-/**
- * Return the contents of a trailing arbitrary value — `gap-[13px]` → `13px` —
- * or null when the utility has none.
- */
 export function arbitraryValue(base) {
   const match = /\[([^\]]*)\]$/.exec(base)
   return match ? match[1] : null
 }
 
-/**
- * Build a visitor that fires `handle({ node, value, classes })` once per class
- * string in the file. A `cn()` nested inside a `className` is reached by both
- * selectors, so results are de-duplicated by node identity.
- */
+// A `cn()` inside a `className` is reached by both selectors, so results are de-duplicated by node.
 export function createClassVisitor(handle) {
   const seen = new WeakSet()
 
@@ -116,12 +86,6 @@ export function createClassVisitor(handle) {
   }
 }
 
-/**
- * Build a visitor that fires once per `className` attribute with every class
- * in it flattened into one list. Use this when a rule needs to check whether
- * one class is accompanied by another (e.g. a `motion-reduce:` counterpart),
- * which a per-string visitor cannot see across `cn()` arguments.
- */
 export function createAttributeVisitor(handle) {
   return {
     JSXAttribute(node) {
@@ -132,9 +96,4 @@ export function createAttributeVisitor(handle) {
       if (classes.length) handle({ node, classes })
     },
   }
-}
-
-/** The shadcn primitives are generated code — rules that police authored UI skip them. */
-function isPrimitiveFile(filename) {
-  return /[/\\]src[/\\]components[/\\]ui[/\\]/.test(filename)
 }

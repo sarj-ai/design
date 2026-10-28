@@ -7,12 +7,6 @@ import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-/**
- * PROD-600 — the dashboard brought in line with the design system, in the
- * product chrome. The period buttons switch the data the way the page does;
- * the reviewer switch up top empties the window, so the zero and -100% case
- * the ticket asks for can be checked on every period.
- */
 export default function DashboardRoute() {
   const [data, setData] = React.useState<"calls" | "none">("calls")
 

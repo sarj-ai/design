@@ -1,17 +1,5 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * Sarj mockups are flat. Only the shadcn primitives cast a shadow.
- *
- * Depth in this design system comes from `ring-1 ring-foreground/10` and from
- * surface tokens (`bg-card` on `bg-background`, `bg-muted` insets) — not from a
- * drop shadow. The primitives that genuinely float (Dialog, Popover, Sheet,
- * DropdownMenu) already carry their own shadow, so hand-written ones only ever
- * add a second, mismatched elevation language.
- *
- * `shadow-none` stays legal: removing a shadow is always in the flat direction.
- */
-
 const SHADOW = /^-?(shadow|drop-shadow|inset-shadow|text-shadow)(-.+)?$/
 const REMOVERS = new Set([
   "shadow-none",

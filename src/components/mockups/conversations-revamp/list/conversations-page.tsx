@@ -26,7 +26,6 @@ import {
   type Channel,
 } from "@/lib/mockups/conversations-revamp-drawer-data"
 
-/** Statuses where the call has not produced anything to read yet. */
 const PRE_CALL_STATUSES = new Set<CallStatus>([
   "queued",
   "ringing",
@@ -43,54 +42,21 @@ import {
   PreviousIcon,
 } from "@/components/mockups/conversations-revamp/list/icons"
 
-/**
- * Conversations, as the page ships today — the filter bar, the result count,
- * the table, and the pagination row pinned to the bottom — with the revamped
- * drawer behind its rows. The breadcrumb belongs to the app header, one level
- * up in the shell.
- *
- * The list is untouched on purpose. What changes when a row is clicked is the
- * drawer, so the page around it stays the one people already know.
- */
 export function ConversationsPage({
   initialDrawerOpen = false,
   initialStatusOpen = false,
 }: {
-  /** Opens the call drawer, for reviewing and exporting that state. */
   initialDrawerOpen?: boolean
-  /** Opens the Status filter's list. */
   initialStatusOpen?: boolean
 }) {
   const [drawerOpen, setDrawerOpen] = React.useState(initialDrawerOpen)
-  /** Owned here because Fields sets it and the table reads it. */
   const [columns, setColumns] = React.useState(DEFAULT_COLUMNS)
-  /**
-   * Which drawer the clicked row gets. A call that has not run has no
-   * recording, transcript or outcome to show, so the drawer that expects all
-   * three is the wrong one to open.
-   */
   const [drawerState, setDrawerState] = React.useState<CallState>("complete")
-  /* The row's own type, not its status. A chat row used to open the call
-     drawer — recording player, phone number, seekable timestamps — because
-     nothing downstream ever read `interactionType`. The table no longer shows
-     a Type column, but the field still decides which drawer a row opens. */
   const [drawerChannel, setDrawerChannel] = React.useState<Channel>("call")
 
-  /* Rows are state because cancelling a scheduled call has to change one, and
-     the row is where the status the reader is looking for actually lives. */
   const [rows, setRows] = React.useState(CALLS)
-  /**
-   * Which row is open.
-   *
-   * The drawer used to be told only what *kind* of call it was showing —
-   * complete, queued or scheduled — and read one hardcoded record for
-   * everything else, so all twelve rows opened the same call. Nothing about a
-   * call's relationships could be shown while the drawer could not name it.
-   */
   const [selected, setSelected] = React.useState<CallRow | null>(null)
 
-  /* Cancelled is terminal: the booking is gone and the schedule that explained
-     it goes with it, which is why the origin is cleared too. */
   function cancelSelected() {
     if (!selected) return
 
@@ -120,10 +86,8 @@ export function ConversationsPage({
           {TOTAL_RESULTS.toLocaleString("en-US")} results
         </div>
 
-        {/* `--card-spacing: 0` is how Card is meant to be told its content
-            reaches the edge — the table draws its own header band and row
-            rules, so the card's usual 16px inset showed as a white strip above
-            the header instead of framing anything. */}
+        {/* `--card-spacing: 0` lets content reach the card edge; the table
+           draws its own header band. */}
         <Card className="[--card-spacing:0px]" id="calls-table">
           <div className="overflow-x-auto">
             <CallTable

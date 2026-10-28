@@ -36,16 +36,6 @@ import {
   OverlapIcon,
 } from "@/components/mockups/transfer-routing/icons"
 
-/**
- * The Transfer tool, configured with more than one destination.
- *
- * Routes are a flat, reorderable list rather than a graph: they are parallel
- * cases the agent weighs once, not a branching sequence, so a list is what
- * matches how the matching actually runs.
- *
- * A right-side drawer rather than a centre modal — the list grows with every
- * route a client adds, and a drawer has the height to take it.
- */
 export function TransferToolDrawer() {
   const [open, setOpen] = React.useState(true)
   const [routes, setRoutes] = React.useState<Route[]>(ROUTES)
@@ -53,7 +43,6 @@ export function TransferToolDrawer() {
   const [shared, setShared] =
     React.useState<SharedSettingsValue>(SHARED_SETTINGS)
 
-  /** The card whose grip is held, and the card being dragged over it. */
   const [armedId, setArmedId] = React.useState<string | null>(null)
   const [draggingId, setDraggingId] = React.useState<string | null>(null)
 
@@ -61,7 +50,6 @@ export function TransferToolDrawer() {
   const flagged = overlappingCases(overlaps)
   const overlappingRouteIds = new Set(overlaps.flatMap((item) => item.routeIds))
 
-  /** One panel starts open so the override state is visible without a click. */
   const firstOverriding = routes.find((route) => overriddenFields(route).length)
 
   function addRoute() {
@@ -87,9 +75,7 @@ export function TransferToolDrawer() {
       open={open}
       onOpenChange={setOpen}
       direction="right"
-      // The cards own drag-to-reorder, so the drawer must not read a drag as a
-      // dismiss gesture. Dragging is confined to the handle — of which a
-      // right-side drawer has none — leaving Escape and the overlay to close it.
+      // Cards own drag-to-reorder, so the drawer must not read a drag as dismiss.
       handleOnly
     >
       <DrawerTrigger asChild>

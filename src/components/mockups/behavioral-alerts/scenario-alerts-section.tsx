@@ -56,18 +56,6 @@ import {
 } from "@/components/mockups/behavioral-alerts/icons"
 import { PriorityBadge } from "@/components/mockups/behavioral-alerts/severity"
 
-/**
- * The Call flags section on the scenario's Configuration tab, sitting
- * where Data extraction and Record sinks already sit — one card per thing the
- * scenario asks the post-call pipeline to do.
- *
- * A table rather than a card per alert: name, priority and on/off are three
- * short values that a client reads down a column to answer "what am I watching
- * for", and five cards each holding one sentence is a list in a costume.
- *
- * The whole row opens the alert, not just its name. A row that is clickable
- * only on one word is a row you have to aim at.
- */
 export function ScenarioAlertsSection({
   alerts,
   onAlertsChange,
@@ -78,14 +66,9 @@ export function ScenarioAlertsSection({
   const [editing, setEditing] = React.useState<ConfiguredAlert | null>(null)
   const [formOpen, setFormOpen] = React.useState(false)
   const [deleting, setDeleting] = React.useState<ConfiguredAlert | null>(null)
-  /* Bumped on every open so the form remounts and seeds its draft from props.
-     Editing the same alert twice has to start from the saved values both
-     times, which a key on the alert's own id would not give. */
+  // Bumped on every open so the form remounts; keying by alert id would not
+  // reset a second edit of the same alert.
   const [formKey, setFormKey] = React.useState(0)
-  /* The scenario either asks the post-call analyst to watch for flags or it
-     does not, which is one switch above the list rather than five switches all
-     turned off. Local, because it is this card's own setting — a call's
-     analysis is already recorded and does not change when it flips. */
   const [watching, setWatching] = React.useState(true)
 
   function openNew() {
@@ -119,8 +102,6 @@ export function ScenarioAlertsSection({
     <>
       <Card>
         <CardHeader>
-          {/* Icon beside the title, the way every other section on the
-              scenario page carries one. */}
           <CardTitle className="flex items-center gap-3">
             <FlagsIcon className="size-5 shrink-0" />
             Call flags
@@ -187,9 +168,6 @@ export function ScenarioAlertsSection({
                 >
                   <ItemContent>
                     <ItemTitle className="flex-wrap gap-2">
-                      {/* A paused flag keeps its definition and loses its
-                          emphasis — the switch says it is off, the weight says
-                          it stopped mattering to this list. */}
                       <span
                         className={cn(
                           (!watching || !alert.enabled) &&
@@ -264,9 +242,6 @@ export function ScenarioAlertsSection({
         open={formOpen}
       />
 
-      {/* Deleting throws the definition away and the detections already made
-          against it stop having anything to name them. Pausing is the reason
-          this dialog can offer a second way out rather than only a cancel. */}
       <AlertDialog
         onOpenChange={(open) => {
           if (!open) setDeleting(null)

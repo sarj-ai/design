@@ -82,7 +82,6 @@ import {
 import { PromptBuilder } from "@/components/mockups/scenario-single-screen/v2/prompt-builder"
 import { RawPromptDrawer } from "@/components/mockups/scenario-single-screen/v2/raw-prompt-drawer"
 
-/** Every drawer this screen can open. One at a time, by design. */
 type Setting =
   | "criteria"
   | "extraction"
@@ -97,13 +96,10 @@ type Setting =
   | "tools"
   | "variables"
 
-/** Which drawer an insight's "open" button lands on. */
 const INSIGHT_TARGETS: Record<InsightTarget, Setting | null> = {
   criteria: "criteria",
   extraction: "extraction",
   knowledge: "knowledge",
-  /* The prompt is on the page, so there is nothing to open — closing the
-     drawer already puts the reader in front of it. */
   prompt: null,
   tools: "tools",
 }
@@ -132,7 +128,6 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
   const [sectioned, setSectioned] = React.useState(SECTIONED_PROMPTS)
   const [rawOpen, setRawOpen] = React.useState(false)
 
-  /** Every edit on this screen is the same kind of edit — one save bar. */
   const edit = <T,>(setter: (value: T) => void) => {
     return (value: T) => {
       setter(value)
@@ -162,8 +157,6 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
     setDirty(true)
   }
 
-  /* The prompt spends names the variables table does not declare — the agent's
-     own name comes from the persona, not from a column. Both are offered. */
   const insertableVariables = [
     ...IMPLICIT_VARIABLES,
     ...variables.map((variable) => variable.name),

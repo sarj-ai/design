@@ -47,18 +47,6 @@ import {
   RemoveIcon,
 } from "@/components/mockups/knowledge-base/icons"
 
-/**
- * What the knowledge base is made of.
- *
- * The status column is the part that is new. Pasted text was live the moment
- * it was saved; a document has to have its text pulled out first, once, and
- * that can fail — so a row says whether the agent can query it yet, and when
- * it cannot, why.
- *
- * Every row can also be opened, each in the way that suits what it is: a URL
- * goes to the page, pasted text opens what was saved, and a document hands the
- * original file back.
- */
 export function SourceTable({
   sources,
   onRemove,
@@ -114,9 +102,6 @@ export function SourceTable({
 
             <TableCell>
               <div className="flex items-center justify-end gap-1">
-                {/* The original is kept whatever happened to the extraction, so
-                    a document that could not be read is still downloadable —
-                    often the point at which someone wants it back. */}
                 {isFileSource(source.kind) ? (
                   <Button
                     variant="ghost"
@@ -140,15 +125,6 @@ export function SourceTable({
   )
 }
 
-/**
- * Taking something out, with a step in between.
- *
- * A row is one trash icon away from the rows either side of it, and what it
- * removes is not recoverable from this screen — a file has to be uploaded
- * again, typed text has to be typed again. So the click asks first, and the
- * copy carries what actually changes: the agent stops being able to look this
- * up mid-call.
- */
 function RemoveSource({
   source,
   onRemove,
@@ -190,13 +166,6 @@ function RemoveSource({
   )
 }
 
-/**
- * The name, and what opening it means for that kind of source.
- *
- * A document is not a link — its original comes back through Download in the
- * actions column, so its name stays plain rather than offering a click that
- * would have to do the same thing twice.
- */
 function SourceName({ source }: { source: Source }) {
   if (source.kind === "url" && source.url) {
     return (
@@ -218,7 +187,6 @@ function SourceName({ source }: { source: Source }) {
   return <span className="font-medium">{source.name}</span>
 }
 
-/** Pasted text has no page to open, so opening it shows what was saved. */
 function TextPreview({ source }: { source: Source }) {
   return (
     <Dialog>

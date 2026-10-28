@@ -6,16 +6,8 @@ import { flushSync } from "react-dom"
 import { cn } from "@/lib/utils"
 import { FPS, enter as enterStyle, exit as exitStyle } from "@/lib/reels/anim"
 
-/** The canvas. Every reel is authored against these exact pixels. */
 export const CANVAS = { width: 1920, height: 1080 } as const
 
-/**
- * The frame a component should draw itself at.
- *
- * `<Scene>` shifts this, so a component inside a scene always sees a frame
- * counted from its own start — a scene can be moved along the timeline without
- * touching a single number inside it.
- */
 const FrameContext = React.createContext(0)
 const DurationContext = React.createContext(0)
 
@@ -29,16 +21,7 @@ export function useSceneDuration(): number {
   return React.useContext(DurationContext)
 }
 
-/**
- * The handle `scripts/render-reel.mjs` drives.
- *
- * The renderer never reloads the page — it mounts once, then seeks and
- * screenshots. `flushSync` is what makes that safe: it forces React to commit
- * before `page.evaluate` resolves, so the screenshot that follows can only ever
- * catch the frame that was asked for. Without it the renderer races the
- * scheduler and drops frames at random, which looks like a stutter in the
- * finished video and is close to impossible to diagnose from the MP4.
- */
+/** Driven by `scripts/render-reel.mjs`. `flushSync` forces React to commit before `page.evaluate` resolves, so the screenshot always catches the requested frame. */
 declare global {
   interface Window {
     __reel?: {
@@ -49,14 +32,6 @@ declare global {
   }
 }
 
-/**
- * The reel canvas.
- *
- * In preview it scales to fit its container, so a 1920x1080 composition can be
- * watched inside a normal browser window. In render mode the transform is off
- * and the canvas is exactly 1:1, because a scaled screenshot is a resampled
- * screenshot and the text goes soft.
- */
 export function Stage({
   frame,
   duration,
@@ -75,8 +50,7 @@ export function Stage({
   const box = React.useRef<HTMLDivElement>(null)
   const [scale, setScale] = React.useState(1)
 
-  /* Preview only. In render mode the canvas must stay 1:1, and measuring would
-     briefly scale it on mount — a soft first frame. */
+  // Preview only: measuring in render mode would briefly scale the canvas on mount.
   React.useEffect(() => {
     if (render) return
     const element = box.current
@@ -91,8 +65,7 @@ export function Stage({
     return () => observer.disconnect()
   }, [render])
 
-  /* Publish the render handle. Registered from an effect so it only ever
-     appears once React can actually service a seek. */
+  // Registered from an effect so it only appears once React can service a seek.
   React.useEffect(() => {
     if (!onSeek) return
 
@@ -133,8 +106,7 @@ export function Stage({
 
   return (
     <div ref={box} className="w-full">
-      {/* Reserves the scaled height, so the page below does not jump as the
-          canvas is measured and scaled on mount. */}
+      {/* Reserves the scaled height so the page below does not jump on mount. */}
       <div
         className="relative w-full"
         style={{ height: CANVAS.height * scale }}
@@ -145,14 +117,7 @@ export function Stage({
   )
 }
 
-/**
- * A slice of the timeline.
- *
- * Children mount only while the playhead is inside it, and see a frame counted
- * from the scene's own start. Scenes are free to overlap — give the next one an
- * earlier `from` than the previous one's end and they cross-dissolve, which is
- * how a reel gets a continuous feel instead of a slideshow of hard cuts.
- */
+/** Children mount only while the playhead is inside it and see a frame counted from its start. Overlapping scenes cross-dissolve. */
 export function Scene({
   from,
   duration,
@@ -180,13 +145,6 @@ export function Scene({
   )
 }
 
-/**
- * The common entrance, so a composition does not spell out the same three
- * lines for every element on screen.
- *
- * Anything that wants a different move reaches for `interpolate` directly —
- * that is the point of the kernel, and the reason reels do not all look alike.
- */
 export function Appear({
   delay = 0,
   distance = 20,

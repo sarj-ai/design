@@ -12,21 +12,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { FALLBACK_VOICES } from "@/lib/mockups/add-voice-data"
 
-/**
- * Picks the voice that covers this one when its provider goes down.
- *
- * A popover rather than a nested dialog: the choice is one tap on a short list
- * of voices that already exist, and stacking a second modal over the one being
- * filled in loses the row it is changing.
- *
- * Each row names the voice's gender, not its provider — the row behind the
- * popover already carries the provider, and while choosing, gender is what a
- * fallback is matched on.
- *
- * Choosing closes the popover. There is nothing else in it to do, so a row that
- * selects and then waits for the reader to dismiss it asks for a second click
- * that decides nothing.
- */
 export function FallbackVoicePicker({
   onValueChange,
   value,
@@ -57,8 +42,6 @@ export function FallbackVoicePicker({
               htmlFor={`fallback-${voice.id}`}
               key={voice.id}
             >
-              {/* The radio is text-sized, so it centres on the name rather
-                  than on the two-line block. */}
               <RadioGroupItem
                 className="mt-1"
                 id={`fallback-${voice.id}`}

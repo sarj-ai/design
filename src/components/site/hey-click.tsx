@@ -16,36 +16,6 @@ import { PointerIcon } from "@/components/shell/workspace-icons"
 import { TOUR, type Beat } from "@/lib/site/tour"
 import { cn } from "@/lib/utils"
 
-/**
- * A walkthrough that points at the real page instead of drawing a picture of
- * it.
- *
- * It replaced a two-step dialog. That dialog had to reproduce the card and
- * the command inside itself, so the reader met a drawing of the control,
- * dismissed it, and then had to find the real one — which is the whole
- * problem it existed to solve. This one never covers the page: a small card
- * rides the reader's pointer, and when a beat is about a control it leaves,
- * draws a loop round that control, parks a pointer glyph on it, and waits for
- * the reader to actually do it. The reader finishes the tour having installed
- * a screen, not having read about installing one.
- *
- * Three things move, and each answers a question a sentence would otherwise
- * have to:
- *
- *  - **the card** — where the voice is. It trails the pointer while there is
- *    nothing to point at, and stands still the moment the pointer comes for
- *    it, so its own button is always catchable.
- *  - **the loop** — which control. Drawn, not faded in, because a stroke that
- *    arrives by being written reads as somebody pointing.
- *  - **the glyph** — what to do to it. It flies out of the card, lands on the
- *    control and taps, for as long as the beat is waiting.
- *
- * Under reduced motion none of that happens: the card is parked at the foot
- * of the viewport, the loop is simply there, and the glyph does not tap.
- *
- * It opens itself once and then never again — the flag lives in localStorage,
- * and the nav keeps a button so it is reachable rather than gone.
- */
 const SEEN_KEY = "design-lab:hey-click-seen"
 
 /* Between the control and the loop drawn round it. */
@@ -59,9 +29,8 @@ const CATCH = 28
 /* Every edge of the viewport the card keeps off. */
 const EDGE = 12
 
-/* The design system's entering curve, in the form JS animation takes it. */
+// --ease-out-cubic, as Motion takes it.
 const OUT_CUBIC = [0.215, 0.61, 0.355, 1] as const
-/* Firm enough to arrive inside a beat, loose enough to read as a hand. */
 const FLIGHT = {
   type: "spring",
   stiffness: 260,
@@ -73,15 +42,7 @@ type Point = { x: number; y: number }
 type Size = { width: number; height: number }
 type Box = Point & Size
 
-/**
- * Whether this browser has been shown the walkthrough, as an external store.
- *
- * `localStorage` is exactly what `useSyncExternalStore` is for: it is state
- * React does not own, it does not exist on the server, and reading it in an
- * effect to then `setState` is the cascading render the lint rule rejects.
- * The server snapshot is `true` — nothing is running in the HTML, and only a
- * browser that has never seen it starts after hydration.
- */
+/** localStorage as an external store. The server snapshot is `true`, so nothing runs before hydration. */
 let listeners: (() => void)[] = []
 
 function subscribeSeen(callback: () => void) {
@@ -95,9 +56,7 @@ function readSeen(): boolean {
   try {
     return window.localStorage.getItem(SEEN_KEY) !== null
   } catch {
-    /* A private window, or site data blocked. The dismissal could not be
-       remembered either, so it counts as seen rather than greeting the same
-       person on every visit. The nav button still starts it. */
+    // Storage unavailable (private window, blocked site data): count it as seen.
     return true
   }
 }
@@ -115,12 +74,9 @@ function markSeen() {
 export function HeyClick() {
   const seen = useSyncExternalStore(subscribeSeen, readSeen, () => true)
 
-  /* Null until the reader starts or ends it themselves; until then the store
-     decides, which is what makes the first visit run it and every later one
-     not. */
+  // Null until the reader starts or ends it; until then the store decides.
   const [manual, setManual] = React.useState<boolean | null>(null)
-  /* Bumped on every press, so the button restarts a tour already running
-     rather than being a control that does nothing. */
+  // Bumped on every press so the button restarts a running tour.
   const [run, setRun] = React.useState(0)
   const trigger = React.useRef<HTMLButtonElement>(null)
 
@@ -133,8 +89,6 @@ export function HeyClick() {
 
   return (
     <>
-      {/* Ghost, in the nav's actions: this is the thing you need once, and
-          that is the thing you come back for. */}
       <Button
         onClick={() => {
           setRun((count) => count + 1)
@@ -158,17 +112,6 @@ export function HeyClick() {
   )
 }
 
-/**
- * The tour itself, mounted only while it runs.
- *
- * Everything it measures is live — the install menu's drops spring out of
- * their pill over about 400ms, and the loop is drawn round where they are
- * this frame, not where they were when the beat started. So one animation
- * frame loop owns the whole thing: it measures the beat's target, decides
- * where the card belongs, and hands both to springs. Nothing here polls when
- * the tour is not running, because when the tour is not running this
- * component does not exist.
- */
 function Coach({
   onDone,
   origin,
@@ -185,9 +128,6 @@ function Coach({
   const card = React.useRef<HTMLDivElement>(null)
   const [box, setBox] = React.useState<Box | null>(null)
 
-  /* The coach comes out of the button that summoned it. On a first visit
-     nobody pressed that button, but it is still the thing in the nav that
-     this is about, so it is still where the card arrives from. */
   const [launch] = React.useState<Point>(() => {
     const rect = origin.current?.getBoundingClientRect()
     return rect ? { x: rect.left, y: rect.bottom + 8 } : { x: EDGE, y: EDGE }
@@ -196,8 +136,6 @@ function Coach({
   const x = useSpring(launch.x, FLIGHT)
   const y = useSpring(launch.y, FLIGHT)
 
-  /* Where the springs are heading, kept so the card can hold a position
-     rather than recompute one while the pointer is over it. */
   const home = React.useRef<Point>(launch)
   const pointer = React.useRef<Point>(launch)
 
@@ -219,9 +157,7 @@ function Coach({
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [onDone])
 
-  /* A control the reader cannot see is a control they cannot be asked to
-     press. The nav floats over the top of the page, so `center` rather than
-     `start` — it is what keeps the card out from under the pill. */
+  // `center`, not `start`, keeps the target out from under the floating nav.
   React.useEffect(() => {
     if (!target) return
     document.querySelector(target)?.scrollIntoView({
@@ -230,9 +166,7 @@ function Coach({
     })
   }, [target, reduced])
 
-  /* The beat ends when the reader does it, not when they press Next. Captured
-     on the way down, so a control that stops the event on its own — or
-     unmounts under the pointer, which the drops do — still counts. */
+  // Captured on the way down so a control that stops the event, or unmounts under the pointer, still counts.
   React.useEffect(() => {
     if (!target || beat.advance === "button") return
 
@@ -305,9 +239,7 @@ function Coach({
       >
         <Card className="w-72" ref={card} size="sm">
           <CardContent className="flex flex-col gap-3">
-            {/* Keyed on the beat so the line is replaced rather than patched,
-                which is what gives the new one its entrance — and what makes
-                a screen reader read it out rather than diff it. */}
+            {/* Keyed on the beat so the line is replaced, which gives it its entrance and makes screen readers read it out. */}
             <p
               aria-live="polite"
               className="animate-pane-in text-sm motion-reduce:animate-none"
@@ -317,8 +249,6 @@ function Coach({
             </p>
 
             <div className="flex items-center justify-between gap-3">
-              {/* Position, not a control: four dots read as "there is more"
-                  without adding a second thing to press. */}
               <div aria-hidden className="flex items-center gap-1.5">
                 {TOUR.map((entry, step) => (
                   <span
@@ -331,8 +261,6 @@ function Coach({
                 ))}
               </div>
 
-              {/* A beat the reader answers on the page has no button of its
-                  own — the page is the button. All it needs is the way out. */}
               {beat.action ? (
                 <Button onClick={last ? onDone : advance} size="sm">
                   {beat.action}
@@ -350,15 +278,7 @@ function Coach({
   )
 }
 
-/**
- * The loop round the control the beat is about.
- *
- * Drawn rather than faded in: `pathLength` runs the stroke round the shape
- * the way a hand would, which is what separates "look here" from a box that
- * was always there. Motion normalises the path length, so the rectangle can
- * keep changing size under it — and on the drops beat it does, every frame,
- * while they spring out of their pill.
- */
+/** Motion normalises `pathLength`, so the rectangle can keep resizing under the stroke. */
 function Loop({
   beat,
   box,
@@ -387,15 +307,6 @@ function Loop({
   )
 }
 
-/**
- * The pointer glyph, thrown from the card onto the control.
- *
- * It taps for as long as the beat is waiting, because the beat is waiting for
- * a tap — the one piece of looping motion in the lab, and it stops the
- * instant the reader does the thing. It starts wherever the card was standing
- * when the beat began, which is why it reads as having been sent rather than
- * as having appeared.
- */
 function Tap({
   box,
   from,
@@ -443,14 +354,6 @@ function Tap({
   )
 }
 
-/**
- * One box round everything the beat is about.
- *
- * A selector matching four drops gets one loop round the four, not four
- * loops: the beat is "pick one of these", and four separate rings would be
- * four separate instructions. Zero-sized nodes are skipped — a drop still
- * parked inside its pill has no geometry worth pointing at.
- */
 function enclose(selector: string): Box | null {
   let top = Infinity
   let left = Infinity
@@ -485,14 +388,6 @@ function clamp(value: number, low: number, high: number): number {
   return Math.min(Math.max(value, low), Math.max(low, high))
 }
 
-/**
- * Beside the control, on whichever side the viewport has room for.
- *
- * The inline-end side first, so the card sits where the reading eye is
- * already heading; the start side when the control is too close to the far
- * edge; and under it when neither side fits, which on this page means a
- * narrow window rather than a wide card.
- */
 function beside(box: Box, size: Size): Point {
   const after = box.x + box.width + LOOP_PAD + STAND_OFF
   const before = box.x - LOOP_PAD - STAND_OFF - size.width
@@ -510,13 +405,6 @@ function beside(box: Box, size: Size): Point {
   }
 }
 
-/**
- * Behind the pointer — until the pointer comes for the card.
- *
- * A card that keeps its offset from the pointer is a card whose own button
- * can never be pressed: every approach pushes it further away. So once the
- * pointer is within reach of it, it holds still and lets itself be caught.
- */
 function trailing(pointer: Point, size: Size, current: Point): Point {
   const caught =
     pointer.x > current.x - CATCH &&
@@ -531,18 +419,10 @@ function trailing(pointer: Point, size: Size, current: Point): Point {
   }
 }
 
-/**
- * Where the card waits when it has been asked not to move.
- *
- * The foot of the viewport, at the start edge: the surface dock sits at the
- * centre of that line and the toasts arrive at the end of it, and this is the
- * one position on the page that is spoken for by neither.
- */
 function parked(size: Size): Point {
   return { x: EDGE, y: floor(size) }
 }
 
-/** The lowest the card's top edge can sit and still be whole. */
 function floor(size: Size): number {
   return window.innerHeight - size.height - EDGE
 }

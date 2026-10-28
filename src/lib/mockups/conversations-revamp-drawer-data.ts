@@ -1,12 +1,3 @@
-/**
- * The call drawer, on its own — the data behind the panel we are about to
- * revamp.
- *
- * This is a copy of what the Conversations page carries today, kept separate
- * so the revamp can change the drawer without editing the record of what
- * ships now.
- */
-
 type CallStatus =
   | "cancelled"
   | "completed"
@@ -24,14 +15,8 @@ type CallStatus =
   | "user_rejected"
   | "voicemail"
 
-/**
- * One axis, two readings: the agent either met the bar the scenario set or it
- * did not. A call with no verdict has no `OutcomeStatus` at all — it prints
- * Not available, which is the absence of a reading rather than a third one.
- */
 type OutcomeStatus = "met" | "not_met"
 
-/** What an `OutcomeStatus` prints. Lowercase, as the table column prints it. */
 export const OUTCOME_LABELS: Record<OutcomeStatus, string> = {
   met: "met",
   not_met: "not met",
@@ -150,31 +135,15 @@ export const CALL_DETAIL = {
   } as Record<string, boolean | string>,
 }
 
-/* -------------------------------------------------------------------------
-   The revamp.
-
-   Built to the agent engineers' feedback (Anas, Hasan):
-     · metadata compact and secondary, most of it folded into the header
-     · every utterance seeks the recording
-     · one transcript — no Raw/Enhanced tabs — with STT fixes shown inline
-     · backchannel and tool turns told apart from what the agent actually said
-     · a tool reveals its response in place, not on another tab
-     · collected data promoted, scannable at a glance
-     · room for a second outcome, because insights ship with their own criteria
-------------------------------------------------------------------------- */
-
-/** What a line in the transcript is. Only `speech` is the agent talking. */
 export type TurnKind = "backchannel" | "speech" | "tool"
 
 export type RevampTurn = {
   role: "agent" | "caller" | "human agent"
   kind: TurnKind
   content: string
-  /** Seconds into the recording. Clicking the line seeks here. */
+  /** Seconds into the recording. */
   at: number
-  /** What the enhanced pass fixed, printed under the line rather than hidden. */
   corrections?: { from: string; to: string }[]
-  /** Only on a tool turn. The response opens in place. */
   tool?: { name: string; args: string; ms: number; response: string }
 }
 
@@ -188,30 +157,12 @@ type Outcome = {
   criteria: { achieved: boolean; isPrimary: boolean; text: string }[]
 }
 
-/**
- * The three verdicts a finished call carries, which are three different
- * questions and were being printed as one badge.
- *
- *   Call status    did the call connect at all — telephony, not judgement
- *   Outcome        did the scenario's goal get met
- *   Agent outcome  was the agent any use to the person on the line, which is a
- *                  separate question: an agent can be helpful on a call whose
- *                  goal was never reachable, and useless on one that got there
- *
- * Each reads exactly what its column in the table reads — Met / Not met for the
- * outcome, Helpful / Not helpful for the agent — so a reader who opens a row
- * does not have to translate one vocabulary into another.
- */
 export const CALL_VERDICTS: { label: string; ok: boolean; value: string }[] = [
   { label: "Call status", ok: true, value: "Connected" },
   { label: "Outcome", ok: true, value: "Met" },
   { label: "Agent outcome", ok: true, value: "Helpful" },
 ]
 
-/**
- * Two of them, side by side. The second is the insights outcome that ships with
- * its own criteria — the reason the summary needs room to grow.
- */
 export const OUTCOMES: Outcome[] = [
   {
     title: "Call outcome",
@@ -273,7 +224,6 @@ export const OUTCOMES: Outcome[] = [
   },
 ]
 
-/** Promoted to the top of the panel: what the call actually produced. */
 export const COLLECTED: { label: string; value: string }[] = [
   { label: "Payment promised", value: "Yes" },
   { label: "Promised amount", value: "SAR 4,820.00" },
@@ -283,7 +233,6 @@ export const COLLECTED: { label: string; value: string }[] = [
   { label: "Payment method", value: "Transfer from Noon" },
 ]
 
-/** What is left of the metadata once the header takes the useful part. */
 export const TECHNICAL: { label: string; value: string }[] = [
   { label: "Created", value: "Aug 11, 2026, 2:41:02 PM" },
   { label: "Started", value: "Aug 11, 2026, 2:41:09 PM" },
@@ -296,31 +245,6 @@ export const TECHNICAL: { label: string; value: string }[] = [
   { label: "Answer rate", value: "67%" },
 ]
 
-/* -------------------------------------------------------------------------
-   Revamp four.
-
-   Everything below is additive — nothing above it changes shape, so revamp two
-   and revamp three keep rendering exactly what they rendered before.
-
-   Two things the earlier variants got factually wrong, corrected here against
-   the product:
-
-     · An insight has no status. `InsightCategory` is tool | prompt | knowledge
-       | platform and the table has no status column at all. success/failure/
-       error belongs to the call outcome, which is a different thing entirely.
-
-     · The enhanced transcription and the STT corrections are two separate
-       outputs, not one. Post-call analysis returns `{ transcript, errors }`:
-       `transcript` is the call re-transcribed from the audio, `errors` is the
-       list of what the live STT misheard. They are produced together and they
-       disagree in ways that matter — the enhanced pass can recover a line the
-       live pass never captured, and it emits no tool rows at all.
-------------------------------------------------------------------------- */
-
-/**
- * One thing the live STT misheard, as post-call analysis reports it.
- * `word` is a single token; `phrase` is a run of them.
- */
 export type TranscriptionError = {
   incorrect_text: string
   correction: string
@@ -328,27 +252,12 @@ export type TranscriptionError = {
 }
 
 export type V4Turn = Omit<RevampTurn, "corrections"> & {
-  /**
-   * The same line re-transcribed from the audio. Absent means the enhanced
-   * pass left it alone.
-   */
+  /** Absent when the enhanced pass left the line alone. */
   enhanced?: string
-  /**
-   * The enhanced pass heard this and the live pass did not — so it exists in
-   * the enhanced transcript and nowhere in the raw one.
-   */
   addedInEnhanced?: boolean
-  /** What the live STT got wrong on this line. */
   errors?: TranscriptionError[]
 }
 
-/**
- * The same call as `REVAMP_TRANSCRIPT`, carrying both post-call outputs.
- *
- * `content` is the raw live STT — no punctuation, no capitals, occasionally the
- * wrong word. `enhanced` is the re-transcription. The two tool turns exist only
- * in raw, and the turn at 0:34 exists only in enhanced.
- */
 export const V4_TRANSCRIPT: V4Turn[] = [
   {
     role: "agent",
@@ -411,10 +320,6 @@ export const V4_TRANSCRIPT: V4Turn[] = [
       { incorrect_text: "4 7 2 90", correction: "4 7 2 9", type: "phrase" },
     ],
   },
-  /**
-   * The line the live pass missed entirely. The agent never answered it,
-   * because as far as the agent was concerned it was never said.
-   */
   {
     role: "caller",
     kind: "speech",
@@ -451,19 +356,13 @@ export const V4_TRANSCRIPT: V4Turn[] = [
   },
 ]
 
-/** The whole call in a paragraph, so the panel answers before it is opened. */
 export const SUMMARY = {
   text: "Saud confirmed the outstanding SAR 4,820 and committed to paying on 18 August by transfer from Noon. The agent recorded the promise, read back reference 4729, and the customer repeated it correctly and asked for it by SMS. The instalment plan was never offered, and a question about early-payment discount went unanswered.",
   generatedAt: "Aug 11, 2026, 2:45 PM",
 }
 
-/** Which part of the agent has to change to resolve the insight. */
 type InsightCategory = "knowledge" | "platform" | "prompt" | "tool"
 
-/**
- * An insight, as the product actually models it: a title, a description, and a
- * category. No status, no criteria, no success or failure.
- */
 type Insight = {
   id: string
   title: string
@@ -471,7 +370,6 @@ type Insight = {
   category: InsightCategory
 }
 
-/** What each category means, for the badge tooltip. */
 export const INSIGHT_CATEGORY_LABELS: Record<InsightCategory, string> = {
   knowledge:
     "Information the agent got wrong, or could not provide when it should have.",
@@ -520,9 +418,6 @@ export const INSIGHTS: Insight[] = [
   },
 ]
 
-/* ------------------------------------------------------------------- flags */
-
-/** The issue types a reviewer can flag a moment in the call with. */
 export type IssueType =
   "connectivity" | "flow" | "latency" | "other" | "pronunciation" | "silence"
 
@@ -544,11 +439,6 @@ export const ISSUE_TYPE_ORDER: IssueType[] = [
   "other",
 ]
 
-/**
- * A flag is a child row anchored to a millisecond in the recording, not a
- * boolean on the call — which is why the control sits by the player and why a
- * call can carry several.
- */
 type CallFlag = {
   id: string
   issueType: IssueType
@@ -558,7 +448,6 @@ type CallFlag = {
   createdAt: string
 }
 
-/** Ten is the cap the API enforces per call. */
 export const FLAG_LIMIT = 10
 
 export const CALL_FLAGS: CallFlag[] = [
@@ -588,41 +477,10 @@ export const CALL_FLAGS: CallFlag[] = [
   },
 ]
 
-/* ------------------------------------------------------- before the call ran */
-
-/**
- * What the drawer can show for a call that has not happened yet.
- *
- * A queued or scheduled call has no recording, no transcript, no outcome and no
- * collected data — most of the drawer is null, and drawing those sections empty
- * would be a page of "—". So the pre-call drawer carries only what exists.
- *
- * For a queued call that is nothing but its place in the line. A scheduled call
- * is the one that knows why it exists: it was booked by something, usually the
- * post-call analysis of an earlier call, and that reasoning is the only thing
- * worth reading before it runs.
- */
 export type CallState = "complete" | "queued" | "scheduled"
 
-/**
- * Which kind of session the drawer is showing.
- *
- * A chat is the same conversation with three things missing: there is no
- * recording, no phone number, and no audio timeline for a transcript turn to
- * seek into. Everything else the drawer reports — summary, insights, outcome,
- * collected data, flags — is identical, which is why this is a flag on the same
- * drawer rather than a second one.
- */
 export type Channel = "call" | "chat"
 
-/**
- * Who the drawer is showing, taken from the clicked row.
- *
- * The drawer used to read one module-level record, so every row in the table
- * opened the same call — click the 3307 Instalment Plan Offer and read the
- * 4477 Collections Follow Up. The deep content below is still one call's
- * worth; this is the part that has to be the row you clicked.
- */
 export type CallIdentity = {
   id: string
   scenario: string
@@ -633,68 +491,30 @@ export type CallIdentity = {
 
 export type ScheduleOrigin = "follow_up" | "requested"
 
-/**
- * How a scheduled call came to exist, and how far it can be pushed.
- *
- * The two limits are separate on purpose. The PRD caps reschedules per
- * customer and retries on no-answer, and they count different things — a call
- * can be on its last reschedule with every dial attempt still unused, or the
- * other way round. `Attempt 1 of 3` collapsed them into one number that
- * answered neither question.
- */
 export type ScheduleDetail = {
-  /** Inferred by the post-call analyst, or asked for by the customer. */
   origin: ScheduleOrigin
-  /** How confident the analyst was. Absent when the customer asked outright. */
   confidence?: string
-  /** What the booking is for, e.g. "Follow up". */
   trigger: string
-  /** When it dials, in the reader's own words rather than a timestamp. */
   dialsAt: string
-  /** How many times this booking has been moved, against the per-customer cap. */
   reschedules: { limit: number; used: number }
-  /** How many times it has been dialled, against the no-answer retry cap. */
   dialAttempts: { limit: number; used: number }
-  /** What the agent should pick up, written for the person reading it. */
   contextBrief: string
 }
 
-/**
- * The other call in a scheduling relationship.
- *
- * It points both ways: a scheduled call names the call that booked it, and a
- * completed call names the callback it created. One reading of a customer's
- * story should not require the reader to go back to the table and guess which
- * row continues it.
- */
 export type CallLink = {
   callId: string
   scenario: string
-  /** When that call ran, or is due to. */
   when: string
-  /** What its status chip says, so the link does not lie about a dead call. */
   status: string
 }
 
-/**
- * What the drawer knows about one particular call, over the shared sample.
- *
- * The transcript, recording and insights below are one call's worth of content
- * and stay shared — twelve full transcripts is not what this mockup is for.
- * What is per-call is everything a reader uses to tell the rows apart: which
- * call this is, and how it relates to the others.
- */
 export type CallSpecifics = {
   schedule?: ScheduleDetail
-  /** The scheduled call this one ran from. */
   ranFrom?: CallLink
-  /** The callback this call created. */
   booked?: CallLink
 }
 
 export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
-  /* Booked by the analyst off the 2:41 PM call, where the customer promised to
-     pay. The brief is a guess, so it carries a confidence. */
   call_b6913fe0c7d4428a: {
     ranFrom: {
       callId: "call_9f2c41ab7d3e4c08",
@@ -714,8 +534,6 @@ export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
     },
   },
 
-  /* The customer asked for this one during the call, so there is nothing to be
-     confident about — they said it. */
   call_4e903bc85a1d47f0: {
     ranFrom: {
       callId: "call_1b7e93f5c2a84d16",
@@ -734,7 +552,6 @@ export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
     },
   },
 
-  /* The completed call that created the callback above. */
   call_9f2c41ab7d3e4c08: {
     booked: {
       callId: "call_b6913fe0c7d4428a",
@@ -744,8 +561,6 @@ export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
     },
   },
 
-  /* A completed call that ran from a schedule: the settings it was given, read
-     back after the fact. */
   call_0a4fb27c68e1495d: {
     ranFrom: {
       callId: "call_dc73f5019ab2470e",

@@ -6,11 +6,7 @@ import {
 
 import { icon } from "@/components/shared/icon"
 
-/**
- * The keys on the picker's hint row. Glyphs rather than the Unicode arrows:
- * `↑`, `↓` and `↵` fall back to another font in Nunito and land off-centre
- * in a keycap, and an SVG sits exactly where `Kbd` puts it.
- */
+/** SVG, not ↑ ↓ ↵: those fall back to another font in Nunito and sit off-centre in a keycap. */
 export const MoveUpKeyIcon = icon(ArrowUp02Icon, "MoveUpKeyIcon")
 export const MoveDownKeyIcon = icon(ArrowDown02Icon, "MoveDownKeyIcon")
 export const InsertKeyIcon = icon(CornerDownLeftIcon, "InsertKeyIcon")

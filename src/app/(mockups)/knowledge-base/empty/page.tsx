@@ -20,10 +20,6 @@ export default function KnowledgeBaseEmptyPage() {
   )
 }
 
-/**
- * The knowledge base the create dialog just made, carrying the name that was
- * typed into it. Opened directly, it is simply an unnamed one.
- */
 function JustCreated() {
   const name = useSearchParams().get("name")?.trim()
 

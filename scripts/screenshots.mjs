@@ -1,24 +1,4 @@
-/**
- * Capture every mockup.
- *
- *   npm run shots
- *   npm run shots -- --routes /reports,/knowledge-bases
- *   npm run shots -- --url http://localhost:3000 --skip-build
- *
- * Why this exists: fourteen mockups is fourteen screenshots by hand, so in
- * practice nobody took them, and review happened against whatever was open.
- *
- * The workspace is light and left-to-right, so there is one pass and one
- * screenshot per route — no theme, no direction, no mode subfolders.
- *
- * Runs against a production build by default. The dev server renders the
- * Agentation overlay and compiles routes on first visit, neither of which
- * belongs in a review screenshot.
- *
- * What it does NOT do: open dialogs, drawers, or any state behind a click. It
- * captures each route as it loads. Mockups whose subject is an overlay should
- * open it on mount if they want it in the sweep.
- */
+// Usage: npm run shots [-- --routes /a,/b] [--url <base>] [--skip-build]
 
 import { spawn } from "node:child_process"
 import { mkdir, rm } from "node:fs/promises"
@@ -77,8 +57,7 @@ function waitForExit(child) {
   })
 }
 
-/* Any HTTP answer means the server is up — a 401 from the site password is a
-   reply, not a failure to start. */
+// Any HTTP answer, a 401 included, means the server is up.
 async function reachable(url) {
   try {
     await fetch(url, { signal: AbortSignal.timeout(1500) })
@@ -99,7 +78,6 @@ async function waitUntilReachable(url, timeoutMs = 60_000) {
   throw new Error(`Server never came up at ${url}`)
 }
 
-/** The index is the registry — every mockup is a card with a link on it. */
 async function discoverRoutes(page, baseUrl) {
   await page.goto(baseUrl, { waitUntil: "networkidle" })
 
@@ -118,16 +96,7 @@ function fileNameFor(route) {
   return route === "/" ? "index" : route.replace(/^\//, "").replaceAll("/", "-")
 }
 
-/**
- * Basic-auth credentials for the capture browser, when `SITE_PASSWORD` is set.
- *
- * `src/proxy.ts` gates every route and every asset once there is a password, so
- * without this a capture comes back as a blank 401. Any username is accepted;
- * only the password is checked.
- */
-/* `.env.local` is read by Next, not by Node, so the capture has to load it
-   itself — otherwise the server it just started gates a browser holding no
-   password, and every shot comes back blank. */
+// .env.local is read by Next, not Node: load it so the capture browser gets the site password.
 nextEnv.loadEnvConfig(process.cwd(), true, {
   error: () => {},
   info: () => {},
@@ -181,8 +150,6 @@ async function main() {
     await mkdir(outDir, { recursive: true })
 
     const context = await browser.newContext({
-      /* The site password, when one is set — `src/proxy.ts` gates every route
-         and every asset, so a capture without this comes back blank. */
       ...credentials(),
       viewport: { width: Number(args.width), height: Number(args.height) },
       deviceScaleFactor: 2,

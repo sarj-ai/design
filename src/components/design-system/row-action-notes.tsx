@@ -10,19 +10,6 @@ import {
 } from "@/components/design-system/reference-table"
 import { Button } from "@/components/ui/button"
 
-/**
- * The three shapes a row action takes, and the order to reach for them in.
- *
- * They are one decision, not three: what a control looks like on a row is
- * settled by whether a glyph exists for it and by how many controls the row
- * already carries. Kept beside the table rather than on the Buttons page,
- * because the sizes here are the row's, not the page's.
- *
- * The table above shows none of the worded form, and that is the rule working
- * rather than the rule being broken: edit and delete both have a glyph every
- * reader knows, so neither earns a word. The row keeps the word for the day it
- * carries an action nothing mimes.
- */
 export function RowActionNotes() {
   return (
     <section className="flex flex-col gap-4">

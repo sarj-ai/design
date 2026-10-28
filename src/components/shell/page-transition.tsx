@@ -8,43 +8,7 @@ import { useAnimate, useReducedMotion } from "motion/react"
 import { MOCKUPS } from "@/lib/site/mockups-data"
 import { REELS } from "@/lib/site/reels-data"
 
-/**
- * The curtain between screens.
- *
- * A route change here used to be a cut: one screen gone, the next one there.
- * This wraps every route once, in the root layout, and turns a click on an
- * internal link into a wipe that names where the reader is going.
- *
- * Choreography, in three beats. On a click the curtain rises from the foot of
- * the viewport and the page it covers is dragged up a little with it, so the
- * two read as one motion rather than a lid closing over a still. As the
- * curtain clears the middle of the screen the two brackets, which started
- * touching at its centre, part to make room, and the destination's name fades
- * in between them. The route is pushed only once the curtain covers the
- * viewport, so whatever the new page does on mount happens out of sight; the
- * name holds for a beat after the route has rendered, longer if it is slow to
- * arrive, which is also what makes the curtain a loading state. Then the
- * curtain keeps rising off the top while the new page rises into place from
- * below it, at a slower rate, so the two move in parallax and the reveal has
- * depth. The whole thing runs in about a second and a half.
- *
- * The shape is lifted from the page-name wipe on sstr.tech (barba.js and
- * GSAP there); the curves, colours and type are this system's. It runs on
- * the house in-out curve for the curtain and the house out curve for the
- * name, so it reads as kin to the drawers and popovers rather than as a
- * different product's motion.
- *
- * Where it does not play: a click that stays inside one section (the design
- * system's rail, topic to topic) is browsing, not leaving, and gets no
- * curtain. Nor does anything a link opts out of with `data-no-transition`,
- * an external or modified click, the browser's own back and forward, or any
- * navigation at all under reduced motion, where the click falls through to
- * Next and the screens simply swap. Direct loads never see it, so `npm run
- * shots` and the reel renderer capture the page and nothing else.
- */
-
-/* The house curves, as motion wants them: the values behind --ease-in-out-cubic
-   and --ease-out-cubic in globals.css. */
+// The values behind --ease-in-out-cubic and --ease-out-cubic in globals.css.
 const inOutCubic = [0.645, 0.045, 0.355, 1] as const
 const outCubic = [0.215, 0.61, 0.355, 1] as const
 
@@ -54,11 +18,8 @@ const REVEAL = 0.6 // s, the curtain leaving off the top
 const PUSH = 32 // px the leaving page is dragged up, and the arriving page rises through
 const STALL = 5000 // ms to wait for a route before revealing whatever is there
 
-/* Sections that are one place. A click from one path to another inside the
-   same entry is browsing, and browsing does not get a curtain. */
 const IN_PLACE = ["/design-system"]
 
-/** What the curtain calls the place a link goes to. */
 function labelFor(path: string, link: HTMLAnchorElement): string {
   if (path === "/") return "Design lab"
   if (path === "/reels") return "Reels showcase"
@@ -89,9 +50,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   const [scope, animate] = useAnimate()
   const [label, setLabel] = React.useState("")
 
-  /* The navigation in flight: where it is going, and how to tell the click
-     handler the route has rendered. One at a time; a second click while the
-     curtain is moving is swallowed rather than queued. */
+  // One navigation at a time; a second click while the curtain moves is swallowed.
   const pending = React.useRef<{ path: string; arrive: () => void } | null>(
     null,
   )
@@ -113,11 +72,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
         "[data-transition-bracket]",
       )
       const text = part("[data-transition-text]")
-      /* The brackets start touching at the centre, where the name will be,
-         and part by half its width each. Measured, because the name is
-         whatever the destination is called. Both wait for the curtain's edge
-         to pass the middle of the screen (half-way through an in-out curve),
-         so the name never shows over the page it is covering. */
+      // Measured, because the name's width varies. Both wait for the curtain's edge to pass mid-screen so the name never shows over the page it covers.
       const half = text.offsetWidth / 2 + 16
 
       panel.style.visibility = "visible"
@@ -153,7 +108,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
     async function reveal() {
       const panel = part("[data-transition-panel]")
       const content = part("[data-transition-content]")
-      /* Under the curtain, the new page is parked below where it will sit. */
       await animate(content, { y: PUSH }, { duration: 0 })
       await Promise.all([
         animate(
@@ -174,9 +128,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       ])
       panel.style.visibility = "hidden"
       await animate(panel, { y: "100%" }, { duration: 0 })
-      /* A transform left on the wrapper would pin every fixed element inside
-         the page to it — drawers, dialogs, the app shell's sidebar. Clear it
-         entirely rather than leaving translateY(0) behind. */
+      // Clear the transform entirely: even translateY(0) makes the wrapper the containing block for every fixed element inside.
       content.style.transform = ""
     }
 
@@ -237,8 +189,6 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
         {children}
       </div>
 
-      {/* The curtain. Parked below the viewport and hidden until a click,
-          so it costs nothing to a page that is only being read. */}
       <div
         aria-hidden="true"
         data-transition-panel

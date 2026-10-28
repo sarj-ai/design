@@ -33,31 +33,15 @@ import {
 import { StatusHelp } from "@/components/mockups/conversations-revamp/list/status-help"
 import { TimeIcon } from "@/components/mockups/conversations-revamp/list/icons"
 
-/**
- * The table, driven by whatever the Fields dropdown says.
- *
- * Header and body both walk the same `columns` array, so a column cannot end up
- * in one and not the other, and reordering is a single list to move.
- */
 export function CallTable({
   calls,
   columns,
   onCallClick,
   rowMarker,
 }: {
-  /** Owned by the page, because cancelling a scheduled call changes one. */
   calls: CallRow[]
   columns: ColumnSetting[]
   onCallClick: (call: CallRow) => void
-  /**
-   * A mark on the row's time icon, for a mockup whose calls carry a finding the
-   * columns do not — the behavioural flags, in practice.
-   *
-   * It rides the icon rather than taking a column of its own: a column would
-   * cost width on every row to say nothing on most of them, and this is the
-   * absence of a value rather than a value. Rows with nothing to report return
-   * null; the mockups that pass nothing get the table exactly as it was.
-   */
   rowMarker?: (call: CallRow) => ReactNode
 }) {
   const shown = columns.filter((column) => column.visible)
@@ -71,14 +55,9 @@ export function CallTable({
               className="font-semibold text-foreground"
               key={column.id}
             >
-              {/* The help icon only appears on columns that carry a
-                  COLUMN_HELP entry, so it marks the one header worth reading
-                  rather than decorating every one of them. */}
               {COLUMN_HELP[column.id] ? (
                 <span className="inline-flex items-center gap-1">
                   {COLUMN_LABELS[column.id]}
-                  {/* A legend rather than a tooltip — see StatusHelp for why
-                      five definitions are the wrong thing to put in one. */}
                   <StatusHelp />
                 </span>
               ) : (
@@ -114,14 +93,6 @@ export function CallTable({
   )
 }
 
-/**
- * One placeholder for every cell that has no value, so a blank never has to be
- * interpreted. Direction used to render nothing at all on a chat row while
- * Phone Number rendered "-" — two ways of saying "no value here" in one row.
- *
- * The two verdict columns keep their own wording, because there the absence
- * *is* a reading: Unavailable is one of the things each of them reports.
- */
 function NoValue() {
   return (
     <span aria-label="Not applicable" className="text-muted-foreground">
@@ -137,7 +108,6 @@ function Cell({
 }: {
   call: CallRow
   column: ColumnId
-  /** Rendered against the time icon; positioned by whoever passes it. */
   marker?: ReactNode
 }) {
   switch (column) {
@@ -157,8 +127,6 @@ function Cell({
         </span>
       )
 
-    /* The chip is the verdict; the tooltip is why it reads that way, and only
-       a call that produced one has a why to give. */
     case "outcome":
       return call.outcomeReason ? (
         <Tooltip>

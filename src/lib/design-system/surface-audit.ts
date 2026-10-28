@@ -1,32 +1,6 @@
 import type { SurfaceId, SurfaceRuleId } from "@/lib/design-system/data"
 
-/**
- * The surface rules, dry-run against the Sarj platform.
- *
- * Every overlay in `sarj-ai/platform` (`products/platform/apps/web/src`) as of
- * 28 September 2026: each Dialog, AlertDialog, Sheet, Popover and
- * `window.confirm`, plus the destructive actions that have no surface at all.
- * Picker wrappers inside `components/ui` and the mobile nav sheet are left
- * out — they are primitives, not decisions.
- *
- * Each row says what the reader is doing there, what the platform uses, what
- * the decision picks, and which of the rules it breaks. Paths are relative to
- * that `src`; line numbers are where the overlay opens.
- *
- * One finding is structural rather than per-site: the platform's `Dialog`
- * carries `sm:max-w-lg`, and a consumer passing `max-w-2xl` (no prefix) only
- * replaces the unprefixed max width — so above 640px every one of those
- * dialogs is 512px, whatever it asked for. They are marked "asks N".
- *
- * The same default makes every confirm 512 rather than 384: the platform's
- * `AlertDialog` is `sm:max-w-lg` unless given `size="sm"`, which nothing
- * passes. That is one line in the primitive, not 27 fixes — the rows still
- * carry it so the count is honest.
- *
- * Checked against the rules on 29 September 2026: every verdict follows the
- * decision (what the reader is doing, and how much or what is being made),
- * and every "breaks" entry is a rule the overlay breaks today.
- */
+// Paths are relative to products/platform/apps/web/src in sarj-ai/platform; line numbers are where the overlay opens.
 
 export type Doing =
   | "Configuring"
@@ -66,7 +40,6 @@ export type AuditRow = {
   file: string
   doing: Doing
   today: Today
-  /** What the platform renders it at, when that is part of the finding. */
   width?: string
   should: SurfaceId
   verdict: Verdict
@@ -75,7 +48,6 @@ export type AuditRow = {
 }
 
 export const SURFACE_AUDIT: AuditRow[] = [
-  /* Personas ------------------------------------------------------------- */
   {
     id: "persona-create",
     area: "Personas",
@@ -168,7 +140,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "One click to reverse. Set it, and put Undo in the toast.",
   },
 
-  /* Scenarios ------------------------------------------------------------ */
   {
     id: "scenario-archive",
     area: "Scenarios",
@@ -463,7 +434,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "Steps on a page of their own, with Back.",
   },
 
-  /* Knowledge bases ------------------------------------------------------ */
   {
     id: "kb-create",
     area: "Knowledge bases",
@@ -568,7 +538,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "One value, edited where it is shown.",
   },
 
-  /* Batch calls ---------------------------------------------------------- */
   {
     id: "batch-settings",
     area: "Batch calls",
@@ -645,7 +614,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "A CSV needs its preview beside the form. ElevenLabs does the same.",
   },
 
-  /* Conversations -------------------------------------------------------- */
   {
     id: "call-detail",
     area: "Conversations",
@@ -748,7 +716,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "Two months of calendar, anchored to the range.",
   },
 
-  /* Messaging ------------------------------------------------------------ */
   {
     id: "messaging-detail",
     area: "Messaging",
@@ -802,7 +769,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "Say which inboxes stop answering, not “are you sure”.",
   },
 
-  /* Integrations --------------------------------------------------------- */
   {
     id: "integration-configure",
     area: "Integrations",
@@ -868,7 +834,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "An amber triangle and “are you sure”. Name the webhook, say which events stop.",
   },
 
-  /* Developers ----------------------------------------------------------- */
   {
     id: "api-key-create",
     area: "Developers",
@@ -997,7 +962,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "Delete in primary. Destructive, and name the tools that use it.",
   },
 
-  /* Playground ----------------------------------------------------------- */
   {
     id: "playground-mode",
     area: "Playground",
@@ -1025,7 +989,6 @@ export const SURFACE_AUDIT: AuditRow[] = [
     fix: "The same question as switching mode, with the same words.",
   },
 
-  /* Admin ---------------------------------------------------------------- */
   {
     id: "admin-org-create",
     area: "Admin",

@@ -12,33 +12,13 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item"
 import { cn } from "@/lib/utils"
 
-/**
- * What a card looks like when it is the one you picked.
- *
- * Selection moves the card's edge and changes nothing else. A tint repaints
- * the ground every badge and every line of text sits on, so the card you
- * picked stops matching the ones you are comparing it against — at the moment
- * you are comparing them. And a fill, a coloured border and a tick together
- * spend three signals on one bit of state.
- *
- * How many you can pick decides whether anything joins the edge. Picking one
- * needs no mark: exactly one card carries it, and whatever the choice feeds is
- * on screen already showing which. Picking several needs a checkbox, because
- * "how many are on" is not a question an edge answers — and a checkbox is a
- * control, so it is the thing to click as well as the thing to read.
- */
-
 const AGENTS = [
   { id: "support", name: "Support triage", languages: ["English", "Arabic"] },
   { id: "collections", name: "Collections", languages: ["Arabic"] },
   { id: "onboarding", name: "Onboarding", languages: ["English", "Arabic"] },
 ]
 
-/**
- * The whole pattern. `border-primary` alone is 1px of brand against 1px of
- * grey, which is a colour change rather than an edge; the ring doubles it
- * without taking any space, so nothing reflows when a card is picked.
- */
+/** The ring doubles the 1px border without taking space, so nothing reflows when a card is picked. */
 const SELECTED = "border-primary ring-1 ring-primary"
 
 const RULES = [
@@ -92,9 +72,6 @@ export function SelectionPreview() {
                   key={agent.id}
                   variant="outline"
                 >
-                  {/* The card is the control, so it is a button rather than a
-                      div with a click on it — that is what makes it reachable
-                      by keyboard and what announces the state. */}
                   <button
                     aria-pressed={selected}
                     className={cn(
@@ -155,11 +132,6 @@ export function SelectionPreview() {
                       </div>
                     </ItemContent>
                     <ItemActions>
-                      {/* The card already carries the state and the click, so
-                          the box is the readout, not a second control — a
-                          checkbox inside a button is a control inside a
-                          control, and neither the pointer nor the screen
-                          reader can tell which one it just used. */}
                       <Checkbox
                         aria-hidden
                         checked={selected}

@@ -23,43 +23,9 @@ import {
 import { TabsContent } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 
-/**
- * JSON, read rather than dumped.
- *
- * The admin's global settings page prints each language as
- * `JSON.stringify(settings, null, 2)` in a `<pre>`, two cards side by side.
- * They are fifty lines each and mostly identical, so the one thing the reader
- * came for — what differs between English and Arabic — is the thing the page
- * makes hardest to see.
- *
- * Monochrome, in the Unsaved changes diff's register: a bordered block, small
- * mono type, what is shared muted and what differs at full strength. No tint
- * marks a difference — two languages are peers, not a before and an after, so
- * the diff's red and green do not apply, and a brand tint over code reads as
- * a selection. Where rows need grouping, it is the neutral muted band.
- *
- * Three ways to compare, as tabs to pick from, and the single view they are
- * all built on:
- *
- *  - Unified: one document. Shared lines print once, muted; a value that
- *    differs prints once per language, labelled en / ar in the gutter where
- *    the diff has − / +.
- *  - Table: no code at all. Every value is a row under its section; a value
- *    both share spans both columns, a value that differs splits.
- *  - Side by side: the two documents aligned key by key, identical rows
- *    muted, differing rows marked at the edge.
- *  - Single: one value, line numbers, folds, Copy.
- *
- * Short arrays of plain values print on one line, as a person would write
- * them, so a whitelist is one row rather than five. Arabic strings sit in
- * `<bdi>`, so a right-to-left value in a left-to-right line keeps its quotes.
- */
-
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json }
 type Container = Json[] | { [key: string]: Json }
 
-/* The platform's global settings, per language, as far as the admin page
-   shows them. */
 const ENGLISH: Json = {
   agentName: "Sara",
   allowInterruptions: true,
@@ -154,16 +120,12 @@ export function JsonViewPreview() {
   )
 }
 
-/* ------------------------------------------------------------------ model */
-
-/** Short enough to write on one line, and nothing nested inside. */
 const INLINE_MAX = 48
 
 function isContainer(value: Json | undefined): value is Container {
   return typeof value === "object" && value !== null
 }
 
-/** A value printed across several lines, with a fold. */
 function isBranch(value: Json | undefined): value is Container {
   return (
     isContainer(value) &&
@@ -189,7 +151,6 @@ function brackets(value: Container) {
   return Array.isArray(value) ? (["[", "]"] as const) : (["{", "}"] as const)
 }
 
-/** Both sides' keys, in the first side's order, then the second's extras. */
 function union(a: Container, b: Container) {
   const left = new Map(members(a))
   const right = new Map(members(b))
@@ -200,7 +161,6 @@ function union(a: Container, b: Container) {
   }
 }
 
-/** How many values differ, counted at the printed leaves. */
 function countDifferences(a: Json | undefined, b: Json | undefined): number {
   if (isBranch(a) && isBranch(b) && Array.isArray(a) === Array.isArray(b)) {
     const { keys, left, right } = union(a, b)
@@ -214,18 +174,14 @@ function countDifferences(a: Json | undefined, b: Json | undefined): number {
 
 type Line = {
   id: string
-  /** Where the line sits in the value — also what folds it. */
   path: string
   depth: number
-  /** The key, on an object's members. Array items and the root have none. */
   label?: string
   kind: "open" | "close" | "leaf" | "folded"
   value?: Json
   bracket?: string
-  /** How many members a folded branch is hiding. */
   count?: number
   comma: boolean
-  /** On a compared line that belongs to one side only. */
   side?: "left" | "right"
 }
 
@@ -248,7 +204,6 @@ function folded(
   }
 }
 
-/** One value as lines. */
 function toLines(
   value: Json,
   folds: Set<string>,
@@ -282,11 +237,6 @@ function toLines(
 
 type CompareOptions = { folds: Set<string>; only: boolean }
 
-/**
- * Two values as one document: a shared line once, a differing value once per
- * side. Branches both sides have are walked together, so a difference deep in
- * `models` does not reprint the rest of `models`.
- */
 function toUnified(
   a: Json | undefined,
   b: Json | undefined,
@@ -362,7 +312,6 @@ type Row = {
   differs: boolean
 }
 
-/** The unified lines laid out in two halves, one row per key. */
 function toRows(
   a: Json | undefined,
   b: Json | undefined,
@@ -373,8 +322,7 @@ function toRows(
       rows.push({ id: line.id, left: line, right: line, differs: false })
       return rows
     }
-    /* The right half of a differing value joins the row its left half
-       opened, so the two sit level. */
+    /* The right half of a differing value joins the row its left half opened, so the two sit level. */
     const last = rows[rows.length - 1]
     if (line.side === "right" && last?.id === `${line.path}@left`) {
       last.right = line
@@ -395,7 +343,6 @@ function childPath(prefix: string, key: string, inArray: boolean) {
   return prefix ? `${prefix}.${key}` : key
 }
 
-/** Every printed leaf of one value, by its path. */
 function flatten(value: Json, prefix = "", out = new Map<string, Json>()) {
   if (!isBranch(value)) {
     out.set(prefix, value)
@@ -409,10 +356,6 @@ function flatten(value: Json, prefix = "", out = new Map<string, Json>()) {
 
 type TableRowData = { path: string; a: Json | undefined; b: Json | undefined }
 
-/**
- * Both values' leaves, walked together so a key only one side has lands
- * beside its siblings rather than at the end of the section.
- */
 function pairLeaves(
   a: Json | undefined,
   b: Json | undefined,
@@ -430,7 +373,6 @@ function pairLeaves(
   }
   if (!isBranch(a) && !isBranch(b)) return [{ path: prefix, a, b }]
 
-  /* A branch against a plain value or nothing: each side's own leaves. */
   const from = a === undefined ? new Map<string, Json>() : flatten(a, prefix)
   const to = b === undefined ? new Map<string, Json>() : flatten(b, prefix)
   return [...new Set([...from.keys(), ...to.keys()])].map((path) => ({
@@ -439,8 +381,6 @@ function pairLeaves(
     b: to.get(path),
   }))
 }
-
-/* ------------------------------------------------------------------ parts */
 
 function useFolds() {
   const [folds, setFolds] = React.useState<Set<string>>(() => new Set())
@@ -468,7 +408,6 @@ function useCopy() {
   return { copied, copy }
 }
 
-/** A plain value or a one-line array, as JSON writes it. */
 function Value({ value }: { value: Json | undefined }) {
   if (typeof value === "string") return <bdi>&quot;{value}&quot;</bdi>
   if (Array.isArray(value)) {
@@ -488,11 +427,6 @@ function Value({ value }: { value: Json | undefined }) {
   return <>{String(value)}</>
 }
 
-/**
- * The line itself. Keys and punctuation are muted and the value is not,
- * because the value is what you read; `muted` drops the value too, for a
- * line both sides share.
- */
 function Code({ line, muted = false }: { line: Line; muted?: boolean }) {
   return (
     <span
@@ -523,7 +457,6 @@ function Code({ line, muted = false }: { line: Line; muted?: boolean }) {
   )
 }
 
-/** The fold toggle, on an opening line or a folded one; a spacer elsewhere. */
 function Fold({
   line,
   onToggle,
@@ -576,7 +509,6 @@ function CopyButton({
   )
 }
 
-/** The count and the one switch every compare view shares. */
 function CompareBar({
   children,
   only,
@@ -607,19 +539,15 @@ function CompareBar({
   )
 }
 
-/** The block every code view sits in. */
 const BLOCK = "relative overflow-hidden rounded-lg border"
 const CODE = "flex flex-col py-3 font-mono text-xs leading-relaxed"
-
-/* ------------------------------------------------------------------ views */
 
 export function JsonView({ value }: { value: Json }) {
   const { folds, toggle } = useFolds()
   const { copied, copy } = useCopy()
   const lines = toLines(value, folds)
 
-  /* Line numbers are the unfolded ones, as in an editor: folding a branch
-     skips its numbers rather than renumbering everything under it. */
+  /* Line numbers are the unfolded ones: folding skips numbers rather than renumbering. */
   const numbers = React.useMemo(
     () =>
       new Map(
@@ -670,7 +598,6 @@ function JsonUnified({ left, right, only }: CompareProps) {
             key={line.id}
           >
             <Fold line={line} onToggle={toggle} />
-            {/* Where the diff has − and +, the language the line is for. */}
             <span className="w-6 shrink-0 text-muted-foreground select-none">
               {line.side === "left"
                 ? left.code
@@ -694,8 +621,6 @@ function JsonTable({ left, right, only }: CompareProps) {
   const keep = (rows: TableRowData[]) =>
     rows.filter((row) => !only || !same(row.a, row.b))
 
-  /* Plain values at the top level lead, unsectioned; every branch under
-     them becomes a section with its key on the band. */
   const isSection = (key: string) =>
     isBranch(leftTop.get(key)) || isBranch(rightTop.get(key))
   const plainRows = keep(
@@ -749,7 +674,6 @@ function JsonTable({ left, right, only }: CompareProps) {
   )
 }
 
-/** One value: across both columns when shared, split when not. */
 function ValueRow({
   indent = false,
   row,
@@ -816,8 +740,6 @@ function JsonSideBySide({ left, right, only }: CompareProps) {
 
       <div className="py-2 font-mono text-xs leading-relaxed">
         {rows.map((row) => (
-          /* A differing row is marked at the edge, the one brand stroke on
-             the block; everything shared is muted. */
           <div
             className={cn(
               "grid grid-cols-2 divide-x border-s-2",

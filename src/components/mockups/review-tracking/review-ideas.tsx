@@ -37,15 +37,6 @@ function toggleIn(list: string[], id: string) {
   return list.includes(id) ? list.filter((item) => item !== id) : [...list, id]
 }
 
-/* ------------------------------------------------------------ review mode */
-
-/**
- * Vansh's answer to "a checkbox on every row all the time is noise": the
- * page stays as it is, and a Review switch in the search row turns the
- * reviewing tools on — a checkbox column, a bookmark column, how many are
- * done, Mark all as reviewed, and two chips to narrow the list. Off, they
- * all go; what was ticked stays ticked for next time.
- */
 export function ReviewModeIdea() {
   const [on, setOn] = React.useState(true)
   const [reviewed, setReviewed] = React.useState<string[]>(REVIEWED)
@@ -178,21 +169,8 @@ export function ReviewModeIdea() {
   )
 }
 
-/* --------------------------------------------------------- review session */
-
 type Session = { ids: string[]; done: string[] }
 
-/**
- * Mohammed's review session: filter the page down to what you mean to
- * review, then Start review. The drawer opens on the first call and walks
- * the filtered list; Mark reviewed and next ticks one and moves on, and the
- * drawer says how far through you are.
- *
- * Close the drawer and the session waits above the list, with Continue and
- * End review. Done-ness belongs to the session, not the call — Mohammed's
- * worry about one call turning up in two reviews: a call ticked in
- * yesterday's session starts unticked in today's.
- */
 export function SessionIdea() {
   const [session, setSession] = React.useState<Session | null>(null)
   const [open, setOpen] = React.useState<CallRow | null>(null)

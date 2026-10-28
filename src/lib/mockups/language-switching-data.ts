@@ -1,12 +1,3 @@
-/**
- * Mock data for DES-199 — the scenario's "Switch voice on language change"
- * setting from the DIS-53 PRD.
- *
- * Languages are the platform's three (EN, AR, UR — `LANGUAGES` in
- * precedent-iso). Personas are agent profiles: one language each, which is the
- * premise of the PRD — a voice is strong in one language, not both.
- */
-
 export type LanguageCode = "ar" | "en" | "ur"
 
 export const LANGUAGE_NAMES: Record<LanguageCode, string> = {
@@ -15,7 +6,6 @@ export const LANGUAGE_NAMES: Record<LanguageCode, string> = {
   ur: "Urdu",
 }
 
-/** Arabic and Urdu are typed right to left. */
 export const RTL: Record<LanguageCode, boolean> = {
   ar: true,
   en: false,
@@ -51,15 +41,12 @@ export const PERSONAS: Persona[] = [
   },
 ]
 
-/** One configured language, with the persona a call that starts in it uses. */
 export type ScenarioLanguage = {
   code: LanguageCode
   personaId: string | null
 }
 
-/** Per language switched to. Phrases are optional; a handoff target is not. */
 export type SwitchConfig = {
-  /** OFF — continuity. ON — handoff. */
   switchVoice: boolean
   transitionPhrase: Partial<Record<LanguageCode, string>>
   target: Partial<Record<LanguageCode, string>>
@@ -73,13 +60,10 @@ export type Preset = {
   scenario: string
   start: LanguageCode
   languages: ScenarioLanguage[]
-  /** What is saved. */
   config: SwitchConfig
-  /** An edit already in progress when the preset opens. */
   draft?: SwitchConfig
 }
 
-/** What every existing multi-language scenario migrates to: continuity, no phrase. */
 const MIGRATED: SwitchConfig = {
   handoffPhrase: {},
   switchVoice: false,
@@ -88,11 +72,6 @@ const MIGRATED: SwitchConfig = {
   transitionPhrase: {},
 }
 
-/**
- * The reviewer's three scenarios. Each is a different shape of the same
- * screen, not a different screen: two languages, three languages with no
- * Urdu persona yet, and one language, where the setting has nothing to act on.
- */
 export const PRESETS: Preset[] = [
   {
     config: MIGRATED,
@@ -107,8 +86,6 @@ export const PRESETS: Preset[] = [
   },
   {
     config: MIGRATED,
-    /* The owner has just turned handoff on and picked English, and has no
-       Urdu persona to pick — so Save is one click from being blocked. */
     draft: {
       handoffPhrase: {
         en: "One moment, my colleague will continue with you in English.",
@@ -138,7 +115,6 @@ export const PRESETS: Preset[] = [
   },
 ]
 
-/** Examples of the shape, shown as placeholders — gone on the first keystroke. */
 export const TRANSITION_EXAMPLE: Record<LanguageCode, string> = {
   ar: "تمام، نكمل بالعربي.",
   en: "Sure, let's continue in English.",

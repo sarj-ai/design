@@ -1,21 +1,9 @@
-/**
- * Every colour in `globals.css`, in the order the file declares them.
- *
- * The values are copied from that file rather than read at runtime, so this
- * table has to be updated with it — the alternative reads the computed style
- * of a probe element, which renders empty on the server and lands a hydration
- * mismatch on the one page whose job is to be exact.
- *
- * `swatch` is a literal class rather than `bg-${name}`: Tailwind only emits a
- * utility it can see spelled out in a source file.
- */
+// Copied from globals.css in its declaration order: update this table whenever that file changes.
 
 type ColourToken = {
-  /** The name without its `--` prefix. */
   name: string
-  /** Exactly what `globals.css` sets it to. */
   value: string
-  /** A literal `bg-*` class, so Tailwind emits it. */
+  /** A literal `bg-*` class, not `bg-${name}`: Tailwind only emits utilities spelled out in source. */
   swatch: string
   use: string
 }

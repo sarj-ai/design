@@ -1,16 +1,3 @@
-/**
- * The design lab, as tools an agent in another repo can call.
- *
- * The flow these exist for: an engineer says "add the design for DES-173" and
- * their agent resolves the ticket to a mockup, reads what installing it will
- * do, and runs one command. Everything here serves that — nothing browses,
- * nothing paginates, and every answer carries enough to act on without a
- * second round trip.
- *
- * The server is hosted, so it cannot write to the caller's disk. It hands back
- * a complete install brief and the agent runs the single command in it.
- */
-
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { z } from "zod"
 
@@ -24,7 +11,6 @@ import {
   installCommand,
 } from "@/lib/mcp/designs"
 
-/** Tool results are text. JSON is what an agent reads most reliably. */
 function json(value: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }],
@@ -38,7 +24,6 @@ function fail(message: string) {
   }
 }
 
-/** The card, without the install detail — enough to pick one. */
 function summary(design: Design) {
   return {
     slug: design.slug,
@@ -51,15 +36,7 @@ function summary(design: Design) {
   }
 }
 
-/**
- * Files an item ships that share a basename.
- *
- * shadcn rewrites each installed file's imports to wherever the target put it,
- * and it matches by basename — so a design carrying both drawer/icons.tsx and
- * list/icons.tsx installs cleanly and then compiles against the wrong one. The
- * screen looks installed and is not, which is worth saying up front rather
- * than leaving to be discovered as a pile of missing-export errors.
- */
+/** shadcn rewrites installed imports by basename, so two shipped files sharing one compile against the wrong file. */
 function clashes(design: Design): string[][] {
   const byBasename = new Map<string, string[]>()
 
@@ -71,13 +48,6 @@ function clashes(design: Design): string[][] {
   return [...byBasename.values()].filter((paths) => paths.length > 1)
 }
 
-/**
- * What a caller has to know before running the install, in plain language.
- *
- * Every line here was learned by installing a design into `sarj-ai/platform`
- * and reading the diff, so they travel with every brief rather than living in
- * a README nobody installing a design reads.
- */
 function notes(design: Design) {
   const lines = [
     `Run the command from the sarj-ai/platform repository root. The repo's only components.json is in ${DEFAULT_CWD} (@sarj/platform-web), so --cwd points shadcn at that package: every file lands under its src/, the npm packages go into its package.json and the root yarn.lock, and nothing else in the monorepo is touched. Without --cwd shadcn finds no components.json at the root and stops.`,
@@ -199,9 +169,6 @@ export function createDesignLabServer(origin: string): McpServer {
         })),
         primitives: item.registryDependencies,
         packages: item.dependencies,
-        /* The colours arrive through cssVars and the stacking scale through
-           plain CSS, for reasons the generator explains — but a caller asking
-           what this adds to their globals.css wants one list, not two. */
         tokens: {
           ...(item.cssVars?.light ?? {}),
           ...Object.fromEntries(
@@ -247,9 +214,7 @@ export function createDesignLabServer(origin: string): McpServer {
         })
       }
 
-      /* The published item is the one place the file contents live — the
-         generated index carries paths only, and reading from disk would tie
-         this to how the deployment lays out its filesystem. */
+      /* File contents live only in the published item; the generated index carries paths, and disk layout differs per deployment. */
       const response = await fetch(design.registry)
       if (!response.ok) {
         return fail(`Could not read ${design.registry} (${response.status}).`)

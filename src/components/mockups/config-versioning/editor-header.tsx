@@ -16,18 +16,6 @@ import {
 } from "@/components/mockups/config-versioning/icons"
 import type { Subject } from "@/lib/mockups/config-versioning-data"
 
-/**
- * The top of the editor: DES-203's header — title, the Live switch (shared
- * with DES-203, so the two never drift), Run scenario and the more menu —
- * with versioning added in the two places it fits.
- *
- *  - The line under the title says who put the version in use there, and
- *    how: published, applied, or (on a scenario that is not live) saved. No
- *    version numbers: the editor speaks of "the version in use" and "the
- *    latest" (review, 13 Oct 2026), and History is where numbers are.
- *  - History sits beside the Live switch. The page's other actions are
- *    DES-203's, unchanged.
- */
 export function EditorHeader({
   subject,
   canEdit,
@@ -36,12 +24,10 @@ export function EditorHeader({
   onToggleLive,
 }: {
   subject: Subject
-  /** No longer shown — the header names no version. Kept so DES-204's
-   *  editor, which passes it, still compiles. */
+  /** Unused; kept because DES-204's editor still passes it. */
   base?: number
   canEdit: boolean
-  /** Turning live on or off is its own permission (TDD 3.1), separate from
-   *  editing. Defaults to the edit permission. */
+  /** Permission to toggle Live. Defaults to `canEdit`. */
   canToggle?: boolean
   onOpenHistory: () => void
   onToggleLive: (on: boolean) => void

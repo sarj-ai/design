@@ -18,7 +18,6 @@ import {
 
 import { icon } from "@/components/shared/icon"
 
-/* Index toolbar and rows. */
 export const SearchIcon = icon(Search01Icon, "SearchIcon")
 export const AddPersonaIcon = icon(UserAdd01Icon, "AddPersonaIcon")
 export const EditIcon = icon(Edit02Icon, "EditIcon")
@@ -27,12 +26,10 @@ export const RowMenuIcon = icon(MoreHorizontalIcon, "RowMenuIcon")
 export const MakeDefaultIcon = icon(StarIcon, "MakeDefaultIcon")
 export const ScenariosIcon = icon(Target02Icon, "ScenariosIcon")
 
-/* Voice previews, everywhere a voice can be heard. */
 export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon")
 export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon")
 export const VoiceWaveIcon = icon(AudioWave01Icon, "VoiceWaveIcon")
 
-/* Edge states. */
 export const LoadErrorIcon = icon(Alert02Icon, "LoadErrorIcon")
 export const RetryIcon = icon(Refresh01Icon, "RetryIcon")
 export const NoPersonasIcon = icon(UserMultipleIcon, "NoPersonasIcon")

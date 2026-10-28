@@ -63,16 +63,6 @@ import {
   type ScenarioRow,
 } from "@/lib/mockups/live-scenarios-data"
 
-/**
- * The scenarios index with what DES-203 asks for — "badge, filter":
- *
- *  - The badge: a live scenario's Status chip says Live instead of Active.
- *  - The filter: a chip under the search, as every index filter is in the
- *    design system — "+ Live status", then "Live status: Live". Never a
- *    dropdown: filters are chips. It is the Active view's alone, because a
- *    deleted scenario is never live.
- */
-
 const LIVE_OPTIONS = [
   { value: "live", label: "Live" },
   { value: "not-live", label: "Not live" },
@@ -87,9 +77,8 @@ export function ScenarioIndex({
   rows = SCENARIOS,
   marker,
 }: {
-  /** The rows of the Active view. Defaults to DES-203's own. */
   rows?: ScenarioRow[]
-  /** A second chip after the status, for a later ticket's state on a row. */
+  /** A second chip after the status. */
   marker?: (row: ScenarioRow) => React.ReactNode
 } = {}) {
   const [view, setView] = React.useState("active")
@@ -172,7 +161,6 @@ function ScenarioList({
   rows: ScenarioRow[]
   deleted: boolean
   marker?: (row: ScenarioRow) => React.ReactNode
-  /** Set while a filter is on, for the no-results way out. */
   onClearFilter?: () => void
 }) {
   const [pageSize, setPageSize] = React.useState(10)

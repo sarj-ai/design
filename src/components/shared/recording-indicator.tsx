@@ -5,29 +5,6 @@ import { useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-/**
- * The mark for "the microphone is live": five level bars in the recording
- * red, inside a tinted disc, tallest in the middle — speaking grows the shape
- * outward from its centre, and each bar grows up and down from its own.
- *
- * A pulsing dot says only that something is happening. The bars answer the
- * question a reader actually has while speaking — is it hearing me? — because
- * they move with the voice and fall flat when it stops. Silence still shows
- * four short bars, so a quiet room never reads as recording having ended.
- *
- * `useMicrophoneLevels()` feeds it from the real microphone: an
- * `AnalyserNode`'s frequency data across the voice range, split into four
- * bands and scaled 0–1, read on every animation frame. The product and the
- * mockups use the same hook. `useSimulatedLevels()` fakes the rise and fall
- * of speech for places that must not ask for the microphone — a demo on a
- * docs page, or a browser that refuses.
- *
- * Each bar moves on `transform: scaleY` only, out from its centre, with a 100ms
- * ease-out that smooths the gaps between readings — the bars track the voice
- * rather than replaying a loop. Under reduced motion they stop following the
- * voice and hold a fixed shape; the disc still says recording.
- */
-
 /** Silence keeps a sliver of every bar, so the mark never empties. */
 const FLOOR = 0.2
 
@@ -36,14 +13,7 @@ const SILENCE = [0, 0, 0, 0]
 /** The static shape shown under reduced motion: a voice at rest. */
 const STILL = [0.35, 0.6, 0.85, 0.6, 0.35]
 
-/**
- * Four frequency bands become five bars, mirrored about the middle one, so
- * the mark grows from its centre instead of leaning toward the bands a voice
- * happens to fill. The middle bar is the loudest of the two voice bands
- * (fundamental and low formants), the pair beside it leans on the middle
- * band, and the outer pair on the top two — a voice reads as a swell from
- * the centre, a hiss or a click only reaches the edges.
- */
+/** Four bands become five bars, mirrored about the middle one. */
 function toBars([low = 0, mid = 0, high = 0, top = 0]: readonly number[]) {
   const loud = Math.max(low, mid)
   /* Loud, the shape is an arch — about 1, 0.7, 0.4 from the middle out. */
@@ -88,22 +58,16 @@ function clamp(value: number) {
   return Math.min(1, Math.max(0, value))
 }
 
-/**
- * Stand-in levels for a mockup: speech-like bursts — a syllable every few
- * hundred milliseconds, louder in the middle bands, with short pauses —
- * sampled every 90ms. Stops and settles to silence when `active` is false.
- */
+/** Fake speech-like levels for places that must not ask for the microphone. */
 export function useSimulatedLevels(active: boolean) {
   const [levels, setLevels] = React.useState<number[]>(SILENCE)
 
   React.useEffect(() => {
     if (!active) return
-    /* How strongly each band answers a voice: the middle carries it. */
     const weight = [0.6, 1, 0.85, 0.5]
     let envelope = 0
     let target = 0.8
     const timer = setInterval(() => {
-      /* A new syllable, or a pause, now and then. */
       if (Math.random() < 0.28) {
         target = Math.random() < 0.18 ? 0.05 : 0.45 + Math.random() * 0.55
       }
@@ -116,12 +80,7 @@ export function useSimulatedLevels(active: boolean) {
   return active ? levels : SILENCE
 }
 
-/*
- * The voice sits between about 90 Hz and 4 kHz. With a 256-point FFT each bin
- * is sampleRate / 256 wide (~190 Hz at 48 kHz), so the bands below are bin
- * ranges over that span: the fundamental, the low and high formants, and the
- * consonants. Computed from the context's real sample rate, not assumed.
- */
+// Bin ranges over the voice band (~90 Hz to 4 kHz) for a 256-point FFT, computed from the context's real sample rate.
 const BAND_EDGES_HZ = [90, 350, 900, 2000, 4000]
 
 /* Byte levels map -85 dB to 0 and -25 dB to 255: a normal speaking voice at
@@ -131,18 +90,7 @@ const MAX_DB = -25
 
 type MicrophoneState = "idle" | "asking" | "live" | "unavailable"
 
-/**
- * The microphone's level in four bands while `active`, from the real input.
- *
- * Asks for the microphone the first time it becomes active and releases it —
- * every track stopped, the context closed — when it stops being active or
- * the component goes. Call it from the moment capture is about to start (the
- * countdown, not the first recorded frame), so the permission prompt never
- * eats into the take.
- *
- * `state` says whether the levels are real: `unavailable` means the browser
- * refused or has no microphone, and the caller decides what to show.
- */
+/** The microphone's level in four bands while `active`. Activate it at the countdown, not the first recorded frame, so the permission prompt never eats into the take. */
 export function useMicrophoneLevels(active: boolean) {
   const [levels, setLevels] = React.useState<number[]>(SILENCE)
   const [state, setState] = React.useState<MicrophoneState>("idle")

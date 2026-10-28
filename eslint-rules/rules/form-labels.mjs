@@ -1,17 +1,5 @@
 import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * A field's label is full strength.
- *
- * Above the control, `text-sm font-medium`, at `text-foreground`. Never
- * muted: at `text-muted-foreground` it clears AA by 0.04 and can no longer be
- * told from its own description, which is the same size in the same grey.
- * The same goes for a group's legend.
- *
- * The one muted thing a label may hold is the "(optional)" marker, in a span
- * of its own — that span is not the label, so it is not checked.
- */
-
 const LABELS = new Set(["FieldLabel", "Label", "FieldLegend", "FieldTitle"])
 const MUTED = /^text-muted-foreground(\/\d+)?$/
 

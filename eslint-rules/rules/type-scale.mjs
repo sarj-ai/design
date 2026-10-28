@@ -1,18 +1,5 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * One typeface, three weights.
- *
- * Two faces, both tokens: Nunito (`font-sans`, set globally, so usually
- * written only to step back out of a mono block) and Geist Mono
- * (`font-mono`, for code, IDs and JSON). A serif or an arbitrary family is a
- * third face, and `fontFamily` in a style prop is one out of lint's sight.
- *
- * The type scale uses three weights: `font-semibold` for page and section
- * titles, `font-medium` for card/dialog/drawer titles and labels,
- * `font-normal` for body. Bold, black, light and thin are not on it.
- */
-
 const FAMILY = /^font-(serif|\[.*\])$/
 const WEIGHT = /^font-(thin|extralight|light|bold|extrabold|black)$/
 

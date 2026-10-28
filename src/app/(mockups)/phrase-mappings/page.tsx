@@ -27,39 +27,22 @@ import { FillerWordsDrawer } from "@/components/mockups/phrase-mappings/filler-w
 
 type Scope = "global" | "persona"
 
-/**
- * Configurable phrase-response mappings — DIS-21 / DES-171.
- *
- * Global Settings and a persona are two destinations in the product's own
- * sidebar, so they are two views of this one route rather than two mockups:
- * the scope changes whose values are on screen and which save action commits
- * them, never what there is to configure.
- */
 export default function PhraseMappingsPage() {
-  /* The persona, because the persona-specific case is what this ticket is
-     about — the global set is one click away in the toolbar. */
   const [scope, setScope] = React.useState<Scope>("persona")
 
-  /* Arabic is the case this design is for. English is here so a reviewer who
-     does not read Arabic can still judge the layout — same rules, same match
-     modes, same third rule off, different words. */
   const [language, setLanguage] = React.useState<SampleLanguage>("ar")
 
   const [globals, setGlobals] = React.useState<FillerConfig>(
     SAMPLE_CONFIG[language],
   )
 
-  /* `null` while the persona inherits. The PRD's override is a full-set
-     replacement, so it is one copy of the whole configuration rather than a
-     patch over the globals. */
+  // `null` while the persona inherits; an override replaces the whole set.
   const [override, setOverride] = React.useState<FillerConfig | null>(() =>
     personaOverride(SAMPLE_CONFIG[language]),
   )
 
   const [fillerWords, setFillerWords] = React.useState(true)
 
-  /* Open on the panel this ticket is about; closing it reveals the row it was
-     opened from. */
   const [drawerOpen, setDrawerOpen] = React.useState(true)
 
   const isPersona = scope === "persona"
@@ -143,8 +126,6 @@ export default function PhraseMappingsPage() {
               </p>
             </div>
 
-            {/* The PRD's publish points: nothing staged in the drawer reaches a
-                call until one of these is pressed. */}
             <Button>{isPersona ? "Update Profile" : "Save for All"}</Button>
           </header>
 

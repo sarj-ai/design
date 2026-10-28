@@ -2,13 +2,6 @@ import { Separator } from "@/components/ui/separator"
 import { RuleList } from "@/components/design-system/rule-list"
 import type { PatternAnatomy as Anatomy } from "@/lib/design-system/data"
 
-/**
- * A pattern's parts, split into the bare minimum and the rest.
- *
- * Two labelled lists rather than a marker per row: the question people actually
- * arrive with is "what is the least I can ship", and a column answers that in
- * one glance where an asterisk scattered down a list does not.
- */
 export function PatternAnatomy({ pattern }: { pattern: Anatomy }) {
   return (
     <div className="flex flex-col gap-6">
@@ -22,8 +15,6 @@ export function PatternAnatomy({ pattern }: { pattern: Anatomy }) {
         <RuleList rules={pattern.required} />
       </section>
 
-      {/* A pattern with nothing optional shows no Optional heading — an empty
-          section under a rule is worse than no section. */}
       {pattern.optional.length > 0 ? (
         <>
           <Separator />

@@ -46,22 +46,6 @@ import {
   TechnicalIcon,
 } from "@/components/mockups/conversations-revamp/drawer/icons"
 
-/**
- * The panel, as a register the reader owns rather than a stack we chose for
- * them.
- *
- * Two things drive this. Sections keep arriving — every PRD adds one — and the
- * order that suits a collections reviewer is not the order that suits someone
- * auditing transcription quality. So order and visibility are settings, they
- * are stored, and a section that is shut still states its finding in its own
- * header, which is what makes collapsing safe rather than hostile.
- */
-
-/**
- * Which chart slot each issue type gets. Six unrelated kinds of problem, which
- * is what the DES-174 palette is for — on the purple ramp this replaced, a
- * silence issue and a latency issue were two shades of the same thing.
- */
 export const ISSUE_TONE: Record<IssueType, string> = {
   connectivity: "bg-chart-2",
   flow: "bg-chart-3",
@@ -74,20 +58,10 @@ export const ISSUE_TONE: Record<IssueType, string> = {
 type SectionId =
   "collected" | "flags" | "insights" | "outcome" | "summary" | "technical"
 
-/**
- * `open` is stored alongside order and visibility on purpose. Collapsing a
- * section in the panel and setting it to start collapsed are the same wish, so
- * they are the same flag — whichever way you set it, the section stays that way
- * on the next call.
- */
 type Arrangement = { id: SectionId; open: boolean; visible: boolean }
 
 const STORAGE_KEY = "sarj-mockup:v4-panel-order"
 
-/**
- * Summary and Insights answer "what happened on this call", so they start open.
- * Technical is hidden outright — it is the rail nobody read.
- */
 const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "summary", open: true, visible: true },
   { id: "insights", open: true, visible: true },
@@ -97,11 +71,8 @@ const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "technical", open: false, visible: false },
 ]
 
-/**
- * A stored arrangement is not trusted: it can predate a section being added or
- * renamed. Keep what is still known, in the stored order, then append anything
- * the defaults have that it does not.
- */
+// Stored arrangement may predate added or renamed sections: keep known ids in
+// stored order, then append missing defaults.
 function normalise(stored: unknown): Arrangement[] {
   if (!Array.isArray(stored)) return DEFAULT_ARRANGEMENT
 
@@ -126,18 +97,8 @@ function normalise(stored: unknown): Arrangement[] {
   return kept
 }
 
-/* ---------------------------------------------------------- stored setting */
-
-/**
- * The arrangement is state that lives outside React — localStorage owns it, and
- * it has to survive the drawer being closed and reopened, which unmounts every
- * component below. So it is read through `useSyncExternalStore` rather than
- * copied into state on mount: the server renders the defaults, the client
- * renders what is stored, and neither needs an effect to reconcile them.
- *
- * `snapshot` is cached against the raw string because the hook compares
- * snapshots by identity — parsing afresh on every call would never settle.
- */
+// Cached against the raw string: useSyncExternalStore compares snapshots by
+// identity.
 const listeners = new Set<() => void>()
 let cachedRaw: string | null = null
 let cachedValue = DEFAULT_ARRANGEMENT
@@ -213,8 +174,6 @@ export function SectionRegister({
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      {/* The chips wrap in their own box so the Customize button stays pinned
-          beside them instead of being pushed onto a line of its own. */}
       <div className="flex shrink-0 items-start gap-2 border-b pb-3">
         <div className="flex flex-1 flex-wrap items-center gap-1">
           {shown.map((item) => (
@@ -271,8 +230,6 @@ export function SectionRegister({
   )
 }
 
-/* ------------------------------------------------------------- customizing */
-
 function CustomizePopover({
   arrangement,
   onRearrange,
@@ -285,7 +242,6 @@ function CustomizePopover({
   sections: Record<SectionId, Section>
 }) {
   const [dragging, setDragging] = React.useState<SectionId | null>(null)
-  /** Where the dragged row would land — the index the drop line sits before. */
   const [dropAt, setDropAt] = React.useState<number | null>(null)
 
   function move(from: number, to: number) {
@@ -296,7 +252,7 @@ function CustomizePopover({
     onRearrange(next)
   }
 
-  /** Drop uses an insertion point, which shifts once the row is lifted out. */
+  // Drop uses an insertion point, which shifts once the row is lifted out.
   function moveTo(from: number, insertAt: number) {
     const next = [...arrangement]
     const [moved] = next.splice(from, 1)
@@ -353,7 +309,6 @@ function CustomizePopover({
               onDragEnd={endDrag}
               onDragOver={(event) => {
                 event.preventDefault()
-                // Past the midpoint means it lands after this row, not before.
                 const box = event.currentTarget.getBoundingClientRect()
                 const below = event.clientY > box.top + box.height / 2
                 setDropAt(below ? index + 1 : index)
@@ -369,17 +324,12 @@ function CustomizePopover({
                 endDrag()
               }}
             >
-              {/* The drop line is absolutely positioned so showing it does not
-                  shove the rows around while you are still dragging. */}
               {dropAt === index ? <DropLine className="-top-px" /> : null}
               {dropAt === arrangement.length &&
               index === arrangement.length - 1 ? (
                 <DropLine className="-bottom-px" />
               ) : null}
 
-              {/* A button, not just the icon: dragging is the way to reorder
-                  now that the arrows are gone, and dragging has no keyboard
-                  equivalent — so the handle takes arrow keys itself. */}
               <Button
                 aria-label={`Reorder ${sections[item.id].title}`}
                 className="shrink-0 cursor-grab"
@@ -403,17 +353,11 @@ function CustomizePopover({
                 {sections[item.id].title}
               </span>
 
-              {/* Show only. "Open by default" was a second switch answering a
-                  question the panel already answers by itself — collapsing a
-                  section in the panel is stored, so the state it is in is the
-                  state it starts in next time. */}
               <span className="ms-auto flex justify-center">
                 <Switch
                   aria-label={`Show ${sections[item.id].title}`}
                   checked={item.visible}
                   onCheckedChange={(checked) => {
-                    // Hiding a section also closes it, so bringing it back does
-                    // not dump an expanded body into the panel unannounced.
                     set(item.id, {
                       open: checked ? item.open : false,
                       visible: checked,
@@ -438,7 +382,6 @@ function CustomizePopover({
   )
 }
 
-/** Where the dragged row will land. */
 function DropLine({ className }: { className: string }) {
   return (
     <span
@@ -450,12 +393,9 @@ function DropLine({ className }: { className: string }) {
   )
 }
 
-/* ---------------------------------------------------------------- sections */
-
 type Section = {
   body: React.ReactNode
   icon: React.ComponentType<{ className?: string }>
-  /** What the header says while the section is shut. */
   summary: string
   title: string
 }
@@ -526,8 +466,6 @@ function useSections(onSeek: (seconds: number) => void) {
     outcome: {
       body: <OutcomeBody />,
       icon: CompletedIcon,
-      /* The label, not the raw value — the collapsed header is the one place
-         the reader sees the verdict without opening the section. */
       summary: OUTCOME_LABELS[OUTCOMES[0].status],
       title: "Call outcome",
     },
@@ -554,14 +492,6 @@ function SummaryBody() {
   )
 }
 
-/**
- * Insights, as they actually are.
- *
- * The earlier revamps drew this as an outcome with a failure badge and a
- * criteria checklist. It is neither. An insight has a title, a description, and
- * one of four categories naming which part of the agent has to change — and no
- * status at all. Success and failure belong to the call outcome above.
- */
 function InsightsBody() {
   return (
     <div className="flex flex-col gap-4">
@@ -572,9 +502,6 @@ function InsightsBody() {
               {insight.title}
             </span>
 
-            {/* One neutral treatment for all four. A category is not a
-                severity, so it must not be coloured into looking like one —
-                outline reads as a chip without implying good or bad. */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Badge className="shrink-0" variant="outline">
@@ -594,17 +521,6 @@ function InsightsBody() {
   )
 }
 
-/**
- * Three verdicts, then why, then what was checked.
- *
- * The three are separate questions and used to be one badge: a call can
- * connect and still miss its goal, and an agent can behave well on a call whose
- * goal was never reachable. Collapsing them hid exactly the case worth finding.
- *
- * The criteria list is capped and scrolls. A scenario can carry a dozen, and a
- * section that grows without limit pushes everything under it off the panel —
- * which is how the sections a reader ordered stop being where they put them.
- */
 function OutcomeBody() {
   const outcome = OUTCOMES[0]
 
@@ -653,8 +569,6 @@ function OutcomeBody() {
 
         <div className="flex max-h-72 flex-col gap-2 overflow-y-auto">
           {outcome.criteria.map((criterion) => (
-            /* bg-card, not bg-muted: the section itself is already the muted
-               surface, so a row has to come forward to read as a row. */
             <div
               className="flex items-start gap-2 rounded-lg bg-card p-3"
               key={criterion.text}

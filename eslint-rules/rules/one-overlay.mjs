@@ -1,18 +1,6 @@
 import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * One overlay at a time.
- *
- * A confirm may sit on anything, and a popover, menu or select may open inside
- * anything. Nothing else stacks: a drawer that needs a new thing goes one level
- * deeper inside itself, with Back, and returns with it selected. A dialog on a
- * drawer on a page is three things to close, in an order the reader has to
- * remember.
- *
- * This sees nesting written in one file — a Dialog in a SheetContent's JSX. A
- * component that renders its own Dialog and is dropped into a drawer from
- * another file is still the same mistake; lint just cannot see across files.
- */
+// Sees nesting written in one file only; a component that renders its own Dialog from another file is missed.
 
 const STACKING = new Set(["Dialog", "Sheet", "Drawer"])
 const CONTENT = new Set([

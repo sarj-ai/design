@@ -36,18 +36,6 @@ import {
   EditPermissionsIcon,
 } from "@/components/mockups/roles-permissions/icons"
 
-/**
- * Every permission the platform has, against every role that can hold it.
- *
- * One grid rather than a page per role, because the question this screen
- * answers is comparative — "what does an admin get that a caller does not" —
- * and the PRD's problem statement is that nobody could answer it without
- * reading source. Reading down a column tells you what a role is; reading
- * across a row tells you where the line sits.
- *
- * Only one column is editable at a time. The others stay as marks, so a change
- * is always made against the roles it has to stay distinct from.
- */
 export function RolesMatrix({
   canEdit,
   draft,
@@ -58,7 +46,6 @@ export function RolesMatrix({
   roles,
 }: {
   canEdit: boolean
-  /** The editing role's working set, before it is saved. */
   draft: PermissionId[]
   editingRoleId: string | null
   grants: Record<string, PermissionId[]>
@@ -71,18 +58,10 @@ export function RolesMatrix({
   }
 
   return (
-    /* `--card-spacing: 0` rather than a padding override, the way the token
-       table does it: the grid runs edge to edge, so the header band meets the
-       card's own corners instead of floating in a strip of card behind it. The
-       footer puts the spacing back for itself. */
+    /* `--card-spacing: 0` runs the grid to the card's edge; the footer restores its own spacing. */
     <Card className="[--card-spacing:0px]">
       <Table
-        /* Cells keep their inset; the rules run the full width of the card.
-
-           Fixed layout so the role columns hold their width when one of them
-           turns into checkboxes — an auto table re-flows the whole grid on the
-           first click, and a matrix that moves under you while you edit it is
-           a matrix you stop trusting. */
+        /* Fixed layout so role columns keep their width when one switches to checkboxes. */
         className="table-fixed [&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4"
       >
         <TableHeader>
@@ -103,11 +82,6 @@ export function RolesMatrix({
         <TableBody>
           {SECTIONS.map((section, index) => (
             <React.Fragment key={section.id}>
-              {/* Only where the rules change. The first 21 rows are the
-                  default case and need no label — the band that matters is the
-                  one saying "everything below here is platform tier", which is
-                  also where the role names come back, two screens down from a
-                  header that cannot be made sticky inside this card. */}
               {index > 0 ? (
                 <DataTableHeaderRow>
                   <TableCell className="py-2 font-medium">
@@ -157,13 +131,6 @@ export function RolesMatrix({
   )
 }
 
-/**
- * A role's column head: what it is called, the role string the platform still
- * stores for it, how far it reaches, and how much of the taxonomy it holds.
- *
- * That last number is the PRD's opening argument in one line — three roles
- * that today resolve to 21, 21 and 39.
- */
 function RoleHead({
   canEdit,
   held,
@@ -176,11 +143,7 @@ function RoleHead({
   role: Role
 }) {
   return (
-    /* `whitespace-normal` undoes the primitive's `nowrap`: with fixed column
-       widths a role's line has to wrap rather than run past its cell. Every
-       head is the same three lines — name, what it is for, what it holds — so
-       the three titles land on one baseline instead of one of them wrapping
-       under the padlock. */
+    /* `whitespace-normal` undoes the primitive's `nowrap` so the head wraps in fixed columns. */
     <TableHead className="w-64 align-top whitespace-normal">
       <div className="flex flex-col gap-0.5 py-2">
         <div className="flex items-center gap-2">
@@ -211,9 +174,6 @@ function RoleHead({
           ) : null}
         </div>
 
-        {/* The role string the platform stores, and how much of the taxonomy
-            this role holds. Support and engineering read a 403 against
-            `admin`, not against "Org admin". */}
         <span className="text-xs font-normal text-muted-foreground tabular-nums">
           {role.legacy ? (
             <>
@@ -227,14 +187,6 @@ function RoleHead({
   )
 }
 
-/**
- * One role's answer for one permission.
- *
- * Static columns carry a mark or a dash and nothing else — 39 rows of the word
- * "Allowed" is a wall. The column being edited spells its state out next to
- * the box, because that is the moment someone is about to change access for a
- * few hundred people and a bare tick is one glance away from being misread.
- */
 function GrantCell({
   editing,
   granted,

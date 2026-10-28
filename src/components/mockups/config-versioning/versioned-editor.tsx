@@ -36,28 +36,6 @@ import {
   type Version,
 } from "@/lib/mockups/config-versioning-data"
 
-/**
- * A scenario's editor, cut to what DES-202 changes, as the TDD has it.
- *
- * The editor names two versions and never numbers them: the version in use
- * (what the next call runs) and the latest (the newest save). Numbers live
- * in History, where you pick one. Review on 13 Oct 2026 found a screen with
- * v9, v12, v13 and v14 on it at once unreadable.
- *
- *  - Save makes a version, live or not. On a live scenario callers keep
- *    getting the version in use until someone publishes; on one that is not
- *    live the new version is in use from the next call (TDD 3.3).
- *  - With saves ahead of the version in use, one row under the header says
- *    so and offers Review and publish. Turning live off greys the button
- *    rather than removing the row, so the page does not jump when the
- *    switch flips; the row is absent only when there is nothing ahead.
- *  - History (history-drawer.tsx) is where publishing, applying an older
- *    version and "edit from here" happen, with the comparison on screen.
- *    After applying, the editor opens on that version, and saving from there
- *    makes the next one (TDD 3.7).
- *  - Live is a switch and a badge with its own permission. Turning it on or
- *    off changes nothing about which version runs (TDD 3.1).
- */
 export function VersionedEditor({
   initial,
   caseId,
@@ -65,14 +43,13 @@ export function VersionedEditor({
 }: {
   initial: Subject
   caseId: CaseId
-  /** Opens History on this version — the link from a call's details. */
+  /** Opens History on this version. */
   openAt?: number
 }) {
   const [subject, setSubject] = React.useState(initial)
   const [base, setBase] = React.useState(initial.versions[0].n)
   const [draft, setDraft] = React.useState(initial.versions[0].body)
   const [reviewing, setReviewing] = React.useState(false)
-  /* Each review opens with an empty note. */
   const [reviewKey, setReviewKey] = React.useState(0)
   const [saveFailed, setSaveFailed] = React.useState(false)
   const [history, setHistory] = React.useState<{
@@ -90,12 +67,9 @@ export function VersionedEditor({
   const changes = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
   ).length
-  const ahead = subject.versions.filter(
-    (version) => version.n > subject.inUse,
-  )
+  const ahead = subject.versions.filter((version) => version.n > subject.inUse)
 
   function openReview() {
-    /* The conflict case: someone else's save lands after this page opened. */
     if (caseId === "conflict" && !rival) {
       const theirs: Version = {
         ...RIVAL,
@@ -119,7 +93,6 @@ export function VersionedEditor({
   }
 
   function save(note: string) {
-    /* The save-fails case: the first attempt writes nothing (TDD 5.4). */
     if (caseId === "save-fails" && !saveFailed) {
       setSaveFailed(true)
       return
@@ -137,7 +110,6 @@ export function VersionedEditor({
     setSubject((current) => ({
       ...current,
       versions: [made, ...current.versions],
-      /* Not live: a save is in use from the next call. */
       ...(current.live
         ? {}
         : {
@@ -187,7 +159,6 @@ export function VersionedEditor({
       inUse: n,
       log: [{ n, by: "You", at: "just now", how }, ...current.log],
     }))
-    /* The editor opens on the version just applied (TDD 3.7). */
     setBase(n)
     setDraft(version.body)
     setHistory(null)
@@ -196,8 +167,6 @@ export function VersionedEditor({
         caseId === "apply-skips"
           ? `${REMOVED_BLOCK} was skipped. It’s no longer in the product.`
           : "Callers get it from the next call. No version was made.",
-      /* A live scenario asked first; a scenario that is not live applies
-         at once, so it can take it back. */
       action: subject.live
         ? undefined
         : {

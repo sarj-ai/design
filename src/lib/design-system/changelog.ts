@@ -1,15 +1,4 @@
-/**
- * What changed in the design system, newest first. `/changelog` renders it.
- *
- * Add an entry whenever a rule, token, topic, component or lint rule changes —
- * in the same commit as the change, so the log never trails the system. Put
- * new entries at the top.
- *
- * An entry is one change a reader would describe in one breath. Its title
- * says what is different now, not what was done ("Select opens below its
- * trigger", not "Fix select"). Each line under it is one fact, and `topics`
- * are design-system topic ids, which the page turns into links.
- */
+// Newest first: add entries at the top, in the same commit as the change.
 
 export type ChangeKind = "added" | "changed" | "fixed" | "removed"
 
@@ -17,7 +6,6 @@ export type ChangelogEntry = {
   /** ISO date, `YYYY-MM-DD`. */
   date: string
   title: string
-  /** One sentence on why, when the title does not already carry it. */
   summary?: string
   changes: { kind: ChangeKind; text: string }[]
   /** Topic ids from `DOCS_SECTIONS`, linked under the entry. */
@@ -134,7 +122,8 @@ export const CHANGELOG: ChangelogEntry[] = [
   },
   {
     date: "2026-10-11",
-    title: "Multi-step creation is removed; creating in steps is the creation flow",
+    title:
+      "Multi-step creation is removed; creating in steps is the creation flow",
     summary:
       "Two components did one job, and the card one read as a pop-up with steps — a shape the surfaces page rules out.",
     changes: [

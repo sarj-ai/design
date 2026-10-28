@@ -20,24 +20,14 @@ import {
 import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
 import { cn } from "@/lib/utils"
 
-/** A column an idea adds: its header and what each row shows in it. */
 type ExtraColumn = {
   id: string
   head: React.ReactNode
   cell: (call: CallRow, index: number) => React.ReactNode
-  /** Narrow columns hug their content. */
   className?: string
 }
 
-/**
- * The Conversations table as it ships — Time, Direction, Phone number,
- * Scenario, Call status, Outcome, Duration — with the slots each idea needs:
- * columns before and after, a mark beside the time, and a selected row.
- *
- * A click anywhere on a row opens the call, as on the platform. Controls
- * inside a row (a checkbox, a bookmark) stop the click, so ticking a call
- * does not also open it.
- */
+/** Controls inside a row must stop the click, or ticking one also opens the call. */
 export function ReviewTable({
   calls,
   onOpen,
@@ -51,12 +41,8 @@ export function ReviewTable({
   onOpen: (call: CallRow) => void
   before?: ExtraColumn[]
   after?: ExtraColumn[]
-  /** The row drawn selected — the last call opened. The lilac the sidebar
-   *  gives the page you are on, because muted is already the hover. */
   selected?: string | null
-  /** A mark before the time, such as the unread dot. */
   timeMark?: (call: CallRow) => React.ReactNode
-  /** Whether a row's time reads in full strength, as an unread email does. */
   timeStrong?: (call: CallRow) => boolean
 }) {
   return (

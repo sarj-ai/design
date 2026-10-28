@@ -23,17 +23,6 @@ import {
   PlayRecordingIcon,
 } from "@/components/mockups/behavioral-alerts/icons"
 
-/**
- * The recording player from the revamped call drawer.
- *
- * The waveform and its transport row live in one tinted box: play and the time
- * readout at the start, and the things you do to the recording rather than to
- * the playhead — speed, download — collected at the end.
- *
- * The real one is wavesurfer.js against the signed URL, so the bars here are
- * static and the colours are the nearest tokens.
- */
-
 const PLAYBACK_RATES = [
   { label: "0.5x speed", value: "0.5" },
   { label: "0.75x speed", value: "0.75" },
@@ -45,22 +34,12 @@ const PLAYBACK_RATES = [
 
 const BARS = 144
 
-/**
- * Deterministic pseudo-noise. The server and the client have to draw the same
- * bars, so this stands in for `Math.random`, which would not.
- */
+// Deterministic so server and client draw the same bars; Math.random would not.
 function noise(index: number) {
   const value = Math.sin(index * 12.9898) * 43758.5453
   return value - Math.floor(value)
 }
 
-/**
- * Normalised bar heights, 0–1, the way wavesurfer draws them from the audio.
- *
- * Shaped rather than flat: a slow envelope gives the loud stretches where
- * somebody is talking and the quiet ones between them, and the noise on top
- * keeps neighbouring bars from marching.
- */
 const WAVE = Array.from({ length: BARS }, (_, index) => {
   const position = index / BARS
   const envelope = 0.3 + 0.7 * Math.abs(Math.sin(position * Math.PI * 3.7))
@@ -78,9 +57,7 @@ export function formatTimeSeconds(seconds: number) {
 export type RecordingMarker = {
   id: string
   label: string
-  /** Seconds into the recording. */
   at: number
-  /** The token class the marker is drawn in. */
   tone: string
 }
 
@@ -90,13 +67,8 @@ export function RecordingPlayer({
   markers,
   onSeek,
 }: {
-  /** Where the playhead sits, in seconds. */
   at?: number
   duration: number
-  /**
-   * Drawn on the waveform at the second each one happened. Here that is one
-   * per detection: the moment the quote the analyst lifted was said.
-   */
   markers?: RecordingMarker[]
   onSeek: (seconds: number) => void
 }) {
@@ -106,10 +78,6 @@ export function RecordingPlayer({
   const played = Math.round((at / duration) * BARS)
 
   return (
-    /* Wave and controls in one tinted box rather than a box with a loose row of
-       buttons under it. They are one instrument: the transport moves the
-       playhead the wave draws, and the time readout is the same number the
-       playhead is at. */
     <div className="flex shrink-0 flex-col overflow-hidden rounded-lg bg-muted">
       <div className="p-4">
         <div
@@ -123,11 +91,8 @@ export function RecordingPlayer({
           role="button"
           tabIndex={0}
         >
-          {/* The bars flex to fill rather than sitting at a fixed width: the
-              track spans the panel, and the panel is resizable. If they did
-              not, the wave would end partway across while clicking to seek and
-              the markers below both still measured the full width — so the
-              picture and the positions would disagree. */}
+          {/* Bars must fill the track: seeking and the markers are measured
+             against its full width. */}
           {Array.from({ length: BARS }, (_, index) => (
             <span
               className={cn(
@@ -139,8 +104,6 @@ export function RecordingPlayer({
             />
           ))}
 
-          {/* A detection is anchored to a moment in the call, so the waveform
-              is the only place it can honestly be drawn. */}
           {markers?.map((marker) => (
             <Tooltip key={marker.id}>
               <TooltipTrigger
@@ -165,9 +128,6 @@ export function RecordingPlayer({
         </div>
       </div>
 
-      {/* One transport row, and every control on it the same height. Play is
-          the only filled one, because it is the only thing you press without
-          looking. */}
       <div className="flex items-center gap-2 border-t border-border px-3 py-2">
         <Button
           aria-label={playing ? "Pause" : "Play"}

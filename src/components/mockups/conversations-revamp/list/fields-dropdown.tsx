@@ -21,17 +21,6 @@ import {
   FieldsIcon,
 } from "@/components/mockups/conversations-revamp/list/icons"
 
-/**
- * Which columns the table shows, and in what order.
- *
- * This is what replaced the Default View / Detailed View picker. Two saved
- * views could not answer the questions people actually bring to this table, and
- * a third view per question is how a picker turns into a menu nobody reads —
- * so the columns are chosen directly instead.
- *
- * Drag to reorder, tick to show. The same interaction as the call drawer's
- * panel, because it is the same decision: what belongs on screen, and where.
- */
 export function FieldsDropdown({
   columns,
   onChange,
@@ -40,7 +29,6 @@ export function FieldsDropdown({
   onChange: (columns: ColumnSetting[]) => void
 }) {
   const [dragging, setDragging] = React.useState<ColumnId | null>(null)
-  /** Where the dragged row would land — the index the drop line sits before. */
   const [dropAt, setDropAt] = React.useState<null | number>(null)
 
   const shown = columns.filter((column) => column.visible).length
@@ -53,7 +41,7 @@ export function FieldsDropdown({
     onChange(next)
   }
 
-  /** Drop uses an insertion point, which shifts once the row is lifted out. */
+  // Drop uses an insertion point, which shifts once the row is lifted out.
   function moveTo(from: number, insertAt: number) {
     const next = [...columns]
     const [moved] = next.splice(from, 1)
@@ -112,7 +100,6 @@ export function FieldsDropdown({
               onDragEnd={endDrag}
               onDragOver={(event) => {
                 event.preventDefault()
-                // Past the midpoint means it lands after this row, not before.
                 const box = event.currentTarget.getBoundingClientRect()
                 const below = event.clientY > box.top + box.height / 2
                 setDropAt(below ? index + 1 : index)
@@ -126,15 +113,11 @@ export function FieldsDropdown({
                 endDrag()
               }}
             >
-              {/* Absolutely positioned so showing it does not shove the rows
-                  around while you are still dragging. */}
               {dropAt === index ? <DropLine className="-top-px" /> : null}
               {dropAt === columns.length && index === columns.length - 1 ? (
                 <DropLine className="-bottom-px" />
               ) : null}
 
-              {/* A button, not just the glyph: dragging has no keyboard
-                  equivalent, so the handle takes arrow keys itself. */}
               <Button
                 aria-label={`Reorder ${COLUMN_LABELS[column.id]}`}
                 className="shrink-0 cursor-grab text-muted-foreground"
@@ -184,7 +167,6 @@ export function FieldsDropdown({
   )
 }
 
-/** Where the dragged row will land. */
 function DropLine({ className }: { className: string }) {
   return (
     <span

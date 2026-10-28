@@ -61,25 +61,8 @@ import {
 } from "@/lib/mockups/model-catalog-data"
 import { cn } from "@/lib/utils"
 
-/** The four states the reviewer switch in the mockup header moves between. */
 export type CatalogState = "populated" | "empty" | "loading" | "error"
 
-/**
- * The model catalog — DES-169, scoped to DIS-9.
- *
- * One table per modality, because LLM and TTS are two lists an admin reads
- * separately. Tabs rather than two routes: it is one surface with two views of
- * the same five columns.
- *
- * Only LLM can be onboarded here. TTS is activate-only, so its tab carries the
- * table and the row action and no Add button at all — see `canOnboard`.
- *
- * The page follows the closest thing the platform already ships — the telephony
- * providers admin screen — which is a one-line description above a table whose
- * status column is a badge and whose row carries a single state-changing
- * action. Search and the status filter come from the Voice Library admin
- * screen, the other list this staff surface sits beside.
- */
 export function ModelCatalogPage({ state }: { state: CatalogState }) {
   const [entries, setEntries] = React.useState<CatalogEntry[]>(CATALOG)
   const [modality, setModality] = React.useState<Modality>("llm")
@@ -87,15 +70,6 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
   const [statusFilter, setStatusFilter] = React.useState("all")
   const [addOpen, setAddOpen] = React.useState(false)
 
-  /**
-   * Deactivating is one click and a quiet toast, as the PRD specifies.
-   *
-   * It takes the model out of future selection and touches nothing already
-   * configured to it, so there is no consequence for a confirmation dialog to
-   * warn about — a modal here would describe a risk that does not exist. The
-   * undo in the toast is the recovery path instead. Reactivate is one click and
-   * the same button styling for the same reason.
-   */
   function toggleActive(entry: CatalogEntry) {
     const nowActive = !entry.active
 
@@ -260,15 +234,6 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
   )
 }
 
-/**
- * Whichever of the table's states applies.
- *
- * Loading keeps the real header above skeleton rows so it reads as this table
- * arriving rather than as something unrelated. Empty, no-results and error each
- * name their own cause and carry the one action that resolves it — a catalog
- * that failed to load is not the same problem as a filter that matched nothing,
- * and one shared "nothing here" block would say neither.
- */
 function CatalogBody({
   canAdd,
   filtersOn,
@@ -409,7 +374,6 @@ function CatalogBody({
   )
 }
 
-/** The PRD's five columns, in the PRD's order. */
 function CatalogHead() {
   return (
     <TableHeader>

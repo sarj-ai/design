@@ -13,15 +13,6 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { Permission, Role } from "@/lib/mockups/roles-permissions-data"
 
-/**
- * What a role change costs, before it costs it.
- *
- * A role edit is a bulk action wearing a checkbox: one tick moves access for
- * everyone holding that role, in every organization, with no per-person step
- * to catch it. So the confirmation is the diff and the headcount, not "are you
- * sure" — and it says plainly which of the changes the backend does not
- * enforce yet, because a permission nobody checks is a promise, not a control.
- */
 export function SaveChangesDialog({
   granted,
   onConfirm,
@@ -41,9 +32,7 @@ export function SaveChangesDialog({
 
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
-      {/* The primitive caps at `sm:max-w-sm` through a `data-[size]` variant,
-          which outranks a plain utility — a diff of a dozen permission names
-          needs the important modifier to get the room. */}
+      {/* `!` needed: the primitive's `data-[size]` max-width outranks a plain utility. */}
       <AlertDialogContent className="sm:max-w-lg!">
         <AlertDialogHeader>
           <AlertDialogTitle>Change what {role.name} can do?</AlertDialogTitle>

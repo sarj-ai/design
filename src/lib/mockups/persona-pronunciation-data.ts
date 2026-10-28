@@ -6,13 +6,10 @@ export const GENDERS: PersonaGender[] = ["Male", "Female"]
 
 type Voice = {
   id: string
-  /** Display name, in the voice's own language. */
   name: string
-  /** The three-word vibe line under the name. */
   vibe: string
 }
 
-/** The voices this persona's language and gender resolve to, in library order. */
 export const VOICES: Voice[] = [
   {
     id: "khalid-base",
@@ -27,7 +24,6 @@ export const VOICES: Voice[] = [
   },
 ]
 
-/** The persona the dialog opens on. */
 export const PERSONA = {
   name: "Support Agent — خالد",
   initial: "خ",
@@ -46,13 +42,11 @@ export const PERSONA = {
 
 export type PronunciationTerm = {
   id: string
-  /** The word as it appears in the prompt or the caller's speech. */
   word: string
   /** The fully vowelled spelling the TTS reads instead. */
   replacement: string
 }
 
-/** Ten support-desk terms, each with the tashkeel the TTS needs. */
 export const PRONUNCIATION_TERMS: PronunciationTerm[] = [
   { id: "t1", word: "المبالغ", replacement: "الْمَبَالِغ" },
   { id: "t2", word: "سرج", replacement: "سَرْج" },

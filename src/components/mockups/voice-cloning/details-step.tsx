@@ -36,20 +36,6 @@ import {
   PREVIEW_LINE,
 } from "@/lib/mockups/voice-cloning-data"
 
-/**
- * Step 2: hear the clone, then describe it.
- *
- * The preview leads and plays on arrival — the PRD's "preview precedes
- * metadata". It stays at the top while the fields below are filled, so a
- * second listen is one click and never a step back.
- *
- * Only the five fields the PRD makes user-set. Provider, model, steps and
- * format are system-set and never shown: a cloned voice is always Sarj Omni.
- *
- * Most fields are required, so the one that is not carries "(optional)".
- * Errors appear on Create, under the label and above the control.
- */
-
 export type Details = {
   name: string
   vibe: string
@@ -77,7 +63,6 @@ export function DetailsStep({
 }: {
   details: Details
   setDetails: React.Dispatch<React.SetStateAction<Details>>
-  /** Sarj users only: client organizations can never publish. */
   canPublish: boolean
   showErrors: boolean
 }) {

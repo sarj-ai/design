@@ -1,23 +1,4 @@
-/**
- * Render a reel to MP4.
- *
- *   npm run reel -- callback-tool
- *   npm run reel -- callback-tool --scale 2          # 4K
- *   npm run reel -- callback-tool --skip-build       # reuse a running server
- *
- * How it works: the reel route already draws itself from a single frame
- * number, so rendering is just "set the number, take a picture", 30 times a
- * second of finished video. `?render=1` drops the player chrome and pins the
- * canvas to exactly 1920x1080 so nothing is scaled on the way out.
- *
- * The page is loaded ONCE and then seeked, rather than reloaded per frame. A
- * reload per frame would re-decode every screenshot 1140 times for a 38-second
- * reel and turn a two-minute render into most of an hour.
- *
- * Frames go straight down a pipe into ffmpeg instead of onto disk. A 38-second
- * reel is ~1140 PNGs at roughly 2 MB each — about 2.3 GB of temporary files
- * that exist only to be read back immediately.
- */
+// Usage: npm run reel -- <slug> [--scale 2] [--skip-build] [--url <base>]
 
 import { spawn } from "node:child_process"
 import { once } from "node:events"
@@ -83,8 +64,7 @@ function waitForExit(child) {
   })
 }
 
-/* Any HTTP answer means the server is up — a 401 from the site password is a
-   reply, not a failure to start. */
+// Any HTTP answer, a 401 included, means the server is up.
 async function reachable(url) {
   try {
     await fetch(url, { signal: AbortSignal.timeout(1500) })
@@ -105,9 +85,7 @@ async function waitUntilReachable(url, timeoutMs = 60_000) {
   throw new Error(`Server never came up at ${url}`)
 }
 
-/* `.env.local` is read by Next, not by Node, so the render has to load it
-   itself — otherwise the browser holds no site password and every frame comes
-   back as a blank 401. Same reasoning as scripts/screenshots.mjs. */
+// .env.local is read by Next, not Node: load it so the capture browser gets the site password.
 nextEnv.loadEnvConfig(process.cwd(), true, { error: () => {}, info: () => {} })
 
 function credentials() {
@@ -115,20 +93,9 @@ function credentials() {
   return password ? { httpCredentials: { password, username: "render" } } : {}
 }
 
-/** The gallery card's poster. 16:9 off a 1920x1080 canvas. */
 const POSTER = { width: 1280, height: 720 }
 const POSTER_MANIFEST = "src/lib/site/reel-posters.json"
 
-/**
- * Record the poster so the gallery can render it.
- *
- * Fingerprinted on the image's own bytes rather than on the composition's
- * source, which is the same job `thumbnails.json` does for mockup cards and for
- * the same reason: the filename is reused on every render, so without a cache
- * key a reader who has seen the old poster keeps seeing it. Hashing the bytes
- * means the key moves exactly when the picture does — a re-render that changes
- * nothing visible does not invalidate anyone's cache.
- */
 async function writePosterManifest(slug, buffer) {
   let previous = { fingerprints: {} }
 
@@ -203,25 +170,17 @@ async function main() {
     console.log(`Loading ${target}`)
     await page.goto(target, { waitUntil: "networkidle" })
 
-    /* In render mode the canvas is the only thing that should exist. Frames are
-       taken from the canvas element, so anything overlapping it lands in the
-       video — the toast viewport, and in dev the Agentation overlay, which sits
-       exactly where a reel's end card does. Hiding every sibling is what lets
-       `--url http://localhost:3000` be a usable fast path against a dev server
-       instead of a render with a floating dev button baked into it. */
+    // Frames are taken from the canvas, so hide every sibling (toasts, the dev overlay) or it lands in the video.
     await page.addStyleTag({
       content: "body > *:not([data-reel-root]) { display: none !important }",
     })
 
-    /* The composition registers this once React can service a seek. Waiting on
-       it rather than on a timeout is what makes the first frame reliable. */
+    // Wait on the composition's seek hook, not a timeout, so frame 0 is reliable.
     await page.waitForFunction(() => Boolean(window.__reel), null, {
       timeout: 30_000,
     })
 
-    /* Fonts and screenshots have to be decoded before frame 0, or the opening
-       second of the video renders in a fallback face with blank panels — and
-       it is invisible until someone watches the export. */
+    // Decode fonts and images before frame 0, or the opening renders in a fallback face with blank panels.
     await page.evaluate(() => document.fonts.ready)
     await page.evaluate(() =>
       Promise.all(
@@ -268,8 +227,7 @@ async function main() {
         args.crf,
         "-preset",
         "slow",
-        /* Lets a player start the video before the whole file has arrived,
-           which is what Slack and Drive previews need. */
+        // Lets Slack and Drive previews start before the whole file arrives.
         "-movflags",
         "+faststart",
         outFile,
@@ -286,13 +244,10 @@ async function main() {
       await page.evaluate((n) => window.__reel.seek(n), frame)
       const buffer = await canvas.screenshot({ type: "png" })
 
-      /* Respect backpressure — ffmpeg encodes slower than Chromium can hand
-         over frames, and ignoring this grows an unbounded buffer in Node. */
+      // Respect backpressure: ffmpeg encodes slower than Chromium hands over frames.
       if (!ffmpeg.stdin.write(buffer)) await once(ffmpeg.stdin, "drain")
 
-      /* Frame 0 is almost always blank — a reel opens on an empty canvas and
-         fades its first line in, so a poster taken there is a white rectangle.
-         A third of the way in lands on a real beat. */
+      // Frame 0 is usually a blank canvas, so the poster is taken a third of the way in.
       if (frame === posterFrame) {
         poster = await sharp(buffer)
           .resize({ width: POSTER.width })

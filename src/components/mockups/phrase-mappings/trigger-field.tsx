@@ -17,19 +17,6 @@ import { cn } from "@/lib/utils"
 
 import { RemoveTriggerIcon } from "./icons"
 
-/**
- * The caller phrases that select one mapping.
- *
- * The chips sit above the field, and the field carries Add on a shared edge,
- * so the row reads as one control rather than a button dropped in it. A phrase
- * claimed by another active rule turns destructive here as well as in the
- * alert below the list — the alert says which rules clash, the chip says which
- * word did it.
- *
- * An inherited set keeps every control and disables it, rather than dropping
- * the input and the ×. One dead control reads as "not yours to edit"; a control
- * that is simply absent reads as a screen that failed to render.
- */
 export function TriggerField({
   conflicts,
   disabled,
@@ -38,7 +25,6 @@ export function TriggerField({
   triggers,
 }: {
   conflicts: Conflict[]
-  /** Persona scope only: the inherited global set, shown but not editable. */
   disabled: boolean
   onAdd: (trigger: string) => void
   onRemove: (trigger: string) => void
@@ -48,7 +34,6 @@ export function TriggerField({
 
   const full = triggers.length >= MAX_TRIGGERS
   const tooLong = draft.length > TRIGGER_MAX_CHARS
-  /* Compared normalised, so "سلام" is not added twice as "سلامٌ". */
   const duplicate = triggers.some(
     (trigger) => normalize(trigger) === normalize(draft) && draft.trim() !== "",
   )

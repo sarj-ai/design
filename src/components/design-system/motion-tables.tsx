@@ -12,22 +12,7 @@ import { Button } from "@/components/ui/button"
 import type { MotionRule } from "@/lib/design-system/data"
 import { cn } from "@/lib/utils"
 
-/**
- * The motion rules, each one demonstrated by the thing it governs.
- *
- * A curve cannot be read off a cubic-bezier and a duration cannot be read off
- * a number, so the two pages that answer "which one" carry a rail you can
- * replay rather than a column of values. The rest — what may move, who has
- * asked it not to, and what makes a correct choice still run badly — are
- * genuinely tables: there is nothing to watch, only a rule to follow.
- *
- * Prose here renders as plain text, so no backticks. A literal that needs to
- * look like one goes in its own cell as a ReferenceName.
- */
-
-/** The rail is a fixed w-64 and the runner a size-4, so the travel is the
-    difference. Fixed rather than measured because nothing here reflows, and a
-    ResizeObserver for a demo would be machinery earning nothing. */
+/** The rail's w-64 minus the runner's size-4. */
 const TRAVEL = 240
 
 const CURVES = [
@@ -70,7 +55,10 @@ const DURATIONS = [
   { cls: "duration-150", use: "Hover and press." },
   { cls: "duration-200", use: "Tooltip, popover, dropdown." },
   { cls: "duration-250", use: "Dialog and drawer." },
-  { cls: "duration-300", use: "The cap. A container morphing to fit new content." },
+  {
+    cls: "duration-300",
+    use: "The cap. A container morphing to fit new content.",
+  },
 ]
 
 const ANIMATABLE = [
@@ -114,14 +102,6 @@ const REDUCED = [
   },
 ]
 
-/**
- * Where the frames go.
- *
- * Which property you animate is settled on the page before this one, so none
- * of these repeat it. What is left is everything that makes a correct property
- * choice run badly anyway, and all of it is already solved somewhere in this
- * repo — so each row names the file rather than describing the technique.
- */
 const PERFORMANCE = [
   {
     rule: "Animate from CSS, not from state",
@@ -157,7 +137,6 @@ const PERFORMANCE = [
   },
 ]
 
-/** One runner on one rail, replayed by the button above it. */
 function Rail({ className, run }: { className: string; run: boolean }) {
   return (
     <div className="relative h-4 w-64 rounded-full bg-muted">
@@ -172,11 +151,6 @@ function Rail({ className, run }: { className: string; run: boolean }) {
   )
 }
 
-/**
- * The replay control. One button for the whole comparison, because the point
- * is the difference between the rails and separate triggers would let them
- * start at different moments.
- */
 function Replay({
   children,
   label,
@@ -211,10 +185,7 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
               <div className="flex flex-col gap-3">
                 {CURVES.map((curve) => (
                   <div className="flex items-center gap-4" key={curve.cls}>
-                    <Rail
-                      className={cn("duration-300", curve.cls)}
-                      run={run}
-                    />
+                    <Rail className={cn("duration-300", curve.cls)} run={run} />
                     <ReferenceName>{curve.cls}</ReferenceName>
                   </div>
                 ))}

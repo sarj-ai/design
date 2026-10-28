@@ -1,13 +1,5 @@
 import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * A Card never sits inside a Card.
- *
- * Two rings, two paddings, two radii, one thing — the inner edge says "this
- * is separate" about something that is not. Inside a card, separate with a
- * `bg-muted` inset, an `ItemSeparator` or a `Separator`.
- */
-
 const noNestedCard = {
   meta: {
     type: "problem",

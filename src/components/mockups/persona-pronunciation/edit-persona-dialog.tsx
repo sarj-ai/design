@@ -50,15 +50,6 @@ import {
   RenameIcon,
 } from "@/components/mockups/persona-pronunciation/icons"
 
-/**
- * Edit persona, rebuilt wide so pronunciation terms get a table instead of a
- * strip at the bottom of a narrow scroll.
- *
- * One column, five sections in the order an operator reads them: who the
- * persona is, which voice says it, how it behaves in a call, when it hangs
- * up, and finally the terms that voice has to say correctly. The footer stays
- * pinned so Save is never below the table.
- */
 export function EditPersonaDialog() {
   const [open, setOpen] = React.useState(true)
 
@@ -68,9 +59,6 @@ export function EditPersonaDialog() {
         <Button variant="outline">Edit persona</Button>
       </DialogTrigger>
 
-      {/* The dialog's own close sits in the header row, next to the title,
-          so the primitive's corner button is switched off. Nothing is
-          autofocused: the design shows the dialog at rest. */}
       <DialogContent
         className="sm:max-w-200"
         onOpenAutoFocus={(event) => event.preventDefault()}
@@ -113,9 +101,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
     <>
       <DialogHeader className="-mx-4 -mt-4 flex-row items-center justify-between gap-4 border-b px-6 py-5">
         <div className="flex items-center gap-4">
-          {/* Not <Avatar>: the primitive draws a border ring and the design
-              has a plain muted circle. No edge, no padding, so it stays a
-              bare element rather than a rebuilt primitive. */}
+          {/* Not <Avatar>: the primitive draws a border ring. */}
           <span
             aria-hidden
             className="flex size-11 shrink-0 items-center justify-center rounded-full bg-muted text-lg"
@@ -139,9 +125,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
               ) : (
                 <>
                   <DialogTitle dir="auto">{name}</DialogTitle>
-                  {/* Negative vertical margins keep the 28px hit area from
-                      making the title row taller than the title, so the
-                      subtitle sits 4px under the text as in the design. */}
+                  {/* Negative margins keep the 28px hit area from making the title row taller. */}
                   <Button
                     aria-label="Rename persona"
                     className="-my-1.5 text-muted-foreground"
@@ -167,10 +151,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
         </DialogClose>
       </DialogHeader>
 
-      {/* ScrollArea instead of overflow-y-auto: the bar is an overlay that only
-          shows while scrolling, so no permanent gutter beside the fields. The
-          negative vertical margins eat the dialog's own gap so content clips
-          exactly at the header and footer borders, not 16px short of them. */}
+      {/* Negative margins let content clip exactly at the header and footer borders. */}
       <ScrollArea className="-mx-4 -my-4 [&>[data-slot=scroll-area-viewport]]:max-h-150">
         <div className="flex flex-col gap-8 px-6 py-6">
           <section className="flex flex-col gap-4">
@@ -313,8 +294,6 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
                 onCheckedChange={setEndCallOnSilence}
               />
             </div>
-            {/* Off is greyed, not removed — the reader still sees what the
-                timeout was set to. */}
             <div className="grid grid-cols-2 gap-6">
               <Field>
                 <FieldLabel htmlFor="silence-seconds">

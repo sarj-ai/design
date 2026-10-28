@@ -1,11 +1,3 @@
-/**
- * Mock data for DES-198, voice cloning. The limits are the PRD's ("Voice
- * cloning on the platform", Taynam Alzamel), not the TTS contract's: the
- * contract accepts 25 MB and recommends 8–12 seconds, and the product caps
- * tighter on purpose — past 20 seconds latency and memory rise while quality
- * drops.
- */
-
 export const SAMPLE_LIMITS = {
   minSeconds: 6,
   maxSeconds: 20,
@@ -13,19 +5,13 @@ export const SAMPLE_LIMITS = {
   formats: ["wav", "mp3", "flac", "ogg"],
 } as const
 
-/** What the reader reads aloud. The clone is built from the audio and a
- *  transcript of what was actually said, so this is a prompt, not the
- *  reference text. */
 export const SCRIPT =
   "مرحباً بك في سرج. نحن هنا لمساعدتك في كل خطوة على الطريق. يسعدنا أن نستمع إليك، فتحدث بصوتك الطبيعي وبالسرعة التي تناسبك."
 
-/** What transcription returns for a take: close to the script, not equal to
- *  it — the reader skipped a word, which is why the transcript is editable. */
+/** Differs from SCRIPT by a skipped word, on purpose. */
 export const TRANSCRIPT =
   "مرحباً بك في سرج. نحن هنا لمساعدتك في كل خطوة. يسعدنا أن نستمع إليك، فتحدث بصوتك الطبيعي وبالسرعة التي تناسبك."
 
-/** The line the clone speaks on the preview step — new words, so the reader
- *  hears the voice say something they did not record. */
 export const PREVIEW_LINE = "أهلاً وسهلاً، كيف أقدر أخدمك اليوم؟"
 
 export type LanguageCode = "ar" | "en"
@@ -56,16 +42,11 @@ export type Voice = {
   language: LanguageCode
   gender: Gender
   status: VoiceStatus
-  /** Cloned voices can be deleted by their owner; native ones never. */
   cloned: boolean
-  /** Whose library it sits in. `sarj` and published is the catalog every
-   *  organization sees; `org` is the viewer's own. */
   scope: "catalog" | "org"
-  /** Personas speaking with it — a voice in use cannot be deleted. */
   usedBy: string[]
 }
 
-/** The catalog: Sarj's published voices, seen by every organization. */
 const CATALOG: Voice[] = [
   {
     id: "nourah",
@@ -141,7 +122,6 @@ const CATALOG: Voice[] = [
   },
 ]
 
-/** A client organization's own clones. */
 const CLIENT_OWN: Voice[] = [
   {
     id: "khalid",
@@ -169,7 +149,6 @@ const CLIENT_OWN: Voice[] = [
   },
 ]
 
-/** Sarj's own clones — private to Sarj, one waiting on publish approval. */
 const SARJ_OWN: Voice[] = [
   {
     id: "salem",
@@ -203,8 +182,6 @@ export function voicesFor(viewer: Viewer): Voice[] {
   return [...(viewer === "sarj" ? SARJ_OWN : CLIENT_OWN), ...CATALOG]
 }
 
-/** The persona the picker is shown on. Its language and gender filter the
- *  voice cards, as `VoiceSelector` does on the platform. */
 export const PERSONA = {
   name: "Noura",
   language: "ar" as LanguageCode,
@@ -212,7 +189,6 @@ export const PERSONA = {
   voiceId: "nourah",
 }
 
-/** Outcomes a reviewer can force, so every state is reachable. */
 export type SampleOutcome = "clean" | "noisy" | "fails"
 
 export const OUTCOMES: { id: SampleOutcome; label: string }[] = [

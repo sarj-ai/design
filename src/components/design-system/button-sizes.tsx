@@ -13,13 +13,6 @@ import {
 } from "@/components/ui/card"
 import { BUTTON_SIZES } from "@/lib/design-system/data"
 
-/**
- * Which of the four sizes to reach for, with the button itself as the sample.
- *
- * A table rather than a grid of pairs: the question is which rung to pick, and
- * that is a comparison down a column. The four buttons sitting in one column
- * also show the ladder as a ladder, which two-per-row did not.
- */
 export function ButtonSizes() {
   return (
     <Card>

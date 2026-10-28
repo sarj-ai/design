@@ -21,25 +21,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { TableBody, TableCell, TableRow } from "@/components/ui/table"
 
-/**
- * The four states an index page has that are not the populated one.
- *
- * All four render at the same width and inside the same container the real
- * table uses, because that is the claim each of them is making: nothing about
- * the page moves between states except what is inside the rows. A preview that
- * floated each state on the page background would demonstrate the opposite.
- */
-
-/** The four columns the demos share, so the four states are the same table. */
 const COLUMNS = ["Source", "Type", "Size", "Added"]
 
-/**
- * Loading — the table's own shape, with the cells not arrived yet.
- *
- * Same column count, same 40px rows, same band. The skeleton is not a picture
- * of a table, it is the table, which is the only way the page does not jump
- * when the data lands.
- */
 export function LoadingPreview() {
   return (
     <DataTable>
@@ -54,12 +37,9 @@ export function LoadingPreview() {
           <TableRow key={row}>
             {COLUMNS.map((column, index) => (
               <TableCell key={column}>
-                {/* Varied widths, because a column of identical bars reads as
-                    a loading graphic rather than as rows of text arriving. */}
                 <Skeleton
                   className={cellWidth(index)}
-                  /* The primitive pulses; the escape is ours to add wherever
-                     it is used, and opacity is not an exception. */
+                  /* The primitive pulses, so the reduced-motion escape is added here. */
                 />
               </TableCell>
             ))}
@@ -70,20 +50,12 @@ export function LoadingPreview() {
   )
 }
 
-/** A believable text width per column, fixed rather than random so the
-    skeleton does not reshuffle on every render. */
+/** Fixed rather than random so the skeleton does not reshuffle on every render. */
 function cellWidth(index: number) {
   const widths = ["h-4 w-40", "h-4 w-20", "h-4 w-14", "h-4 w-24"]
   return `${widths[index]} motion-reduce:animate-none`
 }
 
-/**
- * Empty — nothing here yet, and the one action that changes it.
- *
- * The description says what a row would be. It is the only place a reader who
- * has not seen the feature finds out what the list is for, and leaving it at
- * "No items" spends the whole state saying something the heading already said.
- */
 export function EmptyStatePreview() {
   return (
     <div className="rounded-lg border">
@@ -106,13 +78,6 @@ export function EmptyStatePreview() {
   )
 }
 
-/**
- * No results — the collection has rows, this filter does not.
- *
- * Inside the table's container, band and all. Dropping the header would drop
- * the columns, and with them the evidence that a filter is what is doing this
- * rather than an account with nothing in it.
- */
 export function NoResultsPreview() {
   return (
     <DataTable>
@@ -124,8 +89,6 @@ export function NoResultsPreview() {
         </DataTableHeaderRow>
 
         <TableRow className="hover:bg-transparent">
-          {/* The one place a cell is not 40px: it is holding a state, not a
-              row, so it spans the columns rather than pretending to be one. */}
           <TableCell className="h-auto! py-8" colSpan={COLUMNS.length}>
             <Empty className="p-0">
               <EmptyHeader>
@@ -151,14 +114,6 @@ export function NoResultsPreview() {
   )
 }
 
-/**
- * Error — name what failed, and offer the retry.
- *
- * "Something went wrong" is what a page says when nobody decided which page it
- * was, and it is the sentence a shared root boundary produces by default. The
- * title here names the collection, so a reader who has three tabs open knows
- * which one is broken.
- */
 export function ErrorStatePreview() {
   return (
     <div className="rounded-lg border">

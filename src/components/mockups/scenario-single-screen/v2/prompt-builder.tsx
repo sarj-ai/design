@@ -38,22 +38,7 @@ import {
   RemoveIcon,
 } from "@/components/mockups/scenario-single-screen/v2/icons"
 
-/**
- * The instruction prompt, written as the six things it says.
- *
- * The review said the prompting area is not intuitive for a business user, and
- * the reason is that the prompt was never one thing: it is already an identity,
- * a refusal, a goal, a script, a tone and an escalation rule, glued together
- * with `#` headings. A person who has not written a prompt before cannot see
- * that, so they get a wall of monospace and no idea whether they have missed
- * anything.
- *
- * Each of those becomes a field with a plain label, one line saying what
- * belongs in it, and an example in the placeholder. The call script becomes a
- * numbered list, because it is the one part that is genuinely ordered and free
- * text hides that. Nothing is taken away — `Raw prompt` opens exactly what the
- * model is sent, and the markdown it shows is byte-identical to what v1 stores.
- */
+/** The markdown `Raw prompt` shows must stay byte-identical to what v1 stores. */
 export function PromptBuilder({
   onChange,
   onOpenRaw,
@@ -67,7 +52,6 @@ export function PromptBuilder({
   onOpenVariables: () => void
   prompt: SectionedPrompt
   rtl: boolean
-  /** Variable names the prompt may spend, already ordered for display. */
   variables: string[]
 }) {
   const dir = rtl ? "rtl" : "ltr"
@@ -142,13 +126,6 @@ export function PromptBuilder({
   )
 }
 
-/**
- * One prose section.
- *
- * The variable chips appear only while this field has focus: six permanent
- * chip rows would be six copies of the same list, and the moment a person
- * needs them is the moment they are typing.
- */
 function SectionField({
   dir,
   example,
@@ -180,8 +157,7 @@ function SectionField({
     const end = element.selectionEnd ?? start
     onChange(value.slice(0, start) + token + value.slice(end))
 
-    /* Put the caret after what was just inserted, so a second chip does not
-       land inside the first. */
+    /* Caret after the insert, so a second chip does not land inside the first. */
     requestAnimationFrame(() => {
       element.focus()
       element.setSelectionRange(start + token.length, start + token.length)
@@ -211,8 +187,7 @@ function SectionField({
           {variables.map((name) => (
             <Button
               key={name}
-              /* Mouse-down would blur the textarea before the click lands,
-                 taking the caret — and the chip row — with it. */
+              /* Mouse-down would blur the textarea, taking the caret and chip row with it. */
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => insert(name)}
               size="xs"
@@ -236,13 +211,6 @@ function SectionField({
   )
 }
 
-/**
- * The call script, as ordered steps.
- *
- * Written as a paragraph the order is invisible, and order is the whole point
- * — the agent works down it. Numbering it makes that legible, and makes "move
- * the confirmation before the close" a drag rather than a rewrite.
- */
 function FlowField({
   dir,
   onChange,

@@ -33,11 +33,6 @@ import {
 
 import { icon } from "@/components/shared/icon"
 
-/**
- * Icons for the shared product shell — one glyph per nav destination, matched
- * to the app's own sidebar. Icons *inside* a mockup live in that mockup's own
- * icons.tsx; this file is only the app chrome.
- */
 export const PlaygroundIcon = icon(PlayIcon, "PlaygroundIcon")
 export const PersonasIcon = icon(RoboticIcon, "PersonasIcon")
 export const ScenariosIcon = icon(GoogleDocIcon, "ScenariosIcon")
@@ -60,7 +55,6 @@ export const DeveloperDocsIcon = icon(CodeIcon, "DeveloperDocsIcon")
 export const BuildingIcon = icon(Building02Icon, "BuildingIcon")
 export const RolesIcon = icon(ShieldKeyIcon, "RolesIcon")
 export const MobileIcon = icon(SmartPhone01Icon, "MobileIcon")
-/* The model catalog (DES-169), under Configuration. */
 export const ModelsIcon = icon(CpuIcon, "ModelsIcon")
 export const TelephonyIcon = icon(TelephoneIcon, "TelephonyIcon")
 export const SettingsIcon = icon(Settings01Icon, "SettingsIcon")
@@ -69,5 +63,4 @@ export const MessagingSettingsIcon = icon(
   "MessagingSettingsIcon",
 )
 export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon")
-/** The hover "+" on Personas and Scenarios — creates one without leaving the nav. */
 export const NewItemIcon = icon(PlusSignIcon, "NewItemIcon")

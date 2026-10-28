@@ -7,19 +7,6 @@ import {
   RequestedIcon,
 } from "@/components/mockups/conversations-revamp/drawer/icons"
 
-/**
- * How a booking reads once the call has actually run.
- *
- * Same facts as the pre-call panel, past tense and without the controls: the
- * booking cannot be cancelled or rescheduled any more, so a Cancel call button
- * here would be a dead affordance. What is left is the question a reader
- * arrives with — this call was booked, so what was it booked *for*, and did the
- * agent get the brief we meant to give it?
- *
- * Dial attempts stay, because "connected on the second attempt" explains a
- * customer who sounded surprised. Reschedules stay for the same reason: a call
- * that was moved twice is a different conversation from one that was not.
- */
 export function CompletedScheduleSummary({
   schedule,
 }: {

@@ -10,15 +10,6 @@ import {
 import { LanguageModelIcon, SpeechToTextIcon, TextToSpeechIcon } from "./icons"
 import { TurnDetectionSection } from "./turn-detection-section"
 
-/**
- * The Model Settings tab of the call detail, with the new turn detection
- * section in place.
- *
- * The three sections below it are unchanged and are here only so the placement
- * reads: turn detection goes first because it is the only one that reports what
- * happened rather than echoing what was configured, and it is what someone
- * opens this tab to find when a client says the agent was slow.
- */
 export function ModelSettingsTab({
   timing,
   voice,
@@ -69,7 +60,6 @@ export function ModelSettingsTab({
   )
 }
 
-/** The label-and-value shape the tab already uses for every model section. */
 function ConfigSection({
   icon,
   title,

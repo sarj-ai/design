@@ -22,24 +22,13 @@ import {
 } from "@/lib/mockups/transfer-routing-data"
 import { WorkingHoursFields } from "@/components/mockups/transfer-routing/route-card"
 
-/**
- * What every route does unless it says otherwise.
- *
- * Most clients run one team behind all their routes, so these start shared and
- * a route only takes one off the block when it genuinely differs. The trunk is
- * the exception — the call leaves on one carrier whatever route picked it.
- */
 export function SharedSettings({
   value,
   warmInUse,
   onChange,
 }: {
   value: SharedSettingsValue
-  /**
-   * Any route transfers warm, shared or overridden. A route that overrode
-   * itself to warm still inherits this prompt, so hiding it whenever the
-   * shared mode is cold left that route pointing at a value with no control.
-   */
+  /** Any route can transfer warm, and a route overridden to warm still inherits this prompt. */
   warmInUse: boolean
   onChange: (next: SharedSettingsValue) => void
 }) {
@@ -86,8 +75,6 @@ export function SharedSettings({
 
       <Field>
         <FieldTitle>Working hours</FieldTitle>
-        {/* Three controls under one heading. Without the inset they read as
-            three more peers of Transfer mode rather than parts of the hours. */}
         <div className="rounded-lg bg-muted p-4">
           <WorkingHoursFields
             value={value.workingHours}

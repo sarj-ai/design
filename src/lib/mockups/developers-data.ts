@@ -1,14 +1,3 @@
-/**
- * The Developers page's mock data.
- *
- * The quickstart is the real public API, read from `sarj-ai/platform`
- * (`python/webserver/.../public_api`): `POST /calls` on
- * `https://platform-api.sarj.ai/api/v1`, a Bearer API key, and a body of
- * `phone_number`, `scenario_id`, `variables` and `language` (Arabic unless
- * set). Keys, webhook and variables carry the fields their product pages
- * already have — nothing new.
- */
-
 export const DOCS_URL = "https://platform-docs.sarj.ai"
 export const GETTING_STARTED_URL = `${DOCS_URL}/getting-started`
 export const MCP_URL = `${DOCS_URL}/mcp-server`

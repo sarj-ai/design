@@ -5,13 +5,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { HistoryIcon } from "@/components/mockups/config-versioning/icons"
 import { CONVERSATION } from "@/lib/mockups/config-versioning-data"
 
-/**
- * The top of a conversation's details, with the one thing versioning adds:
- * the version the call ran with, beside the scenario's name (TDD 3.8). It
- * opens that version in the scenario's history, which is how an engineer
- * gets from a call to the configuration behind it. The conversations list
- * does not show it.
- */
 export function ConversationVersion({
   onOpenVersion,
 }: {

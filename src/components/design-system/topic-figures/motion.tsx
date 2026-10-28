@@ -8,10 +8,6 @@ const R = 200
 const T = 76
 const B = 196
 
-/**
- * Easing: `--ease-out-cubic`, cubic-bezier(0.215, 0.61, 0.355, 1), plotted
- * from its real control points with its handles drawn.
- */
 function EasingFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -28,11 +24,7 @@ function EasingFigure({ className }: FigureProps) {
   )
 }
 
-/**
- * Duration: a 0 to 300ms timeline with a keyframe on each duration
- * `eslint-rules/rules/motion-tokens.mjs` allows — 0, 100, 150, 200, 250,
- * 300 — and the 300ms ceiling run off the sheet.
- */
+/** Durations must match eslint-rules/rules/motion-tokens.mjs. */
 function DurationFigure({ className }: FigureProps) {
   const x = (ms: number) => L + (ms * (R - L)) / 300
   return (
@@ -62,10 +54,6 @@ function DurationFigure({ className }: FigureProps) {
   )
 }
 
-/**
- * What may animate: a box, and the same box moved (transform) and faded
- * (opacity) — the only two properties the compositor takes.
- */
 function AnimatableFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -86,10 +74,6 @@ function AnimatableFigure({ className }: FigureProps) {
   )
 }
 
-/**
- * Reduced motion: the same element twice — above it moves, below it holds
- * where it started. Each carries its own escape.
- */
 function ReducedMotionFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -104,9 +88,6 @@ function ReducedMotionFigure({ className }: FigureProps) {
   )
 }
 
-/**
- * Performance: frame times as bars, every one under the frame budget.
- */
 function MotionPerformanceFigure({ className }: FigureProps) {
   const bars = [52, 64, 44, 70, 58, 48]
   return (
@@ -130,7 +111,6 @@ function MotionPerformanceFigure({ className }: FigureProps) {
   )
 }
 
-/** Topic id → its tile's drawing. */
 export const MOTION_FIGURES: Record<
   string,
   (props: FigureProps) => React.ReactNode

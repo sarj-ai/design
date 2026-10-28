@@ -85,34 +85,20 @@ import {
   type QuickstartLanguage,
 } from "@/lib/mockups/developers-data"
 
-/**
- * Developers: everything someone building on Sarj needs, as tabs of one page
- * instead of four entries scattered through Configuration.
- *
- * The overview leads with the one thing every integration starts with —
- * placing a call through the public API — as code that runs, then links to
- * the rest. The other tabs carry the fields their product pages already have.
- */
-
 type Tab = "overview" | "api-keys" | "webhooks" | "variables"
 
-/** Nav entries that move into this page's tabs. */
 const DEVELOPER_ONLY = ["API Keys", "Variables", "Webhooks", "Developer Docs"]
 
 export function DevelopersPage({
   framed = false,
 }: {
-  /** Shown inside a frame on the design-system page, with no mockup shell
-   *  header above it for the sidebar to clear. */
+  /** Inside a design-system frame, with no mockup shell header for the sidebar to clear. */
   framed?: boolean
 }) {
   const [tab, setTab] = React.useState<Tab>("overview")
 
   return (
     <AppShell
-      /* Nothing in the sidebar is this page any more: it opens from the
-         Developers button in the top bar, and the four entries it gathers
-         leave the nav — only developers need them, and they are its tabs. */
       active=""
       breadcrumb="Developers"
       developers="open"
@@ -161,8 +147,6 @@ export function DevelopersPage({
     </AppShell>
   )
 }
-
-/* ---------------------------------------------------------------- Overview */
 
 function Overview({ onOpenTab }: { onOpenTab: (tab: Tab) => void }) {
   return (
@@ -266,11 +250,6 @@ function QuickLink({
   )
 }
 
-/**
- * The request, with line numbers, a copy button, and the language switch in
- * the corner. Monochrome: syntax colour would need colours the token set
- * does not have, and the code reads fine without them.
- */
 function CodeBlock() {
   const [language, setLanguage] = React.useState<QuickstartLanguage>("curl")
   const [copied, setCopied] = React.useState(false)
@@ -335,8 +314,6 @@ function CodeBlock() {
     </div>
   )
 }
-
-/* ---------------------------------------------------------------- API keys */
 
 function ApiKeys() {
   const [keys, setKeys] = React.useState(API_KEYS)
@@ -467,8 +444,6 @@ function ApiKeys() {
   )
 }
 
-/* ---------------------------------------------------------------- Webhooks */
-
 function Webhook() {
   const [url, setUrl] = React.useState(WEBHOOK_URL)
   const [saved, setSaved] = React.useState(WEBHOOK_URL)
@@ -508,8 +483,6 @@ function Webhook() {
     </Card>
   )
 }
-
-/* --------------------------------------------------------------- Variables */
 
 function Variables() {
   const [shown, setShown] = React.useState<Set<string>>(new Set())

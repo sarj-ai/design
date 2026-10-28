@@ -62,26 +62,6 @@ import {
   OverrideIcon,
 } from "@/components/mockups/phrase-mappings/icons"
 
-/**
- * The acknowledgments drawer: the generic filler words that ship today, and
- * phrase-response mappings beside them.
- *
- * **The panel is no longer called "filler words".** It held a section called
- * Generic filler words, so the panel and its own first section were reading as
- * the same thing. Acknowledgments is what both halves produce — one at random,
- * one exactly — and it is the word the mappings section already used.
- *
- * **Each half switches on its own.** Review, Fatma, Aug 2026: one switch over
- * both of them made "I want exact answers to five greetings and no random
- * filler" impossible to express. They fire at the same moment in a call but
- * they are not one behaviour, so they are not one control.
- *
- * **A persona still inheriting sees one read-only language, not three.** Every
- * control stays on screen and every one of them is disabled — the switches and
- * Done included, so the reader can see which halves the global set has on. No
- * banner explaining it: the Override switch is right there at the top, off,
- * and a panel of dead controls under it needs no caption.
- */
 export function FillerWordsDrawer({
   config,
   inherited,
@@ -94,21 +74,16 @@ export function FillerWordsDrawer({
   voice,
 }: {
   config: FillerConfig
-  /** Persona scope only: the persona has no override yet. */
   inherited: boolean
   onChange: (config: FillerConfig) => void
   onCreateOverride: () => void
   onOpenChange: (open: boolean) => void
   onRemoveOverride: () => void
   open: boolean
-  /** Name of the persona being edited, or undefined in global settings. */
   persona?: string
-  /** The voice this scope's mapped responses are heard in. */
   voice: PreviewVoice
 }) {
   const fieldId = React.useId()
-  /* Which mapping is expanded. Adding one opens it, because a new mapping is
-     empty and the reader's next act is always to fill it in. */
   const [openMapping, setOpenMapping] = React.useState<string>("")
 
   const conflicts = findConflicts(config.mappings)
@@ -131,13 +106,7 @@ export function FillerWordsDrawer({
     setOpenMapping(mapping.id)
   }
 
-  /**
-   * Which mappings clash, by position in the list rather than by response.
-   *
-   * The response would name them more precisely, but it can run to 80
-   * characters of Arabic, and dropping two of those into an English sentence
-   * makes a line nobody can read in either direction.
-   */
+  /** By position, not response: long Arabic responses break the English sentence. */
   const positionsOf = (ids: string[]) => {
     const positions = ids
       .map((id) => config.mappings.findIndex((entry) => entry.id === id) + 1)

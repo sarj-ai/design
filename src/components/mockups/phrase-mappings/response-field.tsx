@@ -23,28 +23,13 @@ import { cn } from "@/lib/utils"
 
 import { PlayPreviewIcon, StopPreviewIcon } from "./icons"
 
-/* Rendering the line is a request to a speech provider, so it is never
-   instant — and a play button that appears to do nothing for a beat is the
-   thing readers press twice. */
 const RENDER_MS = 700
 
-/* Roughly the pace of a spoken Arabic acknowledgment, floored so a two-word
-   response still reads as audio playing rather than as a flicker. */
 const SPEECH_MS_PER_CHAR = 95
 const MIN_SPEECH_MS = 1100
 
 type Preview = "idle" | "rendering" | "playing"
 
-/**
- * The response, and the button that plays it.
- *
- * Diacritics are the whole point of storing this field verbatim, but they are
- * a hint to a speech engine rather than an instruction: the same vowelled word
- * handed to two providers does not come out the same. The only way to know a
- * spelling works is to hear it, on the voice that will say it — so the play
- * button names that voice on hover instead of a line of help repeating that
- * the button plays audio.
- */
 export function ResponseField({
   disabled,
   fieldId,
@@ -52,12 +37,10 @@ export function ResponseField({
   value,
   voice,
 }: {
-  /** Persona scope only: the inherited global set, shown but not editable. */
   disabled: boolean
   fieldId: string
   onChange: (response: string) => void
   value: string
-  /** The voice this scope is heard in, and what the preview button names. */
   voice: PreviewVoice
 }) {
   const [preview, setPreview] = React.useState<Preview>("idle")
@@ -65,8 +48,6 @@ export function ResponseField({
   const overLimit = value.length > RESPONSE_MAX_CHARS
   const spoken = value.trim()
 
-  /* Rendering, then playing, then done — one timer per leg, cleared on
-     unmount so collapsing the row mid-sentence stops it. */
   React.useEffect(() => {
     if (preview === "idle") return
 
@@ -80,9 +61,6 @@ export function ResponseField({
     return () => window.clearTimeout(timer)
   }, [preview, spoken.length])
 
-  /* The voice, not the engine behind it. Review, Fatma, Aug 2026: the vendor's
-     name does not belong on a product surface, and the reader picks between
-     voices anyway — which is the thing that changes how tashkeel is read. */
   const label =
     preview === "idle" ? `Play in ${voice.name}'s voice` : "Stop preview"
 
@@ -111,8 +89,6 @@ export function ResponseField({
           disabled={disabled}
           id={`${fieldId}-response`}
           onChange={(event) => {
-            /* Whatever was rendered belongs to the old spelling — keeping it
-               playing would have the reader judging a line they just edited. */
             setPreview("idle")
             onChange(event.target.value)
           }}

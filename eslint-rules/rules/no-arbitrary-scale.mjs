@@ -1,16 +1,5 @@
 import { arbitraryValue, createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * Spacing, radius, and type sizes come off the scale — never an arbitrary value.
- *
- * `gap-[13px]` and `rounded-[10px]` are the difference between a mockup that
- * reads as built and one that reads as assembled: they land half a step off
- * every neighbouring element and quietly break the 4px rhythm.
- *
- * Viewport-relative values are allowed through, because `max-h-[86vh]` has no
- * scale equivalent. So are `var(--…)` values, which are tokens by definition.
- */
-
 const SPACING =
   "p|px|py|pt|pr|pb|pl|ps|pe|m|mx|my|mt|mr|mb|ml|ms|me|gap|gap-x|gap-y|space-x|space-y|inset|inset-x|inset-y|top|right|bottom|left|start|end|w|h|size|min-w|min-h|max-w|max-h|basis|translate-x|translate-y|scroll-m|scroll-p"
 
@@ -23,7 +12,6 @@ const SPACING_RE = new RegExp(`^-?(${SPACING})-\\[`)
 const RADIUS_RE = new RegExp(`^-?(${RADIUS})-\\[`)
 const TYPE_RE = new RegExp(`^-?(${TYPE})-\\[`)
 
-/** Values with no equivalent on the scale — let these through. */
 const ESCAPE_HATCH =
   /\b\d*\.?\d+(vh|vw|dvh|dvw|svh|svw|lvh|lvw|vmin|vmax|%)|var\(--/
 

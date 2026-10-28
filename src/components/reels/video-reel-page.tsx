@@ -2,13 +2,6 @@ import { SiteNav } from "@/components/shell/site-nav"
 import posters from "@/lib/site/reel-posters.json"
 import type { Reel } from "@/lib/site/reels-data"
 
-/**
- * A reel that arrived as a finished MP4 rather than a composition.
- *
- * The browser's own player, not `ReelPlayer`: there is no frame number to
- * drive, only a file, and the native controls already scrub, go full screen
- * and play the sound a composition does not have.
- */
 export function VideoReelPage({ reel }: { reel: Reel }) {
   const slug = reel.href.replace("/reels/", "")
   const fingerprint =

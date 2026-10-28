@@ -1,14 +1,4 @@
-/**
- * The orb's tones, kept out of orb-avatar.tsx because that file is a client
- * module, and a server page importing a plain value from one gets a reference
- * instead of the array.
- *
- * Violet has three stops of its own in globals.css, matched to the
- * reference. Every other tone is one token: its body and light are that
- * colour mixed toward white, so a tone is a single decision. Written as
- * classes rather than variable names because Tailwind only emits a colour
- * variable something uses, and these class strings make it emit them.
- */
+/** Kept out of orb-avatar.tsx: a server page importing a value from a client module gets a reference, not the array. Written as classes so Tailwind emits the colour variables. */
 export const TONES = {
   violet: ["bg-orb-deep", "bg-orb-body", "bg-orb-light"],
   brand: ["bg-primary"],

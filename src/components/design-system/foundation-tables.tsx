@@ -32,19 +32,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import type { GlobalRule } from "@/lib/design-system/data"
 import { cn } from "@/lib/utils"
 
-/**
- * Every foundation as the same table the colour tab uses: the specimen, what
- * it is called, and what it is for.
- *
- * These were a demo each — a row of samples with a caption under every one.
- * That answers "what does it look like" and stops. The questions people
- * actually arrive with are which one to reach for and what it is called, and
- * both of those are comparisons down a column.
- *
- * The specimen stays first, so the table is still the rule running rather than
- * a description of it.
- */
-
 const SCROLL_ROWS = [
   "CL-8842 · Rawabi Holding",
   "CL-8841 · Nadec Foods",
@@ -65,8 +52,6 @@ function ScrollRows() {
   )
 }
 
-/* Named for the job, not the glyph — the whole point of the rule. The source
-   column is the HugeIcons export, because that is what you import. */
 const ICONS = [
   {
     El: PreviewIcon,
@@ -374,8 +359,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             {
               key: "native",
               cells: [
-                /* Padding on the inner block: radius + edge + padding together
-                   is a hand-rolled Card, and lint says so. */
+                /* Padding on the inner block: radius + edge + padding on one element trips use-ui-primitives. */
                 <div
                   className="h-20 w-60 overflow-y-auto rounded-lg border"
                   key="s"
@@ -433,14 +417,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             {
               key: "focus",
               cells: [
-                /* Painted on rather than focused: the rule is what focus looks
-                   like, and a static page cannot hold a tab stop.
-
-                   These are Button's own focus-visible classes copied exactly
-                   — border-ring ring-3 ring-ring/50. An approximation here is
-                   worse than nothing: this table is the page someone checks a
-                   focus ring against, so it has to be the ring, not a ring.
-                   If button.tsx changes, this changes with it. */
+                /* Button's own focus-visible classes, copied exactly; keep them in sync. */
                 <Button
                   className="border-ring ring-3 ring-ring/50"
                   key="s"

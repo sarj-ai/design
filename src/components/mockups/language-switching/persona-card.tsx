@@ -16,18 +16,6 @@ import {
   type SwitchConfig,
 } from "@/lib/mockups/language-switching-data"
 
-/**
- * The scenario's persona card — as the platform draws it, a header-less card
- * around the language tabs — with the setting under the tabs.
- *
- * The language tabs stay what they are — one start persona per language —
- * and the setting sits under them, outside the tabs, because it belongs to
- * the scenario rather than to any one language. Inside a tab it would read as
- * a per-language switch and appear once per tab.
- *
- * A one-language scenario has nothing to switch to, so the setting is absent
- * there, not disabled.
- */
 export function PersonaCard({
   config,
   invalid,
@@ -43,7 +31,6 @@ export function PersonaCard({
   onConfigChange: (next: SwitchConfig) => void
   onLanguagesChange: (next: ScenarioLanguage[]) => void
   start: LanguageCode
-  /** The card's own actions — Save sits inside the card, as on the platform. */
   footer?: React.ReactNode
 }) {
   const [tab, setTab] = React.useState<string>(start)

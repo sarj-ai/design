@@ -1,14 +1,3 @@
-/**
- * Mock data for INT-287: keeping your place while reviewing conversations.
- *
- * The calls are a reviewer's afternoon: fourteen calls that ran, a few
- * minutes apart, as the screenshot in the thread shows them — only calls
- * that finished, because queued and scheduled ones have nothing to review.
- *
- * Every idea is one from the Slack thread that raised the ticket, with who
- * put it forward, so the reply to the thread can name them.
- */
-
 import type {
   CallRow,
   CallStatus,
@@ -172,25 +161,18 @@ export const IDEAS = [
 
 export type IdeaId = (typeof IDEAS)[number]["id"]
 
-/* Where each idea opens, so its state is already visible on arrival. */
-
-/** The call opened last, before this visit. */
 export const LAST_OPENED = REVIEW_CALLS[4].id
 
-/** Opened at some point. New calls land on top, unopened. */
 export const OPENED = REVIEW_CALLS.filter(
   (_, index) => index >= 3 && index !== 7,
 ).map((call) => call.id)
 
-/** Ticked as reviewed: the older half. */
 export const REVIEWED = REVIEW_CALLS.filter((_, index) => index >= 6).map(
   (call) => call.id,
 )
 
-/** Saved for later. */
 export const SAVED = [REVIEW_CALLS[2].id, REVIEW_CALLS[8].id]
 
-/** Your watch history, newest first: which call, and when you opened it. */
 export const HISTORY: { id: string; at: string }[] = [
   { id: REVIEW_CALLS[4].id, at: "2 min ago" },
   { id: REVIEW_CALLS[5].id, at: "6 min ago" },

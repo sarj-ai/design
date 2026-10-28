@@ -1,15 +1,3 @@
-/**
- * What the scenario editor can mention, and the scenario it is mentioned in.
- *
- * Three kinds of variable, split by where the value comes from when a call
- * starts. Scenario variables are the ones an author defines under Template
- * variables and supplies per call. The other two are provided by the
- * platform — today the product files all of them under one "Global" badge
- * (`precedent-iso/src/global-variables.ts`). The ticket asks to keep system
- * information apart from global variables; the split below is the working
- * assumption for review, not a decision on which names belong where.
- */
-
 export type VariableKind = "global" | "scenario" | "system"
 
 type VariableType = "boolean" | "date" | "number" | "text"
@@ -19,14 +7,12 @@ export interface ScenarioVariable {
   name: string
   required: boolean
   type: VariableType
-  /** Only an optional variable carries one, as in the product's schema. */
   defaultValue?: string
 }
 
 export interface PlatformVariable {
   kind: "global" | "system"
   name: string
-  /** The product's own description, verbatim. */
   description: string
 }
 
@@ -119,15 +105,8 @@ const SYSTEM_VARIABLES: PlatformVariable[] = [
   },
 ]
 
-/**
- * The line under a name in the picker, and the second line of a chip's
- * tooltip. A scenario variable has no description of its own in the product,
- * so its type and whether a call has to supply it stand in.
- */
 export function describe(variable: Variable): string {
   if (variable.kind !== "scenario") {
-    /* The product appends the scenario's timezone to date and time — the two
-       whose value depends on it. */
     const zoned = variable.name === "date" || variable.name === "time"
     return zoned
       ? `${variable.description} · ${TIMEZONE}`
@@ -141,8 +120,6 @@ export function describe(variable: Variable): string {
     : `${type} · optional`
 }
 
-/* ------------------------------------------------------- reviewer states -- */
-
 export type VariablesState = "loading" | "none" | "populated"
 
 export const VARIABLE_STATES: { label: string; value: VariablesState }[] = [
@@ -151,19 +128,10 @@ export const VARIABLE_STATES: { label: string; value: VariablesState }[] = [
   { label: "Loading", value: "loading" },
 ]
 
-/**
- * The mentionable set for a reviewer state. Global variables and system
- * information exist for every scenario, so only the scenario's own list can
- * be empty — and every chip in the prompt that pointed at one of those turns
- * into the not-defined state, which is exactly what happens when a variable
- * is deleted while the prompt still uses it.
- */
 export function variablesFor(state: VariablesState): Variable[] {
   const scenario = state === "none" ? [] : SCENARIO_VARIABLES
   return [...scenario, ...GLOBAL_VARIABLES, ...SYSTEM_VARIABLES]
 }
-
-/* -------------------------------------------------------------- scenario -- */
 
 export const SCENARIO = { name: "Reservation Assistant for Sizzler" }
 
@@ -186,12 +154,7 @@ export interface PromptText {
   prompt: string
 }
 
-/**
- * The stored form stays `{{name}}` — that is what PROD-80 inserts and what
- * every existing scenario already holds. The chip is how it is shown, not
- * how it is saved. `{{promo_code}}` is not defined anywhere on purpose: it
- * is the stale mention a deleted variable leaves behind.
- */
+/** Stored as `{{name}}`; the chip is display only. `{{promo_code}}` is undefined on purpose: a stale mention. */
 export const TEXTS: Record<LanguageCode, PromptText> = {
   en: {
     firstMessage:

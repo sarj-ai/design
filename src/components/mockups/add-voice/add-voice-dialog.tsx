@@ -43,18 +43,6 @@ import {
 import { FallbackVoicePicker } from "@/components/mockups/add-voice/fallback-voice-picker"
 import { FieldHelpIcon } from "@/components/mockups/add-voice/icons"
 
-/**
- * Add new voice — one voice entering the global library.
- *
- * Three groups down the dialog, in the order the reader can answer them: what
- * the voice is called and sounds like, then which provider renders it, then
- * what plays if that provider cannot. The fallback is last because it is the
- * only one already answered — it arrives with a default, so it reads as a row
- * to check rather than a field to fill.
- *
- * The model field takes the provider's default when left blank, so switching
- * provider moves the placeholder with it.
- */
 export function AddVoiceDialog() {
   const [open, setOpen] = React.useState(true)
   const [provider, setProvider] = React.useState(PROVIDERS[0].value)
@@ -73,9 +61,6 @@ export function AddVoiceDialog() {
         <Button variant="outline">Add new voice</Button>
       </DialogTrigger>
 
-      {/* Nothing is autofocused: the design shows the dialog at rest, and the
-          first input picking up a focus ring on open is the one difference a
-          reviewer would read as a styling change. */}
       <DialogContent
         className="sm:max-w-2xl"
         onOpenAutoFocus={(event) => event.preventDefault()}

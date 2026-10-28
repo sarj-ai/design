@@ -44,22 +44,12 @@ export type PersonaDraft = {
   prompt: string
 }
 
-/* The product's actual Arabic defaults — see the platform's
-   components/settings/backchannel-settings.tsx. */
+/* Mirrors the platform's components/settings/backchannel-settings.tsx. */
 const DEFAULT_FILLER_WORDS = ["تمام", "حاضر", "ممتاز", "زين", "نعم"]
 
-/* The product's four ambience options, "Office" first as its default. */
 const NOISE_TYPES = ["Office", "City Street", "Crowded Room", "Forest"]
 
-/**
- * Create and edit share one dialog. The current product stacks ten sections
- * into a single narrow scroll (the DIS-17 complaint); here the form is split
- * into three tabs — identity, voice, conversation behavior — with the footer
- * always in reach.
- *
- * The form lives in a child mounted with the dialog content, so every open
- * starts from the persona being edited (or a blank slate) without effects.
- */
+/** The form is a child mounted with the dialog content, so each open resets its state without effects. */
 export function PersonaDialog({
   open,
   onOpenChange,
@@ -68,7 +58,6 @@ export function PersonaDialog({
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  /** Present when editing; absent when creating. */
   persona: Persona | null
   onSubmit: (draft: PersonaDraft) => void
 }) {
@@ -109,7 +98,6 @@ function PersonaForm({
   const [prompt, setPrompt] = React.useState(persona?.prompt ?? "")
   const [speed, setSpeed] = React.useState(1)
 
-  /* Conversation behavior — mock-local, not part of the submitted draft. */
   const [backchannel, setBackchannel] = React.useState(true)
   const [fillerWords, setFillerWords] = React.useState(DEFAULT_FILLER_WORDS)
   const [fillerDraft, setFillerDraft] = React.useState("")
@@ -509,9 +497,6 @@ function PersonaForm({
   )
 }
 
-/**
- * Two settings that belong together, on one muted panel with a quiet label.
- */
 function GroupPanel({
   label,
   children,
@@ -519,8 +504,7 @@ function GroupPanel({
   label: string
   children: React.ReactNode
 }) {
-  // Half-strength muted: full-strength matches the Slider track's own token
-  // exactly, which made the unfilled track invisible.
+  // Half-strength: full `bg-muted` matches the Slider track and hides it.
   return (
     <section className="flex flex-col gap-4 rounded-lg bg-muted/50 p-4">
       <span className="text-xs font-medium text-muted-foreground">{label}</span>
@@ -529,11 +513,6 @@ function GroupPanel({
   )
 }
 
-/**
- * One setting inside a group: title and control on the first line, the
- * one-line status under them, expanded fields below. The status copy changes
- * with the switch, so a collapsed setting still says what "off" means.
- */
 function SettingRow({
   title,
   description,

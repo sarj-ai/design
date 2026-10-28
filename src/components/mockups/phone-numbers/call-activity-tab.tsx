@@ -327,9 +327,6 @@ function SortableHead({
         numeric && "text-end",
       )}
     >
-      {/* The caret stays on every sortable column, faded until it is the one
-          sorting. Showing it only on the active column left the other four
-          looking inert — you had to click one to learn it was clickable. */}
       <span
         className={cn("flex items-center gap-1", numeric && "justify-end")}
         onClick={() => {
@@ -343,8 +340,6 @@ function SortableHead({
   )
 }
 
-/* Intent-tint tokens, not the solid destructive fill: a column of low rates
-   should read as ten measurements, not ten alarms. */
 function AnswerRate({ answered, total }: { answered: number; total: number }) {
   if (total === 0) {
     return (

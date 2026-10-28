@@ -1,21 +1,3 @@
-/**
- * Post-call behavioural alerts — the data the two halves of this mockup read.
- *
- * The shapes mirror what the PRD describes the pipeline writing: alerts
- * configured per scenario, and one detection row per alert the post-call
- * analyst found, each carrying the transcript quote it was found in.
- *
- * Two three-step scales live here and they are not the same scale:
- *
- *   priority   Low / Medium / High      set by the admin, per alert, once
- *   severity   Mild / Moderate / Severe  set by the analyst, per detection
- *
- * A High-priority alert can be detected at Mild severity — "how much I care
- * about this pattern" and "how bad it was on this call" are separate readings.
- */
-
-/* ------------------------------------------------------------ configuration */
-
 export type AlertPriority = "high" | "low" | "medium"
 
 export const PRIORITY_LABELS: Record<AlertPriority, string> = {
@@ -24,25 +6,16 @@ export const PRIORITY_LABELS: Record<AlertPriority, string> = {
   medium: "Medium",
 }
 
-/** Ordered loudest first, which is the order the priority select offers. */
 export const PRIORITY_ORDER: AlertPriority[] = ["high", "medium", "low"]
 
 export type ConfiguredAlert = {
-  /** Plain-language brief for the analyst — what to look for in a transcript. */
   description: string
-  /** Paused rather than deleted: the definition survives, detection stops. */
   enabled: boolean
   id: string
   name: string
   priority: AlertPriority
 }
 
-/**
- * What the sales scenario watches for.
- *
- * Five is the realistic number: enough that the list has to be scannable, few
- * enough that an admin still knows every one of them by name.
- */
 export const CONFIGURED_ALERTS: ConfiguredAlert[] = [
   {
     id: "escalation",
@@ -86,8 +59,6 @@ export const CONFIGURED_ALERTS: ConfiguredAlert[] = [
   },
 ]
 
-/* ---------------------------------------------------------------- detection */
-
 export type AlertSeverity = "mild" | "moderate" | "severe"
 
 export const SEVERITY_LABELS: Record<AlertSeverity, string> = {
@@ -96,24 +67,13 @@ export const SEVERITY_LABELS: Record<AlertSeverity, string> = {
   severe: "Severe",
 }
 
-/** Worst first — the order the detections list sorts into. */
 export const SEVERITY_ORDER: AlertSeverity[] = ["severe", "moderate", "mild"]
 
 export type Detection = {
-  /** The alert this detection is against, so the row can name it. */
   alertId: string
-  /**
-   * Seconds into the recording where the evidence was said. It is what puts
-   * the detection on the waveform and what a click on it seeks to — a quote
-   * nobody can find in the call is a quote nobody can check.
-   */
+  /** Seconds into the recording; places the detection on the waveform. */
   at: number
-  /** Why the analyst assigned this severity rather than the one below it. */
   explanation: string
-  /**
-   * A direct quote from the transcript. The PRD makes this required precisely
-   * so a detection cannot be asserted without something to check it against.
-   */
   evidence: string
   id: string
   severity: AlertSeverity
@@ -129,28 +89,15 @@ export const SENTIMENT_LABELS: Record<Sentiment, string> = {
 }
 
 export type UserJourney = {
-  /** Keywords the analyst pulled from the transcript, in the caller's words. */
   keywords: string[]
-  /** What the caller rang for, in one line. */
   purpose: string
   purposeAchieved: boolean
   /** 1–5. */
   rating: number
-  /** Why that rating and not the one above it. Read from the (i). */
   ratingRationale: string
   sentiment: Sentiment
 }
 
-/**
- * What the tab has to show, which is four different things and not one thing
- * with holes in it.
- *
- *   detected        journey, and at least one alert fired
- *   clear           journey, alerts configured, none of them fired
- *   unconfigured    journey, and no alerts configured on this scenario at all
- *   pending         the background task has not written its result yet
- *   unavailable     no transcript, so the analyst skipped the call entirely
- */
 export type AnalysisState =
   "clear" | "detected" | "pending" | "unavailable" | "unconfigured"
 
@@ -161,8 +108,6 @@ export type AlertAnalysis = {
   state: AnalysisState
 }
 
-/* --------------------------------------------------------------- the calls */
-
 export type TranscriptLine = {
   /** Seconds into the recording, so a turn and the waveform agree. */
   at: number
@@ -172,16 +117,14 @@ export type TranscriptLine = {
 
 export type CallRow = {
   callId: string
-  /** Collected data the Details tab prints, as the scenario defined it. */
   collected: { label: string; value: string }[]
   createdAt: string
   direction: "inbound" | "outbound"
-  /** Seconds — the player's total, and the connection duration in the rail. */
+  /** Seconds. */
   duration: number
   endedAt: string
   id: string
   language: string
-  /** The alert analysis this call carries. One state per row, on purpose. */
   analysis: AlertAnalysis
   outcome: {
     reason: string
@@ -312,14 +255,6 @@ const ARABIC_TRANSCRIPT: TranscriptLine[] = [
   { at: 36, speaker: "caller", text: "تمام، شكراً." },
 ]
 
-/**
- * Six calls, one per state the alerts tab has to be reviewed in — including
- * the two that look like nothing is there and are not the same nothing.
- *
- * Clicking a row opens that row's call, so the drawer's header, rail, outcome
- * and transcript all belong to the row that was pressed rather than to one
- * sample call standing in for six.
- */
 export const CALLS: CallRow[] = [
   {
     id: "call-1",
@@ -582,10 +517,8 @@ export const CALLS: CallRow[] = [
   },
 ]
 
-/** The scenario the drawer's alerts are configured against. */
 export const SCENARIO_NAME = "Performance car sales inquiry"
 
-/** Who is signed in, for the metadata rail. */
 export const OWNER = {
   email: "talzamel@sarj.ai",
   organization: "Sarj.ai",

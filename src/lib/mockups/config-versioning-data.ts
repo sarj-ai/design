@@ -1,36 +1,15 @@
-/**
- * Mock data for DES-202, configuration versioning. The model is the TDD,
- * "Live scenarios and configuration versioning" (Fatma Moanes, 22 Oct 2026):
- *
- *  - Scenarios only. The global prompt gets versions in a later release.
- *  - A version is the prompt and the first message, saved together and
- *    always restored together. Every save makes one, with an optional note,
- *    and records the version it was edited from. Versions are never edited
- *    or deleted.
- *  - Every scenario has a version in use: what the next call runs. On a live
- *    scenario a save does not move it; publishing does. On a scenario that
- *    is not live a save moves it straight away. Applying an older version
- *    points back at it and makes no new version.
- *  - Live is a switch and a badge. Turning it on or off changes nothing
- *    about which version runs.
- */
-
 export type Field = { id: string; label: string; multiline: boolean }
 
 export type Version = {
   n: number
   author: string
-  /** Saved by the person looking. */
   mine: boolean
   at: string
   editedFrom: number | null
-  /** The optional note left on save. */
   note: string | null
   body: Record<string, string>
 }
 
-/** One time a version was put in use: by a save on a scenario that is not
-    live, by publishing, or by applying an older one. */
 export type InUseEntry = {
   n: number
   by: string
@@ -43,20 +22,12 @@ export type Subject = {
   fields: Field[]
   /** Newest first. */
   versions: Version[]
-  /** The switch and the badge. Moving it changes no version. */
   live: boolean
-  /** The version in use: what the next call runs. */
   inUse: number
-  /** Every time a version was put in use, newest first, so the first is
-      the version in use now. History reads it to say who applied each
-      version and when (TDD 3.2). */
+  /** Newest first, so the first entry is the version in use now. */
   log: InUseEntry[]
-  /** Who last turned live on or off, and when. Toggling makes no version,
-      so this is where the record of it shows. */
   toggled: { by: string; at: string } | null
 }
-
-/* -------------------------------------------------------------- scenario */
 
 const SCENARIO_FIELDS: Field[] = [
   { id: "first-message", label: "First message", multiline: false },
@@ -224,8 +195,6 @@ export const LIVE_SCENARIO: Subject = {
   versions: scenarioVersions(),
   live: true,
   inUse: 12,
-  /* v10 went out and was taken back to v9 the next day; v11 was edited
-     from v9. */
   log: [
     { n: 12, by: "Sami Rahman", at: "yesterday 16:40", how: "published" },
     { n: 11, by: "Nouf Al-Harbi", at: "8 Oct, 10:30", how: "published" },
@@ -246,9 +215,6 @@ export const TEST_SCENARIO: Subject = {
   toggled: null,
 }
 
-/* ----------------------------------------------------------------- cases */
-
-/** What a reviewer can force, so every state the TDD names is reachable. */
 export type CaseId =
   | "normal"
   | "conflict"
@@ -272,7 +238,6 @@ export const CASES: { id: CaseId; label: string }[] = [
   { id: "apply-skips", label: "Version has a removed block" },
 ]
 
-/** The version someone else saves while you are editing, in the conflict case. */
 export const RIVAL: Omit<Version, "n" | "editedFrom" | "body"> = {
   author: "Ahmad Khalil",
   mine: false,
@@ -280,12 +245,9 @@ export const RIVAL: Omit<Version, "n" | "editedFrom" | "body"> = {
   note: "Branch name in the greeting",
 }
 
-/** What the two apply cases name: a tool the version's prompt calls that
-    was since deleted from the scenario, and a block the product dropped. */
 export const DELETED_REFERENCE = "the tool “Book callback”"
 export const REMOVED_BLOCK = "Sentiment tags"
 
-/** The call the conversation-details surface shows: it ran on v12. */
 export const CONVERSATION = {
   scenario: LIVE_SCENARIO.name,
   version: 12,

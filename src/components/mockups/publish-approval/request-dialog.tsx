@@ -19,21 +19,6 @@ import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
 import { type CaseId, summaryFor } from "@/lib/mockups/publish-approval-data"
 
-/**
- * Request approval — what Publish becomes on a live scenario.
- *
- * Two fields, so a dialog (the surfaces page: creating, four fields or
- * fewer). The PRD's split is the layout: the summary says what changed, for
- * the client; the note says why. The summary is generated against what
- * callers hear now and is editable here, so an inaccurate one never reaches
- * the client unread (PRD). Both are required — the PRD bars a request
- * without a note, and a request without a summary has nothing for a
- * non-technical reader.
- *
- * States: the summary still being written (the field waits, the note does
- * not), the summary failing (the requester writes it), and the send
- * failing (the dialog stays, with what was typed).
- */
 export function RequestDialog({
   open,
   onOpenChange,
@@ -47,7 +32,7 @@ export function RequestDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
   version: number
-  /** What callers hear now — the summary's basis. */
+  /** The version callers hear now. */
   live: number
   org: string
   /** A version already waiting, which sending this withdraws. */
@@ -58,8 +43,7 @@ export function RequestDialog({
 }) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      {/* Opens on the note, the one field the requester must write — not
-          on the summary's (i), which would open its hint on arrival. */}
+      {/* Focus the note, not the summary's (i), which would open its hint on arrival. */}
       <DialogContent
         className="sm:max-w-md"
         onOpenAutoFocus={(event) => {
@@ -76,7 +60,7 @@ export function RequestDialog({
             {version} once one of them approves.
           </DialogDescription>
         </DialogHeader>
-        {/* Keyed so each opening writes its summary afresh. */}
+        {/* Mounted only while open, so each opening writes its summary afresh. */}
         {open ? (
           <RequestForm
             caseId={caseId}

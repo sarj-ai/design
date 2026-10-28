@@ -1,19 +1,5 @@
 import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * Four widths and the screen: confirm 384, dialog 448, drawer 448, record 1024.
- *
- * The surfaces decision (/design-system/product-components/surfaces) fixes one
- * width per surface so a reader learns the shape once. Two things break it:
- *
- *  - An unprefixed `max-w-*`. The primitives set their width at `sm:`, and a
- *    class with no breakpoint loses to one with a breakpoint — so
- *    `max-w-md` on a DialogContent does nothing and every dialog stays at
- *    the primitive's default. Always `sm:max-w-*`.
- *  - A width that is not one of the four. A 512px dialog is not a fifth
- *    surface, it is a dialog someone resized.
- */
-
 const ALLOWED = {
   AlertDialogContent: {
     widths: new Set(["max-w-sm"]),
@@ -35,9 +21,8 @@ const ALLOWED = {
 
 const BREAKPOINT = /^(sm|md|lg|xl|2xl)$/
 
-/* Sheet and Drawer set their width as `data-[side=right]:sm:max-w-sm`, whose
-   attribute selector outranks a plain `sm:max-w-md` — so on those two the
-   width only lands with `!`. Dialog sets a bare `sm:max-w-sm` and needs none. */
+// Sheet and Drawer set width via `data-[side=right]:sm:max-w-sm`, which outranks a plain `sm:max-w-*`,
+// so on those two the width only lands with `!`.
 const NEEDS_IMPORTANT = new Set(["SheetContent", "DrawerContent"])
 
 const surfaceWidth = {
@@ -70,8 +55,7 @@ const surfaceWidth = {
 
         for (const { raw, base, variants, node } of classesOf(opening)) {
           if (!/^max-w-/.test(base) || base === "max-w-none") continue
-          /* `max-w-[calc(100%-2rem)]`, `max-w-full`: the mobile gutter, which
-             the primitive sets too. Not a surface width. */
+          // The mobile gutter, which the primitive sets too. Not a surface width.
           if (/^max-w-(full|screen|\[)/.test(base)) continue
 
           const atBreakpoint = variants.some((v) => BREAKPOINT.test(v))

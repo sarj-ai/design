@@ -1,14 +1,5 @@
 import { collectStrings, parseClasses } from "../lib/classes.mjs"
 
-/**
- * Sixty-one primitives are installed. Almost nothing needs to be built.
- *
- * A hand-rolled `<button>` gets the brand's colour but not its focus ring, its
- * disabled state, its icon sizing, its hover timing, or its dark-mode pairing —
- * and every one of those drifts a little further with each new mockup. The
- * primitive is not a shortcut, it is the definition of what the component is.
- */
-
 const RAW_ELEMENTS = {
   button:
     "`<Button>` from @/components/ui/button — sizes xs | sm | default | lg, plus icon-xs | icon-sm | icon | icon-lg",
@@ -26,17 +17,11 @@ const RAW_ELEMENTS = {
   kbd: "`<Kbd>` from @/components/ui/kbd",
 }
 
-/** A div with a radius, an edge, and padding is a Card with extra steps. */
 const RADIUS = /^rounded(-|$)/
 const EDGE = /^(border|ring)(-|$)/
 const PADDING = /^p[xytrbles]?-/
 
-/**
- * `<Item asChild><button …>` is the idiomatic shadcn pattern, not a hand-rolled
- * button: asChild merges the primitive's props onto the child, so the child
- * *has* to be a raw element. Swapping in `<Button>` there would nest two
- * buttons. Skip any raw element whose parent primitive carries asChild.
- */
+// `<X asChild><button>` is idiomatic shadcn: the child must be a raw element, and a Button there would nest two buttons.
 function isAsChildTarget(node) {
   const parentElement = node.parent?.parent
   if (parentElement?.type !== "JSXElement") return false

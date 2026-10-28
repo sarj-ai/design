@@ -65,22 +65,6 @@ import {
   type VoiceStatus,
 } from "@/lib/mockups/voice-cloning-data"
 
-/**
- * `/admin/voices` as the platform ships it on the index-page revamp branch —
- * search with the page's actions at its end, filter chips under it, the same
- * eight columns — plus what DES-198 adds. The page is super admin only, as
- * it is today; a client organization clones and deletes its voices from a
- * persona instead (persona-voice.tsx).
- *
- *  - Clone voice beside Add voice, two buttons and not a chooser (PRD). Add
- *    voice stays as the platform has it, registering an external voice by
- *    provider ID.
- *  - Pending, the third status the PRD asks for: a Sarj voice whose request
- *    to be offered to every organization is waiting on approval.
- *  - Delete, only on cloned voices. A native voice cannot be deleted, so the
- *    button is absent there rather than disabled.
- */
-
 const STATUS_OPTIONS = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
@@ -303,7 +287,7 @@ function VoiceRow({ voice, onDelete }: { voice: Voice; onDelete: () => void }) {
               <DeleteVoiceIcon />
             </Button>
           ) : (
-            /* Holds the column so edit buttons line up down the table. */
+            /* Holds the column so edit buttons line up. */
             <span aria-hidden className="size-7" />
           )}
         </span>
@@ -312,7 +296,6 @@ function VoiceRow({ voice, onDelete }: { voice: Voice; onDelete: () => void }) {
   )
 }
 
-/** The platform's Active and Inactive chips, and the new Pending. */
 function StatusChip({ status }: { status: VoiceStatus }) {
   if (status === "active") {
     return (
@@ -342,13 +325,6 @@ function StatusChip({ status }: { status: VoiceStatus }) {
   )
 }
 
-/**
- * Deleting a clone is final — the reference audio is not kept, so it cannot
- * be cloned back. That makes it a confirm, not an undo toast. A voice a
- * persona still speaks with is not deletable at all: the confirm names those
- * personas and offers no Delete until they have switched. Shared with the
- * persona's voice section, where a client organization deletes its clones.
- */
 export function DeleteVoiceConfirm({
   voice,
   onOpenChange,

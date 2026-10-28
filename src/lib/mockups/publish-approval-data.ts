@@ -1,30 +1,7 @@
-/**
- * Mock data for DES-204, publish approval. The model is the "Publish
- * approval" requirements doc (Taynam Alzamel), on top of DES-202's versions,
- * as the TDD "Live scenarios and configuration versioning" (22 Oct 2026)
- * leaves it: approval is its own feature, shipped after live and versioning,
- * and the first release has none.
- *
- *  - Only live scenarios are gated. The global prompt has no versions in
- *    the first releases, so there is nothing to approve there yet.
- *  - A live scenario is approved by its client. Turning a scenario live
- *    needs only the live permission, never an approval (TDD 3.1).
- *  - A request is pinned to one version, carries the requester's note (the
- *    why) and a summary of the effect on callers (the what), and waits
- *    until someone acts. It never expires and never publishes on its own.
- *  - Approving puts the version in use. There is no override and no bypass.
- *
- * Assumed, because the access model (INT-93, INT-32) has no approval concept
- * yet: a client approver is a member of the client organization who holds
- * an "Approve changes" permission, and any one of them can decide.
- */
-
 import {
   LIVE_SCENARIO,
   type Subject,
 } from "@/lib/mockups/config-versioning-data"
-
-/* --------------------------------------------------------------- viewers */
 
 export type ViewerId = "requester" | "approver"
 
@@ -32,9 +9,7 @@ export type Viewer = {
   id: ViewerId
   name: string
   label: string
-  /** Sarj staff see every organization they can access; a client sees one. */
   sarj: boolean
-  /** The organization whose changes this person approves. */
   approves: string | null
 }
 
@@ -55,13 +30,10 @@ export const VIEWERS: Viewer[] = [
   },
 ]
 
-/** "You" when it is the person looking; "you" inside a sentence. */
 export function who(name: string, viewer: Viewer, inSentence = false) {
   if (name !== viewer.name) return name
   return inSentence ? "you" : "You"
 }
-
-/* -------------------------------------------------------------- requests */
 
 export type Status = "pending" | "approved" | "rejected" | "withdrawn"
 
@@ -70,10 +42,8 @@ export type Change = { label: string; before: string; after: string }
 export type ApprovalRequest = {
   id: string
   item: string
-  /** The client organization, which decides. */
   org: string
   version: number
-  /** The version in use when the request was raised. */
   live: number
   by: string
   raised: string
@@ -93,10 +63,6 @@ export function canSee(request: ApprovalRequest, viewer: Viewer) {
   return viewer.sarj || request.org === viewer.approves
 }
 
-/* The live scenario from DES-202, owned by Riyad Bank. Its newest save is
-   Ahmad's, so DES-202's "You" becomes his name here. Authors are stored as
-   names and turned into "You" for whoever is looking (forViewer), so the
-   same state reads right as the reviewer switches between people. */
 export const SCENARIO_ORG = "Riyad Bank"
 
 export const SCENARIO: Subject = {
@@ -123,7 +89,6 @@ export function forViewer(subject: Subject, viewer: Viewer): Subject {
   }
 }
 
-/** The changes between the version in use and the version requested. */
 export function changesBetween(
   subject: Subject,
   live: number,
@@ -141,12 +106,6 @@ export function changesBetween(
     }))
 }
 
-/**
- * A stand-in for the generated summary. The PRD wants it written for a
- * non-technical reader, about the effect on callers rather than the fields,
- * and against what callers hear now — not against the version it was edited
- * from, which the client never heard.
- */
 export function summaryFor(version: number, live: number) {
   if (version === 14 && live === 12) return SUMMARY_V14
   if (version === 15 && live === 12) return SUMMARY_V15
@@ -160,14 +119,12 @@ const SUMMARY_V14 =
 
 const SUMMARY_V15 = `${SUMMARY_V14} The greeting now names Riyad Bank.`
 
-/** v15, saved while v14 waits — the "version changes while pending" case. */
 const V15_GREETING =
   "Hello {{name}}, this is Sara from Riyad Bank's branch team. Do you have a minute for a quick survey?"
 
 const MAIN_NOTE =
   "Riyad Bank's branch reports moved to a 5-point scale this month, and they asked for low scores to reach the branch manager the same day."
 
-/** The request on the live scenario, in whatever state a case opens it. */
 export function mainRequest(
   status: Status,
   version = 14,
@@ -190,7 +147,6 @@ export function mainRequest(
   }
 }
 
-/** Everything else on the Approvals page, newest first. */
 export const OTHER_REQUESTS: ApprovalRequest[] = [
   {
     id: "qfc-41",
@@ -315,9 +271,6 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
   },
 ]
 
-/* ----------------------------------------------------------------- cases */
-
-/** What a reviewer can force, so every state the ticket names is reachable. */
 export type CaseId =
   | "normal"
   | "pending"
@@ -345,7 +298,6 @@ export const CASES: { id: CaseId; label: string }[] = [
   { id: "view-only", label: "View only" },
 ]
 
-/** v15 on top of v14: the greeting names the bank. */
 export function withV15(subject: Subject): Subject {
   const v14 = subject.versions[0]
   return {

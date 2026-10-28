@@ -33,19 +33,6 @@ import { ColumnChips } from "@/components/mockups/configure-report/column-chips"
 import { ColumnPicker } from "@/components/mockups/configure-report/column-picker"
 import { BackgroundTaskIcon } from "@/components/mockups/configure-report/icons"
 
-/**
- * Configure Report — the approved design from DES-155, as PROD-289 asks for.
- *
- * Three groups of columns down the dialog, each a set of removable chips: the
- * standard ones that always ship, then the custom ones split into the values
- * passed into the call and the values the agent gathered during it. The
- * template row sits above all of them because picking one rewrites everything
- * below.
- *
- * Each group's Add opens a checkbox list of everything that group can hold,
- * ticked where the report already has it — so a group is filled in one pass
- * instead of one column per reopen.
- */
 export function ConfigureReportDialog({
   onOpenChange,
   open,
@@ -61,7 +48,6 @@ export function ConfigureReportDialog({
   const drop = (id: string) => (columns: Column[]) =>
     columns.filter((column) => column.id !== id)
 
-  /** Lift one chip out and drop it back in at the new index. */
   const reorder = (from: number, to: number) => (columns: Column[]) => {
     const next = [...columns]
     const [moved] = next.splice(from, 1)
@@ -71,14 +57,7 @@ export function ConfigureReportDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      {/* Nothing is autofocused: the design shows the dialog at rest, and the
-          template select picking up a focus ring on open is the one difference
-          a reviewer would read as a styling change. */}
-      {/* The body is the only row that scrolls, so the header and the footer
-          stay put and the dialog never grows past the viewport. `1fr` with
-          `min-h-0` on the body is what lets it take the space that is left
-          instead of a fixed slice of the screen — a fixed slice clipped the
-          note at the bottom on shorter windows. */}
+      {/* `1fr` + `min-h-0` lets only the body scroll; a fixed height clipped it on short windows. */}
       <DialogContent
         className="grid-rows-[auto_1fr_auto] max-h-[85vh] sm:max-w-2xl"
         onOpenAutoFocus={(event) => event.preventDefault()}

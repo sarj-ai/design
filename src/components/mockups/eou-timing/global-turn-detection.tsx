@@ -32,14 +32,6 @@ import {
 import { FieldHelpIcon, ScopeNoteIcon } from "./icons"
 import { WaitWindow, type WaitWindowValue } from "./wait-window"
 
-/**
- * Turn Detection in Global Settings — PRD requirements 1 and 3.
- *
- * "The detection model selector and the wait values appear together, so a user
- * selecting a model can see the timing that will apply to it." The window
- * therefore belongs to the model that uses it, and disappears for VAD, which
- * has no semantic verdict to wait on.
- */
 export function GlobalTurnDetection({
   onWindowChange,
   window,
@@ -65,9 +57,6 @@ export function GlobalTurnDetection({
 
       <CardContent className="flex flex-col gap-6">
         <Field>
-          {/* Which languages a model covers is a fact about the option, not an
-              instruction for using the control — so it sits on the (i) rather
-              than under the select. Helper-text rule, Fatma, Aug 2026. */}
           <div className="flex items-center gap-1">
             <FieldLabel htmlFor="detection-model">Detection model</FieldLabel>
             <Tooltip>
@@ -103,11 +92,6 @@ export function GlobalTurnDetection({
           <>
             <Separator />
 
-            {/* The scope note used to be a two-sentence Alert under the
-                window. It is neither destructive nor irreversible, so by the
-                helper-text rule it belongs on a hover target — and the PRD's
-                requirement is that new-calls-only is *stated*, which it still
-                is. Flagged on DES-173 in case Fatma wants it back inline. */}
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <span className="text-sm font-medium">Wait window</span>

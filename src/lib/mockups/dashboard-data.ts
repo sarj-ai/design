@@ -1,11 +1,4 @@
-/**
- * PROD-600 — the dashboard's numbers, per period.
- *
- * The chart series is generated first and every total is summed from it, so
- * the cards and the chart always agree. Changes are the API's own numbers,
- * kept as it sends them: a percentage against the previous window, 0 when
- * that window had no calls.
- */
+/** Totals are summed from the generated series so the cards and the chart always agree. */
 
 export type PresetPeriod = "today" | "week" | "month" | "quarter"
 export type Period = PresetPeriod | "custom"
@@ -17,9 +10,6 @@ export const PRESET_PERIODS: readonly { id: PresetPeriod; label: string }[] = [
   { id: "quarter", label: "Last 90 days" },
 ]
 
-/* The second half of `trend_period_label` from the analytics service. It sits
-   after the period buttons, so the selected one already says the first half
-   ("Last 30 days") and the label only says what it is compared with. */
 const COMPARISON: Record<Period, string> = {
   today: "vs yesterday",
   week: "vs previous 7 days",
@@ -37,10 +27,7 @@ export type NumberCard = {
   value: string
   /** Percent against the previous window. Only the top three carry one. */
   change?: number
-  /** Whether a rise is good news. Average duration is neither, so it stays
-   *  neutral whichever way it moves. */
   riseIsGood?: boolean
-  /** The chart series this number totals; its card draws that line. */
   series?: Series
 }
 
@@ -49,7 +36,6 @@ type DashboardData = {
   summary: NumberCard[]
   analytics: NumberCard[]
   chart: ChartPoint[]
-  /** What one point on the chart counts, and over which window. */
   chartDescription: string
 }
 
@@ -62,7 +48,6 @@ function noise(seed: number) {
 const DAY_MS = 24 * 60 * 60 * 1000
 const TODAY = new Date(Date.UTC(2026, 9, 20))
 
-/* The platform's own format, `formatChartLabel` in call-volume-chart.tsx. */
 function dayLabel(date: Date) {
   return date.toLocaleDateString("en-US", {
     day: "numeric",
@@ -77,7 +62,6 @@ function hourLabel(hour: number) {
   return hour < 12 ? `${hour}AM` : `${hour - 12}PM`
 }
 
-/* Calls follow the working day: quiet overnight, busiest late morning. */
 function hourlySeries(): ChartPoint[] {
   const now = 15
   return Array.from({ length: now + 1 }, (_, hour) => {
@@ -94,7 +78,6 @@ function dailySeries(from: Date, days: number, seed: number): ChartPoint[] {
   return Array.from({ length: days }, (_, index) => {
     const date = new Date(from.getTime() + index * DAY_MS)
     const weekday = date.getUTCDay()
-    /* Friday and Saturday are the Saudi weekend. */
     const weekend = weekday === 5 || weekday === 6 ? 0.45 : 1
     return {
       label: dayLabel(date),
@@ -203,8 +186,6 @@ export function rangeLabel(range: CustomRange) {
   return `${dayLabel(range.from)} – ${dayLabel(range.to)} (UTC)`
 }
 
-/* The platform buckets today by the hour and every other window by the day
-   (`formatChartLabel`), so the chart says which one the reader is looking at. */
 function chartDescription(period: Period, range: CustomRange | undefined) {
   if (period === "today") return "Calls each hour, today"
   if (period === "custom") {
@@ -239,8 +220,6 @@ export function dashboardData(
   const description = chartDescription(period, range)
   if (!noCalls) return build(period, shape, description)
 
-  /* A window with no calls: every point is zero and the API reports the drop
-     against the previous window as it does today. */
   return build(
     period,
     {

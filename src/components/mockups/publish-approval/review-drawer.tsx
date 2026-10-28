@@ -41,24 +41,6 @@ import {
   who,
 } from "@/lib/mockups/publish-approval-data"
 
-/**
- * One request, opened from the Approvals list, a notification or the
- * editor's pending row. A record drawer — 1024px, ↑ ↓ to the next request,
- * actions in the header, no footer — because the approver reads requests one
- * after another from a list, and the exact changes are a side-by-side diff
- * that does not fit in 448.
- *
- * Read order is the PRD's: the effect on callers first, written for someone
- * who is not technical; then why it is needed, in the requester's words;
- * then what it affects; the exact changes last, on expand.
- *
- * Who sees what:
- *  - The client's approver:
- *    Reject and Approve and publish. Approving publishes — there is no
- *    second step that could be forgotten, and no bypass (PRD).
- *  - The requester: Withdraw.
- *  - Anyone else: the decision buttons, greyed, saying who decides.
- */
 export function ReviewDrawer({
   request,
   onClose,
@@ -76,7 +58,6 @@ export function ReviewDrawer({
   /** The requests ↑ and ↓ step through, in list order. */
   list: string[]
   onStep: (id: string) => void
-  /** The approve-fails case: the first approve fails. */
   failApprove: boolean
   onApprove: (id: string) => Promise<boolean>
   onReject: (id: string, reason: string) => void
@@ -304,8 +285,6 @@ function Review({
   )
 }
 
-/** One line on where the request stands: how long it has waited, or who
- *  closed it and when. */
 function Standing({
   request,
   viewer,
@@ -356,11 +335,6 @@ function Block({
   )
 }
 
-/**
- * Reject asks for a reason, inline at the top of the record rather than in
- * a dialog over the drawer (one overlay at a time). The reason goes back to
- * the requester with the rejection.
- */
 function RejectReason({
   version,
   onCancel,
@@ -412,7 +386,6 @@ function RejectReason({
   )
 }
 
-/** The exact changes, closed until asked for (PRD: "on expand"). */
 function ExactChanges({ request }: { request: ApprovalRequest }) {
   const [open, setOpen] = React.useState(false)
 

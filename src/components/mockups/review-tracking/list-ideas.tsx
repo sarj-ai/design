@@ -25,7 +25,6 @@ import {
 } from "@/lib/mockups/review-tracking-data"
 import { cn } from "@/lib/utils"
 
-/** The open call, and the rows its arrows walk. */
 function useOpenCall(onOpen?: (call: CallRow) => void) {
   const [open, setOpen] = React.useState<CallRow | null>(null)
   const show = React.useCallback(
@@ -42,14 +41,6 @@ function toggleIn(list: string[], id: string) {
   return list.includes(id) ? list.filter((item) => item !== id) : [...list, id]
 }
 
-/* ------------------------------------------------------------ row numbers */
-
-/**
- * Mohammed's first ask: a number per row, so "I'm on the 15th" is something
- * you can remember. It counts the list as filtered and sorted — row 15 is
- * the fifteenth call on screen, not a property of the call — so it holds
- * only until the list changes under you.
- */
 export function RowNumbersIdea() {
   const { open, show, close } = useOpenCall()
 
@@ -86,14 +77,6 @@ export function RowNumbersIdea() {
   )
 }
 
-/* ------------------------------------------------------------ last opened */
-
-/**
- * Maryam's and Hasan's: the row you opened last stays shaded after the
- * drawer closes, so coming back to the list you land where you left off.
- * Walking with ↑ ↓ in the drawer moves the shade with you. It remembers one
- * call, per person, and asks nothing of the reviewer.
- */
 export function LastOpenedIdea() {
   const [last, setLast] = React.useState<string | null>(LAST_OPENED)
   const { open, show, close } = useOpenCall(
@@ -112,15 +95,6 @@ export function LastOpenedIdea() {
   )
 }
 
-/* ----------------------------------------------------------------- unread */
-
-/**
- * Vansh's dot, with Maryam's way out of it: a call you have never opened
- * carries a dot and a full-strength time, as an unread email does; opening
- * it clears both. "Unread only" narrows the list to what is left, and Mark
- * all as read clears the lot — so the dots never become a chore of clicking
- * through every call. The button is absent once nothing is unread.
- */
 export function UnreadIdea() {
   const [opened, setOpened] = React.useState<string[]>(OPENED)
   const [unreadOnly, setUnreadOnly] = React.useState(false)
@@ -186,14 +160,6 @@ export function UnreadIdea() {
   )
 }
 
-/* --------------------------------------------------------------- reviewed */
-
-/**
- * Vansh's checkbox: the reviewer ticks a call once they are done with it.
- * Opening is not reviewing — Hasan's point — so the tick is a deliberate
- * act, from the row or from the drawer. "Not reviewed" narrows the list to
- * what is left.
- */
 export function ReviewedIdea() {
   const [reviewed, setReviewed] = React.useState<string[]>(REVIEWED)
   const [notReviewed, setNotReviewed] = React.useState(false)
@@ -278,14 +244,6 @@ export function ReviewedButton({
   )
 }
 
-/* ------------------------------------------------------------------ saved */
-
-/**
- * Kidus's bookmark, which Abdulrahman likened to Slack's save for later:
- * keep a call to come back to, per person. The bookmark sits at the end of
- * the row and in the drawer, filled once saved. "Saved" narrows the list to
- * your saved calls.
- */
 export function SavedIdea() {
   const [saved, setSaved] = React.useState<string[]>(SAVED)
   const [savedOnly, setSavedOnly] = React.useState(false)
@@ -374,19 +332,10 @@ export function SaveButton({
   )
 }
 
-/* ---------------------------------------------------------- watch history */
-
-/**
- * Abdulrahman's watch history, as Instagram keeps one: a second view of the
- * page listing the calls you opened, most recent first, with when. Nothing
- * to tick or remember — the page remembers for you. Opening a call from
- * either view puts it at the top of the history.
- */
 export function HistoryIdea() {
   const [view, setView] = React.useState("all")
   const [history, setHistory] = React.useState(HISTORY)
-  /* Calls opened during this visit to the drawer. They join the history
-     when it closes, so the list does not reorder under the arrows. */
+  /* Joins the history when the drawer closes, so the list does not reorder under the arrows. */
   const visited = React.useRef<string[]>([])
   const opener = useOpenCall(
     React.useCallback((call: CallRow) => {

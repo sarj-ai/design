@@ -35,35 +35,12 @@ import {
 } from "@/components/mockups/behavioral-alerts/icons"
 import { UserExperienceBody } from "@/components/mockups/behavioral-alerts/user-experience"
 
-/**
- * The panel, as the revamped drawer has it: a register the reader owns rather
- * than a stack we chose for them.
- *
- * Sections keep arriving — this PRD adds two of them — and the order that suits
- * someone triaging frustrated callers is not the order that suits someone
- * auditing whether the workflow completed. So order and visibility are
- * settings, they are stored, and a section that is shut still states its
- * finding in its own header, which is what makes collapsing safe rather than
- * hostile.
- */
-
 type SectionId = "alerts" | "collected" | "experience" | "outcome" | "technical"
 
-/**
- * `open` is stored alongside order and visibility on purpose. Collapsing a
- * section in the panel and setting it to start collapsed are the same wish, so
- * they are the same flag — whichever way you set it, the section stays that way
- * on the next call.
- */
 type Arrangement = { id: SectionId; open: boolean; visible: boolean }
 
 const STORAGE_KEY = "sarj-mockup:behavioral-alerts-panel"
 
-/**
- * The two the PRD adds lead, because they are the reading a client currently
- * cannot get anywhere. Technical is hidden outright — it is the rail nobody
- * read, and the header already prints the four fields off it that get used.
- */
 const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "experience", open: true, visible: true },
   { id: "alerts", open: true, visible: true },
@@ -72,11 +49,8 @@ const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "technical", open: false, visible: false },
 ]
 
-/**
- * A stored arrangement is not trusted: it can predate a section being added or
- * renamed. Keep what is still known, in the stored order, then append anything
- * the defaults have that it does not.
- */
+// Stored arrangement may predate added or renamed sections: keep known ids in
+// stored order, then append missing defaults.
 function normalise(stored: unknown): Arrangement[] {
   if (!Array.isArray(stored)) return DEFAULT_ARRANGEMENT
 
@@ -101,15 +75,8 @@ function normalise(stored: unknown): Arrangement[] {
   return kept
 }
 
-/* ---------------------------------------------------------- stored setting */
-
-/**
- * The arrangement is state that lives outside React — localStorage owns it, and
- * it has to survive the drawer being closed and reopened, which unmounts every
- * component below. So it is read through `useSyncExternalStore` rather than
- * copied into state on mount: the server renders the defaults, the client
- * renders what is stored, and neither needs an effect to reconcile them.
- */
+// Cached against the raw string: useSyncExternalStore compares snapshots by
+// identity.
 const listeners = new Set<() => void>()
 let cachedRaw: string | null = null
 let cachedValue = DEFAULT_ARRANGEMENT
@@ -152,8 +119,6 @@ function store(next: Arrangement[] | null) {
   for (const listener of listeners) listener()
 }
 
-/* ----------------------------------------------------------- the register */
-
 export function SectionRegister({
   call,
   onConfigureAlerts,
@@ -187,19 +152,11 @@ export function SectionRegister({
   }
 
   const sections = useSections(call, onConfigureAlerts, onSeek)
-  /**
-   * A section with nothing behind it on this call is absent, not empty: an
-   * unanalysed call has no user experience to report, and a scenario that
-   * extracts nothing has no collected data. A header that only ever says
-   * "none" is a row the reader learns to skip.
-   */
   const present = arrangement.filter((item) => sections[item.id] !== null)
   const shown = present.filter((item) => item.visible)
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      {/* The chips wrap in their own box so the Customize button stays pinned
-          beside them instead of being pushed onto a line of its own. */}
       <div className="flex shrink-0 items-start gap-2 border-b pb-3">
         <div className="flex flex-1 flex-wrap items-center gap-1">
           {shown.map((item) => (
@@ -220,8 +177,8 @@ export function SectionRegister({
         <CustomizePopover
           arrangement={present}
           onRearrange={(next) => {
-            // Only the sections on this call are draggable, so the ones that
-            // are absent keep their stored place rather than being appended.
+            // Only present sections are draggable; absent ones keep their
+            // stored slot.
             const order = next.map((item) => item.id)
             let cursor = 0
             store(
@@ -265,8 +222,6 @@ export function SectionRegister({
   )
 }
 
-/* ------------------------------------------------------------- customizing */
-
 function CustomizePopover({
   arrangement,
   onRearrange,
@@ -279,7 +234,6 @@ function CustomizePopover({
   sections: Record<SectionId, null | Section>
 }) {
   const [dragging, setDragging] = React.useState<SectionId | null>(null)
-  /** Where the dragged row would land — the index the drop line sits before. */
   const [dropAt, setDropAt] = React.useState<number | null>(null)
 
   function move(from: number, to: number) {
@@ -290,7 +244,7 @@ function CustomizePopover({
     onRearrange(next)
   }
 
-  /** Drop uses an insertion point, which shifts once the row is lifted out. */
+  // Drop uses an insertion point, which shifts once the row is lifted out.
   function moveTo(from: number, insertAt: number) {
     const next = [...arrangement]
     const [moved] = next.splice(from, 1)
@@ -347,7 +301,6 @@ function CustomizePopover({
               onDragEnd={endDrag}
               onDragOver={(event) => {
                 event.preventDefault()
-                // Past the midpoint means it lands after this row, not before.
                 const box = event.currentTarget.getBoundingClientRect()
                 const below = event.clientY > box.top + box.height / 2
                 setDropAt(below ? index + 1 : index)
@@ -363,17 +316,12 @@ function CustomizePopover({
                 endDrag()
               }}
             >
-              {/* The drop line is absolutely positioned so showing it does not
-                  shove the rows around while you are still dragging. */}
               {dropAt === index ? <DropLine className="-top-px" /> : null}
               {dropAt === arrangement.length &&
               index === arrangement.length - 1 ? (
                 <DropLine className="-bottom-px" />
               ) : null}
 
-              {/* A button, not just the icon: dragging is the way to reorder,
-                  and dragging has no keyboard equivalent — so the handle takes
-                  arrow keys itself. */}
               <Button
                 aria-label={`Reorder ${sections[item.id]?.title ?? item.id}`}
                 className="shrink-0 cursor-grab"
@@ -397,17 +345,11 @@ function CustomizePopover({
                 {sections[item.id]?.title}
               </span>
 
-              {/* Show only. "Open by default" was a second switch answering a
-                  question the panel already answers by itself — collapsing a
-                  section in the panel is stored, so the state it is in is the
-                  state it starts in next time. */}
               <span className="ms-auto flex justify-center">
                 <Switch
                   aria-label={`Show ${sections[item.id]?.title ?? item.id}`}
                   checked={item.visible}
                   onCheckedChange={(checked) => {
-                    // Hiding a section also closes it, so bringing it back does
-                    // not dump an expanded body into the panel unannounced.
                     set(item.id, {
                       open: checked ? item.open : false,
                       visible: checked,
@@ -432,7 +374,6 @@ function CustomizePopover({
   )
 }
 
-/** Where the dragged row will land. */
 function DropLine({ className }: { className: string }) {
   return (
     <span
@@ -444,12 +385,9 @@ function DropLine({ className }: { className: string }) {
   )
 }
 
-/* ---------------------------------------------------------------- sections */
-
 type Section = {
   body: React.ReactNode
   icon: React.ComponentType<{ className?: string }>
-  /** What the header says while the section is shut. */
   summary: string
   title: string
 }
@@ -497,7 +435,6 @@ function PanelSection({
   )
 }
 
-/** `null` means this call has nothing for that section, so it is not drawn. */
 function useSections(
   call: CallRow,
   onConfigureAlerts: () => void,
@@ -530,9 +467,6 @@ function useSections(
       ? {
           body: <UserExperienceBody journey={journey} />,
           icon: ExperienceIcon,
-          /* Sentiment and the rating together, because either one alone reads
-             as the whole verdict — a five-star neutral call and a two-star
-             neutral call are not the same call. */
           summary: `${SENTIMENT_LABELS[journey.sentiment]} · ${journey.rating}/5`,
           title: "Caller experience",
         }
@@ -543,8 +477,6 @@ function useSections(
         call.outcome.status === "success"
           ? CriterionMetIcon
           : CriterionMissedIcon,
-      /* The verdict, not the raw value — the collapsed header is the one place
-         the reader sees it without opening the section. */
       summary: call.outcome.status === "success" ? "Achieved" : "Not achieved",
       title: "Call outcome",
     },
@@ -557,10 +489,6 @@ function useSections(
   }
 }
 
-/**
- * The scenario's own pass/fail and why — the reading the platform gives today,
- * kept beside the one this PRD adds rather than replaced by it.
- */
 function OutcomeBody({ call }: { call: CallRow }) {
   const achieved = call.outcome.criteria.filter((item) => item.achieved).length
 
@@ -591,8 +519,6 @@ function OutcomeBody({ call }: { call: CallRow }) {
         </div>
 
         {call.outcome.criteria.map((criterion) => (
-          /* bg-card, not bg-muted: the section itself is already the muted
-             surface, so a row has to come forward to read as a row. */
           <div
             className="flex items-start gap-2 rounded-lg bg-card p-3"
             key={criterion.text}

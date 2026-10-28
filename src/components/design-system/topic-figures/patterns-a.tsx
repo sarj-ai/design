@@ -2,12 +2,8 @@ import { Figure, type FigureProps, LINE } from "@/components/shared/figure"
 
 import { TOPIC_FIGURE_VIEWBOX } from "./frame"
 
-/*
- * Every subject sits in the same box — x 48–192, y 84–196 — so the grid
- * reads as one set: same scale, same margins, same weight.
- */
+/* Every subject sits in the same box: x 48–192, y 84–196. */
 
-/* A primary and an outline button on one shared baseline. */
 function ButtonsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -37,7 +33,6 @@ function ButtonsFigure({ className }: FigureProps) {
   )
 }
 
-/* Two label-over-field stacks and the button that saves them. */
 function FormsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -58,7 +53,6 @@ function FormsFigure({ className }: FigureProps) {
   )
 }
 
-/* The same page three ways: a pop-up, a drawer, a row opened inline. */
 function SurfacesFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -96,7 +90,6 @@ function SurfacesFigure({ className }: FigureProps) {
   )
 }
 
-/* A tab strip with the first view underlined, over the panel it shows. */
 function TabsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -117,7 +110,6 @@ function TabsFigure({ className }: FigureProps) {
   )
 }
 
-/* The page stays in view behind a panel on its trailing edge. */
 function DrawerFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -140,7 +132,6 @@ function DrawerFigure({ className }: FigureProps) {
   )
 }
 
-/* Vertical steps, each on a line of its own. */
 function StepperFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -161,7 +152,6 @@ function StepperFigure({ className }: FigureProps) {
   )
 }
 
-/* Three cards; the picked one gets a second edge and nothing else. */
 function SelectionFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -189,7 +179,6 @@ function SelectionFigure({ className }: FigureProps) {
   )
 }
 
-/** Topic id → its tile's drawing. */
 export const PATTERNS_A_FIGURES: Record<
   string,
   (props: FigureProps) => React.ReactNode

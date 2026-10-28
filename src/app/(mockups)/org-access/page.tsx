@@ -21,21 +21,6 @@ import {
 } from "@/components/ui/select"
 import { ORG, type InviteeState } from "@/lib/mockups/org-access-data"
 
-/**
- * Invite-only organization access — DES-197, built to the "Organization
- * access and membership" requirements doc that PLT-4476 implements.
- *
- * Three places, picked from the nav: Sarj's organizations list (owners,
- * creating an organization, the migration pass), one organization's members
- * (invites, the invite link, owners, removal), and what the invited person
- * sees. Clicking an organization's name in the list opens its members.
- *
- * Seen as Sarj staff, on the admin Organizations page the platform already
- * has. Approving unprompted sign-ups and verifying domains, both named in the
- * ticket, are absent on purpose: the doc removes the first and makes the
- * second a non-goal.
- */
-
 const VIEWS = [
   {
     group: "Sarj",
@@ -116,7 +101,7 @@ export default function OrgAccessPage() {
           }
         >
           {membersState ? (
-            /* Keyed so each state starts from the same list. */
+            // Keyed so each state starts from the same list.
             <MembersView key={view} state={membersState} />
           ) : (
             <OrganizationsView

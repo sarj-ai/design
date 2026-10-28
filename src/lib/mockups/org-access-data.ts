@@ -1,14 +1,3 @@
-/**
- * Mock data for DES-197 — invite-only organization access.
- *
- * Built to the "Organization access and membership" requirements doc
- * (PLT-4476) and the access model's five groups. Zain KSA and Yaqoot share
- * sa.zain.com, which is the subsidiary case the doc exists for. Saudia and
- * Al Rajhi Bank are migrated organizations with no owner yet.
- */
-
-/** The groups a person can be added to inside an organization. Sarj Super
-    Admin is platform-wide and is never offered here. */
 export const GROUPS = ["Viewer", "Caller", "Editor", "Org Admin"] as const
 export type Group = (typeof GROUPS)[number]
 
@@ -18,8 +7,7 @@ export type Member = {
   email: string
   group: Group
   owner?: boolean
-  /** Who admitted them. Null for someone auto-enrolled by domain before
-      invites existed. */
+  /** Null for someone auto-enrolled by domain. */
   addedBy: string | null
   added: string
 }
@@ -103,8 +91,6 @@ export const INVITES: Invite[] = [
   },
 ]
 
-/** People already in another organization. V1 keeps a person in one
-    organization, so inviting them here is refused by name. */
 export const ELSEWHERE: Record<string, string> = {
   "a.alrashid@sa.zain.com": "Yaqoot",
 }
@@ -112,23 +98,18 @@ export const ELSEWHERE: Record<string, string> = {
 export const LINK_EXPIRY = ["1 day", "7 days", "30 days"] as const
 export type LinkExpiry = (typeof LINK_EXPIRY)[number]
 
-const RETENTIONS = ["2 years", "5 years", "10 years"] as const
-export type Retention = (typeof RETENTIONS)[number]
+export type Retention = "2 years" | "5 years" | "10 years"
 
 export type Organization = {
   id: string
   name: string
   domain: string
-  /** The owner's name, or their email while their invite is pending. Null
-      on an organization migrated from before owners existed. */
+  /** The owner's email while their invite is pending; null on a migrated organization. */
   owner: string | null
   ownerPending?: boolean
   members: number
-  /** How long its calls are kept, as the platform labels it. */
   retention: Retention
-  /** Whether it overrides the global settings. */
   customSettings: boolean
-  /** Who could be made owner, for an organization without one. */
   candidates?: { name: string; group: Group }[]
 }
 
@@ -189,8 +170,6 @@ export const ORGANIZATIONS: Organization[] = [
   },
 ]
 
-/** People with an account and no organization, as Sarj's admin page
-    lists them. */
 export type UnassignedUser = {
   id: string
   email: string
@@ -210,7 +189,6 @@ export const UNASSIGNED_USERS: UnassignedUser[] = [
   },
 ]
 
-/** What the invited person sees, one state per screen. */
 export const INVITEE_STATES = [
   { id: "invite", label: "Invite" },
   { id: "wrong-account", label: "Wrong account" },

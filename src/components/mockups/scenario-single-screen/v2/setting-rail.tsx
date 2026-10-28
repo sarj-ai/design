@@ -14,19 +14,6 @@ import {
 } from "@/components/ui/item"
 import { OpenSettingIcon } from "@/components/mockups/scenario-single-screen/v2/icons"
 
-/**
- * One setting in the rail: what it is, what it is currently set to, and the
- * drawer that edits it.
- *
- * The value line is the point of the row. A rail that only listed setting
- * names would still make you open nine drawers to learn what the scenario
- * does — printing the current value is what lets the whole configuration be
- * read off one screen, which is the thing the tabs were costing.
- *
- * `ItemMedia variant="icon"` sizes the glyph to the text and top-aligns it to
- * the title, which is the correct relationship for a 16px icon labelling a
- * two-line block.
- */
 export function SettingRow({
   icon: Icon,
   onOpen,
@@ -60,13 +47,6 @@ export function SettingRow({
   )
 }
 
-/**
- * A labelled group of rows.
- *
- * Nine flat rows read as a list to get through. Grouped by when they matter —
- * how it speaks, what it knows, what happens after the call — the rail reads
- * as a summary of the scenario instead.
- */
 export function RailGroup({
   children,
   title,

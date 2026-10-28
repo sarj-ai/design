@@ -45,18 +45,6 @@ export type { DateRange }
 type FilterOption = { value: string; label: string }
 export type Range = { min?: number; max?: number }
 
-/**
- * Filters as a row of chips under the search.
- *
- * A filter that is not set is one small chip naming its field — "+ Language" —
- * so ten of them cost a line, not a toolbar. Opening one gives its control the
- * room it needs (a checklist, a calendar) in a popover. Once set, the chip
- * reads its value and grows an × to clear it. Past two set filters the row
- * ends in Clear all.
- *
- * Show the three or four filters people reach for as chips; put the rest
- * behind AddFilter, which turns a chosen field into a chip of its own.
- */
 export function FilterBar({
   children,
   activeCount = 0,
@@ -79,12 +67,7 @@ export function FilterBar({
   )
 }
 
-/**
- * The chip itself: "+ Field" when empty, "Field: value" and an × once set.
- * One tree for both states: swapping the button for a group once a value is
- * set would remount the trigger, and the open list would close on the first
- * tick.
- */
+/** One tree for both states: swapping the trigger once a value is set would remount it and close the open list. */
 function Chip({
   field,
   summary,
@@ -92,7 +75,6 @@ function Chip({
   trigger,
 }: {
   field: string
-  /** What the filter is set to, or null when it is not set. */
   summary: string | null
   onClear: () => void
   trigger: (button: React.ReactElement) => React.ReactNode
@@ -127,13 +109,6 @@ function Chip({
   )
 }
 
-/* ---------------------------------------------------------------- summaries */
-
-/**
- * What a many-value filter reads once set: the value, two values when both
- * fit, and past that the first value and how many more — "Completed +2".
- * A bare count ("Status: 3") makes you open the chip to learn anything.
- */
 function manySummary(options: FilterOption[], value: string[]) {
   if (!value.length) return null
   const labels = value.map(
@@ -185,13 +160,6 @@ function rangeSummary(range: Range | null, unit: string) {
 /** Past this many options the list gets a search box. */
 const SEARCH_FROM = 8
 
-/**
- * The one list every select filter opens, many-value or one-value, so the two
- * cannot drift apart: same rows, the tick on the right. A short list is the
- * standard dropdown menu, so it looks like every other dropdown in the
- * product; a long one needs a search box, so it is a command list. A set
- * many-value list ends in Clear.
- */
 function OptionList({
   button,
   field,
@@ -207,12 +175,10 @@ function OptionList({
   selected: string[]
   onSelect: (value: string) => void
   onClear?: () => void
-  /** One-value filters close on a pick; many-value ones stay open. */
   closeOnSelect: boolean
 }) {
   const [open, setOpen] = React.useState(false)
-  /* Ticked ones float to the top of a long list, so they are never scrolled
-     out of sight — but only when it opens, not under the pointer. */
+  // Ticked ones float to the top only when the list opens, not under the pointer.
   const [order, setOrder] = React.useState(options)
 
   if (options.length < SEARCH_FROM) {
@@ -228,7 +194,6 @@ function OptionList({
               checked={selected.includes(option.value)}
               key={option.value}
               onSelect={(event) => {
-                /* A many-value list stays open while ticking. */
                 if (!closeOnSelect) event.preventDefault()
                 onSelect(option.value)
               }}
@@ -304,7 +269,6 @@ function OptionList({
   )
 }
 
-/** Pick one or more values. The list stays open while ticking. */
 export function SelectFilter({
   field,
   options,
@@ -342,7 +306,6 @@ export function SelectFilter({
   )
 }
 
-/** Pick exactly one value — a direction, a channel. Choosing closes it. */
 export function ChoiceFilter({
   field,
   options,
@@ -373,7 +336,6 @@ export function ChoiceFilter({
   )
 }
 
-/** A date range: presets first, then any range on the calendar. */
 export function DateFilter({
   field,
   value,
@@ -383,7 +345,7 @@ export function DateFilter({
   field: string
   value: DateRange | undefined
   onChange: (value: DateRange | undefined) => void
-  /** What "today" is. Mock data is dated, so the demo fixes it. */
+  /** Mock data is dated, so the demo fixes today. */
   today: Date
 }) {
   return (
@@ -429,10 +391,6 @@ export function DateFilter({
   )
 }
 
-/**
- * A number between two bounds — duration, cost. The common bands are one
- * click; Min and Max take anything else, and either may be left empty.
- */
 export function RangeFilter({
   field,
   unit,
@@ -509,10 +467,6 @@ export function RangeFilter({
   )
 }
 
-/**
- * A filter that is either on or off — "Scheduled only". Clicking the chip
- * turns it on; there is nothing to choose, so nothing opens.
- */
 export function ToggleFilter({
   field,
   value,
@@ -548,7 +502,6 @@ export function ToggleFilter({
   )
 }
 
-/** The filters not shown as chips. Choosing one adds its chip to the row. */
 export function AddFilter({
   fields,
   onAdd,

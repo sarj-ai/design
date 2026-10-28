@@ -26,19 +26,6 @@ import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
 import { IDEAS, type IdeaId } from "@/lib/mockups/review-tracking-data"
 
-/**
- * Keeping your place in conversation review — INT-287.
- *
- * Every idea from the Slack thread that raised the ticket, each drawn on the
- * Conversations page as it ships after the index revamp, so they can be put
- * in front of the reviewers who will use them (Abdulrahman's ask). The
- * select in the bar picks the idea; it names who suggested it.
- *
- * Each idea is a real, clickable version: rows open the call drawer, ↑ ↓
- * walk the list, and whatever an idea remembers (last opened, read, ticked,
- * saved, history, a session) changes as you use it.
- */
-
 const VIEWS: Record<IdeaId, () => React.ReactNode> = {
   "row-numbers": RowNumbersIdea,
   "last-opened": LastOpenedIdea,
@@ -54,7 +41,6 @@ export default function ReviewTrackingPage() {
   const [idea, setIdea] = React.useState<IdeaId>("last-opened")
   const View = VIEWS[idea]
 
-  /* A toast belongs to the idea that raised it. */
   React.useEffect(() => {
     toast.dismiss()
   }, [idea])

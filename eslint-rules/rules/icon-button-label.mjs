@@ -7,18 +7,7 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * An icon-only button has no name unless you give it one.
- *
- * `<Button size="icon-sm"><CloseIcon /></Button>` reads to a screen reader as
- * "button" and nothing else, because the glyph is the only thing in it. The
- * design system's accessibility foundation says every control is named, and
- * the table rules say it again for row actions: every glyph carries an
- * aria-label, because the glyph is the only name it has.
- *
- * A tooltip is not a name — Radix wires it up as a description. A visible
- * label or a `sr-only` span inside the button is.
- */
+// A tooltip is not a name (Radix wires it as a description); a visible label or `sr-only` span is.
 
 const ICON_SIZE = /^icon(-|$)/
 

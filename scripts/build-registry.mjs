@@ -1,51 +1,11 @@
-/**
- * Generate registry.json from the mockups index.
- *
- *   npm run registry
- *
- * Why this is generated and not hand-written: a registry item has to list every
- * file the mockup actually needs, and that list changes every time someone adds
- * an import. Written by hand it goes stale silently — a consumer runs the
- * install and gets a screen that does not compile. So the item is derived from
- * the real import graph: start at the route, follow every local import, and
- * whatever it reaches is what ships.
- *
- * shadcn's own `ui/*` primitives are not copied. They are listed as
- * registryDependencies so the consumer's own CLI installs them from wherever
- * their components.json points — a mockup should not overwrite a shipped
- * Button with this repo's copy of it.
- *
- * The tokens are derived the same way, and for the same reason: a screen that
- * installs without the custom properties it is styled against renders with
- * `bg-primary-tint` resolving to nothing, and nobody finds out until they look.
- *
- * The walk itself lives in lib/import-graph.mjs, shared with `npm run thumbs`.
- */
-
 import { existsSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 import { ROOT, SRC, collect, read, readMockups } from "./lib/import-graph.mjs"
 
-/**
- * One folder for everything this repo installs.
- *
- * Without it a mockup scatters into the consumer's own tree — `icon.tsx` at
- * the root of their components directory, a data file loose in their lib —
- * and a month later nobody can tell which files came from here. shadcn
- * rewrites each file's `@/` imports to wherever its target puts it, so the
- * namespace costs nothing: the installed components still find each other.
- */
 const NAMESPACE = "sarj"
 
-/**
- * The custom properties a stock shadcn project already defines.
- *
- * Everything else this repo puts in `:root` is something it added on top, so
- * a consumer will not have it and it has to travel with the item. Listing the
- * stock names rather than the added ones keeps the split honest: add a token
- * to globals.css and it ships automatically, instead of being forgotten here.
- */
+// List the stock names, not the added ones, so a token added to globals.css ships automatically.
 const STOCK_TOKENS = new Set([
   "radius",
   "background",
@@ -82,33 +42,16 @@ const STOCK_TOKENS = new Set([
   "sidebar-ring",
 ])
 
-/**
- * Where a file lands in the consumer's project.
- *
- * The `@components`/`@lib` placeholders resolve to whatever that project's
- * components.json calls those directories, so the mockup keeps its folder
- * rather than being flattened into one — the components import each other by
- * relative path and would break.
- */
 function placement(file) {
   const rel = path.relative(SRC, file).split(path.sep).join("/")
 
   if (rel.startsWith("app/")) {
-    /* Deliberately not `~/`-prefixed. shadcn joins a `~/` target to the
-       project root verbatim, which drops the route beside the app directory
-       rather than inside it in any project that keeps its router under src/ —
-       a file Next never reads. A bare target goes through the framework
-       resolver instead, which lands it at src/app/… where there is a src
-       directory and app/… where there is not.
-
-       Route groups are stripped. `(mockups)` only sorts this repo's routes; it
-       never reaches a URL, so it has no business in someone else's app. */
+    /* Not `~/`-prefixed: shadcn joins a `~/` target to the project root verbatim, so it misses src/app.
+       Route groups are stripped: they never reach a URL. */
     return { type: "registry:page", target: rel.replace(/\([^/]+\)\//g, "") }
   }
   if (rel === "lib/utils.ts") {
-    /* The one exception. This is shadcn's own `cn`, and every ui primitive
-       the consumer installs from their own registry imports it from the root
-       lib alias — namespace it and their Button stops compiling. */
+    // shadcn's own `cn`: the consumer's primitives import it from the root lib alias, so it is not namespaced.
     return { type: "registry:lib", target: "@lib/utils.ts" }
   }
   if (rel.startsWith("lib/")) {
@@ -129,26 +72,15 @@ function placement(file) {
   }
 }
 
-/**
- * Every custom property this repo declares, read out of globals.css.
- *
- * Read rather than copied: a second copy of the palette in this script drifts
- * the first time someone retunes a colour, and the failure is the silent kind
- * — a consumer installs a screen tinted a shade nothing here uses any more.
- */
 function readTokens() {
   const css = read(path.join(SRC, "app", "globals.css"))
 
   const declarations = (header) => {
-    /* Every block with this header, not just the first — the stacking scale
-       is a second `:root` further down the file, next to the @utility rules
-       that read it, and reading only the first silently drops all nine
-       layers. */
+    // Every `:root` block, not just the first: the z-layer scale is a second one further down.
     const entries = []
 
     for (let start = css.indexOf(header); start !== -1;) {
-      /* Only the block's own closing brace sits at the start of a line — the
-         nested at-rules inside it are all indented. */
+      // Only the block's own closing brace sits at column 0; nested at-rules are indented.
       const end = css.indexOf("\n}", start)
       const body = css.slice(start, end === -1 ? undefined : end)
 
@@ -172,45 +104,20 @@ function readTokens() {
   }
 }
 
-/**
- * The added tokens a mockup actually reaches for.
- *
- * Only what it uses ships. A screen that never tints a surface has no business
- * pushing four tint pairs into somebody else's globals.css, and a consumer
- * reading the diff should be able to tell which of them the design needed.
- */
 function tokensFor(files, tokens) {
   const source = [...files].map(read).join("\n")
 
   return Object.keys(tokens.root)
     .filter((name) => !STOCK_TOKENS.has(name))
     .filter((name) =>
-      /* A z-layer is worn as its own utility class; everything else is a
-         colour, reached through a utility prefix or a var() reference. */
       name.startsWith("z-")
         ? new RegExp(`\\b${name}\\b`).test(source)
         : new RegExp(`(?:--|[a-z]-)${name}\\b`).test(source),
     )
 }
 
-/**
- * The `cssVars` and `css` an item carries, from the tokens it uses.
- *
- * Most colours go through `cssVars`: `light` writes the value into the
- * consumer's `:root` and `theme` registers the Tailwind alias, so
- * `bg-primary-tint` becomes a real utility there rather than a class that does
- * nothing. shadcn leaves a property the consumer already defines alone, so
- * this never restyles an app it is installed into.
- *
- * Two families cannot go that way. shadcn re-declares the stacking scale and
- * the chart ramp inside `@theme` as `--z-overlay: var(--z-overlay)` and
- * `--chart-6: var(--chart-6)` — properties defined as themselves, which is
- * junk in somebody's design system and was found by installing this into
- * the product rather than by reading the CLI. Both are written as plain CSS
- * instead: the value in `:root`, and for a layer the `@utility` block that
- * reads it, which is what makes `z-overlay` a utility rather than a variable
- * nothing consults.
- */
+// Z-layers and the chart ramp go as plain CSS, not cssVars: shadcn re-declares those inside @theme
+// as self-references (`--z-overlay: var(--z-overlay)`).
 function styling(names, tokens) {
   const light = {}
   const theme = {}
@@ -228,8 +135,7 @@ function styling(names, tokens) {
       css[`@utility ${name}`] = { "z-index": `var(--${name})` }
     }
 
-    /* The Tailwind alias still comes through cssVars — it is what turns the
-       property into a utility, and shadcn does not duplicate it. */
+    // The Tailwind alias still goes through cssVars; shadcn does not duplicate it.
     const alias = `color-${name}`
     if (tokens.theme[alias]) theme[alias] = tokens.theme[alias]
   }
@@ -243,14 +149,6 @@ function styling(names, tokens) {
   return { cssVars, css }
 }
 
-/**
- * Where a mockup's item starts following imports.
- *
- * The route by default, so a screen ships with the chrome it is drawn inside.
- * A mockup whose deliverable is a single component says so with
- * `registryEntry` in the index, and the item is that component plus whatever
- * it imports — no route file, no shell, nothing the consumer already has.
- */
 function entryFor({ slug, registryEntry }) {
   const rel = registryEntry ?? `app/(mockups)/${slug}/page.tsx`
 
@@ -290,18 +188,7 @@ const items = readMockups().map((mockup) => {
   }
 })
 
-/**
- * Files an item ships that share a basename.
- *
- * shadcn rewrites each installed file's `@/` imports to wherever the target
- * put it, and it matches by basename — so an item carrying both
- * `drawer/icons.tsx` and `list/icons.tsx` installs fine and then compiles
- * against the wrong one. The screen looks installed and is not.
- *
- * This cannot be fixed from here, only reported: the resolution is to give the
- * files distinct names in the mockup itself. Warn rather than throw, so one
- * mockup with a clash does not block publishing the other twelve.
- */
+// shadcn rewrites `@/` imports by basename, so two shipped files sharing one compile against the wrong file.
 function clashes(item) {
   const byBasename = new Map()
 

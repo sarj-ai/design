@@ -58,31 +58,9 @@ import { Spinner } from "@/components/ui/spinner"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { cn } from "@/lib/utils"
 
-/**
- * Creating a scenario, as a full-screen flow: one question a screen, the
- * answer is the click, and it ends on a name and Create.
- *
- * The platform splits this across two pages that do not know about each
- * other — /scenarios/auto-generate (describe it, AI builds it) and
- * /scenarios/new (a Blank card over an industry grid, then use cases, then the
- * whole twenty-card editor). Here they are one flow after ElevenLabs' New
- * agent: the AI path is the first row, the industries sit under it, Blank
- * closes the list, and every path lands on the same last screen.
- *
- * Choosing is the step. A card is a button, so a start, an industry and a
- * template each move on the moment they are clicked — no Next to find. Only
- * the two screens you type on have a primary button, and it names what
- * happens: Build scenario, Create scenario.
- *
- * The chrome is three things: Back on the left, Close on the right, the step
- * dots at the foot. The title stays "New scenario" on every screen, because
- * it is one task; what changes is the question under it.
- */
-
 type Template = {
   id: string
   name: string
-  /** The template's own first message, which is what its card previews. */
   firstMessage: string
   reply: string
 }
@@ -232,7 +210,6 @@ const INDUSTRIES: Industry[] = [
       },
     ],
   },
-  /* No templates yet — the one industry that shows the empty state. */
   {
     id: "real-estate",
     name: "Real estate",
@@ -241,7 +218,6 @@ const INDUSTRIES: Industry[] = [
   },
 ]
 
-/* The platform's quick starts, cut down to their first lines. */
 const QUICK_STARTS = [
   {
     label: "Customer service",
@@ -274,7 +250,6 @@ const LANGUAGES = [
   { value: "ur", label: "Urdu" },
 ]
 
-/* The platform's generation stages, in its order. */
 const STAGES = [
   "Analysing your requirements",
   "Designing the agent's personality",
@@ -288,7 +263,6 @@ const PROMPT_MIN = 50
 const PROMPT_MAX = 10000
 const PROMPT_WARN = 8000
 
-/* A demo stand-in for the generation job: one stage every this many ms. */
 const STAGE_MS = 700
 
 type Step = "start" | "describe" | "build" | "use-case" | "name"
@@ -331,8 +305,7 @@ export function CreationFlowPreview() {
     setTrail((t) => [...t, next])
   }
 
-  /* Back skips the build screen: it is a wait, not a question, and going back
-     to it would run the job again. */
+  /* Back skips the build screen: returning to it would run the job again. */
   const back = () => {
     setDirection(-1)
     setTrail((t) => {
@@ -365,7 +338,6 @@ export function CreationFlowPreview() {
     reset()
   }
 
-  /* Past the first screen there are answers to lose, so leaving asks. */
   const requestClose = () => (trail.length > 1 ? setLeaving(true) : close())
 
   const build = () => {
@@ -373,9 +345,6 @@ export function CreationFlowPreview() {
     go("build")
   }
 
-  /* The generation job, played at demo speed. When it finishes, the flow
-     moves on by itself to the name the job suggested — a wait screen has no
-     button to press. */
   React.useEffect(() => {
     if (step !== "build") return
     const timer = window.setTimeout(() => {
@@ -406,7 +375,6 @@ export function CreationFlowPreview() {
         <CreationFlow
           direction={direction}
           framed
-          /* The build screen is a wait, so it has no Back. */
           onBack={trail.length > 1 && step !== "build" ? back : null}
           onClose={requestClose}
           question={QUESTIONS[step]}
@@ -514,7 +482,6 @@ export function CreationFlowPreview() {
         </div>
       )}
 
-      {/* A confirm is the one overlay allowed over another. */}
       <AlertDialog onOpenChange={setLeaving} open={leaving}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -536,7 +503,6 @@ export function CreationFlowPreview() {
   )
 }
 
-/* A card that is one choice: the whole card is the button. */
 const CHOICE = "cursor-pointer text-start hover:bg-muted/50"
 
 function StartStep({
@@ -550,8 +516,6 @@ function StartStep({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      {/* The AI path first: it is where most scenarios start, and the only
-          one that ends with the prompt already written. */}
       <Item asChild className={cn(CHOICE, "p-4")} variant="outline">
         <button onClick={onDescribe} type="button">
           <ItemMedia>
@@ -627,8 +591,6 @@ function DescribeStep({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* One composer: what to build, which languages, and Build — so the
-          button sits where the typing ends. */}
       <InputGroup>
         <InputGroupTextarea
           aria-label="What the agent should do"
@@ -645,7 +607,6 @@ function DescribeStep({
           value={prompt}
         />
         <InputGroupAddon align="block-end" className="justify-between">
-          {/* At least one: the last language cannot be switched off. */}
           <ToggleGroup
             aria-label="Languages"
             onValueChange={(value) => value.length && onLanguages(value)}
@@ -709,8 +670,6 @@ function DescribeStep({
 function BuildStep({ prompt, stage }: { prompt: string; stage: number }) {
   return (
     <div className="flex flex-col items-center gap-10 pt-4">
-      {/* The same orb as the Describe it row, grown: the thing you chose is
-          the thing working. */}
       <OrbAvatar className="size-24" name={prompt} />
 
       <ol aria-live="polite" className="flex w-full max-w-xs flex-col gap-3">
@@ -780,9 +739,6 @@ function UseCaseStep({
           variant="outline"
         >
           <button onClick={() => onTemplate(template)} type="button">
-            {/* The call as the template opens it: its first message, and a
-                caller answering. It says what the template does faster than
-                a description would. */}
             <div className="flex h-44 flex-col justify-end gap-2 p-4">
               <Message>
                 <OrbAvatar
@@ -813,7 +769,6 @@ function UseCaseStep({
   )
 }
 
-/** What the scenario is starting from, with the way back to change it. */
 function Source({
   description,
   media,

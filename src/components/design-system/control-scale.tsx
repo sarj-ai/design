@@ -15,15 +15,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { CONTROL_STEPS } from "@/lib/design-system/data"
 
-/**
- * The four heights, and the demo that says why they are pinned together.
- *
- * The table alone would read as trivia — four numbers, one per size name. What
- * makes it a rule is the pairing: `sm` is the height of a small field and
- * `default` is the height of a normal one, so a row of mixed controls has one
- * top edge and one bottom edge. Move any of the four and every filter bar in
- * the product steps.
- */
 export function ControlScale() {
   return (
     <div className="flex flex-col gap-8">
@@ -42,8 +33,6 @@ export function ControlScale() {
             step.field ? (
               <ReferenceName key="field">{step.field}</ReferenceName>
             ) : (
-              /* An em dash rather than "None", by the same vocabulary the
-                 tables use: no field is 24 or 36px, so nothing is missing. */
               <ReferenceNote key="field">—</ReferenceNote>
             ),
             <ReferenceNote key="when">{step.when}</ReferenceNote>,
@@ -60,9 +49,6 @@ export function ControlScale() {
           </p>
         </div>
 
-        {/* A muted inset rather than a second bordered box: this already sits
-            inside a Card, and a card in a card draws two edges around one
-            thing. */}
         <div className="flex flex-wrap items-center gap-2 rounded-lg bg-muted p-4">
           <Input className="w-56" placeholder="Search calls" />
 

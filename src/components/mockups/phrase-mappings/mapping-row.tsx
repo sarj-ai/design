@@ -34,26 +34,6 @@ import { DeleteMappingIcon, RespondsWithIcon } from "./icons"
 import { ResponseField } from "./response-field"
 import { TriggerField } from "./trigger-field"
 
-/**
- * One mapping, collapsed to a line until it is being edited.
- *
- * What is *not* here is the point of this round. The row used to carry a
- * priority number, a match-mode select and an on/off switch beside the two
- * fields that actually define the rule. Review, Fatma, Aug 2026 took all three
- * out, and they came out together because they held each other up: matching is
- * whole-utterance only, so an utterance reaches at most one rule; with no two
- * rules competing there is nothing for a priority to order; and with no order
- * to protect, pausing a rule stops being a way to resolve anything, which was
- * the only argument for it over deleting.
- *
- * What is left is the rule: the phrases that trigger it, and what the agent
- * says back.
- *
- * An inherited row keeps every control and disables it. The row used to swap
- * its editors for plain values and drop its delete button, which meant three
- * different answers to "why can't I touch this?" in one panel. One answer now:
- * the control is there, and it is dead.
- */
 export function MappingRow({
   conflicts,
   disabled,
@@ -64,13 +44,11 @@ export function MappingRow({
   voice,
 }: {
   conflicts: Conflict[]
-  /** Persona scope only: the inherited global set, shown but not editable. */
   disabled: boolean
   fieldId: string
   mapping: Mapping
   onChange: (mapping: Mapping) => void
   onRemove: () => void
-  /** The voice this scope's responses are previewed in. */
   voice: PreviewVoice
 }) {
   const set = (patch: Partial<Mapping>) => onChange({ ...mapping, ...patch })
@@ -79,32 +57,17 @@ export function MappingRow({
     conflict.mappingIds.includes(mapping.id),
   )
 
-  /* The row summarises the rule as the pair it is. Review: the response alone
-     read as a list of unexplained answers with no sign of what the caller has
-     to say to get one. One phrase makes the rule legible; the rest are a
-     count, and all of them are one click away. */
   const [firstTrigger, ...restTriggers] = mapping.triggers
 
-  /* Resolved, not `auto` — the arrow between the pair has to mirror with it,
-     and `rtl:` cannot see through `dir="auto"`. See `textDirection`. */
+  /* Resolved, not `auto`: `rtl:` cannot see through `dir="auto"`, and the arrow must mirror. */
   const pairDirection = textDirection(firstTrigger ?? "", mapping.response)
 
-  /* Names the row for the delete dialog before anything is typed into it. */
   const name = mapping.response.trim() || firstTrigger || "this mapping"
 
-  /* `not-last:border-b-0`, not `border-b-0`: the primitive draws its divider
-     under a variant, which outranks a bare override on specificity — so the
-     plain version left a hairline under every row but the last. Each row is a
-     Card here, and the Card's ring is the only edge it should have. */
+  /* `not-last:`, not bare `border-b-0`: the primitive's divider sits under a variant that outranks it. */
   return (
     <AccordionItem className="not-last:border-b-0" value={mapping.id}>
       <Card
-        /* Hover belongs to the card, not to the trigger inside it.
-           `hover:bg-muted` on the trigger painted a `rounded-lg` pill inside a
-           `rounded-xl` card, inset a few pixels on one side and a couple of
-           hundred on the other where the actions begin — a second surface
-           inside the surface, aligned to neither. The card is already the row;
-           tinting the card tints the row, edge to edge, on its own radius. */
         className={cn(
           "transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none",
           contested && "ring-destructive",

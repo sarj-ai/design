@@ -77,7 +77,6 @@ import {
   UNRESOLVED_INSIGHTS,
 } from "@/lib/mockups/scenario-single-screen-data"
 
-/** Every drawer this screen can open. One at a time, by design. */
 type Setting =
   | "criteria"
   | "extraction"
@@ -92,13 +91,10 @@ type Setting =
   | "tools"
   | "variables"
 
-/** Which drawer an insight's "open" button lands on. */
 const INSIGHT_TARGETS: Record<InsightTarget, Setting | null> = {
   criteria: "criteria",
   extraction: "extraction",
   knowledge: "knowledge",
-  /* The prompt is on the page, so there is nothing to open — closing the
-     drawer already puts the reader in front of it. */
   prompt: null,
   tools: "tools",
 }
@@ -125,7 +121,6 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
   )
   const [dismissedInsights, setDismissedInsights] = React.useState<string[]>([])
 
-  /** Every edit on this screen is the same kind of edit — one save bar. */
   const edit = <T,>(setter: (value: T) => void) => {
     return (value: T) => {
       setter(value)

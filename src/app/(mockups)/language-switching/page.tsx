@@ -15,18 +15,6 @@ import {
   type Preset,
 } from "@/lib/mockups/language-switching-data"
 
-/**
- * Mid-call language switching — DES-199, from the DIS-53 PRD.
- *
- * One setting on the scenario's Persona card: keep the voice (continuity) or
- * hand off to a persona for the new language. Everything else on the scenario
- * editor is left out; the card is the deliverable.
- *
- * The switch in the mockup shell picks the scenario, not a product state: two
- * languages (opens as every migrated scenario does — continuity, no phrase),
- * three languages with handoff on and no Urdu persona yet (the empty picker
- * and the blocked save), and one language (the setting is absent).
- */
 export default function LanguageSwitchingPage() {
   const [presetId, setPresetId] = React.useState(PRESETS[0].id)
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0]

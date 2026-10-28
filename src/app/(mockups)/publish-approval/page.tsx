@@ -45,21 +45,6 @@ import {
   withV15,
 } from "@/lib/mockups/publish-approval-data"
 
-/**
- * Publish approval — DES-204, under INT-253, for PLT-4477. The spec is the
- * "Publish approval" requirements doc and its two mockups (the Approvals
- * page and the bell); it sits on DES-202's versions (/config-versioning).
- * The TDD (22 Oct 2026) makes it a feature of its own, after live and
- * versioning ship; the first release has no approval.
- *
- * One state, two people. The reviewer switches between the requester
- * (Sarj) and the client's approver, and the same request moves between
- * them: send it as Ahmad, approve or reject it as Yusuf, see the outcome as
- * Ahmad. The views are the three places approval shows up —
- * the scenario editor, the scenarios index and Approvals — and the state
- * select reaches the cases the ticket names directly.
- */
-
 const VIEWS = [
   { id: "editor", label: "Scenario" },
   { id: "index", label: "Scenarios" },
@@ -102,7 +87,6 @@ function initialWorld(caseId: CaseId): World {
   }
 }
 
-/** The index row for the scenario the editor shows, above DES-203's rows. */
 const SCENARIO_ROW: ScenarioRow = {
   id: "bvs",
   name: SCENARIO.name,
@@ -124,7 +108,6 @@ export default function PublishApprovalPage() {
   const [read, setRead] = React.useState<Set<string>>(new Set())
   const viewer = VIEWERS.find((entry) => entry.id === viewerId)!
 
-  /* A toast belongs to the case and person that raised it. */
   React.useEffect(() => {
     toast.dismiss()
   }, [caseId, viewerId])
@@ -147,8 +130,6 @@ export default function PublishApprovalPage() {
     (request) => request.status === "pending" && canDecide(request, viewer),
   )
 
-  /* An approver hears a request is waiting; a requester hears theirs was
-     decided by someone else. */
   const notices: Notice[] = [
     ...waitingOnMe.map((request) => ({
       id: request.id,
@@ -171,8 +152,6 @@ export default function PublishApprovalPage() {
         at: request.decision!.at,
       })),
   ]
-
-  /* ------------------------------------------------------------ actions */
 
   function update(id: string, change: Partial<ApprovalRequest>) {
     setWorld((current) => ({
@@ -234,7 +213,6 @@ export default function PublishApprovalPage() {
     }
     setWorld((current) => ({
       ...current,
-      /* One request at a time: a new one withdraws the one waiting. */
       requests: [
         made,
         ...current.requests.map((item) =>
@@ -266,8 +244,6 @@ export default function PublishApprovalPage() {
             }
           : item,
       ),
-      /* Approving publishes: the version goes in use, and no version is
-         made. */
       subject:
         target.item === current.subject.name
           ? {
@@ -320,8 +296,6 @@ export default function PublishApprovalPage() {
     })
   }
 
-  /* Live is a switch and a badge with its own permission, never an
-     approval, and the version in use does not change (TDD 3.1). */
   function toggleLive(on: boolean) {
     setWorld((current) => ({
       ...current,
@@ -332,8 +306,6 @@ export default function PublishApprovalPage() {
       },
     }))
   }
-
-  /* -------------------------------------------------------------- page */
 
   const shown = open
     ? (requests.find((item) => item.id === open.id) ?? null)
@@ -449,8 +421,6 @@ export default function PublishApprovalPage() {
                   (item) => item.item === row.name && item.status === "pending",
                 )
                 if (!waiting) return null
-                /* The chip is the flag; which version, and for how long,
-                   is a hover away rather than another column. */
                 return (
                   <Tooltip>
                     <TooltipTrigger asChild>

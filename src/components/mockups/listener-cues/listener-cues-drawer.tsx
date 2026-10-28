@@ -72,15 +72,6 @@ import {
   PickerChevronIcon,
 } from "@/components/mockups/listener-cues/icons"
 
-/**
- * The listener-cue configuration, in one panel.
- *
- * Global defaults and a persona override are the same controls — the PRD asks
- * for both in the same settings pattern — so the scope only changes whose
- * values are on screen and whether they can be edited yet. An inherited persona
- * shows the globals read-only until an override is created, because a control
- * that silently edits nothing is worse than a disabled one.
- */
 export function ListenerCuesDrawer({
   config,
   inherited,
@@ -101,7 +92,7 @@ export function ListenerCuesDrawer({
   onOpenChange: (open: boolean) => void
   onRemoveOverride: () => void
   open: boolean
-  /** Name of the persona being edited, or undefined in global settings. */
+  /** Undefined in global settings. */
   persona?: string
 }) {
   const fieldId = React.useId()
@@ -109,14 +100,7 @@ export function ListenerCuesDrawer({
   const inMixCount = clips.filter((entry) => entry.inMix).length
   const shown = displayWeights(config.cues)
 
-  /**
-   * Where a percentage sits along the slider, as CSS.
-   *
-   * The scale starts at the minimum, not at zero, and the thumb's own width
-   * insets both ends of its travel — so a plain percentage of the row lands
-   * beside the thumb rather than under it. Both are accounted for here, and
-   * everything drawn under the track is positioned through it.
-   */
+  /** Offsets for the scale's minimum and the thumb's inset, so marks sit under the thumb. */
   const span = 100 - FREQUENCY_MIN
   const THUMB_PX = 12
   const at = (value: number) =>
@@ -129,8 +113,6 @@ export function ListenerCuesDrawer({
 
   return (
     <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
-      {/* A side panel wider than the primitive's own sm:max-w-sm — the cue mix
-          is a list of rows with a slider each. */}
       <DrawerContent className="sm:max-w-2xl!">
         <DrawerHeader className="flex flex-row items-start justify-between gap-4 border-b">
           <div className="flex flex-col gap-0.5">
@@ -146,10 +128,7 @@ export function ListenerCuesDrawer({
           </DrawerClose>
         </DrawerHeader>
 
-        {/* A right-side drawer treats any horizontal drag as drag-to-close, so
-            dragging a weight slider dismissed the whole panel. This opts the
-            body out of the gesture; the header still drags, and Escape, the
-            overlay, Close and Cancel all still shut it. */}
+        {/* Opts the body out of drag-to-close, so dragging a slider does not dismiss the drawer. */}
         <div
           className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-4"
           data-vaul-no-drag
@@ -160,12 +139,6 @@ export function ListenerCuesDrawer({
                 <OverrideIcon />
               </ItemMedia>
               <ItemContent>
-                {/* One line, the same in both states — it says what the
-                    switch does, not which way it is set. The switch itself
-                    says that, and the dead controls below say what it means.
-                    Swapping the text made one flip change three things at
-                    once: this line, a read-only paragraph that pushed the
-                    whole panel down, and a dim over everything under it. */}
                 <ItemTitle>Override for {persona}</ItemTitle>
                 <ItemDescription>
                   Replaces the global defaults — later global edits do not reach{" "}
@@ -173,9 +146,6 @@ export function ListenerCuesDrawer({
                 </ItemDescription>
               </ItemContent>
 
-              {/* Pinned to the title's line, where the icon column already
-                  sits — centred on the block it read as adrift between the two
-                  lines. */}
               <ItemActions className="self-start">
                 <Switch
                   aria-label={`Override listener cues for ${persona}`}
@@ -188,23 +158,10 @@ export function ListenerCuesDrawer({
             </Item>
           ) : null}
 
-          {/* The PRD asks for inherited controls to be disabled until an
-              override exists, and every one of them is. Nothing else marks the
-              state. A read-only paragraph and a dim over the whole block both
-              repeated what the switch above already says, and the paragraph
-              pushed every setting down the moment the switch moved — so the
-              panel reflowed to tell you something it had told you twice.
-              Flipping the switch now changes one thing: whether the controls
-              take input. The sibling Filler words drawer settled on the same
-              answer in review. */}
           <div className="flex flex-col gap-6">
             <section className="flex flex-col gap-3">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-col gap-1">
-                  {/* The total sits with the heading, at the head of the column
-                    of shares below it. Success-tinted because it is the one
-                    thing on this section that says the mix is valid — it is a
-                    state, not a label. */}
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-medium">Cue mix</h3>
                     {config.cues.length ? (
@@ -225,16 +182,6 @@ export function ListenerCuesDrawer({
                 <div className="flex shrink-0 items-center gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      {/* "Add approved cue", not "Add cue". The button picks
-                        from Sarj's existing clips; recording a new one is a
-                        Potential Upgrade in the PRD and does not exist. Called
-                        "Add cue" it read as "make one", which is what sent the
-                        first reviewer looking for where cues are created.
-
-                        Not disabled once every clip is in the mix. A dead
-                        button is the one state that cannot explain itself, and
-                        "there are four approved cues and you have all four" is
-                        exactly what the reader is here to find out. */}
                       <Button disabled={inherited} size="sm" variant="outline">
                         <AddCueIcon />
                         Add approved cue
@@ -242,13 +189,6 @@ export function ListenerCuesDrawer({
                       </Button>
                     </DropdownMenuTrigger>
 
-                    {/* This menu is where "cues come from a fixed, approved set"
-                      has to be legible, because it is the only moment the
-                      reader asks. So it names the set, counts it, keeps the
-                      clips already in the mix on the list as ticked rows, and
-                      says the rule once underneath. Widened past the trigger:
-                      the primitive matches the button's width, which left a
-                      120px box holding a single word. */}
                     <DropdownMenuContent align="end" className="w-72">
                       <DropdownMenuLabel className="flex items-center justify-between gap-2">
                         <span>Approved {languageLabel(language)} cues</span>
@@ -266,11 +206,7 @@ export function ListenerCuesDrawer({
                             set({ cues: addCue(config.cues, clip) })
                           }
                         >
-                          {/* The auto margin sits on the wrapper, not on the
-                            dir="auto" span: a logical margin resolves against
-                            its own element's direction, so on an Arabic clip
-                            me-auto became a left margin and shunted the word
-                            across the row into the "In mix" column. */}
+                          {/* Margin on the wrapper, not the dir="auto" span: a logical margin flips with its element's direction. */}
                           <div className="me-auto min-w-0">
                             <span className="block truncate" dir="auto">
                               {clip.label}
@@ -286,12 +222,6 @@ export function ListenerCuesDrawer({
                       ))}
 
                       <DropdownMenuSeparator />
-                      {/* The menu lists what exists; this says why there is
-                        nothing to add. Recording a cue in the editor is a
-                        Potential Upgrade in the PRD, not V1 — without saying
-                        so, the absence of an Add button reads as an oversight
-                        and the first question every reviewer asks is where
-                        the cues came from. */}
                       <p className="px-1.5 py-1 text-xs text-muted-foreground">
                         Sarj approves cue clips per language, and this is the
                         whole approved set. Nothing is generated on the call,
@@ -337,15 +267,8 @@ export function ListenerCuesDrawer({
 
             <FieldSeparator />
 
-            {/* Deliberately not a bg-muted inset: Slider's own track is bg-muted,
-              so on a muted panel the unfilled half of the track vanishes and
-              the control reads as a stray line. Plain, like every other
-              section here. */}
+            {/* Not bg-muted: Slider's track is bg-muted and would vanish on it. */}
             <section className="flex flex-col gap-3">
-              {/* No (i) beside the title. The PRD asks to "mark the recommended
-                  range", and the bracket under the track does that — a tooltip
-                  repeating it in words is a second explanation language on a
-                  screen that already describes every setting inline. */}
               <div className="flex flex-col gap-1">
                 <h3 className="text-base font-medium">Response frequency</h3>
                 <p className="text-sm text-muted-foreground">
@@ -354,11 +277,6 @@ export function ListenerCuesDrawer({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                {/* The value rides above the thumb rather than sitting in the
-                  section header: the number and the thumb's position are the
-                  same fact, and apart the reader converts one into the other.
-                  Clamped to half its own width so it stays on the track at
-                  either end. */}
                 <div className="relative h-5">
                   <span
                     className="absolute w-10 -translate-x-1/2 text-center text-sm font-medium tabular-nums"
@@ -380,10 +298,6 @@ export function ListenerCuesDrawer({
                   value={[config.frequency]}
                 />
 
-                {/* The recommended stretch, bracketed under the track. Drawn as a
-                  rule with end ticks, not as a filled bar — a bar of the same
-                  weight directly under the track reads as a second slider and
-                  the real one stops being findable. */}
                 <div aria-hidden className="relative h-2">
                   <div
                     className="absolute inset-y-0 border-x-2 border-border"
@@ -396,9 +310,6 @@ export function ListenerCuesDrawer({
                   </div>
                 </div>
 
-                {/* The range's name sits over the range, not over the middle of
-                  the row — a label centred on the whole slider points at
-                  whatever happens to be under the centre. */}
                 <div className="relative h-4 text-xs">
                   <span className="absolute inset-s-0 text-muted-foreground tabular-nums">
                     {FREQUENCY_MIN}%
@@ -503,13 +414,6 @@ export function ListenerCuesDrawer({
           </div>
         </div>
 
-        {/* Tinted, because the body scrolls underneath it. On the same surface
-            as the content, a 1px rule was the only thing saying "this bar
-            stays put" — and settings slid up to it and vanished mid-letter. */}
-        {/* No staging note and no summary pills. The PRD's save contract is
-            about behaviour — nothing here reaches a call until Save for All or
-            Update Profile — and the page's own save button is what carries it;
-            a caption restating it in the drawer is not a control. */}
         <DrawerFooter className="flex-row items-center justify-end gap-4 border-t bg-muted">
           <div className="flex shrink-0 items-center gap-2">
             <DrawerClose asChild>

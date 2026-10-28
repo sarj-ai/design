@@ -27,14 +27,6 @@ import {
 } from "@/lib/mockups/language-switching-data"
 import { cn } from "@/lib/utils"
 
-/**
- * "Switch voice on language change" — one setting per scenario (DIS-53).
- *
- * Off: an optional transition phrase per language. On: per language other
- * than the start one, a persona (required), a handoff phrase and a transfer
- * sound (on by default). Both sets are always on screen; the switch decides
- * which one is live, and the other is greyed out and disabled.
- */
 export function LanguageSwitchSetting({
   config,
   invalid,
@@ -77,8 +69,6 @@ export function LanguageSwitchSetting({
         />
       </Field>
 
-      {/* Both sets stay on screen. The one the switch is not on is greyed
-          out and disabled — one read-only language, no caption. */}
       <FieldSet disabled={continuityOff}>
         <FieldLegend
           className={cn(continuityOff && "opacity-50")}

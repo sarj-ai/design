@@ -39,15 +39,6 @@ import {
   WithinWindowIcon,
 } from "./icons"
 
-/**
- * The section this ticket adds to a call's Model Settings tab.
- *
- * It answers the one question the tab cannot answer today — why this call was
- * paced the way it was — so it leads the tab rather than trailing the config
- * echoes below it. Three blocks, in the order a pacing complaint gets read:
- * which path ran, what window it was given, and what the caller actually sat
- * through.
- */
 export function TurnDetectionSection({
   timing,
 }: {
@@ -208,7 +199,6 @@ function RecordedTiming({ timing }: { timing: TurnTimingRecord }) {
   )
 }
 
-/** A call from before turn timing was recorded shows nothing rather than today's settings. */
 function NotRecorded() {
   return (
     <Empty className="rounded-lg border">
@@ -227,7 +217,6 @@ function NotRecorded() {
   )
 }
 
-/** The one-word verdict, so the section can be triaged from the collapsed tab. */
 function OutcomeBadge({ timing }: { timing: TurnTimingRecord }) {
   if (timing.fallbackReason !== null) {
     return <Badge variant="destructive">Fell back</Badge>
@@ -250,15 +239,6 @@ function OutcomeBadge({ timing }: { timing: TurnTimingRecord }) {
   )
 }
 
-/**
- * A block of the panel.
- *
- * `help` replaced what used to be a `description` printed under every title.
- * The split that survived review: a sentence that *defines* how the platform
- * works is read once and belongs on the (i); a sentence that *reads this call*
- * is the content and stays on the surface. Three definitions came off this
- * panel that way.
- */
 function Block({
   title,
   help,
@@ -304,10 +284,7 @@ function HelpDot({
   )
 }
 
-/**
- * One reading. `caption` is this call's verdict and stays visible; `help` is
- * the metric's definition and goes on the (i).
- */
+/** `caption` is this call's verdict and stays visible; `help` is the definition, on the (i). */
 function Stat({
   label,
   value,

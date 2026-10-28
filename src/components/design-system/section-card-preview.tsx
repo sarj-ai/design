@@ -39,41 +39,17 @@ import {
 import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import { cn } from "@/lib/utils"
 
-/**
- * The scenario page's section card, four ways.
- *
- * The product stacks nine muted cards and lets every section component draw
- * its own header, so there are five title sizes (text-xl, text-lg semibold,
- * text-lg medium, text-base, a bare Label), three description sizes, an icon
- * tile on one card and a loose icon on another, a Card nested inside the muted
- * Card on three of them, and the one control each needs — a switch, a count,
- * "Add Tool" — wherever that component put it. Where the control shares a row
- * with a two-line description, the row wraps and the control drops.
- *
- * Every take below fixes the same four things: one header, drawn by the card
- * rather than by what is inside it; one title size; the description on its own
- * line, never sharing a row with the control; and no card inside a card. They
- * differ in where the header sits and how much of the page it takes.
- */
-
-/* ------------------------------------------------------------------- data */
-
 type SectionId = "first-message" | "variables" | "analytics" | "tools" | "kb"
 
 type Section = {
   id: SectionId
   title: string
   description: string
-  /** A count beside the title — what the section holds. */
   count?: number
-  /** A switch the whole section depends on. Off, its body is absent. */
   toggle?: string
-  /** The one way to add to the section. */
   add?: string
 }
 
-/* Titles and descriptions are the platform's own, in sentence case and cut to
-   one line each. */
 const SECTIONS: Section[] = [
   {
     id: "first-message",
@@ -140,8 +116,6 @@ const KNOWLEDGE = [
 const FIRST_MESSAGE =
   "Hi {{name}}, this is Sara from Sarj. Is now a good time to talk?"
 
-/* ------------------------------------------------------------------ state */
-
 type Toggles = Record<SectionId, boolean>
 
 function useToggles() {
@@ -157,7 +131,6 @@ function useToggles() {
   return { on, set }
 }
 
-/** One line that says what a section holds, for the collapsed take. */
 function summary(id: SectionId, on: boolean) {
   if (!on) return "Off"
   switch (id) {
@@ -174,9 +147,6 @@ function summary(id: SectionId, on: boolean) {
   }
 }
 
-/* ------------------------------------------------------------------ parts */
-
-/** The section's body — the same in every take. */
 function Body({ id }: { id: SectionId }) {
   switch (id) {
     case "first-message":
@@ -247,7 +217,6 @@ function Rows({ rows }: { rows: { name: string; detail: string }[] }) {
   )
 }
 
-/** The section's one control: its switch, or its way to add. */
 function Control({
   section,
   on,
@@ -280,7 +249,6 @@ function Title({
   onBand = false,
 }: {
   section: Section
-  /** On the shaded band a secondary badge disappears into it. */
   onBand?: boolean
 }) {
   return (
@@ -295,13 +263,6 @@ function Title({
   )
 }
 
-/* --------------------------------------------------------------- variants */
-
-/**
- * Title row. Title and count on the first line with the control at its end,
- * pinned to that line; the description under both, alone. The smallest change
- * from what ships.
- */
 function TitleRowTake() {
   const { on, set } = useToggles()
   return (
@@ -330,20 +291,12 @@ function TitleRowTake() {
   )
 }
 
-/**
- * Band. The header is a shaded band across the top of the card — the drawer's
- * section band and a table's header row, the same shape a third time — so
- * title, count and control sit on one line that cannot wrap into the body.
- * The description opens the body.
- */
 function BandTake() {
   const { on, set } = useToggles()
   return (
     <div className="flex flex-col gap-4">
       {SECTIONS.map((section) => (
         <Card key={section.id}>
-          {/* Flush with the card's top edge: the card's own spacing, taken
-              back. */}
           <div className="-mt-(--card-spacing) flex h-12 items-center justify-between gap-4 border-b bg-muted/60 px-4">
             <Title onBand section={section} />
             <Control
@@ -364,12 +317,6 @@ function BandTake() {
   )
 }
 
-/**
- * Side column. One sheet instead of five cards: each section is a row, the
- * title, description and control in a fixed column on the start side, the
- * content beside it. A long description gets a column of its own instead of
- * a row it has to share — the settings layout Stripe and Vercel use.
- */
 function SideColumnTake() {
   const { on, set } = useToggles()
   return (
@@ -403,13 +350,6 @@ function SideColumnTake() {
   )
 }
 
-/**
- * Summary. Every section folds to one line that says what it holds —
- * "End call, Schedule callback, Collect digits" — so the whole scenario reads
- * in one screen, and a section opens only to change it. The description
- * lives inside, since it is for the first visit, not every one. The switch
- * stays on the folded line because on or off is part of the summary.
- */
 function SummaryTake() {
   const { on, set } = useToggles()
   return (
@@ -420,8 +360,7 @@ function SummaryTake() {
             <CardContent className="flex flex-col gap-4">
               <div className="flex h-8 items-center gap-4">
                 <CollapsibleTrigger asChild>
-                  {/* Raw on purpose: an asChild child, and the whole line is
-                      the target. */}
+                  {/* Raw on purpose: an asChild child, and the whole line is the target. */}
                   <button
                     className="group flex min-w-0 flex-1 items-center gap-4 text-start outline-none"
                     type="button"
@@ -448,8 +387,7 @@ function SummaryTake() {
                   />
                 ) : null}
               </div>
-              {/* Indented to the title, past the chevron: the chevron's 16px
-                  and the 16px gap after it. */}
+              {/* Indented to the title, past the chevron: the chevron's 16px and the 16px gap after it. */}
               <CollapsibleContent className="flex flex-col gap-4 ps-8">
                 <div className="flex items-start justify-between gap-4">
                   <p className="max-w-2xl text-sm text-muted-foreground">
@@ -472,8 +410,6 @@ function SummaryTake() {
     </div>
   )
 }
-
-/* ------------------------------------------------------------------- page */
 
 const TAKES = [
   { id: "title-row", label: "Title row", View: TitleRowTake },

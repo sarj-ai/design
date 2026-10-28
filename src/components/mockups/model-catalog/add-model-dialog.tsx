@@ -55,40 +55,8 @@ import {
 } from "@/lib/mockups/model-catalog-data"
 import { cn } from "@/lib/utils"
 
-/**
- * Adding a model, in the two weights the PRD separates.
- *
- * Picking a model under a provider we already hold credentials for is the light
- * path: the key we already call that provider with fetches its own model list,
- * so there is nothing to configure. Connecting a provider we have never reached
- * is the heavy one: base URL, credentials, model identifier, and a connection
- * test that has to pass before the model can be saved.
- *
- * One entry point, two visibly different forms. The admin only discovers which
- * path they are on at the provider field — that is the moment they find out we
- * have never called this provider — so making them choose a flow beforehand
- * would ask a question they cannot yet answer. What the PRD's Braintrust
- * benchmark asks for is that the heavier action not be folded invisibly into
- * the lighter one, so the switch changes the dialog's title, adds a way back,
- * and splits the form into labelled sections the light path does not have.
- *
- * Modality is not a field. The catalog's tab decides it, and a select that
- * repeats the tab is one more place for the wrong value to be left at its
- * default.
- */
-
-/** The sentinel the provider Select uses for "we have never called this one". */
 const NEW_PROVIDER = "__new__"
 
-/**
- * Placeholder examples per modality. A TTS voice-set caveat shown in the LLM
- * dialog is the kind of thing a reviewer reads as invented data, so every
- * example moves with the tab the dialog was opened from.
- *
- * Only LLM can reach this dialog today — TTS is activate-only — but the type
- * covers every modality, so the TTS example stays correct rather than being
- * deleted and re-guessed if onboarding ever opens up again.
- */
 const EXAMPLES: Record<Modality, { model: string; name: string }> = {
   llm: { model: "llama-3.3-70b-versatile", name: "Llama 3.3 70B" },
   tts: { model: "eleven_flash_v2_5", name: "ElevenLabs Flash v2.5" },
@@ -138,7 +106,6 @@ function AddModelBody({
   const [fetchState, setFetchState] = React.useState<FetchState>("idle")
   const [testState, setTestState] = React.useState<TestState>("idle")
 
-  /* Only the heavy path asks for these. */
   const [newProviderName, setNewProviderName] = React.useState("")
   const [baseUrl, setBaseUrl] = React.useState("")
   const [apiKey, setApiKey] = React.useState("")
@@ -151,20 +118,12 @@ function AddModelBody({
     option.modalities.includes(modality),
   )
 
-  /* The live list is offered only where the provider publishes one and the
-     fetch came back. Everything else — no endpoint, a fetch that timed out, or
-     the admin choosing to type it — lands on the same manual field, because the
-     answer in all three cases is "type the ID and prove it with a test". */
   const usesLiveList =
     !connecting &&
     provider?.listsModels === true &&
     !manual &&
     fetchState !== "failed"
 
-  /* A model picked from a provider's own list is already proven by the list. A
-     typed ID is not, and neither is a provider we have never called, so Save
-     stays closed until the test passes. That gate is the whole guarantee the
-     heavy path buys. */
   const testRequired = !usesLiveList && (connecting || Boolean(provider))
   const testReady = connecting
     ? Boolean(
@@ -197,8 +156,7 @@ function AddModelBody({
     const chosen = providerById(next)
     if (chosen?.listsModels) {
       setFetchState("loading")
-      /* Groq is stubbed to fail so the fallback is reachable in the mockup
-         rather than only described. */
+      /* Groq is stubbed to fail so the fallback is reachable. */
       window.setTimeout(() => {
         setFetchState(chosen.id === "groq" ? "failed" : "ready")
       }, 900)
@@ -220,7 +178,7 @@ function AddModelBody({
 
   function runTest() {
     setTestState("running")
-    /* A stub short ID fails, so both answers are reachable. */
+    /* A stub short ID fails, so both outcomes are reachable. */
     window.setTimeout(() => {
       setTestState(modelId.trim().length > 3 ? "passed" : "failed")
     }, 1100)
@@ -431,11 +389,6 @@ function AddModelBody({
   )
 }
 
-/**
- * A label with an (i) for the one thing about the field its own name cannot
- * carry. One sentence, and never a restatement of the label — anything that
- * needs a paragraph is a design problem, not a copy problem.
- */
 function HelpLabel({
   children,
   help,
@@ -461,14 +414,6 @@ function HelpLabel({
   )
 }
 
-/**
- * The model field, in whichever of its shapes applies.
- *
- * The switch is automatic: a provider that publishes a list gets the list. The
- * manual escape stays reachable underneath it regardless, because a live list
- * lags a provider's own releases and an admin who already knows the new ID
- * should not have to wait for the list to catch up.
- */
 function ModelField({
   fetchState,
   liveModels,
@@ -509,8 +454,6 @@ function ModelField({
   return (
     <Field>
       {fetchState === "failed" ? (
-        /* A fetch that timed out says nothing about whether the model is
-           valid, so this is a notice with a way forward, not an error. */
         <Alert>
           <FetchWarningIcon />
           <AlertTitle>
@@ -591,14 +534,6 @@ function ModelField({
   )
 }
 
-/**
- * The connection test.
- *
- * It gates Save on the paths where nothing else proves the model exists — a
- * provider we have never called, or an ID typed by hand. On the live-list path
- * it is absent entirely, because picking from the provider's own list already
- * is the proof.
- */
 function ConnectionTest({
   onRun,
   ready,

@@ -22,19 +22,6 @@ import {
   RawPromptIcon,
 } from "@/components/mockups/scenario-single-screen/v2/icons"
 
-/**
- * What the model is actually sent.
- *
- * The structured fields are a view onto this string, so this is the thing that
- * proves nothing was hidden. It exists for two readers: the engineer who wants
- * to check exactly what shipped, and the person who pasted a prompt in from
- * somewhere else and wants it back out.
- *
- * Read-only on purpose. Editing here would need the markdown parsed back into
- * sections, and a heading typed slightly differently would silently drop a
- * field — losing somebody's work to a spelling. Editing stays where the labels
- * are; this stays the honest copy.
- */
 export function RawPromptDrawer({
   onOpenChange,
   open,

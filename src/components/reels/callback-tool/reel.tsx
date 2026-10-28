@@ -7,37 +7,9 @@ import { Shot } from "@/components/reels/shot"
 import { Cursor } from "@/components/reels/cursor"
 import { Brandmark, Headline, Kicker, Lead } from "@/components/reels/type"
 
-/**
- * The callback-tool release reel.
- *
- * This file is the EDITORIAL layer — what this release says, and how it is
- * paced. It is written from scratch per reel, on purpose. The old engine took
- * the opposite bet: one renderer, one card shape, a JSON spec of headline plus
- * sub, and every release came out looking like the last one because
- * structurally it *was* the last one. Here the shared layer is the canvas, the
- * camera and the type — things that must not vary — and everything above that
- * is free.
- *
- * Note the beats below use three different layouts. That is the point.
- *
- * SHOTS: `public/reels/callback-tool/*.png`, captured at 2x with the design-lab
- * shell and the Agentation dev overlay cropped off. They are stand-ins from
- * design-lab mockups — swap in real platform captures and update the focus
- * rects, which are in the screenshot's own pixels.
- *
- * COPY: placeholder framing. Replace with the release's real story before this
- * goes anywhere near Slack.
- */
-
 const SHOT = { width: 2880, height: 1545 } as const
 
-/**
- * Regions of `scenario-editor.png`, in that file's own pixels.
- *
- * Named once and used twice — the tour below aims at these, and anything else
- * that wants to point at a control (`Spotlight`, `Pin`) takes the same rects.
- * Naming them is what lets the script read as verbs instead of coordinates.
- */
+/** Regions of `scenario-editor.png`, in that file's own pixels. */
 const EDITOR = {
   card: { x: 904, y: 281, width: 1535, height: 839 },
   attempts: { x: 936, y: 457, width: 256, height: 123 },
@@ -45,19 +17,10 @@ const EDITOR = {
   save: { x: 2127, y: 1030, width: 281, height: 58 },
 }
 
-/**
- * The set-up beat, as a hand using the product.
- *
- * The camera and the pointer come off this one script, so the frame follows
- * the hand rather than being timed against it by eye. Travel times are not
- * written here on purpose — each hop is derived from how far it actually is,
- * which is what stops a tour sounding metronomic.
- */
 const SETUP = tour(SHOT, EDITOR, (s) =>
   s
     .parkAt("card")
-    /* 2880 source / 1535 card = 1.88, so this frames the card almost exactly.
-       Anything less leaves the controls too small to read at Slack size. */
+    // 2880 source / 1535 card = 1.88, so this frames the card almost exactly.
     .zoomTo("card", { z: 1.85, duration: 1.3 })
     .enter(0.4)
     .moveTo("attempts")
@@ -72,8 +35,6 @@ const SETUP = tour(SHOT, EDITOR, (s) =>
     .leave(),
 )
 
-/* One place to read the running order. Every `from` below is derived, so a
-   scene can be re-timed without renumbering the ones after it. */
 const HOOK = { from: 0, duration: seconds(4.5) }
 const TITLE = { from: 125, duration: seconds(5.2) }
 const CONFIGURE = { from: 270, duration: seconds(10) }
@@ -88,8 +49,6 @@ export function CallbackToolReel() {
     <>
       <Brandmark>Release 16</Brandmark>
 
-      {/* 1 — the problem, before the product appears. A reel that opens on a
-          screenshot has skipped the only question the viewer has. */}
       <Scene {...HOOK}>
         <div className="flex size-full flex-col justify-center gap-6 px-32">
           <Appear delay={0}>
@@ -104,7 +63,6 @@ export function CallbackToolReel() {
         </div>
       </Scene>
 
-      {/* 2 — name it once, on its own, so the name lands before the UI does. */}
       <Scene {...TITLE}>
         <div className="flex size-full flex-col justify-center gap-6 px-32">
           <Appear delay={4} exitAt={14}>
@@ -116,9 +74,6 @@ export function CallbackToolReel() {
         </div>
       </Scene>
 
-      {/* 3 — text above, shot below. The camera pushes from the whole screen
-          into the settings card, so the viewer sees where they are before they
-          are asked to read anything. */}
       <Scene {...CONFIGURE}>
         <div className="flex size-full flex-col gap-10 px-32 pt-24">
           <div className="flex flex-col gap-3">
@@ -130,10 +85,6 @@ export function CallbackToolReel() {
             </Appear>
           </div>
 
-          {/* No spotlight and no pin on this beat: the pointer is already
-              saying "this control", and the field it lands on is labelled.
-              A ring plus a label plus a cursor is three things pointing at one
-              thing. */}
           <Appear delay={10} className="self-center">
             <Shot
               alt="The scenario editor, with the callback settings card open"
@@ -149,9 +100,6 @@ export function CallbackToolReel() {
         </div>
       </Scene>
 
-      {/* 4 — a different shape: text left, shot bled off the right edge. The
-          crop implies the screen continues past the frame, which reads as a
-          product rather than a slide. */}
       <Scene {...ON_CALL}>
         <div className="relative size-full">
           <div className="absolute top-0 bottom-0 left-32 flex w-2xl flex-col justify-center gap-5">
@@ -183,7 +131,6 @@ export function CallbackToolReel() {
         </div>
       </Scene>
 
-      {/* 5 — the payoff. Shot large and quiet, one line over it. */}
       <Scene {...OUTCOME}>
         <div className="flex size-full flex-col items-center justify-center gap-10">
           <Appear delay={0}>
@@ -193,9 +140,6 @@ export function CallbackToolReel() {
               width={SHOT.width}
               height={SHOT.height}
               frameWidth={1240}
-              /* The drawer only. The left of this screenshot is the dimmed
-                 page behind it, which reads as a dead grey slab on a canvas
-                 this size. */
               origin={{ x: 1344, y: 0, width: 1536, height: 824 }}
               focus={{ x: 1344, y: 200, width: 1536, height: 824 }}
               at={[0, 170]}
@@ -209,7 +153,6 @@ export function CallbackToolReel() {
         </div>
       </Scene>
 
-      {/* 6 — the end card, with the one detail a viewer might act on. */}
       <Scene {...END}>
         <EndCard />
       </Scene>
@@ -217,14 +160,6 @@ export function CallbackToolReel() {
   )
 }
 
-/**
- * The closing frame.
- *
- * Written out rather than assembled from `Appear` because the rule underneath
- * it is doing something the shared helper does not: the three lines share one
- * rise so they read as a single block arriving, instead of a stagger that
- * makes the viewer's eye track three separate arrivals on the last beat.
- */
 function EndCard() {
   const frame = useFrame()
   const lines = ["Callback tool", "Release 16", "sarj.ai"]

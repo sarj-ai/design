@@ -8,21 +8,12 @@ import { Input } from "@/components/ui/input"
 
 import { RemoveTriggerIcon } from "./icons"
 
-/**
- * The generic filler words that already ship today.
- *
- * Same control as the trigger field, deliberately: both are a free list of
- * short phrases, and giving the existing half of this panel a different
- * affordance would suggest it behaves differently. It has no limit and no
- * conflict rules, so it stays the plain version.
- */
 export function GenericFillerField({
   disabled,
   fillers,
   onAdd,
   onRemove,
 }: {
-  /** Persona scope only: the inherited global set, shown but not editable. */
   disabled: boolean
   fillers: string[]
   onAdd: (filler: string) => void

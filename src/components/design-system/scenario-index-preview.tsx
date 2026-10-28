@@ -51,19 +51,6 @@ import {
   SearchIcon,
 } from "@/components/design-system/icons"
 
-/**
- * The index page, whole, as the product's scenarios list lays it out.
- *
- *  - Header: the title alone.
- *  - Views: Active and Recently deleted, as the system's secondary tabs under
- *    the title — they pick the list, so they come before what narrows it.
- *  - Controls: search filling the row with the page's buttons at its end,
- *    then the filter chips under it.
- *  - Content: the table, then the footer under it.
- *
- * The admin view the product puts above all of this has its own topic.
- */
-
 type Scenario = {
   id: string
   name: string
@@ -200,7 +187,6 @@ const VIEWS = [
 /** The day the mock data was captured, so the date presets land on it. */
 const TODAY = new Date(2026, 8, 28)
 
-/** "28 Sep 2026, 17:07" as a Date. */
 function parse(stamp: string) {
   return new Date(stamp.replace(",", ""))
 }
@@ -233,8 +219,6 @@ export function ScenarioIndexPreview() {
   const [updated, setUpdated] = React.useState<DateRange | undefined>()
   const [languages, setLanguages] = React.useState<string[]>([])
   const [editors, setEditors] = React.useState<string[]>([])
-  /* Created is the one filter behind + Filter: its chip exists only once it
-     has been added, and goes back into the menu when cleared. */
   const [created, setCreated] = React.useState<DateRange | undefined>()
   const [showCreated, setShowCreated] = React.useState(false)
 
@@ -258,9 +242,6 @@ export function ScenarioIndexPreview() {
       <PageHeader title="Scenarios" />
 
       <SecondaryTabs items={VIEWS} value={view} onValueChange={setView}>
-        {/* Search and filters are one control — the filters narrow what the
-          search finds — so they sit closer to each other than to anything
-          else on the page. */}
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <InputGroup className="min-w-64 flex-1">

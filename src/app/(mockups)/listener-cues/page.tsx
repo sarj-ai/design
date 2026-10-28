@@ -26,27 +26,15 @@ import { ListenerCuesDrawer } from "@/components/mockups/listener-cues/listener-
 
 type Scope = "global" | "persona"
 
-/**
- * Mid-turn listener cues — DIS-63 / DES-172.
- *
- * Global settings and a persona are two destinations in the product's own
- * sidebar, so they are two views of this one route rather than two mockups:
- * what the scope changes is whose values are on screen and which save action
- * commits them, never what there is to configure.
- */
 export default function ListenerCuesPage() {
   const [scope, setScope] = React.useState<Scope>("persona")
 
   const [globals, setGlobals] =
     React.useState<Record<Language, CueConfig>>(GLOBAL_CONFIGS)
 
-  /* Which approved set is being edited. One piece of state for both scopes:
-     cues are approved per language wherever you configure them, so a persona
-     picks its language the same way global settings do. */
   const [language, setLanguage] = React.useState<Language>(PERSONA.language)
 
-  /* `null` while the persona inherits. Opens on the override the PRD mockup
-     shows; "Use global settings" drops back to the inherited, read-only state. */
+  // `null` while the persona inherits.
   const [override, setOverride] = React.useState<Record<
     Language,
     CueConfig
@@ -55,8 +43,6 @@ export default function ListenerCuesPage() {
   const [fillerWords, setFillerWords] = React.useState(true)
   const [listenerCues, setListenerCues] = React.useState(true)
 
-  /* Open on the panel this ticket is about; closing it reveals the row it was
-     opened from. */
   const [drawerOpen, setDrawerOpen] = React.useState(true)
 
   const isPersona = scope === "persona"
@@ -94,11 +80,6 @@ export default function ListenerCuesPage() {
 
           <Separator className="h-5" orientation="vertical" />
 
-          {/* A review switch, not a setting. The PRD configures the active
-              language's mix and never asks the panel for a language control,
-              but cues are approved per language — so a reviewer still needs to
-              reach the English set. It sits in the mockup chrome for the same
-              reason the scope switcher does. */}
           <span className="text-xs text-muted-foreground">Approved set</span>
           <ToggleGroup
             onValueChange={(value) => {
@@ -137,8 +118,6 @@ export default function ListenerCuesPage() {
               </p>
             </div>
 
-            {/* The PRD's commit points: nothing in the panel changes a call
-                until one of these is pressed. */}
             <Button>{isPersona ? "Update Profile" : "Save for All"}</Button>
           </header>
 

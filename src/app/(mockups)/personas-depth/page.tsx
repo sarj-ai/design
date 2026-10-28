@@ -11,12 +11,6 @@ import {
 } from "@/components/mockups/personas-depth/personas-index"
 import { VoiceLibrary } from "@/components/mockups/personas-depth/voice-library"
 
-/**
- * DES-117 — the personas surface in the shared product chrome. Personas and
- * Voice Library are separate pages in the product's sidebar, so they are two
- * views of this one route, switched from the nav — no extra tabs on the page.
- * The state toggle lives in the workspace bar above the design.
- */
 export default function PersonasDepthPage() {
   const [previewState, setPreviewState] = React.useState<PreviewState>("data")
   const [view, setView] = React.useState<"Personas" | "Voice Library">(
@@ -53,16 +47,7 @@ export default function PersonasDepthPage() {
           if (title === "Personas" || title === "Voice Library") setView(title)
         }}
       >
-        {/* Same gutter as the Conversations page, and no page heading for the
-            same reason it has none: the sidebar item is already lit and the
-            breadcrumb already says Personas, so an <h1> repeats the answer to a
-            question nobody asked and costs a row of vertical space above the
-            filters. */}
-        {/* A flex column with no gap: the column is what lets the empty state's
-            own `flex-1` fill the page and centre itself, and no gap keeps the
-            filter row at the same y as the Conversations page. It was `block`
-            for a moment, which made `flex-1` inert and left the empty state
-            pinned to the top above 700px of nothing. */}
+        {/* A flex column with no gap: the empty state's `flex-1` needs it to fill the page. */}
         <div className="flex flex-1 flex-col p-3 lg:p-4">
           {view === "Personas" ? (
             <PersonasIndex state={previewState} />

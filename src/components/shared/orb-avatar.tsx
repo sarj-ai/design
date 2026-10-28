@@ -5,26 +5,7 @@ import { useEffect, useRef } from "react"
 import { TONES, type OrbTone } from "@/components/shared/orb-tones"
 import { Avatar } from "@/components/ui/avatar"
 
-/**
- * A disc of liquid light that stands in for someone with no photo.
- *
- * Drawn by a fragment shader: a soft two-blob gradient seen through a lattice
- * of diamond lenses, each one flipping the light behind it, with a bevel and a
- * groove between cells. The blobs drift, so the light rolls through the
- * lattice. The name sets the tone and where
- * the blobs start, so the same name always gets the same orb and a list of
- * them does not repeat one picture.
- *
- * One WebGL context for every avatar on the page. Browsers cap live contexts
- * at around sixteen, so a context per avatar breaks a list of forty. Instead
- * a single offscreen canvas draws each visible avatar in turn, every frame,
- * at that avatar's own pixel size, and copies the frame into the avatar's 2D
- * canvas. Off-screen avatars are skipped, and under reduced motion each one
- * is drawn once and left still.
- *
- * The colours are read from the live tokens, not written here, so the orbs
- * follow a brand or whitelabel change.
- */
+/** One shared offscreen WebGL context draws every avatar: browsers cap live contexts at around sixteen. */
 
 type Rgb = [number, number, number]
 
@@ -157,7 +138,6 @@ function getRenderer(): Renderer | null {
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null
   gl.useProgram(program)
 
-  /* One triangle that covers the whole viewport. */
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
   gl.bufferData(
     gl.ARRAY_BUFFER,
@@ -182,9 +162,7 @@ function getRenderer(): Renderer | null {
   return renderer
 }
 
-/* A colour class as 0–1 RGB. A hidden element wearing the class gives the
-   resolved colour, which may be oklch or lab, and a 2D canvas turns any CSS
-   colour into sRGB pixels. */
+// A hidden element wearing the class resolves the colour (possibly oklch or lab), and a 2D canvas turns it into sRGB.
 let probe: CanvasRenderingContext2D | null = null
 
 function classRgb(className: string): Rgb {
@@ -225,8 +203,7 @@ const orbs = new Set<Orb>()
 let frame = 0
 const start = typeof performance === "undefined" ? 0 : performance.now()
 
-/* Seconds of drift per real second. Slow: an avatar sits beside text someone
-   is reading, and it should never pull the eye off it. */
+// Seconds of drift per real second.
 const SPEED = 0.35
 
 function paint(orb: Orb, time: number) {
@@ -294,8 +271,6 @@ export function OrbAvatar({
     const context = canvas?.getContext("2d")
     if (!canvas || !context) return
 
-    /* Drawn at the avatar's real size in device pixels — no bigger, so a
-       24px avatar costs a 48px draw on a retina screen. */
     const ratio = window.devicePixelRatio || 1
     canvas.width = Math.round(canvas.clientWidth * ratio)
     canvas.height = Math.round(canvas.clientHeight * ratio)
@@ -340,7 +315,6 @@ export function OrbAvatar({
         ref={ref}
         role="img"
       />
-      {/* An AvatarBadge, as on any shadcn avatar. */}
       {children}
     </Avatar>
   )

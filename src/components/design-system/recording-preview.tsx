@@ -20,19 +20,8 @@ import {
   useSimulatedLevels,
 } from "@/components/shared/recording-indicator"
 
-/**
- * The recording mark on its own — speaking, then silent — and in the row it
- * was made for: voice cloning's sample step (DES-198), where the reader reads
- * a script aloud for up to twenty seconds.
- *
- * The demos run on `useSimulatedLevels` until the reader turns on their own
- * microphone, which runs `useMicrophoneLevels` — the hook the mockup records
- * with. The component is the one the mockup imports, so a change here is a
- * change there.
- */
 export function RecordingPreview() {
-  /* Simulated until the reader asks for their own microphone: a docs page
-     must not open a permission prompt on load. */
+  /* Simulated until the reader asks for their own microphone: a docs page must not open a permission prompt on load. */
   const [useMic, setUseMic] = React.useState(false)
   const mic = useMicrophoneLevels(useMic)
   const simulated = useSimulatedLevels(!useMic || mic.state !== "live")
@@ -78,7 +67,6 @@ export function RecordingPreview() {
   )
 }
 
-/** The voice-cloning row: the mark, the clock against the limit, Stop. */
 function InContext() {
   const levels = useSimulatedLevels(true)
   const [elapsed, setElapsed] = React.useState(0)

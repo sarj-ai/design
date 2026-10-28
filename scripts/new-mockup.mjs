@@ -1,17 +1,4 @@
-/**
- * Scaffold a mockup.
- *
- *   npm run new -- call-recording
- *   npm run new -- call-recording --title "Call recording consent" \
- *     --meta "Dialog · in progress" --surface Conversations \
- *     --icon Mic01Icon --tickets DES-201,DIS-8
- *
- * Creates the route and registers it on the index. That is all it creates —
- * no components directory, no data file, no placeholder sections. Per
- * AGENTS.md, nothing gets built that the ticket did not ask for; the generator
- * only removes the two steps that are easy to get wrong (wiring the shell and
- * hand-editing the registry).
- */
+// Usage: npm run new -- <slug> [--title …] [--description …] [--meta …] [--surface …] [--icon …] [--tickets DES-1,DES-2] [--eyebrow …]
 
 import { access, mkdir, readFile, writeFile } from "node:fs/promises"
 import { spawn } from "node:child_process"
@@ -24,9 +11,7 @@ const ICON_IMPORT_BLOCK =
   /import \{([^}]*)\} from "@hugeicons\/core-free-icons"/
 const SENTINEL = "  // `npm run new` appends new mockups above this line."
 
-/* Linear's Surface label group — kept in step with SURFACES in the registry.
-   A mockup that no label covers is written as `null` rather than given an
-   invented one. */
+// Must match SURFACES in src/lib/site/mockups-data.ts.
 const SURFACES = [
   "Conversations",
   "Personas",
@@ -153,7 +138,6 @@ function registryEntry({
 `
 }
 
-/** Keeps the import list sorted, so the diff is one line. */
 function withIconImport(source, icon) {
   const block = source.match(ICON_IMPORT_BLOCK)
   if (!block) throw new Error(`Could not find the icon import in ${REGISTRY}`)

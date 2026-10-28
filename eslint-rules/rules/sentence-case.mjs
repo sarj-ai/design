@@ -1,23 +1,6 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 import { jsxName, textOf, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * Sentence case, everywhere a reader reads a name.
- *
- * Title Case and ALL CAPS are the two loudest tells that a screen was
- * generated rather than designed. The product writes "Create persona", "API
- * keys", "No API keys yet" — one capitalisation across every title, label,
- * tab and button, so the reader never has to wonder whether "Call Flow" and
- * "call flow" are different things.
- *
- *  - The `uppercase` class is banned. The one sanctioned use is a reel's
- *    `Kicker`, which carries its own disable comment.
- *  - Literal text in a title, label, tab, button or heading where every word
- *    after the first is capitalised is Title Case. Acronyms (API, SIP, URL)
- *    and words with a digit are skipped; proper nouns are the reader's call,
- *    so write them as an expression (`{"Google Calendar"}`) to opt out.
- */
-
 const NAMED = new Set([
   "Button",
   "CardTitle",
@@ -65,7 +48,6 @@ const SMALL = new Set([
   "with",
 ])
 
-/** True when every word after the first starts with a capital. */
 function isTitleCase(text) {
   const words = text.match(/[A-Za-z][A-Za-z'’]*/g) ?? []
   if (words.length < 2) return false
@@ -109,8 +91,7 @@ const sentenceCase = {
         const local = jsxName(element.openingElement)
         if (!NAMED.has(imports.ui(local)) && !HEADINGS.has(local)) return
 
-        /* Only the element's own literal text: an expression is data, and
-           data (a customer's name, a scenario title) keeps its own case. */
+        // Only literal text: an expression is data and keeps its own case, which is how proper nouns opt out.
         const own = (element.children ?? []).filter((c) => c.type === "JSXText")
         const { text } = textOf({ children: own })
         if (!text || !isTitleCase(text)) return

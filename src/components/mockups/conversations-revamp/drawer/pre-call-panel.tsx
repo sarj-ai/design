@@ -22,30 +22,11 @@ import {
   RequestedIcon,
 } from "@/components/mockups/conversations-revamp/drawer/icons"
 
-/**
- * What the drawer shows for a call that has not run yet.
- *
- * Almost everything the drawer exists to show — recording, transcript, outcome,
- * insights, collected data — is null before a call happens. Rendering those
- * sections anyway would be a panel of empty headers, so the pre-call drawer
- * carries only what actually exists.
- *
- * For a queued call that is nothing at all: it is in the line, and the only
- * honest thing to say is what it is waiting for. A scheduled call is the one
- * with something to read — it was booked by something, and why it was booked is
- * the whole reason someone opens it before it runs.
- *
- * A scheduled call becomes a queued one when its time arrives, and at that
- * point it keeps this section: the booking is still the reason it exists.
- * `state` is what decides, not the section, so that transition costs nothing
- * here.
- */
 export function PreCallPanel({
   onCancel,
   specifics,
   state,
 }: {
-  /** Confirmed cancellation, handed up so the row's status can follow. */
   onCancel: () => void
   specifics: CallSpecifics
   state: Exclude<CallState, "complete">
@@ -95,7 +76,6 @@ export function PreCallPanel({
   )
 }
 
-/** Why this call was booked, where it came from, when it dials, how to stop it. */
 function ScheduledCallSection({
   onCancel,
   ranFrom,
@@ -115,10 +95,6 @@ function ScheduledCallSection({
           Scheduled call
         </span>
 
-        {/* Origin sits beside the trigger rather than inside the brief's
-            footnote. A call the analyst guessed at and a call the customer
-            asked for in words carry different weight, and the reader decides
-            how much to trust the brief below before they read it. */}
         <div className="flex flex-wrap items-center gap-2">
           <Badge
             className={
@@ -139,9 +115,6 @@ function ScheduledCallSection({
 
       <div className="grid gap-3 sm:grid-cols-3">
         <Field label="Dials" value={schedule.dialsAt} />
-        {/* Two limits, because the PRD sets two and they run out
-            independently: a booking can be on its last reschedule with both
-            dial attempts still in hand. */}
         <Field
           label="Reschedules"
           value={`${schedule.reschedules.used} of ${schedule.reschedules.limit}`}
@@ -159,10 +132,6 @@ function ScheduledCallSection({
         </p>
       </div>
 
-      {/* Only the inferred brief gets a footnote. It is a guess and has to say
-          so. A requested one is the customer's own words — the badge above
-          already says that, and a confidence score under it would invent doubt
-          that is not there. */}
       {requested ? null : (
         <p className="rounded-lg bg-card px-3 py-2 text-xs text-muted-foreground">
           Inferred by post-call analysis · {schedule.confidence}

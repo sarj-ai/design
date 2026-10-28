@@ -3,16 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-/**
- * The page's unsaved-changes bar: a small dark pill, bottom centre, saying
- * how much changed — a state, not a warning. Discard sits beside Save; the
- * caller decides whether Save saves or opens a review first.
- *
- * Place it last in a column that is at least as tall as the scroll area
- * (`min-h-full flex flex-col`): `mt-auto` holds it at the bottom of a short
- * page, `sticky` at the bottom of a long one. It fades in once there is
- * something to save.
- */
+/** Place it last in a column at least as tall as the scroll area (`min-h-full flex flex-col`): `mt-auto` holds it down on a short page, `sticky` on a long one. */
 export function SaveBar({
   changes,
   onDiscard,

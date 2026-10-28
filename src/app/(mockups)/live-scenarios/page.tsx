@@ -18,17 +18,6 @@ import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
 import { EDITOR_CASES } from "@/lib/mockups/live-scenarios-data"
 
-/**
- * Live scenario status and the change warning — DES-203, under INT-257, for
- * PROD-234. The three places the ticket and its comments name: the editor
- * (the switch and the warning), the scenarios index (the chip and the
- * filter), and the playground list (the chip).
- *
- * The bar's last switch picks the surface. On the editor, the select picks
- * which scenario the page opens on — live, not live, one that someone turns
- * live while you edit, one you may not switch, and one whose switch fails.
- */
-
 const SURFACES = [
   { id: "editor", label: "Editor" },
   { id: "index", label: "Scenarios" },
@@ -43,7 +32,6 @@ export default function LiveScenariosPage() {
   const editorCase =
     EDITOR_CASES.find((entry) => entry.id === caseId) ?? EDITOR_CASES[0]
 
-  /* A toast belongs to the case that raised it. */
   React.useEffect(() => {
     toast.dismiss()
   }, [surface, caseId])

@@ -32,22 +32,6 @@ export type Notice = {
   at: string
 }
 
-/**
- * Notifications: a bell in the app's top bar, first in the header's
- * right-hand row (AppShell's `scope` slot), and the list it opens.
- *
- *  - Unread is a dot on the bell, never a count. The number is in the
- *    button's label and the list; a numbered pill hanging off a 28px button
- *    outweighs the button.
- *  - Each notice is one line saying what happened, then where and when.
- *    Clicking it marks it read, closes the list and opens the thing it is
- *    about. Unread notices carry a primary-tint wash.
- *  - Mark all read appears only while something is unread. The foot always
- *    leads to the page that holds everything (`viewAll`).
- *
- * Designed for DES-204's approvals (/publish-approval); the design system's
- * Notifications topic shows it in the app frame.
- */
 export function Notifications({
   notices,
   read,
@@ -82,8 +66,6 @@ export function Notifications({
           variant="outline"
         >
           <NotificationsIcon />
-          {/* A dot, not a count: the count is in the label and the list,
-              and a numbered pill hanging off a 28px button outweighs it. */}
           {unread ? (
             <span
               aria-hidden

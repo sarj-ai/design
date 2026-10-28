@@ -4,17 +4,6 @@ import * as React from "react"
 
 import { Item } from "@/components/ui/item"
 
-/**
- * The top of a page, one shape everywhere.
- *
- * Title on the left, with one line of description under it only when the
- * title does not say enough on its own. Whatever describes the page's state —
- * a quota, a sync status — sits on the right, level with the title. The ways
- * of adding to the page come after, as a row of tiles directly under the
- * title, so the reader meets the actions before the list they fill.
- *
- * The layout follows ElevenLabs' knowledge base page; the look is ours.
- */
 export function PageHeader({
   title,
   description,
@@ -22,7 +11,6 @@ export function PageHeader({
   actions,
 }: {
   title: React.ReactNode
-  /** Optional. Leave it out when the title already says what the page is. */
   description?: React.ReactNode
   /** Page state, shown on the right of the title — never an action. */
   aside?: React.ReactNode
@@ -46,11 +34,6 @@ export function PageHeader({
   )
 }
 
-/**
- * One way of adding to the page: an icon over a label, nothing else. The
- * label carries the verb, so there is no second line explaining it — what a
- * choice accepts is said in the dialog it opens.
- */
 export function ActionTile({
   icon,
   label,

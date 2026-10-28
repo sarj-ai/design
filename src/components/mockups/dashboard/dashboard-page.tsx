@@ -21,17 +21,6 @@ import {
   type Period,
 } from "@/lib/mockups/dashboard-data"
 
-/**
- * PROD-600 — the dashboard on the system.
- *
- * Every card is a plain `Card`: a title, then the number at the top of the type
- * scale. Colour is kept only where it means something. A change follows its
- * number on the same baseline, as X's analytics does, with no pill behind it:
- * green when it is good news, red when it is bad, and grey for average
- * duration, which is neither. Inbound and outbound draw their own line from the
- * chart, in its colour. What a change is compared against is said once,
- * beside the period it belongs to.
- */
 export function DashboardPage({ noCalls }: { noCalls: boolean }) {
   const [period, setPeriod] = React.useState<Period>("today")
   const [range, setRange] = React.useState<CustomRange>()
@@ -39,8 +28,6 @@ export function DashboardPage({ noCalls }: { noCalls: boolean }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* The comparison reads on from the selected period: "Last 30 days",
-          then "vs previous 30 days". */}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <PeriodSelector
           onPeriodChange={setPeriod}
@@ -95,9 +82,6 @@ function NumberTile({
           <Change percent={card.change} riseIsGood={card.riseIsGood} />
         )}
       </CardContent>
-      {/* Flush to the card's bottom and end edges, outside its padding; the
-          card's rounded corner clips it. Its start fades out instead of
-          stopping at a hard edge. */}
       {card.series && points ? (
         <Sparkline
           className="absolute end-0 bottom-0 h-14 w-1/2 mask-l-from-60%"
@@ -117,7 +101,6 @@ function Change({
   riseIsGood: boolean | undefined
 }) {
   const Arrow = percent > 0 ? ChangeUpIcon : percent < 0 ? ChangeDownIcon : null
-  /* The arrow is the sign; this says it to a screen reader. */
   const direction = percent > 0 ? "Up " : percent < 0 ? "Down " : ""
   const tone =
     percent === 0 || riseIsGood === undefined
@@ -125,8 +108,7 @@ function Change({
       : percent > 0 === riseIsGood
         ? "good"
         : "bad"
-  /* The tint foregrounds, not `success` and `destructive` themselves: those
-     are fill colours and too light to read as 14px text on a card. */
+  /* Tint foregrounds: `success` and `destructive` are fills, too light for 14px text. */
   return (
     <span
       className={cn(

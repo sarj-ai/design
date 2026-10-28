@@ -1,18 +1,8 @@
-/**
- * Mock data for the turn detection panel on a call's Model Settings tab.
- *
- * The wire names and the default wait values are the platform's own —
- * `sarj_eou` waits 0.5s–3.0s, `livekit_v1_mini` waits 0.3s–2.5s — so a reader
- * comparing the mockup against a real call sees the same vocabulary.
- */
-
-/** The three detection paths a call can run, by their platform wire type. */
 type DetectionPathId = "livekit_v1_mini" | "sarj_eou" | "vad"
 
 export type DetectionPath = {
   id: DetectionPathId
   label: string
-  /** What the path does, for a reader who has not met the model. */
   description: string
 }
 
@@ -37,33 +27,25 @@ const DETECTION_PATHS: Record<DetectionPathId, DetectionPath> = {
   },
 }
 
-/** Whether the wait values came from Global Settings or from a persona override. */
 export type WaitSource = "global" | "persona"
 
 export type TurnTimingRecord = {
-  /** The path Global Settings asked for. */
   configured: DetectionPath
   /** What actually ran. Differs from `configured` only after a fallback. */
   ran: DetectionPath
-  /** Why the configured path did not run, or `null` when it did. */
   fallbackReason: null | string
   minWaitSeconds: number
   maxWaitSeconds: number
   waitSource: WaitSource
-  /** The persona the call ran under, named whether or not it overrode anything. */
   persona: string
   turnCount: number
-  /** Turns where the model never reached confidence, so the ceiling applied. */
   turnsAtMaximum: number
-  /** What the caller sat through before the agent's first word. */
   firstTurnWaitSeconds: number
 }
 
 export type CallCase = {
   id: string
-  /** Tab label — the state, not the call. */
   label: string
-  /** The one line that says why this state is worth drawing. */
   summary: string
   call: {
     id: string
@@ -72,13 +54,11 @@ export type CallCase = {
     duration: string
     language: string
   }
-  /** The voice this call ran, so the TTS section below agrees with its language. */
   voice: { name: string; language: string; gender: string }
   /** `null` for a call placed before turn timing was recorded. */
   timing: null | TurnTimingRecord
 }
 
-/** Unchanged by this ticket — the sections the new one sits above. */
 export const MODEL_SETTINGS = {
   llm: { provider: "Anthropic", model: "claude-sonnet-4-5" },
   stt: { provider: "Deepgram", model: "nova-3" },
@@ -185,7 +165,6 @@ export const CALL_CASES: CallCase[] = [
   },
 ]
 
-/** The floor the persona and global editors already warn below. */
 export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3
 
 export function formatSeconds(seconds: number): string {

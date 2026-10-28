@@ -62,29 +62,6 @@ import {
 import { docsParams, resolveDocs } from "@/lib/design-system/nav"
 import { notFound } from "next/navigation"
 
-/**
- * `/design-system` — the rules and the patterns, written down.
- *
- * A reference page rather than a mockup of a product screen, so it is reachable
- * from the index header rather than carrying a card in the list. The list table
- * folded into it when `/tables` was removed, and it is the only reference page
- * left since `/colors` was removed too.
- *
- * It reads as a documentation site: a rail listing every topic the system has,
- * and one topic open beside it. `DesignSystemDocs` owns the rail, the heading
- * and the switching; this file owns what each topic actually renders, keyed by
- * the ids in `DOCS_SECTIONS`.
- *
- * Every topic in `DOCS_SECTIONS` needs an entry here. A section does not: its
- * page is the list of its topics, which the shell draws.
- *
- * No topic repeats its own title in a card header: the heading above the pane
- * has already said it. A live demo still sits on a `Card` — a lone "Open
- * drawer" button on the page background is a control with nothing under it —
- * while a topic that is only a reference table stays bare, because a table
- * inside a card is two edges drawn around one thing.
- */
-/* The avatar group on the avatar topic. */
 const ORB_NAMES = ["Sara", "Nour", "Yusuf"]
 
 export async function generateStaticParams() {
@@ -99,9 +76,6 @@ export default async function DesignSystemPage({
   const { slug } = await params
   const location = resolveDocs(slug)
 
-  /* A slug that names nothing is a 404 rather than a quiet fall back to the
-     overview: a link that lands somewhere else never tells the person who sent
-     it that they sent the wrong one. */
   if (!location) notFound()
 
   return (
@@ -109,7 +83,6 @@ export default async function DesignSystemPage({
       page={location.page}
       section={location.section}
       views={{
-        /* Foundations — what is fixed. */
         colour: <ColourTable />,
         ...Object.fromEntries(
           GLOBAL_RULES.map((rule) => [
@@ -118,14 +91,10 @@ export default async function DesignSystemPage({
           ]),
         ),
 
-        /* Bare, like the colour table above it: a reference table inside a
-           card is two edges drawn around one thing. */
         layering: <LayerTable />,
         "control-scale": <ControlScale />,
         enforcement: <LintRules />,
 
-        /* Motion — the three enforced rules, plus the curve and the step to
-           pick. Wrapped in a Card like every other reference pane. */
         ...Object.fromEntries(
           MOTION_RULES.map((rule) => [
             rule.id,
@@ -137,8 +106,6 @@ export default async function DesignSystemPage({
           ]),
         ),
 
-        /* Patterns — what the decisions produce. */
-        /* The choice is two questions, so the page asks them. */
         surfaces: <SurfaceDecisionPreview />,
 
         tabs: (
@@ -149,9 +116,6 @@ export default async function DesignSystemPage({
           </Card>
         ),
 
-        /* Its own topic rather than a note on the index page: the same edge
-           answers a picker in a drawer, a wizard step and a row in a list, and
-           before this it was re-decided in each of them. */
         selection: (
           <Card>
             <CardContent>
@@ -160,10 +124,6 @@ export default async function DesignSystemPage({
           </Card>
         ),
 
-        /* Separate from the multi-step pattern because it is the component,
-             not the pattern: that topic answers what a multi-step creation
-             must contain, this one answers what the stepper inside it looks
-             like at each orientation. */
         stepper: (
           <Card>
             <CardContent>
@@ -176,9 +136,6 @@ export default async function DesignSystemPage({
             <CardContent className="flex flex-col gap-6">
               <IndexPagePreview />
 
-              {/* The colour, empty-cell, language and action keys belong
-                    against the rows they explain, so they ride under this
-                    preview. The three lookups first, then the one decision. */}
               <Separator />
               <ChipNotes />
               <EmptyValueNotes />
@@ -187,10 +144,6 @@ export default async function DesignSystemPage({
             </CardContent>
           </Card>
         ),
-        /* The table shape, then the four states of the page it usually sits
-           on. Each state is one Card, because each is a live surface rather
-           than a reference table — and the rules ride under the demo they
-           describe rather than in a list of their own. */
         tables: (
           <Card>
             <CardContent>
@@ -242,7 +195,6 @@ export default async function DesignSystemPage({
           </Card>
         ),
 
-        /* Components — the guidance, then the inventory. */
         buttons: (
           <div className="flex flex-col gap-8">
             <ButtonSizes />
@@ -269,7 +221,6 @@ export default async function DesignSystemPage({
         "admin-view": <AdminViewPagePreview />,
         notifications: <NotificationsPreview />,
         "section-card": <SectionCardPreview />,
-        /* The flow, then the parts it cannot ship without. */
         "creation-flow": (
           <div className="flex flex-col gap-4">
             <CreationFlowPreview />
@@ -286,21 +237,14 @@ export default async function DesignSystemPage({
         "unsaved-changes": <SaveBarPreview />,
         "integration-card": <IntegrationCardPreview />,
         developers: (
-          /* Framed like the admin view: `translate-x-0` makes the frame the
-             containing block for the app's fixed sidebar. */
+          // `translate-x-0` makes the frame the containing block for the app's fixed sidebar.
           <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
             <DevelopersPage framed />
           </div>
         ),
         "orb-avatar": (
           <div className="flex flex-col gap-4">
-            {/* One height per row: the grid stretches each card to the
-                tallest beside it. The demo and the sizes share a row; the six
-                tones need one of their own. */}
             <div className="grid gap-4 sm:grid-cols-2">
-              {/* The shadcn avatar demo, with the orb in place of the photo:
-                on its own, with a status badge, and as a group with a
-                count. */}
               <Card>
                 <CardContent className="flex min-h-48 flex-1 flex-wrap items-center justify-center gap-8">
                   <OrbAvatar name="Layla" />
@@ -315,7 +259,6 @@ export default async function DesignSystemPage({
                   </AvatarGroup>
                 </CardContent>
               </Card>
-              {/* The primitive's three sizes: 24, 32 and 40px. */}
               <Card>
                 <CardContent className="flex min-h-48 flex-1 items-center justify-center gap-6">
                   {(["sm", "default", "lg"] as const).map((size) => (
@@ -323,7 +266,6 @@ export default async function DesignSystemPage({
                   ))}
                 </CardContent>
               </Card>
-              {/* Every tone, on one name, so only the colour changes. */}
               <Card className="sm:col-span-2">
                 <CardContent className="flex min-h-48 flex-1 flex-wrap items-center justify-center gap-4">
                   {ORB_TONES.map((tone) => (

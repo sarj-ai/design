@@ -1,18 +1,5 @@
 import { jsxDescendants, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * An empty state is one primitive with one action.
- *
- * `Empty`, with `EmptyHeader` → `EmptyMedia` / `EmptyTitle` /
- * `EmptyDescription`, and `EmptyContent` holding the single thing that
- * changes the state: the action that makes the first row, the Clear filters
- * that undoes a narrow search, or Try again. Two actions is a menu, and a
- * menu on an empty screen means nobody decided what the first step is.
- *
- * Every Empty has an EmptyTitle — the title is the state ("No API keys yet",
- * “No calls match “refund””, “Could not load calls”).
- */
-
 const BUTTONS = new Set(["Button"])
 
 const emptyState = {

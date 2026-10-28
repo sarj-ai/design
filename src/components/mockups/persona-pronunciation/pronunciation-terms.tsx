@@ -26,20 +26,8 @@ import {
 
 type TermField = "word" | "replacement"
 
-/** How long a fake preview "plays" before the button returns to Play. */
 const PREVIEW_MS = 1500
 
-/**
- * The pronunciation table — the reason the persona dialog was widened.
- *
- * The add row is always visible at the top of the box so a term never has
- * to be reached through a menu, and "Hear it" plays the replacement as typed,
- * so the tashkeel is checked before the term is saved instead of on the next
- * call. Duplicate words are refused at add, never merged.
- *
- * Each saved cell is editable in place: click, retype, blur or Enter to keep,
- * Escape to drop.
- */
 export function PronunciationTerms() {
   const [terms, setTerms] = React.useState(PRONUNCIATION_TERMS)
   const [query, setQuery] = React.useState("")
@@ -272,11 +260,6 @@ export function PronunciationTerms() {
   )
 }
 
-/**
- * One cell of a saved term. At rest it is the word with a dotted underline —
- * the one cue that it can be clicked into. While editing it is a plain input
- * that keeps on blur or Enter and drops on Escape.
- */
 function EditableTerm({
   term,
   field,

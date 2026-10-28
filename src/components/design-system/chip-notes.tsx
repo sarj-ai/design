@@ -21,18 +21,6 @@ const CHIP_ICONS = {
   scheduled: ScheduledIcon,
 }
 
-/**
- * Every chip, the token it is painted with, and the decision behind that token.
- *
- * The chip is its own swatch: the question on a list surface is which chip a
- * state gets, not what colour that chip is, so a square of the raw token would
- * be answering something nobody asked.
- *
- * Split from `ChipNotes` because two tabs want these rows under different
- * headings — the index page wants a key for the table above it, and the colour
- * tab wants the five tints shown being used. One table, one set of data, two
- * framings; a second copy would drift.
- */
 function ChipTable() {
   return (
     <ReferenceTable
@@ -60,13 +48,6 @@ function ChipTable() {
   )
 }
 
-/**
- * The colour key for the table above it.
- *
- * A section rather than a card of its own, because it sits inside the index
- * page's card — a key belongs against the rows it explains, and a Card never
- * nests in a Card.
- */
 export function ChipNotes() {
   return (
     <section className="flex flex-col gap-4">

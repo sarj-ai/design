@@ -14,23 +14,6 @@ import {
 } from "@/components/ui/card"
 import { INVITEE, ORG, type InviteeState } from "@/lib/mockups/org-access-data"
 
-/**
- * What the invited person sees, outside the app.
- *
- * Four states, all on one centred card:
- *
- *  - invite: who invited them, as what, and the address the invite is for —
- *    named up front, so a person signed in as someone else finds out here
- *    rather than after they join the wrong way;
- *  - wrong account: an email invite is tied to its address, so the only way
- *    forward is the right account;
- *  - link expired: invite links expire, and the way out is a person;
- *  - no invite: someone who signed up on their own. This replaces today's
- *    "Create your organization" screen — signing up grants nothing, whether
- *    their domain matches an organization, is the first from that domain, or
- *    is a personal one. Sign out is on every state (PROD-342: people got
- *    stuck on the old screen with no way out).
- */
 export function InviteeView({ state }: { state: InviteeState }) {
   const copy = {
     invite: {

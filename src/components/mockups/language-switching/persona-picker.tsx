@@ -13,10 +13,6 @@ import {
   type LanguageCode,
 } from "@/lib/mockups/language-switching-data"
 
-/**
- * One persona for one language — the platform's own persona Select, offering
- * only personas in that language.
- */
 export function PersonaPicker({
   disabled = false,
   id,

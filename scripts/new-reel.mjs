@@ -1,20 +1,4 @@
-/**
- * Scaffold a reel.
- *
- *   npm run new:reel -- release-17
- *   npm run new:reel -- release-17 --title "Release 17" \
- *     --meta "Release reel · 40s" --seconds 40 --icon RocketIcon
- *
- * Creates the route, a starting composition, the folder its screenshots go in,
- * and the card on `/reels`. It deliberately does NOT create a finished video.
- *
- * The skeleton it writes is two beats and an end card — enough to render
- * something on the first `npm run reel`, and far too little to ship. That is
- * the point. The engine this replaced handed you a fixed card shape and a JSON
- * spec of headline plus sub, so every release came out looking like the last
- * one. Here the scaffold gets the wiring right and then gets out of the way:
- * rewrite the composition for what this release actually shipped.
- */
+// Usage: npm run new:reel -- <slug> [--title …] [--description …] [--meta …] [--eyebrow …] [--icon …] [--seconds N]
 
 import { access, mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -61,7 +45,6 @@ function parseArgs(argv) {
   return args
 }
 
-/** `release-17` → `Release 17`. A starting point the author overrides. */
 function titleFrom(slug) {
   return slug
     .split("-")
@@ -71,7 +54,6 @@ function titleFrom(slug) {
     .join(" ")
 }
 
-/** `release-17` → `Release17Reel`, the component name. */
 function componentFrom(slug) {
   return `${slug
     .split("-")
@@ -211,7 +193,14 @@ export function ${component}() {
 `
 }
 
-function registryEntry({ slug, title, meta, description, icon, seconds: length }) {
+function registryEntry({
+  slug,
+  title,
+  meta,
+  description,
+  icon,
+  seconds: length,
+}) {
   return `  {
     href: "/reels/${slug}",
     title: "${title}",
@@ -224,7 +213,6 @@ function registryEntry({ slug, title, meta, description, icon, seconds: length }
 `
 }
 
-/** Add the glyph to the registry's existing HugeIcons import, alphabetically. */
 function withIconImport(source, icon) {
   const match = source.match(ICON_IMPORT_BLOCK)
   if (!match) throw new Error("No HugeIcons import block in the registry")
@@ -270,13 +258,14 @@ async function main() {
   await mkdir(componentDir, { recursive: true })
   await mkdir(shotsDir, { recursive: true })
 
-  await writeFile(path.join(routeDir, "page.tsx"), routeFile({ ...args, title }))
+  await writeFile(
+    path.join(routeDir, "page.tsx"),
+    routeFile({ ...args, title }),
+  )
   await writeFile(
     path.join(componentDir, "reel.tsx"),
     compositionFile({ ...args, title }),
   )
-  /* Git does not track an empty directory, and the composition points at a
-     screenshot that is not there yet — so leave a note rather than a silence. */
   await writeFile(
     path.join(shotsDir, "README.md"),
     `# ${title} — screenshots\n\nDrop 2x captures of the product here, then point each \`<Shot focus={…}>\`\nat the region that matters, in the screenshot's own pixels.\n\nCrop off the design-lab shell header and the Agentation dev overlay — neither\nis product UI. Real customer names must not reach a video that leaves the\ncompany.\n`,

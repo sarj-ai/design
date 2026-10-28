@@ -86,14 +86,6 @@ import {
 } from "@/components/design-system/icons"
 import { DEMO_VOICES, type SurfaceId } from "@/lib/design-system/data"
 
-/**
- * The eight surfaces, opened rather than described.
- *
- * The diagram says where a surface sits; this says what being in it is like,
- * which is the half a criterion cannot carry. Each demo is a real Sarj task
- * the decision sends to that surface, and each keeps the surface's shape —
- * the widths, the footer, the guard — so the demo is also the reference.
- */
 export function SurfaceDemo({ variant }: { variant: SurfaceId }) {
   switch (variant) {
     case "inline":
@@ -115,10 +107,6 @@ export function SurfaceDemo({ variant }: { variant: SurfaceId }) {
   }
 }
 
-/**
- * Inline: the page is already about this, so there is nothing to open. The
- * field swaps in where the value was and the reader never leaves.
- */
 function InlineDemo() {
   const [editing, setEditing] = React.useState(false)
   const [voice, setVoice] = React.useState(DEMO_VOICES[0].id)
@@ -164,8 +152,6 @@ function InlineDemo() {
           ))}
         </SelectContent>
       </Select>
-      {/* Save and Cancel belong to the field, not to a form: inline editing
-          that saves on blur leaves a reader unsure whether it took. */}
       <div className="flex justify-end gap-2">
         <Button onClick={() => setEditing(false)} size="sm" variant="ghost">
           Cancel
@@ -184,12 +170,6 @@ function InlineDemo() {
   )
 }
 
-/**
- * Popover: attaching knowledge bases to a scenario, the platform's own picker.
- * Anchored to the button that asked, searchable, no footer — and the way to
- * make a new one at its foot, which closes the popover, opens a dialog in its
- * place, and comes back with the new one attached.
- */
 const KNOWLEDGE_BASES = [
   { id: "returns", label: "Returns policy", language: "AR" },
   { id: "pricing", label: "Pricing 2026", language: "EN" },
@@ -267,8 +247,6 @@ function AttachKnowledgeDemo() {
         ))}
       </div>
 
-      {/* Replaces the popover rather than stacking on it, and returns with
-          the new knowledge base already attached. */}
       <Dialog
         onOpenChange={(next) => {
           setCreating(next)
@@ -315,11 +293,6 @@ function AttachKnowledgeDemo() {
   )
 }
 
-/**
- * Undo: archiving a scenario, which the platform does today on one click
- * with no word at all. Nothing asks first; the toast says what happened and
- * Undo puts it back in its place.
- */
 const SCENARIO_NAMES = [
   "Appointment booking",
   "Delivery confirmation",
@@ -384,12 +357,6 @@ function ArchiveDemo() {
   )
 }
 
-/**
- * Dialog: creating an API key. One field, so it is a dialog; the platform
- * asks "Create API key?" instead, a confirm about something harmless. The key
- * is shown once, in the same dialog after the create — a second dialog would
- * be two overlays for one task.
- */
 const DEMO_KEY = "sk_live_4f9a2c7e1b8d3a60e5c1"
 
 function CreateApiKeyDialog() {
@@ -457,8 +424,6 @@ function CreateApiKeyDialog() {
             </DialogFooter>
           </>
         ) : (
-          /* Create stays on and says what is missing when pressed, rather
-             than sitting disabled with no reason given. */
           <form
             className="flex flex-col gap-4"
             onSubmit={(event) => {
@@ -505,12 +470,6 @@ function CreateApiKeyDialog() {
   )
 }
 
-/**
- * Confirm: deleting a persona that answers a live number, so the one case
- * where the name is typed. The title names it; the body says what goes, what
- * stops and what stays; the button is the verb, in red because it destroys.
- * No warning icon — the sentence is the warning.
- */
 const PERSONA = "Reservations"
 
 function DeletePersonaDialog() {
@@ -565,16 +524,7 @@ function DeletePersonaDialog() {
   )
 }
 
-/**
- * Record: a call opened from the list. Wide enough for the transcript and a
- * details column, narrow enough that the list stays at the edge; ↑ and ↓ (the
- * buttons or the keys) move through the list without closing it. No footer —
- * nothing here is being saved.
- */
-/**
- * ↑ and ↓ step through the list while a record is open, wherever focus is —
- * except in a field, where the arrows belong to the text.
- */
+/** ↑ and ↓ step through the list wherever focus is, except in a field. */
 export function useRecordKeys(active: boolean, step: (by: number) => void) {
   const latest = React.useRef(step)
   React.useEffect(() => {
@@ -691,8 +641,7 @@ function CallRecordDemo() {
       </ItemGroup>
 
       <Drawer direction="right" onOpenChange={setOpen} open={open}>
-        {/* 1024: the one record width. `!` because the primitive pins its
-            width on a data-attribute variant. */}
+        {/* `!` because the primitive pins its width on a data-attribute variant. */}
         <DrawerContent className="sm:max-w-5xl!">
           <DrawerHeader className="flex flex-row items-center justify-between gap-4 border-b">
             <div className="flex flex-col gap-0.5">

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { type DocsSection } from "@/lib/design-system/data"
 import { FOUNDATIONS_SKILL } from "@/lib/design-system/foundations-skill"
 
-/** Copies every foundation rule out as one skill file. */
 export function CopySkillButton() {
   async function copy() {
     try {
@@ -26,13 +25,6 @@ export function CopySkillButton() {
   )
 }
 
-/**
- * Every Foundations topic on one sheet, instead of a grid of tiles that each
- * open one. There is not enough of it to be worth the extra click.
- *
- * Each view sits on the page surface, so its tables and cards read as they
- * do anywhere else rather than inheriting the cover's purple.
- */
 export function FoundationsSheet({
   section,
   views,

@@ -1,15 +1,4 @@
-/**
- * Mock transcripts for DES-205, in the platform's own shape.
- *
- * These mirror `TranscriptMessage` from `@sarj/precedent-node` field for field,
- * so the pairing in the component is the code the platform would run: a call
- * and its result are two items linked by `toolCallId`, `startAt` is epoch
- * seconds, and other speech can sit between them.
- *
- * The output strings are the agent's real ones from `transfer_to_human.py`
- * (TEL-263). `lookup_invoice` stands in for a client's custom tool, so the
- * mockup has arguments and a JSON output to show.
- */
+/** Mirrors `TranscriptMessage` from `@sarj/precedent-node`; `startAt` is epoch seconds. */
 
 export type TranscriptRole = "assistant" | "user" | "human agent"
 
@@ -198,8 +187,6 @@ export const CALL_CASES: CallCase[] = [
         arguments: "{}",
         startAt: T0 + 82,
       },
-      /* The caller hung up while this rang. The agent fills the result in at
-         call end, with the real start time on the call. */
       {
         type: "function_call_output",
         toolCallId: "call_a5",

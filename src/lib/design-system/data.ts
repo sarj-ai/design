@@ -1,22 +1,9 @@
-/**
- * The design system, written down.
- *
- * Content only. It lives here rather than inside the page because the rules
- * are a list that gets edited, and a list that gets edited should not be
- * tangled up in the markup that renders it.
- */
-
-/** A named rule and the one line that says what it means. */
 export type Rule = {
   label: string
   detail: string
 }
 
-/**
- * One of the seven non-negotiables. The `id` picks the worked example that runs
- * underneath it in `RuleDemo` — the rule and its example are one thing, so they
- * are keyed together rather than left to line up by position.
- */
+/** The `id` picks the worked example `RuleDemo` renders under it. */
 export type GlobalRule = Rule & {
   id:
     | "icons"
@@ -28,10 +15,6 @@ export type GlobalRule = Rule & {
     | "scrollbars"
 }
 
-/**
- * The non-negotiables. Seven rules, no exceptions, and none of them is a
- * judgement call — which is why they are the first thing on the page.
- */
 export const GLOBAL_RULES: GlobalRule[] = [
   {
     id: "icons",
@@ -68,18 +51,6 @@ export const GLOBAL_RULES: GlobalRule[] = [
   },
 ]
 
-/**
- * The eight answers to "where does this go?".
- *
- * Researched in September 2026 against ElevenLabs Agents (about 45 overlays on
- * Mobbin), Vapi, Stripe, Linear, Vercel, Attio, HubSpot and Supabase, and the
- * written guidance of NN/g, Carbon, Atlassian, Polaris, Primer, Fluent and
- * Apple — then dry-run against every overlay in the Sarj platform
- * (`surface-audit.ts`). Carbon gave the only hard numbers (a modal for up to
- * four fields and never one that scrolls); ElevenLabs gave the rest by doing
- * it: small creates in a modal, growing ones in a drawer, records in a wide
- * sheet with arrows, the agent as a page, steps full screen.
- */
 export type SurfaceId =
   | "inline"
   | "popover"
@@ -93,19 +64,12 @@ export type SurfaceId =
 type SurfaceChoice = {
   id: SurfaceId
   title: string
-  /** Where it sits relative to the page the reader was on. */
   sits: string
-  /** How big it is: a width, or where it lives when it has none. */
   size: string
-  /** What this surface is for. */
   criterion: string
-  /** What it is never for. The exclusions are the half that gets argued. */
   avoid: string
-  /** Its fixed shape — width, chrome, how it closes. Not a menu of options. */
   shape: string[]
-  /** Where the Sarj platform should use it. */
   examples: string
-  /** Products seen doing it, so a reader can go and look. */
   seenIn: string
 }
 
@@ -258,7 +222,6 @@ export const SURFACE_CHOICES: SurfaceChoice[] = [
   },
 ]
 
-/** A rule every surface keeps, whichever one the decision picked. */
 export type SurfaceRuleId =
   | "one-at-a-time"
   | "pinned"
@@ -367,35 +330,22 @@ export const SURFACE_RULES: SurfaceRule[] = [
   },
 ]
 
-/**
- * Content for the four surface demos, and nothing beyond what they render.
- *
- * The demos configure a voice because that is the one object in the product
- * that legitimately gets every surface: picking one is inline, tuning one is a
- * drawer, deleting one is a pop-up, and making one runs across steps.
- */
 export const DEMO_VOICES = [
   { id: "layla-gulf", label: "Layla — Gulf Arabic" },
   { id: "omar-msa", label: "Omar — Modern Standard" },
   { id: "sara-egyptian", label: "Sara — Egyptian" },
 ]
 
-/* ---------------------------------------------------------------------------
- * The list table, moved here when /tables was folded into this page. It is the
- * index page's content, and the colour key for the chips those rows render.
- * ------------------------------------------------------------------------ */
-
 export type CallRow = {
   id: string
   customer: string
   status: "completed" | "failed" | "in_progress" | "scheduled"
-  /** Rides inside the status chip, dimmed, rather than in a column of its own. */
   cause: null | string
   direction: "inbound" | "outbound"
   scenario: string
-  /** ISO 639-1 codes, uppercased by the chip. One chip each. */
+  /** ISO 639-1 codes. */
   languages: string[]
-  /** Seconds. Formatted at the call site so the column stays sortable. */
+  /** Seconds. */
   duration: null | number
   cost: null | number
   started: string
@@ -476,19 +426,9 @@ export const CALL_ROWS: CallRow[] = [
   },
 ]
 
-/**
- * Every chip the table renders, and why it is the colour it is.
- *
- * The intent tokens in globals.css settle what each tint means across the app;
- * this list is the layer under that — which of the four states gets which
- * verdict, and which chips are deliberately not verdicts at all. Both halves
- * matter: a reader who cannot see why `scheduled` is purple will pick amber for
- * it on the next screen.
- */
 type ChipNote = {
   label: string
   tone: string
-  /** Mapped to a component at the call site so the data file stays data. */
   icon: "completed" | "failed" | "inbound" | "running" | "scheduled" | null
   token: string
   why: string
@@ -539,18 +479,8 @@ export const CHIP_NOTES: ChipNote[] = [
   },
 ]
 
-/**
- * What goes in a cell that has nothing in it.
- *
- * The rule the list is answering: **one reason, one rendering, across the whole
- * table.** A dash in one column and a word in the next, for the same reason, is
- * two conventions doing one job — and the approval checklist gates on exactly
- * that ("one empty-value convention").
- */
 type EmptyValueNote = {
-  /** Rendered as it appears in the cell. */
   sample: string
-  /** The condition, or "Never" for the one that is here as a warning. */
   when: string
   why: string
 }
@@ -578,32 +508,17 @@ export const EMPTY_VALUES: EmptyValueNote[] = [
   },
 ]
 
-/**
- * The three languages the platform has, from `LANGUAGES` and
- * `LanguageLabels.en` in `precedent-iso/src/models/config.ts`. There is no
- * fourth, and no dialect: `Language` is flat ISO 639-1, and the Hamsa dialect
- * list is a TTS provider setting rather than a language a customer picks.
- */
+// Must match `LANGUAGES` in precedent-iso/src/models/config.ts.
 export const LANGUAGES = [
   { code: "EN", name: "English" },
   { code: "AR", name: "Arabic" },
   { code: "UR", name: "Urdu" },
 ]
 
-/** Code to name, for the tooltip on a chip. */
 export const LANGUAGE_NAMES: Record<string, string> = Object.fromEntries(
   LANGUAGES.map((language) => [language.code, language.name]),
 )
 
-/**
- * When each button size is the right one.
- *
- * The four steps are 24, 28, 32 and 36px — close together on purpose, because
- * size is a density decision and not a hierarchy one. Two of them are pinned to
- * the form controls: `sm` is the height of a small Input or SelectTrigger and
- * `default` is the height of a normal one, which is what makes a filter bar
- * line up instead of stepping.
- */
 type ButtonSizeNote = {
   size: "xs" | "sm" | "default" | "lg"
   when: string
@@ -633,14 +548,6 @@ export const BUTTON_SIZES: ButtonSizeNote[] = [
   },
 ]
 
-/**
- * The eight form decisions, settled.
- *
- * Read out of the real forms in `sarj-ai/platform` — persona, voice, batch calls, the
- * scenario editor — rather than invented, except where the app contradicts
- * itself. Where it does, the newest shipped code wins and the divergence is
- * named in the rule.
- */
 export const FORM_RULES: Rule[] = [
   {
     label: "The label",
@@ -704,7 +611,6 @@ export const FORM_RULES: Rule[] = [
   },
 ]
 
-/** Which variant carries which kind of action. */
 type ButtonRoleNote = {
   variant: "default" | "outline" | "ghost" | "destructive"
   label: string
@@ -734,28 +640,14 @@ export const BUTTON_ROLES: ButtonRoleNote[] = [
   },
 ]
 
-/**
- * A page pattern, split into what it cannot ship without and what it grows.
- *
- * The split is the point. "Anatomy" as one flat list reads as a checklist of
- * things every page must have, and half of them are not — a bulk action on a
- * collection nobody multi-selects is a feature with a cost and no reader.
- */
 export type PatternAnatomy = {
   id: string
   title: string
   description: string
-  /** Ship without one of these and the pattern is broken. */
   required: Rule[]
-  /** Earn their place per surface; absent by default. */
   optional: Rule[]
 }
 
-/* One pattern left with an anatomy: the creation flow. There used to be a
-   second, "Multi-step creation" — the same steps in a card on a grey screen,
-   which read as a pop-up with steps. The surfaces page rules that shape out
-   (a dialog never has steps; creating in steps is the creation flow), so it
-   was removed on 11 Oct 2026 and the rules worth keeping moved here. */
 export const PATTERNS: PatternAnatomy[] = [
   {
     id: "creation-flow",
@@ -802,45 +694,20 @@ export const PATTERNS: PatternAnatomy[] = [
   },
 ]
 
-/* ---------------------------------------------------------------------------
- * The docs navigation.
- *
- * The page reads as a documentation site rather than one long scroll: a rail
- * on the start edge listing everything the system has, and one topic in the
- * pane beside it. The rail is the table of contents *and* the inventory —
- * scanning it is how you find out that `Marker` exists at all, which a tab
- * strip of three words could never say.
- *
- * Everything here is a client-side view. AGENTS.md keeps alternate views of
- * one thing on one route, so a topic switches the pane rather than the URL.
- * ------------------------------------------------------------------------ */
-
-/** A leaf in the rail: a title, and the one line the pane opens with. */
 export type DocsPage = {
   id: string
   title: string
   description: string
-  /**
-   * The page documents a decision of ours rather than an inherited default —
-   * somewhere following stock shadcn or Tailwind would give a different answer.
-   * The rail and the section index both mark these, so a reader can see at a
-   * glance which half of the system is ours to argue about.
-   */
   sarj?: boolean
 }
 
-/** Leaves under an optional small label, the way `Components` splits its
-    guidance from its inventory. */
 export type DocsGroup = {
   label?: string
   pages: DocsPage[]
 }
 
-/** A top-level entry in the rail. It is itself a page — clicking it opens the
-    section's index rather than nothing. */
 export type DocsSection = DocsPage & { groups: DocsGroup[] }
 
-/** The Components section: ours, built for this product. */
 const PRODUCT_COMPONENTS: DocsPage[] = [
   {
     id: "colour",
@@ -849,8 +716,7 @@ const PRODUCT_COMPONENTS: DocsPage[] = [
       "The 44 tokens a screen is built from, and what each one is for.",
     sarj: true,
   },
-  /* `index` rather than `index-page`: that id is the pattern's, and a topic
-     id has to be unique across every section. */
+  // Topic ids must be unique across every section; `index-page` is taken.
   {
     id: "index",
     title: "Index page",
@@ -951,15 +817,6 @@ const PRODUCT_COMPONENTS: DocsPage[] = [
   },
 ]
 
-/** Colour leads, then the seven rules in the order the source document has
-    them. Each rule's own `detail` is the line its pane opens with. */
-/**
- * The foundations where stock shadcn or Tailwind would answer differently:
- * icons are HugeIcons where shadcn ships lucide, shadows are banned outright
- * where shadcn leans on them, the type scale is Nunito, and the scrollbar is
- * one we draw. Spacing, radius and accessibility are left unmarked — those
- * are the ordinary answers, and marking them would say nothing.
- */
 const SARJ_FOUNDATIONS = new Set([
   "icons",
   "shadows",
@@ -968,9 +825,6 @@ const SARJ_FOUNDATIONS = new Set([
 ])
 
 const FOUNDATION_PAGES: DocsPage[] = [
-  /* Beside colour rather than under Motion, where the lint rule that enforces
-     it lives: a layer is a token like any other, and the reason it was being
-     guessed at is that nothing listed the names. */
   {
     id: "layering",
     title: "Layering",
@@ -984,9 +838,6 @@ const FOUNDATION_PAGES: DocsPage[] = [
     description: rule.detail,
     sarj: SARJ_FOUNDATIONS.has(rule.id),
   })),
-  /* The heights were written down twice \u2014 once under Buttons as four sizes,
-     once nowhere \u2014 and the half that got lost is the half that matters: they
-     are pinned to the fields beside them, so none of the four is free to move. */
   {
     id: "control-scale",
     title: "Control scale",
@@ -994,8 +845,6 @@ const FOUNDATION_PAGES: DocsPage[] = [
       "Four heights, shared by every control. A button is pinned to the field it sits next to, which is what makes a filter bar line up instead of stepping.",
     sarj: true,
   },
-  /* Last, because it is the one page that is about the others: much of the
-     system above is not advice, and a reader is better off knowing which. */
   {
     id: "enforcement",
     title: "Enforcement",
@@ -1005,13 +854,6 @@ const FOUNDATION_PAGES: DocsPage[] = [
   },
 ]
 
-/**
- * The motion rules, which lint already enforces.
- *
- * They live in `eslint-rules/rules/motion-*.mjs` and were unwritten here, so
- * the only way to learn them was to break one and read the error. Three of the
- * enforced rules are motion rules; none of them had a page.
- */
 export type MotionRule = {
   id:
     | "easing"
@@ -1106,9 +948,6 @@ const PATTERN_PAGES: DocsPage[] = [
       "A collection of one kind of object — agents, voices, API keys.",
     sarj: true,
   },
-  /* Its own topic rather than a note under the index page: the same shape
-     answers a tab, a detail panel and a settings block, and the index page is
-     only the place it is seen most. */
   {
     id: "tables",
     title: "Tables",
@@ -1125,15 +964,6 @@ const PATTERN_PAGES: DocsPage[] = [
   },
 ]
 
-/**
- * The four states an index page has that are not the populated one.
- *
- * A group of their own under Patterns because they are the half that gets
- * skipped: a screen is drawn full, shipped, and then meets an empty account, a
- * slow request, a filter that matches nothing, or a 500. Each of those is a
- * different sentence to write, and running them together is what produces a
- * spinner where an empty state belongs.
- */
 const STATE_PAGES: DocsPage[] = [
   {
     id: "loading",
@@ -1173,9 +1003,6 @@ export const DOCS_SECTIONS: DocsSection[] = [
       "The fixed half of the system. Nothing here is a judgement call, which is what stops the decisions further down from being re-argued.",
     groups: [{ pages: FOUNDATION_PAGES }],
   },
-  /* Its own section rather than a page under Foundations: three of the
-     enforced rules are motion rules, and each one is a different question —
-     which curve, how long, what may move, and who has asked not to see it. */
   {
     id: "motion",
     title: "Motion",
@@ -1189,16 +1016,10 @@ export const DOCS_SECTIONS: DocsSection[] = [
     title: "Patterns",
     description:
       "The shapes to reach for first, and what each one cannot ship without.",
-    groups: [
-      { pages: PATTERN_PAGES },
-      /* Labelled, so the four read as one list with one job rather than four
-         more shapes filed after the shapes. */
-      { label: "States", pages: STATE_PAGES },
-    ],
+    groups: [{ pages: PATTERN_PAGES }, { label: "States", pages: STATE_PAGES }],
   },
 
-  /* `product-components` rather than `components`: `components` was the
-     shadcn inventory's address, and links to it may still be out there. */
+  // Not `components`: that was the shadcn inventory's address, and old links may still point at it.
   {
     id: "product-components",
     title: "Components",
@@ -1208,15 +1029,7 @@ export const DOCS_SECTIONS: DocsSection[] = [
   },
 ]
 
-/* ---------------------------------------------------------------------------
- * Layering. The nine `--z-*` tokens in globals.css, in order, with what each
- * one is for. Written down because the alternative is what the product does
- * today: two sticky bars and five fullscreen overlays all on a raw z-50, with
- * no ordering guarantee between them.
- * ------------------------------------------------------------------------ */
-
 type LayerToken = {
-  /** The utility, which is what gets typed. */
   name: string
   value: number
   what: string
@@ -1266,14 +1079,9 @@ export const LAYER_TOKENS: LayerToken[] = [
   },
 ]
 
-/* ---------------------------------------------------------------------------
- * The control scale. Four heights, and which primitives sit at each.
- * ------------------------------------------------------------------------ */
-
 type ControlStep = {
   px: number
   button: string
-  /** The field at the same height, or null where nothing pairs with it. */
   field: null | string
   when: string
 }
@@ -1305,14 +1113,7 @@ export const CONTROL_STEPS: ControlStep[] = [
   },
 ]
 
-/* ---------------------------------------------------------------------------
- * The enforced rules, from `eslint-rules/`. Named here so the reference says
- * which of its own pages are errors rather than advice. Ten police tokens,
- * primitives and motion; the rest police the decisions written on this site.
- * ------------------------------------------------------------------------ */
-
 type LintRule = {
-  /** The `sarj/*` rule id, as the error prints it. */
   id: string
   bans: string
   instead: string
@@ -1376,9 +1177,6 @@ export const LINT_RULES: LintRule[] = [
     instead:
       "Transform and opacity. They are the only two the browser hands to the compositor.",
   },
-  /* The design system's own decisions, enforced since 7 October 2026. Files
-     that broke one that day are listed in eslint.config.mjs and exempt from
-     that rule only, until they are migrated. */
   {
     id: "type-scale",
     bans: "font-bold, font-black, font-light, font-thin; font-serif, font-[…], fontFamily",
@@ -1475,10 +1273,6 @@ export const LINT_RULES: LintRule[] = [
     instead: "Sentence case. Acronyms stay; proper nouns go in an expression.",
   },
 ]
-
-/* ---------------------------------------------------------------------------
- * The table shape, and the states an index page has besides the populated one.
- * ------------------------------------------------------------------------ */
 
 export const TABLE_RULES: Rule[] = [
   {

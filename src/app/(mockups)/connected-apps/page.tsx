@@ -17,17 +17,6 @@ import { AppsOverview } from "@/components/mockups/connected-apps/apps-overview"
 
 type Preview = "populated" | "first-run"
 
-/**
- * Custom integrations and their access tokens — DES-146 / DIS-24.
- *
- * Two levels on one route: the organization's connected apps, and the tokens
- * under whichever one is open. The move between them is a real click on a real
- * link, so it is not in the reviewer switcher — and neither are the empty,
- * expiring, expired, revoked and at-the-ceiling states, because all of them are
- * reachable by clicking through the default data. The only state that is not is
- * an organization that has never made an app, since apps cannot be deleted.
- * Hence exactly two switch positions.
- */
 export default function ConnectedAppsPage() {
   const [preview, setPreview] = React.useState<Preview>("populated")
   const [openAppId, setOpenAppId] = React.useState<string | null>(null)
@@ -43,8 +32,6 @@ export default function ConnectedAppsPage() {
     setTokens(next === "populated" ? TOKENS : [])
   }
 
-  /* Creating an app opens it, which lands the reader on its empty token list —
-     the next thing they have to do rather than a list they have to re-find. */
   function createApp(app: ConnectedApp) {
     setApps((previous) => [...previous, app])
     setOpenAppId(app.id)
@@ -84,8 +71,6 @@ export default function ConnectedAppsPage() {
         active="Integrations"
         breadcrumb={openApp ? openApp.name : "Integrations"}
         onNavigate={(title) => {
-          /* The sidebar's own Integrations item is the second way out of the
-             drill-in, so the nav reads as wired rather than decorative. */
           if (title === "Integrations") setOpenAppId(null)
         }}
       >

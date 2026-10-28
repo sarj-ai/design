@@ -20,9 +20,6 @@ import {
 import { cn } from "@/lib/utils"
 import type { ChartPoint, Series } from "@/lib/mockups/dashboard-data"
 
-/* Violet and blue, chart-6 and chart-2. The pair passes the palette checks
-   (lightness band, colour-blind separation, contrast on the card); chart-1,
-   the brand purple, is too dark to sit beside either as a line. */
 const CHART_CONFIG = {
   inbound: { label: "Inbound", color: "var(--chart-6)" },
   outbound: { label: "Outbound", color: "var(--chart-2)" },
@@ -38,10 +35,7 @@ function useSvgId(prefix: string) {
   return `${prefix}-${React.useId().replace(/[^a-zA-Z0-9-]/g, "")}`
 }
 
-/* Fades a series in at its first point and out at its last, so its line and
-   wash start and stop softly instead of at a hard vertical edge. The mask
-   sits on the series' own paths, so the axes beside them stay sharp. It is an
-   alpha mask, which reads only each stop's opacity. */
+/* An alpha mask, which reads only each stop's opacity. */
 function EdgeFade({ id }: { id: string }) {
   return (
     <>
@@ -63,7 +57,6 @@ function EdgeFade({ id }: { id: string }) {
   )
 }
 
-/* A short stroke, drawn like the line it names. */
 function SeriesKey({ series }: { series: Series }) {
   return (
     <span
@@ -73,12 +66,6 @@ function SeriesKey({ series }: { series: Series }) {
   )
 }
 
-/**
- * One series across the period, small and without axes, so the Inbound and
- * Outbound cards carry the chart's colour as data rather than decoration.
- * The big chart below is where it is read; this only shows its shape. It has
- * no margin of its own: the card places it, flush to its bottom and end edges.
- */
 export function Sparkline({
   className,
   points,
@@ -116,12 +103,6 @@ export function Sparkline({
   )
 }
 
-/**
- * Two 2px lines over a light wash, not stacked, so each series reads on its
- * own against the other. Both fade in and out at their ends. The legend sits
- * on the title's line; under the title, what one point counts ("Calls each
- * hour, today"), which neither the title nor the axis says.
- */
 export function CallVolumeChart({
   description,
   points,

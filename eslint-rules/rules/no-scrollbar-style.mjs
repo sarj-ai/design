@@ -1,14 +1,5 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * No scrollbar, anywhere — and so nothing to style.
- *
- * globals.css hides every bar: the page's, every `overflow-auto` panel's and
- * the ScrollArea primitive's. Everything still scrolls. A `scrollbar-*` class
- * or a `::-webkit-scrollbar` variant in a component either restyles a bar
- * nobody can see or re-hides one that is already hidden.
- */
-
 const SCROLLBAR_STYLE = new Set([
   "scrollbarWidth",
   "scrollbarColor",

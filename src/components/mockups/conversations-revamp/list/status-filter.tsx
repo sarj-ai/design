@@ -19,18 +19,9 @@ import {
   SelectedIcon,
 } from "@/components/mockups/conversations-revamp/list/icons"
 
-/**
- * The Status filter: a trigger that reads "Status" until something is ticked
- * and then "N selected", over the four groups with a Clear All footer. Applies
- * as you tick — there is no Apply button on this one.
- *
- * Five rows rather than fifteen. `STATUS_GROUPS` says why, and holds the raw
- * statuses each one stands for.
- */
 export function StatusFilter({
   defaultOpen = false,
 }: {
-  /** Opens the list on load, so the dropdown has a link of its own. */
   defaultOpen?: boolean
 }) {
   const [open, setOpen] = React.useState(defaultOpen)
@@ -79,8 +70,6 @@ export function StatusFilter({
 
       <PopoverContent align="start" className="w-56 overflow-hidden p-0">
         <div className="flex flex-col">
-          {/* Five rows still fit without scrolling, so the list needs no
-              height cap and no inner scroller. */}
           <div className="p-1">
             {STATUS_GROUPS.map((group) => {
               const isSelected = selected.includes(group.id)

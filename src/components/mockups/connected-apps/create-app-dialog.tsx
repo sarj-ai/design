@@ -16,13 +16,6 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { NOW, type ConnectedApp } from "@/lib/mockups/connected-apps-data"
 
-/**
- * Registering one of the organization's own systems.
- *
- * Two fields, because a connected app is only a place for tokens to belong to
- * — it holds no credentials of its own. Creating one lands the reader on its
- * empty token list, which is where the work actually starts.
- */
 export function CreateAppDialog({
   onCreate,
   onOpenChange,

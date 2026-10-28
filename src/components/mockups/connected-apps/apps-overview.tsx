@@ -39,13 +39,6 @@ import {
   CreateAppIcon,
 } from "@/components/mockups/connected-apps/icons"
 
-/**
- * The organization's own integrations.
- *
- * No row menu: there is no app-level action here. Deleting a connected app is
- * a cascade over live credentials, which is a flow of its own and not one this
- * ticket asks for.
- */
 export function AppsOverview({
   apps,
   onCreate,
@@ -144,38 +137,22 @@ function AppRow({
   const live = liveTokens(tokens, app.id)
   const active = live.filter((token) => tokenStatus(token) === "active")
 
-  /* Expiry is the one thing worth surfacing a level up: it is the reason a
-     reader opens an app they were not already thinking about. */
   const expiring = active.filter(
     (token) =>
       token.expiresAt !== null &&
       daysUntil(token.expiresAt) <= NEAR_EXPIRY_DAYS,
   ).length
 
-  /* Spelled out because the ceiling counts both: an app showing "4 active"
-     that will not let you create a fifth token reads as a bug unless the
-     expired one is on the line too. */
   const expired = live.length - active.length
 
   return (
-    /* The whole row opens the app. It already lights up on hover, and a row
-       that looks clickable and is not is the fastest way to make a mockup feel
-       broken. The name stays a real link so there is still something to tab
-       to — clicking it just opens the same app twice, which is nothing. */
     <TableRow
       className="cursor-pointer transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
       onClick={() => onOpen(app.id)}
     >
       <TableCell>
         <div className="flex flex-col gap-0.5">
-          {/* Negative margin cancels the Button's own inline padding so the
-              name starts on the column's edge like every other cell.
-
-              `text-foreground` because the whole row opens the app: link
-              colour on the name alone would point at the one part of the row
-              that is no more clickable than the rest of it. The button stays,
-              unstyled as a link, so there is still something to tab to — the
-              hover underline is what marks it. */}
+          {/* Negative margin cancels the Button's inline padding so the name aligns with the column. */}
           <Button
             className="-ms-2.5 h-auto w-fit justify-start text-foreground"
             onClick={() => onOpen(app.id)}

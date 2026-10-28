@@ -6,18 +6,7 @@ import { SiteNav } from "@/components/shell/site-nav"
 import { Stage } from "@/components/reels/stage"
 import { ReelPlayer } from "@/components/reels/player"
 
-/**
- * One reel, at its own address.
- *
- * Two modes behind one route. `?render=1` strips every piece of chrome and
- * pins the canvas to exactly 1920x1080 with no scaling, which is what
- * `scripts/render-reel.mjs` drives. Without it you get the player.
- *
- * Sharing a route rather than splitting into `/render` keeps a single source of
- * truth for what a reel *is*. A second route is a second place to forget to
- * update, and the failure would only ever show up in the exported MP4 — after
- * the render, which is the expensive step.
- */
+/** `?render=1` strips the chrome and pins the canvas at 1920x1080 for `scripts/render-reel.mjs`. */
 export function ReelPage({
   title,
   eyebrow,
@@ -44,12 +33,7 @@ export function ReelPage({
   )
 }
 
-/**
- * The bare canvas the renderer screenshots.
- *
- * Fixed to the top-left corner of the viewport so the screenshot clip is
- * always the same rectangle, whatever the page around it decides to do.
- */
+/** Fixed to the viewport's top-left so the renderer's screenshot clip is always the same rectangle. */
 function RenderCanvas({
   duration,
   children,

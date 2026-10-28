@@ -2,12 +2,6 @@
 
 import * as React from "react"
 
-/**
- * The two cues the PRD asks for: a distinct tone when capture starts and
- * another when it stops. Real Web Audio, so a reviewer hears the difference —
- * a rising pair to start, a single lower note to stop. A browser that blocks
- * audio just stays silent.
- */
 export function playTone(kind: "start" | "stop") {
   try {
     const context = new AudioContext()
@@ -29,11 +23,6 @@ export function playTone(kind: "start" | "stop") {
   }
 }
 
-/**
- * Pretend playback: plays for `seconds`, then stops on its own. The mockup
- * has no audio to play, but play turning into pause and back is the part a
- * reviewer has to see.
- */
 export function usePlayback(seconds: number) {
   const [playing, setPlaying] = React.useState(false)
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null)

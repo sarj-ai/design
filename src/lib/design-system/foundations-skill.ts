@@ -1,10 +1,3 @@
-/**
- * The Foundations section as one skill file, for the "Copy as skill" button.
- *
- * Built from the same arrays the pages render, so the copy cannot say
- * something the page does not.
- */
-
 import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens"
 import {
   CONTROL_STEPS,

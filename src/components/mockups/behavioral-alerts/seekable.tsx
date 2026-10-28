@@ -2,13 +2,6 @@
 
 import { cn } from "@/lib/utils"
 
-/**
- * A clickable surface that is not a Button, ported from the revamped drawer.
- *
- * The transcript bubbles and the detection rows carry their own shape, and a
- * Button would fight its own padding and radius. Keyboard behaviour is the part
- * that has to be kept by hand.
- */
 export function Seekable({
   children,
   className,

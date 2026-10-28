@@ -43,22 +43,10 @@ import {
   SyncDocumentsIcon,
 } from "@/components/design-system/icons"
 
-/**
- * The same index page, for a collection that is filled in several ways.
- *
- * Under the title it is the scenarios page again — search, filters, table,
- * footer — without the tabs, because this list has one view. The change is
- * how it is added to: from a URL, a file, typed text, a folder or a sync, and
- * five buttons at the end of the search row would crowd it. So the ways in
- * become a row of tiles under the title, and the search row keeps only the
- * search.
- */
-
 type Doc = {
   id: string
   name: string
   kind: "URL" | "PDF" | "DOCX" | "Text" | "Folder"
-  /** Size, page count or address — the line under the name. */
   detail: string
   createdBy: string
   updated: string
@@ -154,7 +142,6 @@ export function KnowledgeIndexPreview() {
     <div className="flex flex-col gap-4">
       <PageHeader title="Knowledge base" />
 
-      {/* The ways in, right above the search that finds what they add. */}
       <div className="mt-2 flex flex-wrap gap-3">
         <ActionTile icon={<AddUrlIcon />} label="Add URL" />
         <ActionTile icon={<AddFilesIcon />} label="Add files" />

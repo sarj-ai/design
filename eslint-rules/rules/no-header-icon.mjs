@@ -1,18 +1,5 @@
 import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * A surface header is a title, a description and a Close button.
- *
- * No icon tile beside the title. The platform does not put one there, and a
- * glyph beside a title the title already names is decoration. A confirm gets
- * no warning icon either — the words are the warning. Icons inside the
- * header's own buttons and badges are fine; they are part of a control.
- *
- * Where an icon does belong: `ItemMedia variant="icon"` on a settings row,
- * where it tells one row from the next. A header has no list to be told apart
- * within.
- */
-
 const HEADERS = new Set([
   "DrawerHeader",
   "SheetHeader",
@@ -20,7 +7,6 @@ const HEADERS = new Set([
   "AlertDialogHeader",
 ])
 
-/** An icon inside one of these is part of a control, not a tile. */
 const CONTROLS = new Set([
   "Button",
   "Badge",

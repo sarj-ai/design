@@ -1,17 +1,3 @@
-/**
- * DES-161 — Multiple Routing Options Within Transfer Tool.
- *
- * A route is a destination plus the reasons a caller should reach it. The tool
- * evaluates every route's cases once, in parallel, and picks the closest match
- * — so routes are a flat list rather than a branching tree, and one of them has
- * to be the default that catches everything nothing else claimed.
- *
- * Three fields are always per route, because they are what makes a route a
- * route: the destination, the trigger cases, and the keypad key that jumps
- * straight there. Everything else starts shared and only splits once a route
- * actually needs to differ.
- */
-
 export type TransferMode = "cold" | "warm"
 
 export const TRANSFER_MODES: { value: TransferMode; label: string }[] = [
@@ -19,7 +5,6 @@ export const TRANSFER_MODES: { value: TransferMode; label: string }[] = [
   { value: "warm", label: "Warm transfer — brief the agent first" },
 ]
 
-/** Keys a caller can actually press to skip the conversation. */
 export const KEYPAD_KEYS = [
   "0",
   "1",
@@ -35,7 +20,6 @@ export const KEYPAD_KEYS = [
   "#",
 ]
 
-/** Always shared, never per route — the carrier the call leaves on. */
 export const OUTBOUND_TRUNKS = [
   "Sarj shared trunk",
   "Quara dedicated trunk (STC)",
@@ -48,12 +32,7 @@ export type WorkingHours = {
   outsideHoursMessage: string
 }
 
-/**
- * What a route takes off the shared settings. `null` means "still shared".
- *
- * Working hours and the outside-hours message travel as one unit — hours with
- * no message to play outside them is a half-configured route.
- */
+/** `null` means still shared. Working hours and the outside-hours message are overridden together. */
 export type RouteOverrides = {
   transferMode: TransferMode | null
   messageBeforeTransfer: string | null
@@ -65,7 +44,6 @@ export type Route = {
   id: string
   name: string
   destination: string
-  /** Free text on purpose — an LLM reads these live, mid-call. */
   cases: string[]
   keypadKey: string
   overrides: RouteOverrides
@@ -116,8 +94,6 @@ export const ROUTES: Route[] = [
     destination: "+966 11 234 5601",
     cases: ["wants pricing", "asks to speak to sales team"],
     keypadKey: "1",
-    // Sales is the route that genuinely differs: its own hours, its own words,
-    // and it stays cold on purpose even if support moves to a warm handoff.
     overrides: {
       transferMode: "cold",
       messageBeforeTransfer:
@@ -137,7 +113,6 @@ export const ROUTES: Route[] = [
     destination: "+966 11 234 5622",
     cases: ["wants to cancel", "wants to talk to sales about upgrading"],
     keypadKey: "2",
-    // A cancellation is the one call nobody wants handed over cold.
     overrides: {
       transferMode: "warm",
       messageBeforeTransfer: null,
@@ -148,7 +123,6 @@ export const ROUTES: Route[] = [
   },
 ]
 
-/** A blank route, for the button at the bottom of the list. */
 export function emptyRoute(id: string, keypadKey: string): Route {
   return {
     id,
@@ -165,7 +139,6 @@ export function emptyRoute(id: string, keypadKey: string): Route {
   }
 }
 
-/** Which fields this route has taken off the shared settings. */
 export function overriddenFields(route: Route): string[] {
   const {
     transferMode,
@@ -182,7 +155,6 @@ export function overriddenFields(route: Route): string[] {
   ].filter((field): field is string => field !== null)
 }
 
-/** The mode a route will actually transfer in, shared or overridden. */
 export function effectiveMode(
   route: Route,
   shared: SharedSettings,
@@ -190,17 +162,8 @@ export function effectiveMode(
   return route.overrides.transferMode ?? shared.transferMode
 }
 
-/* -------------------------------------------------------------------------
-   Overlapping cases.
+/* A cheap lexical stand-in for the semantic overlap check an LLM makes live on the call. */
 
-   The real check is semantic: an LLM reads these live on the call, so "speak
-   to sales team" and "talk to sales about upgrading" collide for reasons no
-   string comparison can see. This is the cheap stand-in — strip the words
-   every case sentence carries and see what is left in common. It fires on the
-   pairs a reviewer would flag by eye, which is what the warning is for.
-------------------------------------------------------------------------- */
-
-/** Words that appear in half the cases anyone writes, so they prove nothing. */
 const FILLER = new Set([
   "a",
   "about",
@@ -258,11 +221,9 @@ function contentWords(text: string): string[] {
 type Overlap = {
   routeIds: [string, string]
   cases: [string, string]
-  /** The words the two cases have in common, for the warning copy. */
   shared: string[]
 }
 
-/** Every pair of cases from different routes that read alike. */
 export function findOverlaps(routes: Route[]): Overlap[] {
   const overlaps: Overlap[] = []
 
@@ -290,7 +251,6 @@ export function findOverlaps(routes: Route[]): Overlap[] {
   return overlaps
 }
 
-/** The cases caught in an overlap, so the chips can carry the warning too. */
 export function overlappingCases(overlaps: Overlap[]): Set<string> {
   return new Set(overlaps.flatMap((overlap) => overlap.cases))
 }

@@ -36,15 +36,9 @@ import {
   MoveUpKeyIcon,
 } from "@/components/mockups/variable-mentions/icons"
 
-/** The stored form of a mention. */
 const TOKEN = /\{\{\s*([\w-]+)\s*\}\}/g
 
-/**
- * An `@` at the start of a run of text or after a space or an opening
- * bracket, then whatever has been typed since. `user@domain.com` never
- * matches, and `@ ` stops matching the moment the space lands — the two
- * rules PROD-80 sets for when the picker is open.
- */
+/** `@` at the start or after a space or opening bracket; `user@domain.com` never matches and `@ ` stops matching. */
 const TRIGGER = /(?:^|[\s(["'«“])@(\w*)$/
 
 const KEYCAP = "bg-foreground/10 text-foreground"
@@ -63,21 +57,7 @@ interface Mention {
   start: number
 }
 
-/**
- * A text field whose variables are chips.
- *
- * The stored value is still the string with `{{name}}` in it, exactly what
- * the product saves today. The editor paints that string into the field,
- * turning each token into a chip, and reads the field back into the string
- * on every edit. Typing `@` opens the picker at the caret; picking inserts a
- * chip. Typing or pasting `{{name}}` by hand becomes a chip too, which is
- * how an existing scenario opens looking right without a migration.
- *
- * The field is a contenteditable rather than a textarea because a textarea
- * cannot hold a chip. It stays uncontrolled on purpose — repainting from
- * state on every keystroke would take the caret with it — so React owns the
- * frame, the picker and the tooltip, and the DOM owns the text.
- */
+/** Contenteditable and uncontrolled: repainting from state on every keystroke would lose the caret. React owns the frame, picker and tooltip; the DOM owns the text. */
 export function MentionEditor({
   ariaLabel,
   dir,
@@ -99,9 +79,7 @@ export function MentionEditor({
   treatment: ChipTreatment
   /** The stored string, `{{name}}` tokens included. */
   value: string
-  /** Everything that can be mentioned, in the order the picker lists it. */
   variables: Variable[]
-  /** The picker shows placeholders instead of rows until the list arrives. */
   variablesLoading?: boolean
 }) {
   const root = React.useRef<HTMLDivElement>(null)
@@ -114,8 +92,7 @@ export function MentionEditor({
   } | null>(null)
 
   const [mention, setMention] = React.useState<Mention | null>(null)
-  /* The highlighted row, remembered with the query it was chosen for: a new
-     query starts at the top of the list again. */
+  /* Remembered with its query: a new query starts at the top again. */
   const [choice, setChoice] = React.useState<{
     name: string
     query: string
@@ -168,7 +145,6 @@ export function MentionEditor({
     onChange(text)
   }, [onChange])
 
-  /* Is the caret just after an `@query`? Then the picker belongs there. */
   const sync = React.useCallback(() => {
     const el = root.current
     const selection = window.getSelection()
@@ -250,8 +226,7 @@ export function MentionEditor({
 
       const chip = createChip(name, classFor(name))
       range.insertNode(chip)
-      /* A space after the chip, and the caret after the space, so the next
-         word does not land inside the chip and a second `@` starts clean. */
+      /* A space after the chip, caret after it, so the next word does not land inside the chip. */
       const space = document.createTextNode(" ")
       chip.after(space)
       const caret = document.createRange()
@@ -271,8 +246,7 @@ export function MentionEditor({
     if (!el) return
 
     if (hasTypedToken(el)) {
-      /* `{{name}}` typed or pasted by hand: repaint so it becomes a chip,
-         then put the caret back where it was in the stored string. */
+      /* `{{name}}` typed or pasted: repaint into a chip, then restore the caret by stored-string offset. */
       const offset = caretOffset(el)
       const text = serialize(el)
       paint(el, text, classFor)
@@ -318,8 +292,7 @@ export function MentionEditor({
 
     if (event.key === "Enter") {
       event.preventDefault()
-      /* A newline as text, so the field never grows a `<div>` per line and
-         the stored string stays the plain markdown the model is sent. */
+      /* A newline as text, so the field never grows a `<div>` per line. */
       if (multiline) document.execCommand("insertText", false, "\n")
     }
   }
@@ -401,8 +374,6 @@ export function MentionEditor({
             </span>
           ) : null}
 
-          {/* The picker and the tooltip each anchor to an empty span parked
-              over the caret or the chip they belong to. */}
           <PopoverAnchor asChild>
             <span
               aria-hidden
@@ -439,8 +410,7 @@ export function MentionEditor({
         align="start"
         className="w-96 p-0"
         onCloseAutoFocus={(event) => event.preventDefault()}
-        /* The editor keeps focus: a mouse-down here would blur it, and the
-           caret — which is where the chip has to go — would be gone. */
+        /* Keep editor focus: blurring would lose the caret the chip is inserted at. */
         onMouseDown={(event) => event.preventDefault()}
         onOpenAutoFocus={(event) => event.preventDefault()}
         side="bottom"
@@ -496,10 +466,7 @@ export function MentionEditor({
             )}
           </CommandList>
 
-          {/* Keycaps on the popover surface: the Kbd default is bg-muted,
-              which on bg-popover is a three-percent grey and reads as
-              nothing. A tenth of foreground gives each key an edge without
-              borrowing a chip colour. */}
+          {/* Kbd's default bg-muted is invisible on bg-popover. */}
           <div className="flex items-center gap-4 border-t px-3 py-2 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <KbdGroup>
@@ -529,21 +496,17 @@ export function MentionEditor({
   )
 }
 
-/* ------------------------------------------------------------------- DOM -- */
-
 function createChip(name: string, className: string): HTMLSpanElement {
   const chip = document.createElement("span")
   chip.textContent = name
   chip.dataset.variable = name
   chip.contentEditable = "false"
-  /* A variable name is Latin text; isolated, it does not reorder the Arabic
-     around it. */
+  /* Isolated so the Latin name does not reorder the Arabic around it. */
   chip.dir = "ltr"
   chip.className = className
   return chip
 }
 
-/** Fill the field from the stored string, one chip per token. */
 function paint(
   el: HTMLElement,
   value: string,
@@ -564,7 +527,6 @@ function paint(
   el.replaceChildren(fragment)
 }
 
-/** Read the field back into the stored string. */
 function serialize(container: Node): string {
   let out = ""
 
@@ -593,7 +555,6 @@ function serialize(container: Node): string {
   return out
 }
 
-/** Does any text outside a chip still read `{{name}}`? */
 function hasTypedToken(el: HTMLElement): boolean {
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
   const single = new RegExp(TOKEN.source)
@@ -604,7 +565,6 @@ function hasTypedToken(el: HTMLElement): boolean {
   return false
 }
 
-/** Where the caret is, as an offset into the stored string. */
 function caretOffset(el: HTMLElement): number | null {
   const selection = window.getSelection()
   const anchor = selection?.anchorNode
@@ -616,7 +576,6 @@ function caretOffset(el: HTMLElement): number | null {
   return serialize(range.cloneContents()).length
 }
 
-/** Put the caret at an offset into the stored string. */
 function placeCaret(el: HTMLElement, offset: number) {
   const selection = window.getSelection()
   if (!selection) return
@@ -671,7 +630,6 @@ function placeCaret(el: HTMLElement, offset: number) {
   selection.addRange(range)
 }
 
-/** A range's box in the coordinates of the field, for the anchors. */
 function relativeBox(range: Range, el: HTMLElement): Box {
   const rect = range.getBoundingClientRect()
   const base = el.getBoundingClientRect()

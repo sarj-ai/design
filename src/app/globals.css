@@ -3,19 +3,9 @@
 @import "shadcn/tailwind.css";
 @plugin "@tailwindcss/typography";
 
-/* This workspace is light only — there is no `.dark` token block and no theme
-   toggle. The line stays because the 61 generated shadcn primitives are full of
-   `dark:` utilities: binding the variant to a class nothing ever sets makes
-   every one of them dead. Delete it and Tailwind falls back to its built-in
-   `prefers-color-scheme` behaviour, which would turn the whole app dark for
-   anyone whose OS is. */
+/* Bound to a class nothing sets, so the primitives' `dark:` utilities stay off. Without it Tailwind follows prefers-color-scheme. */
 @custom-variant dark (&:is(.dark *));
 
-/* ---------------------------------------------------------------------------
-   Base tokens — shadcn "Nova" neutral base, full OKLCH values.
-   Brand purple overrides --primary / --primary-foreground and the sidebar
-   accent so the app stays branded (NOT Nova-neutral gray).
---------------------------------------------------------------------------- */
 :root {
   --radius: 0.625rem;
 
@@ -26,7 +16,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
 
-  /* BRAND override (Nova base would be oklch(0.205 0 0)) — #392868 */
+  /* Brand purple, #392868 */
   --primary: oklch(0.334 0.107 291.8);
   --primary-foreground: oklch(1 0 0);
 
@@ -46,18 +36,10 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
 
-  /* Brand-tint surface — selected rows, active nav items, icon containers.
-     Same values the sidebar accent uses, exposed under a primary-* name so it
-     reads correctly outside a sidebar. */
+  /* Same values as --sidebar-accent. */
   --primary-tint: oklch(0.948 0.019 291.8); /* #eeecfa */
   --primary-tint-foreground: oklch(0.411 0.108 291.8); /* #4d3d80 */
 
-  /* Intent-tint surfaces — status pills, chips, inline state badges.
-     Built the same way as --primary-tint: a near-white surface at the intent's
-     own hue, paired with a foreground dark enough to clear 4.5:1 at text-xs.
-     The solid --success / --warning / --destructive stay as they are and remain
-     correct for icons, bars, rings and anything on a filled background; they
-     are simply too light to be read as 12px text on their own tint. */
   --success-tint: oklch(0.945 0.045 149.2);
   --success-tint-foreground: oklch(0.402 0.098 149.2);
   --warning-tint: oklch(0.955 0.055 70.08);
@@ -65,41 +47,12 @@
   --destructive-tint: oklch(0.948 0.028 27.325);
   --destructive-tint-foreground: oklch(0.442 0.176 27.325);
 
-  /* Info — the fourth intent. There was no colour for "here is something you
-     should know" that is not an error, a warning or a success, so screens
-     reached for --primary-tint and an informational note ended up looking like
-     a selected row. Blue, following the same solid + tint shape as the other
-     three: #0871c1 carries near-white at 4.85:1 (destructive manages 4.56,
-     success 3.16), and the tint carries its foreground at 6.96:1. */
   --info: oklch(0.54 0.15 250); /* #0871c1 */
   --info-foreground: oklch(0.985 0 0);
   --info-tint: oklch(0.948 0.03 250); /* #dff0ff */
   --info-tint-foreground: oklch(0.43 0.11 250); /* #125289 */
 
-  /* Charts — DES-174. Brand purple first, then five distinct hues.
-     Replaces a ramp of one purple stepped by lightness. That ramp is right for
-     a ranked series, where the reader only has to see more and less, and wrong
-     the moment the series are unrelated: six steps of one purple made "voice"
-     and "latency" look like more and less of one thing.
-
-     Chosen against a measured target, not by eye. The worst-separated pair,
-     in OKLab across normal vision plus simulated protanopia, deuteranopia and
-     tritanopia (Machado 2009), is ΔE 0.121. For comparison the Okabe-Ito
-     palette — the reference for colour-blind safety — manages 0.076 and
-     Tableau 10 manages 0.007. Every colour also clears 2.99:1 against white so
-     a fill reads as a shape, and none comes closer than ΔE 0.112 to
-     --destructive, --warning or --success, so a bare dot is never mistaken for
-     a status.
-
-     Marks, not text surfaces: fills, dots and legend swatches, so no
-     -foreground. Anything read as text belongs on an intent tint.
-
-     --chart-1 follows --primary so the set stays branded under a whitelabel,
-     but the separation above was measured against Sarj purple; a whitelabel
-     whose brand colour is blue would sit close to --chart-2.
-
-     Ordinal data does not belong here. Three ranked steps are one hue at three
-     opacities — see PRIORITY_DOT in behavioral-alerts/severity.tsx. */
+  /* Marks only (fills, dots, swatches), so no -foreground. */
   --chart-1: var(--primary); /* #392868 */
   --chart-2: oklch(0.5 0.13 250); /* #1666aa */
   --chart-3: oklch(0.66 0.08 178); /* #57a292 */
@@ -107,38 +60,26 @@
   --chart-5: oklch(0.46 0.08 350); /* #79455e */
   --chart-6: oklch(0.66 0.18 300); /* #a473ee */
 
-  /* The avatar orb's three stops, deep to pale. A violet brighter than
-     --primary on purpose: the orb is lit glass, and the brand purple reads as
-     slate at that size. Used by OrbAvatar and nothing else. */
   --orb-deep: oklch(0.499 0.265 287.9); /* #6821ec */
   --orb-body: oklch(0.67 0.172 295.3); /* #9f7bf2 */
   --orb-light: oklch(0.825 0.086 302.1); /* #d0b9f5 */
 
-  /* Nova uses --sidebar (renamed from --sidebar-background) */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  /* BRAND-tinted purple accent (kept branded, not Nova neutral) — brand hue 291.8 (#392868) */
+  /* Same values as --primary-tint. */
   --sidebar-accent: oklch(0.948 0.019 291.8);
   --sidebar-accent-foreground: oklch(0.411 0.108 291.8);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* ---------------------------------------------------------------------------
-   @theme inline — alias base tokens, declare brand --color-* tokens,
-   radius scale, fonts, animations, keyframes.
---------------------------------------------------------------------------- */
 @theme inline {
-  /* Brand-static color tokens */
   --color-tailwind-black: #06050f;
   --color-manafa-blue: #0d6efd;
   --color-manafa-light-blue: #3d8bfd;
 
-  /* Brand primary unified with --primary so bg-primary == --color-primary ==
-     #392868. References the base token, so anything that overrides --primary —
-     a whitelabel, if one is ever added back — cascades through. */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-highlight: color-mix(in oklch, #392868 85%, white);
@@ -148,7 +89,7 @@
   --color-variable: #0369a1;
   --color-variable-background: #e0f2fe;
 
-  /* shadcn aliases — bare var(), NO hsl() wrapper */
+  /* Bare var(), no hsl() wrapper. */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -205,7 +146,6 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Nova radius scale (wider than the platform's — Nova components use 2xl–4xl) */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -214,28 +154,16 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* Font — Nunito via next/font CSS var */
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-heading: var(--font-sans);
 
-  /* Two rungs above text-9xl, for the ghost status code behind a 404 or 500.
-     It is a graphic rather than a heading — nothing reads it, the title below
-     it does the talking — but it still belongs on the scale rather than
-     arbitrary-valued at the call site, so there is one place to change it and
-     one place to look when a second oversized number turns up. */
   --text-status-code: 10rem;
   --text-status-code--line-height: 1;
   --text-status-code-lg: 16rem;
   --text-status-code-lg--line-height: 1;
 
-  /* Reel type — the video canvas is 1920x1080 and read from across a room or
-     in a muted Slack autoplay, so it needs rungs above the app's scale. The
-     app's text-4xl is 36px, which is a caption at this size, not a headline.
-
-     Same reasoning as --text-status-code above: these are genuinely off the
-     scale, so they become tokens rather than arbitrary values at the call
-     site. Only reels use them; nothing on a mockup should be this large. */
+  /* Reels only: the 1920x1080 canvas needs rungs above the app's scale. */
   --text-reel-display: 5.5rem;
   --text-reel-display--line-height: 1.02;
   --text-reel-h1: 4rem;
@@ -249,12 +177,8 @@
   --text-reel-kicker: 1.125rem;
   --text-reel-kicker--line-height: 1.2;
 
-  /* Easing — ease-out for anything entering or leaving, ease-in-out for an
-     on-screen element resizing or moving. Never a raw cubic-bezier in a
-     component. */
   --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
   --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
-  /* The app's sidebar open/close curve. */
   --ease-sidebar: cubic-bezier(0.165, 0.85, 0.45, 1);
 
   --animate-collapsible-down: collapsible-down 0.2s var(--ease-out-cubic);
@@ -263,47 +187,14 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-fade-in: fade-in 0.5s ease-out;
   --animate-fade-in-up: fade-in-up 0.4s ease-out;
-  /* A stroke drawn along its own path, for a tick that arrives by being
-     written rather than by appearing. The dash length has to be set on the
-     path beside it, and be at least the path's own length. */
+  /* Set --draw-length on the path, at least the path's own length. */
   --animate-draw-stroke: draw-stroke 0.3s var(--ease-out-cubic) both;
 
-  /* A pane of content arriving in place of another. ease-out because it is
-     entering; 200ms because it is a swap inside a page rather than a page.
-
-     It travels along the inline axis, from the side the control that switched
-     it is on — the rail is at the start of the page and a tab bar is read from
-     the start, so content emerging from there is content answering the thing
-     you just clicked. Vertically it competed with the page's own scroll.
-
-     4px, not 8: the larger the surface the less it has to travel to read as
-     having arrived, and a full pane sliding a whole 8px reads as the page
-     lurching rather than the content changing. */
   --animate-pane-in: pane-in 0.2s var(--ease-out-cubic) both;
 
-  /* A small panel rising from the bottom edge — the affordance that answers a
-     click on the design system's orbit figure while the topic it names loads.
-
-     300ms, the top of the drawer band: it travels its own full height, which
-     is the longest distance anything in this system moves, and at 200ms that
-     reads as a snap rather than as something arriving. `both` so it holds the
-     start frame before it runs and the end frame after, instead of flashing at
-     its destination for one frame first.
-
-     Transform only. The panel carries a card's own surface, and fading a
-     surface in while it moves reads as two things happening to it. */
   --animate-drawer-up: drawer-up 0.3s var(--ease-out-cubic) both;
 
-  /* The design system's front door, arriving a line at a time.
-
-     `both` rather than the bare fill `fade-in-up` carries, because the pieces
-     are staggered: without it every line paints at its final position first
-     and then snaps back to the start frame when its delay elapses. The delay
-     is the one value set at the call site — it is per-line ordering, not a
-     duration, so it is not something a token can hold.
-
-     300ms and ease-out-cubic, like everything else that enters. Transform and
-     opacity only; the type does not reflow as it lands. */
+  /* `both` so staggered lines hold the start frame until their delay elapses. */
   --animate-hero-in: hero-in 0.3s var(--ease-out-cubic) both;
 
   @keyframes accordion-down {
@@ -400,16 +291,7 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Stacking scale — z-index is a design token, not a number you pick.
-
-   Every layer name maps to one UI concept. `--z-modal: 50` matches what the
-   shadcn overlay primitives already use, so feature code composes with them
-   instead of guessing. Anything that must sit above a dialog gets `z-popover`
-   or higher; never a bigger number.
-
-   Enforced by the `sarj/z-index-tokens` lint rule outside src/components/ui.
---------------------------------------------------------------------------- */
+/* Enforced by `sarj/z-index-tokens`. --z-modal: 50 matches the shadcn overlay primitives. */
 :root {
   --z-base: 0; /* normal flow */
   --z-raised: 10; /* sticky table header, hover lift */
@@ -461,14 +343,7 @@
   }
 }
 
-/* ---------------------------------------------------------------------------
-   The opening-crawl mask.
-
-   A crawl has no edges — text has to arrive out of nothing at the bottom and
-   dissolve into the vanishing point at the top, or the tilt just looks like a
-   rotated div with two hard cuts in it. The stops are a mask, not a colour:
-   `black` and `transparent` here mean opaque and clear, so no token applies.
---------------------------------------------------------------------------- */
+/* Mask stops: black and transparent mean opaque and clear, not colours. */
 @utility crawl-mask {
   mask-image: linear-gradient(
     to bottom,
@@ -498,12 +373,6 @@
     @apply font-sans;
   }
 
-  /* The browser's own spinner on a number field. Chrome and Safari draw it
-     inside the input, so it lands on top of the primitive's padding, eats a
-     sixth of a narrow box, and is the one control on the page the design
-     system does not own — wrong radius, wrong weight, and no token anywhere
-     near it. Nothing here wants it: every number field on these screens is
-     typed into, clamped in JS, and reads its bounds from a description. */
   input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
@@ -516,16 +385,7 @@
   }
 }
 
-/* No scrollbar, anywhere.
-
-   Every surface still scrolls — wheel, trackpad, keyboard, drag — but nothing
-   draws a bar for it: not the page, not an `overflow-auto` panel, and not the
-   ScrollArea primitive, whose bar is a Radix element rather than a native
-   scrollbar and so needs hiding on its own.
-
-   `scrollbar-width` is the standard property (Firefox, and Chromium 121+,
-   where it also switches the `::-webkit-` rules off); the `::-webkit-` rule
-   is for Safari, which does not support it yet. */
+/* `scrollbar-width` covers Firefox and Chromium 121+; the ::-webkit- rule is for Safari. */
 * {
   scrollbar-width: none;
 }
@@ -540,16 +400,10 @@
   display: none;
 }
 
-/* Redundant now that every bar is hidden, and kept only because three mockup
-   surfaces still carry the class. */
 .scrollbar-hide {
   scrollbar-width: none;
 }
 
-/* `pane-in` travels along the inline axis, and `translateX` is a physical one.
-   The workspace is left-to-right and this changes nothing today; it is what
-   keeps the entrance pointing the right way if the Arabic mirror is ever
-   wanted back, at the cost of one declaration. */
 [dir="rtl"] {
   --pane-in-from: 4px;
 }

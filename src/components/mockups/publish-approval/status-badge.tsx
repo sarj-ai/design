@@ -20,12 +20,6 @@ const LOOK: Record<Status, { label: string; className: string }> = {
   },
 }
 
-/**
- * Where a request is. "In review" is the short name for waiting on an
- * approval, short because it shares a table cell with Live. It takes the
- * warning tint because it is the one a reader has to act on or wait for;
- * Withdrawn is muted because nothing follows from it.
- */
 export function StatusBadge({ status }: { status: Status }) {
   const look = LOOK[status]
   return (

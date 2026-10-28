@@ -1,23 +1,3 @@
-/**
- * KB Experience Upgrade — the knowledge base as a tool, not prompt text.
- *
- * The whole point of V1 is that the agent stops carrying this content on every
- * turn and fetches it only when it needs it. Two things follow from that, and
- * both are on this screen:
- *
- *   Sources — a knowledge base is now built from documents. Text is pulled out
- *             of each one at upload, once, so a document has a state before it
- *             is usable rather than being instantly live the way pasted text was.
- *   Summary — with the content out of the prompt, the only thing left in the
- *             prompt is a description of what this knowledge base covers. That
- *             is what tells the agent the tool exists and when it applies, so
- *             it is a field a client writes, not a detail under the hood.
- *
- * Folders are deliberately absent: the PRD puts organising and navigating a
- * large corpus in V2.
- */
-
-/** What V1 can pull text out of. Everything else is V2. */
 export type SourceKind = "pdf" | "docx" | "txt" | "markdown" | "url" | "text"
 
 export const SOURCE_LABELS: Record<SourceKind, string> = {
@@ -29,36 +9,21 @@ export const SOURCE_LABELS: Record<SourceKind, string> = {
   text: "Text",
 }
 
-/**
- * Extraction happens once, on upload, and it can fail — a scanned PDF is
- * images, so there is no text V1 can read. So a document is not simply present
- * or absent; it is on its way, usable, or stuck.
- */
 export type SourceStatus = "ready" | "extracting" | "failed"
 
 export type Source = {
   id: string
   name: string
   kind: SourceKind
-  /** On a URL source, the address behind the title. Nothing else has one. */
   url?: string
   status: SourceStatus
-  /** The original is kept whatever happens to the extraction. */
   size: string
   addedBy: string
   addedAt: string
-  /** Only on a failure — says why the text could not be pulled out. */
   problem?: string
-  /** Pasted text keeps its content, so a row can show what was actually saved. */
   body?: string
 }
 
-/**
- * Did this arrive as an uploaded document?
- *
- * A URL and a pasted note have no original file behind them, so there is
- * nothing to hand back — only these can be downloaded again.
- */
 export function isFileSource(kind: SourceKind): boolean {
   return kind !== "url" && kind !== "text"
 }
@@ -72,15 +37,10 @@ export const KNOWLEDGE_BASE = {
   name: "Quara Collections Handbook",
   updatedAt: "Jul 20, 2026, 5:00 PM",
   updatedBy: "talzamel@sarj.ai",
-  /**
-   * Up to ten sentences. This is the only part of the knowledge base that
-   * still sits in the agent's prompt.
-   */
   summary:
     "Covers instalment plans, how a customer settles an overdue balance, and what counts as a hardship case. Includes the current late-fee schedule and the wording the team uses when a payment date is promised. Use it for anything about balances, payment dates, or fees.",
 }
 
-/** One that has just been created — no summary, nothing in it. */
 export const NEW_KNOWLEDGE_BASE = {
   name: "Untitled Knowledge Base",
   updatedAt: "just now",
@@ -148,17 +108,9 @@ export const SOURCES: Source[] = [
   },
 ]
 
-/* -------------------------------------------------------------------------
-   The index of knowledge bases.
-
-   The page already exists; what changes is that a knowledge base is now made
-   of documents, so a row can say how much is in it.
-------------------------------------------------------------------------- */
-
 export type KnowledgeBaseRow = {
   id: string
   name: string
-  /** Null until something has been added — a fresh KB is genuinely empty. */
   documents: number | null
   created: string
   updatedAt: string
@@ -216,14 +168,12 @@ export const KNOWLEDGE_BASES: KnowledgeBaseRow[] = [
   },
 ]
 
-/** Sentences the client has written, against the ten the prompt will carry. */
 export function sentenceCount(summary: string): number {
   return summary.split(/[.!?]+\s|[.!?]+$/).filter((part) => part.trim()).length
 }
 
 export const SUMMARY_SENTENCE_LIMIT = 10
 
-/** What a picked file arrives as, before anything has been pulled out of it. */
 export function pendingSource(id: string, name: string, size: string): Source {
   const extension = name.split(".").pop()?.toLowerCase() ?? ""
   const kind: SourceKind =

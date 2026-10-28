@@ -21,23 +21,11 @@ import {
 } from "@/components/mockups/variable-mentions/chip-treatment"
 import { ScenarioPrompt } from "@/components/mockups/variable-mentions/scenario-prompt"
 
-/**
- * Variables as `@` mentions in the scenario editor.
- *
- * Today an author types `{{guest_name}}` by hand and the editor tints the
- * braces blue. PROD-80 replaces the typing with an `@` picker; this page is
- * the direction for what that picker and the chip it inserts look like.
- * Three colour treatments are on the switch in the top bar so the team can
- * compare them on the same prompt rather than on three separate screens —
- * "By kind" is the recommended one and the one the page opens on.
- */
 export default function VariableMentionsPage() {
   const [treatment, setTreatment] = React.useState<ChipTreatment>("kind")
   const [state, setState] = React.useState<VariablesState>("populated")
   const [viewOnly, setViewOnly] = React.useState(false)
 
-  /* The chips in the prompt resolve against the loaded scenario either way;
-     only the picker waits. */
   const variables = React.useMemo(
     () => variablesFor(state === "loading" ? "populated" : state),
     [state],

@@ -44,13 +44,6 @@ import {
 } from "@/lib/mockups/connected-apps-data"
 import { RevokeTokenIcon } from "@/components/mockups/connected-apps/icons"
 
-/**
- * An app's tokens, newest first.
- *
- * The order is fixed and there is no re-sort control: the whole create flow
- * ends with the reader looking for the token they just made, and it should be
- * the first row every time.
- */
 export function TokenTable({
   onRevoke,
   tokens,
@@ -59,10 +52,7 @@ export function TokenTable({
   tokens: Token[]
 }) {
   return (
-    <Table
-      // Cells keep their inset; the rules run the full width of the card.
-      className="[&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4"
-    >
+    <Table className="[&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4">
       <TableHeader>
         <DataTableHeaderRow>
           <DataTableHead>Name</DataTableHead>
@@ -106,9 +96,7 @@ function TokenRow({
 
           <Tooltip>
             <TooltipTrigger asChild>
-              {/* Left-to-right whatever the row around it does: a base64
-                  credential reordered next to Arabic text is a different
-                  string. */}
+              {/* Always LTR: a base64 credential reordered next to Arabic is a different string. */}
               <span
                 className="w-fit font-mono text-xs text-muted-foreground"
                 dir="ltr"
@@ -128,8 +116,7 @@ function TokenRow({
           <TooltipTrigger asChild>
             <Badge variant="outline">{scopeSummary(token.scopes)}</Badge>
           </TooltipTrigger>
-          {/* The platform's own strings, unedited — a scope a customer cannot
-              quote back is a scope they cannot debug against. */}
+          {/* The platform's scope strings, unedited. */}
           <TooltipContent className="font-mono">
             {token.scopes.join(", ")}
           </TooltipContent>
@@ -171,9 +158,6 @@ function StatusBadge({ status }: { status: "active" | "expired" | "revoked" }) {
     )
   }
 
-  /* Grey, both of them. Neither an expiry nor a deliberate revoke is a
-     failure, and colouring them as one would misread the risk. The two words
-     are different enough without a second signal. */
   return (
     <Badge className="bg-muted text-muted-foreground" variant="secondary">
       {status === "expired" ? "Expired" : "Revoked"}
@@ -209,13 +193,6 @@ function ExpiryCell({ token }: { token: Token }) {
   )
 }
 
-/**
- * Revoking, with the consequence spelled out from what the row already knows.
- *
- * "Last used two hours ago" is the only number on this screen that answers the
- * question actually being asked — am I about to break something that is
- * running right now — so when it is recent it leads.
- */
 function RevokeDialog({
   onRevoke,
   token,
@@ -224,9 +201,7 @@ function RevokeDialog({
   token: Token
 }) {
   const expired = tokenStatus(token) === "expired"
-  /* `daysUntil` reads negative for a past date, so this is "used within the
-     last week". Measured against the frozen clock, like everything else, so a
-     screenshot does not drift. */
+  /* `daysUntil` is negative for a past date, so this is "used within the last week". */
   const recentlyUsed =
     token.lastUsedAt !== null && -daysUntil(token.lastUsedAt) <= 7
 

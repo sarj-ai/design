@@ -27,29 +27,9 @@ import {
   type PromptField,
 } from "@/lib/mockups/live-scenarios-data"
 
-/**
- * The scenario editor, cut to what DES-203 changes: the Live switch at the
- * top of the page (editor-header.tsx), and the save review, which on a live
- * scenario is the warning.
- *
- * Why the warning lives in the review and not in its own dialog: the product
- * already stops every save on a review of what changed. A live scenario adds
- * one fact to that step — callers hear this from the next call — so it says
- * that there and renames the verb. No extra click, and nothing to suppress:
- * a "don't show again" would switch off the only thing Live is for.
- *
- * Save is the one door the warning guards (it also carries Import and the
- * AI notes, since both only fill the form). Delete is not: the TDD leaves
- * deleting a live scenario to a later release, and today a deleted
- * scenario is only archived and still answers calls (TDD 7), so a warning
- * that callers stop reaching it would be untrue. Delete works as on any
- * scenario: it moves to Recently deleted, with Undo.
- */
 export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   const [live, setLive] = React.useState<LiveRecord | null>(editorCase.live)
   const [pending, setPending] = React.useState(false)
-  /* The goes-live case: true once the review has found that someone else
-     turned the scenario live after this page loaded. */
   const [liveChangedUnderUs, setLiveChangedUnderUs] = React.useState(false)
 
   const [saved, setSaved] = React.useState(PROMPT_FIELDS)
@@ -176,11 +156,6 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
   )
 }
 
-/**
- * A prompt field as the editor's Scenario tab has it: the first message is
- * one line, the instruction prompt grows with what it holds. No card around
- * either — a bordered field inside a ringed card was a box in a box.
- */
 function PromptField({
   field,
   onChange,
@@ -210,11 +185,6 @@ function PromptField({
   )
 }
 
-/**
- * The save review: what changed, line by line, and Save. On a live scenario
- * the top of it says so and the verb becomes Save to live; on any other
- * scenario it is the review the product already has.
- */
 function SaveReview({
   open,
   onOpenChange,

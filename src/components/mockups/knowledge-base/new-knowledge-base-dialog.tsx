@@ -16,14 +16,6 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 
-/**
- * Creating a knowledge base.
- *
- * The name is the only thing asked for up front — it is what the index lists
- * and what someone picks from when attaching a knowledge base to an agent.
- * What it covers and what goes in it are written inside it, on a screen that
- * has room for both, so asking for them here would only split one job in two.
- */
 export function NewKnowledgeBaseDialog({
   open,
   onOpenChange,
@@ -34,9 +26,6 @@ export function NewKnowledgeBaseDialog({
   const [name, setName] = React.useState("")
 
   const ready = Boolean(name.trim())
-  /* The new knowledge base opens on its own screen, carrying the name that was
-     just typed — there is nothing to look at on the index until content is in
-     it. */
   const href = `/knowledge-base/empty?name=${encodeURIComponent(name.trim())}`
 
   return (

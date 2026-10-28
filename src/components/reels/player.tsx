@@ -12,18 +12,7 @@ import {
   RestartIcon,
 } from "@/components/reels/icons"
 
-/**
- * Watching a reel in the browser.
- *
- * The player owns the playhead and nothing else — it hands a frame number to
- * `Stage` exactly the way the renderer does. That is the point: there is no
- * "preview version" of a reel that can look different from the exported file,
- * because previewing and exporting differ only in who is counting.
- *
- * Playback derives the frame from elapsed wall-clock time rather than counting
- * rAF ticks, so a dropped frame on a busy machine shows up as a skip and not as
- * the whole reel running slow.
- */
+/** The frame derives from wall-clock time, not rAF ticks, so a dropped frame skips instead of slowing the reel. */
 export function ReelPlayer({
   duration,
   children,
@@ -33,9 +22,7 @@ export function ReelPlayer({
 }) {
   const [frame, setFrame] = React.useState(0)
 
-  /* Where playback started, and when. Held as state rather than a ref so the
-     effect below has it without listing `frame` as a dependency — which would
-     tear the loop down and rebuild it on every single frame. `null` is paused. */
+  // State rather than a ref so the effect needn't depend on `frame`, which would rebuild the loop every frame. `null` is paused.
   const [origin, setOrigin] = React.useState<{
     frame: number
     at: number
@@ -72,15 +59,11 @@ export function ReelPlayer({
       return
     }
 
-    /* Pressing play on the last frame replays from the top, which is what the
-       button says it will do — it reads "Replay" there. */
     setOrigin({ frame: atEnd ? 0 : frame, at: performance.now() })
   }
 
   return (
     <div className="flex flex-col gap-4">
-      {/* The canvas sits on the muted surface so a white composition has an
-          edge without a shadow under it. */}
       <div className="rounded-xl border bg-muted">
         <Stage frame={frame} duration={duration}>
           {children}
@@ -115,7 +98,6 @@ export function ReelPlayer({
           value={[frame]}
         />
 
-        {/* Tabular so the timecode does not jitter as the digits change. */}
         <span className="w-24 shrink-0 text-end font-mono text-sm tabular-nums text-muted-foreground">
           {timecode(frame)} / {timecode(duration)}
         </span>

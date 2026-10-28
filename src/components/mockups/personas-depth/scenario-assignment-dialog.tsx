@@ -34,11 +34,6 @@ import {
   type Persona,
 } from "@/lib/mockups/personas-depth-data"
 
-/**
- * The reverse view the product is missing: which scenarios use this persona,
- * and a way to assign it to more. A scenario holds one persona per language,
- * so assigning replaces that language slot's current persona.
- */
 export function ScenarioAssignmentDialog({
   persona,
   onOpenChange,

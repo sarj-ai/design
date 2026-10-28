@@ -59,31 +59,10 @@ import {
 } from "@/lib/mockups/config-versioning-data"
 import { cn } from "@/lib/utils"
 
-/** How many versions a page of history holds before Load more (TDD 3.6). */
 const PAGE = 5
 
-/** What applying or publishing came to. */
 export type ApplyResult = "ok" | "failed" | "blocked"
 
-/**
- * Version history as a record drawer — 1024px, the surfaces page's answer
- * for reading records opened from a list — because compare is side by side,
- * and two columns of prompt do not fit in 448.
- *
- * The list is newest first, a page at a time with Load more: number, who,
- * when, and the version it was edited from. The note, if one was left, is
- * read in the right pane, not the list (feedback, 22 Oct 2026). The
- * version callers get is marked "In use", never "Live" — live is only the
- * scenario's switch and badge (TDD 3.6). The pane on the right is the
- * selected version against the one it was edited from, or any other.
- *
- * Applying happens here, with the comparison on screen. On a live scenario
- * a version newer than the one in use is published and an older one is
- * applied, both after the extra warning (TDD 3.4); on a scenario that is
- * not live any version is applied straight away. Neither makes a version
- * (TDD 3.7). Edit from here copies a version into the editor; saving makes
- * a new one on top.
- */
 export function HistoryDrawer({
   open,
   onOpenChange,
@@ -103,13 +82,11 @@ export function HistoryDrawer({
   initial: { n: number; against: number | null }
   caseId: CaseId
   canEdit: boolean
-  /** The version open in the editor — Edit from here is absent for it. */
+  /** The version open in the editor. */
   editing: number
-  /** Puts a version in use. */
   onApply: (n: number) => Promise<ApplyResult>
   onEditFrom: (n: number) => void
-  /** DES-204: publishing a live item needs an approval, so the apply
-   *  action becomes a request. */
+  /** When set, applying a live version becomes an approval request. */
   approval?: Approval
 }) {
   return (
@@ -152,9 +129,8 @@ export function HistoryDrawer({
 type Load = "loading" | "failed" | "ready"
 
 type Approval = {
-  /** Who approves, in words — the client. */
   by: string
-  /** The version already waiting, if one is. One request at a time. */
+  /** The version already waiting, if any. One request at a time. */
   pending: number | null
   onRequest: (n: number) => void
 }
@@ -182,7 +158,6 @@ function HistoryBody({
   const [attempt, setAttempt] = React.useState(0)
   const [selected, setSelected] = React.useState(initial.n)
   const [against, setAgainst] = React.useState<number | null>(initial.against)
-  /* Enough pages that the version asked for is on screen. */
   const [count, setCount] = React.useState(() => {
     const index = subject.versions.findIndex((item) => item.n === initial.n)
     return Math.max(PAGE, Math.ceil((index + 1) / PAGE) * PAGE)
@@ -234,8 +209,6 @@ function HistoryBody({
   const more = subject.versions.length - shown.length
   const version =
     subject.versions.find((item) => item.n === selected) ?? subject.versions[0]
-  /* Against the version it was edited from, or the next one down when it
-     has none. */
   const find = (n: number | null) =>
     subject.versions.find((item) => item.n === n) ?? null
   const compare =
@@ -300,12 +273,6 @@ function HistoryBody({
   )
 }
 
-/**
- * One version on the timeline. A rail runs down the list with a dot per
- * version, filled green on the one in use, so the reader sees at a glance
- * which saves sit above it and which below. No box per row: the selected one
- * is a muted fill, as in a nav.
- */
 function VersionRow({
   version,
   inUse,
@@ -316,9 +283,7 @@ function VersionRow({
 }: {
   version: Version
   inUse: boolean
-  /** The newest save — the editor's "latest". */
   latest: boolean
-  /** The rail stops at the last dot. */
   last: boolean
   selected: boolean
   onSelect: () => void
@@ -367,9 +332,6 @@ function VersionRow({
                   In use
                 </Badge>
               ) : latest ? (
-                /* Named only while it differs from the one in use: the two
-                   words the editor uses, so History is where they meet a
-                   number. */
                 <Badge variant="outline">Latest</Badge>
               ) : null}
               <span className="ms-auto text-xs font-normal text-muted-foreground">
@@ -414,9 +376,6 @@ function VersionPane({
   const inUse = subject.inUse
   const isInUse = version.n === inUse
 
-  /* Publish for a version newer than the one in use on a live scenario,
-     Apply for everything else. Neither makes a version. Absent on the
-     version in use, and while a request is waiting (DES-204). */
   const verb = subject.live && version.n > inUse ? "Publish" : "Apply"
   const action =
     isInUse || (approval && approval.pending !== null)
@@ -439,9 +398,6 @@ function VersionPane({
   }
 
   const [view, setView] = React.useState<"changes" | "version">("changes")
-  /* Every time this version was put in use, newest first (TDD 3.2). A save
-     that put it in use is left out: who saved it and when is the line
-     above. */
   const record = subject.log.filter(
     (entry) => entry.n === version.n && entry.how !== "saved",
   )
@@ -501,8 +457,6 @@ function VersionPane({
               <Button
                 disabled={!canEdit || busy || result === "blocked"}
                 onClick={() => {
-                  /* The extra warning is for live scenarios only (TDD
-                     3.4); a retry after a failure has had it already. */
                   if (subject.live && !approval && result === null) {
                     setConfirming(true)
                     return
@@ -661,14 +615,13 @@ function VersionPane({
   )
 }
 
-/** A field's title band, with what it says about the field at the end. */
 function FieldBand({
   label,
   open,
   children,
 }: {
   label: string
-  /** Something sits under it, so it draws its bottom edge. */
+  /** Draws the bottom edge because content sits under it. */
   open: boolean
   children?: React.ReactNode
 }) {
@@ -685,7 +638,6 @@ function FieldBand({
   )
 }
 
-/** The version whole, as it was: each field read-only, in full. */
 function FullVersion({
   subject,
   version,
@@ -707,7 +659,6 @@ function FullVersion({
   )
 }
 
-/** A greyed action says why on hover, as DES-203's Live switch does. */
 function Permission({
   allowed,
   children,

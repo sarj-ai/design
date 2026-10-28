@@ -29,36 +29,15 @@ import {
   ScheduledIcon,
 } from "@/components/mockups/conversations-revamp/drawer/icons"
 
-/**
- * The pieces the drawer shares across its transcript and its section panel.
- *
- * They came out of the earlier drawer variants, which this mockup does not
- * carry — only revamp 4 ships here, so the parts it still needs live on their
- * own rather than inside a variant nobody renders.
- */
-
-/**
- * The metadata that gets read, in one line under the title. The two IDs sit
- * beside the title as buttons, the way the copy-link button already did.
- */
 export function CallHeader({
-  /** Appended after Link and Call ID. Omitted, the header is unchanged. */
   actions,
   channel = "call",
   state = "complete",
   title,
 }: {
   actions?: React.ReactNode
-  /** A chat has no phone number to print in the rail. */
   channel?: Channel
-  /** A call that has not run has no duration and no time it started. */
   state?: CallState
-  /**
-   * The clicked row. Without it the header printed one hardcoded call for
-   * every row in the table, so opening the 3307 Instalment Plan Offer read as
-   * the 4477 Collections Follow Up. The rest of the rail — organization,
-   * owner, language — is still the shared sample.
-   */
   title?: CallIdentity
 } = {}) {
   const call = CALL_DETAIL
@@ -96,9 +75,6 @@ export function CallHeader({
           </div>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-            {/* A chat has no number and no direction. The channel takes the
-                slot instead of leaving a gap, so the rail still opens with what
-                kind of session this is. */}
             <span className="flex items-center gap-1 font-medium text-foreground">
               {isChat ? (
                 <ChatChannelIcon className="size-3.5" />
@@ -120,9 +96,6 @@ export function CallHeader({
               <LanguageIcon className="size-3.5" />
               {call.language}
             </span>
-            {/* A call that has not run has no start time and no duration, and
-                printing the ones from a finished call would be a lie the
-                reader has no way to spot. */}
             {ran ? (
               <>
                 <Separator className="h-3" orientation="vertical" />
@@ -149,11 +122,6 @@ export function CallHeader({
   )
 }
 
-/**
- * A clickable surface that is not a Button: the bubbles, chips and the waveform
- * track carry their own shape, and a Button would fight its own padding and
- * radius. Keyboard behaviour is the part that has to be kept by hand.
- */
 export function Seekable({
   children,
   className,
@@ -163,12 +131,6 @@ export function Seekable({
 }: {
   children: React.ReactNode
   className?: string
-  /**
-   * False on a chat, where there is no recording to seek into. The turn still
-   * renders identically — it just stops claiming to be clickable, because a
-   * pointer cursor and a focus ring on something that does nothing is worse
-   * than no affordance at all.
-   */
   enabled?: boolean
   label: string
   onActivate: () => void

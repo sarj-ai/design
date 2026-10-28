@@ -13,13 +13,6 @@ import { Switch } from "@/components/ui/switch"
 
 import { ConfigureIcon, FillerWordsIcon } from "./icons"
 
-/**
- * The entry point to the drawer this ticket extends.
- *
- * Mappings obey this switch: turning filler words off stops the mapped
- * responses too, so the switch and the Configure button belong on one row
- * rather than the configuration living somewhere the toggle cannot be seen.
- */
 export function BackchannelSettings({
   fillerWords,
   onConfigure,

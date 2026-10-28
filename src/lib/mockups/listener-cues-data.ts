@@ -1,12 +1,3 @@
-/**
- * Mid-turn listener cues — DIS-63 / DES-172.
- *
- * Every default here is the PRD's: 35% response frequency adjustable 5–100 in
- * 5-point steps with 20–50% recommended, 7 seconds of continuous caller speech
- * before the first cue, an 8-second cooldown, and at most 2 cues per turn.
- * Cue weights always total 100% and rebalance proportionally.
- */
-
 export type Language = "ar" | "en"
 
 const LANGUAGES: { id: Language; label: string }[] = [
@@ -14,22 +5,16 @@ const LANGUAGES: { id: Language; label: string }[] = [
   { id: "en", label: "English" },
 ]
 
-/** A saved clip approved for one language. Cues are never generated in V1. */
 export type Clip = {
   id: string
   label: string
 }
 
-/** An approved clip that is in the mix, with its share of playback. */
 export type Cue = Clip & {
   /** Share of playback. Every cue's weight in a config sums to 100. */
   weight: number
 }
 
-/**
- * Approved cues are configured per language, so a language with none cannot
- * run listener cues at all — the mix is not a global list filtered by language.
- */
 const APPROVED_CLIPS: Record<Language, Clip[]> = {
   ar: [
     { id: "ar-mmm", label: "ممم" },
@@ -70,7 +55,6 @@ const DEFAULTS = {
   maxPerTurn: 2,
 }
 
-/** The global defaults every persona inherits until it saves an override. */
 export const GLOBAL_CONFIGS: Record<Language, CueConfig> = {
   ar: {
     ...DEFAULTS,
@@ -89,20 +73,12 @@ export const GLOBAL_CONFIGS: Record<Language, CueConfig> = {
   },
 }
 
-/**
- * The persona the override journey is shown on.
- *
- * `language` is the approved set the panel opens on, not a language the persona
- * is locked to: cues are approved per language everywhere, so a persona
- * overrides them per language too.
- */
 export const PERSONA = {
   name: "Aisha",
   language: "ar" as Language,
   description: "Emkan customer support",
 }
 
-/** A persona's own values, per language, once it stops inheriting. */
 export function personaOverride(
   globals: Record<Language, CueConfig>,
 ): Record<Language, CueConfig> {
@@ -112,19 +88,11 @@ export function personaOverride(
   }
 }
 
-/* ------------------------------------------------------------------------- *
- * Weights
- *
- * The percentages are the contract: they always total 100, and moving one
- * rebalances the rest in proportion to the shares they already had. Kept as
- * exact numbers here and rounded only for display, so repeated edits do not
- * accumulate error.
- * ------------------------------------------------------------------------- */
+/* Weights always total 100. They stay exact and are rounded only for display, so repeated edits do not drift. */
 
 function rescale(cues: Cue[], total: number): Cue[] {
   const current = cues.reduce((sum, cue) => sum + cue.weight, 0)
 
-  /* Nothing to be proportional to — split what is left evenly instead. */
   if (current === 0) {
     return cues.map((cue) => ({ ...cue, weight: total / cues.length }))
   }
@@ -160,13 +128,7 @@ export function removeCue(cues: Cue[], id: string): Cue[] {
   )
 }
 
-/**
- * Whole percentages that still add up to 100.
- *
- * Rounding each weight on its own gives 33/33/33, and a mix that reads as 99%
- * makes the "Total 100%" badge look like a lie. The largest remainders take the
- * spare points instead.
- */
+/** Largest-remainder rounding, so the displayed whole percentages still sum to 100. */
 export function displayWeights(cues: Cue[]): number[] {
   const floors = cues.map((cue) => Math.floor(cue.weight))
   const spare = 100 - floors.reduce((sum, value) => sum + value, 0)
@@ -180,15 +142,7 @@ export function displayWeights(cues: Cue[]): number[] {
   return floors.map((value, index) => value + (order.includes(index) ? 1 : 0))
 }
 
-/**
- * The whole approved set for this language, each clip flagged with whether it
- * is already in the mix.
- *
- * Deliberately not "the clips you have left". Filtering the taken ones out left
- * the picker holding one stray word once most of the set was in the mix, which
- * read as a text field's suggestion rather than as a closed list of approved
- * clips. The set is the point, so the set is what gets returned.
- */
+/** The whole approved set, flagged by membership — not just the clips left over. */
 export function approvedClips(
   language: Language,
   cues: Cue[],

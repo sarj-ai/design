@@ -1,16 +1,5 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * Stacking order is a design decision, so it gets a name — not a number.
- *
- * `z-50` tells the next reader nothing about what this element is supposed to
- * sit above. When two people both reach for 50 the layering becomes a race, and
- * the usual fix is someone typing `z-[9999]`. Naming the layer makes the
- * intent reviewable and the conflicts obvious.
- *
- * The scale lives in src/app/globals.css.
- */
-
 const Z_UTILITY = /^-?z-(.+)$/
 
 const LAYERS = {
@@ -47,7 +36,6 @@ const zIndexTokens = {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
         if (!Z_UTILITY.test(base)) continue
-        // `z-auto` is a reset, not a layer choice.
         if (base === "z-auto" || base in LAYERS) continue
 
         context.report({

@@ -6,21 +6,6 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * One table shape: one container, one header band, one row height.
- *
- *  - Header labels are full strength — semibold at foreground. A column name
- *    is what the reader scans by; muting it makes them hunt.
- *  - The header band is `bg-muted/50` and stays shaded on hover. Without
- *    `hover:bg-muted/50` the header lights up under the pointer and reads as a
- *    row you can click.
- *  - Sorting is a ghost Button inside the TableHead, never an onClick on the
- *    cell — a `<th>` with a click handler has no focus, no role and no key.
- *
- * `DataTable`, `DataTableHeaderRow` and `DataTableHead` in
- * src/components/shared/data-table.tsx already do all three.
- */
-
 const MUTED = /^text-muted-foreground(\/\d+)?$/
 const BAND = /^bg-muted(\/\d+)?$/
 

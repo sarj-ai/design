@@ -1,29 +1,10 @@
-/**
- * Connected apps and their access tokens — DES-146 / DIS-24.
- *
- * The permission strings, the 8-character prefix, the 43-character secret and
- * the five-token ceiling are taken from the platform as it is built today. The
- * records they hang off — a connected app, a token with a name, an expiry, a
- * last-used stamp — are the target state DIS-24 describes and the API does not
- * expose yet.
- */
-
-/** Frozen so a screenshot taken next month reads the same as today's. */
+/** Fixed rather than Date.now(), so screenshots stay stable. */
 export const NOW = "2026-08-19T11:00:00.000Z"
 
-/** The platform's own ceiling on how many tokens can exist at once. */
 export const TOKEN_CAP = 5
 
-/** How close to expiry a token has to be before the list says so unprompted. */
 export const NEAR_EXPIRY_DAYS = 14
 
-/**
- * The permissions an organization's own token can carry.
- *
- * These are the platform's strings, exactly as it spells them — the tooltip on
- * every row shows them unedited, because a scope a customer cannot quote back
- * is a scope they cannot debug against.
- */
 export type Permission =
   | "agent_profiles:read"
   | "agent_profiles:write"
@@ -47,17 +28,7 @@ export type Permission =
   | "scenarios:write"
   | "settings:read"
 
-/**
- * One row of the permission picker.
- *
- * Grouped by resource rather than listed flat: twenty-one checkboxes in a
- * column is a wall, and the read/write pair is the only axis anyone actually
- * reasons about. `write: null` is a resource the platform exposes read-only —
- * the cell stays empty rather than the row collapsing, so the two checkbox
- * columns hold one vertical line.
- */
 type ScopeGroup = {
-  /** What the product calls this resource, not what the table is called. */
   label: string
   read: Permission
   write: Permission | null
@@ -98,17 +69,14 @@ export const SCOPE_GROUPS: ScopeGroup[] = [
   { label: "Settings", read: "settings:read", write: null },
 ]
 
-/** Every read permission — the "Read-only" preset. */
 export const READ_ONLY_SCOPES: Permission[] = SCOPE_GROUPS.map(
   (group) => group.read,
 )
 
-/** Every permission there is — the "Full access" preset. */
 export const ALL_SCOPES: Permission[] = SCOPE_GROUPS.flatMap((group) =>
   group.write ? [group.read, group.write] : [group.read],
 )
 
-/** One of the organization's own systems that calls the platform. */
 export type ConnectedApp = {
   id: string
   name: string
@@ -121,12 +89,12 @@ export type Token = {
   id: string
   appId: string
   name: string
-  /** The first eight characters — all the platform keeps of the secret. */
+  /** The secret's first eight characters, all the platform keeps of it. */
   prefix: string
   scopes: Permission[]
   createdAt: string
   createdBy: string
-  /** `null` is a token that runs until someone revokes it. */
+  /** `null` never expires. */
   expiresAt: string | null
   lastUsedAt: string | null
   revokedAt: string | null
@@ -157,8 +125,6 @@ export const CONNECTED_APPS: ConnectedApp[] = [
 ]
 
 export const TOKENS: Token[] = [
-  /* Order status sync — three live tokens and one already revoked, so the
-     tombstone row is on screen without anyone having to press anything. */
   {
     id: "tok-order-prod",
     appId: "app-order-sync",
@@ -216,9 +182,6 @@ export const TOKENS: Token[] = [
     revokedAt: "2026-06-02T08:45:00.000Z",
   },
 
-  /* Nightly reporting export — five live tokens, which is the ceiling, and one
-     of them has already expired. Revoking the dead one is the way back under
-     the cap, which is why an expired row keeps its Revoke action. */
   {
     id: "tok-report-prod",
     appId: "app-reporting",
@@ -281,12 +244,7 @@ export const TOKENS: Token[] = [
   },
 ]
 
-/**
- * A token's secret, the way the platform mints one: 32 random bytes in URL-safe
- * base64, which lands at 43 characters. No vendor prefix — no `sk-`, no
- * `sarj_`. Showing one here would teach a reader to look for a marker that
- * never arrives.
- */
+/** As the platform mints them: 32 random bytes in URL-safe base64 (43 chars), no vendor prefix. */
 const SECRET_ALPHABET =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 
@@ -300,7 +258,6 @@ export function mintSecret(): string {
   return secret
 }
 
-/** What survives on the server once the secret is hashed away. */
 export function prefixOf(secret: string): string {
   return secret.slice(0, 8)
 }
@@ -318,7 +275,6 @@ export function daysUntil(iso: string): number {
   return Math.ceil(millis / 86_400_000)
 }
 
-/** "2 hours ago" while that is still the useful unit, then a date. */
 export function relativeSince(iso: string | null): string {
   if (!iso) return "Never used"
 
@@ -335,10 +291,7 @@ export function relativeSince(iso: string | null): string {
 
 type TokenStatus = "active" | "expired" | "revoked"
 
-/**
- * Derived, never stored. A revoked token that had also expired is still
- * revoked — the deliberate act outranks the clock.
- */
+/** Revoked outranks expired. */
 export function tokenStatus(token: Token): TokenStatus {
   if (token.revokedAt) return "revoked"
   if (token.expiresAt && daysUntil(token.expiresAt) <= 0) return "expired"
@@ -352,14 +305,12 @@ function sameScopes(scopes: Permission[], preset: Permission[]): boolean {
   )
 }
 
-/** "Read-only", "Full access", or the count — the list never spells out 21. */
 export function scopeSummary(scopes: Permission[]): string {
   if (sameScopes(scopes, ALL_SCOPES)) return "Full access"
   if (sameScopes(scopes, READ_ONLY_SCOPES)) return "Read-only"
   return `Custom · ${scopes.length}`
 }
 
-/** Tokens that still take up one of the organization's five slots. */
 export function liveTokens(tokens: Token[], appId: string): Token[] {
   return tokens.filter((token) => token.appId === appId && !token.revokedAt)
 }

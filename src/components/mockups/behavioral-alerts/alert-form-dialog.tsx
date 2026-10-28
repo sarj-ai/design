@@ -31,29 +31,19 @@ import {
 
 const DESCRIPTION_LIMIT = 500
 
-/**
- * Adding or editing one alert. Four fields, which is the whole definition — the
- * PRD's target is a client defining their own alerts in under two minutes.
- *
- * No helper text under any of them. Description is the one field whose job is
- * not obvious from its label, and a placeholder showing a real alert does that
- * better than a sentence explaining it would: the format is the example.
- */
 export function AlertFormDialog({
   alert,
   onOpenChange,
   onSave,
   open,
 }: {
-  /** The alert being edited, or null when this is a new one. */
   alert: ConfiguredAlert | null
   onOpenChange: (open: boolean) => void
   onSave: (alert: ConfiguredAlert) => void
   open: boolean
 }) {
-  /* Seeded once, from whichever alert is being edited. The parent remounts this
-     component every time it opens it — see the `key` on the call site — so the
-     draft is fresh without an effect copying props into state on every open. */
+  // Seeded once: the parent remounts this on every open (see `key` at the call
+  // site).
   const [name, setName] = React.useState(alert?.name ?? "")
   const [description, setDescription] = React.useState(alert?.description ?? "")
   const [priority, setPriority] = React.useState<AlertPriority>(

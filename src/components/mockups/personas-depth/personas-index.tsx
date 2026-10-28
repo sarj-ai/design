@@ -89,7 +89,6 @@ import {
 import { PersonaWizard } from "@/components/mockups/personas-depth/persona-wizard"
 import { ScenarioAssignmentDialog } from "@/components/mockups/personas-depth/scenario-assignment-dialog"
 
-/** Which of the ticket's edge states the reviewer is looking at. */
 export type PreviewState = "data" | "loading" | "empty" | "error"
 
 type GroupBy = "none" | "language" | "gender"
@@ -201,16 +200,6 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
     setDeleting(null)
   }
 
-  /**
-   * The same shape as the empty state below — centred in the content area, icon
-   * over title over description, one action underneath. Both are "there is no
-   * table to show you and here is what to do about it", and an alert pinned to
-   * the top of an otherwise blank page read as a notice about a page that was
-   * still coming.
-   *
-   * The tint carries the difference the layout no longer does: `destructive` on
-   * the icon says this is a failure, where the empty state's icon is muted.
-   */
   if (state === "error") {
     return (
       <Empty>
@@ -449,12 +438,6 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
                         return (
                           <TableRow
                             key={persona.id}
-                            /* Row height is set by the tallest control in it,
-                               not by the cell padding — that is already the 8px
-                               Conversations uses. `icon-xs` (24px) rather than
-                               `icon-sm` (28px) on the three row buttons is what
-                               brings these rows down to the Conversations
-                               density instead of running 6px taller. */
                             className="transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
                           >
                             <TableCell>

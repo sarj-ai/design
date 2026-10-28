@@ -7,17 +7,6 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * Red is for destroying.
- *
- * `variant="destructive"` goes on the button that deletes, removes, revokes,
- * disconnects — and on nothing else. Transfer, retry, archive and create
- * anyway are primary or outline: red on an action that can be undone trains
- * people to stop reading red. A row's delete is ghost with
- * `text-destructive`, never the filled variant — a column of red buttons is
- * the loudest thing on the page and the least likely to be pressed.
- */
-
 const DESTROYING = new Set([
   "delete",
   "remove",

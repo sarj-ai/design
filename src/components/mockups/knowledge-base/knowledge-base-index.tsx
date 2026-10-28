@@ -51,20 +51,11 @@ import {
   SearchIcon,
 } from "@/components/mockups/knowledge-base/icons"
 
-/**
- * The index, which already exists. The one change is that a knowledge base is
- * now made of documents, so a row can say how much is in it.
- *
- * The whole row opens the knowledge base, so the only row control left is the
- * menu — a view and an edit button beside it did the same thing twice over.
- */
 export function KnowledgeBaseIndex({
   initialRowMenu = false,
   initialCreate = false,
 }: {
-  /** Opens the first row's menu, for reviewing and exporting that state. */
   initialRowMenu?: boolean
-  /** Opens with the create dialog already showing, for reviewing that state. */
   initialCreate?: boolean
 }) {
   const [bases, setBases] = React.useState(KNOWLEDGE_BASES)
@@ -85,8 +76,6 @@ export function KnowledgeBaseIndex({
           }
         />
 
-        {/* Search runs the full width under the header, on its own line, and
-          the card below holds only the table. */}
         <section className="flex flex-col gap-4">
           <InputGroup>
             <InputGroupAddon>
@@ -98,10 +87,7 @@ export function KnowledgeBaseIndex({
             />
           </InputGroup>
 
-          {/* `--card-spacing: 0` is how Card is told its content reaches the
-            edge — the table draws its own header band and row rules, so the
-            card's usual 16px inset would show as a strip above the header
-            instead of framing it. */}
+          {/* `--card-spacing: 0` runs the table to the card's edge. */}
           <Card className="[--card-spacing:0px]">
             <div className="overflow-x-auto">
               <Table>
@@ -125,10 +111,7 @@ export function KnowledgeBaseIndex({
                         <div className="flex flex-col gap-0.5">
                           <Link
                             href="/knowledge-base/detail"
-                            /* The ::after covers the whole row, so anywhere on it
-                         opens this knowledge base. Still one real link, so
-                         focus, middle-click and open-in-new-tab keep working
-                         — which a click handler on the row would break. */
+                            /* The link's ::after covers the row. Keep it a real link so focus and open-in-new-tab work. */
                             className="font-medium after:absolute after:inset-0"
                           >
                             {base.name}
@@ -151,8 +134,7 @@ export function KnowledgeBaseIndex({
                         {base.updatedBy}
                       </TableCell>
 
-                      {/* Raised above the row's link overlay so the menu stays
-                    clickable. */}
+                      {/* Raised above the row's link overlay so the menu stays clickable. */}
                       <TableCell>
                         <div className="relative z-raised flex items-center justify-end">
                           <DropdownMenu
@@ -190,8 +172,6 @@ export function KnowledgeBaseIndex({
 
         <NewKnowledgeBaseDialog open={creating} onOpenChange={setCreating} />
 
-        {/* Deleting takes the documents with it, and the agents pointed at it
-          lose what they were looking things up in — so it asks first. */}
         <AlertDialog
           open={deleting !== null}
           onOpenChange={(open) => {

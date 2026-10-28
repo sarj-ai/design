@@ -22,14 +22,6 @@ import {
   AddUrlIcon,
 } from "@/components/mockups/knowledge-base/icons"
 
-/**
- * The three ways content gets in.
- *
- * V1 reads text-based PDF, DOCX, TXT and Markdown, plus a single web page and
- * anything typed straight in. There is no folder here on purpose — organising
- * a large corpus is V2.
- */
-
 export type AddKind = "files" | "url" | "text"
 
 export function AddSources({ onOpen }: { onOpen: (kind: AddKind) => void }) {
@@ -54,10 +46,6 @@ export function AddSources({ onOpen }: { onOpen: (kind: AddKind) => void }) {
   )
 }
 
-/**
- * Adding a URL or typed text. Files go through the browser's own picker, so
- * only these two need a form.
- */
 export function AddSourceDialog({
   kind,
   onOpenChange,
@@ -76,8 +64,6 @@ export function AddSourceDialog({
 
   const isUrl = kind === "url"
 
-  /* Both dialogs now name the thing and then carry it, so both need both
-     fields before there is anything to add. */
   const ready = Boolean(title.trim() && (isUrl ? url.trim() : body.trim()))
 
   function submit() {

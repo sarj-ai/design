@@ -15,16 +15,6 @@ import {
 } from "@/components/mockups/live-scenarios/icons"
 import type { LiveRecord } from "@/lib/mockups/live-scenarios-data"
 
-/**
- * The top of the scenario editor: the title and the page's actions on one
- * row, with Live said once — as the switch itself, beside Run scenario.
- *
- * The switch is the one DES-202 uses (shared/live-switch.tsx), so live and
- * versioning ship the same control. It replaced two takes, a popover behind
- * a status button and a status strip under the title: the popover took two
- * clicks for one value, and the TDD asks for one click and nothing more
- * (feedback, 22 Oct 2026).
- */
 export function EditorHeader({
   scenario,
   live,

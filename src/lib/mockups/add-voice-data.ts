@@ -1,13 +1,5 @@
-/**
- * Mock data for the Add new voice dialog.
- *
- * The library is global — one list of voices every workspace picks from — so
- * these options are platform-wide, not per-customer.
- */
-
 type Option = { value: string; label: string }
 
-/** The languages the library currently carries voices for. */
 export const LANGUAGES: Option[] = [
   { value: "ar", label: "AR" },
   { value: "en", label: "EN" },
@@ -21,10 +13,6 @@ export const GENDERS: Option[] = [
   { value: "female", label: "Female" },
 ]
 
-/**
- * A TTS provider and the model it renders with unless the voice names another
- * one — the model field takes the provider's default when left blank.
- */
 type Provider = Option & { defaultModel: string }
 
 export const PROVIDERS: Provider[] = [
@@ -38,15 +26,6 @@ export const PROVIDERS: Provider[] = [
   { value: "azure", label: "Azure", defaultModel: "neural-hd" },
 ]
 
-/**
- * A voice already in the library, offered as the one to fall back to.
- *
- * The picked row and the picker say different second things about the same
- * voice, and both are deliberate: the row names the **provider**, because the
- * point of a fallback is that it is not the provider that just failed; the
- * picker names the **gender**, because that is what you match on while
- * choosing.
- */
 type FallbackVoice = {
   id: string
   name: string

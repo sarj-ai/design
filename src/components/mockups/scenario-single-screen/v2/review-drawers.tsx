@@ -35,7 +35,6 @@ import {
   ORGANIZATIONS,
 } from "@/lib/mockups/scenario-single-screen-data"
 
-/** What each insight's "take me there" button opens. */
 const TARGET_LABELS: Record<InsightTarget, string> = {
   criteria: "success criteria",
   extraction: "data extraction",
@@ -44,16 +43,6 @@ const TARGET_LABELS: Record<InsightTarget, string> = {
   tools: "tools",
 }
 
-/* -------------------------------------------------------------- insights -- */
-
-/**
- * Every insight names the setting it is about and opens it.
- *
- * This is the one place the tabbed editor was actively hostile: an insight
- * would tell you the late-arrival policy was wrong and then leave you to work
- * out that the fix lived under a different tab. With one screen the insight
- * can just open the drawer.
- */
 export function InsightsDrawerBody({
   dismissed,
   insights,
@@ -122,8 +111,6 @@ export function InsightsDrawerBody({
   )
 }
 
-/* ------------------------------------------------- optimization opportunities -- */
-
 const IMPACT_VARIANT = {
   high: "default",
   low: "outline",
@@ -155,8 +142,6 @@ export function OpportunitiesDrawerBody({
     </div>
   )
 }
-
-/* ------------------------------------------------------------- ownership -- */
 
 export function OwnershipDrawerBody({
   attachedBases,

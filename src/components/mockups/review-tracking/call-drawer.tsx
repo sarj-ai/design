@@ -30,14 +30,6 @@ import {
 } from "@/components/mockups/review-tracking/icons"
 import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
 
-/**
- * The call, opened from a row: a record drawer — 1024px, ↑ ↓ to the call
- * above or below, no footer. The body stands in for the platform's call
- * details; what the ideas change is the header and the list behind it.
- *
- * ↑ and ↓ work from the keyboard too, so a reviewer can walk the list
- * without going back to it — the arrows the thread remembered.
- */
 export function CallDrawer({
   call,
   calls,
@@ -47,13 +39,12 @@ export function CallDrawer({
   description,
 }: {
   call: CallRow | null
-  /** The list the arrows walk, in the order on screen. */
+  /** The list the arrows walk, in on-screen order. */
   calls: CallRow[]
   onStep: (call: CallRow) => void
   onClose: () => void
-  /** What an idea adds beside the arrows: Save for later, Mark reviewed. */
   actions?: React.ReactNode
-  /** Replaces the phone and scenario line — a session's progress, say. */
+  /** Replaces the phone and scenario line. */
   description?: React.ReactNode
 }) {
   const index = call ? calls.findIndex((item) => item.id === call.id) : -1

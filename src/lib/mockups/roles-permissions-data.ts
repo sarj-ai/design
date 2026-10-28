@@ -1,32 +1,10 @@
-/**
- * Roles and the permissions behind them — DES-170 / DIS-15.
- *
- * The 39 permission strings are the platform's own, copied verbatim from
- * `webserver/auth/permissions.py`, in its order and its two blocks: the 21 an
- * organization's own people can hold, then the 18 the platform reserves. The
- * PRD's Table 3 spells some of them differently (`knowledge_base:write`,
- * `org_sip:config`, `calls:view:all_orgs`); those strings do not exist in the
- * codebase, and the PRD's own Q&A answers "reuse the existing taxonomy", so
- * this screen uses the enum.
- *
- * What is target state: the grants. Today `permissions_for_role()` hands the
- * same 21 to both `admin` and `user`, which is the whole problem — three roles
- * that resolve to two. The grants below are Phase 1's split.
- */
-
 export type PermissionId = string
 
 export type Permission = {
-  /** The platform's string, spelled exactly as the enum spells it. */
   id: PermissionId
-  /** What it lets someone do, in the words the product uses. */
   label: string
 }
 
-/**
- * The two halves of the taxonomy, and the line the PRD organizes around: what
- * someone does inside their own organization, and what reaches past it.
- */
 export const SECTIONS = [
   { id: "own-org", label: "Own organization" },
   { id: "platform", label: "Cross-organization and platform" },
@@ -202,14 +180,9 @@ const OWN_ORG_IDS = PERMISSIONS["own-org"].map((permission) => permission.id)
 export type Role = {
   id: string
   name: string
-  /** The role string the platform stores today, or null for a role Sarj added. */
   legacy: string | null
   people: number
   organizations: number
-  /**
-   * Super admin holds everything by definition — the PRD leaves it unchanged,
-   * and a platform with no one who can fix a mistake is not a platform.
-   */
   locked: boolean
 }
 
@@ -240,15 +213,6 @@ export const ROLES: Role[] = [
   },
 ]
 
-/**
- * Phase 1's split, as Table 3 describes it in the strings the platform has.
- *
- * Call-only keeps every read in its own organization plus `calls:write`, which
- * is what a Yelo tester does all day. Org admin takes the whole own-org block
- * and pulls four permissions down from the platform side — people and
- * organization settings — bounded to the organization it belongs to. That pull
- * is the entire difference between an admin today and an admin after this.
- */
 export const GRANTS: Record<string, PermissionId[]> = {
   "call-only": [
     "scenarios:read",
@@ -287,12 +251,6 @@ export function diffGrants(
   }
 }
 
-/**
- * The nav items each role should see, which is the other half of DIS-15: the
- * app hands `admin` a byte-identical menu to `superadmin` today, so an admin
- * gets eight items that bounce them back to the dashboard. A role's menu is
- * whatever its permissions can actually open.
- */
 export const HIDDEN_NAV: Record<string, string[]> = {
   "org-admin": [
     "Scenario Templates",

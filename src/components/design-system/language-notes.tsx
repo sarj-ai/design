@@ -5,13 +5,6 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { LANGUAGES } from "@/lib/design-system/data"
 
-/**
- * The language rule, which is one sentence: a chip with the two-letter code.
- *
- * Three languages, and no dialect — `LANGUAGES` in precedent-iso is flat ISO
- * 639-1. The names sit beside the chips here because this is the page that
- * says what the codes are; in a row there is the chip and its tooltip.
- */
 export function LanguageNotes() {
   return (
     <section className="flex flex-col gap-4">

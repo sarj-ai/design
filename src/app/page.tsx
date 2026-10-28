@@ -40,10 +40,6 @@ import {
 import thumbnails from "@/lib/site/thumbnails.json"
 
 export default function Home() {
-  /* Search lives in the nav, where it reaches the reels and the design
-     system too. What stays here is the order: newest first by default, as
-     one flat list so the latest work is the first card on the page. Sections
-     come back only when the reader asks for them. */
   const [order, setOrder] = useState<Order>("newest")
   const grouped = order === "section"
 
@@ -55,8 +51,7 @@ export default function Home() {
     [order],
   )
 
-  /* Memoised because the dock re-measures the page whenever this identity
-     changes, and a fresh array every render would mean every render. */
+  // Memoised: the dock re-measures the page whenever this identity changes.
   const sections = useMemo(
     () =>
       groups.map(({ surface }) => ({
@@ -68,11 +63,6 @@ export default function Home() {
 
   return (
     <>
-      {/* The design system and the reels used to be two outline buttons in
-          a header on this page. They are two menus in the nav now, on every
-          page rather than on this one, and the search field went with them:
-          on the index the nav is where you say what you are looking for,
-          and being sticky it stays within reach however far the list goes. */}
       <SiteNav actions={<HeyClick />} />
 
       <main className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-8 pb-8">
@@ -112,35 +102,15 @@ export default function Home() {
               {mockups.map((mockup, card) => {
                 const { href, title, meta, icon, tickets } = mockup
                 const slug = href.slice(1)
-                /* The walkthrough points at one install menu, and this is
-                     how it finds it. First card of the first group *after*
-                     the search, so a reader who started the tour with a query
-                     typed still gets pointed at a card they can see. */
+                // The walkthrough's install menu: the first card visible after a search.
                 const tour = group === 0 && card === 0 ? "install" : undefined
 
                 return (
-                  /* `relative` so the thumbnail's link can sit over it.
-                       Positioning only — Card still owns its own padding,
-                       radius and ring. */
                   <Card className="relative" key={href}>
-                    {/* Card already expects a leading image — it drops its own
-                        top padding and rounds the corners for one. Unoptimized
-                        because `npm run thumbs` already wrote a WebP at twice
-                        the width a card gives it; Vercel re-encoding it would
-                        spend quota to produce the same picture. Its intrinsic
-                        size comes from the manifest rather than being written
-                        here too, so the crop cannot change under it.
-
-                        The fingerprint is the cache key. Redeploys reuse a
-                        filename, so without it a reader who has seen the old
-                        thumbnail keeps seeing it. */}
+                    {/* Unoptimized: `npm run thumbs` already wrote a 2x WebP. The fingerprint is the cache key, since redeploys reuse a filename. */}
                     {slug in thumbnails.fingerprints ? (
                       <Image
                         alt=""
-                        /* A hairline, because both the thumbnail and the
-                             card are white and a screen with no chrome down
-                             its left edge otherwise bleeds into the title
-                             underneath it. */
                         className="border-b"
                         height={thumbnails.height}
                         src={`/thumbs/${slug}.webp?v=${
@@ -153,23 +123,7 @@ export default function Home() {
                       />
                     ) : null}
 
-                    {/* The thumbnail opens the mockup too — it is the
-                          biggest thing on the card and reads as the screen
-                          itself, so clicking it and getting nothing is the
-                          surprise.
-
-                          An overlay rather than a link wrapped around the
-                          image: Card drops its top padding via
-                          `has-[>img:first-child]`, so an anchor between the
-                          two would put a white strip above every thumbnail.
-                          The aspect ratio comes from the thumbnail manifest,
-                          the same numbers the image is sized from, so the
-                          overlay covers the picture exactly at any card width.
-
-                          Hidden from assistive tech and skipped by Tab: it
-                          goes to the same route as `Open mockup` below, and a
-                          second unnamed link per card is sixteen extra tab
-                          stops that lead nowhere new. */}
+                    {/* An overlay, not a wrapping link: Card drops its top padding via `has-[>img:first-child]`, which an anchor in between would break. */}
                     {slug in thumbnails.fingerprints ? (
                       <Link
                         aria-hidden="true"
@@ -199,22 +153,11 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Pinned to the title's line rather than centred on the
-                          two-line block — CardAction already does that. */}
                       <CardAction className="flex items-center gap-1">
-                        {/* Two errands, two menus: this one hands a link to
-                              someone else, the next installs the screen into
-                              their repo. */}
                         <LinkMenu slug={slug} tickets={tickets} title={title} />
                         <RegistryMenu slug={slug} title={title} tour={tour} />
                       </CardAction>
                     </CardHeader>
-                    {/* No body: the thumbnail and title say what the mockup
-                          is, and the tickets it answers live in the link menu
-                          above, where they can be copied. */}
-                    {/* Pinned to the foot: a card beside a taller one
-                          stretches to its row, and without this the extra
-                          height lands under the footer as a white strip. */}
                     <CardFooter className="mt-auto">
                       <Button variant="outline" size="sm" asChild>
                         <Link href={href}>
@@ -230,8 +173,6 @@ export default function Home() {
           </section>
         ))}
 
-        {/* The dock jumps between sections, so it only exists when the list
-          is grouped, and only from two groups. */}
         {grouped && sections.length > 1 ? (
           <SurfaceDock sections={sections} />
         ) : null}

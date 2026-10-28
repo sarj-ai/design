@@ -1,13 +1,3 @@
-/**
- * The scenario the one-screen editor is showing.
- *
- * Every field here maps to something the scenario editor already stores today
- * — first message, prompt, template variables, data extraction, record sinks,
- * languages, timezone, knowledge bases, persona per language, success
- * criteria, tools, AI notes and the two Sarj-staff surfaces. Nothing is
- * invented; the mockup only changes where each one is read and edited.
- */
-
 export type LanguageCode = "ar" | "en" | "ur"
 
 export const LANGUAGE_LABELS: Record<LanguageCode, string> = {
@@ -16,7 +6,6 @@ export const LANGUAGE_LABELS: Record<LanguageCode, string> = {
   ur: "Urdu",
 }
 
-/** Short form for the language switch, which sits in a narrow row. */
 export const LANGUAGE_SHORT: Record<LanguageCode, string> = {
   ar: "AR",
   en: "EN",
@@ -32,13 +21,10 @@ export const SCENARIO = {
   successRate: 76,
 }
 
-/* ---------------------------------------------------------------- prompt -- */
-
 export interface PerLanguage {
   firstMessage: string
   firstMessageEnabled: boolean
   language: LanguageCode
-  /** Persona driving the voice for this language. */
   persona: string
   prompt: string
   removed?: boolean
@@ -117,19 +103,15 @@ export const PER_LANGUAGE: PerLanguage[] = [
   },
 ]
 
-/** English is the scenario's default language. */
 export const DEFAULT_LANGUAGE: LanguageCode = "en"
 
 export const TIMEZONE = "Asia/Riyadh"
-
-/* ------------------------------------------------------ template variables -- */
 
 export interface TemplateVariable {
   defaultValue: string
   name: string
   required: boolean
   type: "boolean" | "date" | "number" | "text"
-  /** Which language prompts reference it. */
   usedIn: LanguageCode[]
 }
 
@@ -170,8 +152,6 @@ export const TEMPLATE_VARIABLES: TemplateVariable[] = [
     usedIn: ["en"],
   },
 ]
-
-/* -------------------------------------------------------- data extraction -- */
 
 export interface ExtractionField {
   description: string
@@ -223,8 +203,6 @@ export const DATA_EXTRACTION = {
   ] satisfies ExtractionField[],
 }
 
-/* -------------------------------------------------------- data destinations -- */
-
 export interface Destination {
   connected: boolean
   description: string
@@ -257,17 +235,13 @@ export const DESTINATIONS: Destination[] = [
   },
 ]
 
-/** Call recording delivery — the record-sinks section as it stands today. */
 export const RECORD_SINKS = {
   zohoCallActivity: true,
 }
 
-/* ------------------------------------------------------- knowledge bases -- */
-
 export interface KnowledgeBase {
   attached: boolean
   documents: number
-  /** Languages the base has content for. */
   languages: LanguageCode[]
   name: string
 }
@@ -305,8 +279,6 @@ export const KNOWLEDGE_BASES: KnowledgeBase[] = [
   },
 ]
 
-/* -------------------------------------------------------- success criteria -- */
-
 export interface SuccessCriterion {
   primary: boolean
   text: string
@@ -323,8 +295,6 @@ export const SUCCESS_CRITERIA: SuccessCriterion[] = [
   },
 ]
 
-/* ------------------------------------------------------------------ tools -- */
-
 export type ToolSlug =
   | "code-switching"
   | "collect-digits"
@@ -340,7 +310,6 @@ export interface Tool {
   description: string
   enabled: boolean
   label: string
-  /** One line of the tool's own configuration, shown once it is on. */
   summary?: string
   slug: ToolSlug
 }
@@ -407,8 +376,6 @@ export const TOOLS: Tool[] = [
   },
 ]
 
-/* ----------------------------------------------------------- personas -- */
-
 export const PERSONAS = [
   "Noura — Warm, Gulf English",
   "Layla — Warm, Saudi Arabic",
@@ -417,9 +384,6 @@ export const PERSONAS = [
   "Huda — Bright, Egyptian Arabic",
 ]
 
-/* --------------------------------------------------------------- insights -- */
-
-/** Where an insight points, so the rail row it belongs to can be highlighted. */
 export type InsightTarget =
   "criteria" | "extraction" | "knowledge" | "prompt" | "tools"
 
@@ -463,10 +427,7 @@ export const INSIGHTS: Insight[] = [
   },
 ]
 
-/** Total the header shows; the drawer lists the ones with a written note. */
 export const UNRESOLVED_INSIGHTS = 41
-
-/* ---------------------------------------------------- Sarj staff surfaces -- */
 
 export interface Opportunity {
   detail: string

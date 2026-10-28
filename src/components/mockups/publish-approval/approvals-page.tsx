@@ -41,18 +41,6 @@ import {
   who,
 } from "@/lib/mockups/publish-approval-data"
 
-/**
- * Approvals — the page the PRD's mockups put in the nav, where the email and
- * the in-app notification both land. Every request the viewer can see: a
- * client sees their own organization's, Sarj staff every organization they
- * can access, so a requester and an approver read the same record.
- *
- * Laid out by the index page rules: tabs for the two views, search, filter
- * chips, the table, the pagination block. Waiting shows how long each has
- * waited (PRD); Closed shows the outcome and who closed it. A row opens the
- * request as a record drawer.
- */
-
 const VIEWS = [
   { id: "waiting", label: "Waiting" },
   { id: "closed", label: "Closed" },
@@ -66,11 +54,9 @@ export function ApprovalsPage({
   caseId,
   onOpen,
 }: {
-  /** What this viewer can see, newest first. */
   requests: ApprovalRequest[]
   viewer: Viewer
   caseId: CaseId
-  /** Opens one request; ↑ ↓ step through the list it was opened from. */
   onOpen: (id: string, list: string[]) => void
 }) {
   const [view, setView] = React.useState("waiting")
@@ -240,8 +226,6 @@ function RequestTable({
         <TableHeader>
           <DataTableHeaderRow>
             <DataTableHead>Change</DataTableHead>
-            {/* A client approves only their own organization's, so the
-                column would say the same thing on every row. */}
             {viewer.sarj ? <DataTableHead>Approver</DataTableHead> : null}
             <DataTableHead>Requested by</DataTableHead>
             <DataTableHead>Raised</DataTableHead>

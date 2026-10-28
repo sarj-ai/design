@@ -43,10 +43,7 @@ type Selection = {
 
 const NOTHING: Selection = { category: null, subcategories: [] }
 
-/* Categories with subcategories draw as a labelled group of rows. The ones
-   with none are a single row each, so they close the list as one block rather
-   than sitting between the groups looking like a stray subcategory. The enum
-   keeps DIS-50's order; only the drawing order moves. */
+/* The enum keeps the taxonomy order; only the drawing order changes here. */
 const GROUPED = FLAG_CATEGORIES.filter(
   (category) => FLAG_SUBCATEGORIES[category].length > 0,
 )
@@ -54,25 +51,6 @@ const STANDALONE = FLAG_CATEGORIES.filter(
   (category) => FLAG_SUBCATEGORIES[category].length === 0,
 )
 
-/**
- * Flag this call — one moment, filed under one parent category.
- *
- * The list is the DIS-50 taxonomy. A flag belongs to one parent and carries
- * any number of that parent's subcategories: the first row ticked commits the
- * flag to its parent and every other group dims. Dimmed is not disabled — a
- * row in another group is one click away, and ticking it moves the flag there
- * and drops the previous parent's ticks, so changing your mind never means
- * unticking everything first. Nothing captions the dimmed groups — the ticked
- * rows above them are the explanation.
- *
- * Latency is the one parent whose subcategories are optional, because the
- * person flagging often cannot tell which stage was slow. It gets a "Not sure"
- * row that submits latency with no subcategory. The four parents with nothing
- * beneath them are plain rows under the divider.
- *
- * The footer reads the flag back as "category - subcategories" so it can be
- * checked without scrolling, and Save stays disabled until there is a flag.
- */
 export function FlagCallDialog() {
   const [open, setOpen] = React.useState(true)
   const [selection, setSelection] = React.useState<Selection>({
@@ -97,8 +75,6 @@ export function FlagCallDialog() {
     )
   }
 
-  /* The whole category with no subcategory: a standalone parent, or the
-     "Not sure" row of an optional one. */
   function toggleCategory(category: FlagCategory, checked: boolean) {
     setSelection(checked ? { category, subcategories: [] } : NOTHING)
   }
@@ -127,8 +103,6 @@ export function FlagCallDialog() {
         <Button variant="outline">Flag this call</Button>
       </DialogTrigger>
 
-      {/* Nothing is autofocused: the design shows the dialog at rest, and a
-          focus ring on the first checkbox reads as a styling change. */}
       <DialogContent
         className="sm:max-w-120"
         onOpenAutoFocus={(event) => event.preventDefault()}
@@ -141,10 +115,7 @@ export function FlagCallDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        {/* ScrollArea instead of overflow-y-auto: the bar is an overlay, so the
-            checkbox column keeps its edge. The negative margins let rows clip
-            at the dialog's own edge and at the footer border. The cap is the
-            height that lands the dialog on the design's 686px frame. */}
+        {/* Negative margins clip rows at the dialog edge; the cap matches the design's 686px frame. */}
         <ScrollArea className="-mx-4 -mb-4 [&>[data-slot=scroll-area-viewport]]:max-h-133">
           <div className="flex flex-col gap-3 px-4 pt-3.5 pb-4">
             {GROUPED.map((category) => {
@@ -212,9 +183,7 @@ export function FlagCallDialog() {
         </ScrollArea>
 
         <DialogFooter className="sm:items-center">
-          {/* `w-0` with `flex-1`, not `min-w-0`: the dialog is a grid, and a
-              nowrap line's full width otherwise counts toward the footer's
-              minimum, which pushed the buttons out past the dialog's edge. */}
+          {/* `w-0` with `flex-1`, not `min-w-0`: in a grid, a nowrap line's width otherwise pushes the buttons out. */}
           {summary ? (
             <p
               className="w-0 flex-1 truncate text-sm text-muted-foreground"
@@ -235,13 +204,7 @@ export function FlagCallDialog() {
   )
 }
 
-/**
- * One tickable line: a subcategory, a "Not sure", or a standalone parent.
- *
- * `dimmed` is a look, never a lock: the row belongs to a parent other than the
- * flagged one, and it stays fully clickable. Hovering lifts the dimming so it
- * does not read as disabled at the moment someone reaches for it.
- */
+/** `dimmed` is a look, never a lock: the row stays clickable. */
 function FlagRow({
   id,
   label,

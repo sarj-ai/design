@@ -18,11 +18,6 @@ import {
   type Period,
 } from "@/lib/mockups/dashboard-data"
 
-/**
- * The platform's period selector as it ships (`period-selector.tsx`), outside
- * PROD-600's scope. Only its copy moves to sentence case, which the lint
- * requires of every string here.
- */
 export function PeriodSelector({
   period,
   range,

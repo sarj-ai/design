@@ -23,15 +23,6 @@ const NextIcon = icon(ArrowRight01Icon, "NextIcon")
 
 const PAGE_SIZES = [10, 25, 50, 100] as const
 
-/**
- * The row under a list.
- *
- * Where you are on the left — "1–10 of 12", nothing more. On the right, the
- * page size ("10 / page") and the cursor: First, Previous and Next as one
- * joined group of icons, because they are one control that moves through the
- * list. No labels — the select's value and the arrows say it. No page
- * numbers: a list being written to cannot promise page four twice.
- */
 export function ListFooter({
   from,
   shown,

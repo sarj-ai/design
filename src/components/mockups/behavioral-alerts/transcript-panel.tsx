@@ -29,17 +29,6 @@ import {
 import { Seekable } from "@/components/mockups/behavioral-alerts/seekable"
 import { SeverityBadge } from "@/components/mockups/behavioral-alerts/severity"
 
-/**
- * The left half of the revamped drawer: the recording, a search box, and the
- * turns.
- *
- * The one thing here that is not carried over unchanged is the evidence mark on
- * a turn. A detection promises a direct quote, and that promise is only
- * checkable if the reader can land on the line it came from — so the quoted
- * turn names the alert it triggered, and the detection in the panel seeks here.
- */
-
-/** What a turn says about itself when a detection quoted it. */
 export type Evidence = { name: string; severity: AlertSeverity }
 
 export function TranscriptPanel({
@@ -51,7 +40,6 @@ export function TranscriptPanel({
 }: {
   at: number
   call: CallRow
-  /** Keyed by the turn's second, which is what a detection points at. */
   evidence: Map<number, Evidence>
   markers: RecordingMarker[]
   onSeek: (seconds: number) => void
@@ -60,7 +48,6 @@ export function TranscriptPanel({
   const [active, setActive] = React.useState(0)
   const turnRefs = React.useRef<Record<number, HTMLDivElement | null>>({})
 
-  /** Every match in the transcript, in the order the turns are rendered. */
   const matches = React.useMemo(() => {
     const ranges = new Map<number, [number, number][]>()
     const offsets = new Map<number, number>()
@@ -78,7 +65,6 @@ export function TranscriptPanel({
 
   const search: Search = { ...matches, activeIndex: active }
 
-  /** A shorter result list must not leave the cursor pointing past the end. */
   function runSearch(next: string) {
     setQuery(next)
     setActive(0)
@@ -89,10 +75,6 @@ export function TranscriptPanel({
     setActive((current) => (current + by + matches.total) % matches.total)
   }
 
-  /**
-   * Walking to a match moves the playhead too — the point of finding a line is
-   * usually to hear it.
-   */
   React.useEffect(() => {
     if (!matches.total) return
 
@@ -107,11 +89,6 @@ export function TranscriptPanel({
     onSeek(call.transcript[index].at)
   }, [active, call.transcript, matches, onSeek])
 
-  /**
-   * Seeking from anywhere — the waveform, a marker, a detection in the panel —
-   * brings the turn that was being spoken into view. Without it, clicking a
-   * detection's quote moves a playhead the reader cannot see.
-   */
   React.useEffect(() => {
     const index = activeTurn(call, at)
     if (index !== -1) scrollTo(turnRefs.current[index])
@@ -217,7 +194,6 @@ export function TranscriptPanel({
   )
 }
 
-/** Which turn was being spoken at a given second. */
 function activeTurn(call: CallRow, at: number) {
   return call.transcript.findIndex((line, index) => {
     const next = call.transcript[index + 1]
@@ -253,7 +229,6 @@ function findMatches(text: string, query: string): [number, number][] {
 }
 
 type Search = {
-  /** Which hit the counter is pointing at, across every turn. */
   activeIndex: number
   offsets: Map<number, number>
   ranges: Map<number, [number, number][]>
@@ -311,9 +286,6 @@ function TurnRow({
         }}
       >
         <span className="flex w-full items-center gap-2 text-xs opacity-70">
-          {/* Same treatment as the Conversations drawer: the speaker is a label
-              on the turn, not a word in it, and the caps keep it from reading
-              as the first word of what was said. */}
           <span className="font-semibold tracking-wide uppercase">
             {isCaller ? "Customer" : "Agent"}
           </span>
@@ -326,9 +298,6 @@ function TurnRow({
           <Highlighted search={search} text={line.text} turnIndex={turnIndex} />
         </span>
 
-        {/* The line a detection quoted says which alert it triggered. The
-            badge is the same one the detection carries in the panel, so the
-            two ends of the claim are recognisably the same claim. */}
         {evidence ? (
           <span className="flex items-center gap-2 pt-1">
             <SeverityBadge severity={evidence.severity} />
@@ -340,7 +309,6 @@ function TurnRow({
   )
 }
 
-/** Marks every hit, and the one the counter is currently pointing at. */
 function Highlighted({
   search,
   text,

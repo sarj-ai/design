@@ -24,15 +24,7 @@ import {
 import type { ChipTreatment } from "@/components/mockups/variable-mentions/chip-treatment"
 import { MentionEditor } from "@/components/mockups/variable-mentions/mention-editor"
 
-/**
- * The two places a scenario author writes prose the agent will say: the
- * first message and the prompt. They are the surfaces PROD-80 gives the `@`
- * flow, and the only part of the scenario editor on this page — the rest
- * of the editor is unchanged by this ticket.
- *
- * Each language keeps its own text, as it does in the product. Switching
- * remounts both editors so the Arabic text is painted fresh, chips and all.
- */
+/** Switching language remounts both editors so the text is painted fresh, chips and all. */
 export function ScenarioPrompt({
   treatment,
   variables,

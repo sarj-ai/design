@@ -11,18 +11,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-/**
- * The PRD's update toggle, as the thing it actually is.
- *
- * "Updating the configuration affects all the other sources even for
- * scheduled/queued calls" is a consequence of pressing Save once, not a setting
- * to keep. As a switch it would sit permanently among the retry controls
- * answering a question about saving; as a confirmation it appears exactly when
- * it is true and names what it is about to move.
- *
- * The second sentence is the load-bearing one. Without it a reader cannot tell
- * whether Apply is about to overwrite the batch override they set an hour ago.
- */
 export function SaveConfirmDialog({
   onConfirm,
   onOpenChange,

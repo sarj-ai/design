@@ -21,14 +21,6 @@ import {
   type PermissionId,
 } from "@/lib/mockups/roles-permissions-data"
 
-/**
- * A new role, which Phase 1 gives Sarj without an engineering release.
- *
- * It starts from an existing role rather than from nothing, because every real
- * role Sarj has asked for so far has been "an org admin who cannot do one
- * thing" — starting empty means ticking twenty-five boxes to get back to where
- * you meant to start.
- */
 export function CreateRoleDialog({
   onCreate,
   onOpenChange,
@@ -62,8 +54,7 @@ export function CreateRoleDialog({
       }}
       open={open}
     >
-      {/* Same 512px as the save dialog — the two are a pair, and the
-          primitive's `sm:max-w-sm` is the same width the diff was cramped in. */}
+      {/* Same width as the save changes dialog. */}
       <DialogContent className="sm:max-w-lg!">
         <DialogHeader>
           <DialogTitle>Create a role</DialogTitle>

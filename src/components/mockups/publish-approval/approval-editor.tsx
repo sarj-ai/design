@@ -34,24 +34,6 @@ import {
   who,
 } from "@/lib/mockups/publish-approval-data"
 
-/**
- * DES-202's editor for a live scenario, with publishing replaced by a
- * request. Only the row under the header changes, and it carries every
- * approval state the editor has:
- *
- *  - Saves ahead of the version in use, nothing asked: which versions
- *    aren't in use, and Request approval — where DES-202 had Review and
- *    publish.
- *  - Waiting: which version, who asked, how long it has waited. View
- *    request opens the same record the approver reads; the approver sees
- *    "waiting for your approval" and Review.
- *  - Saved again while waiting: the request stays pinned to the version it
- *    was raised for — the client approves exactly what they read — and the
- *    row says the newer one isn't in it, with Request v15 instead.
- *  - Rejected: who, and their reason, until the next request.
- *  - Approved: nothing. The header already says who published the version
- *    in use.
- */
 export function ApprovalEditor({
   subject,
   viewer,
@@ -62,11 +44,10 @@ export function ApprovalEditor({
   onRequest,
   onOpenRequest,
 }: {
-  /** As this viewer reads it — their own versions say You. */
   subject: Subject
   viewer: Viewer
   caseId: CaseId
-  /** This scenario's requests, newest first. */
+  /** Newest first. */
   requests: ApprovalRequest[]
   onSave: (
     body: Record<string, string>,
@@ -354,7 +335,6 @@ function StatusRow({
   )
 }
 
-/** Greyed for someone who can only view, saying why on hover. */
 function RequestButton({
   allowed,
   onClick,

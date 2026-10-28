@@ -42,53 +42,14 @@ import {
   ToolIcon,
 } from "@/components/mockups/conversations-revamp/drawer/icons"
 
-/**
- * The transcript: one view, with what the live pass misheard marked in place.
- *
- * There were two here — the enhanced transcription, and a Show changes switch
- * that laid the live one underneath it. Review vetoed the switch. A call is
- * usually opened to explain a complaint, and the explanation is usually what
- * the live STT actually heard; a reader who does not know a second mode exists
- * never gets to it, and a link shared without saying which mode to turn on
- * lands on a different screen from the one that was being discussed.
- *
- * So there is one transcript and it is the enhanced one — punctuated,
- * diacritised, readable by someone who has never seen an STT output before.
- * Everything the live pass got wrong is marked inside it rather than behind a
- * control:
- *
- *   a misheard word   struck through, immediately before the word that
- *                     replaced it, in the line where it happened
- *   a missed line     recovered by the enhanced pass, so the agent never heard
- *                     it — labelled under the bubble
- *   a tool call       stays on the timeline; only the live pass records one,
- *                     and dropping it would take the agent's actions off a
- *                     transcript being read to work out what it did
- *   the whole line    any turn whose raw differs opens it under the clean one,
- *                     because the corrections list only reports what analysis
- *                     noticed, and a word dropped unnoticed leaves no strike
- *
- * Nothing is a mode, so nothing is hidden, and the clean read survives: strike
- * one word out of a sentence and the sentence still reads.
- */
-
 function enhancedText(turn: V4Turn) {
   return turn.enhanced ?? turn.content
 }
 
-/** A misheard word, located in the line that replaced it. */
 type Heard = { at: number; text: string }
 
-/**
- * Where each correction belongs in the enhanced line.
- *
- * The corrections arrive as a separate list from post-call analysis, keyed by
- * the text rather than by an offset, so they have to be found. Searching from
- * the end of the previous hit keeps two corrections of the same word landing on
- * two different occurrences. One that cannot be found is not dropped — it falls
- * through to `unplaced` and prints under the line, because a correction nobody
- * can see is the thing this panel exists to stop.
- */
+// Corrections are keyed by text, not offset. Search from the previous hit so
+// repeats land on distinct occurrences; misses go to `unplaced`.
 function corrections(turn: V4Turn) {
   const text = enhancedText(turn)
   const heard: Heard[] = []
@@ -110,11 +71,6 @@ function corrections(turn: V4Turn) {
   return { heard, unplaced }
 }
 
-/**
- * A stretch of text search can run over. A speech turn contributes its line,
- * plus one run for each misheard word printed inside it — both are on screen,
- * so both are findable, and the match count is what the eye can actually find.
- */
 type Run = { key: string; text: string; turnIndex: number }
 
 function findMatches(text: string, query: string): [number, number][] {
@@ -144,11 +100,6 @@ export function TranscriptPanel({
 }: {
   actions?: React.ReactNode
   at: number
-  /**
-   * A chat has no recording, so there is no player and no timeline for a turn
-   * to seek into. Everything else in this panel — search, the turn list — is
-   * the same, which is why this is a flag rather than a second panel.
-   */
   channel?: Channel
   flags?: { id: string; label: string; timestampMs: number; tone: string }[]
   onSeek: (seconds: number) => void
@@ -157,7 +108,6 @@ export function TranscriptPanel({
   const [active, setActive] = React.useState(0)
   const turnRefs = React.useRef<Record<number, HTMLDivElement | null>>({})
 
-  // Every searchable stretch, in the order it is rendered.
   const runs = React.useMemo(() => {
     const collected: Run[] = []
 
@@ -199,14 +149,11 @@ export function TranscriptPanel({
 
   const search: Search = { ...matches, activeIndex: active }
 
-  /** A shorter result list must not leave the cursor pointing past the end. */
   function runSearch(next: string) {
     setQuery(next)
     setActive(0)
   }
 
-  // Walking to a match moves the playhead too — the point of finding a line is
-  // usually to hear it.
   React.useEffect(() => {
     if (!matches.total) return
 
@@ -232,14 +179,8 @@ export function TranscriptPanel({
   }
 
   return (
-    /* `overflow-x-clip` because a transcript that scrolls sideways cuts the
-       first characters off every line, and this panel is resizable down to a
-       third of the drawer. `clip` rather than `hidden`: it does not turn the
-       panel into a scroll container, so the vertical scrolling inside the turn
-       list is untouched. */
+    // `clip`, not `hidden`, so this does not become a scroll container.
     <div className="flex h-full min-h-0 flex-col gap-3 overflow-x-clip">
-      {/* No recording on a chat, so no player. The actions the player would
-          have carried move up on their own row rather than disappearing. */}
       {channel === "chat" ? (
         actions ? (
           <div className="flex shrink-0 items-center justify-end gap-2">
@@ -367,7 +308,6 @@ function TurnList({
 }
 
 type Search = {
-  /** Which hit the counter is pointing at, across every run. */
   activeIndex: number
   offsets: Map<string, number>
   ranges: Map<string, [number, number][]>
@@ -444,21 +384,6 @@ function TurnRow({
   )
 }
 
-/**
- * One spoken turn: the clean line, the mishearings marked inside it, and the
- * live pass's own line one click away.
- *
- * Raw is not a second view of the strikes, it is the thing the strikes cannot
- * cover. The corrections are post-call analysis reporting what it *noticed*; a
- * word the live pass dropped without noticing leaves no strike behind, and the
- * only place it shows up is the line the live pass actually produced — which is
- * the line the agent answered. So every turn whose raw differs can open it.
- *
- * The control is on screen at rest rather than appearing under the pointer.
- * This design gets reviewed as screenshots pasted into a thread, and a control
- * that only exists on hover is not in a screenshot; it is also nothing on a
- * touch screen, and it would compete with the click this bubble already has.
- */
 function SpeechTurn({
   channel,
   isPlaying,
@@ -482,8 +407,6 @@ function SpeechTurn({
   const text = enhancedText(turn)
   const { heard, unplaced } = corrections(turn)
 
-  /* Nothing to open when the live pass produced the same line, and nothing to
-     open when it produced none — that turn carries its own label instead. */
   const raw = turn.content
   const hasRaw = Boolean(raw.trim()) && raw !== text
 
@@ -491,9 +414,6 @@ function SpeechTurn({
     <div className={cn("flex gap-3", isCaller && "flex-row-reverse")} ref={ref}>
       <SpeakerAvatar role={turn.role} />
 
-      {/* The bubble sizes itself to its line; the column exists so the missed-
-          line label can sit under it without being inside it, where it would
-          have to be legible on two different bubble colours. */}
       <div
         className={cn(
           "flex max-w-[80%] flex-col gap-1",
@@ -519,8 +439,8 @@ function SpeechTurn({
             onOpenChange={setRawOpen}
             open={rawOpen}
           >
-            {/* The gap lives in here rather than on the Collapsible, so it is
-                not still holding 4px open at the end of the close. */}
+            {/* Gap lives here, not on the Collapsible, so it does not hold 4px
+               open at the end of the close. */}
             <div className="flex flex-col gap-1">
               <span className="flex w-full items-center gap-2 text-xs">
                 <span className="font-semibold tracking-wide uppercase opacity-70">
@@ -537,8 +457,8 @@ function SpeechTurn({
                   <CollapsibleTrigger
                     className="flex items-center gap-1 rounded-sm opacity-60 transition-opacity duration-150 ease-out-cubic hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-reduce:transition-none"
                     onClick={(event) => {
-                      // The bubble underneath seeks. Reading what the live pass
-                      // heard is not a request to move the playhead.
+                      // The bubble underneath seeks; opening the raw line must
+                      // not.
                       event.stopPropagation()
                     }}
                     onKeyDown={(event) => {
@@ -565,8 +485,6 @@ function SpeechTurn({
                 />
               </span>
 
-              {/* A correction whose word could not be found in the line. It still
-                prints, under the line it belongs to, rather than vanishing. */}
               {unplaced.length ? (
                 <span className="flex flex-col gap-0.5 pt-1 text-xs opacity-70">
                   {unplaced.map((error) => (
@@ -586,10 +504,8 @@ function SpeechTurn({
               ) : null}
             </div>
 
-            {/* `current` rather than a token, and the same 60% the struck words
-                use: one quiet weight for everything the live pass produced,
-                readable on the customer's tinted bubble and the agent's grey
-                one alike. */}
+            {/* Opacity, not a muted token, matching the struck words: it must
+               read on both bubble colours. */}
             {hasRaw ? (
               <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
                 <span
@@ -603,8 +519,6 @@ function SpeechTurn({
           </Collapsible>
         </Seekable>
 
-        {/* Recovered from the audio, which means the agent never heard it —
-            the answer to half the "it ignored me" reports. */}
         {turn.addedInEnhanced ? (
           <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <AddedIcon className="size-3.5 shrink-0" />
@@ -616,12 +530,6 @@ function SpeechTurn({
   )
 }
 
-/**
- * The line, with each misheard word struck through in front of the word that
- * replaced it. Wrong-then-right rather than right-then-wrong: it leaves the
- * punctuation attached to the word that survives, and a struck word reads as
- * one to skip, so the sentence still runs.
- */
 function TurnLine({
   heard,
   search,
@@ -652,8 +560,7 @@ function TurnLine({
 
     parts.push(
       <React.Fragment key={`heard-${word.at}`}>
-        {/* `opacity` rather than a muted token: the same mark has to read on
-            the customer's tinted bubble and the agent's grey one. */}
+        {/* Opacity, not a muted token: it must read on both bubble colours. */}
         <span className="line-through opacity-60" dir="auto">
           <Highlighted
             runKey={`${turnIndex}-heard-${word.at}`}
@@ -680,7 +587,6 @@ function TurnLine({
   return parts
 }
 
-/** A tool the agent called, in the order it was called. */
 function ToolRow({
   onSeek,
   turn,
@@ -736,14 +642,8 @@ function ToolRow({
   )
 }
 
-/**
- * Marks every hit, and the one the counter is pointing at.
- *
- * `from`/`to` render a window of the run rather than all of it, because a line
- * is drawn in pieces with the misheard words inserted between them — while the
- * search itself still runs over the whole line, so a phrase spanning a
- * correction is still found.
- */
+// `from`/`to` render a window of the run; search still runs over the whole
+// line.
 function Highlighted({
   from = 0,
   runKey,

@@ -5,8 +5,6 @@ import { MOTION_FIGURES } from "./motion"
 import { PATTERNS_A_FIGURES } from "./patterns-a"
 import { PATTERNS_B_FIGURES } from "./patterns-b"
 
-/** The drawing on each topic's tile, by topic id. A topic with none shows a
-    bare tile. */
 export const TOPIC_FIGURES: Record<
   string,
   (props: FigureProps) => React.ReactNode

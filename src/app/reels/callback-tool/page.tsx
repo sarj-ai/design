@@ -4,12 +4,7 @@ import {
   DURATION,
 } from "@/components/reels/callback-tool/reel"
 
-/**
- * `?render=1` is read here, on the server, rather than with `useSearchParams`
- * in the client — it keeps the route out of a Suspense boundary it would
- * otherwise need, and the renderer gets the bare canvas on first paint instead
- * of after a hydration round-trip.
- */
+/** Read `?render=1` on the server, not with useSearchParams, so the route needs no Suspense boundary and the renderer gets the bare canvas on first paint. */
 export default async function Page({
   searchParams,
 }: {

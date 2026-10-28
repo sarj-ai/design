@@ -31,25 +31,8 @@ import { CreateRoleIcon } from "@/components/mockups/roles-permissions/icons"
 import { RolesMatrix } from "@/components/mockups/roles-permissions/roles-matrix"
 import { SaveChangesDialog } from "@/components/mockups/roles-permissions/save-changes-dialog"
 
-/** Which chair the reviewer is sitting in. */
 type Seat = "super-admin" | "org-admin"
 
-/**
- * Roles and the permissions behind them — DES-170, from DIS-15 and the
- * Role-Based Access & Permissions PRD.
- *
- * Phase 1 has two halves. One is the split: `user` becomes call-only, `admin`
- * becomes a real org-level role, `superadmin` is unchanged — which this screen
- * both shows and edits. The other is that Sarj can make that change itself,
- * which is why the matrix is editable at all rather than a documentation page.
- *
- * The seat is a reviewer control rather than something to click into, because
- * you cannot become another role from inside the product — and the PRD's
- * fourth goal is about what the *other* seat sees. Flipping it changes the
- * sidebar as well as the page: an admin is handed eight superadmin destinations
- * today that bounce them straight back to the dashboard, and that gap is the
- * thing agent engineering actually ran into.
- */
 export default function RolesPermissionsPage() {
   const [seat, setSeat] = React.useState<Seat>("super-admin")
   const [roles, setRoles] = React.useState<Role[]>(ROLES)
@@ -79,7 +62,6 @@ export default function RolesPermissionsPage() {
     setDiscarding(false)
   }
 
-  /** Cancel throws work away, so it asks first once there is work to throw. */
   function requestCancel() {
     if (changes === 0) {
       cancelEdit()
@@ -100,8 +82,6 @@ export default function RolesPermissionsPage() {
     if (!editing) return
     setGrants((current) => ({ ...current, [editing.id]: draft }))
     setConfirming(false)
-    /* The footer bar disappearing is not confirmation that anything saved,
-       and this is the one action on the page that reaches other people. */
     toast(`${editing.name} updated`, {
       description: `${editing.people} people in ${editing.organizations} organizations now have this access.`,
     })
@@ -190,11 +170,7 @@ export default function RolesPermissionsPage() {
             roles={roles}
           />
 
-          {/* Fixed, not sticky, and not a card footer. 39 rows put a footer two
-              screens below the row you just ticked — a save button nobody
-              finds. `sticky` is no help either: the shell's scroll container
-              never actually scrolls, so there is nothing to stick to. Pinned to
-              the corner it is in reach from any row, and clear of the sidebar. */}
+          {/* Fixed, not sticky: the shell's scroll container never scrolls, so there is nothing to stick to. */}
           {editing ? (
             <Card className="fixed end-6 bottom-6 z-sticky" size="sm">
               <CardContent className="flex items-center gap-2">

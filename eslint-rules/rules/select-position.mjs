@@ -6,16 +6,6 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * A Select opens as a popover under its trigger.
- *
- * The primitive's default, `item-aligned`, lays the list over the trigger so
- * the chosen item sits where the value was — and on a short list near the
- * foot of a drawer it jumps the whole menu up the screen. The platform opens
- * every Select as `position="popper"`, below the trigger, like every other
- * popover.
- */
-
 const selectPosition = {
   meta: {
     type: "problem",

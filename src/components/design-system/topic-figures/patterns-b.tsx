@@ -2,10 +2,8 @@ import { Figure, type FigureProps, LINE } from "@/components/shared/figure"
 
 import { TOPIC_FIGURE_VIEWBOX } from "./frame"
 
-/* Every tile draws inside the same box — x 50 to 190, y 78 to 190 — so the
-   Patterns grid reads as one set. */
+/* Every tile draws inside the same box: x 50 to 190, y 78 to 190. */
 
-/* A page title with its one action, over a stack of object rows. */
 function IndexPageFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -22,7 +20,6 @@ function IndexPageFigure({ className }: FigureProps) {
   )
 }
 
-/* One container, one header band, one row height. */
 function TablesFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -34,7 +31,6 @@ function TablesFigure({ className }: FigureProps) {
   )
 }
 
-/* Page size on the left, prev and next on the right, under the rows. */
 function PaginationFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -53,7 +49,6 @@ function PaginationFigure({ className }: FigureProps) {
   )
 }
 
-/* Skeleton rows in the shape of what is coming. */
 function LoadingFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -76,7 +71,6 @@ function LoadingFigure({ className }: FigureProps) {
   )
 }
 
-/* An empty frame and the one action that fills it. */
 function EmptyStateFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -96,7 +90,6 @@ function EmptyStateFigure({ className }: FigureProps) {
   )
 }
 
-/* A filter chip over a result with no rows under its header. */
 function NoResultsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -109,7 +102,6 @@ function NoResultsFigure({ className }: FigureProps) {
   )
 }
 
-/* A warning mark, and the retry under it. */
 function ErrorStateFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -121,7 +113,6 @@ function ErrorStateFigure({ className }: FigureProps) {
   )
 }
 
-/** Topic id → its tile's drawing. */
 export const PATTERNS_B_FIGURES: Record<
   string,
   (props: FigureProps) => React.ReactNode

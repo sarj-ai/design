@@ -14,15 +14,6 @@ import { Switch } from "@/components/ui/switch"
 
 import { ConfigureIcon, FillerWordsIcon, ListenerCuesIcon } from "./icons"
 
-/**
- * The two backchannel capabilities, side by side and deliberately separate.
- *
- * They read as one pair because both are the agent acknowledging the caller,
- * but they run at different points in the turn and share no runtime rules — so
- * they get a switch each, and only listener cues carry a configuration of their
- * own. Putting them in one row with a single switch would be the design mistake
- * this ticket exists to avoid.
- */
 export function BackchannelSettings({
   fillerWords,
   listenerCues,
@@ -72,8 +63,6 @@ export function BackchannelSettings({
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          {/* Nothing to configure until the capability is on, and the panel
-              would otherwise open onto controls that change no call. */}
           {listenerCues ? (
             <Button onClick={onConfigure} size="sm" variant="outline">
               <ConfigureIcon />

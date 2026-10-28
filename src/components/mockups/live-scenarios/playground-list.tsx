@@ -14,20 +14,6 @@ import { SearchScenariosIcon } from "@/components/mockups/live-scenarios/icons"
 import { SCENARIOS } from "@/lib/mockups/live-scenarios-data"
 import { cn } from "@/lib/utils"
 
-/**
- * The playground's scenario list — the column the product shows beside the
- * call — with a Live pill on a live scenario's second line, before its languages, as Kidus asked for on
- * PROD-234. A test call from here runs the scenario callers hear, so it is
- * worth seeing before picking one.
- *
- * The call panel to the right, and the rest of the column, are unchanged
- * and left out.
- */
-/**
- * The design system's Selection pattern (Patterns › Selection): picking one
- * moves the card's edge and nothing else — no tint, no tick — and only an
- * unpicked card takes a hover.
- */
 const SELECTED = "border-primary ring-1 ring-primary"
 
 export function PlaygroundList() {

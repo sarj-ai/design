@@ -1,31 +1,4 @@
-/**
- * Card thumbnails for the index.
- *
- *   npm run thumbs                    build, shoot every mockup, write them
- *   npm run thumbs -- --check         shoot nothing; fail if any is stale
- *   npm run thumbs -- --slugs a,b     just these
- *   npm run thumbs -- --skip-build    reuse the last build
- *
- * A card that names a screen in prose asks the reader to reconstruct it. A
- * picture of the screen does not — and at the 624px a card gives it, a real
- * mockup is still legible: column headers, dialog titles, status chips.
- *
- * The whole risk is staleness. A thumbnail of a design that has changed is
- * worse than no thumbnail, because a reviewer believes it. So each one is
- * fingerprinted against the mockup it shows: the hash covers every file the
- * route's import graph reaches — the same walk `npm run registry` publishes
- * from — and `--check` fails the moment source and screenshot disagree. Run it
- * in CI and a stale thumbnail cannot reach main.
- *
- * Generated at the desk and committed, rather than built on Vercel. Shooting
- * them during the deploy would mean building the app, serving it, driving a
- * browser over it and building again with the results — twice the build for an
- * image that changes a few times a week.
- *
- * A TOP crop, not the whole viewport and never the full page. Full-page shots
- * (what `npm run shots` takes) squeeze a 2600px screen into a card and read as
- * grey noise; the top of a screen is also the part that identifies it.
- */
+// Usage: npm run thumbs [-- --check] [--slugs a,b] [--skip-build] [--url <base>]
 
 import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
@@ -42,26 +15,14 @@ import sharp from "sharp"
 
 import { ROOT, collect, readMockups, routeFile } from "./lib/import-graph.mjs"
 
-/** Where the images land, and where the page reads the fingerprints from. */
 const OUT_DIR = path.join(ROOT, "public/thumbs")
 const MANIFEST = path.join(ROOT, "src/lib/site/thumbnails.json")
 
-/* The shot. 1440x900 is the viewport every review screenshot uses.
-
-   The crop starts below MockupShell's own header, which is workspace chrome
-   and not the design — it would put a back link and a repeat of the card's
-   own title across the top of all twelve.
-
-   600 of the remaining 855 is roughly 2.4:1. It is a trade: every pixel here
-   is a pixel of index the reader has to scroll past twelve times over, and
-   the top of a screen already says what the screen is. At the full viewport
-   the index was exactly twice as long. */
+// The crop starts below MockupShell's header, which is workspace chrome, not the design.
 const VIEWPORT = { height: 900, width: 1440 }
 const SHELL_HEADER = 45
 const CROP_HEIGHT = 600
 
-/* The card gives an image 624px. Twice that covers a retina screen, and past
-   it the extra pixels are weight nobody sees. */
 const OUTPUT_WIDTH = 1280
 
 const DEFAULTS = { port: "3102", slugs: "", url: "" }
@@ -102,8 +63,7 @@ function waitForExit(child) {
   })
 }
 
-/* Any HTTP answer means the server is up — a 401 from the site password is a
-   reply, not a failure to start. */
+// Any HTTP answer, a 401 included, means the server is up.
 async function reachable(url) {
   try {
     await fetch(url, { signal: AbortSignal.timeout(1500) })
@@ -124,14 +84,7 @@ async function waitUntilReachable(url, timeoutMs = 60_000) {
   throw new Error(`Server never came up at ${url}`)
 }
 
-/**
- * What the mockup is made of, as one string.
- *
- * Paths as well as contents, so renaming a component invalidates the shot even
- * when nothing inside it changed — the route renders a different file then,
- * and the screen can look different for it. Sorted, because the walk visits in
- * import order and that is not stable.
- */
+// Paths as well as contents, so a rename invalidates the shot. Sorted: the walk order is not stable.
 function fingerprint(slug) {
   const { files } = collect(routeFile(slug))
   const hash = createHash("sha256")
@@ -158,13 +111,11 @@ function captureUrl(route, baseUrl) {
   return new URL(route, baseUrl).href
 }
 
-/** Shoot one route and write its thumbnail. */
 async function capture(page, baseUrl, slug) {
   await page.goto(captureUrl(`/${slug}`, baseUrl), {
     waitUntil: "networkidle",
   })
-  /* Entrance animations and font swap. The mockups animate on mount, and a
-     shot taken mid-transition shows a half-faded screen. */
+  // Wait out mount animations and the font swap.
   await page.waitForTimeout(900)
 
   const png = await page.screenshot({
@@ -184,16 +135,7 @@ async function capture(page, baseUrl, slug) {
   return { height, width }
 }
 
-/**
- * Basic-auth credentials for the capture browser, when `SITE_PASSWORD` is set.
- *
- * `src/proxy.ts` gates every route and every asset once there is a password, so
- * without this a capture comes back as a blank 401. Any username is accepted;
- * only the password is checked.
- */
-/* `.env.local` is read by Next, not by Node, so the capture has to load it
-   itself — otherwise the server it just started gates a browser holding no
-   password, and every shot comes back blank. */
+// .env.local is read by Next, not Node: load it so the capture browser gets the site password.
 nextEnv.loadEnvConfig(process.cwd(), true, {
   error: () => {},
   info: () => {},
@@ -261,14 +203,11 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true })
 
   const browser = await chromium.launch()
-  /* The page needs the intrinsic size to reserve the space before the image
-     loads, and it must be the size actually written rather than a second copy
-     of the crop arithmetic that can fall out of step with it. */
+  // The size actually written, not a second copy of the crop arithmetic.
   let size
 
   try {
     const page = await browser.newPage({
-      /* See screenshots.mjs — the gate covers thumbnails too. */
       ...credentials(),
       deviceScaleFactor: 2,
       viewport: VIEWPORT,
@@ -283,8 +222,7 @@ async function main() {
     server?.kill()
   }
 
-  /* Merged, not replaced, so `--slugs` does not drop every other mockup's
-     fingerprint and mark them all stale. */
+  // Merged, not replaced, so `--slugs` keeps every other mockup's fingerprint.
   const previous = await readManifest()
   const merged = { ...previous.fingerprints, ...current }
   const fingerprints = Object.fromEntries(

@@ -16,18 +16,6 @@ import {
 } from "@/components/ui/input-group"
 import { WAIT_DAYS_MAX, type WaitDuration } from "@/lib/mockups/call-retry-data"
 
-/**
- * The wait between retries, in days and hours:minutes.
- *
- * A single minutes box is what the platform has today, and it is why a two-week
- * wait is typed as 20160. Days pulls the number a client actually says out of
- * the arithmetic they had to do to express it.
- *
- * The hours:minutes pair carries no visible unit on purpose. The same shape
- * appears three times on this card — the window's two ends and this — so the
- * screen teaches one clock idiom rather than two. The days box beside it, and
- * the label above, are what say this one is a span and not a time.
- */
 export function WaitDurationField({
   description,
   disabled = false,
@@ -39,15 +27,14 @@ export function WaitDurationField({
 }: {
   description: string
   disabled?: boolean
-  /** Null while the value is legal. */
   error: null | string
-  /** Prefix for the three input ids. The label points at the days box. */
+  /** Prefix for the three input ids. */
   id: string
   label: string
   onChange: (value: WaitDuration) => void
   value: WaitDuration
 }) {
-  /** See TimeOfDayField — same reason, same lifetime. */
+  /** Raw text while typing, as in TimeOfDayField. Cleared on blur. */
   const [draft, setDraft] = React.useState<null | {
     days: string
     hours: string

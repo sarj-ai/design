@@ -26,24 +26,6 @@ import {
   voicesFor,
 } from "@/lib/mockups/voice-cloning-data"
 
-/**
- * Voice cloning — DES-198, under INT-191, for PLT-4472. The spec is the PRD
- * "Voice cloning on the platform" (DIS-71).
- *
- * Two places the flow starts from, one flow:
- *  - Persona, where a client organization clones: the voice picker, own
- *    voices above Sarj's, Clone a voice at its foot, delete on each own
- *    voice. The new voice comes back selected. The page opens here.
- *  - Voice library, super admin only as on the platform: Clone voice beside
- *    Add voice, the new Pending status, and delete on cloned voices (blocked
- *    while a persona uses one).
- *
- * The bar holds what a reviewer needs to reach every state: the surface, who
- * is looking on a persona (only a super admin gets the publish request; the
- * library has no client view, so the toggle is locked there), and how the
- * sample turns out — clean, noisy, or a clone that fails once.
- */
-
 const SURFACES = [
   { id: "library", label: "Voice library" },
   { id: "persona", label: "Persona" },
@@ -67,7 +49,6 @@ export default function VoiceCloningPage() {
   const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId)
   const [cloning, setCloning] = React.useState(false)
 
-  /* The library is super admin only, whoever was picked for the persona. */
   const looking: Viewer = surface === "library" ? "sarj" : viewer
 
   const changeViewer = (next: Viewer) => {
@@ -173,8 +154,6 @@ export default function VoiceCloningPage() {
           <AppShell
             active="Personas"
             breadcrumb={["Personas", PERSONA.name]}
-            /* The voice library is super admin only, so a client's nav
-               doesn't list it. */
             hiddenItems={viewer === "client" ? ["Voice Library"] : undefined}
           >
             <PersonaVoice
@@ -187,9 +166,7 @@ export default function VoiceCloningPage() {
           </AppShell>
         )}
 
-        {/* From a persona the flow starts on its language and gender, so the
-            clone lands in that persona's cards. Keyed so switching surface or
-            viewer opens a fresh flow. */}
+        {/* Keyed so switching surface or viewer opens a fresh flow. */}
         <CloneVoiceFlow
           canPublish={looking === "sarj"}
           defaults={{ language: PERSONA.language, gender: PERSONA.gender }}

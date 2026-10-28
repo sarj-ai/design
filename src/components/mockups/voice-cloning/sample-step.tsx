@@ -41,25 +41,8 @@ import {
   TRANSCRIPT,
 } from "@/lib/mockups/voice-cloning-data"
 
-/**
- * Step 1 of the clone flow: one reference sample, recorded or uploaded, and
- * the transcript the clone is built from.
- *
- * The PRD puts the transcript after preview; it sits here instead, beside the
- * take it describes. The TTS contract registers audio and text together, so a
- * transcript corrected after the clone is a clone built from the wrong text —
- * here, Next clones from text the reader has already checked, and the preview
- * on step 2 is the final voice.
- *
- * The limits are enforced, not warned: stopping before 6 seconds discards the
- * take, recording stops itself at 20, and an upload over 20 seconds or 10 MB
- * never becomes a take. Noise is the one thing only warned about — it still
- * clones, just badly.
- */
-
 export type Take = {
   source: "recording" | "upload"
-  /** "Recording", or the uploaded file's name. */
   label: string
   seconds: number
   /** Null while transcription runs. */
@@ -87,21 +70,17 @@ export function SampleStep({
 }: {
   capture: Capture
   setCapture: React.Dispatch<React.SetStateAction<Capture>>
-  /** The reviewer's forced outcome: every take comes back noisy. */
+  /** Reviewer switch: every take comes back noisy. */
   noisy: boolean
-  /** Set once Next has been pressed with something missing. */
   showErrors: boolean
 }) {
   const fileInput = React.useRef<HTMLInputElement>(null)
 
-  /* The microphone opens with the countdown, not with the first recorded
-     frame, so the browser's permission prompt never eats into the take. */
+  /* Opens with the countdown so the permission prompt never eats into the take. */
   const mic = useMicrophoneLevels(
     capture.kind === "countdown" || capture.kind === "recording",
   )
 
-  /* No microphone, or the reader said no: back to the two choices, with the
-     way that needs no microphone still open. */
   React.useEffect(() => {
     if (mic.state !== "unavailable") return
     setCapture({
@@ -111,8 +90,6 @@ export function SampleStep({
     })
   }, [mic.state, setCapture])
 
-  /* 3, 2, 1 — counted only once the microphone is live — then the start
-     tone and capture. */
   React.useEffect(() => {
     if (capture.kind !== "countdown" || mic.state !== "live") return
     const timer = setTimeout(() => {
@@ -150,7 +127,6 @@ export function SampleStep({
     [noisy, setCapture],
   )
 
-  /* The clock, and the hard stop at 20 seconds. */
   React.useEffect(() => {
     if (capture.kind !== "recording") return
     if (capture.elapsed >= SAMPLE_LIMITS.maxSeconds) {
@@ -172,7 +148,6 @@ export function SampleStep({
     return () => clearTimeout(timer)
   }, [capture, finish, setCapture])
 
-  /* Transcription comes back a moment after the take lands. */
   const transcribing =
     capture.kind === "take" && capture.take.transcript === null
   React.useEffect(() => {
@@ -398,7 +373,6 @@ function RecordingView({
   onStop,
 }: {
   elapsed: number
-  /** The live microphone's four bands. */
   levels: readonly number[]
   onStop: () => void
 }) {
@@ -537,7 +511,6 @@ function TakeView({
   )
 }
 
-/** Reads a file's real length, or null when the browser cannot decode it. */
 function readDuration(file: File): Promise<number | null> {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(file)

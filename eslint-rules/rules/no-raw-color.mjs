@@ -4,22 +4,12 @@ import {
   createClassVisitor,
 } from "../lib/classes.mjs"
 
-/**
- * Every colour in this repo is a semantic token from src/app/globals.css.
- *
- * A literal colour is not just a style preference — it is invisible breakage.
- * `bg-[#392868]` and `text-gray-500` do not follow the `.dark` class and do not
- * follow `.dark`, so the mockup silently
- * looks wrong in two of the three themes this repo ships.
- */
-
 const PALETTE =
   "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose"
 
 const COLOR_UTILITIES =
   "bg|text|border|ring|ring-offset|fill|stroke|from|via|to|decoration|outline|accent|caret|divide|placeholder|shadow"
 
-/** `text-gray-500`, `bg-red-500/40`, `border-slate-200` */
 const RAW_PALETTE = new RegExp(
   `^-?(${COLOR_UTILITIES})-(${PALETTE})-\\d{2,3}(\\/\\d{1,3})?$`,
 )
@@ -29,7 +19,6 @@ const RAW_BW = new RegExp(
   `^-?(${COLOR_UTILITIES})-(white|black)(\\/\\d{1,3})?$`,
 )
 
-/** A colour literal anywhere in a string: #hex, oklch(), rgb(), hsl(), lab()… */
 const COLOR_LITERAL =
   /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgba?|hsla?|lab|lch|color-mix)\s*\(/
 
@@ -54,7 +43,6 @@ const COLOR_STYLE_KEYS = new Set([
   "textShadow",
 ])
 
-/** JSX props that take a raw colour — Recharts and friends. */
 const COLOR_PROPS = new Set([
   "fill",
   "stroke",
@@ -140,7 +128,6 @@ const noRawColor = {
               }
             }
           }
-          // Catch colours hidden in values and CSS custom properties too.
           for (const { node: strNode, value } of collectStrings(node.value)) {
             if (COLOR_LITERAL.test(value)) {
               context.report({

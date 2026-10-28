@@ -18,22 +18,6 @@ import { LineDiff } from "@/components/shared/line-diff"
 import { CloseIcon } from "@/components/mockups/config-versioning/icons"
 import type { Subject, Version } from "@/lib/mockups/config-versioning-data"
 
-/**
- * DES-203's save review — what changed, line by line, then Save — with what
- * versioning adds:
- *
- *  - One line on what the save does to callers. Live: it makes a version and
- *    callers keep getting the version in use until a publish. Not live: the
- *    new version is in use from the next call (TDD 3.3).
- *  - An optional note (TDD 3.3), shown on the version's row in History.
- *  - The concurrent-save warning (TDD 3.4) above the diff: the save still
- *    goes through, as the next version, so the verb becomes Save anyway.
- *  - A failed save writes nothing (TDD 5.4); the drawer says so and the
- *    person saves again.
- *
- * No version numbers here — the review names "the version in use", not v12
- * (review, 13 Oct 2026).
- */
 export function SaveReview({
   open,
   onOpenChange,
@@ -53,11 +37,8 @@ export function SaveReview({
   draft: Record<string, string>
   /** A version someone else saved after this page loaded. */
   rival: Version | null
-  /** The last attempt failed and nothing was written. */
   failed?: boolean
   onSave: (note: string) => void
-  /** What a save means for callers on a live item, when something other
-   *  than a publish puts it on calls — DES-204's approval. */
   liveLine?: string
 }) {
   const [note, setNote] = React.useState("")

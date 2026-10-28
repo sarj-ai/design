@@ -24,25 +24,6 @@ import {
 import { BatchRetry } from "@/components/mockups/call-retry/batch-retry"
 import { ScenarioRetry } from "@/components/mockups/call-retry/scenario-retry"
 
-/**
- * Global call retry — DES-145.
- *
- * The PRD's two layers, on one route. A scenario owns the retry configuration
- * and every trigger source inherits it; a source can override it. Reviewed
- * apart, neither half can be checked against the other — an override is only
- * legible as an override if it is visibly the same fields with the same bounds
- * — so they are one route with a switch, not two cards on the index.
- *
- * Batch Calls is the source drawn, because it is the one that already has retry
- * settings of its own today. Those settings are currently independent of the
- * scenario rather than an override of it, which is the thing this design
- * changes.
- *
- * The trigger sources the PRD also names — Zoho, custom integrations, the API,
- * a call placed by hand — get the same card. Drawing five copies of one
- * relationship would say nothing the first one does not.
- */
-
 type Surface = "batch" | "scenario"
 type ScenarioState = "off" | "on" | "window"
 type Queue = "none" | "queued"
@@ -53,11 +34,6 @@ const SCENARIO_STATES: { id: ScenarioState; label: string }[] = [
   { id: "window", label: "Window invalid" },
 ]
 
-/**
- * The Select seeds the card, it does not lock it — every field stays editable
- * afterwards and the errors track live, which is the only way to check that a
- * rule fires on what a reader would actually type.
- */
 function seed(state: ScenarioState): RetryConfig {
   if (state === "off") return { ...SCENARIO_RETRY, enabled: false }
   if (state === "window") {
@@ -77,9 +53,6 @@ export default function CallRetryPage() {
 
   return (
     <MockupShell
-      /* Reviewer controls, not product ones — nothing in the app crosses from
-         a scenario editor to a batch call. Up here they stay out of the design
-         they exist to let you compare. */
       actions={
         <>
           <ToggleGroup
@@ -177,9 +150,7 @@ export default function CallRetryPage() {
                 scheduled={queue === "queued" ? SCHEDULED_CALLS : 0}
               />
             ) : (
-              /* Keyed so switching back to Inheriting drops the batch's draft
-                 rather than keeping it warm behind a switch that says it is
-                 following the scenario. */
+              // Keyed so switching back to Inheriting drops the batch's draft.
               <BatchRetry
                 key={overridden ? "override" : "inherit"}
                 onOverriddenChange={setOverridden}

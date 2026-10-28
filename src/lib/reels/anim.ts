@@ -1,32 +1,12 @@
-/**
- * The animation kernel every reel is built on.
- *
- * One rule holds the whole system together: **a reel is a pure function of one
- * integer.** Given a frame number, the composition renders exactly one picture,
- * every time, on any machine. No timers, no CSS transitions, no `animate-*`.
- *
- * That single constraint is what lets the browser preview and the MP4 render be
- * the same code. Playback is a rAF loop that advances the number; rendering is
- * a Playwright loop that sets the number and screenshots. Neither knows about
- * the other, and they cannot disagree — which is the failure mode of recording
- * a screen: the recording is a performance, and a performance is different
- * every take.
- *
- * The easings are the design system's own curves from globals.css, ported to
- * JS. They have to be values here rather than `ease-out-cubic` classes, because
- * the whole point is that nothing animates itself.
- */
+// A reel is a pure function of the frame number: no timers, CSS transitions or `animate-*`,
+// so the browser preview and the rendered MP4 cannot disagree.
 
-/** Frames per second, everywhere. 30 is plenty for UI motion and halves the
- *  render time against 60 — there is no fast pan in a product reel. */
 export const FPS = 30
 
-/** Seconds to frames. Compositions are written in seconds and read in frames. */
 export function seconds(value: number): number {
   return Math.round(value * FPS)
 }
 
-/** Frames back to a clock string, for the player's timecode. */
 export function timecode(frame: number): string {
   const total = Math.max(0, Math.round(frame / FPS))
   const mins = Math.floor(total / 60)
@@ -34,18 +14,11 @@ export function timecode(frame: number): string {
   return `${mins}:${String(secs).padStart(2, "0")}`
 }
 
-/** A rectangle in some source's own pixels — a screenshot's, usually. */
 export type Rect = { x: number; y: number; width: number; height: number }
 
 export type Easing = (t: number) => number
 
-/**
- * A cubic-bezier solver, Newton-Raphson with a fixed iteration count.
- *
- * Fixed rather than converging on a tolerance so the answer never depends on
- * how long the machine was willing to think about it — a frame rendered on a
- * busy laptop has to equal the same frame rendered on CI.
- */
+// Fixed iteration count, not a tolerance, so a frame renders identically on every machine.
 function cubicBezier(x1: number, y1: number, x2: number, y2: number): Easing {
   const a = (m: number, n: number) => 1 - 3 * n + 3 * m
   const b = (m: number, n: number) => 3 * n - 6 * m
@@ -71,36 +44,17 @@ function cubicBezier(x1: number, y1: number, x2: number, y2: number): Easing {
   }
 }
 
-/** `--ease-out-cubic`. Anything entering or leaving. */
+/** Must match `--ease-out-cubic` in globals.css. */
 export const easeOutCubic = cubicBezier(0.215, 0.61, 0.355, 1)
 
-/** `--ease-in-out-cubic`. An on-screen element resizing or moving. */
+/** Must match `--ease-in-out-cubic` in globals.css. */
 export const easeInOutCubic = cubicBezier(0.645, 0.045, 0.355, 1)
 
-/**
- * Overshoots past the target and settles back.
- *
- * The one curve here with no counterpart in `globals.css`, and deliberately so:
- * nothing in the app overshoots, because overshoot on a real control reads as
- * a bug. On a cursor release it is the opposite — it is the only thing that
- * makes a click read as a click rather than a scale animation.
- */
 export const easeOutBack: Easing = (t) =>
   1 + 2.70158 * (t - 1) ** 3 + 1.70158 * (t - 1) ** 2
 
-/** No curve. For a camera drift that must not accelerate. */
 export const linear: Easing = (t) => t
 
-/**
- * Map a frame onto a value through a set of stops.
- *
- *     interpolate(frame, [0, 12], [0, 1])            // fade in over 12 frames
- *     interpolate(frame, [0, 12, 90, 102], [0, 1, 1, 0])  // in, hold, out
- *
- * Clamps at both ends by default, because an un-clamped value that keeps
- * growing past its last stop is never what a composition wants and is
- * invisible until the one frame where it flies off the canvas.
- */
 export function interpolate(
   frame: number,
   input: readonly number[],
@@ -127,15 +81,6 @@ export function interpolate(
   return output[i] + easing(progress) * (output[i + 1] - output[i])
 }
 
-/**
- * The entrance every element shares: rise a little, fade in.
- *
- * Returns a style object rather than classes because the value changes every
- * frame — this is exactly the "dynamic geometry" the style prop is for.
- *
- * `distance` is in canvas pixels. Keep it small: 16–32px reads as arrival,
- * 80px reads as a slide transition and pulls the eye off the words.
- */
 export function enter(
   frame: number,
   options: { delay?: number; duration?: number; distance?: number } = {},
@@ -149,13 +94,6 @@ export function enter(
   }
 }
 
-/**
- * The matching exit, measured from the end of a scene.
- *
- * A scene that only enters leaves a hard cut on its last frame. That reads as a
- * dropped frame rather than an edit, so every scene should either exit or be
- * covered by the next one arriving.
- */
 export function exit(
   frame: number,
   sceneDuration: number,
@@ -173,7 +111,6 @@ export function exit(
   }
 }
 
-/** Enter and exit in one call — what most elements actually want. */
 export function through(
   frame: number,
   sceneDuration: number,
@@ -194,7 +131,6 @@ export function through(
   }
 }
 
-/** Nth item's delay in a staggered group. Keep `step` at 3–5 frames. */
 export function stagger(index: number, step = 4, base = 0): number {
   return base + index * step
 }

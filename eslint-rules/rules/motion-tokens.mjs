@@ -1,21 +1,5 @@
 import { createClassVisitor } from "../lib/classes.mjs"
 
-/**
- * Duration and easing are tokens, from the house rules in
- * .claude/skills/web-animation-design/SKILL.md.
- *
- * Duration:  hover/press 150ms · tooltip, popover, dropdown 200ms ·
- *            dialog and drawer 200–300ms · container morph 250–300ms.
- *            Nothing over 300ms — past that a UI animation stops reading as
- *            feedback and starts reading as latency.
- *
- * Easing:    ease-out-cubic for anything entering or leaving the screen (the
- *            fast start makes it feel like the UI reacted instantly), and
- *            ease-in-out-cubic for an on-screen element resizing or moving.
- *            Both live in globals.css. `ease-in` is banned outright: a slow
- *            start delays visual feedback and makes the interface feel sluggish.
- */
-
 const DURATION = /^duration-(.+)$/
 const EASE = /^ease-(.+)$/
 

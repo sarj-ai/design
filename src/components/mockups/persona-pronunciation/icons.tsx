@@ -13,14 +13,11 @@ import {
 
 import { icon } from "@/components/shared/icon"
 
-/* Dialog header. */
 export const RenameIcon = icon(Edit03Icon, "RenameIcon")
 export const CloseIcon = icon(Cancel01Icon, "CloseIcon")
 
-/* Behavior toggles — the gear opens that behavior's own settings. */
 export const BehaviorSettingsIcon = icon(Settings02Icon, "BehaviorSettingsIcon")
 
-/* Pronunciation terms. */
 export const SearchIcon = icon(Search01Icon, "SearchIcon")
 export const BulkUploadIcon = icon(Upload04Icon, "BulkUploadIcon")
 export const HearIcon = icon(PlayIcon, "HearIcon")

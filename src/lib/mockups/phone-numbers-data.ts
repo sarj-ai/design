@@ -1,13 +1,3 @@
-/**
- * Mock data for the phone numbers admin index, shaped to the models the live
- * platform returns.
- *
- * Field names and unions come from `precedent-iso/src/models/phone-number.ts`
- * and the three table components under `src/app/admin/phone-numbers/` in
- * `sarj-ai/platform`, so
- * every column here is a column that exists today.
- */
-
 type NumberDirection = "both" | "inbound" | "outbound"
 
 export const NUMBER_DIRECTION_LABELS: Record<NumberDirection, string> = {
@@ -15,8 +5,6 @@ export const NUMBER_DIRECTION_LABELS: Record<NumberDirection, string> = {
   inbound: "Inbound only",
   outbound: "Outbound only",
 }
-
-/* ----------------------------------------------------------- Call activity */
 
 export type CallActivityRow = {
   answered: number
@@ -106,8 +94,6 @@ export const CALL_ACTIVITY: CallActivityRow[] = [
   },
 ]
 
-/* --------------------------------------------------- Outbound trunk assign */
-
 export type TrunkRow = {
   assignedOrganizations: { id: string; name: string }[]
   createdAt: null | string
@@ -155,8 +141,6 @@ export const TRUNKS: TrunkRow[] = [
     createdAt: "2026-07-04T11:22:00.000Z",
   },
 ]
-
-/* ------------------------------------------------------ Provisioned numbers */
 
 type ProvisionedRow = {
   connectionLabel: null | string

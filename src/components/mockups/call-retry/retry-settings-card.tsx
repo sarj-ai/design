@@ -35,25 +35,6 @@ import {
 import { TimeOfDayInput } from "@/components/mockups/call-retry/time-of-day-field"
 import { WaitDurationField } from "@/components/mockups/call-retry/wait-duration-field"
 
-/**
- * The retry configuration, as one card.
- *
- * Both surfaces render this exact component. A source overriding the scenario
- * is only checkable if it is the same fields, in the same order, with the same
- * bounds — a differently-shaped override panel is a second design the reader
- * has to reconcile by hand.
- *
- * **One column, one alignment axis.** The controls here are deliberately
- * unlike each other — six chips, a bare number, a three-part duration, two
- * three-part times, two selects — and side-by-side columns gave each pair its
- * own split, so the card had three different mid-points and no two controls
- * began at the same place. Everything now hangs off one left edge, in the
- * order a reader asks the questions: which calls, how many tries, how far
- * apart, when it may dial, how hard it may push, how it ends.
- *
- * Every field explains itself inline where it needs explaining, and no field
- * carries an (i). One explanation language per screen.
- */
 export function RetrySettingsCard({
   description,
   disabled = false,
@@ -62,24 +43,15 @@ export function RetrySettingsCard({
   scope,
   value,
 }: {
-  /** Omitted where the `scope` row already says where the policy comes from. */
   description?: string
-  /** The scope is inheriting: every control stays, and every control is dead. */
   disabled?: boolean
   onChange: (value: RetryConfig) => void
   onSave: () => void
-  /**
-   * The inheritance control, on a trigger source. It renders above the fields
-   * rather than in the header: it decides whose policy the whole card shows, so
-   * it sits over what it governs instead of competing with the gate for the
-   * header's end edge — where it read as a second, unrelated switch and left
-   * its own label stranded between the two.
-   */
+  /** The inheritance control, rendered above the fields. */
   scope?: React.ReactNode
   value: RetryConfig
 }) {
   const errors = retryConfigErrors(value)
-  /** A field is editable only if the scope owns the policy and the gate is on. */
   const fieldsDisabled = disabled || !value.enabled
 
   function update(patch: Partial<RetryConfig>) {
@@ -141,8 +113,6 @@ export function RetrySettingsCard({
           <Field data-disabled={fieldsDisabled || undefined}>
             <FieldLabel htmlFor="retry-attempts">Retry attempts</FieldLabel>
             <Input
-              /* One width for every quantity box in the column, so the
-                   three of them share a right edge instead of stepping. */
               className="max-w-32"
               disabled={fieldsDisabled}
               id="retry-attempts"

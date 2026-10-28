@@ -9,7 +9,6 @@ export default function TransferRoutingPage() {
       eyebrow="Scenario · Tools"
       title="Transfer tool — multiple routing options"
     >
-      {/* The ticket is the drawer. The page behind it is only what opens it. */}
       <main className="flex min-h-150 w-full items-center justify-center p-8">
         <TransferToolDrawer />
       </main>

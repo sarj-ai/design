@@ -30,37 +30,6 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { TabsContent } from "@/components/ui/tabs"
 
-/**
- * Alerts, from every place the platform uses one.
- *
- * The platform has alerts in forty files and four intents, but the primitive
- * ships two variants, so the other two are hand-mixed on each screen:
- * `border-warning/30 bg-warning/10`, `border-primary/15 bg-primary/5`,
- * `bg-primary/10`, `border-primary/30 bg-primary/10` — four recipes for
- * "info" alone. Half have no icon. Several are not alerts at all: a field's
- * error, an empty list, a save bar, a connection toast, the admin banner.
- *
- * Decided here:
- *
- *  - The primitive as shadcn ships it, and nothing mixed on top: a card,
- *    a border, an icon, a title and a muted description. Neutral, success
- *    and warning are all the default variant and differ only by icon, as
- *    shadcn's own examples do; error is the destructive variant. No tints,
- *    no brand purple — every hand-mixed "info" becomes the default alert.
- *  - Always an icon, one per intent: it is the only thing that tells a
- *    warning from a note, so it is never left off.
- *  - The title says what happened and the description says what to do.
- *    One line is enough when there is nothing to do.
- *  - One short action sits in the corner (`AlertAction`). A longer one — a
- *    verb and its object — goes under the text, because the corner slot is
- *    72px and "Go to connections" does not fit it.
- *  - A raw error from a server goes under a human title, in mono, never as
- *    the title.
- *  - A list longer than three stops and says how many more.
- *  - Partly failed is a warning, not an error: the page still works, some of
- *    it may be stale.
- */
-
 type Intent = "neutral" | "success" | "warning" | "error"
 
 const INTENTS: Record<
@@ -73,7 +42,6 @@ const INTENTS: Record<
   error: { Icon: ErrorAlertIcon, variant: "destructive" },
 }
 
-/** An alert in one of the four intents. */
 function Notice({
   intent,
   children,
@@ -92,7 +60,6 @@ function Notice({
   )
 }
 
-/** One case: what it is, where the platform has it, and the thing itself. */
 function Case({
   children,
   label,
@@ -115,7 +82,6 @@ function Case({
 
 const GRID = "grid gap-x-10 gap-y-8 md:grid-cols-2"
 
-/** The words a server sent back, kept apart from the sentence about them. */
 function Raw({ children }: { children: React.ReactNode }) {
   return (
     <code className="mt-1.5 block rounded-sm bg-muted px-2 py-1 font-mono text-xs">
@@ -211,8 +177,6 @@ function Content() {
         <Notice intent="success">
           <AlertTitle>Connection is active</AlertTitle>
           <AlertDescription>Its numbers can take calls now.</AlertDescription>
-          {/* Under the text, in the text column, and out of the
-              description so it keeps the button's own colour. */}
           <div className="col-start-2 mt-2">
             <Button size="sm" variant="outline">
               Go to connections
@@ -301,10 +265,6 @@ function Content() {
   )
 }
 
-/**
- * The platform's alerts that are really something else, each shown as what
- * it should be.
- */
 function NotAnAlert() {
   const [phone, setPhone] = React.useState("0551234567")
   const invalid = !phone.startsWith("+")

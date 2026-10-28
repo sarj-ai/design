@@ -46,11 +46,6 @@ import {
   SetDefaultIcon,
 } from "@/components/mockups/transfer-routing/icons"
 
-/**
- * One route: where the call goes, why it goes there, and the key that skips
- * the asking. Below that, the four settings this route can take off the
- * shared block when it genuinely needs to differ.
- */
 export function RouteCard({
   route,
   isDefault,
@@ -74,9 +69,8 @@ export function RouteCard({
   overlappingCases: Set<string>
   hasOverlap: boolean
   dragging: boolean
-  /** The grip is held, so this card is allowed to start a drag. */
+  /** The grip is held, so this card may start a drag. */
   armed: boolean
-  /** Start with the override panel expanded, so the state is visible on load. */
   settingsOpen: boolean
   onChange: (next: Route) => void
   onDelete: () => void
@@ -107,8 +101,6 @@ export function RouteCard({
       onDragStart={onDragStart}
       className={cn(
         "gap-4",
-        // The ring alone marks the card. Filling it too turned a third of the
-        // drawer yellow for what is advice, not an error.
         hasOverlap && "ring-warning",
         dragging && "opacity-60",
       )}
@@ -318,12 +310,6 @@ export function RouteCard({
   )
 }
 
-/**
- * One shared setting, with the switch that splits it off for this route.
- *
- * Switched off it shows what the route inherits, so nobody has to scroll down
- * to the shared block to find out what this route will actually do.
- */
 function OverrideRow({
   title,
   shared,
@@ -357,7 +343,6 @@ function OverrideRow({
   )
 }
 
-/** Hours and the message that plays outside them — one unit, never split. */
 export function WorkingHoursFields({
   value,
   idPrefix,

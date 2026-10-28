@@ -1,16 +1,3 @@
-/**
- * Icons in authored UI come from HugeIcons. One set, one weight, one grid.
- *
- * Mixing icon libraries is the fastest way to make a design system look
- * assembled rather than built: stroke weights disagree, optical sizes disagree,
- * and the corner radius of a "settings" gear stops matching the corner radius
- * of everything around it. The tell is subtle per-icon and obvious per-screen.
- *
- * src/components/ui is exempt on purpose. Those files are generated — every
- * `npx shadcn@latest add <name>` writes lucide imports back in, so policing
- * them would mean re-patching the primitives forever for no visual gain.
- */
-
 const BANNED = {
   "lucide-react":
     "lucide-react is the shadcn default and stays inside src/components/ui",

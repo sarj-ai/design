@@ -7,21 +7,6 @@ import {
   trackUiImports,
 } from "../lib/jsx.mjs"
 
-/**
- * Cancel, then the verb.
- *
- * Every surface ends the same way: at the trailing edge, Cancel as outline,
- * then one primary whose label names the result — Create persona, Save,
- * Delete webhook. Never Done, OK, Yes, Submit or Got it: those say the
- * dialog is over, not what just happened.
- *
- * Checked here:
- *  - the five dead labels, on any Button or AlertDialog action, anywhere;
- *  - in a Dialog/Sheet/Drawer/AlertDialog/Card footer: Cancel comes first and
- *    is outline, there is one filled button at most, and the two are not
- *    joined in a ButtonGroup — that is for the parts of one control.
- */
-
 const DEAD_LABELS = new Set(["done", "ok", "okay", "yes", "submit", "got it"])
 const ACTIONS = new Set(["Button", "AlertDialogAction", "AlertDialogCancel"])
 const FOOTERS = new Set([

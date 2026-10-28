@@ -37,13 +37,6 @@ import { cn } from "@/lib/utils"
 import { FieldHint } from "@/components/design-system/field-hint"
 import { CloseIcon } from "@/components/design-system/icons"
 
-/**
- * What a drawer is, built once: header, body, footer, and the guard on the
- * way out. The drawer here is a placeholder — voicemail detection on a
- * scenario — chosen because it is the common case: a handful of settings on
- * one thing, reached from a page the reader is still using.
- */
-
 type Settings = {
   enabled: boolean
   window: string
@@ -83,7 +76,6 @@ const LANGUAGES = [
   { value: "en", label: "English" },
 ]
 
-/** Seconds it takes to say, at about 2.5 words a second. */
 function spoken(text: string) {
   const words = text.trim().split(/\s+/).filter(Boolean).length
   return Math.ceil(words / 2.5)
@@ -107,8 +99,7 @@ export function DrawerAnatomyPreview() {
     setDraft((current) => ({ ...current, ...patch }))
   }
 
-  /* Every way out — Close, Cancel, Esc, the overlay — comes through here, so
-     unsaved edits are guarded once rather than per button. */
+  /* Every way out (Close, Cancel, Esc, overlay) comes through here, so unsaved edits are guarded once. */
   function requestClose(next: boolean) {
     if (next) {
       setDraft(saved)
@@ -138,13 +129,8 @@ export function DrawerAnatomyPreview() {
       </div>
 
       <Drawer direction="right" open={open} onOpenChange={requestClose}>
-        {/* 448, the one drawer width. 384 wrapped the three retry fields;
-            every reference measured sits at 460–620. The `!` is needed: the
-            primitive pins its width on a data-attribute variant, which a
-            plain `sm:max-w-md` loses to. */}
+        {/* `!` is needed: the primitive pins its width on a data-attribute variant that a plain `sm:max-w-md` loses to. */}
         <DrawerContent className="sm:max-w-md!">
-          {/* Title and Close. The button that opened this already named
-              it, so a description would say it twice. */}
           <DrawerHeader className="flex flex-row items-center justify-between gap-4 border-b">
             <DrawerTitle>Voicemail detection</DrawerTitle>
             <DrawerClose asChild>
@@ -154,8 +140,6 @@ export function DrawerAnatomyPreview() {
             </DrawerClose>
           </DrawerHeader>
 
-          {/* The only part that scrolls. Three sections, each with a
-              legend and a rule above it; the header and footer stay put. */}
           <div className="flex-1 overflow-y-auto">
             <Section legend="Detection">
               <Field
@@ -363,11 +347,6 @@ export function DrawerAnatomyPreview() {
   )
 }
 
-/**
- * One group in the body. Its name sits on a shaded band across the drawer,
- * the way a table's header row sits over its rows, so the sections read as
- * blocks without a hairline and a grey label doing the same job worse.
- */
 function Section({
   legend,
   children,

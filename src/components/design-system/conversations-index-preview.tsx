@@ -36,21 +36,6 @@ import {
   type CallRow,
 } from "@/lib/mockups/conversations-revamp-list-data"
 
-/**
- * The conversations list from `conversations-revamp`, laid out by the index
- * page rules — same table, same rows, different frame around them.
- *
- *  - The page has a title.
- *  - Search fills the row; refresh, fields and export sit at its end.
- *  - Status, outcome, date and scenario are chips under the search instead of
- *    four dropdowns sharing the search's row. "All time" becomes the Date
- *    chip's unset state.
- *  - The results line goes: the footer already says "1–12 of 1,284".
- *  - The footer is the shared one.
- *
- * The mockup itself is left as it is — it answers its own tickets.
- */
-
 /** The day the mock calls were placed, so the date presets land on them. */
 const TODAY = new Date(2026, 7, 11)
 
@@ -83,10 +68,8 @@ const MORE_FILTERS = [
   { id: "scheduled", label: "Scheduled only" },
 ]
 
-/* The bands the platform's "Any duration" select offers, in minutes. */
 const DURATION_PRESETS: Range[] = [{ max: 1 }, { min: 1, max: 5 }, { min: 5 }]
 
-/** m:ss as minutes. */
 function minutes(duration: string) {
   const [m, s] = duration.split(":").map(Number)
   return (m || 0) + (s || 0) / 60
@@ -119,8 +102,6 @@ export function ConversationsIndexPreview() {
   const [direction, setDirection] = React.useState<string | null>(null)
   const [duration, setDuration] = React.useState<Range | null>(null)
   const [scheduledOnly, setScheduledOnly] = React.useState(false)
-  /* The three filters people reach for less wait behind + Filter, and join
-     the row once picked — the index page rule. */
   const [added, setAdded] = React.useState<string[]>([])
   const [pageSize, setPageSize] = React.useState(25)
 
@@ -147,8 +128,6 @@ export function ConversationsIndexPreview() {
       inDuration(call.duration, duration) &&
       (!scheduledOnly || call.status === "scheduled"),
   )
-  /* Unfiltered, the page stands for the whole history; filtered, the mock
-     rows are all there is. */
   const total = activeCount || digits ? rows.length : TOTAL_RESULTS
 
   return (
@@ -245,7 +224,6 @@ export function ConversationsIndexPreview() {
         </FilterBar>
       </div>
 
-      {/* `--card-spacing: 0`: the table draws its own header band and rules. */}
       <Card className="[--card-spacing:0px]">
         <div className="overflow-x-auto">
           <CallTable calls={rows} columns={columns} onCallClick={() => {}} />

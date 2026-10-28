@@ -27,14 +27,6 @@ import {
   CreateTokenIcon,
 } from "@/components/mockups/connected-apps/icons"
 
-/**
- * One connected app and the tokens it authenticates with.
- *
- * The count line sits above the table rather than beside the button because it
- * is the thing that turns the disabled button from a dead end into an
- * instruction — and it counts tokens that still hold a slot, so revoking one
- * visibly buys the reader their next create.
- */
 export function AppDetail({
   app,
   onBack,
@@ -70,7 +62,6 @@ export function AppDetail({
       </Button>
 
       <header className="flex flex-wrap items-start justify-between gap-4">
-        {/* A 32px square against exactly two lines is the centred case. */}
         <div className="flex items-center gap-3">
           <div className="rounded-lg bg-primary-tint p-2 text-primary-tint-foreground">
             <ConnectedAppIcon />

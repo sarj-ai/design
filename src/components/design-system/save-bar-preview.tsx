@@ -36,16 +36,6 @@ import { CloseIcon } from "@/components/design-system/icons"
 import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import { cn } from "@/lib/utils"
 
-/**
- * Unsaved changes, five ways, on the same editable page.
- *
- * The product's bar is a full-width strip with a warning triangle, "You have
- * unsaved changes", Clear and Review Changes. It says something changed but
- * not what, treats a normal state as a warning, and puts Clear beside the
- * primary action. Each variant below answers those differently; they share
- * one review, which marks only the lines that changed.
- */
-
 type Prompt = { id: string; title: string; language: string; body: string }
 
 const PROMPTS: Prompt[] = [
@@ -78,8 +68,6 @@ const VARIANTS = [
 ]
 
 type Variant = (typeof VARIANTS)[number]["id"]
-
-/* ------------------------------------------------------------------ state */
 
 function useDraft() {
   const [saved, setSaved] = React.useState(PROMPTS)
@@ -139,8 +127,6 @@ const name = (prompt: Prompt) => `${prompt.title} (${prompt.language})`
 function count(n: number) {
   return n === 1 ? "1 change" : `${n} changes`
 }
-
-/* ------------------------------------------------------------------- page */
 
 export function SaveBarPreview() {
   const [variant, setVariant] = React.useState<Variant>("pill")
@@ -243,7 +229,6 @@ function PromptCard({
               className="size-2 rounded-full bg-primary"
             />
           ) : null}
-          {/* Variant 3: the card is the unit of saving. */}
           {perCard && edited ? (
             <div className="ms-auto flex items-center gap-2">
               <Button
@@ -271,9 +256,6 @@ function PromptCard({
   )
 }
 
-/* --------------------------------------------------------------- variants */
-
-/** 1. A small dark pill, bottom centre. Says how much, not a warning. */
 function PillVariant({
   state,
   onReview,
@@ -290,7 +272,6 @@ function PillVariant({
   )
 }
 
-/** 2. No bar: the page header carries the state and the two actions. */
 function HeaderVariant({
   state,
   onReview,
@@ -324,10 +305,6 @@ function HeaderVariant({
   )
 }
 
-/**
- * 4. Docked under the content, full width of it. The change list folds out
- * of the tray, and each line can be put back on its own.
- */
 function TrayVariant({
   state,
   onReview,
@@ -380,10 +357,6 @@ function TrayVariant({
   )
 }
 
-/**
- * 5. A slim bar whose only job is to open the review in a drawer: every
- * change with its diff and its own Revert, and Save at the foot.
- */
 function DrawerVariant({ state }: { state: Draft }) {
   const [open, setOpen] = React.useState(false)
   const shown = state.dirty || open
@@ -454,8 +427,6 @@ function DrawerVariant({ state }: { state: Draft }) {
     </>
   )
 }
-
-/* ----------------------------------------------------------------- review */
 
 function ReviewDialog({
   open,
@@ -541,7 +512,6 @@ function diffLines(before: string, after: string): DiffLine[] {
   return out
 }
 
-/** Unchanged lines stay muted; only what changed carries colour. */
 function LineDiff({ before, after }: { before: string; after: string }) {
   return (
     <div className="overflow-hidden rounded-lg border text-xs">

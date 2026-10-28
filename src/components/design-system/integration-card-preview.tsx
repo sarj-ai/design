@@ -11,22 +11,6 @@ import { PageHeader } from "@/components/shared/page-header"
 import { SecondaryTabs } from "@/components/design-system/tabs-preview"
 import { cn } from "@/lib/utils"
 
-/**
- * Integration cards, three concepts.
- *
- * The product's card only says whether a service is connected — and says it
- * four times (tick, gear, Configure, clickable card), with the auth type in
- * capitals underneath. What a reader wants from this page is what each
- * connection *does* for their agents: which events start calls, where call
- * results go, and whether it is still working.
- *
- * The flows are the product's own: Salla runs per-event automations into
- * scenarios (`integrations/salla/management`); Zoho starts scenarios from CRM
- * webhooks (`integrations/zoho/management`), receives call results as a sink
- * (`scenario/sinks/zoho-crm-sink-config`) and opens ZohoDesk tickets as a
- * tool. Counts, dates and activity are sample data.
- */
-
 type Flow = { from: string; to: string; direction: "in" | "out" }
 
 type Integration = {
@@ -41,7 +25,6 @@ type Integration = {
   activity?: number[]
   lastEvent?: string
   health?: { tone: "ok" | "warn"; text: string; action?: string }
-  /** For a service not yet connected: what connecting it would do. */
   offers?: string[]
 }
 
@@ -138,8 +121,6 @@ export function IntegrationCardPreview() {
   )
 }
 
-/* ----------------------------------------------------------------- pieces */
-
 function Frame({ children }: { children: React.ReactNode }) {
   return (
     <Card>
@@ -234,7 +215,6 @@ function Health({ integration }: { integration: Integration }) {
   )
 }
 
-/** Manage when connected, Reconnect when something is about to break. */
 function PrimaryAction({ integration }: { integration: Integration }) {
   if (!integration.connected) return <Button size="sm">Connect</Button>
   if (integration.health?.action)
@@ -250,13 +230,6 @@ function PrimaryAction({ integration }: { integration: Integration }) {
   )
 }
 
-/* ---------------------------------------------------------- 1. flow card */
-
-/**
- * The pipe itself: each automation as a line between the service and Sarj —
- * pointing in when an event starts a call, out when a call's result goes
- * back. Connecting reads as wiring something up, not ticking a box.
- */
 function FlowCard({ integration }: { integration: Integration }) {
   return (
     <Card size="sm">
@@ -324,13 +297,8 @@ function FlowLine({
       )}
     >
       <span
-        className={cn(
-          "w-full border-t",
-          pending ? "border-dashed" : "",
-          tone,
-        )}
+        className={cn("w-full border-t", pending ? "border-dashed" : "", tone)}
       />
-      {/* The arrowhead, at the end the data flows toward. */}
       <span
         className={cn(
           "absolute end-0 size-1.5 rotate-45 border-e border-t",
@@ -341,12 +309,6 @@ function FlowLine({
   )
 }
 
-/* ------------------------------------------------------ 2. activity card */
-
-/**
- * Proof it is working: a week of events as bars, when the last one arrived,
- * how many automations run on it, and the one thing about to break.
- */
 function ActivityCard({ integration }: { integration: Integration }) {
   const activity = integration.activity ?? []
   const peak = Math.max(1, ...activity)
@@ -403,7 +365,11 @@ function ActivityCard({ integration }: { integration: Integration }) {
         )}
 
         <div className="flex items-center justify-between gap-3">
-          {integration.connected ? <Health integration={integration} /> : <span />}
+          {integration.connected ? (
+            <Health integration={integration} />
+          ) : (
+            <span />
+          )}
           <PrimaryAction integration={integration} />
         </div>
       </CardContent>
@@ -411,13 +377,6 @@ function ActivityCard({ integration }: { integration: Integration }) {
   )
 }
 
-/* ----------------------------------------------------------------- 3. hub */
-
-/**
- * What is connected gets the room: one wide panel each, listing every
- * automation it runs. What is not connected shrinks to a shelf of chips — it
- * matters once, when someone adds it.
- */
 function Hub() {
   return (
     <div className="flex flex-col gap-6">
@@ -454,7 +413,9 @@ function Hub() {
                       }
                       variant="secondary"
                     >
-                      {flow.direction === "in" ? "Starts a call" : "After a call"}
+                      {flow.direction === "in"
+                        ? "Starts a call"
+                        : "After a call"}
                     </Badge>
                   </div>
                 ))}

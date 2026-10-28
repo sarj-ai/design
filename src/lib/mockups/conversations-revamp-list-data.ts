@@ -1,11 +1,3 @@
-/**
- * Conversations, as the page ships today.
- *
- * The shapes here mirror `Call` and `CallDetail` in the app, so the mockup shows
- * the same columns, the same badges and the same metadata rows the real screen
- * renders. Nothing is designed here — it is a copy for handoff.
- */
-
 export type CallStatus =
   | "cancelled"
   | "completed"
@@ -24,37 +16,13 @@ export type CallStatus =
   | "user_rejected"
   | "voicemail"
 
-/**
- * Where a scheduled call came from.
- *
- * A field on the call and not a pair of statuses, because origin is not a
- * place in the lifecycle — it stays true after the call runs. Modelled as two
- * statuses it would evaporate the moment the call completes, and the completed
- * call is exactly where a reader asks "why did we ring this person?"
- *
- * The two differ in how much they can be trusted. `follow_up` is the post-call
- * analyst's reading of a call, which is a guess and carries a confidence.
- * `requested` is the customer asking for a callback in words, which is not.
- */
 export type ScheduleOrigin = "follow_up" | "requested"
 
-/** What the Status chip prints after the dash, and the drawer's origin badge. */
 export const SCHEDULE_ORIGIN_LABELS: Record<ScheduleOrigin, string> = {
   follow_up: "follow up",
   requested: "requested",
 }
 
-/**
- * The two verdicts a finished call carries, and they are different questions.
- *
- *   Outcome        did the scenario's goal get met
- *   Agent outcome  was the agent helpful to the person on the line, which an
- *                  agent can be on a call whose goal was never reachable, and
- *                  fail to be on a call that got there anyway
- *
- * Both share `unavailable` — one word for "no reading", so a queued call and a
- * call nobody answered do not report their emptiness two different ways.
- */
 export type OutcomeStatus = "met" | "not_met" | "unavailable"
 
 export type AgentOutcomeStatus = "helpful" | "not_helpful" | "unavailable"
@@ -63,7 +31,6 @@ export type CallDirection = "inbound" | "outbound"
 
 export type CallRow = {
   id: string
-  /** Rendered by the Time column. */
   createdAt: string
   user: string
   interactionType: "call" | "chat"
@@ -71,24 +38,13 @@ export type CallRow = {
   phoneNumber: null | string
   scenario: string
   status: CallStatus
-  /**
-   * Set on a call that was booked rather than placed directly — while it is
-   * still scheduled, and afterwards on the call that ran from it.
-   */
   scheduleOrigin?: ScheduleOrigin
   outcome: OutcomeStatus
-  /** Why the outcome reads the way it does — the Outcome cell's tooltip. */
   outcomeReason: null | string
   agentOutcome: AgentOutcomeStatus
   /** m:ss, the way formatDuration prints it. */
   duration: string
 }
-
-/* Every status now reaches the table through `STATUS_DISPLAY` in
-   status-badges.tsx, which pairs it with the state it belongs to and the cause
-   printed after the dash — so there is no flat label map any more. */
-
-/* ------------------------------------------------------------------ columns */
 
 export type ColumnId =
   | "agentOutcome"
@@ -100,32 +56,10 @@ export type ColumnId =
   | "status"
   | "time"
 
-/**
- * `Call status` rather than `Status`, because the table now carries all three
- * verdicts the drawer names — call status, outcome, agent outcome — and a
- * column called just `Status` does not say which of the three it is.
- */
-/**
- * What a column's header tooltip explains, for the columns whose values are not
- * self-evident to someone who has not read the PRD.
- *
- * Call status is the one that gets asked about: Queued and Scheduled both mean
- * "has not happened yet", and nothing in the two words says which one the
- * platform is about to act on. Only columns listed here get a help icon.
- */
 export const COLUMN_HELP: Partial<Record<ColumnId, string>> = {
   status: "What each state in this column means.",
 }
 
-/**
- * The Call status legend, one row per state.
- *
- * It used to be a single paragraph inside a tooltip: five definitions run
- * together on a black surface, which is a hard read for the one column that
- * most needs explaining. Split into rows it can carry each state's own chip,
- * so the reader matches what they are looking at rather than translating a
- * description back into a colour.
- */
 export const STATUS_LEGEND: { detail: string; status: CallStatus }[] = [
   {
     detail: "Booked for a later time. Nothing happens until then.",
@@ -162,55 +96,24 @@ export const COLUMN_LABELS: Record<ColumnId, string> = {
 
 export type ColumnSetting = { id: ColumnId; visible: boolean }
 
-/**
- * The order and visibility the table starts in, and what Reset goes back to.
- *
- * This replaces the Default View / Detailed View picker. Two fixed views could
- * not answer "I only care about failures and how long they ran", and adding a
- * third view for every such question is how a view picker becomes a menu
- * nobody reads. Choosing the columns directly covers both views and everything
- * between them.
- */
 export const DEFAULT_COLUMNS: ColumnSetting[] = [
   { id: "time", visible: true },
   { id: "direction", visible: true },
   { id: "phoneNumber", visible: true },
   { id: "scenario", visible: true },
   { id: "status", visible: true },
-  /* Outcome sits directly after Call status, and Agent outcome after it: the
-     three verdicts read left to right in the order a reader asks them — did it
-     connect, did it reach the goal, was the agent any use. */
   { id: "outcome", visible: true },
   { id: "agentOutcome", visible: true },
   { id: "duration", visible: true },
 ]
 
-/* ------------------------------------------------------------------ filters */
-
 export type StatusGroupId =
   "completed" | "failed" | "in_progress" | "queued" | "scheduled"
 
-/**
- * What the Status filter lists.
- *
- * The app's status enum is fifteen values long because it is a state machine —
- * `ringing`, `dialing` and `transferring` are moments the platform passes
- * through, not things anyone sets out to look for. Filtering by them one at a
- * time meant ticking four boxes to ask "which calls never connected".
- *
- * So the filter offers the questions people actually ask, and each one covers
- * the raw statuses that answer it. Every status belongs to exactly one group,
- * so nothing in the table is unreachable from here.
- *
- * These are the same states the Status column prints, deliberately — a
- * filter whose options do not appear in the column it filters is a guessing
- * game. The column adds the specific cause after a dash; the filter does not
- * need it, because the causes inside a group are the same question.
- */
 export const STATUS_GROUPS: {
   id: StatusGroupId
   label: string
-  /** Every raw status this group matches. The union of them all is complete. */
+  /** Every CallStatus must appear in exactly one group. */
   statuses: CallStatus[]
 }[] = [
   {
@@ -218,10 +121,6 @@ export const STATUS_GROUPS: {
     label: "Queued",
     statuses: ["queued", "ringing", "dialing"],
   },
-  /* Split out of Queued. The PRD's own status list names In Progress
-     alongside Completed, Failed and the rest, and a call that is being spoken
-     on is not a call waiting to be dialled — reading it as "Queued – on the
-     call" put a live call in the queue and invented a cause for it. */
   {
     id: "in_progress",
     label: "In progress",
@@ -253,8 +152,6 @@ export const STATUS_GROUPS: {
 ]
 
 export const CALLS: CallRow[] = [
-  /* The two Call Status rows asked for: one waiting to be dialled, one booked
-     for later. Neither has run, so neither has an outcome or a duration. */
   {
     id: "call_2ad7f6019be34c72",
     createdAt: "Aug 11, 2026, 2:46 PM",
@@ -284,8 +181,6 @@ export const CALLS: CallRow[] = [
     agentOutcome: "unavailable",
     duration: "-",
   },
-  /* The callback the 2:41 PM Collections Follow Up created when the customer
-     promised to pay — the other half of the link that call carries. */
   {
     id: "call_b6913fe0c7d4428a",
     createdAt: "Aug 11, 2026, 2:42 PM",
@@ -370,7 +265,6 @@ export const CALLS: CallRow[] = [
     status: "voicemail",
     outcome: "not_met",
     outcomeReason: "Reached voicemail, so nothing was confirmed.",
-    /* Nobody picked up, so there was no one for the agent to help. */
     agentOutcome: "unavailable",
     duration: "0:48",
   },
@@ -402,8 +296,6 @@ export const CALLS: CallRow[] = [
     agentOutcome: "not_helpful",
     duration: "0:09",
   },
-  /* Booked on Aug 9 and dialled today, so the drawer can show how the
-     scheduled settings read once the call has actually run. */
   {
     id: "call_0a4fb27c68e1495d",
     createdAt: "Aug 11, 2026, 1:41 PM",

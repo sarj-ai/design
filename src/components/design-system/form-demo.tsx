@@ -17,14 +17,6 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 
-/**
- * One form carrying every decision at once, so the rules beside it can be
- * checked rather than taken on trust.
- *
- * Static on purpose: the error and the read-only row are states a live form
- * would only reach by being driven into them, and the point here is that all
- * of the decisions are visible in a single glance.
- */
 export function FormDemo() {
   return (
     <form className="flex max-w-xl flex-col gap-6">
@@ -34,16 +26,11 @@ export function FormDemo() {
         </FieldLegend>
 
         <FieldGroup>
-          {/* Most of this form is required, so the few that are not are what
-              gets marked. Asterisks on five of six fields are not information,
-              they are a texture. */}
           <Field>
             <FieldLabel htmlFor="form-demo-name">Display name</FieldLabel>
             <Input defaultValue="Layla" id="form-demo-name" />
           </Field>
 
-          {/* Help text the reader needs in order to answer: it says what the
-              choice does elsewhere, which is not guessable from "Language". */}
           <Field>
             <FieldLabel htmlFor="form-demo-language">Language</FieldLabel>
             <FieldDescription>
@@ -60,12 +47,7 @@ export function FormDemo() {
             </NativeSelect>
           </Field>
 
-          {/* The control is as wide as the value it takes. Three characters
-              in a 576px box asks for a sentence and then rejects one.
-
-              max-w rather than w: the vertical Field sets `*:w-full` on every
-              direct child, and a child selector outranks the control's own
-              class. A cap wins over a width without fighting it. */}
+          {/* max-w, not w: the vertical Field's `*:w-full` outranks the control's own width class. */}
           <Field>
             <FieldLabel htmlFor="form-demo-rate">Speaking rate</FieldLabel>
             <FieldDescription>
@@ -79,15 +61,6 @@ export function FormDemo() {
             />
           </Field>
 
-          {/* Everything a field says, it says above its control, and the
-              error says it on the label's own line, at its end. The box never
-              moves: a column keeps one rhythm, and a row of fields stays in
-              line when one of them goes wrong — see `FieldHeader`.
-
-              The label stays the colour it always is — the border and the
-              message carry the state. The placeholder is an example of the
-              shape, and it is gone by the second keystroke, so nothing needed
-              while typing is in it. */}
           <Field>
             <FieldHeader
               error="Add a line for the voice to read."
@@ -124,15 +97,11 @@ export function FormDemo() {
         </FieldLegend>
 
         <FieldGroup>
-          {/* The one horizontal case: a switch, label start, control end. */}
           <Field orientation="horizontal">
             <FieldLabel htmlFor="form-demo-active">Active</FieldLabel>
             <Switch defaultChecked id="form-demo-active" />
           </Field>
 
-          {/* Background rather than instruction: knowing what barge-in means
-              does not change how you answer, it changes whether you know what
-              you are answering. That is the (i)'s whole remit. */}
           <Field orientation="horizontal">
             <FieldHint
               className="flex-auto"
@@ -144,11 +113,6 @@ export function FormDemo() {
             <Switch id="form-demo-barge" />
           </Field>
 
-          {/* Read-only stays on screen, disabled, with the reason above it.
-              The reason is help text like any other, so it sits where all help
-              text sits — under the label. Below the control it reads as
-              something that happened because of the value, which is what an
-              error is, and it is the only thing that goes there. */}
           <Field>
             <FieldLabel htmlFor="form-demo-provider">Provider</FieldLabel>
             <FieldDescription>
@@ -164,7 +128,6 @@ export function FormDemo() {
         </FieldGroup>
       </FieldSet>
 
-      {/* Cancel first as outline, then the one primary. */}
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline">
           Cancel

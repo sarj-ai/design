@@ -4,10 +4,8 @@ import { cn } from "@/lib/utils"
 
 import { TOPIC_FIGURE_VIEWBOX } from "./frame"
 
-/* Every subject sits in the box x 60–180, y 72–192: centred across the sheet,
-   a little below its middle, clear of the tile's number. */
+/* Every subject sits in the box x 60–180, y 72–192. */
 
-/** Colour: a swatch strip, one cell per step of a ramp. */
 function ColourFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -20,7 +18,6 @@ function ColourFigure({ className }: FigureProps) {
   )
 }
 
-/** Layering: three planes stacked in plan, each lifted over the last. */
 function LayeringFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -33,11 +30,6 @@ function LayeringFigure({ className }: FigureProps) {
   )
 }
 
-/**
- * Icons: one real glyph on its construction sheet — the keyline square it is
- * drawn inside, centre guides run edge to edge, and the 24px grid every
- * HugeIcons glyph is drawn on called out above it.
- */
 function IconsFigure({ className }: FigureProps) {
   return (
     <div
@@ -49,9 +41,7 @@ function IconsFigure({ className }: FigureProps) {
         viewBox={TOPIC_FIGURE_VIEWBOX}
       >
         <g {...LINE}>
-          {/* Centre guides through the glyph, to every edge. */}
           <path d="M0 140h240M120 0v240" opacity=".5" strokeDasharray="4 8" />
-          {/* The keyline square the glyph sits in, and its padding box. */}
           <rect height="112" opacity=".7" rx="14" width="112" x="64" y="84" />
           <rect
             height="80"
@@ -62,7 +52,6 @@ function IconsFigure({ className }: FigureProps) {
             x="80"
             y="100"
           />
-          {/* 24px, the grid the set is drawn on. */}
           <path d="M64 68h112M64 60v16M176 60v16" opacity=".7" />
           <path d="m74 62-10 6 10 6M166 62l10 6-10 6" opacity=".7" />
         </g>
@@ -76,13 +65,11 @@ function IconsFigure({ className }: FigureProps) {
           24px
         </text>
       </Figure>
-      {/* The glyph itself, centred on the guides. */}
       <IconsTopicGlyph className="relative mt-4 size-12" strokeWidth={1.5} />
     </div>
   )
 }
 
-/** Shadows: a card, and the one soft edge it casts on the ground below. */
 function ShadowsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -98,7 +85,6 @@ function ShadowsFigure({ className }: FigureProps) {
   )
 }
 
-/** Typography: two letterforms on cap, x-height and baseline guides. */
 function TypographyFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -118,14 +104,12 @@ function TypographyFigure({ className }: FigureProps) {
 
 /* The spacing steps 8 12 16 24 32, at 1.25 units to the pixel. */
 const SPACING_STEPS = [8, 12, 16, 24, 32].map((px) => px * 1.25)
-/* Each square's left edge, 5 units after the one before — worked out once
-   here rather than accumulated during render. */
+/* Computed once here rather than accumulated during render. */
 const SPACING_LEFTS = SPACING_STEPS.map(
   (_, i) =>
     52.5 + SPACING_STEPS.slice(0, i).reduce((sum, size) => sum + size + 5, 0),
 )
 
-/** Spacing: the scale's steps as squares standing on one baseline. */
 function SpacingFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -146,7 +130,6 @@ function SpacingFigure({ className }: FigureProps) {
   )
 }
 
-/** Radius: one rounded corner over the square corner it replaces. */
 function RadiusFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -169,7 +152,6 @@ function RadiusFigure({ className }: FigureProps) {
   )
 }
 
-/** Scrollbars: a panel with a bare thumb on its edge, and no track. */
 function ScrollbarsFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -182,7 +164,6 @@ function ScrollbarsFigure({ className }: FigureProps) {
   )
 }
 
-/** Accessibility: a control wearing its visible focus ring. */
 function AccessibilityFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -198,7 +179,6 @@ function AccessibilityFigure({ className }: FigureProps) {
 /* The four control heights, 36 32 28 24px, at 1.5 units to the pixel. */
 const CONTROL_HEIGHTS = [36, 32, 28, 24].map((px) => px * 1.5)
 
-/** Control scale: the four heights side by side on one baseline. */
 function ControlScaleFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -220,7 +200,6 @@ function ControlScaleFigure({ className }: FigureProps) {
   )
 }
 
-/** Enforcement: a file of code with one line underlined as an error. */
 function EnforcementFigure({ className }: FigureProps) {
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
@@ -234,7 +213,6 @@ function EnforcementFigure({ className }: FigureProps) {
   )
 }
 
-/** Topic id → its tile's drawing. */
 export const FOUNDATIONS_FIGURES: Record<
   string,
   (props: FigureProps) => React.ReactNode

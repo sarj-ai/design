@@ -28,20 +28,10 @@ import {
   StopPreviewIcon,
 } from "@/components/mockups/personas-depth/icons"
 
-/** Search earns its place once the list is taller than the scroll window. */
 const SEARCH_THRESHOLD = 6
 
-/**
- * Whether the viewport still has content below the fold, watched rather than
- * guessed from a row count — a two-column grid means the same number of voices
- * overflows or does not depending on how the rows pack, and the fade has to be
- * right every time or it stops meaning anything. Returns false once the reader
- * reaches the bottom, so the fade clears instead of implying more.
- */
 function useHasMoreBelow(shownCount: number) {
-  /* Held on the wrapper and queried down, because ScrollArea owns its viewport
-     and forwards no ref to it — and `src/components/ui` is regenerated, so it
-     is not the place to add one. */
+  /* Queried from the wrapper: ScrollArea forwards no ref to its viewport. */
   const wrapperRef = React.useRef<HTMLDivElement | null>(null)
   const [hasMore, setHasMore] = React.useState(false)
 
@@ -54,8 +44,7 @@ function useHasMoreBelow(shownCount: number) {
     const measure = () => {
       const remaining =
         viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight
-      /* A pixel of slack: fractional scroll heights would otherwise leave the
-         fade on forever at the bottom of the list. */
+      /* 1px slack: fractional scroll heights would leave the fade on at the bottom. */
       setHasMore(remaining > 1)
     }
 
@@ -74,12 +63,6 @@ function useHasMoreBelow(shownCount: number) {
   return { hasMore, wrapperRef }
 }
 
-/**
- * The voice list a persona picks from — DES-96's shipped behavior: voices are
- * filtered to the persona's language and gender, and every row can be heard
- * before it is chosen. Production combos hold dozens of voices, so this is a
- * dense searchable list in a fixed window, not a card wall.
- */
 export function VoicePicker({
   language,
   gender,
@@ -107,8 +90,6 @@ export function VoicePicker({
       )
     : voices
 
-  /* Above the empty-state return: the list length is what the fade re-measures
-     on, and a hook cannot sit behind a conditional. */
   const { hasMore, wrapperRef } = useHasMoreBelow(shown.length)
 
   if (voices.length === 0) {

@@ -27,14 +27,6 @@ const NOTICES: Notice[] = [
   },
 ]
 
-/**
- * The bell in the app's own top bar, open over a real page so it is judged
- * where it lives. Framed like the admin view: `translate-x-0` makes the
- * frame the containing block for the app's fixed sidebar.
- *
- * The notices are DES-204's — approval is the first thing the product
- * notifies about. Clicking one marks it read; the page behind stays put.
- */
 export function NotificationsPreview() {
   const [read, setRead] = React.useState<Set<string>>(new Set(["wel-5"]))
 

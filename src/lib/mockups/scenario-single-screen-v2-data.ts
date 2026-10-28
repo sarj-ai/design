@@ -1,36 +1,10 @@
-/**
- * The instruction prompt, as the things it actually says — v2 only.
- *
- * v1 stores the prompt as one markdown string and edits it in one monospace
- * textarea. That is the shape the model wants, and it is the wrong shape for
- * the person writing it: the reviewer feedback was that the prompting area is
- * not intuitive for a business user. A `#` heading is not a label, `{{var}}`
- * is not a field, and a 140-row code box gives no clue whether anything has
- * been missed.
- *
- * So the same prompt is held here as named sections. Nothing is lost — the raw
- * markdown is assembled back from these, byte-comparable with what v1 stores,
- * which is what lets the structured view be a view rather than a lossy form.
- */
-
 import type { LanguageCode } from "@/lib/mockups/scenario-single-screen-data"
 
 type SectionId = "context" | "escalation" | "identity" | "scope" | "tone"
 
-/**
- * One prose section, and how it is introduced to somebody who has never
- * written a prompt.
- *
- * `heading` is what goes back into the markdown, so it stays the engineer's
- * wording. `label` is what the screen says. They are deliberately different:
- * "Scope limitation" is precise and means nothing to a restaurant manager.
- */
 interface SectionMeta {
-  /** Shown when the section is empty — teaching by example, not by tooltip. */
   example: string
-  /** The `#` heading this section round-trips to in the raw prompt. */
   heading: string
-  /** One line of plain guidance, under the label. */
   help: string
   id: SectionId
   label: string
@@ -77,7 +51,6 @@ export const SECTION_META: SectionMeta[] = [
   },
 ]
 
-/** The call script. Its own shape because it is the one section that is a list. */
 export const FLOW_META = {
   example: "Greet the guest",
   heading: "Conversation flow",
@@ -88,7 +61,6 @@ export const FLOW_META = {
 export interface SectionedPrompt {
   context: string
   escalation: string
-  /** Ordered steps. The agent follows them top to bottom. */
   flow: string[]
   identity: string
   language: LanguageCode
@@ -146,21 +118,12 @@ export const SECTIONED_PROMPTS: SectionedPrompt[] = [
   },
 ]
 
-/* ------------------------------------------------------------- assembling -- */
-
-/**
- * The raw markdown, rebuilt from the sections.
- *
- * This is what the model is actually sent, and what the raw editor shows. An
- * empty section is left out rather than emitted as a bare heading — a heading
- * with nothing under it reads to the model as an instruction to say nothing.
- */
+/** What the model is sent. Empty sections are left out: a bare heading reads to the model as an instruction. */
 export function assemblePrompt(prompt: SectionedPrompt): string {
   const blocks: string[] = []
 
   for (const meta of SECTION_META) {
-    /* Flow is interleaved by heading order in v1's markdown, so it is emitted
-       in its own slot below rather than appended at the end. */
+    /* v1's markdown interleaves Flow by heading order, so it gets its own slot rather than going at the end. */
     if (meta.id === "context") {
       if (prompt.context.trim()) {
         blocks.push(`# ${meta.heading}\n${prompt.context.trim()}`)
@@ -178,7 +141,6 @@ export function assemblePrompt(prompt: SectionedPrompt): string {
   return blocks.join("\n\n")
 }
 
-/** How many sections carry something, for the "nothing is missing" count. */
 export function filledCount(prompt: SectionedPrompt): number {
   const prose = SECTION_META.filter((meta) => prompt[meta.id].trim()).length
   return prose + (prompt.flow.length ? 1 : 0)
@@ -186,18 +148,9 @@ export function filledCount(prompt: SectionedPrompt): number {
 
 export const SECTION_TOTAL = SECTION_META.length + 1
 
-/* -------------------------------------------------------------- variables -- */
-
-/**
- * `{{loyalty_status}}` as a person would say it.
- *
- * Derived rather than mapped by hand, so a variable added in the drawer is
- * readable here without a second list to keep in step.
- */
 export function variableLabel(name: string): string {
   const words = name.replace(/_/g, " ").trim()
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
-/** Variables the prompt references but the variables table does not declare. */
 export const IMPLICIT_VARIABLES = ["agent_name"]

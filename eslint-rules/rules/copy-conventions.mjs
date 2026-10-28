@@ -1,32 +1,5 @@
 import { jsxAncestors, jsxName, textOf, trackUiImports } from "../lib/jsx.mjs"
 
-/**
- * The copy the design system has already ruled out.
- *
- * Each of these is a sentence somebody wrote because nobody had decided what
- * the screen should say. The decision is written down now, so the sentence is
- * an error:
- *
- *  - "Are you sure" — a confirm names the thing and says what goes, what stops
- *    and what stays ("Delete Reservations?").
- *  - "Something went wrong" — an error names what failed ("Could not load
- *    calls") and offers the retry. Under a title that already names it, a
- *    description may say the fault was ours; as the title, or as the whole
- *    message, it is the sentence nobody decided.
- *  - "Unavailable", "N/A" — an empty cell is "—" (cannot exist), "Not set"
- *    (nobody filled it in) or "Not analysed" (the system has not yet).
- *  - "Required" — mark the minority: an asterisk where most fields are
- *    optional, "(optional)" where most are required. Never the word. Only
- *    checked in a field's label: a "Required" column or a badge saying a
- *    schema field is required is data, not a form marker.
- *  - "No … found" — an empty list says "No API keys yet"; a filter that
- *    matches nothing says what was searched for: No calls match “refund”.
- *    Not checked inside an Alert, where "No collisions found" reports a check
- *    rather than an empty list.
- *
- * Read from JSX text, the string props a reader sees, and toast() messages.
- */
-
 /** Where "Something went wrong" is the whole message rather than a gloss. */
 const TITLES = new Set([
   "AlertTitle",
@@ -38,7 +11,7 @@ const TITLES = new Set([
   "CardTitle",
 ])
 const HEADINGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6"])
-/* The parts too, since a wrapper (`<Notice>`) often stands in for Alert. */
+// The parts too, since a wrapper (`<Notice>`) often stands in for Alert.
 const ALERT_PARTS = new Set(["Alert", "AlertTitle", "AlertDescription"])
 const LABELS = new Set(["FieldLabel", "Label", "FieldLegend", "FieldTitle"])
 
@@ -103,7 +76,6 @@ const copyConventions = {
   create(context) {
     const imports = trackUiImports()
 
-    /** Is the text a title, and is it inside an Alert? */
     const placeOf = (element) => {
       const own = element ? jsxName(element.openingElement) : null
       const where = {
@@ -137,8 +109,7 @@ const copyConventions = {
 
     return {
       ...imports.visitor,
-      /* toast("Something went wrong"), toast.error(…): a toast is the whole
-         message, so it is held to the title standard. */
+      // A toast is the whole message, so it is held to the title standard.
       CallExpression(node) {
         const callee = node.callee
         const name =
@@ -153,8 +124,7 @@ const copyConventions = {
           check(first, first.value)
         }
       },
-      /* One report per element, on its whole text, so "No calls found" split
-         across a JSXText and a {term} is still read as one sentence. */
+      // One report per element, on its whole text, so "No calls found" split across JSXText and {term} reads as one.
       JSXElement(element) {
         const hasOwnText = (element.children ?? []).some(
           (child) =>

@@ -96,14 +96,6 @@ const TOOL_ICONS: Record<ToolSlug, React.ComponentType> = {
   "zoho-desk-create-ticket": ZohoTicketToolIcon,
 }
 
-/* --------------------------------------------------------------- persona -- */
-
-/**
- * A persona per language, because that is how the scenario stores it — one
- * voice cannot speak all three. Listing every configured language at once is
- * what stops this reading as a single "voice" dropdown that silently belongs
- * to whichever language you last had selected.
- */
 export function PersonaDrawerBody({
   onPersonaChange,
   perLanguage,
@@ -144,8 +136,6 @@ export function PersonaDrawerBody({
     </FieldGroup>
   )
 }
-
-/* ------------------------------------------------------------- languages -- */
 
 export function LanguagesDrawerBody({
   defaultLanguage,
@@ -232,13 +222,6 @@ export function LanguagesDrawerBody({
   )
 }
 
-/* --------------------------------------------------------------- knowledge -- */
-
-/**
- * Language coverage sits on every row, attached or not. A base with no content
- * in a language the scenario speaks is the failure this screen has to make
- * visible before it is attached, not after a call goes wrong.
- */
 export function KnowledgeDrawerBody({
   bases,
   onToggle,
@@ -316,13 +299,6 @@ export function KnowledgeDrawerBody({
   )
 }
 
-/* ------------------------------------------------------------------- tools -- */
-
-/**
- * A tool's own configuration only appears once it is on. Nine tools each
- * showing their settings is the density that made the Configuration tab
- * unreadable; the switch is the disclosure.
- */
 export function ToolsDrawerBody({
   onToggle,
   tools,
@@ -367,8 +343,6 @@ export function ToolsDrawerBody({
     </FieldGroup>
   )
 }
-
-/* -------------------------------------------------------- success criteria -- */
 
 export function CriteriaDrawerBody({
   criteria,
@@ -429,8 +403,6 @@ export function CriteriaDrawerBody({
     </>
   )
 }
-
-/* ------------------------------------------------------ template variables -- */
 
 export function VariablesDrawerBody({
   onVariablesChange,
@@ -508,8 +480,6 @@ export function VariablesDrawerBody({
     </>
   )
 }
-
-/* -------------------------------------------------------- data extraction -- */
 
 export function ExtractionDrawerBody({
   destinations,
@@ -599,8 +569,6 @@ export function ExtractionDrawerBody({
     </>
   )
 }
-
-/* --------------------------------------------------- call recording delivery -- */
 
 export function RecordingDrawerBody({
   onZohoChange,

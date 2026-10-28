@@ -17,20 +17,12 @@ import {
   SeverityBadge,
 } from "@/components/mockups/behavioral-alerts/severity"
 
-/**
- * What the post-call analyst found, as the panel's own section.
- *
- * The three "nothing fired" cases are three different messages rather than one
- * blank panel — "no flag was detected", "no flag is configured" and "this
- * call was never analysed" are three different things to do next.
- */
 export function AlertDetectionsBody({
   analysis,
   onConfigureAlerts,
   onSeek,
 }: {
   analysis: AlertAnalysis
-  /** Opens the scenario the alerts would be configured on. */
   onConfigureAlerts: () => void
   onSeek: (seconds: number) => void
 }) {
@@ -98,7 +90,6 @@ export function AlertDetectionsBody({
   )
 }
 
-/** The label the collapsed section header carries, per state. */
 export function detectionsSummary(analysis: AlertAnalysis) {
   if (analysis.state === "pending") return "Analysing"
   if (analysis.state === "unavailable") return "No transcript"
@@ -107,18 +98,6 @@ export function detectionsSummary(analysis: AlertAnalysis) {
   return `${analysis.detections.length} detected`
 }
 
-/**
- * One detection, and it seeks.
- *
- * The quote sits on its own surface and the explanation does not, because they
- * carry different weight: one is what the caller said and can be checked
- * against the transcript, the other is the model's reading of it. Rendered as
- * two equal paragraphs a reader has no way to tell which is which — and telling
- * them apart is the entire reason the PRD makes evidence mandatory.
- *
- * Which is also why the row is clickable: pressing it puts the playhead on the
- * quote and brings that turn up in the transcript beside it.
- */
 function DetectionRow({
   detection,
   onSeek,
@@ -130,16 +109,12 @@ function DetectionRow({
 
   return (
     <Seekable
-      /* No hover tint. The card sits still; the pointer and the focus ring
-         are what say it is pressable. */
       className="flex gap-3 rounded-lg bg-card p-3"
       label={`Seek to ${formatTimeSeconds(detection.at)}`}
       onActivate={() => {
         onSeek(detection.at)
       }}
     >
-      {/* Severity twice, deliberately: the rule is what a reader sorts the
-          list by at a glance, the badge is what they read. */}
       <span
         aria-hidden
         className={cn(

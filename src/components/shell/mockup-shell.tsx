@@ -6,21 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { BackIcon } from "@/components/shell/workspace-icons"
 
-/**
- * Chrome shared by every mockup page: one thin bar above the design.
- *
- * Back to the index, the mockup's name, and whatever it gives a reviewer to
- * press — nothing else. The lab's own nav (sections, search, logo) stays on
- * the index pages; on a mockup it only competed with the product chrome
- * underneath for the reader's eye.
- *
- * The bar is the shell's `bg-sidebar`, so it and the app below read as one
- * surface, and it is 48px — `AppShell` starts its fixed sidebar under it.
- *
- * Nothing here restyles a page. The workspace is light and left-to-right —
- * there is no theme and no direction switch, so a mockup is reviewed in the one
- * mode it ships in.
- */
+/** 48px tall: `AppShell` starts its fixed sidebar under it. */
 export function MockupShell({
   title,
   actions,
@@ -29,8 +15,6 @@ export function MockupShell({
   title: string
   /** Kept for the callers that pass it; the bar shows the title alone. */
   eyebrow?: string
-  /** Reviewer controls for this mockup (state toggles and the like) — they
-   * live up here so the design below stays clean. */
   actions?: React.ReactNode
   children: React.ReactNode
 }) {
@@ -53,9 +37,6 @@ export function MockupShell({
         ) : null}
       </header>
 
-      {/* A flex column so a page that wants the remaining height can take it
-          with `grow`. Pages that don't keep their content height, so this is
-          inert for every mockup that just flows. */}
       <div className="flex min-h-0 flex-1 flex-col">{children}</div>
     </div>
   )

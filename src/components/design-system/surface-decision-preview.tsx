@@ -62,27 +62,11 @@ import {
   type Verdict,
 } from "@/lib/design-system/surface-audit"
 
-/**
- * Choosing a surface: the decision, the rules every surface keeps, and the
- * rules dry-run against every overlay in the Sarj platform.
- *
- * Three tabs rather than one long page because they are read for different
- * reasons. Decide is for the person building a screen: answer what the reader
- * is doing and it names the surface, its shape and a working one. Rules is
- * what holds whichever surface that was. Dry run is the evidence — 115 real
- * overlays, each with what the decision would change — and every rule links
- * into it, so "Sarj breaks this 27 times" is one click from the 27.
- */
-
 const TABS = [
   { id: "decide", label: "Decide" },
   { id: "rules", label: "Rules" },
   { id: "dry-run", label: "Dry run" },
 ]
-
-/* -------------------------------------------------------------------------
- * The decision
- * ---------------------------------------------------------------------- */
 
 type Task = "configuring" | "creating" | "picking" | "reading" | "confirming"
 
@@ -96,12 +80,6 @@ const TASKS: { id: Task; label: string }[] = [
 
 type Answer = { id: string; label: string; surface: SurfaceId }
 
-/**
- * The second question, where the first does not settle it. Configuring asks
- * how much there is; creating asks what is being made. Carbon's line of four
- * fields is the only number any system commits to, and it still separates a
- * dialog from everything bigger.
- */
 const FOLLOW_UP: Partial<
   Record<Task, { question: string; answers: Answer[] }>
 > = {
@@ -114,11 +92,6 @@ const FOLLOW_UP: Partial<
       { id: "whole", label: "The whole object", surface: "page" },
     ],
   },
-  /* Creating asks what is being made, not how many fields it has. A main
-     object gets its own page afterwards, so it is made in the creation flow
-     and lands there. A list item is edited later in a drawer, so it is made
-     in that same drawer — one form for both. Field count only decides the
-     small case. */
   creating: {
     question: "What are you making?",
     answers: [
@@ -153,7 +126,6 @@ const DIRECT: Partial<Record<Task, SurfaceId>> = {
   reading: "record",
 }
 
-/** The answers that lead to each surface, for when a tile is picked. */
 const LEADS_TO: Record<SurfaceId, { task: Task; answer?: string }> = {
   inline: { task: "configuring", answer: "one" },
   popover: { task: "picking" },
@@ -164,11 +136,6 @@ const LEADS_TO: Record<SurfaceId, { task: Task; answer?: string }> = {
   record: { task: "reading" },
   page: { task: "creating", answer: "object" },
 }
-
-/* -------------------------------------------------------------------------
- * The dry run's filters, lifted here so a rule or a surface can open it
- * already narrowed.
- * ---------------------------------------------------------------------- */
 
 type AuditFilters = {
   query: string
@@ -242,7 +209,6 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {/* The question. */}
       <Card>
         <CardContent className="flex flex-col gap-6">
           <div className="flex flex-wrap items-end gap-x-10 gap-y-4">
@@ -261,7 +227,6 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
               </ToggleGroup>
             </Question>
 
-            {/* Absent, not disabled, when the first answer settles it. */}
             {followUp ? (
               <Question label={followUp.question}>
                 <ToggleGroup
@@ -327,8 +292,7 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
         </CardContent>
       </Card>
 
-      {/* The answer: what it is, what it is for, its shape, and one to try.
-          Keyed by surface so the demo inside starts fresh on every change. */}
+      {/* Keyed by surface so the demo inside starts fresh on every change. */}
       <Card key={choice.id}>
         <CardContent className="flex flex-col gap-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -378,9 +342,6 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
             </Row>
           </dl>
 
-          {/* The stage. A page takes the whole width, because the whole
-              screen is the point; everything else is tried at the size a
-              panel would give it. */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-medium text-muted-foreground">
               Try it
@@ -431,13 +392,7 @@ function Row({ term, children }: { term: string; children: React.ReactNode }) {
   )
 }
 
-/* -------------------------------------------------------------------------
- * The rules
- * ---------------------------------------------------------------------- */
-
-/* Grouped by when they bite: on every overlay, when one asks before
-   acting, and in the two places a list is involved. Numbered straight
-   through, so "rule 7" means one thing wherever it is quoted. */
+/* Numbered straight through, so "rule 7" means one thing wherever it is quoted. */
 const RULE_GROUPS: { label: string; rules: SurfaceRuleId[] }[] = [
   {
     label: "Every overlay",
@@ -457,7 +412,6 @@ function Rules({ onShowRows }: { onShowRows: (rule: SurfaceRuleId) => void }) {
     <Card className="[--card-spacing:0px]">
       {RULE_GROUPS.map((group) => (
         <section key={group.label}>
-          {/* The drawer's section band, so the rules read in blocks. */}
           <h3 className="bg-muted/60 px-4 py-2 text-xs font-medium text-muted-foreground">
             {group.label}
           </h3>
@@ -507,10 +461,6 @@ function Rules({ onShowRows }: { onShowRows: (rule: SurfaceRuleId) => void }) {
   )
 }
 
-/* -------------------------------------------------------------------------
- * The dry run
- * ---------------------------------------------------------------------- */
-
 const VERDICT_TINT: Record<Verdict, string> = {
   keep: "bg-success-tint text-success-tint-foreground",
   reshape: "bg-muted text-muted-foreground",
@@ -557,7 +507,6 @@ function matches(row: AuditRow, filters: AuditFilters) {
   )
 }
 
-/** "36 move" — the counts line, in the order a reader would act on them. */
 const VERDICT_ORDER: Verdict[] = [
   "move",
   "reshape",
@@ -603,8 +552,6 @@ function DryRun({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* The verdicts are the point of this tab, so they lead it — and each
-          is the filter for its own rows, one click in and one click out. */}
       <div className="flex flex-col gap-2">
         <p className="text-sm text-muted-foreground">
           {SURFACE_AUDIT.length} overlays in the platform, 28 September 2026
@@ -780,10 +727,6 @@ function DryRun({
   )
 }
 
-/**
- * One row of the dry run, opened as what the decision says it is: a record,
- * from a list, with ↑ ↓ through whatever the filters left.
- */
 function AuditRecord({
   rows,
   index,

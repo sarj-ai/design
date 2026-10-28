@@ -13,14 +13,11 @@ import {
 
 import { icon } from "@/components/shared/icon"
 
-/* The editor's header: try the scenario, and its overflow menu. */
 export const RunScenarioIcon = icon(PlayIcon, "RunScenarioIcon")
 export const ScenarioMenuIcon = icon(MoreHorizontalIcon, "ScenarioMenuIcon")
 
-/* The save review drawer's close button. */
 export const CloseReviewIcon = icon(Cancel01Icon, "CloseReviewIcon")
 
-/* The scenarios index: its two views, search, and the page's buttons. */
 export const ActiveViewIcon = icon(CheckmarkCircle02Icon, "ActiveViewIcon")
 export const DeletedViewIcon = icon(Delete02Icon, "DeletedViewIcon")
 export const SearchScenariosIcon = icon(Search01Icon, "SearchScenariosIcon")
