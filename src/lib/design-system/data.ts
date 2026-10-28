@@ -990,7 +990,7 @@ const STATE_PAGES: DocsPage[] = [
     id: "error-state",
     title: "Error",
     description:
-      "Name what failed and offer the retry. \u201cSomething went wrong\u201d is what a page says when nobody decided.",
+      "A failure takes the smallest piece of the screen it can: a field, a toast, a section, the rows, the page area. The sidebar always stays.",
     sarj: true,
   },
 ]
@@ -1378,6 +1378,31 @@ export const NO_RESULTS_RULES: Rule[] = [
 
 export const ERROR_RULES: Rule[] = [
   {
+    label: "Fail at the smallest scope",
+    detail:
+      "A wrong value stays on its field, a failed save is a toast, a failed request takes only the section, the rows or the page area it feeds. One request that failed never blanks the parts of the screen that loaded.",
+  },
+  {
+    label: "The sidebar and top bar always stay",
+    detail:
+      "A page's error renders in the page area, inside the app, so the reader can go anywhere else. The whole window goes only when the app itself cannot start, because then there is nothing left to keep.",
+  },
+  {
+    label: "Show what did load",
+    detail:
+      "Partial data beats a blank page. The failed part keeps its title, its place and its size, so the page does not jump when it loads, and the numbers next to it still read.",
+  },
+  {
+    label: "One block above the field",
+    detail:
+      "Section, list, page and app all use `ErrorState`: the icon, what failed, that trying again is safe, and Try again. It draws no box; the card, the table or the page it replaces already has one.",
+  },
+  {
+    label: "Keep what the reader did",
+    detail:
+      "The search, the filters, the open tab and anything typed survive the error and the retry. A failed save leaves the form as it was, so trying again sends the same thing.",
+  },
+  {
     label: "Name what failed",
     detail:
       "“Could not load calls”. “Something went wrong” is what a page says when nobody decided which page it was.",
@@ -1385,7 +1410,7 @@ export const ERROR_RULES: Rule[] = [
   {
     label: "Offer the retry",
     detail:
-      "Most failures are one request that timed out. A page with no retry sends the reader to the browser's reload button and loses their filters.",
+      "Most failures are one request that timed out. A page with no retry sends the reader to the browser's reload button and loses their filters. Try again re-runs only what failed, keeps its label and shows a spinner while it runs.",
   },
   {
     label: "Never show the raw error",
@@ -1396,6 +1421,11 @@ export const ERROR_RULES: Rule[] = [
     label: "A destructive action reports failure where it was pressed",
     detail:
       "In the dialog, not as a toast after it closes — the reader is still deciding, and the surface they decided on is the one that has to say it did not happen.",
+  },
+  {
+    label: "Every failure is still reported",
+    detail:
+      "A section that shows its error while the rest of the page works is easy to miss in monitoring. Each one reports to Sentry with where it happened, the same as a page that broke.",
   },
 ]
 

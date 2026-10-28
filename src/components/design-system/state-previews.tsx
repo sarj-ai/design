@@ -3,12 +3,8 @@ import {
   DataTableHead,
   DataTableHeaderRow,
 } from "@/components/shared/data-table"
-import {
-  NoResultsIcon,
-  RetryIcon,
-  SourceIcon,
-  WarningIcon,
-} from "@/components/design-system/icons"
+import { ErrorState } from "@/components/design-system/error-state"
+import { NoResultsIcon, SourceIcon } from "@/components/design-system/icons"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -117,23 +113,7 @@ export function NoResultsPreview() {
 export function ErrorStatePreview() {
   return (
     <div className="rounded-lg border">
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <WarningIcon />
-          </EmptyMedia>
-          <EmptyTitle>Could not load sources</EmptyTitle>
-          <EmptyDescription>
-            The request timed out. Nothing was changed, so retrying is safe.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <Button size="sm" variant="outline">
-            <RetryIcon />
-            Try again
-          </Button>
-        </EmptyContent>
-      </Empty>
+      <ErrorState onRetry={() => {}} title="Could not load sources" />
     </div>
   )
 }

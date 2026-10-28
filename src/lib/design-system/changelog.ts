@@ -14,6 +14,31 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-10-28",
+    title: "A failure takes the smallest piece of the screen it can",
+    summary:
+      "The Error topic named what to say but not where an error goes, so one failed request could blank a page that had mostly loaded.",
+    changes: [
+      {
+        kind: "added",
+        text: "Six scopes, each with a demo: field, action (a toast), section, list, page area and app. The sidebar and top bar stay for every one but app.",
+      },
+      {
+        kind: "added",
+        text: "ErrorState in components/design-system: what failed, that trying again is safe, and Try again. It draws no box; the card, table or page it replaces already has one.",
+      },
+      {
+        kind: "added",
+        text: "Rules: show what did load, keep what the reader did through the retry, and report every failure to Sentry, not only a page that broke.",
+      },
+      {
+        kind: "changed",
+        text: "Try again re-runs only what failed, keeps its label and shows a spinner while it runs.",
+      },
+    ],
+    topics: ["error-state"],
+  },
+  {
     date: "2026-10-22",
     title: "A scenario's Live switch is one shared control",
     summary:

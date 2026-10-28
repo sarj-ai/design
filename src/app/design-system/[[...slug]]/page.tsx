@@ -42,10 +42,10 @@ import { LintRules } from "@/components/design-system/lint-rules"
 import { PaginationPreview } from "@/components/design-system/pagination-preview"
 import {
   EmptyStatePreview,
-  ErrorStatePreview,
   LoadingPreview,
   NoResultsPreview,
 } from "@/components/design-system/state-previews"
+import { ErrorSystemPreview } from "@/components/design-system/error-system-preview"
 import { TableAnatomy } from "@/components/design-system/table-anatomy"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -186,13 +186,14 @@ export default async function DesignSystemPage({
           </Card>
         ),
         "error-state": (
-          <Card>
-            <CardContent className="flex flex-col gap-6">
-              <ErrorStatePreview />
-              <Separator />
-              <RuleList rules={ERROR_RULES} />
-            </CardContent>
-          </Card>
+          <div className="flex flex-col gap-4">
+            <ErrorSystemPreview />
+            <Card>
+              <CardContent>
+                <RuleList rules={ERROR_RULES} />
+              </CardContent>
+            </Card>
+          </div>
         ),
 
         buttons: (

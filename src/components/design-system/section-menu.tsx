@@ -34,6 +34,7 @@ const FULL_WIDTH_TOPICS = new Set([
   "alert",
   "integration-card",
   "surfaces",
+  "error-state",
 ])
 
 const GROW = { type: "spring", bounce: 0, duration: 0.55 } as const
