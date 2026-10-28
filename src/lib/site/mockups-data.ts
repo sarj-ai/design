@@ -437,6 +437,17 @@ export const MOCKUPS: Mockup[] = [
     tickets: ["PROD-600"],
     added: "2026-10-20T08:57:18.871Z",
   },
+  {
+    href: "/review-tracking",
+    title: "Keeping your place in conversation review",
+    meta: "Page · 8 ideas",
+    surface: "Conversations",
+    description:
+      "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session.",
+    icon: SparklesIcon,
+    tickets: ["INT-287"],
+    added: "2026-10-28T05:02:24.794Z",
+  },
   // `npm run new` appends new mockups above this line.
 ]
 

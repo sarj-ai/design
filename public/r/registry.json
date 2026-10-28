@@ -3915,6 +3915,203 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "review-tracking",
+      "type": "registry:block",
+      "title": "Keeping your place in conversation review",
+      "description": "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "react-day-picker",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "calendar",
+        "card",
+        "checkbox",
+        "collapsible",
+        "command",
+        "drawer",
+        "dropdown-menu",
+        "field",
+        "input-group",
+        "item",
+        "kbd",
+        "popover",
+        "select",
+        "separator",
+        "sidebar",
+        "table",
+        "tabs",
+        "toggle",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/review-tracking/page.tsx",
+          "type": "registry:page",
+          "target": "app/review-tracking/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/conversations-revamp/list/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/conversations-revamp/list/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/conversations-revamp/list/status-badges.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/conversations-revamp/list/status-badges.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/call-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/call-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/conversations-frame.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/conversations-frame.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/list-ideas.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/list-ideas.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/review-ideas.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/review-ideas.tsx"
+        },
+        {
+          "path": "src/components/mockups/review-tracking/review-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/review-table.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/list-footer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/list-footer.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/conversations-revamp-list-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/conversations-revamp-list-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/review-tracking-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/review-tracking-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }
