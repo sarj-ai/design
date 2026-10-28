@@ -62,8 +62,6 @@ export const DeleteIcon = icon(Delete02Icon, "DeleteIcon")
 
 export const EditRowIcon = icon(PencilEdit02Icon, "EditRowIcon")
 
-export const SortAscIcon = icon(ArrowUp01Icon, "SortAscIcon")
-export const SortDescIcon = icon(ArrowDown01Icon, "SortDescIcon")
 export const SortableIcon = icon(ArrowDataTransferVerticalIcon, "SortableIcon")
 
 export const InboundIcon = icon(ArrowDownLeft01Icon, "InboundIcon")

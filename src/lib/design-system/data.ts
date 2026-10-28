@@ -336,7 +336,7 @@ export const DEMO_VOICES = [
   { id: "sara-egyptian", label: "Sara — Egyptian" },
 ]
 
-export type CallRow = {
+type CallRow = {
   id: string
   customer: string
   status: "completed" | "failed" | "in_progress" | "scheduled"
