@@ -38,7 +38,7 @@ export const MODALITIES: { id: Modality; label: string }[] = [
  * with can fetch that list, so onboarding is "pick one". Where it does not, the
  * admin types the model ID and proves it with a test instead.
  */
-export type Provider = {
+type Provider = {
   id: string
   name: string
   modalities: Modality[]
@@ -81,7 +81,7 @@ export const PROVIDERS: Provider[] = [
  * Only the providers with `listsModels` have one — the rest reach the manual
  * path, and so does any provider whose fetch fails.
  */
-export const LIVE_MODELS: Record<
+const LIVE_MODELS: Record<
   string,
   Partial<Record<Modality, string[]>>
 > = {

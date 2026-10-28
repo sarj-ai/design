@@ -56,7 +56,7 @@ export type Permission =
  * the cell stays empty rather than the row collapsing, so the two checkbox
  * columns hold one vertical line.
  */
-export type ScopeGroup = {
+type ScopeGroup = {
   /** What the product calls this resource, not what the table is called. */
   label: string
   read: Permission
@@ -333,7 +333,7 @@ export function relativeSince(iso: string | null): string {
   return formatDate(iso)
 }
 
-export type TokenStatus = "active" | "expired" | "revoked"
+type TokenStatus = "active" | "expired" | "revoked"
 
 /**
  * Derived, never stored. A revoked token that had also expired is still

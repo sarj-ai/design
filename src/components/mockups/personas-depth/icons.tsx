@@ -3,7 +3,6 @@
 import {
   Alert02Icon,
   AudioWave01Icon,
-  CheckmarkCircle02Icon,
   Delete02Icon,
   Edit02Icon,
   MoreHorizontalIcon,
@@ -32,10 +31,6 @@ export const ScenariosIcon = icon(Target02Icon, "ScenariosIcon")
 export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon")
 export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon")
 export const VoiceWaveIcon = icon(AudioWave01Icon, "VoiceWaveIcon")
-export const SelectedVoiceIcon = icon(
-  CheckmarkCircle02Icon,
-  "SelectedVoiceIcon",
-)
 
 /* Edge states. */
 export const LoadErrorIcon = icon(Alert02Icon, "LoadErrorIcon")

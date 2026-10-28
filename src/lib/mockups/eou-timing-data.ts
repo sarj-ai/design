@@ -22,7 +22,7 @@ export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3
 
 export type DetectionModelId = "livekit_v1_mini" | "sarj_eou" | "vad"
 
-export type DetectionModel = {
+type DetectionModel = {
   id: DetectionModelId
   label: string
   /** Languages it runs on. Picking one it cannot serve is silent today. */

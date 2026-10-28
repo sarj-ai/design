@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export type CopyMenuItem = {
+type CopyMenuItem = {
   id: string
   label: string
   onSelect: () => void

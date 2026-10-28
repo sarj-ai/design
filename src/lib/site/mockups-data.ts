@@ -47,7 +47,7 @@ import {
  * Keep this identical to the group in Linear. It is a vocabulary, not a set of
  * headings to invent from.
  */
-export const SURFACES = [
+const SURFACES = [
   "Conversations",
   "Personas",
   "Scenarios Index",
@@ -58,7 +58,7 @@ export const SURFACES = [
   "Settings",
 ] as const
 
-export type Surface = (typeof SURFACES)[number]
+type Surface = (typeof SURFACES)[number]
 
 /**
  * The index. One entry per mockup — one request, one route, one card.
@@ -66,7 +66,7 @@ export type Surface = (typeof SURFACES)[number]
  * `npm run new <slug>` appends here, so keep the array literal shape: entries
  * separated by `},` and the sentinel comment at the end where new ones land.
  */
-export type Mockup = {
+type Mockup = {
   /** Route it lives at, which is also its identity in the list. */
   href: string
   title: string
@@ -536,7 +536,7 @@ export function surfaceId(surface: Surface | null) {
   return surface ? surface.toLowerCase().replace(/\s+/g, "-") : "unlabelled"
 }
 
-export type SurfaceGroup = { surface: Surface | null; mockups: Mockup[] }
+type SurfaceGroup = { surface: Surface | null; mockups: Mockup[] }
 
 /**
  * The list split by surface, in `SURFACES` order, with the unlabelled ones

@@ -12,7 +12,7 @@
 
 export type VariableKind = "global" | "scenario" | "system"
 
-export type VariableType = "boolean" | "date" | "number" | "text"
+type VariableType = "boolean" | "date" | "number" | "text"
 
 export interface ScenarioVariable {
   kind: "scenario"
@@ -52,9 +52,9 @@ const TYPE_LABEL: Record<VariableType, string> = {
   text: "Text",
 }
 
-export const TIMEZONE = "Asia/Riyadh"
+const TIMEZONE = "Asia/Riyadh"
 
-export const SCENARIO_VARIABLES: ScenarioVariable[] = [
+const SCENARIO_VARIABLES: ScenarioVariable[] = [
   { kind: "scenario", name: "guest_name", required: true, type: "text" },
   {
     defaultValue: "None",
@@ -86,7 +86,7 @@ export const SCENARIO_VARIABLES: ScenarioVariable[] = [
   },
 ]
 
-export const GLOBAL_VARIABLES: PlatformVariable[] = [
+const GLOBAL_VARIABLES: PlatformVariable[] = [
   { description: "Name of the AI agent", kind: "global", name: "agent_name" },
   {
     description: "Gender of the AI agent",
@@ -95,7 +95,7 @@ export const GLOBAL_VARIABLES: PlatformVariable[] = [
   },
 ]
 
-export const SYSTEM_VARIABLES: PlatformVariable[] = [
+const SYSTEM_VARIABLES: PlatformVariable[] = [
   {
     description: "Current date, formatted as 'January 15, 2025'",
     kind: "system",

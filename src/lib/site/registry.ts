@@ -7,7 +7,7 @@
  * Override it per-deployment with NEXT_PUBLIC_REGISTRY_ORIGIN.
  */
 
-export const REGISTRY_ORIGIN =
+const REGISTRY_ORIGIN =
   process.env.NEXT_PUBLIC_REGISTRY_ORIGIN ?? "https://design.sarj.ai"
 
 /**

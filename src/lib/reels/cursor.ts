@@ -38,7 +38,7 @@ export type Pose = { x: number; y: number; scale: number; opacity: number }
 export type Cam = { x: number; y: number; z: number }
 
 /** Named regions of one screenshot. */
-export type Regions = Record<string, Rect>
+type Regions = Record<string, Rect>
 
 type Key<T> = { t: number; value: T; ease: Easing }
 type Track<T> = Key<T>[]

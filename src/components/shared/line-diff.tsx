@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils"
 type DiffLine = { kind: "same" | "removed" | "added"; text: string }
 
 /** Line-level diff by longest common subsequence — prompts are short. */
-export function diffLines(before: string, after: string): DiffLine[] {
+function diffLines(before: string, after: string): DiffLine[] {
   const a = before.split("\n")
   const b = after.split("\n")
   const table = Array.from({ length: a.length + 1 }, () =>

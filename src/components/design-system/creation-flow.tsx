@@ -47,7 +47,7 @@ const DOT = {
   spring: { type: "spring", visualDuration: 0.35, bounce: 0 },
 } as const
 
-export type CreationFlowProps = {
+type CreationFlowProps = {
   /** The thing being made. The same on every screen: it is one task. */
   title: string
   /** This screen's question, under the title. */

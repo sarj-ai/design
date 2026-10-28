@@ -70,7 +70,7 @@ export const API_KEYS: ApiKey[] = [
   { id: "k2", prefix: "sk_live_9c71", created: "Aug 03, 2026" },
 ]
 
-export type Variable = {
+type Variable = {
   key: string
   value: string
   secret: boolean

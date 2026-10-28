@@ -167,8 +167,8 @@ const eslintConfig = defineConfig([
    * every add, for no visual gain. The primitives ARE the design system; these
    * rules exist to stop authored code from drifting away from them.
    *
-   * `react-hooks/set-state-in-effect` is off here for the same reason: carousel
-   * and use-mobile both trip it, both are regenerated, and both are upstream's
+   * `react-hooks/set-state-in-effect` is off here for the same reason: use-mobile
+   * trips it, is regenerated, and is upstream's
    * problem to fix. Authored code is still held to it.
    *
    * `react-hooks/refs` joins it for stepper, which hands its own ref to Base

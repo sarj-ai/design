@@ -49,7 +49,7 @@ export function collectStrings(node, out = []) {
  * `supports-[display:grid]:grid` survive intact. Strips the `!` important
  * marker from either end.
  */
-export function splitVariants(cls) {
+function splitVariants(cls) {
   const segments = []
   let depth = 0
   let start = 0
@@ -135,6 +135,6 @@ export function createAttributeVisitor(handle) {
 }
 
 /** The shadcn primitives are generated code — rules that police authored UI skip them. */
-export function isPrimitiveFile(filename) {
+function isPrimitiveFile(filename) {
   return /[/\\]src[/\\]components[/\\]ui[/\\]/.test(filename)
 }

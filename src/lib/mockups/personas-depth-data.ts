@@ -9,7 +9,7 @@
 export type PersonaLanguage = "Arabic" | "English" | "Urdu"
 export type PersonaGender = "Female" | "Male"
 
-export type Voice = {
+type Voice = {
   id: string
   name: string
   /** Short personality blurb shown wherever the voice is listed. */
@@ -32,7 +32,7 @@ export type Persona = {
   createdAt: string
 }
 
-export type Scenario = {
+type Scenario = {
   id: string
   name: string
   languages: PersonaLanguage[]

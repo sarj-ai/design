@@ -257,6 +257,3 @@ export const EDITOR_CASES: EditorCase[] = [
     turnedLiveElsewhere: null,
   },
 ]
-
-/** Who is reading the editor, for the toast after a flip. */
-export const CURRENT_USER = "Rana Mansour"

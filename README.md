@@ -87,7 +87,7 @@ version:
 - **Build the ticket, nothing else.** The ticket, the PRD, and attached
   screenshots are the entire spec. No invented fields, tabs, screens, or
   "out of scope" sections.
-- **Components come from `src/components/ui/` only.** All 61 shadcn primitives
+- **Components come from `src/components/ui/` only.** All 50 shadcn primitives
   are installed. Never hand-roll a `<div>` that duplicates one.
 - **Colors come from the tokens in `src/app/globals.css` only.** No hex, no
   `oklch()`, no `bg-purple-600`. Literals dodge the token system entirely.

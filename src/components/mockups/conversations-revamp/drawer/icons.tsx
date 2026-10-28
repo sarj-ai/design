@@ -2,9 +2,7 @@
 
 import {
   AiMagicIcon,
-  Alert02Icon,
   ArrowDown01Icon,
-  ArrowDownLeft01Icon,
   ArrowUp01Icon,
   ArrowUpRight01Icon,
   BotIcon,
@@ -22,21 +20,15 @@ import {
   PreferenceVerticalIcon,
   Search01Icon,
   SidebarRight01Icon,
-  SmileIcon,
-  ListViewIcon,
   BubbleChatIcon,
   Message01Icon,
   PauseIcon as PauseSource,
-  PlayCircleIcon,
   PlugSocketIcon,
-  PlusSignIcon,
   UserIcon,
   Wrench01Icon,
   Calendar03Icon,
-  CallOutgoing01Icon,
   CancelCircleIcon,
   Link04Icon,
-  CheckListIcon,
   CheckmarkCircle02Icon,
   Clock01Icon,
   Copy01Icon,
@@ -44,16 +36,11 @@ import {
   Download01Icon,
   HeadsetIcon,
   Link02Icon,
-  Loading03Icon,
   PlayIcon,
-  Tick02Icon,
-  VoiceIcon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
 
-/* The drawer header. */
-export const InboundIcon = icon(ArrowDownLeft01Icon, "InboundIcon")
 export const OutboundIcon = icon(ArrowUpRight01Icon, "OutboundIcon")
 export const CopyLinkIcon = icon(Link02Icon, "CopyLinkIcon")
 
@@ -71,19 +58,11 @@ export const HumanAgentIcon = icon(HeadsetIcon, "HumanAgentIcon")
 /* Status, outcome, and the criteria list. */
 export const CompletedIcon = icon(CheckmarkCircle02Icon, "CompletedIcon")
 export const FailureIcon = icon(CancelCircleIcon, "FailureIcon")
-export const RunningIcon = icon(Loading03Icon, "RunningIcon")
-export const NoticeIcon = icon(Alert02Icon, "NoticeIcon")
-export const TimeIcon = icon(Clock01Icon, "TimeIcon")
 export const ScheduledIcon = icon(Calendar03Icon, "ScheduledIcon")
-export const TransferIcon = icon(CallOutgoing01Icon, "TransferIcon")
-export const VoicemailIcon = icon(VoiceIcon, "VoicemailIcon")
 
 /* Copying a data section. */
 export const CopyIcon = icon(Copy01Icon, "CopyIcon")
-export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")
 
-/* The revamp. */
-export const SeekIcon = icon(PlayCircleIcon, "SeekIcon")
 export const CorrectionIcon = icon(AiMagicIcon, "CorrectionIcon")
 export const BackchannelIcon = icon(Message01Icon, "BackchannelIcon")
 export const ToolIcon = icon(PlugSocketIcon, "ToolIcon")
@@ -95,11 +74,6 @@ export const OrganizationIcon = icon(Building02Icon, "OrganizationIcon")
 export const OwnerIcon = icon(UserIcon, "OwnerIcon")
 export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon")
 
-/* Sections in the panel, and the index that lists them. */
-export const SectionIndexIcon = icon(ListViewIcon, "SectionIndexIcon")
-export const AddSectionIcon = icon(PlusSignIcon, "AddSectionIcon")
-export const SentimentIcon = icon(SmileIcon, "SentimentIcon")
-export const ReviewIcon = icon(CheckListIcon, "ReviewIcon")
 
 /* Searching the transcript. */
 export const SearchIcon = icon(Search01Icon, "SearchIcon")

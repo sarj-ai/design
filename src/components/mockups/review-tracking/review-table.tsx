@@ -21,7 +21,7 @@ import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
 import { cn } from "@/lib/utils"
 
 /** A column an idea adds: its header and what each row shows in it. */
-export type ExtraColumn = {
+type ExtraColumn = {
   id: string
   head: React.ReactNode
   cell: (call: CallRow, index: number) => React.ReactNode

@@ -73,11 +73,6 @@ export const REELS: Reel[] = [
   // `npm run new:reel` appends new reels above this line.
 ]
 
-/** Seconds, for a card that wants to print a length. */
-export function reelLength(reel: Reel): string {
-  return `${Math.round(reel.duration / FPS)}s`
-}
-
 /** One reel by its route. */
 export function reelAt(href: string): Reel {
   const reel = REELS.find((entry) => entry.href === href)

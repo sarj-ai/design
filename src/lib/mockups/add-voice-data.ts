@@ -5,7 +5,7 @@
  * these options are platform-wide, not per-customer.
  */
 
-export type Option = { value: string; label: string }
+type Option = { value: string; label: string }
 
 /** The languages the library currently carries voices for. */
 export const LANGUAGES: Option[] = [
@@ -25,7 +25,7 @@ export const GENDERS: Option[] = [
  * A TTS provider and the model it renders with unless the voice names another
  * one — the model field takes the provider's default when left blank.
  */
-export type Provider = Option & { defaultModel: string }
+type Provider = Option & { defaultModel: string }
 
 export const PROVIDERS: Provider[] = [
   {
@@ -47,7 +47,7 @@ export const PROVIDERS: Provider[] = [
  * picker names the **gender**, because that is what you match on while
  * choosing.
  */
-export type FallbackVoice = {
+type FallbackVoice = {
   id: string
   name: string
   vibe: string

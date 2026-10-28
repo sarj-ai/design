@@ -275,7 +275,7 @@ function tick(now: number) {
   frame = orbs.size ? requestAnimationFrame(tick) : 0
 }
 
-export type OrbAvatarProps = React.ComponentProps<typeof Avatar> & {
+type OrbAvatarProps = React.ComponentProps<typeof Avatar> & {
   /** Who it stands for. Read out to screen readers and used as the seed. */
   name: string
   tone?: OrbTone

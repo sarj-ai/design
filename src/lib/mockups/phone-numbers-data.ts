@@ -8,7 +8,7 @@
  * every column here is a column that exists today.
  */
 
-export type NumberDirection = "both" | "inbound" | "outbound"
+type NumberDirection = "both" | "inbound" | "outbound"
 
 export const NUMBER_DIRECTION_LABELS: Record<NumberDirection, string> = {
   both: "Inbound & outbound",
@@ -158,7 +158,7 @@ export const TRUNKS: TrunkRow[] = [
 
 /* ------------------------------------------------------ Provisioned numbers */
 
-export type ProvisionedRow = {
+type ProvisionedRow = {
   connectionLabel: null | string
   connectionPending: boolean
   direction: NumberDirection

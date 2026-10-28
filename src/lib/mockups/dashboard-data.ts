@@ -44,7 +44,7 @@ export type NumberCard = {
   series?: Series
 }
 
-export type DashboardData = {
+type DashboardData = {
   comparison: string
   summary: NumberCard[]
   analytics: NumberCard[]

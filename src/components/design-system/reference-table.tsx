@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils"
  * prose rather than in a separate block underneath it.
  */
 
-export type ReferenceColumn = {
+type ReferenceColumn = {
   header: string
   /**
    * A literal width class — Tailwind only emits a utility it can see spelled

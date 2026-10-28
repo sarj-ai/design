@@ -4,7 +4,7 @@ export type PersonaGender = "Male" | "Female"
 export const LANGUAGES: PersonaLanguage[] = ["Arabic", "English"]
 export const GENDERS: PersonaGender[] = ["Male", "Female"]
 
-export type Voice = {
+type Voice = {
   id: string
   /** Display name, in the voice's own language. */
   name: string

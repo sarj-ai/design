@@ -68,19 +68,19 @@ export const SCHEDULED_CALLS = 3180
 /* -------------------------------------------------------------- conversion */
 
 /** Minutes since midnight, 0–1439. */
-export function timeOfDayToMinutes(time: TimeOfDay) {
+function timeOfDayToMinutes(time: TimeOfDay) {
   const hour = time.hour % 12
   return (time.meridiem === "pm" ? hour + 12 : hour) * 60 + time.minute
 }
 
 /** The wait as the single number the platform stores it as. */
-export function waitToMinutes(wait: WaitDuration) {
+function waitToMinutes(wait: WaitDuration) {
   return wait.days * 1440 + wait.hours * 60 + wait.minutes
 }
 
 /* ------------------------------------------------------------- the rules */
 
-export type RetryErrors = {
+type RetryErrors = {
   wait: null | string
   window: null | string
 }

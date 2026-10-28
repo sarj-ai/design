@@ -1,11 +1,9 @@
 "use client"
 
 import {
-  ArrowLeft02Icon,
   PauseIcon,
   PlayIcon,
   RefreshIcon,
-  VideoReplayIcon,
 } from "@hugeicons/core-free-icons"
 
 import { icon } from "@/components/shared/icon"
@@ -14,5 +12,3 @@ import { icon } from "@/components/shared/icon"
 export const PlayReelIcon = icon(PlayIcon, "PlayReelIcon")
 export const PauseReelIcon = icon(PauseIcon, "PauseReelIcon")
 export const RestartIcon = icon(RefreshIcon, "RestartIcon")
-export const BackToReelsIcon = icon(ArrowLeft02Icon, "BackToReelsIcon")
-export const ReelIcon = icon(VideoReplayIcon, "ReelIcon")

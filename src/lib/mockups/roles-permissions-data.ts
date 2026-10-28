@@ -14,9 +14,6 @@
  * that resolve to two. The grants below are Phase 1's split.
  */
 
-/** Frozen so a screenshot taken next month reads the same as today's. */
-export const NOW = "2026-08-25T09:00:00.000Z"
-
 export type PermissionId = string
 
 export type Permission = {
@@ -35,7 +32,7 @@ export const SECTIONS = [
   { id: "platform", label: "Cross-organization and platform" },
 ] as const
 
-export type SectionId = (typeof SECTIONS)[number]["id"]
+type SectionId = (typeof SECTIONS)[number]["id"]
 
 export const PERMISSIONS: Record<SectionId, Permission[]> = {
   "own-org": [
@@ -276,7 +273,7 @@ export const GRANTS: Record<string, PermissionId[]> = {
   "super-admin": ALL_IDS,
 }
 
-export type Diff = { granted: Permission[]; revoked: Permission[] }
+type Diff = { granted: Permission[]; revoked: Permission[] }
 
 export function diffGrants(
   before: PermissionId[],
@@ -288,10 +285,6 @@ export function diffGrants(
     granted: ALL_PERMISSIONS.filter((p) => has.has(p.id) && !had.has(p.id)),
     revoked: ALL_PERMISSIONS.filter((p) => had.has(p.id) && !has.has(p.id)),
   }
-}
-
-export function permissionById(id: PermissionId): Permission | undefined {
-  return ALL_PERMISSIONS.find((permission) => permission.id === id)
 }
 
 /**

@@ -22,7 +22,7 @@ export const RTL: Record<LanguageCode, boolean> = {
   ur: true,
 }
 
-export type Persona = {
+type Persona = {
   id: string
   name: string
   language: LanguageCode
@@ -80,7 +80,7 @@ export type Preset = {
 }
 
 /** What every existing multi-language scenario migrates to: continuity, no phrase. */
-export const MIGRATED: SwitchConfig = {
+const MIGRATED: SwitchConfig = {
   handoffPhrase: {},
   switchVoice: false,
   target: {},

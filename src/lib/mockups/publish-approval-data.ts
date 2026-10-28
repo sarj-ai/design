@@ -161,10 +161,10 @@ const SUMMARY_V14 =
 const SUMMARY_V15 = `${SUMMARY_V14} The greeting now names Riyad Bank.`
 
 /** v15, saved while v14 waits — the "version changes while pending" case. */
-export const V15_GREETING =
+const V15_GREETING =
   "Hello {{name}}, this is Sara from Riyad Bank's branch team. Do you have a minute for a quick survey?"
 
-export const MAIN_NOTE =
+const MAIN_NOTE =
   "Riyad Bank's branch reports moved to a 5-point scale this month, and they asked for low scores to reach the branch manager the same day."
 
 /** The request on the live scenario, in whatever state a case opens it. */

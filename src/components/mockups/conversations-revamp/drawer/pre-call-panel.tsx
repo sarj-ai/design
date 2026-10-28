@@ -96,7 +96,7 @@ export function PreCallPanel({
 }
 
 /** Why this call was booked, where it came from, when it dials, how to stop it. */
-export function ScheduledCallSection({
+function ScheduledCallSection({
   onCancel,
   ranFrom,
   schedule,

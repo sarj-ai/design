@@ -90,7 +90,7 @@ export type SurfaceId =
   | "record"
   | "page"
 
-export type SurfaceChoice = {
+type SurfaceChoice = {
   id: SurfaceId
   title: string
   /** Where it sits relative to the page the reader was on. */
@@ -273,7 +273,7 @@ export type SurfaceRuleId =
   | "record-url"
   | "picker"
 
-export type SurfaceRule = {
+type SurfaceRule = {
   id: SurfaceRuleId
   label: string
   detail: string
@@ -378,46 +378,6 @@ export const DEMO_VOICES = [
   { id: "layla-gulf", label: "Layla — Gulf Arabic" },
   { id: "omar-msa", label: "Omar — Modern Standard" },
   { id: "sara-egyptian", label: "Sara — Egyptian" },
-]
-
-export const DEMO_RECORDINGS = [
-  { id: "CL-8840", label: "CL-8840 — Al Bilad Bank, 10:11" },
-  { id: "CL-8842", label: "CL-8842 — Rawabi Holding, 3:44" },
-]
-
-/** The anatomy of the index page, named part by part. */
-export const INDEX_PAGE_PARTS: Rule[] = [
-  {
-    label: "Header",
-    detail:
-      "Title on the left. One line of description under it only when the title does not say enough — most pages have none. Page state, such as a quota or a sync status, sits on the right, level with the title. Never an action there.",
-  },
-  {
-    label: "Actions",
-    detail:
-      "Buttons at the end of the search row: secondary ones first, outlined; the create action last and the only filled one. When a page has several ways of adding content (a knowledge base: files, a URL, text), those become a row of tiles under the title instead — an icon over a verb. PageHeader and ActionTile from shared/page-header.",
-  },
-  {
-    label: "Views",
-    detail:
-      "Two lists of the same object — Active and Recently deleted — are the system's secondary tabs, directly under the title. They pick the list, so they come before the search and filters that narrow it. Not two pages, and not a filter.",
-  },
-  {
-    label: "Controls",
-    detail:
-      'Search at the start of the row, the page\'s buttons at its end. Filters on the line under it, as chips from shared/filter-bar: an unset filter is "+ Field", a set one reads its value ("Language: English", or a count past one) with an × to clear it, and Clear all appears once two are set. Three or four chips at most; the rest sit behind + Filter. Dates are one range chip with presets, never an after and a before.',
-  },
-  { label: "Content", detail: "Table, list, grid or cards." },
-  {
-    label: "Row actions",
-    detail: "Per row, overflow, destructive, and bulk once selection exists.",
-  },
-  {
-    label: "Footer",
-    detail:
-      'Under the table: "1–10 of 12" at the start; the page size ("10 / page") and First, Previous and Next as a joined group of icons at the end. No labels. ListFooter from shared/list-footer.',
-  },
-  { label: "States", detail: "Loading, empty, no results, error, populated." },
 ]
 
 /* ---------------------------------------------------------------------------
@@ -525,7 +485,7 @@ export const CALL_ROWS: CallRow[] = [
  * matter: a reader who cannot see why `scheduled` is purple will pick amber for
  * it on the next screen.
  */
-export type ChipNote = {
+type ChipNote = {
   label: string
   tone: string
   /** Mapped to a component at the call site so the data file stays data. */
@@ -587,7 +547,7 @@ export const CHIP_NOTES: ChipNote[] = [
  * two conventions doing one job — and the approval checklist gates on exactly
  * that ("one empty-value convention").
  */
-export type EmptyValueNote = {
+type EmptyValueNote = {
   /** Rendered as it appears in the cell. */
   sample: string
   /** The condition, or "Never" for the one that is here as a warning. */
@@ -644,7 +604,7 @@ export const LANGUAGE_NAMES: Record<string, string> = Object.fromEntries(
  * `default` is the height of a normal one, which is what makes a filter bar
  * line up instead of stepping.
  */
-export type ButtonSizeNote = {
+type ButtonSizeNote = {
   size: "xs" | "sm" | "default" | "lg"
   when: string
   why: string
@@ -745,7 +705,7 @@ export const FORM_RULES: Rule[] = [
 ]
 
 /** Which variant carries which kind of action. */
-export type ButtonRoleNote = {
+type ButtonRoleNote = {
   variant: "default" | "outline" | "ghost" | "destructive"
   label: string
   when: string
@@ -881,7 +841,7 @@ export type DocsGroup = {
 export type DocsSection = DocsPage & { groups: DocsGroup[] }
 
 /** The Components section: ours, built for this product. */
-export const PRODUCT_COMPONENTS: DocsPage[] = [
+const PRODUCT_COMPONENTS: DocsPage[] = [
   {
     id: "colour",
     title: "Colour",
@@ -1255,7 +1215,7 @@ export const DOCS_SECTIONS: DocsSection[] = [
  * no ordering guarantee between them.
  * ------------------------------------------------------------------------ */
 
-export type LayerToken = {
+type LayerToken = {
   /** The utility, which is what gets typed. */
   name: string
   value: number
@@ -1310,7 +1270,7 @@ export const LAYER_TOKENS: LayerToken[] = [
  * The control scale. Four heights, and which primitives sit at each.
  * ------------------------------------------------------------------------ */
 
-export type ControlStep = {
+type ControlStep = {
   px: number
   button: string
   /** The field at the same height, or null where nothing pairs with it. */
@@ -1351,7 +1311,7 @@ export const CONTROL_STEPS: ControlStep[] = [
  * primitives and motion; the rest police the decisions written on this site.
  * ------------------------------------------------------------------------ */
 
-export type LintRule = {
+type LintRule = {
   /** The `sarj/*` rule id, as the error prints it. */
   id: string
   bans: string

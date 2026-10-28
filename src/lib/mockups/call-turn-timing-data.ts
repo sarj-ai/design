@@ -7,7 +7,7 @@
  */
 
 /** The three detection paths a call can run, by their platform wire type. */
-export type DetectionPathId = "livekit_v1_mini" | "sarj_eou" | "vad"
+type DetectionPathId = "livekit_v1_mini" | "sarj_eou" | "vad"
 
 export type DetectionPath = {
   id: DetectionPathId
@@ -16,7 +16,7 @@ export type DetectionPath = {
   description: string
 }
 
-export const DETECTION_PATHS: Record<DetectionPathId, DetectionPath> = {
+const DETECTION_PATHS: Record<DetectionPathId, DetectionPath> = {
   livekit_v1_mini: {
     id: "livekit_v1_mini",
     label: "LiveKit v1-mini",

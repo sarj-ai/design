@@ -42,7 +42,7 @@ const AddIcon = icon(PlusSignIcon, "AddIcon")
 const ClearIcon = icon(Cancel01Icon, "ClearIcon")
 
 export type { DateRange }
-export type FilterOption = { value: string; label: string }
+type FilterOption = { value: string; label: string }
 export type Range = { min?: number; max?: number }
 
 /**

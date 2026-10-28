@@ -10,7 +10,7 @@
  * utility it can see spelled out in a source file.
  */
 
-export type ColourToken = {
+type ColourToken = {
   /** The name without its `--` prefix. */
   name: string
   /** Exactly what `globals.css` sets it to. */
@@ -20,7 +20,7 @@ export type ColourToken = {
   use: string
 }
 
-export type ColourGroup = {
+type ColourGroup = {
   title: string
   note: string
   tokens: ColourToken[]

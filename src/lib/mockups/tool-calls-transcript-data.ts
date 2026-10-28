@@ -37,7 +37,7 @@ export type TranscriptMessage =
       startAt: number
     }
 
-export type CallCase = {
+type CallCase = {
   id: string
   label: string
   startedAt: number

@@ -15,7 +15,7 @@
 
 import type { LanguageCode } from "@/lib/mockups/scenario-single-screen-data"
 
-export type SectionId = "context" | "escalation" | "identity" | "scope" | "tone"
+type SectionId = "context" | "escalation" | "identity" | "scope" | "tone"
 
 /**
  * One prose section, and how it is introduced to somebody who has never
@@ -25,7 +25,7 @@ export type SectionId = "context" | "escalation" | "identity" | "scope" | "tone"
  * wording. `label` is what the screen says. They are deliberately different:
  * "Scope limitation" is precise and means nothing to a restaurant manager.
  */
-export interface SectionMeta {
+interface SectionMeta {
   /** Shown when the section is empty — teaching by example, not by tooltip. */
   example: string
   /** The `#` heading this section round-trips to in the raw prompt. */

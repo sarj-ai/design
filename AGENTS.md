@@ -66,7 +66,7 @@ src/app/(mockups)/<slug>/page.tsx        one route per mockup — the group is n
 src/components/mockups/<slug>/           that mockup's components
 src/components/mockups/<slug>/icons.tsx  its icons, named for what they do here
 src/lib/mockups/<slug>-data.ts           its mock data
-src/components/ui/                       61 shadcn primitives — GENERATED, do not edit
+src/components/ui/                       50 shadcn primitives — GENERATED, do not edit
 src/components/shell/                    the chrome screens sit in: mockup-shell, app-shell and their icons
 src/components/shell/page-transition.tsx the curtain between screens — mounted once, in the root layout
 src/components/shared/                   building blocks more than one area uses: icon.tsx, data-table.tsx

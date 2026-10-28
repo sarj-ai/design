@@ -63,7 +63,7 @@ export const FLAG_SUBCATEGORIES = {
   other: [],
 } as const satisfies Record<FlagCategory, readonly string[]>
 
-export type FlagSubcategory<C extends FlagCategory = FlagCategory> =
+type FlagSubcategory<C extends FlagCategory = FlagCategory> =
   (typeof FLAG_SUBCATEGORIES)[C][number]
 
 /**
@@ -73,7 +73,7 @@ export type FlagSubcategory<C extends FlagCategory = FlagCategory> =
  * the person flagging often cannot tell which stage the delay came from.
  * `none` is a category with nothing beneath it, complete on its own.
  */
-export type SubcategoryRule = "required" | "optional" | "none"
+type SubcategoryRule = "required" | "optional" | "none"
 
 export const FLAG_SUBCATEGORY_RULES: Record<FlagCategory, SubcategoryRule> = {
   stt: "required",
@@ -89,7 +89,7 @@ export const FLAG_SUBCATEGORY_RULES: Record<FlagCategory, SubcategoryRule> = {
 }
 
 /** A flag as it is submitted: the category decides which subcategories are legal. */
-export type CallFlagSelection = {
+type CallFlagSelection = {
   [C in FlagCategory]: { category: C; subcategories: FlagSubcategory<C>[] }
 }[FlagCategory]
 
@@ -106,7 +106,7 @@ export const FLAG_CATEGORY_LABELS: Record<FlagCategory, string> = {
   other: "Other",
 }
 
-export const FLAG_SUBCATEGORY_LABELS: {
+const FLAG_SUBCATEGORY_LABELS: {
   [C in FlagCategory]: Record<FlagSubcategory<C>, string>
 } = {
   stt: {

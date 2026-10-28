@@ -129,7 +129,7 @@ const BAND_EDGES_HZ = [90, 350, 900, 2000, 4000]
 const MIN_DB = -85
 const MAX_DB = -25
 
-export type MicrophoneState = "idle" | "asking" | "live" | "unavailable"
+type MicrophoneState = "idle" | "asking" | "live" | "unavailable"
 
 /**
  * The microphone's level in four bands while `active`, from the real input.

@@ -27,7 +27,6 @@ import {
   PlayIcon,
   PlusSignIcon,
   PreferenceVerticalIcon,
-  QuoteDownIcon,
   Search01Icon,
   Settings01Icon,
   SidebarRight01Icon,
@@ -50,9 +49,6 @@ import { icon } from "@/components/shared/icon"
 
 /** The alerts section, and the empty state when nothing has been configured. */
 export const FlagsIcon = icon(Flag02Icon, "FlagsIcon")
-
-/** Marks the evidence block as a quotation lifted out of the transcript. */
-export const EvidenceIcon = icon(QuoteDownIcon, "EvidenceIcon")
 
 /** One rung of the satisfaction rating. Filled with `fill-current`. */
 export const RatingStarIcon = icon(StarIcon, "RatingStarIcon")

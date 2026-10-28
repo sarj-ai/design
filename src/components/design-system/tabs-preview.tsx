@@ -323,7 +323,7 @@ export function TabsPreview() {
  * Geometry goes in `style` because it is measured; every class here is on the
  * scale.
  */
-export type TabItem = {
+type TabItem = {
   id: string
   label: string
   Icon?: React.ComponentType

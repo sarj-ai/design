@@ -33,7 +33,7 @@ const CHIP_ICONS = {
  * tab wants the five tints shown being used. One table, one set of data, two
  * framings; a second copy would drift.
  */
-export function ChipTable() {
+function ChipTable() {
   return (
     <ReferenceTable
       columns={[

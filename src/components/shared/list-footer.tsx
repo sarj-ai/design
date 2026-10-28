@@ -21,7 +21,7 @@ const FirstIcon = icon(ArrowLeftDoubleIcon, "FirstIcon")
 const PreviousIcon = icon(ArrowLeft01Icon, "PreviousIcon")
 const NextIcon = icon(ArrowRight01Icon, "NextIcon")
 
-export const PAGE_SIZES = [10, 25, 50, 100] as const
+const PAGE_SIZES = [10, 25, 50, 100] as const
 
 /**
  * The row under a list.

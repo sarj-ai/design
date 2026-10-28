@@ -79,7 +79,7 @@ import {
  * you visit once and then leave alone.
  */
 
-export interface NavItem {
+interface NavItem {
   /** Label for the hover "+", on the two things you create most. */
   action?: string
   /** A count beside the label — what is waiting on the viewer there. */
@@ -249,7 +249,7 @@ function NavGroup({
 }
 
 /** Breadcrumb start, account end — the row every page in the app sits under. */
-export function AppHeader({
+function AppHeader({
   actions,
   scope,
   developers,

@@ -32,7 +32,7 @@ import { DockIcon } from "@/components/shell/workspace-icons"
  * one; every colour, size and duration is this repo's.
  */
 
-export type DockSection = { id: string; label: string }
+type DockSection = { id: string; label: string }
 
 /* Ring geometry. r=8 in a 20px box leaves 2px for the 2px stroke to sit inside
    without clipping at any rotation. */

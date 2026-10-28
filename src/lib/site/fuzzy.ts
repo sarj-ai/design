@@ -72,7 +72,7 @@ function condense(text: string): string {
 const WORDS = /[\p{L}\p{N}]+/gu
 
 /** A field, split every way a term is going to be tried against it. */
-export type Field = {
+type Field = {
   normalized: string
   condensed: string
   words: string[]

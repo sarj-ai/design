@@ -255,7 +255,7 @@ function contentWords(text: string): string[] {
     .filter((word) => word.length > 2 && !FILLER.has(word))
 }
 
-export type Overlap = {
+type Overlap = {
   routeIds: [string, string]
   cases: [string, string]
   /** The words the two cases have in common, for the warning copy. */

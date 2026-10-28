@@ -66,7 +66,7 @@ const SMALL = new Set([
 ])
 
 /** True when every word after the first starts with a capital. */
-export function isTitleCase(text) {
+function isTitleCase(text) {
   const words = text.match(/[A-Za-z][A-Za-z'’]*/g) ?? []
   if (words.length < 2) return false
   const rest = words

@@ -112,7 +112,7 @@ export const ELSEWHERE: Record<string, string> = {
 export const LINK_EXPIRY = ["1 day", "7 days", "30 days"] as const
 export type LinkExpiry = (typeof LINK_EXPIRY)[number]
 
-export const RETENTIONS = ["2 years", "5 years", "10 years"] as const
+const RETENTIONS = ["2 years", "5 years", "10 years"] as const
 export type Retention = (typeof RETENTIONS)[number]
 
 export type Organization = {

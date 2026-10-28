@@ -71,7 +71,7 @@ export function sectionHref(id: string): string {
 }
 
 /** What a URL resolves to. `page` is null on the overview and on a section. */
-export type DocsLocation = {
+type DocsLocation = {
   section: DocsSection | null
   page: DocsPage | null
   /** What the pane is keyed on: a topic id, a section id, or "" on the

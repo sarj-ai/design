@@ -654,7 +654,7 @@ export function JsonView({ value }: { value: Json }) {
 
 type CompareProps = { left: Side; right: Side; only: boolean }
 
-export function JsonUnified({ left, right, only }: CompareProps) {
+function JsonUnified({ left, right, only }: CompareProps) {
   const { folds, toggle } = useFolds()
   const lines = toUnified(left.value, right.value, { folds, only })
 
@@ -686,7 +686,7 @@ export function JsonUnified({ left, right, only }: CompareProps) {
   )
 }
 
-export function JsonTable({ left, right, only }: CompareProps) {
+function JsonTable({ left, right, only }: CompareProps) {
   const a = isContainer(left.value) ? left.value : {}
   const b = isContainer(right.value) ? right.value : {}
   const { keys, left: leftTop, right: rightTop } = union(a, b)
@@ -791,7 +791,7 @@ function ValueRow({
   )
 }
 
-export function JsonSideBySide({ left, right, only }: CompareProps) {
+function JsonSideBySide({ left, right, only }: CompareProps) {
   const { folds, toggle } = useFolds()
   const { copied, copy } = useCopy()
   const rows = toRows(left.value, right.value, { folds, only })

@@ -21,7 +21,7 @@ import registryJson from "../../../registry.json"
    client bundle. Re-exported so the MCP tools keep one import. */
 export { DEFAULT_CWD }
 
-export type RegistryFile = {
+type RegistryFile = {
   path: string
   type: string
   target: string

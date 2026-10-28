@@ -9,7 +9,7 @@
 
 export type Language = "ar" | "en"
 
-export const LANGUAGES: { id: Language; label: string }[] = [
+const LANGUAGES: { id: Language; label: string }[] = [
   { id: "ar", label: "Arabic" },
   { id: "en", label: "English" },
 ]
@@ -30,7 +30,7 @@ export type Cue = Clip & {
  * Approved cues are configured per language, so a language with none cannot
  * run listener cues at all — the mix is not a global list filtered by language.
  */
-export const APPROVED_CLIPS: Record<Language, Clip[]> = {
+const APPROVED_CLIPS: Record<Language, Clip[]> = {
   ar: [
     { id: "ar-mmm", label: "ممم" },
     { id: "ar-aha", label: "أها" },
@@ -111,13 +111,6 @@ export function personaOverride(
     en: { ...globals.en, cues: [...globals.en.cues] },
   }
 }
-
-/** The voices this persona picks between — the row listener cues sits under. */
-export const VOICES = [
-  { id: "v-nourah", name: "Nourah" },
-  { id: "v-aisha", name: "Aisha" },
-  { id: "v-salma", name: "Salma" },
-]
 
 /* ------------------------------------------------------------------------- *
  * Weights

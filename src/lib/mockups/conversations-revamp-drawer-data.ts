@@ -7,7 +7,7 @@
  * ships now.
  */
 
-export type CallStatus =
+type CallStatus =
   | "cancelled"
   | "completed"
   | "dialing"
@@ -29,7 +29,7 @@ export type CallStatus =
  * did not. A call with no verdict has no `OutcomeStatus` at all — it prints
  * Not available, which is the absence of a reading rather than a third one.
  */
-export type OutcomeStatus = "met" | "not_met"
+type OutcomeStatus = "met" | "not_met"
 
 /** What an `OutcomeStatus` prints. Lowercase, as the table column prints it. */
 export const OUTCOME_LABELS: Record<OutcomeStatus, string> = {
@@ -37,28 +37,9 @@ export const OUTCOME_LABELS: Record<OutcomeStatus, string> = {
   not_met: "not met",
 }
 
-export type CallDirection = "inbound" | "outbound"
+type CallDirection = "inbound" | "outbound"
 
-/** What the status badge prints. */
-export const CALL_STATUS_LABELS: Record<CallStatus, string> = {
-  cancelled: "cancelled",
-  completed: "completed",
-  dialing: "dialing",
-  expired: "expired",
-  failed: "failed",
-  in_progress: "in progress",
-  max_duration_reached: "max duration reached",
-  queued: "queued",
-  ringing: "ringing",
-  scheduled: "scheduled",
-  timeout: "not answered",
-  transferred: "transferred",
-  transferring: "transferring",
-  user_rejected: "user rejected",
-  voicemail: "voicemail",
-}
-
-export type TranscriptTurn = {
+type TranscriptTurn = {
   role: "agent" | "caller" | "human agent"
   content: string
   /** Seconds into the recording, printed under the bubble. */
@@ -199,79 +180,7 @@ export type RevampTurn = {
 
 export const RECORDING_SECONDS = 204
 
-export const REVAMP_TRANSCRIPT: RevampTurn[] = [
-  {
-    role: "agent",
-    kind: "speech",
-    content:
-      "مساء الخير، معك المساعد الآلي من قطاع التحصيل في قرى للتمويل. هل أتحدث مع الأستاذ سعود؟",
-    at: 2,
-  },
-  { role: "caller", kind: "speech", content: "نعم، أنا سعود. تفضل.", at: 8 },
-  {
-    role: "agent",
-    kind: "tool",
-    content: "Looked up the account balance",
-    at: 11,
-    tool: {
-      name: "get_account_balance",
-      args: '{ "account_reference": "QF-88420-3" }',
-      ms: 412,
-      response:
-        '{\n  "outstanding_balance": "4820.00",\n  "currency": "SAR",\n  "days_overdue": 7,\n  "late_fee_applied": "0.00"\n}',
-    },
-  },
-  {
-    role: "agent",
-    kind: "speech",
-    content:
-      "شكراً لك. لديك مبلغ مستحق قدره 4,820 ريال على حسابك. هل بإمكانك تحديد موعد للسداد؟",
-    at: 12,
-  },
-  { role: "caller", kind: "backchannel", content: "أيوه…", at: 21 },
-  {
-    role: "caller",
-    kind: "speech",
-    content: "أقدر أسدد يوم 18 من هذا الشهر، بتحويل من نون.",
-    at: 24,
-    corrections: [{ from: "njoonw", to: "نون" }],
-  },
-  { role: "agent", kind: "backchannel", content: "تمام…", at: 28 },
-  {
-    role: "agent",
-    kind: "speech",
-    content:
-      "ممتاز. سجلت وعد بالسداد بتاريخ 18 أغسطس. الرقم المرجعي هو 4 7 2 9. هل تفضل أن أرسله لك برسالة نصية؟",
-    at: 29,
-    corrections: [{ from: "4 7 2 9ين", to: "4 7 2 9" }],
-  },
-  {
-    role: "agent",
-    kind: "tool",
-    content: "Recorded the payment promise",
-    at: 39,
-    tool: {
-      name: "record_payment_promise",
-      args: '{ "promised_date": "2026-08-18", "amount": "4820.00" }',
-      ms: 288,
-      response: '{ "status": "recorded", "reference": "4729" }',
-    },
-  },
-  {
-    role: "caller",
-    kind: "speech",
-    content: "إي، أرسله رسالة. 4 7 2 9، صح؟",
-    at: 41,
-  },
-  {
-    role: "agent",
-    kind: "speech",
-    content: "صحيح تماماً. شكراً لوقتك، وطاب يومك.",
-    at: 47,
-  },
-]
-
-export type Outcome = {
+type Outcome = {
   title: string
   status: OutcomeStatus
   reason: string
@@ -549,13 +458,13 @@ export const SUMMARY = {
 }
 
 /** Which part of the agent has to change to resolve the insight. */
-export type InsightCategory = "knowledge" | "platform" | "prompt" | "tool"
+type InsightCategory = "knowledge" | "platform" | "prompt" | "tool"
 
 /**
  * An insight, as the product actually models it: a title, a description, and a
  * category. No status, no criteria, no success or failure.
  */
-export type Insight = {
+type Insight = {
   id: string
   title: string
   description: string
@@ -640,7 +549,7 @@ export const ISSUE_TYPE_ORDER: IssueType[] = [
  * boolean on the call — which is why the control sits by the player and why a
  * call can carry several.
  */
-export type CallFlag = {
+type CallFlag = {
   id: string
   issueType: IssueType
   timestampMs: number
