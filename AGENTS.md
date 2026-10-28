@@ -445,12 +445,6 @@ prove the gate is still on, which is the half worth having.
 **Localhost is open.** No Access, no password, nothing to configure: `npm run
 dev`, `npm run shots` and `npm run thumbs` all just work.
 
-`src/proxy.ts` still holds the HTTP Basic gate the Vercel deployment used,
-commented out and with the instructions for switching it back on. It does
-nothing today — Access replaced it. Deleting it is fine; leaving it is fine.
-What is not fine is reading it as a description of how the live site is
-gated, because it is not.
-
 ## The shadcn registry
 
 Every mockup is published as a shadcn registry item, so a screen can be pulled
