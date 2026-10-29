@@ -6,10 +6,18 @@ import { toast } from "sonner"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  ElevenLabsIdea,
+  IntercomIdea,
+  VapiIdea,
+} from "@/components/mockups/review-tracking/competitor-ideas"
 import {
   HistoryIdea,
   LastOpenedIdea,
@@ -22,10 +30,13 @@ import {
   ReviewModeIdea,
   SessionIdea,
 } from "@/components/mockups/review-tracking/review-ideas"
-import { SeenIn } from "@/components/mockups/review-tracking/seen-in"
 import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
-import { IDEAS, type IdeaId } from "@/lib/mockups/review-tracking-data"
+import {
+  COMPETITORS,
+  IDEAS,
+  type IdeaId,
+} from "@/lib/mockups/review-tracking-data"
 
 const VIEWS: Record<IdeaId, () => React.ReactNode> = {
   "row-numbers": RowNumbersIdea,
@@ -36,6 +47,9 @@ const VIEWS: Record<IdeaId, () => React.ReactNode> = {
   history: HistoryIdea,
   "review-mode": ReviewModeIdea,
   session: SessionIdea,
+  elevenlabs: ElevenLabsIdea,
+  vapi: VapiIdea,
+  intercom: IntercomIdea,
 }
 
 export default function ReviewTrackingPage() {
@@ -49,25 +63,35 @@ export default function ReviewTrackingPage() {
   return (
     <MockupShell
       actions={
-        <div className="flex items-center gap-2">
-          <SeenIn idea={idea} />
-          <Select
-            onValueChange={(value) => setIdea(value as IdeaId)}
-            value={idea}
-          >
-            <SelectTrigger aria-label="Idea" size="sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent align="end" position="popper">
+        <Select
+          onValueChange={(value) => setIdea(value as IdeaId)}
+          value={idea}
+        >
+          <SelectTrigger aria-label="Idea" size="sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent align="end" position="popper">
+            <SelectGroup>
+              <SelectLabel>Ideas</SelectLabel>
               {IDEAS.map((entry, index) => (
                 <SelectItem key={entry.id} value={entry.id}>
                   {index + 1}. {entry.label}
                   <span className="text-muted-foreground">{entry.from}</span>
                 </SelectItem>
               ))}
-            </SelectContent>
-          </Select>
-        </div>
+            </SelectGroup>
+            <SelectSeparator />
+            <SelectGroup>
+              <SelectLabel>How competitors do it</SelectLabel>
+              {COMPETITORS.map((entry) => (
+                <SelectItem key={entry.id} value={entry.id}>
+                  {entry.label}
+                  <span className="text-muted-foreground">{entry.from}</span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       }
       title="Keeping your place in conversation review"
     >

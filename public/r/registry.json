@@ -3920,7 +3920,7 @@
       "name": "review-tracking",
       "type": "registry:block",
       "title": "Keeping your place in conversation review",
-      "description": "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session.",
+      "description": "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session. Then how ElevenLabs, Vapi and Intercom handle it.",
       "dependencies": [
         "@hugeicons/core-free-icons",
         "@hugeicons/react",
@@ -3993,6 +3993,11 @@
           "target": "@components/sarj/mockups/review-tracking/call-drawer.tsx"
         },
         {
+          "path": "src/components/mockups/review-tracking/competitor-ideas.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/competitor-ideas.tsx"
+        },
+        {
           "path": "src/components/mockups/review-tracking/conversations-frame.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/review-tracking/conversations-frame.tsx"
@@ -4016,11 +4021,6 @@
           "path": "src/components/mockups/review-tracking/review-table.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/review-tracking/review-table.tsx"
-        },
-        {
-          "path": "src/components/mockups/review-tracking/seen-in.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/mockups/review-tracking/seen-in.tsx"
         },
         {
           "path": "src/components/shared/data-table.tsx",

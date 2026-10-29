@@ -389,10 +389,10 @@ export const MOCKUPS: Mockup[] = [
   {
     href: "/review-tracking",
     title: "Keeping your place in conversation review",
-    meta: "Page · 8 ideas",
+    meta: "Page · 8 ideas, 3 competitors",
     surface: "Conversations",
     description:
-      "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session.",
+      "Every idea from the INT-287 thread for tracking which conversation to review next, on the Conversations page as it ships: row numbers, last opened, unread dots, a reviewed checkbox, saved for later, watch history, a review mode and a review session. Then how ElevenLabs, Vapi and Intercom handle it.",
     icon: SparklesIcon,
     tickets: ["INT-287"],
     added: "2026-10-28T05:02:24.794Z",
