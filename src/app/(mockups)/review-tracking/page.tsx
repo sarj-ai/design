@@ -22,6 +22,7 @@ import {
   ReviewModeIdea,
   SessionIdea,
 } from "@/components/mockups/review-tracking/review-ideas"
+import { SeenIn } from "@/components/mockups/review-tracking/seen-in"
 import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
 import { IDEAS, type IdeaId } from "@/lib/mockups/review-tracking-data"
@@ -48,22 +49,25 @@ export default function ReviewTrackingPage() {
   return (
     <MockupShell
       actions={
-        <Select
-          onValueChange={(value) => setIdea(value as IdeaId)}
-          value={idea}
-        >
-          <SelectTrigger aria-label="Idea" size="sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent align="end" position="popper">
-            {IDEAS.map((entry, index) => (
-              <SelectItem key={entry.id} value={entry.id}>
-                {index + 1}. {entry.label}
-                <span className="text-muted-foreground">{entry.from}</span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <SeenIn idea={idea} />
+          <Select
+            onValueChange={(value) => setIdea(value as IdeaId)}
+            value={idea}
+          >
+            <SelectTrigger aria-label="Idea" size="sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end" position="popper">
+              {IDEAS.map((entry, index) => (
+                <SelectItem key={entry.id} value={entry.id}>
+                  {index + 1}. {entry.label}
+                  <span className="text-muted-foreground">{entry.from}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       }
       title="Keeping your place in conversation review"
     >

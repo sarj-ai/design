@@ -4018,6 +4018,11 @@
           "target": "@components/sarj/mockups/review-tracking/review-table.tsx"
         },
         {
+          "path": "src/components/mockups/review-tracking/seen-in.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/review-tracking/seen-in.tsx"
+        },
+        {
           "path": "src/components/shared/data-table.tsx",
           "type": "registry:component",
           "target": "@components/sarj/shared/data-table.tsx"
