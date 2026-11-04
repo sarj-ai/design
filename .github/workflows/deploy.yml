@@ -136,3 +136,9 @@ jobs:
             *)
               echo "::warning::$URL -> $code. Not gated, not reachable either; worth a look, but not a reason to fail a deploy that uploaded fine." ;;
           esac
+
+      - name: Verify deployed Worker security
+        run: node .github/scripts/verify-worker-security.mjs design-lab --previews-disabled
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

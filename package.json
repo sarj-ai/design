@@ -68,7 +68,7 @@
     "cf:preview": "opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare deploy",
     "postinstall": "patch-package --error-on-fail",
-    "test:security": "node --test --test-timeout=10000 scripts/braces-depth-guard.test.mjs"
+    "test:security": "node --test --test-timeout=10000 scripts/braces-depth-guard.test.mjs .github/scripts/verify-worker-security.test.mjs"
   },
   "overrides": {
     "@node-minify/core": {

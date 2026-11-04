@@ -11,17 +11,18 @@
 
   "workers_dev": false,
   // A separate switch, off by default; preview.yml needs it.
-  "preview_urls": true,
+  "preview_urls": false,
   "assets": {
     "binding": "ASSETS",
-    "directory": ".open-next/assets"
+    "directory": ".open-next/assets",
   },
   // next/image is used on the index and in the two shells. Without this
   // binding the optimiser has nothing to call and every image 500s.
   "images": {
-    "binding": "IMAGES"
+    "binding": "IMAGES",
   },
   "observability": {
-    "enabled": true
-  }
+    "redact_query_string": true,
+    "enabled": true,
+  },
 }
