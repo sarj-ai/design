@@ -84,6 +84,11 @@ jobs:
           fi
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
+      - name: Verify the preview requires Sarj Access
+        env:
+          PREVIEW_URL: ${{ steps.upload.outputs.url }}
+        run: node .github/scripts/verify-preview-access.mjs "$PREVIEW_URL"
+
       - name: Comment the preview URL
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

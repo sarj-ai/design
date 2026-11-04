@@ -11,7 +11,7 @@
 
   "workers_dev": false,
   // A separate switch, off by default; preview.yml needs it.
-  "preview_urls": false,
+  "preview_urls": true,
   "assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets",
