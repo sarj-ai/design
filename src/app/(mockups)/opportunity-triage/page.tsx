@@ -3,9 +3,16 @@
 import * as React from "react"
 
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TabsContent } from "@/components/ui/tabs"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { CreatedIcon } from "@/components/mockups/opportunity-triage/icons"
+import { SecondaryTabs } from "@/components/design-system/tabs-preview"
+import {
+  ConfigurationTabIcon,
+  CreatedIcon,
+  OpportunitiesTabIcon,
+  ScenarioTabIcon,
+  ScheduleTabIcon,
+} from "@/components/mockups/opportunity-triage/icons"
 import { OpportunitiesPanel } from "@/components/mockups/opportunity-triage/opportunities-panel"
 import { AppShell } from "@/components/shell/app-shell"
 import { MockupShell } from "@/components/shell/mockup-shell"
@@ -27,13 +34,29 @@ const STATES = [
 type ReviewState = (typeof STATES)[number]["id"]
 
 const TABS = [
-  { id: "configuration", label: "Configuration", short: "Configuration" },
-  { id: "scenario", label: "Scenario", short: "Scenario" },
-  { id: "schedule", label: "Schedule configuration", short: "Schedule" },
+  {
+    id: "configuration",
+    label: "Configuration",
+    short: "Configuration",
+    Icon: ConfigurationTabIcon,
+  },
+  {
+    id: "scenario",
+    label: "Scenario",
+    short: "Scenario",
+    Icon: ScenarioTabIcon,
+  },
+  {
+    id: "schedule",
+    label: "Schedule configuration",
+    short: "Schedule",
+    Icon: ScheduleTabIcon,
+  },
   {
     id: "opportunities",
     label: "Optimization opportunities",
     short: "Opportunities",
+    Icon: OpportunitiesTabIcon,
   },
 ] as const
 
@@ -102,7 +125,26 @@ export default function OpportunityTriagePage() {
             </div>
           </header>
 
-          <Tabs
+          <SecondaryTabs
+            items={TABS.map((entry) => ({
+              id: entry.id,
+              Icon: entry.Icon,
+              label: (
+                <>
+                  <span className="lg:hidden">{entry.short}</span>
+                  <span className="hidden lg:inline">{entry.label}</span>
+                  {entry.id === "opportunities" && showDot ? (
+                    <>
+                      <span
+                        aria-hidden
+                        className="size-1.5 rounded-full bg-primary"
+                      />
+                      <span className="sr-only">New since your last visit</span>
+                    </>
+                  ) : null}
+                </>
+              ),
+            }))}
             onValueChange={(next) => {
               const nextTab = next as Tab
               if (nextTab === "opportunities" && visit === "before") {
@@ -115,36 +157,10 @@ export default function OpportunityTriagePage() {
             }}
             value={tab}
           >
-            <div className="overflow-x-auto border-b">
-              <TabsList className="gap-2 lg:gap-4" variant="line">
-                {TABS.map((entry) => (
-                  <TabsTrigger
-                    className="flex-none"
-                    key={entry.id}
-                    value={entry.id}
-                  >
-                    <span className="lg:hidden">{entry.short}</span>
-                    <span className="hidden lg:inline">{entry.label}</span>
-                    {entry.id === "opportunities" && showDot ? (
-                      <>
-                        <span
-                          aria-hidden
-                          className="size-1.5 rounded-full bg-primary"
-                        />
-                        <span className="sr-only">
-                          New since your last visit
-                        </span>
-                      </>
-                    ) : null}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
-
             {TABS.filter((entry) => entry.id !== "opportunities").map(
               (entry) => (
                 <TabsContent
-                  className="pt-6 motion-safe:data-active:animate-pane-in motion-reduce:animate-none"
+                  className="pt-2 motion-safe:data-active:animate-pane-in motion-reduce:animate-none"
                   key={entry.id}
                   value={entry.id}
                 >
@@ -156,7 +172,7 @@ export default function OpportunityTriagePage() {
             )}
 
             <TabsContent
-              className="pt-6 motion-safe:data-active:animate-pane-in motion-reduce:animate-none"
+              className="pt-2 motion-safe:data-active:animate-pane-in motion-reduce:animate-none"
               value="opportunities"
             >
               <OpportunitiesPanel
@@ -167,7 +183,7 @@ export default function OpportunityTriagePage() {
                 showNew={visit !== "after"}
               />
             </TabsContent>
-          </Tabs>
+          </SecondaryTabs>
         </main>
       </AppShell>
     </MockupShell>

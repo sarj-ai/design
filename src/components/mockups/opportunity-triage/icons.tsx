@@ -3,8 +3,11 @@ import {
   BookOpen01Icon,
   Calendar03Icon,
   Copy01Icon,
+  File01Icon,
+  Idea01Icon,
   Layers01Icon,
   Message01Icon,
+  Settings02Icon,
   Tag01Icon,
   Tick02Icon,
   Wrench01Icon,
@@ -25,3 +28,8 @@ export const KnowledgeCategoryIcon = icon(
 export const PromptCategoryIcon = icon(Message01Icon, "PromptCategoryIcon")
 export const PlatformCategoryIcon = icon(Layers01Icon, "PlatformCategoryIcon")
 export const OtherCategoryIcon = icon(Tag01Icon, "OtherCategoryIcon")
+
+export const ConfigurationTabIcon = icon(Settings02Icon, "ConfigurationTabIcon")
+export const ScenarioTabIcon = icon(File01Icon, "ScenarioTabIcon")
+export const ScheduleTabIcon = icon(Calendar03Icon, "ScheduleTabIcon")
+export const OpportunitiesTabIcon = icon(Idea01Icon, "OpportunitiesTabIcon")

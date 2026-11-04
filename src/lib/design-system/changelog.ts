@@ -14,6 +14,17 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    date: "2026-11-04",
+    title: "A tab can carry a marker after its name",
+    changes: [
+      {
+        kind: "changed",
+        text: "PrimaryTabs and SecondaryTabs take any node as a tab's label, so a tab can show a dot for what is new since your last visit. The scenario's Optimization opportunities tab is the first to use it.",
+      },
+    ],
+    topics: ["tabs"],
+  },
+  {
     date: "2026-11-02",
     title: "The buttons page shows every button and nothing else",
     changes: [

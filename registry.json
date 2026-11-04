@@ -5934,6 +5934,7 @@
         "separator",
         "sidebar",
         "skeleton",
+        "table",
         "tabs",
         "toggle-group",
         "tooltip"
@@ -5943,6 +5944,21 @@
           "path": "src/app/(mockups)/opportunity-triage/page.tsx",
           "type": "registry:page",
           "target": "app/opportunity-triage/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
         },
         {
           "path": "src/components/mockups/opportunity-triage/icons.tsx",

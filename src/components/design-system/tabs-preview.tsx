@@ -256,7 +256,8 @@ export function TabsPreview() {
 
 type TabItem = {
   id: string
-  label: string
+  /** Usually a word. A node when the tab carries a marker after its name, such as a new-since-last-visit dot. */
+  label: React.ReactNode
   Icon?: React.ComponentType
 }
 
