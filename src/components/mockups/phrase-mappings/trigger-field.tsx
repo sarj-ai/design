@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { FieldError } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   MAX_TRIGGERS,
   TRIGGER_MAX_CHARS,
   isContested,
   normalize,
   type Conflict,
-} from "@/lib/mockups/phrase-mappings-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/phrase-mappings-data";
+import { cn } from "@/lib/utils";
 
-import { RemoveTriggerIcon } from "./icons"
+import { RemoveTriggerIcon } from "./icons";
 
 export function TriggerField({
   conflicts,
@@ -24,25 +24,25 @@ export function TriggerField({
   onRemove,
   triggers,
 }: {
-  conflicts: Conflict[]
-  disabled: boolean
-  onAdd: (trigger: string) => void
-  onRemove: (trigger: string) => void
-  triggers: string[]
+  conflicts: Conflict[];
+  disabled: boolean;
+  onAdd: (trigger: string) => void;
+  onRemove: (trigger: string) => void;
+  triggers: string[];
 }) {
-  const [draft, setDraft] = React.useState("")
+  const [draft, setDraft] = React.useState("");
 
-  const full = triggers.length >= MAX_TRIGGERS
-  const tooLong = draft.length > TRIGGER_MAX_CHARS
+  const full = triggers.length >= MAX_TRIGGERS;
+  const tooLong = draft.length > TRIGGER_MAX_CHARS;
   const duplicate = triggers.some(
     (trigger) => normalize(trigger) === normalize(draft) && draft.trim() !== "",
-  )
+  );
 
   function commit() {
-    const value = draft.trim()
-    if (!value || full || tooLong || duplicate) return
-    onAdd(value)
-    setDraft("")
+    const value = draft.trim();
+    if (!value || full || tooLong || duplicate) return;
+    onAdd(value);
+    setDraft("");
   }
 
   return (
@@ -84,9 +84,9 @@ export function TriggerField({
           onBlur={commit}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key !== "Enter") return
-            event.preventDefault()
-            commit()
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            commit();
           }}
           placeholder={
             full
@@ -117,5 +117,5 @@ export function TriggerField({
             : null}
       </FieldError>
     </div>
-  )
+  );
 }

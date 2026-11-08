@@ -1,4 +1,4 @@
-import { collectStrings, parseClasses } from "../lib/classes.mjs"
+import { collectStrings, parseClasses } from "../lib/classes.mjs";
 
 const RAW_ELEMENTS = {
   button:
@@ -15,19 +15,19 @@ const RAW_ELEMENTS = {
   label:
     "`<FieldLabel>` inside a Field, or `<Label>` from @/components/ui/label — both carry the size, weight and disabled state a label needs",
   kbd: "`<Kbd>` from @/components/ui/kbd",
-}
+};
 
-const RADIUS = /^rounded(-|$)/
-const EDGE = /^(border|ring)(-|$)/
-const PADDING = /^p[xytrbles]?-/
+const RADIUS = /^rounded(-|$)/;
+const EDGE = /^(border|ring)(-|$)/;
+const PADDING = /^p[xytrbles]?-/;
 
 // `<X asChild><button>` is idiomatic shadcn: the child must be a raw element, and a Button there would nest two buttons.
 function isAsChildTarget(node) {
-  const parentElement = node.parent?.parent
-  if (parentElement?.type !== "JSXElement") return false
+  const parentElement = node.parent?.parent;
+  if (parentElement?.type !== "JSXElement") return false;
   return (parentElement.openingElement?.attributes ?? []).some(
     (attr) => attr.type === "JSXAttribute" && attr.name?.name === "asChild",
-  )
+  );
 }
 
 const useUiPrimitives = {
@@ -49,35 +49,36 @@ const useUiPrimitives = {
   create(context) {
     return {
       JSXOpeningElement(node) {
-        const name = node.name?.type === "JSXIdentifier" ? node.name.name : null
-        if (!name) return
+        const name =
+          node.name?.type === "JSXIdentifier" ? node.name.name : null;
+        if (!name) return;
 
-        const replacement = RAW_ELEMENTS[name]
+        const replacement = RAW_ELEMENTS[name];
         if (replacement) {
-          if (isAsChildTarget(node)) return
+          if (isAsChildTarget(node)) return;
           context.report({
             node: node.name,
             messageId: "rawElement",
             data: { element: name, replacement },
-          })
-          return
+          });
+          return;
         }
 
-        if (name !== "div") return
+        if (name !== "div") return;
 
         const classAttr = node.attributes.find(
           (attr) =>
             attr.type === "JSXAttribute" && attr.name?.name === "className",
-        )
-        if (!classAttr) return
+        );
+        if (!classAttr) return;
 
         const bases = collectStrings(classAttr.value)
           .flatMap(({ value }) => parseClasses(value))
-          .map(({ base }) => base)
+          .map(({ base }) => base);
 
-        const hasRadius = bases.some((b) => RADIUS.test(b))
-        const hasEdge = bases.some((b) => EDGE.test(b))
-        const hasPadding = bases.some((b) => PADDING.test(b))
+        const hasRadius = bases.some((b) => RADIUS.test(b));
+        const hasEdge = bases.some((b) => EDGE.test(b));
+        const hasPadding = bases.some((b) => PADDING.test(b));
 
         if (hasRadius && hasEdge && hasPadding) {
           context.report({
@@ -90,11 +91,11 @@ const useUiPrimitives = {
                 )
                 .join(" "),
             },
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default useUiPrimitives
+export default useUiPrimitives;

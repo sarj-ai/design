@@ -1,44 +1,44 @@
-export type VariableKind = "global" | "scenario" | "system"
+export type VariableKind = "global" | "scenario" | "system";
 
-type VariableType = "boolean" | "date" | "number" | "text"
+type VariableType = "boolean" | "date" | "number" | "text";
 
 export interface ScenarioVariable {
-  kind: "scenario"
-  name: string
-  required: boolean
-  type: VariableType
-  defaultValue?: string
+  kind: "scenario";
+  name: string;
+  required: boolean;
+  type: VariableType;
+  defaultValue?: string;
 }
 
 export interface PlatformVariable {
-  kind: "global" | "system"
-  name: string
-  description: string
+  kind: "global" | "system";
+  name: string;
+  description: string;
 }
 
-export type Variable = PlatformVariable | ScenarioVariable
+export type Variable = PlatformVariable | ScenarioVariable;
 
 export const KIND_ORDER: readonly VariableKind[] = [
   "scenario",
   "global",
   "system",
-]
+];
 
 export const KIND_LABEL: Record<VariableKind, { group: string; one: string }> =
   {
     scenario: { group: "Scenario variables", one: "Scenario variable" },
     global: { group: "Global variables", one: "Global variable" },
     system: { group: "System information", one: "System information" },
-  }
+  };
 
 const TYPE_LABEL: Record<VariableType, string> = {
   boolean: "Yes or no",
   date: "Date",
   number: "Number",
   text: "Text",
-}
+};
 
-const TIMEZONE = "Asia/Riyadh"
+const TIMEZONE = "Asia/Riyadh";
 
 const SCENARIO_VARIABLES: ScenarioVariable[] = [
   { kind: "scenario", name: "guest_name", required: true, type: "text" },
@@ -70,7 +70,7 @@ const SCENARIO_VARIABLES: ScenarioVariable[] = [
     required: false,
     type: "number",
   },
-]
+];
 
 const GLOBAL_VARIABLES: PlatformVariable[] = [
   { description: "Name of the AI agent", kind: "global", name: "agent_name" },
@@ -79,7 +79,7 @@ const GLOBAL_VARIABLES: PlatformVariable[] = [
     kind: "global",
     name: "agent_gender",
   },
-]
+];
 
 const SYSTEM_VARIABLES: PlatformVariable[] = [
   {
@@ -103,55 +103,55 @@ const SYSTEM_VARIABLES: PlatformVariable[] = [
     kind: "system",
     name: "user_phone_number",
   },
-]
+];
 
 export function describe(variable: Variable): string {
   if (variable.kind !== "scenario") {
-    const zoned = variable.name === "date" || variable.name === "time"
+    const zoned = variable.name === "date" || variable.name === "time";
     return zoned
       ? `${variable.description} · ${TIMEZONE}`
-      : variable.description
+      : variable.description;
   }
 
-  const type = TYPE_LABEL[variable.type]
-  if (variable.required) return `${type} · required`
+  const type = TYPE_LABEL[variable.type];
+  if (variable.required) return `${type} · required`;
   return variable.defaultValue
     ? `${type} · defaults to ${variable.defaultValue}`
-    : `${type} · optional`
+    : `${type} · optional`;
 }
 
-export type VariablesState = "loading" | "none" | "populated"
+export type VariablesState = "loading" | "none" | "populated";
 
 export const VARIABLE_STATES: { label: string; value: VariablesState }[] = [
   { label: "Populated", value: "populated" },
   { label: "None", value: "none" },
   { label: "Loading", value: "loading" },
-]
+];
 
 export function variablesFor(state: VariablesState): Variable[] {
-  const scenario = state === "none" ? [] : SCENARIO_VARIABLES
-  return [...scenario, ...GLOBAL_VARIABLES, ...SYSTEM_VARIABLES]
+  const scenario = state === "none" ? [] : SCENARIO_VARIABLES;
+  return [...scenario, ...GLOBAL_VARIABLES, ...SYSTEM_VARIABLES];
 }
 
-export const SCENARIO = { name: "Reservation Assistant for Sizzler" }
+export const SCENARIO = { name: "Reservation Assistant for Sizzler" };
 
-export type LanguageCode = "ar" | "en"
+export type LanguageCode = "ar" | "en";
 
-export const LANGUAGES: readonly LanguageCode[] = ["en", "ar"]
+export const LANGUAGES: readonly LanguageCode[] = ["en", "ar"];
 
 export const LANGUAGE_LABEL: Record<LanguageCode, string> = {
   ar: "Arabic",
   en: "English",
-}
+};
 
 export const LANGUAGE_SHORT: Record<LanguageCode, string> = {
   ar: "AR",
   en: "EN",
-}
+};
 
 export interface PromptText {
-  firstMessage: string
-  prompt: string
+  firstMessage: string;
+  prompt: string;
 }
 
 /** Stored as `{{name}}`; the chip is display only. `{{promo_code}}` is undefined on purpose: a stale mention. */
@@ -200,4 +200,4 @@ Transfer to a manager for parties over 12, same-day cancellations inside 2 hours
 # التصعيد
 حوّل المكالمة إلى مدير للحجوزات التي تزيد عن 12 شخصًا، وإلغاءات اليوم نفسه خلال ساعتين، وأي شكوى عن زيارة سابقة. اذكر {{promo_code}} فقط إذا سأل الضيف عن العروض.`,
   },
-}
+};

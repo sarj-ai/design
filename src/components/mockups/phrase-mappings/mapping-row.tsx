@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,23 +16,23 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Field, FieldDescription, FieldTitle } from "@/components/ui/field"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Field, FieldDescription, FieldTitle } from "@/components/ui/field";
 import {
   MAX_TRIGGERS,
   type Conflict,
   type Mapping,
   type PreviewVoice,
   textDirection,
-} from "@/lib/mockups/phrase-mappings-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/phrase-mappings-data";
+import { cn } from "@/lib/utils";
 
-import { DeleteMappingIcon, RespondsWithIcon } from "./icons"
-import { ResponseField } from "./response-field"
-import { TriggerField } from "./trigger-field"
+import { DeleteMappingIcon, RespondsWithIcon } from "./icons";
+import { ResponseField } from "./response-field";
+import { TriggerField } from "./trigger-field";
 
 export function MappingRow({
   conflicts,
@@ -43,26 +43,26 @@ export function MappingRow({
   onRemove,
   voice,
 }: {
-  conflicts: Conflict[]
-  disabled: boolean
-  fieldId: string
-  mapping: Mapping
-  onChange: (mapping: Mapping) => void
-  onRemove: () => void
-  voice: PreviewVoice
+  conflicts: Conflict[];
+  disabled: boolean;
+  fieldId: string;
+  mapping: Mapping;
+  onChange: (mapping: Mapping) => void;
+  onRemove: () => void;
+  voice: PreviewVoice;
 }) {
-  const set = (patch: Partial<Mapping>) => onChange({ ...mapping, ...patch })
+  const set = (patch: Partial<Mapping>) => onChange({ ...mapping, ...patch });
 
   const contested = conflicts.some((conflict) =>
     conflict.mappingIds.includes(mapping.id),
-  )
+  );
 
-  const [firstTrigger, ...restTriggers] = mapping.triggers
+  const [firstTrigger, ...restTriggers] = mapping.triggers;
 
   /* Resolved, not `auto`: `rtl:` cannot see through `dir="auto"`, and the arrow must mirror. */
-  const pairDirection = textDirection(firstTrigger ?? "", mapping.response)
+  const pairDirection = textDirection(firstTrigger ?? "", mapping.response);
 
-  const name = mapping.response.trim() || firstTrigger || "this mapping"
+  const name = mapping.response.trim() || firstTrigger || "this mapping";
 
   /* `not-last:`, not bare `border-b-0`: the primitive's divider sits under a variant that outranks it. */
   return (
@@ -226,5 +226,5 @@ export function MappingRow({
         </CardContent>
       </Card>
     </AccordionItem>
-  )
+  );
 }

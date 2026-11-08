@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   SCENARIO,
   VARIABLE_STATES,
   variablesFor,
   type VariablesState,
-} from "@/lib/mockups/variable-mentions-data"
+} from "@/lib/mockups/variable-mentions-data";
 
 import {
   CHIP_TREATMENTS,
   type ChipTreatment,
-} from "@/components/mockups/variable-mentions/chip-treatment"
-import { ScenarioPrompt } from "@/components/mockups/variable-mentions/scenario-prompt"
+} from "@/components/mockups/variable-mentions/chip-treatment";
+import { ScenarioPrompt } from "@/components/mockups/variable-mentions/scenario-prompt";
 
 export default function VariableMentionsPage() {
-  const [treatment, setTreatment] = React.useState<ChipTreatment>("kind")
-  const [state, setState] = React.useState<VariablesState>("populated")
-  const [viewOnly, setViewOnly] = React.useState(false)
+  const [treatment, setTreatment] = React.useState<ChipTreatment>("kind");
+  const [state, setState] = React.useState<VariablesState>("populated");
+  const [viewOnly, setViewOnly] = React.useState(false);
 
   const variables = React.useMemo(
     () => variablesFor(state === "loading" ? "populated" : state),
     [state],
-  )
+  );
 
   return (
     <MockupShell
@@ -40,7 +40,7 @@ export default function VariableMentionsPage() {
             <span className="text-xs text-muted-foreground">Chip colour</span>
             <ToggleGroup
               onValueChange={(value) => {
-                if (value) setTreatment(value as ChipTreatment)
+                if (value) setTreatment(value as ChipTreatment);
               }}
               size="sm"
               type="single"
@@ -61,7 +61,7 @@ export default function VariableMentionsPage() {
             <span className="text-xs text-muted-foreground">Variables</span>
             <ToggleGroup
               onValueChange={(value) => {
-                if (value) setState(value as VariablesState)
+                if (value) setState(value as VariablesState);
               }}
               size="sm"
               type="single"
@@ -98,5 +98,5 @@ export default function VariableMentionsPage() {
         />
       </AppShell>
     </MockupShell>
-  )
+  );
 }

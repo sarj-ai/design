@@ -1,20 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@/components/ui/input-group"
-import { WAIT_DAYS_MAX, type WaitDuration } from "@/lib/mockups/call-retry-data"
+} from "@/components/ui/input-group";
+import {
+  WAIT_DAYS_MAX,
+  type WaitDuration,
+} from "@/lib/mockups/call-retry-data";
 
 export function WaitDurationField({
   description,
@@ -25,40 +28,40 @@ export function WaitDurationField({
   onChange,
   value,
 }: {
-  description: string
-  disabled?: boolean
-  error: null | string
+  description: string;
+  disabled?: boolean;
+  error: null | string;
   /** Prefix for the three input ids. */
-  id: string
-  label: string
-  onChange: (value: WaitDuration) => void
-  value: WaitDuration
+  id: string;
+  label: string;
+  onChange: (value: WaitDuration) => void;
+  value: WaitDuration;
 }) {
   /** Raw text while typing, as in TimeOfDayField. Cleared on blur. */
   const [draft, setDraft] = React.useState<null | {
-    days: string
-    hours: string
-    minutes: string
-  }>(null)
+    days: string;
+    hours: string;
+    minutes: string;
+  }>(null);
 
   const text = draft ?? {
     days: value.days.toString(),
     hours: value.hours.toString().padStart(2, "0"),
     minutes: value.minutes.toString().padStart(2, "0"),
-  }
+  };
 
-  const CEILINGS = { days: WAIT_DAYS_MAX, hours: 23, minutes: 59 }
+  const CEILINGS = { days: WAIT_DAYS_MAX, hours: 23, minutes: 59 };
 
   function edit(part: "days" | "hours" | "minutes", raw: string) {
-    setDraft({ ...text, [part]: raw })
+    setDraft({ ...text, [part]: raw });
 
-    const parsed = Number(raw)
-    if (raw === "" || Number.isNaN(parsed)) return
+    const parsed = Number(raw);
+    if (raw === "" || Number.isNaN(parsed)) return;
 
     onChange({
       ...value,
       [part]: Math.min(Math.max(parsed, 0), CEILINGS[part]),
-    })
+    });
   }
 
   return (
@@ -78,10 +81,10 @@ export function WaitDurationField({
             max={WAIT_DAYS_MAX}
             min={0}
             onBlur={() => {
-              setDraft(null)
+              setDraft(null);
             }}
             onChange={(event) => {
-              edit("days", event.target.value)
+              edit("days", event.target.value);
             }}
             type="number"
             value={text.days}
@@ -101,10 +104,10 @@ export function WaitDurationField({
               max={23}
               min={0}
               onBlur={() => {
-                setDraft(null)
+                setDraft(null);
               }}
               onChange={(event) => {
-                edit("hours", event.target.value)
+                edit("hours", event.target.value);
               }}
               type="number"
               value={text.hours}
@@ -122,10 +125,10 @@ export function WaitDurationField({
               max={59}
               min={0}
               onBlur={() => {
-                setDraft(null)
+                setDraft(null);
               }}
               onChange={(event) => {
-                edit("minutes", event.target.value)
+                edit("minutes", event.target.value);
               }}
               type="number"
               value={text.minutes}
@@ -136,5 +139,5 @@ export function WaitDurationField({
 
       <FieldError>{error}</FieldError>
     </Field>
-  )
+  );
 }

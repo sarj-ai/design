@@ -1,9 +1,9 @@
-import { arbitraryValue, createClassVisitor } from "../lib/classes.mjs"
+import { arbitraryValue, createClassVisitor } from "../lib/classes.mjs";
 
 // The one allowed exception, a ResizeObserver height morph, is marked with an inline disable comment.
 
 const LAYOUT_PROPERTY =
-  /\b(width|height|padding|margin|top|right|bottom|left|inset|inline-size|block-size|flex-basis|gap|font-size|border-width|all)\b/
+  /\b(width|height|padding|margin|top|right|bottom|left|inset|inline-size|block-size|flex-basis|gap|font-size|border-width|all)\b/;
 
 const noLayoutAnimation = {
   meta: {
@@ -25,23 +25,23 @@ const noLayoutAnimation = {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
         if (base === "transition-all") {
-          context.report({ node, messageId: "transitionAll" })
-          continue
+          context.report({ node, messageId: "transitionAll" });
+          continue;
         }
-        if (!base.startsWith("transition-")) continue
+        if (!base.startsWith("transition-")) continue;
 
-        const arbitrary = arbitraryValue(base)
-        const target = arbitrary ?? base.slice("transition-".length)
+        const arbitrary = arbitraryValue(base);
+        const target = arbitrary ?? base.slice("transition-".length);
         if (LAYOUT_PROPERTY.test(target)) {
           context.report({
             node,
             messageId: "layoutProperty",
             data: { cls: raw },
-          })
+          });
         }
       }
-    })
+    });
   },
-}
+};
 
-export default noLayoutAnimation
+export default noLayoutAnimation;

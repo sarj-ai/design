@@ -1,14 +1,14 @@
 export type Column = {
-  id: string
-  label: string
-}
+  id: string;
+  label: string;
+};
 
 function pick(options: Column[], ids: string[]): Column[] {
   return ids.map((id) => {
-    const option = options.find((column) => column.id === id)
-    if (!option) throw new Error(`configure-report: unknown column "${id}"`)
-    return option
-  })
+    const option = options.find((column) => column.id === id);
+    if (!option) throw new Error(`configure-report: unknown column "${id}"`);
+    return option;
+  });
 }
 
 export const STANDARD_OPTIONS: Column[] = [
@@ -20,7 +20,7 @@ export const STANDARD_OPTIONS: Column[] = [
   { id: "outcome", label: "outcome" },
   { id: "duration", label: "duration" },
   { id: "transcript", label: "transcript" },
-]
+];
 
 export const VARIABLE_OPTIONS: Column[] = [
   { id: "agent_name", label: "agent_name" },
@@ -36,7 +36,7 @@ export const VARIABLE_OPTIONS: Column[] = [
   { id: "age", label: "age" },
   { id: "zoho_record_id", label: "zoho_record_id" },
   { id: "zoho_module", label: "zoho_module" },
-]
+];
 
 export const COLLECTED_OPTIONS: Column[] = [
   { id: "sentiment", label: "sentiment" },
@@ -50,21 +50,21 @@ export const COLLECTED_OPTIONS: Column[] = [
   { id: "promised_payment_date", label: "Promised_payment_date" },
   { id: "customer_name", label: "customer_name" },
   { id: "notes", label: "notes" },
-]
+];
 
-export const INITIAL_STANDARD: Column[] = STANDARD_OPTIONS
+export const INITIAL_STANDARD: Column[] = STANDARD_OPTIONS;
 
 export const INITIAL_VARIABLES: Column[] = pick(VARIABLE_OPTIONS, [
   "agent_name",
   "date",
   "time",
   "campaign_name",
-])
+]);
 
 export const INITIAL_COLLECTED: Column[] = pick(COLLECTED_OPTIONS, [
   "promised_payment_date",
   "customer_name",
-])
+]);
 
 export const TEMPLATES = [
   { id: "default", label: "Default template" },
@@ -72,4 +72,4 @@ export const TEMPLATES = [
   { id: "call-performance", label: "Call Performance" },
   { id: "lead-qualification", label: "Lead Qualification" },
   { id: "customer-feedback", label: "Customer Feedback" },
-]
+];

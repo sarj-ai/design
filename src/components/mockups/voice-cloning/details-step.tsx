@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { errorId, FieldHeader } from "@/components/design-system/field-header"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { errorId, FieldHeader } from "@/components/design-system/field-header";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
-import { usePlayback } from "@/components/mockups/voice-cloning/audio"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { usePlayback } from "@/components/mockups/voice-cloning/audio";
 import {
   PauseVoiceIcon,
   PlayVoiceIcon,
-} from "@/components/mockups/voice-cloning/icons"
+} from "@/components/mockups/voice-cloning/icons";
 import {
   DIALECTS,
   GENDER_OPTIONS,
@@ -34,17 +34,17 @@ import {
   LANGUAGE_OPTIONS,
   type LanguageCode,
   PREVIEW_LINE,
-} from "@/lib/mockups/voice-cloning-data"
+} from "@/lib/mockups/voice-cloning-data";
 
 export type Details = {
-  name: string
-  vibe: string
-  language: LanguageCode
-  dialect: string
-  gender: Gender
-  publish: boolean
-  consent: boolean
-}
+  name: string;
+  vibe: string;
+  language: LanguageCode;
+  dialect: string;
+  gender: Gender;
+  publish: boolean;
+  consent: boolean;
+};
 
 export function detailsErrors(details: Details) {
   return {
@@ -52,7 +52,7 @@ export function detailsErrors(details: Details) {
     consent: details.consent
       ? null
       : "Confirm you have the right to use this voice.",
-  }
+  };
 }
 
 export function DetailsStep({
@@ -61,21 +61,21 @@ export function DetailsStep({
   canPublish,
   showErrors,
 }: {
-  details: Details
-  setDetails: React.Dispatch<React.SetStateAction<Details>>
-  canPublish: boolean
-  showErrors: boolean
+  details: Details;
+  setDetails: React.Dispatch<React.SetStateAction<Details>>;
+  canPublish: boolean;
+  showErrors: boolean;
 }) {
-  const playback = usePlayback(4)
-  const { play } = playback
-  const errors = showErrors ? detailsErrors(details) : null
+  const playback = usePlayback(4);
+  const { play } = playback;
+  const errors = showErrors ? detailsErrors(details) : null;
 
   React.useEffect(() => {
-    play()
-  }, [play])
+    play();
+  }, [play]);
 
   const set = <Key extends keyof Details>(key: Key, value: Details[Key]) =>
-    setDetails((current) => ({ ...current, [key]: value }))
+    setDetails((current) => ({ ...current, [key]: value }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -133,12 +133,12 @@ export function DetailsStep({
           <FieldLabel htmlFor="clone-language">Language</FieldLabel>
           <Select
             onValueChange={(value) => {
-              const language = value as LanguageCode
+              const language = value as LanguageCode;
               setDetails((current) => ({
                 ...current,
                 language,
                 dialect: DIALECTS[language][0],
-              }))
+              }));
             }}
             value={details.language}
           >
@@ -231,5 +231,5 @@ export function DetailsStep({
         </div>
       </Field>
     </div>
-  )
+  );
 }

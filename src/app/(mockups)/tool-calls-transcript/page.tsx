@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { CallTranscript } from "@/components/mockups/tool-calls-transcript/call-transcript"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Card, CardContent } from "@/components/ui/card"
+import { CallTranscript } from "@/components/mockups/tool-calls-transcript/call-transcript";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { CALL_CASES } from "@/lib/mockups/tool-calls-transcript-data"
+} from "@/components/ui/select";
+import { CALL_CASES } from "@/lib/mockups/tool-calls-transcript-data";
 
 export default function ToolCallsTranscriptPage() {
-  const [caseId, setCaseId] = React.useState(CALL_CASES[0].id)
+  const [caseId, setCaseId] = React.useState(CALL_CASES[0].id);
   const active =
-    CALL_CASES.find((entry) => entry.id === caseId) ?? CALL_CASES[0]
+    CALL_CASES.find((entry) => entry.id === caseId) ?? CALL_CASES[0];
 
   return (
     <MockupShell
@@ -52,5 +52,5 @@ export default function ToolCallsTranscriptPage() {
         </Card>
       </main>
     </MockupShell>
-  )
+  );
 }

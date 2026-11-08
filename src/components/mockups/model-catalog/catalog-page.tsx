@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { AddModelDialog } from "@/components/mockups/model-catalog/add-model-dialog"
+import { AddModelDialog } from "@/components/mockups/model-catalog/add-model-dialog";
 import {
   AddModelIcon,
   LoadFailedIcon,
@@ -12,10 +12,10 @@ import {
   NoteIcon,
   RetryIcon,
   SearchIcon,
-} from "@/components/mockups/model-catalog/icons"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+} from "@/components/mockups/model-catalog/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -23,20 +23,20 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -44,13 +44,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   CATALOG,
   MODALITIES,
@@ -58,26 +58,26 @@ import {
   providerById,
   type CatalogEntry,
   type Modality,
-} from "@/lib/mockups/model-catalog-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/model-catalog-data";
+import { cn } from "@/lib/utils";
 
-export type CatalogState = "populated" | "empty" | "loading" | "error"
+export type CatalogState = "populated" | "empty" | "loading" | "error";
 
 export function ModelCatalogPage({ state }: { state: CatalogState }) {
-  const [entries, setEntries] = React.useState<CatalogEntry[]>(CATALOG)
-  const [modality, setModality] = React.useState<Modality>("llm")
-  const [search, setSearch] = React.useState("")
-  const [statusFilter, setStatusFilter] = React.useState("all")
-  const [addOpen, setAddOpen] = React.useState(false)
+  const [entries, setEntries] = React.useState<CatalogEntry[]>(CATALOG);
+  const [modality, setModality] = React.useState<Modality>("llm");
+  const [search, setSearch] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState("all");
+  const [addOpen, setAddOpen] = React.useState(false);
 
   function toggleActive(entry: CatalogEntry) {
-    const nowActive = !entry.active
+    const nowActive = !entry.active;
 
     setEntries((previous) =>
       previous.map((item) =>
         item.id === entry.id ? { ...item, active: nowActive } : item,
       ),
-    )
+    );
 
     toast(
       nowActive
@@ -97,10 +97,10 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
             ),
         },
       },
-    )
+    );
   }
 
-  const filtersOn = search.trim() !== "" || statusFilter !== "all"
+  const filtersOn = search.trim() !== "" || statusFilter !== "all";
 
   return (
     <div className="flex flex-col gap-4">
@@ -132,17 +132,17 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
           const all =
             state === "empty"
               ? []
-              : entries.filter((entry) => entry.modality === option.id)
+              : entries.filter((entry) => entry.modality === option.id);
 
           const rows = all.filter((entry) => {
-            if (statusFilter === "active" && !entry.active) return false
-            if (statusFilter === "inactive" && entry.active) return false
-            if (!search.trim()) return true
-            const provider = providerById(entry.providerId)
+            if (statusFilter === "active" && !entry.active) return false;
+            if (statusFilter === "inactive" && entry.active) return false;
+            if (!search.trim()) return true;
+            const provider = providerById(entry.providerId);
             return `${entry.displayName} ${entry.modelId} ${provider?.name ?? ""}`
               .toLowerCase()
-              .includes(search.trim().toLowerCase())
-          })
+              .includes(search.trim().toLowerCase());
+          });
 
           return (
             <TabsContent
@@ -213,15 +213,15 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
                 label={option.label}
                 onAdd={() => setAddOpen(true)}
                 onClearFilters={() => {
-                  setSearch("")
-                  setStatusFilter("all")
+                  setSearch("");
+                  setStatusFilter("all");
                 }}
                 onToggle={toggleActive}
                 rows={rows}
                 state={state}
               />
             </TabsContent>
-          )
+          );
         })}
       </Tabs>
 
@@ -231,7 +231,7 @@ export function ModelCatalogPage({ state }: { state: CatalogState }) {
         open={addOpen}
       />
     </div>
-  )
+  );
 }
 
 function CatalogBody({
@@ -244,14 +244,14 @@ function CatalogBody({
   rows,
   state,
 }: {
-  canAdd: boolean
-  filtersOn: boolean
-  label: string
-  onAdd: () => void
-  onClearFilters: () => void
-  onToggle: (entry: CatalogEntry) => void
-  rows: CatalogEntry[]
-  state: CatalogState
+  canAdd: boolean;
+  filtersOn: boolean;
+  label: string;
+  onAdd: () => void;
+  onClearFilters: () => void;
+  onToggle: (entry: CatalogEntry) => void;
+  rows: CatalogEntry[];
+  state: CatalogState;
 }) {
   if (state === "loading") {
     return (
@@ -283,7 +283,7 @@ function CatalogBody({
           </Table>
         </div>
       </Card>
-    )
+    );
   }
 
   if (state === "error") {
@@ -305,7 +305,7 @@ function CatalogBody({
           </Button>
         </EmptyContent>
       </Empty>
-    )
+    );
   }
 
   if (rows.length === 0 && filtersOn) {
@@ -326,7 +326,7 @@ function CatalogBody({
           </Button>
         </EmptyContent>
       </Empty>
-    )
+    );
   }
 
   if (rows.length === 0) {
@@ -355,7 +355,7 @@ function CatalogBody({
           </EmptyContent>
         ) : null}
       </Empty>
-    )
+    );
   }
 
   return (
@@ -371,7 +371,7 @@ function CatalogBody({
         </Table>
       </div>
     </Card>
-  )
+  );
 }
 
 function CatalogHead() {
@@ -387,17 +387,17 @@ function CatalogHead() {
         </TableHead>
       </TableRow>
     </TableHeader>
-  )
+  );
 }
 
 function CatalogRow({
   entry,
   onToggle,
 }: {
-  entry: CatalogEntry
-  onToggle: (entry: CatalogEntry) => void
+  entry: CatalogEntry;
+  onToggle: (entry: CatalogEntry) => void;
 }) {
-  const provider = providerById(entry.providerId)
+  const provider = providerById(entry.providerId);
 
   return (
     <TableRow className="transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none">
@@ -462,5 +462,5 @@ function CatalogRow({
         </Button>
       </TableCell>
     </TableRow>
-  )
+  );
 }

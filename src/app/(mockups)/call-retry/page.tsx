@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   BATCH_NAME,
   QUEUED_CALLS,
@@ -20,36 +20,36 @@ import {
   SCENARIO_RETRY,
   SCHEDULED_CALLS,
   type RetryConfig,
-} from "@/lib/mockups/call-retry-data"
-import { BatchRetry } from "@/components/mockups/call-retry/batch-retry"
-import { ScenarioRetry } from "@/components/mockups/call-retry/scenario-retry"
+} from "@/lib/mockups/call-retry-data";
+import { BatchRetry } from "@/components/mockups/call-retry/batch-retry";
+import { ScenarioRetry } from "@/components/mockups/call-retry/scenario-retry";
 
-type Surface = "batch" | "scenario"
-type ScenarioState = "off" | "on" | "window"
-type Queue = "none" | "queued"
+type Surface = "batch" | "scenario";
+type ScenarioState = "off" | "on" | "window";
+type Queue = "none" | "queued";
 
 const SCENARIO_STATES: { id: ScenarioState; label: string }[] = [
   { id: "on", label: "Retry on" },
   { id: "off", label: "Retry off" },
   { id: "window", label: "Window invalid" },
-]
+];
 
 function seed(state: ScenarioState): RetryConfig {
-  if (state === "off") return { ...SCENARIO_RETRY, enabled: false }
+  if (state === "off") return { ...SCENARIO_RETRY, enabled: false };
   if (state === "window") {
-    return { ...SCENARIO_RETRY, windowEnd: { ...SCENARIO_RETRY.windowStart } }
+    return { ...SCENARIO_RETRY, windowEnd: { ...SCENARIO_RETRY.windowStart } };
   }
-  return SCENARIO_RETRY
+  return SCENARIO_RETRY;
 }
 
 export default function CallRetryPage() {
-  const [surface, setSurface] = React.useState<Surface>("scenario")
-  const [state, setState] = React.useState<ScenarioState>("on")
-  const [queue, setQueue] = React.useState<Queue>("queued")
-  const [overridden, setOverridden] = React.useState(false)
-  const [config, setConfig] = React.useState<RetryConfig>(SCENARIO_RETRY)
+  const [surface, setSurface] = React.useState<Surface>("scenario");
+  const [state, setState] = React.useState<ScenarioState>("on");
+  const [queue, setQueue] = React.useState<Queue>("queued");
+  const [overridden, setOverridden] = React.useState(false);
+  const [config, setConfig] = React.useState<RetryConfig>(SCENARIO_RETRY);
 
-  const onScenario = surface === "scenario"
+  const onScenario = surface === "scenario";
 
   return (
     <MockupShell
@@ -57,7 +57,7 @@ export default function CallRetryPage() {
         <>
           <ToggleGroup
             onValueChange={(next) => {
-              if (next) setSurface(next as Surface)
+              if (next) setSurface(next as Surface);
             }}
             size="sm"
             type="single"
@@ -74,9 +74,9 @@ export default function CallRetryPage() {
             <>
               <Select
                 onValueChange={(next) => {
-                  const chosen = next as ScenarioState
-                  setState(chosen)
-                  setConfig(seed(chosen))
+                  const chosen = next as ScenarioState;
+                  setState(chosen);
+                  setConfig(seed(chosen));
                 }}
                 value={state}
               >
@@ -94,7 +94,7 @@ export default function CallRetryPage() {
 
               <ToggleGroup
                 onValueChange={(next) => {
-                  if (next) setQueue(next as Queue)
+                  if (next) setQueue(next as Queue);
                 }}
                 size="sm"
                 type="single"
@@ -108,7 +108,7 @@ export default function CallRetryPage() {
           ) : (
             <ToggleGroup
               onValueChange={(next) => {
-                if (next) setOverridden(next === "override")
+                if (next) setOverridden(next === "override");
               }}
               size="sm"
               type="single"
@@ -132,8 +132,8 @@ export default function CallRetryPage() {
             : `Batch Calls · ${BATCH_NAME}`
         }
         onNavigate={(title) => {
-          if (title === "Scenarios") setSurface("scenario")
-          if (title === "Batch Calls") setSurface("batch")
+          if (title === "Scenarios") setSurface("scenario");
+          if (title === "Batch Calls") setSurface("batch");
         }}
       >
         <div className="flex flex-1 flex-col p-3 lg:p-4">
@@ -162,5 +162,5 @@ export default function CallRetryPage() {
         </div>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

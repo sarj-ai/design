@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { EditPersonaDialog } from "@/components/mockups/persona-pronunciation/edit-persona-dialog"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { EditPersonaDialog } from "@/components/mockups/persona-pronunciation/edit-persona-dialog";
 
 export default function PersonaPronunciationPage() {
   return (
@@ -13,5 +13,5 @@ export default function PersonaPronunciationPage() {
         <EditPersonaDialog />
       </main>
     </MockupShell>
-  )
+  );
 }

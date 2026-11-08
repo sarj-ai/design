@@ -1,22 +1,22 @@
-import { createAttributeVisitor } from "../lib/classes.mjs"
+import { createAttributeVisitor } from "../lib/classes.mjs";
 import {
   classesOf,
   getAttr,
   isOpaqueClassName,
   jsxName,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
 /** These animate from inside src/components/ui, so they are checked by name. */
-const SELF_ANIMATED = new Set(["Skeleton"])
+const SELF_ANIMATED = new Set(["Skeleton"]);
 
-const ANIMATED = /^(transition|animate)(-|$)/
+const ANIMATED = /^(transition|animate)(-|$)/;
 const INERT = new Set([
   "transition-none",
   "animate-none",
   "motion-safe",
   "motion-reduce",
-])
+]);
 
 const motionReduce = {
   meta: {
@@ -35,17 +35,17 @@ const motionReduce = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     const classVisitor = createAttributeVisitor(({ classes }) => {
       const hasEscape = classes.some(({ variants }) =>
         variants.includes("motion-reduce"),
-      )
-      if (hasEscape) return
+      );
+      if (hasEscape) return;
 
       for (const { raw, base, variants, node } of classes) {
-        if (!ANIMATED.test(base) || INERT.has(base)) continue
-        if (variants.includes("motion-reduce")) continue
+        if (!ANIMATED.test(base) || INERT.has(base)) continue;
+        if (variants.includes("motion-reduce")) continue;
 
         context.report({
           node,
@@ -56,32 +56,32 @@ const motionReduce = {
               ? "animate-none"
               : "transition-none",
           },
-        })
-        return
+        });
+        return;
       }
-    })
+    });
 
     return {
       ...imports.visitor,
       ...classVisitor,
       JSXOpeningElement(opening) {
-        const name = imports.ui(jsxName(opening))
-        if (!SELF_ANIMATED.has(name)) return
+        const name = imports.ui(jsxName(opening));
+        if (!SELF_ANIMATED.has(name)) return;
         // Lint cannot see into a computed className, so it does not guess.
-        if (isOpaqueClassName(getAttr(opening, "className"))) return
+        if (isOpaqueClassName(getAttr(opening, "className"))) return;
         const escaped = classesOf(opening).some(({ variants }) =>
           variants.includes("motion-reduce"),
-        )
+        );
         if (!escaped) {
           context.report({
             node: opening,
             messageId: "primitive",
             data: { name },
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default motionReduce
+export default motionReduce;

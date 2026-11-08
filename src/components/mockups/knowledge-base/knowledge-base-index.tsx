@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
 import {
   AlertDialog,
@@ -12,24 +12,24 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+} from "@/components/shared/data-table";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Table,
   TableBody,
@@ -37,30 +37,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   KNOWLEDGE_BASES,
   type KnowledgeBaseRow,
-} from "@/lib/mockups/knowledge-base-data"
-import { AppShell } from "@/components/shell/app-shell"
-import { ActionTile, PageHeader } from "@/components/shared/page-header"
-import { NewKnowledgeBaseDialog } from "@/components/mockups/knowledge-base/new-knowledge-base-dialog"
+} from "@/lib/mockups/knowledge-base-data";
+import { AppShell } from "@/components/shell/app-shell";
+import { ActionTile, PageHeader } from "@/components/shared/page-header";
+import { NewKnowledgeBaseDialog } from "@/components/mockups/knowledge-base/new-knowledge-base-dialog";
 import {
   NewKnowledgeBaseIcon,
   RowMenuIcon,
   SearchIcon,
-} from "@/components/mockups/knowledge-base/icons"
+} from "@/components/mockups/knowledge-base/icons";
 
 export function KnowledgeBaseIndex({
   initialRowMenu = false,
   initialCreate = false,
 }: {
-  initialRowMenu?: boolean
-  initialCreate?: boolean
+  initialRowMenu?: boolean;
+  initialCreate?: boolean;
 }) {
-  const [bases, setBases] = React.useState(KNOWLEDGE_BASES)
-  const [creating, setCreating] = React.useState(initialCreate)
-  const [deleting, setDeleting] = React.useState<KnowledgeBaseRow | null>(null)
+  const [bases, setBases] = React.useState(KNOWLEDGE_BASES);
+  const [creating, setCreating] = React.useState(initialCreate);
+  const [deleting, setDeleting] = React.useState<KnowledgeBaseRow | null>(null);
 
   return (
     <AppShell active="Knowledge Bases">
@@ -175,7 +175,7 @@ export function KnowledgeBaseIndex({
         <AlertDialog
           open={deleting !== null}
           onOpenChange={(open) => {
-            if (!open) setDeleting(null)
+            if (!open) setDeleting(null);
           }}
         >
           <AlertDialogContent>
@@ -192,11 +192,11 @@ export function KnowledgeBaseIndex({
               <AlertDialogAction
                 variant="destructive"
                 onClick={() => {
-                  if (!deleting) return
+                  if (!deleting) return;
                   setBases((current) =>
                     current.filter((base) => base.id !== deleting.id),
-                  )
-                  setDeleting(null)
+                  );
+                  setDeleting(null);
                 }}
               >
                 Delete
@@ -206,5 +206,5 @@ export function KnowledgeBaseIndex({
         </AlertDialog>
       </div>
     </AppShell>
-  )
+  );
 }

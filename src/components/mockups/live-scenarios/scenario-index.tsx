@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -12,43 +12,43 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
-import { PrimaryTabs } from "@/components/design-system/tabs-preview"
-import { StatusChip } from "@/components/mockups/live-scenarios/status-chip"
+} from "@/components/shared/data-table";
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
+import { PrimaryTabs } from "@/components/design-system/tabs-preview";
+import { StatusChip } from "@/components/mockups/live-scenarios/status-chip";
 import {
   ActiveViewIcon,
   CreateScenarioIcon,
@@ -56,38 +56,38 @@ import {
   OpenPlaygroundIcon,
   RowActionsIcon,
   SearchScenariosIcon,
-} from "@/components/mockups/live-scenarios/icons"
+} from "@/components/mockups/live-scenarios/icons";
 import {
   DELETED,
   SCENARIOS,
   type ScenarioRow,
-} from "@/lib/mockups/live-scenarios-data"
+} from "@/lib/mockups/live-scenarios-data";
 
 const LIVE_OPTIONS = [
   { value: "live", label: "Live" },
   { value: "not-live", label: "Not live" },
-]
+];
 
 const VIEWS = [
   { id: "active", label: "Active", Icon: ActiveViewIcon },
   { id: "deleted", label: "Recently deleted", Icon: DeletedViewIcon },
-]
+];
 
 export function ScenarioIndex({
   rows = SCENARIOS,
   marker,
 }: {
-  rows?: ScenarioRow[]
+  rows?: ScenarioRow[];
   /** A second chip after the status. */
-  marker?: (row: ScenarioRow) => React.ReactNode
+  marker?: (row: ScenarioRow) => React.ReactNode;
 } = {}) {
-  const [view, setView] = React.useState("active")
-  const [query, setQuery] = React.useState("")
-  const [liveStatus, setLiveStatus] = React.useState<string | null>(null)
+  const [view, setView] = React.useState("active");
+  const [query, setQuery] = React.useState("");
+  const [liveStatus, setLiveStatus] = React.useState<string | null>(null);
 
   const matches = (row: ScenarioRow) =>
     row.name.toLowerCase().includes(query.trim().toLowerCase()) &&
-    (liveStatus === null || (liveStatus === "live") === (row.live !== null))
+    (liveStatus === null || (liveStatus === "live") === (row.live !== null));
 
   return (
     <main className="mx-auto flex w-full max-w-350 flex-col gap-4 p-8">
@@ -149,7 +149,7 @@ export function ScenarioIndex({
         </TabsContent>
       </PrimaryTabs>
     </main>
-  )
+  );
 }
 
 function ScenarioList({
@@ -158,27 +158,27 @@ function ScenarioList({
   marker,
   onClearFilter,
 }: {
-  rows: ScenarioRow[]
-  deleted: boolean
-  marker?: (row: ScenarioRow) => React.ReactNode
-  onClearFilter?: () => void
+  rows: ScenarioRow[];
+  deleted: boolean;
+  marker?: (row: ScenarioRow) => React.ReactNode;
+  onClearFilter?: () => void;
 }) {
-  const [pageSize, setPageSize] = React.useState(10)
-  const [page, setPage] = React.useState(0)
-  const [confirming, setConfirming] = React.useState<ScenarioRow | null>(null)
+  const [pageSize, setPageSize] = React.useState(10);
+  const [page, setPage] = React.useState(0);
+  const [confirming, setConfirming] = React.useState<ScenarioRow | null>(null);
 
-  const pages = Math.max(1, Math.ceil(rows.length / pageSize))
-  const current = Math.min(page, pages - 1)
-  const visible = rows.slice(current * pageSize, (current + 1) * pageSize)
+  const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const current = Math.min(page, pages - 1);
+  const visible = rows.slice(current * pageSize, (current + 1) * pageSize);
 
   function remove(row: ScenarioRow) {
     if (row.live) {
-      setConfirming(row)
-      return
+      setConfirming(row);
+      return;
     }
     toast(`${row.name} moved to Recently deleted`, {
       action: { label: "Undo", onClick: () => {} },
-    })
+    });
   }
 
   if (rows.length === 0) {
@@ -195,7 +195,7 @@ function ScenarioList({
           </EmptyContent>
         ) : null}
       </Empty>
-    )
+    );
   }
 
   return (
@@ -286,8 +286,8 @@ function ScenarioList({
         noun="scenarios"
         pageSize={pageSize}
         onPageSizeChange={(size) => {
-          setPageSize(size)
-          setPage(0)
+          setPageSize(size);
+          setPage(0);
         }}
         atStart={current === 0}
         atEnd={current >= pages - 1}
@@ -299,7 +299,7 @@ function ScenarioList({
       <AlertDialog
         open={confirming !== null}
         onOpenChange={(open) => {
-          if (!open) setConfirming(null)
+          if (!open) setConfirming(null);
         }}
       >
         <AlertDialogContent>
@@ -324,5 +324,5 @@ function ScenarioList({
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

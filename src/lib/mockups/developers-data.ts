@@ -1,14 +1,14 @@
-export const DOCS_URL = "https://platform-docs.sarj.ai"
-export const GETTING_STARTED_URL = `${DOCS_URL}/getting-started`
-export const MCP_URL = `${DOCS_URL}/mcp-server`
+export const DOCS_URL = "https://platform-docs.sarj.ai";
+export const GETTING_STARTED_URL = `${DOCS_URL}/getting-started`;
+export const MCP_URL = `${DOCS_URL}/mcp-server`;
 
-export type QuickstartLanguage = "curl" | "javascript" | "python"
+export type QuickstartLanguage = "curl" | "javascript" | "python";
 
 export const QUICKSTART_LABELS: Record<QuickstartLanguage, string> = {
   curl: "cURL",
   javascript: "JavaScript",
   python: "Python",
-}
+};
 
 export const QUICKSTART: Record<QuickstartLanguage, string> = {
   curl: `curl https://platform-api.sarj.ai/api/v1/calls \\
@@ -50,21 +50,21 @@ response = requests.post(
 )
 
 call = response.json()`,
-}
+};
 
-export type ApiKey = { id: string; prefix: string; created: string }
+export type ApiKey = { id: string; prefix: string; created: string };
 
 export const API_KEYS: ApiKey[] = [
   { id: "k1", prefix: "sk_live_4f2a", created: "Sep 12, 2026" },
   { id: "k2", prefix: "sk_live_9c71", created: "Aug 03, 2026" },
-]
+];
 
 type Variable = {
-  key: string
-  value: string
-  secret: boolean
-  description: string
-}
+  key: string;
+  value: string;
+  secret: boolean;
+  description: string;
+};
 
 export const VARIABLES: Variable[] = [
   {
@@ -85,6 +85,6 @@ export const VARIABLES: Variable[] = [
     secret: false,
     description: "Read out when a caller asks for a human",
   },
-]
+];
 
-export const WEBHOOK_URL = "https://hooks.example.com/sarj/call-complete"
+export const WEBHOOK_URL = "https://hooks.example.com/sarj/call-complete";

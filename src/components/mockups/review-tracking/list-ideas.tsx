@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { ToggleFilter } from "@/components/shared/filter-bar"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { CallDrawer } from "@/components/mockups/review-tracking/call-drawer"
-import { ConversationsFrame } from "@/components/mockups/review-tracking/conversations-frame"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ToggleFilter } from "@/components/shared/filter-bar";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { CallDrawer } from "@/components/mockups/review-tracking/call-drawer";
+import { ConversationsFrame } from "@/components/mockups/review-tracking/conversations-frame";
 import {
   MarkReviewedIcon,
   SaveForLaterIcon,
-} from "@/components/mockups/review-tracking/icons"
-import { ReviewTable } from "@/components/mockups/review-tracking/review-table"
-import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/components/mockups/review-tracking/icons";
+import { ReviewTable } from "@/components/mockups/review-tracking/review-table";
+import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data";
 import {
   HISTORY,
   LAST_OPENED,
@@ -22,27 +22,27 @@ import {
   REVIEW_CALLS,
   REVIEWED,
   SAVED,
-} from "@/lib/mockups/review-tracking-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/review-tracking-data";
+import { cn } from "@/lib/utils";
 
 function useOpenCall(onOpen?: (call: CallRow) => void) {
-  const [open, setOpen] = React.useState<CallRow | null>(null)
+  const [open, setOpen] = React.useState<CallRow | null>(null);
   const show = React.useCallback(
     (call: CallRow) => {
-      setOpen(call)
-      onOpen?.(call)
+      setOpen(call);
+      onOpen?.(call);
     },
     [onOpen],
-  )
-  return { open, show, close: () => setOpen(null) }
+  );
+  return { open, show, close: () => setOpen(null) };
 }
 
 function toggleIn(list: string[], id: string) {
-  return list.includes(id) ? list.filter((item) => item !== id) : [...list, id]
+  return list.includes(id) ? list.filter((item) => item !== id) : [...list, id];
 }
 
 export function RowNumbersIdea() {
-  const { open, show, close } = useOpenCall()
+  const { open, show, close } = useOpenCall();
 
   return (
     <ConversationsFrame calls={REVIEW_CALLS}>
@@ -74,14 +74,14 @@ export function RowNumbersIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function LastOpenedIdea() {
-  const [last, setLast] = React.useState<string | null>(LAST_OPENED)
+  const [last, setLast] = React.useState<string | null>(LAST_OPENED);
   const { open, show, close } = useOpenCall(
     React.useCallback((call: CallRow) => setLast(call.id), []),
-  )
+  );
 
   return (
     <ConversationsFrame calls={REVIEW_CALLS}>
@@ -92,12 +92,12 @@ export function LastOpenedIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function UnreadIdea() {
-  const [opened, setOpened] = React.useState<string[]>(OPENED)
-  const [unreadOnly, setUnreadOnly] = React.useState(false)
+  const [opened, setOpened] = React.useState<string[]>(OPENED);
+  const [unreadOnly, setUnreadOnly] = React.useState(false);
   const { open, show, close } = useOpenCall(
     React.useCallback(
       (call: CallRow) =>
@@ -106,16 +106,16 @@ export function UnreadIdea() {
         ),
       [],
     ),
-  )
-  const unread = (call: CallRow) => !opened.includes(call.id)
-  const unreadCount = REVIEW_CALLS.filter(unread).length
+  );
+  const unread = (call: CallRow) => !opened.includes(call.id);
+  const unreadCount = REVIEW_CALLS.filter(unread).length;
 
   function markAllRead() {
-    const before = opened
-    setOpened(REVIEW_CALLS.map((call) => call.id))
+    const before = opened;
+    setOpened(REVIEW_CALLS.map((call) => call.id));
     toast(`${unreadCount} calls marked as read`, {
       action: { label: "Undo", onClick: () => setOpened(before) },
-    })
+    });
   }
 
   return (
@@ -157,13 +157,13 @@ export function UnreadIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function ReviewedIdea() {
-  const [reviewed, setReviewed] = React.useState<string[]>(REVIEWED)
-  const [notReviewed, setNotReviewed] = React.useState(false)
-  const { open, show, close } = useOpenCall()
+  const [reviewed, setReviewed] = React.useState<string[]>(REVIEWED);
+  const [notReviewed, setNotReviewed] = React.useState(false);
+  const { open, show, close } = useOpenCall();
 
   return (
     <ConversationsFrame
@@ -207,7 +207,7 @@ export function ReviewedIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function reviewedColumn(
@@ -226,28 +226,28 @@ export function reviewedColumn(
         onCheckedChange={() => setReviewed((list) => toggleIn(list, call.id))}
       />
     ),
-  }
+  };
 }
 
 export function ReviewedButton({
   reviewed,
   onToggle,
 }: {
-  reviewed: boolean
-  onToggle: () => void
+  reviewed: boolean;
+  onToggle: () => void;
 }) {
   return (
     <Button aria-pressed={reviewed} onClick={onToggle} variant="outline">
       <MarkReviewedIcon className={cn(reviewed && "text-success")} />
       {reviewed ? "Reviewed" : "Mark reviewed"}
     </Button>
-  )
+  );
 }
 
 export function SavedIdea() {
-  const [saved, setSaved] = React.useState<string[]>(SAVED)
-  const [savedOnly, setSavedOnly] = React.useState(false)
-  const { open, show, close } = useOpenCall()
+  const [saved, setSaved] = React.useState<string[]>(SAVED);
+  const [savedOnly, setSavedOnly] = React.useState(false);
+  const { open, show, close } = useOpenCall();
 
   return (
     <ConversationsFrame
@@ -285,7 +285,7 @@ export function SavedIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function savedColumn(
@@ -297,7 +297,7 @@ export function savedColumn(
     head: <span className="sr-only">Saved</span>,
     className: "w-12 py-1.5 text-end",
     cell: (call: CallRow) => {
-      const on = saved.includes(call.id)
+      const on = saved.includes(call.id);
       return (
         <Button
           aria-label={on ? "Remove from saved" : "Save for later"}
@@ -312,51 +312,51 @@ export function savedColumn(
             )}
           />
         </Button>
-      )
+      );
     },
-  }
+  };
 }
 
 export function SaveButton({
   saved,
   onToggle,
 }: {
-  saved: boolean
-  onToggle: () => void
+  saved: boolean;
+  onToggle: () => void;
 }) {
   return (
     <Button aria-pressed={saved} onClick={onToggle} variant="outline">
       <SaveForLaterIcon className={cn(saved && "fill-current text-primary")} />
       {saved ? "Saved" : "Save for later"}
     </Button>
-  )
+  );
 }
 
 export function HistoryIdea() {
-  const [view, setView] = React.useState("all")
-  const [history, setHistory] = React.useState(HISTORY)
+  const [view, setView] = React.useState("all");
+  const [history, setHistory] = React.useState(HISTORY);
   /* Joins the history when the drawer closes, so the list does not reorder under the arrows. */
-  const visited = React.useRef<string[]>([])
+  const visited = React.useRef<string[]>([]);
   const opener = useOpenCall(
     React.useCallback((call: CallRow) => {
       visited.current = [
         call.id,
         ...visited.current.filter((id) => id !== call.id),
-      ]
+      ];
     }, []),
-  )
-  const { open, show } = opener
+  );
+  const { open, show } = opener;
   function close() {
-    const seen = visited.current
-    visited.current = []
+    const seen = visited.current;
+    visited.current = [];
     setHistory((list) => [
       ...seen.map((id) => ({ id, at: "Just now" })),
       ...list.filter((entry) => !seen.includes(entry.id)),
-    ])
-    opener.close()
+    ]);
+    opener.close();
   }
   const openedAt = (call: CallRow) =>
-    history.find((entry) => entry.id === call.id)?.at
+    history.find((entry) => entry.id === call.id)?.at;
 
   return (
     <ConversationsFrame
@@ -403,5 +403,5 @@ export function HistoryIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }

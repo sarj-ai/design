@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { CopySkillIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
-import { type DocsSection } from "@/lib/design-system/data"
-import { FOUNDATIONS_SKILL } from "@/lib/design-system/foundations-skill"
+import { CopySkillIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
+import { type DocsSection } from "@/lib/design-system/data";
+import { FOUNDATIONS_SKILL } from "@/lib/design-system/foundations-skill";
 
 export function CopySkillButton() {
   async function copy() {
     try {
-      await navigator.clipboard.writeText(FOUNDATIONS_SKILL)
-      toast.success("Copied as a skill")
+      await navigator.clipboard.writeText(FOUNDATIONS_SKILL);
+      toast.success("Copied as a skill");
     } catch {
-      toast.error("Could not copy the skill")
+      toast.error("Could not copy the skill");
     }
   }
 
@@ -22,15 +22,15 @@ export function CopySkillButton() {
       <CopySkillIcon />
       Copy as skill
     </Button>
-  )
+  );
 }
 
 export function FoundationsSheet({
   section,
   views,
 }: {
-  section: DocsSection
-  views: Record<string, React.ReactNode>
+  section: DocsSection;
+  views: Record<string, React.ReactNode>;
 }) {
   return (
     <div className="flex flex-col gap-12">
@@ -52,5 +52,5 @@ export function FoundationsSheet({
           </section>
         ))}
     </div>
-  )
+  );
 }

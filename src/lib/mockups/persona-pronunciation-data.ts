@@ -1,14 +1,14 @@
-export type PersonaLanguage = "Arabic" | "English"
-export type PersonaGender = "Male" | "Female"
+export type PersonaLanguage = "Arabic" | "English";
+export type PersonaGender = "Male" | "Female";
 
-export const LANGUAGES: PersonaLanguage[] = ["Arabic", "English"]
-export const GENDERS: PersonaGender[] = ["Male", "Female"]
+export const LANGUAGES: PersonaLanguage[] = ["Arabic", "English"];
+export const GENDERS: PersonaGender[] = ["Male", "Female"];
 
 type Voice = {
-  id: string
-  name: string
-  vibe: string
-}
+  id: string;
+  name: string;
+  vibe: string;
+};
 
 export const VOICES: Voice[] = [
   {
@@ -22,7 +22,7 @@ export const VOICES: Voice[] = [
     name: "فيصل السريع",
     vibe: "quick, efficient, low-latency",
   },
-]
+];
 
 export const PERSONA = {
   name: "Support Agent — خالد",
@@ -38,14 +38,14 @@ export const PERSONA = {
   endCallOnSilence: true,
   silenceSeconds: "15",
   maxRetries: "",
-}
+};
 
 export type PronunciationTerm = {
-  id: string
-  word: string
+  id: string;
+  word: string;
   /** The fully vowelled spelling the TTS reads instead. */
-  replacement: string
-}
+  replacement: string;
+};
 
 export const PRONUNCIATION_TERMS: PronunciationTerm[] = [
   { id: "t1", word: "المبالغ", replacement: "الْمَبَالِغ" },
@@ -58,4 +58,4 @@ export const PRONUNCIATION_TERMS: PronunciationTerm[] = [
   { id: "t8", word: "استرداد", replacement: "اِسْتِرْدَاد" },
   { id: "t9", word: "المستحقات", replacement: "الْمُسْتَحَقَّات" },
   { id: "t10", word: "التفعيل", replacement: "التَّفْعِيل" },
-]
+];

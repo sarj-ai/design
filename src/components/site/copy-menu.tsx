@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 type CopyMenuItem = {
-  id: string
-  label: string
-  onSelect: () => void
-}
+  id: string;
+  label: string;
+  onSelect: () => void;
+};
 
 export function CopyMenu({
   label,
@@ -24,12 +24,12 @@ export function CopyMenu({
   items,
   tour,
 }: {
-  label: string
-  menuLabel: string
-  icon: React.ReactNode
-  items: CopyMenuItem[]
+  label: string;
+  menuLabel: string;
+  icon: React.ReactNode;
+  items: CopyMenuItem[];
   /** Marks this menu for the walkthrough in `hey-click.tsx`; the portalled content carries `data-tour-menu`. */
-  tour?: string
+  tour?: string;
 }) {
   return (
     <DropdownMenu>
@@ -56,5 +56,5 @@ export function CopyMenu({
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

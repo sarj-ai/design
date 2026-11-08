@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { errorId, FieldHeader } from "@/components/design-system/field-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Field, FieldDescription, FieldError } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { errorId, FieldHeader } from "@/components/design-system/field-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, FieldDescription, FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemActions,
@@ -15,52 +15,52 @@ import {
   ItemFooter,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Progress } from "@/components/ui/progress"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/item";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import {
   RecordingIndicator,
   useMicrophoneLevels,
-} from "@/components/shared/recording-indicator"
+} from "@/components/shared/recording-indicator";
 import {
   formatSeconds,
   playTone,
   usePlayback,
-} from "@/components/mockups/voice-cloning/audio"
+} from "@/components/mockups/voice-cloning/audio";
 import {
   PauseVoiceIcon,
   PlayVoiceIcon,
   RecordIcon,
   StopRecordingIcon,
   UploadSampleIcon,
-} from "@/components/mockups/voice-cloning/icons"
+} from "@/components/mockups/voice-cloning/icons";
 import {
   SAMPLE_LIMITS,
   SCRIPT,
   TRANSCRIPT,
-} from "@/lib/mockups/voice-cloning-data"
+} from "@/lib/mockups/voice-cloning-data";
 
 export type Take = {
-  source: "recording" | "upload"
-  label: string
-  seconds: number
+  source: "recording" | "upload";
+  label: string;
+  seconds: number;
   /** Null while transcription runs. */
-  transcript: string | null
-  noisy: boolean
-}
+  transcript: string | null;
+  noisy: boolean;
+};
 
 export type Capture =
   | { kind: "idle"; error: string | null }
   | { kind: "countdown"; count: number }
   | { kind: "recording"; startedAt: number; elapsed: number }
-  | { kind: "take"; take: Take }
+  | { kind: "take"; take: Take };
 
-export const EMPTY_CAPTURE: Capture = { kind: "idle", error: null }
+export const EMPTY_CAPTURE: Capture = { kind: "idle", error: null };
 
-const COUNTDOWN_FROM = 3
-const TICK_MS = 100
-const ACCEPT = SAMPLE_LIMITS.formats.map((format) => `.${format}`).join(",")
+const COUNTDOWN_FROM = 3;
+const TICK_MS = 100;
+const ACCEPT = SAMPLE_LIMITS.formats.map((format) => `.${format}`).join(",");
 
 export function SampleStep({
   capture,
@@ -68,50 +68,50 @@ export function SampleStep({
   noisy,
   showErrors,
 }: {
-  capture: Capture
-  setCapture: React.Dispatch<React.SetStateAction<Capture>>
+  capture: Capture;
+  setCapture: React.Dispatch<React.SetStateAction<Capture>>;
   /** Reviewer switch: every take comes back noisy. */
-  noisy: boolean
-  showErrors: boolean
+  noisy: boolean;
+  showErrors: boolean;
 }) {
-  const fileInput = React.useRef<HTMLInputElement>(null)
+  const fileInput = React.useRef<HTMLInputElement>(null);
 
   /* Opens with the countdown so the permission prompt never eats into the take. */
   const mic = useMicrophoneLevels(
     capture.kind === "countdown" || capture.kind === "recording",
-  )
+  );
 
   React.useEffect(() => {
-    if (mic.state !== "unavailable") return
+    if (mic.state !== "unavailable") return;
     setCapture({
       kind: "idle",
       error:
         "The microphone is off. Allow it in your browser to record, or upload a file.",
-    })
-  }, [mic.state, setCapture])
+    });
+  }, [mic.state, setCapture]);
 
   React.useEffect(() => {
-    if (capture.kind !== "countdown" || mic.state !== "live") return
+    if (capture.kind !== "countdown" || mic.state !== "live") return;
     const timer = setTimeout(() => {
       if (capture.count > 1) {
-        setCapture({ kind: "countdown", count: capture.count - 1 })
-        return
+        setCapture({ kind: "countdown", count: capture.count - 1 });
+        return;
       }
-      playTone("start")
-      setCapture({ kind: "recording", startedAt: Date.now(), elapsed: 0 })
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [capture, mic.state, setCapture])
+      playTone("start");
+      setCapture({ kind: "recording", startedAt: Date.now(), elapsed: 0 });
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [capture, mic.state, setCapture]);
 
   const finish = React.useCallback(
     (elapsed: number) => {
-      playTone("stop")
+      playTone("stop");
       if (elapsed < SAMPLE_LIMITS.minSeconds) {
         setCapture({
           kind: "idle",
           error: `That take was too short. Record at least ${SAMPLE_LIMITS.minSeconds} seconds.`,
-        })
-        return
+        });
+        return;
       }
       setCapture({
         kind: "take",
@@ -122,16 +122,16 @@ export function SampleStep({
           transcript: null,
           noisy,
         },
-      })
+      });
     },
     [noisy, setCapture],
-  )
+  );
 
   React.useEffect(() => {
-    if (capture.kind !== "recording") return
+    if (capture.kind !== "recording") return;
     if (capture.elapsed >= SAMPLE_LIMITS.maxSeconds) {
-      finish(SAMPLE_LIMITS.maxSeconds)
-      return
+      finish(SAMPLE_LIMITS.maxSeconds);
+      return;
     }
     const timer = setTimeout(
       () =>
@@ -144,14 +144,14 @@ export function SampleStep({
             : current,
         ),
       TICK_MS,
-    )
-    return () => clearTimeout(timer)
-  }, [capture, finish, setCapture])
+    );
+    return () => clearTimeout(timer);
+  }, [capture, finish, setCapture]);
 
   const transcribing =
-    capture.kind === "take" && capture.take.transcript === null
+    capture.kind === "take" && capture.take.transcript === null;
   React.useEffect(() => {
-    if (!transcribing) return
+    if (!transcribing) return;
     const timer = setTimeout(
       () =>
         setCapture((current) =>
@@ -163,49 +163,49 @@ export function SampleStep({
             : current,
         ),
       1200,
-    )
-    return () => clearTimeout(timer)
-  }, [transcribing, setCapture])
+    );
+    return () => clearTimeout(timer);
+  }, [transcribing, setCapture]);
 
   const upload = async (file: File) => {
-    const extension = file.name.split(".").pop()?.toLowerCase() ?? ""
+    const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
     if (!(SAMPLE_LIMITS.formats as readonly string[]).includes(extension)) {
       setCapture({
         kind: "idle",
         error: "Upload a WAV, MP3, FLAC or OGG file.",
-      })
-      return
+      });
+      return;
     }
-    const megabytes = file.size / 1024 / 1024
+    const megabytes = file.size / 1024 / 1024;
     if (megabytes > SAMPLE_LIMITS.maxMegabytes) {
       setCapture({
         kind: "idle",
         error: `That file is ${megabytes.toFixed(1)} MB. Upload one up to ${SAMPLE_LIMITS.maxMegabytes} MB.`,
-      })
-      return
+      });
+      return;
     }
-    const seconds = await readDuration(file)
+    const seconds = await readDuration(file);
     if (seconds === null) {
       setCapture({
         kind: "idle",
         error:
           "That file couldn’t be played. Upload a WAV, MP3, FLAC or OGG file.",
-      })
-      return
+      });
+      return;
     }
     if (seconds > SAMPLE_LIMITS.maxSeconds) {
       setCapture({
         kind: "idle",
         error: `That file is ${Math.round(seconds)} seconds. Trim it to ${SAMPLE_LIMITS.maxSeconds} or less.`,
-      })
-      return
+      });
+      return;
     }
     if (seconds < SAMPLE_LIMITS.minSeconds) {
       setCapture({
         kind: "idle",
         error: `That file is ${Math.round(seconds)} seconds. Upload at least ${SAMPLE_LIMITS.minSeconds}.`,
-      })
-      return
+      });
+      return;
     }
     setCapture({
       kind: "take",
@@ -216,8 +216,8 @@ export function SampleStep({
         transcript: null,
         noisy,
       },
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -275,9 +275,9 @@ export function SampleStep({
                 aria-label="Upload a sample"
                 className="sr-only"
                 onChange={(event) => {
-                  const file = event.target.files?.[0]
-                  event.target.value = ""
-                  if (file) void upload(file)
+                  const file = event.target.files?.[0];
+                  event.target.value = "";
+                  if (file) void upload(file);
                 }}
                 ref={fileInput}
                 tabIndex={-1}
@@ -328,7 +328,7 @@ export function SampleStep({
         </>
       )}
     </div>
-  )
+  );
 }
 
 function SourceChoice({
@@ -337,10 +337,10 @@ function SourceChoice({
   icon,
   onSelect,
 }: {
-  title: string
-  description: string
-  icon: React.ReactNode
-  onSelect: () => void
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  onSelect: () => void;
 }) {
   return (
     <Item
@@ -364,7 +364,7 @@ function SourceChoice({
         </ItemContent>
       </button>
     </Item>
-  )
+  );
 }
 
 function RecordingView({
@@ -372,11 +372,11 @@ function RecordingView({
   levels,
   onStop,
 }: {
-  elapsed: number
-  levels: readonly number[]
-  onStop: () => void
+  elapsed: number;
+  levels: readonly number[];
+  onStop: () => void;
 }) {
-  const short = elapsed < SAMPLE_LIMITS.minSeconds
+  const short = elapsed < SAMPLE_LIMITS.minSeconds;
 
   return (
     <Item variant="outline">
@@ -415,7 +415,7 @@ function RecordingView({
         />
       </ItemFooter>
     </Item>
-  )
+  );
 }
 
 function TakeView({
@@ -424,14 +424,14 @@ function TakeView({
   onTranscriptChange,
   showErrors,
 }: {
-  take: Take
-  onReplace: () => void
-  onTranscriptChange: (transcript: string) => void
-  showErrors: boolean
+  take: Take;
+  onReplace: () => void;
+  onTranscriptChange: (transcript: string) => void;
+  showErrors: boolean;
 }) {
-  const playback = usePlayback(take.seconds)
+  const playback = usePlayback(take.seconds);
   const transcriptMissing =
-    showErrors && take.transcript !== null && take.transcript.trim() === ""
+    showErrors && take.transcript !== null && take.transcript.trim() === "";
 
   return (
     <>
@@ -508,21 +508,21 @@ function TakeView({
         )}
       </Field>
     </>
-  )
+  );
 }
 
 function readDuration(file: File): Promise<number | null> {
   return new Promise((resolve) => {
-    const url = URL.createObjectURL(file)
-    const audio = new Audio()
+    const url = URL.createObjectURL(file);
+    const audio = new Audio();
     const done = (value: number | null) => {
-      URL.revokeObjectURL(url)
-      resolve(value)
-    }
+      URL.revokeObjectURL(url);
+      resolve(value);
+    };
     audio.addEventListener("loadedmetadata", () =>
       done(Number.isFinite(audio.duration) ? audio.duration : null),
-    )
-    audio.addEventListener("error", () => done(null))
-    audio.src = url
-  })
+    );
+    audio.addEventListener("error", () => done(null));
+    audio.src = url;
+  });
 }

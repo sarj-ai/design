@@ -1,26 +1,26 @@
-export const GROUPS = ["Viewer", "Caller", "Editor", "Org Admin"] as const
-export type Group = (typeof GROUPS)[number]
+export const GROUPS = ["Viewer", "Caller", "Editor", "Org Admin"] as const;
+export type Group = (typeof GROUPS)[number];
 
 export type Member = {
-  id: string
-  name: string
-  email: string
-  group: Group
-  owner?: boolean
+  id: string;
+  name: string;
+  email: string;
+  group: Group;
+  owner?: boolean;
   /** Null for someone auto-enrolled by domain. */
-  addedBy: string | null
-  added: string
-}
+  addedBy: string | null;
+  added: string;
+};
 
 export type Invite = {
-  id: string
-  email: string
-  group: Group
-  invitedBy: string
-  sent: string
-}
+  id: string;
+  email: string;
+  group: Group;
+  invitedBy: string;
+  sent: string;
+};
 
-export const ORG = { name: "Zain KSA", domain: "sa.zain.com" }
+export const ORG = { name: "Zain KSA", domain: "sa.zain.com" };
 
 export const MEMBERS: Member[] = [
   {
@@ -72,7 +72,7 @@ export const MEMBERS: Member[] = [
     addedBy: "Fatimah Al-Qahtani",
     added: "20 Sep 2026",
   },
-]
+];
 
 export const INVITES: Invite[] = [
   {
@@ -89,29 +89,29 @@ export const INVITES: Invite[] = [
     invitedBy: "Omar Al-Harbi",
     sent: "29 Sep 2026",
   },
-]
+];
 
 export const ELSEWHERE: Record<string, string> = {
   "a.alrashid@sa.zain.com": "Yaqoot",
-}
+};
 
-export const LINK_EXPIRY = ["1 day", "7 days", "30 days"] as const
-export type LinkExpiry = (typeof LINK_EXPIRY)[number]
+export const LINK_EXPIRY = ["1 day", "7 days", "30 days"] as const;
+export type LinkExpiry = (typeof LINK_EXPIRY)[number];
 
-export type Retention = "2 years" | "5 years" | "10 years"
+export type Retention = "2 years" | "5 years" | "10 years";
 
 export type Organization = {
-  id: string
-  name: string
-  domain: string
+  id: string;
+  name: string;
+  domain: string;
   /** The owner's email while their invite is pending; null on a migrated organization. */
-  owner: string | null
-  ownerPending?: boolean
-  members: number
-  retention: Retention
-  customSettings: boolean
-  candidates?: { name: string; group: Group }[]
-}
+  owner: string | null;
+  ownerPending?: boolean;
+  members: number;
+  retention: Retention;
+  customSettings: boolean;
+  candidates?: { name: string; group: Group }[];
+};
 
 export const ORGANIZATIONS: Organization[] = [
   {
@@ -168,13 +168,13 @@ export const ORGANIZATIONS: Organization[] = [
     retention: "2 years",
     customSettings: false,
   },
-]
+];
 
 export type UnassignedUser = {
-  id: string
-  email: string
-  role: Group
-}
+  id: string;
+  email: string;
+  role: Group;
+};
 
 export const UNASSIGNED_USERS: UnassignedUser[] = [
   {
@@ -187,15 +187,15 @@ export const UNASSIGNED_USERS: UnassignedUser[] = [
     email: "m.alqahtani@flynas.com",
     role: "Viewer",
   },
-]
+];
 
 export const INVITEE_STATES = [
   { id: "invite", label: "Invite" },
   { id: "wrong-account", label: "Wrong account" },
   { id: "expired", label: "Link expired" },
   { id: "no-invite", label: "No invite" },
-] as const
-export type InviteeState = (typeof INVITEE_STATES)[number]["id"]
+] as const;
+export type InviteeState = (typeof INVITEE_STATES)[number]["id"];
 
 export const INVITEE = {
   invitedEmail: "l.alzahrani@sa.zain.com",
@@ -203,4 +203,4 @@ export const INVITEE = {
   inviter: "Fatimah Al-Qahtani",
   group: "Editor" as Group,
   uninvited: "s.alanazi@sa.zain.com",
-}
+};

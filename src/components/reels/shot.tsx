@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Image from "next/image"
+import * as React from "react";
+import Image from "next/image";
 
-import { cn } from "@/lib/utils"
-import { FPS, easeInOutCubic, interpolate, type Rect } from "@/lib/reels/anim"
-import { camRectAt, type Tour } from "@/lib/reels/cursor"
-import { useFrame } from "@/components/reels/stage"
+import { cn } from "@/lib/utils";
+import { FPS, easeInOutCubic, interpolate, type Rect } from "@/lib/reels/anim";
+import { camRectAt, type Tour } from "@/lib/reels/cursor";
+import { useFrame } from "@/components/reels/stage";
 
-export type { Rect }
+export type { Rect };
 
 /** The shot's current zoom. Children that must keep their size counter-scale by 1/this. */
-const ShotScaleContext = React.createContext(1)
+const ShotScaleContext = React.createContext(1);
 
 export function useShotScale(): number {
-  return React.useContext(ShotScaleContext)
+  return React.useContext(ShotScaleContext);
 }
 
 export function Shot({
@@ -30,34 +30,34 @@ export function Shot({
   className,
   children,
 }: {
-  src: string
-  alt: string
+  src: string;
+  alt: string;
   /** Intrinsic pixels of the source file. */
-  width: number
-  height: number
+  width: number;
+  height: number;
   /** How wide the shot sits on the 1920x1080 canvas. */
-  frameWidth: number
+  frameWidth: number;
   /** Region to end on. Omitted, the shot holds the full screen. */
-  focus?: Rect
+  focus?: Rect;
   /** Region to start from. Defaults to the whole screenshot. */
-  origin?: Rect
+  origin?: Rect;
   /** `[startFrame, endFrame]` for the move. Defaults to a slow four seconds. */
-  at?: readonly [number, number]
+  at?: readonly [number, number];
   /** Drive the camera from a scripted tour instead of `origin`/`focus`. */
-  camera?: Tour
-  className?: string
+  camera?: Tour;
+  className?: string;
   /** `Spotlight`, `Pin` and `Cursor`, positioned in source pixels. */
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }) {
-  const frame = useFrame()
+  const frame = useFrame();
 
-  const full: Rect = { x: 0, y: 0, width, height }
-  const from = origin ?? full
-  const to = focus ?? from
-  const [start, end] = at ?? [0, 120]
+  const full: Rect = { x: 0, y: 0, width, height };
+  const from = origin ?? full;
+  const to = focus ?? from;
+  const [start, end] = at ?? [0, 120];
 
   const lerp = (a: number, b: number) =>
-    interpolate(frame, [start, end], [a, b], { easing: easeInOutCubic })
+    interpolate(frame, [start, end], [a, b], { easing: easeInOutCubic });
 
   const rect: Rect = camera
     ? camRectAt(camera, frame / FPS)
@@ -66,14 +66,14 @@ export function Shot({
         y: lerp(from.y, to.y),
         width: lerp(from.width, to.width),
         height: lerp(from.height, to.height),
-      }
+      };
 
-  const frameHeight = Math.round(frameWidth * (height / width))
+  const frameHeight = Math.round(frameWidth * (height / width));
 
   /* Cover: the named region always fills the frame, never letterboxes. */
-  const scale = Math.max(frameWidth / rect.width, frameHeight / rect.height)
-  const translateX = frameWidth / 2 - (rect.x + rect.width / 2) * scale
-  const translateY = frameHeight / 2 - (rect.y + rect.height / 2) * scale
+  const scale = Math.max(frameWidth / rect.width, frameHeight / rect.height);
+  const translateX = frameWidth / 2 - (rect.x + rect.width / 2) * scale;
+  const translateY = frameHeight / 2 - (rect.y + rect.height / 2) * scale;
 
   return (
     <div
@@ -109,7 +109,7 @@ export function Shot({
         </ShotScaleContext.Provider>
       </div>
     </div>
-  )
+  );
 }
 
 /** A ring around a region of the screenshot, in source pixels. */
@@ -118,13 +118,13 @@ export function Spotlight({
   at,
   className,
 }: {
-  rect: Rect
+  rect: Rect;
   /** `[startFrame, endFrame]` to draw it in. */
-  at?: readonly [number, number]
-  className?: string
+  at?: readonly [number, number];
+  className?: string;
 }) {
-  const frame = useFrame()
-  const [start, end] = at ?? [0, 10]
+  const frame = useFrame();
+  const [start, end] = at ?? [0, 10];
 
   return (
     <div
@@ -140,7 +140,7 @@ export function Spotlight({
         opacity: interpolate(frame, [start, end], [0, 1]),
       }}
     />
-  )
+  );
 }
 
 /** A label tied to a region of the screenshot, in source pixels. */
@@ -150,15 +150,15 @@ export function Pin({
   side = "bottom",
   at,
 }: {
-  rect: Rect
-  label: string
+  rect: Rect;
+  label: string;
   /** `end` sits beside the region; use it on dense forms, where below lands on the next field's label. */
-  side?: "top" | "bottom" | "end"
-  at?: readonly [number, number]
+  side?: "top" | "bottom" | "end";
+  at?: readonly [number, number];
 }) {
-  const frame = useFrame()
-  const [start, end] = at ?? [0, 12]
-  const offset = 24
+  const frame = useFrame();
+  const [start, end] = at ?? [0, 12];
+  const offset = 24;
 
   const placement =
     side === "end"
@@ -183,7 +183,7 @@ export function Pin({
             settle: "",
             slide: "translateY",
             from: -8,
-          }
+          };
 
   return (
     <div
@@ -205,5 +205,5 @@ export function Pin({
         {label}
       </span>
     </div>
-  )
+  );
 }

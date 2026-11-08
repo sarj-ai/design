@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { DashboardPage } from "@/components/mockups/dashboard/dashboard-page"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { DashboardPage } from "@/components/mockups/dashboard/dashboard-page";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export default function DashboardRoute() {
-  const [data, setData] = React.useState<"calls" | "none">("calls")
+  const [data, setData] = React.useState<"calls" | "none">("calls");
 
   return (
     <MockupShell
       actions={
         <ToggleGroup
           onValueChange={(next) => {
-            if (next) setData(next as "calls" | "none")
+            if (next) setData(next as "calls" | "none");
           }}
           size="sm"
           type="single"
@@ -34,5 +34,5 @@ export default function DashboardRoute() {
         </div>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

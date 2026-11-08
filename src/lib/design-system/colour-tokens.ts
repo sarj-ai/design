@@ -1,18 +1,18 @@
 // Copied from globals.css in its declaration order: update this table whenever that file changes.
 
 type ColourToken = {
-  name: string
-  value: string
+  name: string;
+  value: string;
   /** A literal `bg-*` class, not `bg-${name}`: Tailwind only emits utilities spelled out in source. */
-  swatch: string
-  use: string
-}
+  swatch: string;
+  use: string;
+};
 
 type ColourGroup = {
-  title: string
-  note: string
-  tokens: ColourToken[]
-}
+  title: string;
+  note: string;
+  tokens: ColourToken[];
+};
 
 export const COLOUR_GROUPS: ColourGroup[] = [
   {
@@ -399,4 +399,4 @@ export const COLOUR_GROUPS: ColourGroup[] = [
       },
     ],
   },
-]
+];

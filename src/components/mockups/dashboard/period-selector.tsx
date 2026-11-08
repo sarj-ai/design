@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { DateRange } from "react-day-picker"
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
 
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { CustomRangeIcon } from "@/components/mockups/dashboard/icons"
+} from "@/components/ui/popover";
+import { CustomRangeIcon } from "@/components/mockups/dashboard/icons";
 import {
   PRESET_PERIODS,
   rangeLabel,
   type CustomRange,
   type Period,
-} from "@/lib/mockups/dashboard-data"
+} from "@/lib/mockups/dashboard-data";
 
 export function PeriodSelector({
   period,
@@ -24,13 +24,13 @@ export function PeriodSelector({
   onPeriodChange,
   onRangeApply,
 }: {
-  period: Period
-  range: CustomRange | undefined
-  onPeriodChange: (period: Period) => void
-  onRangeApply: (range: CustomRange) => void
+  period: Period;
+  range: CustomRange | undefined;
+  onPeriodChange: (period: Period) => void;
+  onRangeApply: (range: CustomRange) => void;
 }) {
-  const [open, setOpen] = React.useState(false)
-  const [draft, setDraft] = React.useState<DateRange | undefined>(range)
+  const [open, setOpen] = React.useState(false);
+  const [draft, setDraft] = React.useState<DateRange | undefined>(range);
 
   return (
     <div className="flex items-center gap-2">
@@ -47,8 +47,8 @@ export function PeriodSelector({
 
       <Popover
         onOpenChange={(next) => {
-          setOpen(next)
-          if (next) setDraft(range)
+          setOpen(next);
+          if (next) setDraft(range);
         }}
         open={open}
       >
@@ -83,9 +83,9 @@ export function PeriodSelector({
             <Button
               disabled={!draft?.from || !draft.to}
               onClick={() => {
-                if (!draft?.from || !draft.to) return
-                onRangeApply({ from: draft.from, to: draft.to })
-                setOpen(false)
+                if (!draft?.from || !draft.to) return;
+                onRangeApply({ from: draft.from, to: draft.to });
+                setOpen(false);
               }}
               size="sm"
             >
@@ -95,5 +95,5 @@ export function PeriodSelector({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-type Option = { value: string; label: string }
+type Option = { value: string; label: string };
 
 export const LANGUAGES: Option[] = [
   { value: "ar", label: "AR" },
@@ -6,14 +6,14 @@ export const LANGUAGES: Option[] = [
   { value: "fr", label: "FR" },
   { value: "hi", label: "HI" },
   { value: "ur", label: "UR" },
-]
+];
 
 export const GENDERS: Option[] = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
-]
+];
 
-type Provider = Option & { defaultModel: string }
+type Provider = Option & { defaultModel: string };
 
 export const PROVIDERS: Provider[] = [
   {
@@ -24,15 +24,15 @@ export const PROVIDERS: Provider[] = [
   { value: "sarj-omni", label: "Sarj Omni", defaultModel: "omni-tts-1" },
   { value: "cartesia", label: "Cartesia", defaultModel: "sonic-2" },
   { value: "azure", label: "Azure", defaultModel: "neural-hd" },
-]
+];
 
 type FallbackVoice = {
-  id: string
-  name: string
-  vibe: string
-  gender: string
-  provider: string
-}
+  id: string;
+  name: string;
+  vibe: string;
+  gender: string;
+  provider: string;
+};
 
 export const FALLBACK_VOICES: FallbackVoice[] = [
   {
@@ -63,6 +63,6 @@ export const FALLBACK_VOICES: FallbackVoice[] = [
     gender: "Female",
     provider: "Azure",
   },
-]
+];
 
-export const DEFAULT_FALLBACK_VOICE_ID = "faisal"
+export const DEFAULT_FALLBACK_VOICE_ID = "faisal";

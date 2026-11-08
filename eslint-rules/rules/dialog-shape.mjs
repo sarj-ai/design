@@ -3,7 +3,7 @@ import {
   jsxAncestors,
   jsxName,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
 const BANNED_INSIDE = {
   Tabs: "Tabs in a dialog are several screens pretending to be one. Several views of one object is a page with tabs; settings that grow are a drawer.",
@@ -11,10 +11,10 @@ const BANNED_INSIDE = {
     "Steps in a dialog are the creation flow squeezed into 448px. Creating in steps is a page: one question a screen, full screen.",
   ScrollArea:
     "A dialog whose body needs to scroll was a drawer — 448px from the right, full height, only the body scrolls.",
-}
+};
 
-const SCROLL = /^overflow(-y)?-(auto|scroll)$/
-const DIALOGS = new Set(["DialogContent", "AlertDialogContent"])
+const SCROLL = /^overflow(-y)?-(auto|scroll)$/;
+const DIALOGS = new Set(["DialogContent", "AlertDialogContent"]);
 
 const dialogShape = {
   meta: {
@@ -32,53 +32,53 @@ const dialogShape = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     const enclosingDialog = (element, includeSelf) => {
       if (includeSelf) {
-        const self = imports.ui(jsxName(element.openingElement))
-        if (DIALOGS.has(self)) return self
+        const self = imports.ui(jsxName(element.openingElement));
+        if (DIALOGS.has(self)) return self;
       }
       for (const ancestor of jsxAncestors(element)) {
-        const name = imports.ui(jsxName(ancestor.openingElement))
-        if (DIALOGS.has(name)) return name
+        const name = imports.ui(jsxName(ancestor.openingElement));
+        if (DIALOGS.has(name)) return name;
         /* A drawer or popover opened from the dialog is its own surface. */
-        if (name === "SheetContent" || name === "PopoverContent") return null
+        if (name === "SheetContent" || name === "PopoverContent") return null;
       }
-      return null
-    }
+      return null;
+    };
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const opening = element.openingElement
-        const name = imports.ui(jsxName(opening))
+        const opening = element.openingElement;
+        const name = imports.ui(jsxName(opening));
 
-        const why = BANNED_INSIDE[name]
+        const why = BANNED_INSIDE[name];
         if (why) {
-          const dialog = enclosingDialog(element, false)
+          const dialog = enclosingDialog(element, false);
           if (dialog) {
             context.report({
               node: opening,
               messageId: "banned",
               data: { name, dialog, why },
-            })
+            });
           }
         }
 
         const scroll = classesOf(opening).find(
           ({ base, variants }) => SCROLL.test(base) && variants.length === 0,
-        )
+        );
         if (scroll && enclosingDialog(element, true)) {
           context.report({
             node: scroll.node,
             messageId: "scrolls",
             data: { cls: scroll.raw },
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default dialogShape
+export default dialogShape;

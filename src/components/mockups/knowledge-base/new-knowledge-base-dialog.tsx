@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,28 +12,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 export function NewKnowledgeBaseDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const [name, setName] = React.useState("")
+  const [name, setName] = React.useState("");
 
-  const ready = Boolean(name.trim())
-  const href = `/knowledge-base/empty?name=${encodeURIComponent(name.trim())}`
+  const ready = Boolean(name.trim());
+  const href = `/knowledge-base/empty?name=${encodeURIComponent(name.trim())}`;
 
   return (
     <Dialog
       open={open}
       onOpenChange={(next) => {
-        if (!next) setName("")
-        onOpenChange(next)
+        if (!next) setName("");
+        onOpenChange(next);
       }}
     >
       <DialogContent className="sm:max-w-lg">
@@ -68,5 +68,5 @@ export function NewKnowledgeBaseDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
 const ALLOWED = {
   AlertDialogContent: {
@@ -17,13 +17,13 @@ const ALLOWED = {
     widths: new Set(["max-w-md", "max-w-5xl"]),
     say: "A drawer is 448px (`sm:max-w-md`); a record opened from a list is 1024px (`sm:max-w-5xl`).",
   },
-}
+};
 
-const BREAKPOINT = /^(sm|md|lg|xl|2xl)$/
+const BREAKPOINT = /^(sm|md|lg|xl|2xl)$/;
 
 // Sheet and Drawer set width via `data-[side=right]:sm:max-w-sm`, which outranks a plain `sm:max-w-*`,
 // so on those two the width only lands with `!`.
-const NEEDS_IMPORTANT = new Set(["SheetContent", "DrawerContent"])
+const NEEDS_IMPORTANT = new Set(["SheetContent", "DrawerContent"]);
 
 const surfaceWidth = {
   meta: {
@@ -44,33 +44,33 @@ const surfaceWidth = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXOpeningElement(opening) {
-        const primitive = imports.ui(jsxName(opening))
-        const allowed = ALLOWED[primitive]
-        if (!allowed) return
+        const primitive = imports.ui(jsxName(opening));
+        const allowed = ALLOWED[primitive];
+        if (!allowed) return;
 
         for (const { raw, base, variants, node } of classesOf(opening)) {
-          if (!/^max-w-/.test(base) || base === "max-w-none") continue
+          if (!/^max-w-/.test(base) || base === "max-w-none") continue;
           // The mobile gutter, which the primitive sets too. Not a surface width.
-          if (/^max-w-(full|screen|\[)/.test(base)) continue
+          if (/^max-w-(full|screen|\[)/.test(base)) continue;
 
-          const atBreakpoint = variants.some((v) => BREAKPOINT.test(v))
+          const atBreakpoint = variants.some((v) => BREAKPOINT.test(v));
           if (!atBreakpoint) {
             context.report({
               node,
               messageId: "unprefixed",
               data: { cls: raw, base, say: allowed.say },
-            })
+            });
           } else if (!allowed.widths.has(base)) {
             context.report({
               node,
               messageId: "offScale",
               data: { cls: raw, say: allowed.say },
-            })
+            });
           } else if (
             NEEDS_IMPORTANT.has(primitive) &&
             !raw.endsWith("!") &&
@@ -80,12 +80,12 @@ const surfaceWidth = {
               node,
               messageId: "notImportant",
               data: { cls: raw },
-            })
+            });
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default surfaceWidth
+export default surfaceWidth;

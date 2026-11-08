@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,15 +13,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
@@ -29,8 +29,8 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import {
   formatDate,
   mintSecret,
@@ -41,29 +41,29 @@ import {
   type ConnectedApp,
   type Permission,
   type Token,
-} from "@/lib/mockups/connected-apps-data"
-import { ScopePicker } from "@/components/mockups/connected-apps/scope-picker"
+} from "@/lib/mockups/connected-apps-data";
+import { ScopePicker } from "@/components/mockups/connected-apps/scope-picker";
 import {
   CopiedIcon,
   CopyTokenIcon,
   NearExpiryIcon,
-} from "@/components/mockups/connected-apps/icons"
+} from "@/components/mockups/connected-apps/icons";
 
 const EXPIRY_CHOICES = [
   { days: 30, id: "30", label: "In 30 days" },
   { days: 60, id: "60", label: "In 60 days" },
   { days: 90, id: "90", label: "In 90 days" },
   { days: 365, id: "365", label: "In a year" },
-]
+];
 
-const NEVER = "never"
+const NEVER = "never";
 
 function expiryFrom(choice: string): string | null {
-  const option = EXPIRY_CHOICES.find((entry) => entry.id === choice)
-  if (!option) return null
+  const option = EXPIRY_CHOICES.find((entry) => entry.id === choice);
+  if (!option) return null;
   return new Date(
     new Date(NOW).getTime() + option.days * 86_400_000,
-  ).toISOString()
+  ).toISOString();
 }
 
 export function CreateTokenDialog({
@@ -72,48 +72,48 @@ export function CreateTokenDialog({
   onOpenChange,
   open,
 }: {
-  app: ConnectedApp
-  onCreated: (token: Token) => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  app: ConnectedApp;
+  onCreated: (token: Token) => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
   /* Lifted into the shell so the scrim, Escape and close button all route through one check. */
-  const [locked, setLocked] = React.useState(false)
-  const guard = React.useRef<() => void>(() => onOpenChange(false))
+  const [locked, setLocked] = React.useState(false);
+  const guard = React.useRef<() => void>(() => onOpenChange(false));
 
   /* Stable identities: the body registers its guard from an effect. */
-  const close = React.useCallback(() => onOpenChange(false), [onOpenChange])
+  const close = React.useCallback(() => onOpenChange(false), [onOpenChange]);
   const registerGuard = React.useCallback(
     (locking: boolean, requestClose: () => void) => {
-      setLocked(locking)
-      guard.current = requestClose
+      setLocked(locking);
+      guard.current = requestClose;
     },
     [],
-  )
+  );
 
   return (
     <Dialog
       onOpenChange={(next) => {
         if (!next && locked) {
-          guard.current()
-          return
+          guard.current();
+          return;
         }
-        onOpenChange(next)
+        onOpenChange(next);
       }}
       open={open}
     >
       <DialogContent
         className="sm:max-w-lg"
         onEscapeKeyDown={(event) => {
-          if (!locked) return
-          event.preventDefault()
-          guard.current()
+          if (!locked) return;
+          event.preventDefault();
+          guard.current();
         }}
         onInteractOutside={(event) => {
-          if (locked) event.preventDefault()
+          if (locked) event.preventDefault();
         }}
         onPointerDownOutside={(event) => {
-          if (locked) event.preventDefault()
+          if (locked) event.preventDefault();
         }}
         showCloseButton={!locked}
       >
@@ -127,10 +127,10 @@ export function CreateTokenDialog({
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-type Phase = "form" | "creating" | "revealed" | "confirm-close"
+type Phase = "form" | "creating" | "revealed" | "confirm-close";
 
 function CreateTokenBody({
   app,
@@ -138,42 +138,42 @@ function CreateTokenBody({
   onCreated,
   onGuardChange,
 }: {
-  app: ConnectedApp
-  onClose: () => void
-  onCreated: (token: Token) => void
-  onGuardChange: (locked: boolean, requestClose: () => void) => void
+  app: ConnectedApp;
+  onClose: () => void;
+  onCreated: (token: Token) => void;
+  onGuardChange: (locked: boolean, requestClose: () => void) => void;
 }) {
-  const [phase, setPhase] = React.useState<Phase>("form")
-  const [name, setName] = React.useState("")
-  const [scopes, setScopes] = React.useState<Permission[]>(READ_ONLY_SCOPES)
-  const [expiry, setExpiry] = React.useState("90")
-  const [secret, setSecret] = React.useState("")
-  const [copied, setCopied] = React.useState(false)
+  const [phase, setPhase] = React.useState<Phase>("form");
+  const [name, setName] = React.useState("");
+  const [scopes, setScopes] = React.useState<Permission[]>(READ_ONLY_SCOPES);
+  const [expiry, setExpiry] = React.useState("90");
+  const [secret, setSecret] = React.useState("");
+  const [copied, setCopied] = React.useState(false);
 
   const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
-  )
-  React.useEffect(() => () => clearTimeout(timer.current), [])
+  );
+  React.useEffect(() => () => clearTimeout(timer.current), []);
 
   /* Sealed from when the secret appears until answered, confirm step included. "Close anyway" calls onClose directly. */
-  const locked = phase === "revealed" || phase === "confirm-close"
+  const locked = phase === "revealed" || phase === "confirm-close";
   React.useEffect(() => {
     onGuardChange(locked, () => {
-      if (copied) onClose()
-      else setPhase("confirm-close")
-    })
-  }, [copied, locked, onClose, onGuardChange])
+      if (copied) onClose();
+      else setPhase("confirm-close");
+    });
+  }, [copied, locked, onClose, onGuardChange]);
 
-  const expiresAt = expiryFrom(expiry)
-  const canSave = name.trim().length > 0 && scopes.length > 0
+  const expiresAt = expiryFrom(expiry);
+  const canSave = name.trim().length > 0 && scopes.length > 0;
 
   function create() {
-    setPhase("creating")
+    setPhase("creating");
 
     window.setTimeout(() => {
-      const value = mintSecret()
-      setSecret(value)
-      setPhase("revealed")
+      const value = mintSecret();
+      setSecret(value);
+      setPhase("revealed");
       onCreated({
         appId: app.id,
         createdAt: NOW,
@@ -185,29 +185,29 @@ function CreateTokenBody({
         prefix: prefixOf(value),
         revokedAt: null,
         scopes,
-      })
-    }, 700)
+      });
+    }, 700);
   }
 
   async function copySecret() {
     try {
-      await navigator.clipboard.writeText(secret)
-      setCopied(true)
-      clearTimeout(timer.current)
-      timer.current = setTimeout(() => setCopied(false), 2000)
-      toast.success("Access token copied", { description: name.trim() })
+      await navigator.clipboard.writeText(secret);
+      setCopied(true);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 2000);
+      toast.success("Access token copied", { description: name.trim() });
     } catch {
       /* Clipboard can be blocked or unavailable; the secret is unrecoverable, so it goes into the toast. */
-      toast.error("Could not reach the clipboard", { description: secret })
+      toast.error("Could not reach the clipboard", { description: secret });
     }
   }
 
   function attemptClose() {
     if (copied) {
-      onClose()
-      return
+      onClose();
+      return;
     }
-    setPhase("confirm-close")
+    setPhase("confirm-close");
   }
 
   if (phase === "confirm-close") {
@@ -231,7 +231,7 @@ function CreateTokenBody({
           </Button>
         </DialogFooter>
       </>
-    )
+    );
   }
 
   if (phase === "revealed") {
@@ -282,7 +282,7 @@ function CreateTokenBody({
           <Button onClick={attemptClose}>Done</Button>
         </DialogFooter>
       </>
-    )
+    );
   }
 
   return (
@@ -347,5 +347,5 @@ function CreateTokenBody({
         </Button>
       </DialogFooter>
     </>
-  )
+  );
 }

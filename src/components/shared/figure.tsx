@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 /** Every stroke is `currentColor`, so the parent owns the colour. */
 
-export type FigureProps = { className?: string }
+export type FigureProps = { className?: string };
 
 export const LINE = {
   fill: "none" as const,
@@ -10,7 +10,7 @@ export const LINE = {
   strokeWidth: 2,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
-}
+};
 
 export function Figure({
   children,
@@ -27,5 +27,5 @@ export function Figure({
     >
       {children}
     </svg>
-  )
+  );
 }

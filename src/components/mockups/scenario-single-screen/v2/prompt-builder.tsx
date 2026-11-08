@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,16 +11,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldSeparator,
   FieldTitle,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   FLOW_META,
   SECTION_META,
@@ -28,15 +28,15 @@ import {
   filledCount,
   variableLabel,
   type SectionedPrompt,
-} from "@/lib/mockups/scenario-single-screen-v2-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/scenario-single-screen-v2-data";
+import { cn } from "@/lib/utils";
 
 import {
   AddIcon,
   DragStepIcon,
   RawPromptIcon,
   RemoveIcon,
-} from "@/components/mockups/scenario-single-screen/v2/icons"
+} from "@/components/mockups/scenario-single-screen/v2/icons";
 
 /** The markdown `Raw prompt` shows must stay byte-identical to what v1 stores. */
 export function PromptBuilder({
@@ -47,19 +47,19 @@ export function PromptBuilder({
   rtl,
   variables,
 }: {
-  onChange: (prompt: SectionedPrompt) => void
-  onOpenRaw: () => void
-  onOpenVariables: () => void
-  prompt: SectionedPrompt
-  rtl: boolean
-  variables: string[]
+  onChange: (prompt: SectionedPrompt) => void;
+  onOpenRaw: () => void;
+  onOpenVariables: () => void;
+  prompt: SectionedPrompt;
+  rtl: boolean;
+  variables: string[];
 }) {
-  const dir = rtl ? "rtl" : "ltr"
-  const filled = filledCount(prompt)
-  const complete = filled === SECTION_TOTAL
+  const dir = rtl ? "rtl" : "ltr";
+  const filled = filledCount(prompt);
+  const complete = filled === SECTION_TOTAL;
 
   const set = (patch: Partial<SectionedPrompt>) =>
-    onChange({ ...prompt, ...patch })
+    onChange({ ...prompt, ...patch });
 
   return (
     <Card>
@@ -123,7 +123,7 @@ export function PromptBuilder({
         </FieldGroup>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function SectionField({
@@ -136,32 +136,32 @@ function SectionField({
   value,
   variables,
 }: {
-  dir: "ltr" | "rtl"
-  example: string
-  help: string
-  label: string
-  onChange: (value: string) => void
-  onOpenVariables: () => void
-  value: string
-  variables: string[]
+  dir: "ltr" | "rtl";
+  example: string;
+  help: string;
+  label: string;
+  onChange: (value: string) => void;
+  onOpenVariables: () => void;
+  value: string;
+  variables: string[];
 }) {
-  const field = React.useRef<HTMLTextAreaElement>(null)
-  const [focused, setFocused] = React.useState(false)
+  const field = React.useRef<HTMLTextAreaElement>(null);
+  const [focused, setFocused] = React.useState(false);
 
   function insert(name: string) {
-    const element = field.current
-    if (!element) return
+    const element = field.current;
+    if (!element) return;
 
-    const token = `{{${name}}}`
-    const start = element.selectionStart ?? value.length
-    const end = element.selectionEnd ?? start
-    onChange(value.slice(0, start) + token + value.slice(end))
+    const token = `{{${name}}}`;
+    const start = element.selectionStart ?? value.length;
+    const end = element.selectionEnd ?? start;
+    onChange(value.slice(0, start) + token + value.slice(end));
 
     /* Caret after the insert, so a second chip does not land inside the first. */
     requestAnimationFrame(() => {
-      element.focus()
-      element.setSelectionRange(start + token.length, start + token.length)
-    })
+      element.focus();
+      element.setSelectionRange(start + token.length, start + token.length);
+    });
   }
 
   return (
@@ -208,7 +208,7 @@ function SectionField({
         </div>
       ) : null}
     </Field>
-  )
+  );
 }
 
 function FlowField({
@@ -216,18 +216,18 @@ function FlowField({
   onChange,
   steps,
 }: {
-  dir: "ltr" | "rtl"
-  onChange: (steps: string[]) => void
-  steps: string[]
+  dir: "ltr" | "rtl";
+  onChange: (steps: string[]) => void;
+  steps: string[];
 }) {
-  const [dragging, setDragging] = React.useState<number | null>(null)
+  const [dragging, setDragging] = React.useState<number | null>(null);
 
   function move(from: number, to: number) {
-    if (to < 0 || to >= steps.length) return
-    const next = [...steps]
-    const [moved] = next.splice(from, 1)
-    next.splice(to, 0, moved)
-    onChange(next)
+    if (to < 0 || to >= steps.length) return;
+    const next = [...steps];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
   }
 
   return (
@@ -247,8 +247,8 @@ function FlowField({
             onDragEnd={() => setDragging(null)}
             onDragEnter={() => {
               if (dragging !== null && dragging !== index) {
-                move(dragging, index)
-                setDragging(index)
+                move(dragging, index);
+                setDragging(index);
               }
             }}
             onDragOver={(event) => event.preventDefault()}
@@ -260,12 +260,12 @@ function FlowField({
               className="cursor-grab"
               onKeyDown={(event) => {
                 if (event.key === "ArrowUp") {
-                  event.preventDefault()
-                  move(index, index - 1)
+                  event.preventDefault();
+                  move(index, index - 1);
                 }
                 if (event.key === "ArrowDown") {
-                  event.preventDefault()
-                  move(index, index + 1)
+                  event.preventDefault();
+                  move(index, index + 1);
                 }
               }}
               onPointerDown={() => setDragging(index)}
@@ -284,9 +284,9 @@ function FlowField({
               aria-label={`Step ${index + 1}`}
               dir={dir}
               onChange={(event) => {
-                const next = [...steps]
-                next[index] = event.target.value
-                onChange(next)
+                const next = [...steps];
+                next[index] = event.target.value;
+                onChange(next);
               }}
               value={step}
             />
@@ -322,5 +322,5 @@ function FlowField({
 
       <FieldSeparator />
     </Field>
-  )
+  );
 }

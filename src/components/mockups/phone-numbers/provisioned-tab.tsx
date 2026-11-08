@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
+} from "@/components/shared/data-table";
 import {
   NoNumbersIcon,
   RowActionsIcon,
   SearchIcon,
-} from "@/components/mockups/phone-numbers/icons"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@/components/mockups/phone-numbers/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,64 +22,64 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   NUMBER_DIRECTION_LABELS,
   ORGANIZATIONS,
   PROVIDERS,
   PROVISIONED,
-} from "@/lib/mockups/phone-numbers-data"
+} from "@/lib/mockups/phone-numbers-data";
 
-const ALL = "all"
+const ALL = "all";
 
 const REGISTERED_FORMAT = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "short",
   year: "numeric",
   timeZone: "UTC",
-})
+});
 
 export function ProvisionedTab() {
-  const [organization, setOrganization] = React.useState(ALL)
-  const [provider, setProvider] = React.useState(ALL)
-  const [ownedOnly, setOwnedOnly] = React.useState(false)
-  const [search, setSearch] = React.useState("")
+  const [organization, setOrganization] = React.useState(ALL);
+  const [provider, setProvider] = React.useState(ALL);
+  const [ownedOnly, setOwnedOnly] = React.useState(false);
+  const [search, setSearch] = React.useState("");
 
-  const query = search.trim().toLowerCase()
+  const query = search.trim().toLowerCase();
   const hasFilters =
-    organization !== ALL || provider !== ALL || ownedOnly || query !== ""
+    organization !== ALL || provider !== ALL || ownedOnly || query !== "";
 
   const rows = PROVISIONED.filter((row) => {
     const organizationName =
-      ORGANIZATIONS.find((item) => item.id === organization)?.name ?? null
+      ORGANIZATIONS.find((item) => item.id === organization)?.name ?? null;
     const providerName =
-      PROVIDERS.find((item) => item.id === provider)?.name ?? null
+      PROVIDERS.find((item) => item.id === provider)?.name ?? null;
     return (
       (organization === ALL || row.organizationName === organizationName) &&
       (provider === ALL || row.providerName === providerName) &&
@@ -87,8 +87,8 @@ export function ProvisionedTab() {
       (query === "" ||
         row.phoneNumber.toLowerCase().includes(query) ||
         (row.organizationName ?? "").toLowerCase().includes(query))
-    )
-  })
+    );
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -137,7 +137,7 @@ export function ProvisionedTab() {
               checked={ownedOnly}
               id="pn-owned-only"
               onCheckedChange={(checked) => {
-                setOwnedOnly(checked === true)
+                setOwnedOnly(checked === true);
               }}
             />
             <Label className="cursor-pointer" htmlFor="pn-owned-only">
@@ -153,7 +153,7 @@ export function ProvisionedTab() {
           <InputGroupInput
             aria-label="Search provisioned numbers"
             onChange={(event) => {
-              setSearch(event.target.value)
+              setSearch(event.target.value);
             }}
             placeholder="Search number or organization…"
             value={search}
@@ -306,5 +306,5 @@ export function ProvisionedTab() {
         </DataTable>
       )}
     </div>
-  )
+  );
 }

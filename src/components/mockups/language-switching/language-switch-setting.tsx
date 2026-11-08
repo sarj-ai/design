@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { PersonaPicker } from "@/components/mockups/language-switching/persona-picker"
+import { PersonaPicker } from "@/components/mockups/language-switching/persona-picker";
 import {
   Field,
   FieldContent,
@@ -13,9 +13,9 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import {
   HANDOFF_EXAMPLE,
   LANGUAGE_NAMES,
@@ -24,8 +24,8 @@ import {
   type LanguageCode,
   type ScenarioLanguage,
   type SwitchConfig,
-} from "@/lib/mockups/language-switching-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/language-switching-data";
+import { cn } from "@/lib/utils";
 
 export function LanguageSwitchSetting({
   config,
@@ -34,21 +34,21 @@ export function LanguageSwitchSetting({
   onChange,
   start,
 }: {
-  config: SwitchConfig
+  config: SwitchConfig;
   /** Languages whose target failed the last save. Live after that. */
-  invalid: Set<LanguageCode>
-  languages: ScenarioLanguage[]
-  onChange: (next: SwitchConfig) => void
-  start: LanguageCode
+  invalid: Set<LanguageCode>;
+  languages: ScenarioLanguage[];
+  onChange: (next: SwitchConfig) => void;
+  start: LanguageCode;
 }) {
   const patch = <K extends keyof SwitchConfig>(
     key: K,
     value: SwitchConfig[K],
-  ) => onChange({ ...config, [key]: value })
+  ) => onChange({ ...config, [key]: value });
 
-  const switchedTo = languages.filter((l) => l.code !== start)
-  const handoffOff = !config.switchVoice
-  const continuityOff = config.switchVoice
+  const switchedTo = languages.filter((l) => l.code !== start);
+  const handoffOff = !config.switchVoice;
+  const continuityOff = config.switchVoice;
 
   return (
     <FieldGroup className="gap-6">
@@ -102,7 +102,7 @@ export function LanguageSwitchSetting({
       </FieldSet>
 
       {switchedTo.map(({ code }) => {
-        const failed = invalid.has(code) && !config.target[code]
+        const failed = invalid.has(code) && !config.target[code];
 
         return (
           <React.Fragment key={code}>
@@ -175,8 +175,8 @@ export function LanguageSwitchSetting({
               </Field>
             </FieldSet>
           </React.Fragment>
-        )
+        );
       })}
     </FieldGroup>
-  )
+  );
 }

@@ -2,11 +2,11 @@ import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/reference-table";
+import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens";
+import { cn } from "@/lib/utils";
 
-const OFF_PAGE = new Set(["Sidebar", "Defined only as a Tailwind alias"])
+const OFF_PAGE = new Set(["Sidebar", "Defined only as a Tailwind alias"]);
 
 export function ColourTable() {
   return (
@@ -51,5 +51,5 @@ export function ColourTable() {
         ),
       )}
     </div>
-  )
+  );
 }

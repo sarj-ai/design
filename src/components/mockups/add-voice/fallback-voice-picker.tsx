@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { FALLBACK_VOICES } from "@/lib/mockups/add-voice-data"
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FALLBACK_VOICES } from "@/lib/mockups/add-voice-data";
 
 export function FallbackVoicePicker({
   onValueChange,
   value,
 }: {
-  onValueChange: (voiceId: string) => void
-  value: string
+  onValueChange: (voiceId: string) => void;
+  value: string;
 }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
@@ -31,8 +31,8 @@ export function FallbackVoicePicker({
         <RadioGroup
           className="gap-0"
           onValueChange={(voiceId) => {
-            onValueChange(voiceId)
-            setOpen(false)
+            onValueChange(voiceId);
+            setOpen(false);
           }}
           value={value}
         >
@@ -58,5 +58,5 @@ export function FallbackVoicePicker({
         </RadioGroup>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

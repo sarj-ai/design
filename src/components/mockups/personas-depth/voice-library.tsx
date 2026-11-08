@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertAction } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+} from "@/components/shared/data-table";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertAction } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -38,8 +38,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { LANGUAGES, VOICES } from "@/lib/mockups/personas-depth-data"
+} from "@/components/ui/table";
+import { LANGUAGES, VOICES } from "@/lib/mockups/personas-depth-data";
 import {
   LoadErrorIcon,
   PlayPreviewIcon,
@@ -47,37 +47,37 @@ import {
   SearchIcon,
   StopPreviewIcon,
   VoiceWaveIcon,
-} from "@/components/mockups/personas-depth/icons"
-import type { PreviewState } from "@/components/mockups/personas-depth/personas-index"
+} from "@/components/mockups/personas-depth/icons";
+import type { PreviewState } from "@/components/mockups/personas-depth/personas-index";
 
-const PROVIDERS = [...new Set(VOICES.map((voice) => voice.provider))]
+const PROVIDERS = [...new Set(VOICES.map((voice) => voice.provider))];
 
 export function VoiceLibrary({ state }: { state: PreviewState }) {
-  const [search, setSearch] = React.useState("")
-  const [language, setLanguage] = React.useState("all")
-  const [gender, setGender] = React.useState("all")
-  const [provider, setProvider] = React.useState("all")
-  const [playingId, setPlayingId] = React.useState<string | null>(null)
+  const [search, setSearch] = React.useState("");
+  const [language, setLanguage] = React.useState("all");
+  const [gender, setGender] = React.useState("all");
+  const [provider, setProvider] = React.useState("all");
+  const [playingId, setPlayingId] = React.useState<string | null>(null);
 
   const filtered = VOICES.filter((voice) => {
-    if (language !== "all" && voice.language !== language) return false
-    if (gender !== "all" && voice.gender !== gender) return false
-    if (provider !== "all" && voice.provider !== provider) return false
+    if (language !== "all" && voice.language !== language) return false;
+    if (gender !== "all" && voice.gender !== gender) return false;
+    if (provider !== "all" && voice.provider !== provider) return false;
     if (
       search &&
       !`${voice.name} ${voice.vibe}`
         .toLowerCase()
         .includes(search.toLowerCase())
     )
-      return false
-    return true
-  })
+      return false;
+    return true;
+  });
 
   const filtersActive =
     search !== "" ||
     language !== "all" ||
     gender !== "all" ||
-    provider !== "all"
+    provider !== "all";
 
   if (state === "error") {
     return (
@@ -95,7 +95,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
           </Button>
         </AlertAction>
       </Alert>
-    )
+    );
   }
 
   if (state === "empty") {
@@ -112,7 +112,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
-    )
+    );
   }
 
   return (
@@ -234,10 +234,10 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          setSearch("")
-                          setLanguage("all")
-                          setGender("all")
-                          setProvider("all")
+                          setSearch("");
+                          setLanguage("all");
+                          setGender("all");
+                          setProvider("all");
                         }}
                       >
                         Clear filters
@@ -247,7 +247,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
                 </TableRow>
               ) : (
                 filtered.map((voice) => {
-                  const playing = playingId === voice.id
+                  const playing = playingId === voice.id;
                   return (
                     <TableRow
                       key={voice.id}
@@ -300,7 +300,7 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
                         </Button>
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 })
               )}
             </TableBody>
@@ -308,5 +308,5 @@ export function VoiceLibrary({ state }: { state: PreviewState }) {
         </div>
       </Card>
     </div>
-  )
+  );
 }

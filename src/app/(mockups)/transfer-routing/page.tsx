@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { TransferToolDrawer } from "@/components/mockups/transfer-routing/transfer-tool-drawer"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { TransferToolDrawer } from "@/components/mockups/transfer-routing/transfer-tool-drawer";
 
 export default function TransferRoutingPage() {
   return (
@@ -13,5 +13,5 @@ export default function TransferRoutingPage() {
         <TransferToolDrawer />
       </main>
     </MockupShell>
-  )
+  );
 }

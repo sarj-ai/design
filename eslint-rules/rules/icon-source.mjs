@@ -7,7 +7,7 @@ const BANNED = {
   "@heroicons/react": "@heroicons/react is not part of this design system",
   "@radix-ui/react-icons":
     "@radix-ui/react-icons is not part of this design system",
-}
+};
 
 const iconSource = {
   meta: {
@@ -26,16 +26,16 @@ const iconSource = {
   create(context) {
     return {
       ImportDeclaration(node) {
-        const reason = BANNED[node.source.value]
-        if (!reason) return
+        const reason = BANNED[node.source.value];
+        if (!reason) return;
         context.report({
           node: node.source,
           messageId: "bannedIconLibrary",
           data: { reason },
-        })
+        });
       },
-    }
+    };
   },
-}
+};
 
-export default iconSource
+export default iconSource;

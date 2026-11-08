@@ -1,7 +1,7 @@
-import { createClassVisitor } from "../lib/classes.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
 
-const FAMILY = /^font-(serif|\[.*\])$/
-const WEIGHT = /^font-(thin|extralight|light|bold|extrabold|black)$/
+const FAMILY = /^font-(serif|\[.*\])$/;
+const WEIGHT = /^font-(thin|extralight|light|bold|extrabold|black)$/;
 
 const typeScale = {
   meta: {
@@ -25,28 +25,28 @@ const typeScale = {
     const classes = createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
         if (FAMILY.test(base)) {
-          context.report({ node, messageId: "family", data: { cls: raw } })
+          context.report({ node, messageId: "family", data: { cls: raw } });
         } else if (WEIGHT.test(base)) {
-          context.report({ node, messageId: "weight", data: { cls: raw } })
+          context.report({ node, messageId: "weight", data: { cls: raw } });
         }
       }
-    })
+    });
 
     return {
       ...classes,
       JSXAttribute(node) {
-        classes.JSXAttribute(node)
-        if (node.name?.name !== "style") return
-        const expr = node.value?.expression
-        if (expr?.type !== "ObjectExpression") return
+        classes.JSXAttribute(node);
+        if (node.name?.name !== "style") return;
+        const expr = node.value?.expression;
+        if (expr?.type !== "ObjectExpression") return;
         for (const prop of expr.properties) {
           if ((prop.key?.name ?? prop.key?.value) === "fontFamily") {
-            context.report({ node: prop, messageId: "style" })
+            context.report({ node: prop, messageId: "style" });
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default typeScale
+export default typeScale;

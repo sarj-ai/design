@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-import { AgentShader } from "./agent-shader"
-import { AGENT_TONE, useAgentLoop, type AgentState } from "./engine"
+import { AgentShader } from "./agent-shader";
+import { AGENT_TONE, useAgentLoop, type AgentState } from "./engine";
 
 /* Ten lines of one sine each, staggered in speed — the pasted WaveLines shader, with the
    rainbow swapped for the orb ramp and alpha out so it sits on a light card. Each state
@@ -48,7 +48,7 @@ void main() {
   float a = (1.0 - clear) * fade;
   gl_FragColor = vec4(col / max(weight, 1e-4) * a, a);
 }
-`
+`;
 
 /* Six fine strands on one ring, each drawn at partial opacity so where they cross reads
    denser. Listening is a loose skein that opens with the caller; thinking twists the
@@ -90,33 +90,33 @@ void main() {
   float alpha = 1.0 - clear;
   gl_FragColor = vec4(col / max(weight, 1e-4) * alpha, alpha);
 }
-`
+`;
 
 export function AgentWaves({
   state,
   className,
 }: {
-  state: AgentState
-  className?: string
+  state: AgentState;
+  className?: string;
 }) {
-  return <AgentShader body={WAVES} className={className} state={state} />
+  return <AgentShader body={WAVES} className={className} state={state} />;
 }
 
 export function AgentString({
   state,
   className,
 }: {
-  state: AgentState
-  className?: string
+  state: AgentState;
+  className?: string;
 }) {
-  return <AgentShader body={STRING} className={className} state={state} />
+  return <AgentShader body={STRING} className={className} state={state} />;
 }
 
 /* A 5 x 5 loader: fixed small dots, a few steps of opacity, time moving in steps. */
-const GRID = 5
-const DOT = 6
-const PITCH = 10
-const STEPS = 9 // per second
+const GRID = 5;
+const DOT = 6;
+const PITCH = 10;
+const STEPS = 9; // per second
 
 /* The outer ring clockwise from the top-left, and the inner ring the same way. */
 const OUTER = [
@@ -136,7 +136,7 @@ const OUTER = [
   [0, 3],
   [0, 2],
   [0, 1],
-]
+];
 const INNER = [
   [1, 1],
   [2, 1],
@@ -146,17 +146,17 @@ const INNER = [
   [2, 3],
   [1, 3],
   [1, 2],
-]
+];
 
 /* Trail behind a head running round a ring: the head, then fading. */
 function orbit(ring: number[][], head: number, trail: number[]) {
-  const out = new Map<string, number>()
+  const out = new Map<string, number>();
   trail.forEach((v, back) => {
     const [x, y] =
-      ring[(((head - back) % ring.length) + ring.length) % ring.length]
-    out.set(`${x},${y}`, v)
-  })
-  return out
+      ring[(((head - back) % ring.length) + ring.length) % ring.length];
+    out.set(`${x},${y}`, v);
+  });
+  return out;
 }
 
 /** Five by five. Listening draws rings inward, thinking runs two dots round in opposite directions, speaking is a mirrored level meter. */
@@ -164,76 +164,78 @@ export function AgentDots({
   state,
   className,
 }: {
-  state: AgentState
-  className?: string
+  state: AgentState;
+  className?: string;
 }) {
-  const ref = useRef<HTMLCanvasElement>(null)
-  const ink = useRef("")
+  const ref = useRef<HTMLCanvasElement>(null);
+  const ink = useRef("");
 
   useEffect(() => {
-    const swatch = document.createElement("span")
-    swatch.className = `${AGENT_TONE[0]} hidden`
-    document.body.append(swatch)
-    ink.current = getComputedStyle(swatch).backgroundColor
-    swatch.remove()
-  }, [])
+    const swatch = document.createElement("span");
+    swatch.className = `${AGENT_TONE[0]} hidden`;
+    document.body.append(swatch);
+    ink.current = getComputedStyle(swatch).backgroundColor;
+    swatch.remove();
+  }, []);
 
   useAgentLoop(ref, state, (f) => {
-    const context = ref.current?.getContext("2d")
-    if (!context) return
-    context.clearRect(0, 0, f.width, f.height)
-    context.fillStyle = ink.current
+    const context = ref.current?.getContext("2d");
+    if (!context) return;
+    context.clearRect(0, 0, f.width, f.height);
+    context.fillStyle = ink.current;
 
-    const step = Math.floor(f.time * STEPS)
-    const pitch = PITCH * f.ratio
-    const ox = f.width / 2 - pitch * 2
-    const oy = f.height / 2 - pitch * 2
+    const step = Math.floor(f.time * STEPS);
+    const pitch = PITCH * f.ratio;
+    const ox = f.width / 2 - pitch * 2;
+    const oy = f.height / 2 - pitch * 2;
 
     /* Listening: one ring lit at a time, outer to centre, as loud as the caller. */
-    const ring = 2 - (Math.floor(step / 3) % 3)
-    const loud = 0.35 + 0.65 * Math.min(1, f.level * 1.6)
+    const ring = 2 - (Math.floor(step / 3) % 3);
+    const loud = 0.35 + 0.65 * Math.min(1, f.level * 1.6);
 
     /* Thinking. */
-    const outer = orbit(OUTER, step, [1, 0.7, 0.45, 0.25])
-    const inner = orbit(INNER, -Math.floor(step / 2), [0.85, 0.4])
+    const outer = orbit(OUTER, step, [1, 0.7, 0.45, 0.25]);
+    const inner = orbit(INNER, -Math.floor(step / 2), [0.85, 0.4]);
 
     for (let row = 0; row < GRID; row++) {
       for (let col = 0; col < GRID; col++) {
-        const d = Math.max(Math.abs(col - 2), Math.abs(row - 2))
-        const listen = (d === ring ? 1 : d === (ring + 1) % 3 ? 0.4 : 0) * loud
+        const d = Math.max(Math.abs(col - 2), Math.abs(row - 2));
+        const listen = (d === ring ? 1 : d === (ring + 1) % 3 ? 0.4 : 0) * loud;
 
-        const key = `${col},${row}`
-        const think = outer.get(key) ?? inner.get(key) ?? 0
+        const key = `${col},${row}`;
+        const think = outer.get(key) ?? inner.get(key) ?? 0;
 
         /* Speaking: each column a bar mirrored about the middle row; silence is a flat line. */
-        const shape = [0.45, 0.8, 1, 0.8, 0.45][col]
-        const wobble = 0.7 + 0.3 * Math.sin(f.time * 11 + col * 1.9)
-        const height = f.level * shape * wobble * 2.6
-        const reach = Math.abs(row - 2)
+        const shape = [0.45, 0.8, 1, 0.8, 0.45][col];
+        const wobble = 0.7 + 0.3 * Math.sin(f.time * 11 + col * 1.9);
+        const height = f.level * shape * wobble * 2.6;
+        const reach = Math.abs(row - 2);
         const speak =
           reach === 0
             ? 0.45 + 0.55 * Math.min(1, height * 2)
-            : Math.min(1, Math.max(0, height - reach + 1)) * (1 - reach * 0.15)
+            : Math.min(1, Math.max(0, height - reach + 1)) * (1 - reach * 0.15);
 
         const v = Math.min(
           1,
           f.listen * listen + f.think * think + f.speak * speak,
-        )
+        );
         /* Five steps of opacity, so it reads as a matrix, not a gradient. */
-        context.globalAlpha = 0.12 + 0.88 * (Math.round(v * 4) / 4)
-        context.beginPath()
+        context.globalAlpha = 0.12 + 0.88 * (Math.round(v * 4) / 4);
+        context.beginPath();
         context.arc(
           ox + col * pitch,
           oy + row * pitch,
           (DOT / 2) * f.ratio,
           0,
           Math.PI * 2,
-        )
-        context.fill()
+        );
+        context.fill();
       }
     }
-    context.globalAlpha = 1
-  })
+    context.globalAlpha = 1;
+  });
 
-  return <canvas aria-hidden className={cn("size-full", className)} ref={ref} />
+  return (
+    <canvas aria-hidden className={cn("size-full", className)} ref={ref} />
+  );
 }

@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
+import { AppShell } from "@/components/shell/app-shell";
 import {
   ModelCatalogPage,
   type CatalogState,
-} from "@/components/mockups/model-catalog/catalog-page"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/mockups/model-catalog/catalog-page";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 export default function ModelCatalogRoute() {
-  const [state, setState] = React.useState<CatalogState>("populated")
+  const [state, setState] = React.useState<CatalogState>("populated");
 
   return (
     <MockupShell
@@ -19,7 +19,7 @@ export default function ModelCatalogRoute() {
       actions={
         <ToggleGroup
           onValueChange={(next) => {
-            if (next) setState(next as CatalogState)
+            if (next) setState(next as CatalogState);
           }}
           size="sm"
           type="single"
@@ -39,5 +39,5 @@ export default function ModelCatalogRoute() {
         </div>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

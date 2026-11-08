@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -8,19 +8,19 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/item";
+import { Switch } from "@/components/ui/switch";
 
-import { ConfigureIcon, FillerWordsIcon } from "./icons"
+import { ConfigureIcon, FillerWordsIcon } from "./icons";
 
 export function BackchannelSettings({
   fillerWords,
   onConfigure,
   onFillerWordsChange,
 }: {
-  fillerWords: boolean
-  onConfigure: () => void
-  onFillerWordsChange: (enabled: boolean) => void
+  fillerWords: boolean;
+  onConfigure: () => void;
+  onFillerWordsChange: (enabled: boolean) => void;
 }) {
   return (
     <Item variant="outline">
@@ -51,5 +51,5 @@ export function BackchannelSettings({
         />
       </ItemActions>
     </Item>
-  )
+  );
 }

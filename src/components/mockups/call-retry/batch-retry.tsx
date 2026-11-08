@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Item,
@@ -9,29 +9,29 @@ import {
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { SCENARIO_NAME, type RetryConfig } from "@/lib/mockups/call-retry-data"
-import { RetrySettingsCard } from "@/components/mockups/call-retry/retry-settings-card"
+} from "@/components/ui/item";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { SCENARIO_NAME, type RetryConfig } from "@/lib/mockups/call-retry-data";
+import { RetrySettingsCard } from "@/components/mockups/call-retry/retry-settings-card";
 
 export function BatchRetry({
   onOverriddenChange,
   overridden,
   scenarioConfig,
 }: {
-  onOverriddenChange: (overridden: boolean) => void
-  overridden: boolean
-  scenarioConfig: RetryConfig
+  onOverriddenChange: (overridden: boolean) => void;
+  overridden: boolean;
+  scenarioConfig: RetryConfig;
 }) {
-  const [draft, setDraft] = React.useState<RetryConfig>(scenarioConfig)
+  const [draft, setDraft] = React.useState<RetryConfig>(scenarioConfig);
 
   return (
     <RetrySettingsCard
       disabled={!overridden}
       onChange={setDraft}
       onSave={() => {
-        toast.success("Retry settings saved")
+        toast.success("Retry settings saved");
       }}
       scope={
         <Item variant="muted">
@@ -50,8 +50,8 @@ export function BatchRetry({
               checked={overridden}
               id="batch-override"
               onCheckedChange={(next) => {
-                if (next) setDraft({ ...scenarioConfig })
-                onOverriddenChange(next)
+                if (next) setDraft({ ...scenarioConfig });
+                onOverriddenChange(next);
               }}
             />
           </ItemActions>
@@ -59,5 +59,5 @@ export function BatchRetry({
       }
       value={overridden ? draft : scenarioConfig}
     />
-  )
+  );
 }

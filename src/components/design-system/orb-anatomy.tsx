@@ -1,36 +1,36 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
-const CX = 270
-const R = 170
-const RY = 46
-const SQUASH = RY / R
-const LAYERS = [90, 225, 360]
+const CX = 270;
+const R = 170;
+const RY = 46;
+const SQUASH = RY / R;
+const LAYERS = [90, 225, 360];
 
-const LX = 720
-const LY = 230
+const LX = 720;
+const LY = 230;
 
 /* Mirrors the shader's constants in orb-avatar.tsx. */
-const CELLS = 9
-const LENS = 0.6
+const CELLS = 9;
+const LENS = 0.6;
 
 function at(x: number, y: number, cy: number) {
-  return `${(CX + x).toFixed(1)} ${(cy + y * SQUASH).toFixed(1)}`
+  return `${(CX + x).toFixed(1)} ${(cy + y * SQUASH).toFixed(1)}`;
 }
 
 function lattice(cy: number) {
-  const step = (2 * R) / CELLS
-  const s = Math.SQRT1_2
-  const lines: string[] = []
+  const step = (2 * R) / CELLS;
+  const s = Math.SQRT1_2;
+  const lines: string[] = [];
   for (let n = -Math.floor(CELLS / 2); n <= Math.floor(CELLS / 2); n++) {
-    const c = n * step
-    if (Math.abs(c) >= R) continue
-    const t = Math.sqrt(R * R - c * c)
+    const c = n * step;
+    if (Math.abs(c) >= R) continue;
+    const t = Math.sqrt(R * R - c * c);
     lines.push(
       `M${at(c * s + t * s, c * s - t * s, cy)}L${at(c * s - t * s, c * s + t * s, cy)}`,
       `M${at(c * s + t * s, -c * s + t * s, cy)}L${at(c * s - t * s, -c * s - t * s, cy)}`,
-    )
+    );
   }
-  return lines.join("")
+  return lines.join("");
 }
 
 function trail(
@@ -40,55 +40,55 @@ function trail(
   cy: number,
   to: number,
 ) {
-  const points: string[] = []
+  const points: string[] = [];
   for (let t = 0; t <= to; t += 0.1)
-    points.push(at(fx(t) * radius * R, -fy(t) * radius * R, cy))
-  return `M${points.join("L")}`
+    points.push(at(fx(t) * radius * R, -fy(t) * radius * R, cy));
+  return `M${points.join("L")}`;
 }
 
 const bright = {
   x: (t: number) => Math.cos(0.7 * t),
   y: (t: number) => Math.sin(0.5 * t),
   radius: 0.55,
-}
+};
 const deep = {
   x: (t: number) => Math.cos(2.6 - 0.4 * t),
   y: (t: number) => Math.sin(2.6 + 0.6 * t),
   radius: 0.45,
-}
-const TRAIL = 5
+};
+const TRAIL = 5;
 
 function end(blob: typeof bright, cy: number) {
   const [x, y] = at(
     blob.x(TRAIL) * blob.radius * R,
     -blob.y(TRAIL) * blob.radius * R,
     cy,
-  ).split(" ")
-  return { cx: x, cy: y }
+  ).split(" ");
+  return { cx: x, cy: y };
 }
 
 /* The shader samples centre − 0.6 × offset, so rays cross at the lens and land mirrored. */
-const D = 60
-const TOP = 125
-const BOTTOM = 335
+const D = 60;
+const TOP = 125;
+const BOTTOM = 335;
 const RAYS = [-1, 0, 1].map((k) => ({
   from: LX - k * D * LENS,
   to: LX + k * D,
-}))
-const FOCUS = TOP + ((BOTTOM - TOP) * LENS) / (1 + LENS)
+}));
+const FOCUS = TOP + ((BOTTOM - TOP) * LENS) / (1 + LENS);
 
 function dimension(x1: number, x2: number, y: number) {
   return (
     `M${x1} ${y}H${x2}` +
     `M${x1} ${y - 10}v20M${x2} ${y - 10}v20` +
     `M${x1 + 10} ${y - 8}l-10 8 10 8M${x2 - 10} ${y - 8}l10 8-10 8`
-  )
+  );
 }
 
 export function OrbAnatomy({ className }: FigureProps) {
-  const [light, lenses, disc] = LAYERS
-  const bEnd = end(bright, light)
-  const dEnd = end(deep, light)
+  const [light, lenses, disc] = LAYERS;
+  const bEnd = end(bright, light);
+  const dEnd = end(deep, light);
 
   return (
     <Figure className={className} viewBox="0 0 960 460">
@@ -171,5 +171,5 @@ export function OrbAnatomy({ className }: FigureProps) {
         </text>
       </g>
     </Figure>
-  )
+  );
 }

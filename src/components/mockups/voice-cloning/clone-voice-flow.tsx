@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { CreationFlow } from "@/components/design-system/creation-flow"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { CreationFlow } from "@/components/design-system/creation-flow";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,26 +13,26 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   type Details,
   DetailsStep,
   detailsErrors,
-} from "@/components/mockups/voice-cloning/details-step"
+} from "@/components/mockups/voice-cloning/details-step";
 import {
   type Capture,
   EMPTY_CAPTURE,
   SampleStep,
-} from "@/components/mockups/voice-cloning/sample-step"
+} from "@/components/mockups/voice-cloning/sample-step";
 import {
   DIALECTS,
   type Gender,
   type LanguageCode,
   type SampleOutcome,
   type Voice,
-} from "@/lib/mockups/voice-cloning-data"
+} from "@/lib/mockups/voice-cloning-data";
 
 const STEPS = [
   {
@@ -44,7 +44,7 @@ const STEPS = [
     key: "details",
     question: "Listen to the clone, then name it.",
   },
-] as const
+] as const;
 
 export function CloneVoiceFlow({
   open,
@@ -54,12 +54,12 @@ export function CloneVoiceFlow({
   outcome,
   defaults,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onCreated: (voice: Voice) => void
-  canPublish: boolean
-  outcome: SampleOutcome
-  defaults: { language: LanguageCode; gender: Gender }
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCreated: (voice: Voice) => void;
+  canPublish: boolean;
+  outcome: SampleOutcome;
+  defaults: { language: LanguageCode; gender: Gender };
 }) {
   const initialDetails = React.useMemo<Details>(
     () => ({
@@ -72,72 +72,72 @@ export function CloneVoiceFlow({
       consent: false,
     }),
     [defaults.language, defaults.gender],
-  )
+  );
 
-  const [step, setStep] = React.useState(0)
-  const [capture, setCapture] = React.useState<Capture>(EMPTY_CAPTURE)
-  const [details, setDetails] = React.useState<Details>(initialDetails)
-  const [showErrors, setShowErrors] = React.useState(false)
-  const [busy, setBusy] = React.useState(false)
-  const [failed, setFailed] = React.useState(false)
-  const [attempts, setAttempts] = React.useState(0)
-  const [leaving, setLeaving] = React.useState(false)
+  const [step, setStep] = React.useState(0);
+  const [capture, setCapture] = React.useState<Capture>(EMPTY_CAPTURE);
+  const [details, setDetails] = React.useState<Details>(initialDetails);
+  const [showErrors, setShowErrors] = React.useState(false);
+  const [busy, setBusy] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+  const [attempts, setAttempts] = React.useState(0);
+  const [leaving, setLeaving] = React.useState(false);
 
   const reset = () => {
-    setStep(0)
-    setCapture(EMPTY_CAPTURE)
-    setDetails(initialDetails)
-    setShowErrors(false)
-    setBusy(false)
-    setFailed(false)
-    setAttempts(0)
-  }
+    setStep(0);
+    setCapture(EMPTY_CAPTURE);
+    setDetails(initialDetails);
+    setShowErrors(false);
+    setBusy(false);
+    setFailed(false);
+    setAttempts(0);
+  };
 
   const close = () => {
-    onOpenChange(false)
-    reset()
-  }
+    onOpenChange(false);
+    reset();
+  };
 
   const requestClose = () => {
-    if (busy) return
+    if (busy) return;
     if (capture.kind === "take" || step > 0) {
-      setLeaving(true)
-      return
+      setLeaving(true);
+      return;
     }
-    close()
-  }
+    close();
+  };
 
-  const take = capture.kind === "take" ? capture.take : null
+  const take = capture.kind === "take" ? capture.take : null;
   const sampleReady =
-    take !== null && take.transcript !== null && take.transcript.trim() !== ""
+    take !== null && take.transcript !== null && take.transcript.trim() !== "";
 
   const clone = async () => {
     if (!sampleReady) {
-      setShowErrors(true)
-      return
+      setShowErrors(true);
+      return;
     }
-    setShowErrors(false)
-    setFailed(false)
-    setBusy(true)
-    await new Promise((resolve) => setTimeout(resolve, 1600))
-    setBusy(false)
-    setAttempts((count) => count + 1)
+    setShowErrors(false);
+    setFailed(false);
+    setBusy(true);
+    await new Promise((resolve) => setTimeout(resolve, 1600));
+    setBusy(false);
+    setAttempts((count) => count + 1);
     if (outcome === "fails" && attempts === 0) {
-      setFailed(true)
-      return
+      setFailed(true);
+      return;
     }
-    setStep(1)
-  }
+    setStep(1);
+  };
 
   const create = async () => {
-    const errors = detailsErrors(details)
+    const errors = detailsErrors(details);
     if (errors.name || errors.consent) {
-      setShowErrors(true)
-      return
+      setShowErrors(true);
+      return;
     }
-    setBusy(true)
-    await new Promise((resolve) => setTimeout(resolve, 900))
-    const name = details.name.trim()
+    setBusy(true);
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const name = details.name.trim();
     onCreated({
       id: `clone-${name.toLowerCase()}-${Date.now()}`,
       name,
@@ -149,11 +149,11 @@ export function CloneVoiceFlow({
       cloned: true,
       scope: "org",
       usedBy: [],
-    })
-    close()
-  }
+    });
+    close();
+  };
 
-  const onSample = step === 0
+  const onSample = step === 0;
 
   return (
     <>
@@ -163,8 +163,8 @@ export function CloneVoiceFlow({
           onSample || busy
             ? null
             : () => {
-                setShowErrors(false)
-                setStep(0)
+                setShowErrors(false);
+                setStep(0);
               }
         }
         onClose={requestClose}
@@ -181,8 +181,8 @@ export function CloneVoiceFlow({
               capture={capture}
               noisy={outcome === "noisy"}
               setCapture={(next) => {
-                setFailed(false)
-                setCapture(next)
+                setFailed(false);
+                setCapture(next);
               }}
               showErrors={showErrors}
             />
@@ -255,8 +255,8 @@ export function CloneVoiceFlow({
             <AlertDialogCancel>Keep going</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                setLeaving(false)
-                close()
+                setLeaving(false);
+                close();
               }}
               variant="destructive"
             >
@@ -266,5 +266,5 @@ export function CloneVoiceFlow({
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
 import {
   AnimatePresence,
   motion,
   useReducedMotion,
   type Transition,
-} from "motion/react"
-import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+} from "motion/react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 import {
   CopySkillButton,
   FoundationsSheet,
-} from "@/components/design-system/foundations-sheet"
-import { CloseIcon } from "@/components/design-system/icons"
-import { SECTION_FIGURES } from "@/components/design-system/section-figures"
-import { TOPIC_FIGURES } from "@/components/design-system/topic-figures"
-import { Button } from "@/components/ui/button"
-import TextHighlightWave from "@/components/ui/text-highlight-wave"
-import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system/data"
-import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/foundations-sheet";
+import { CloseIcon } from "@/components/design-system/icons";
+import { SECTION_FIGURES } from "@/components/design-system/section-figures";
+import { TOPIC_FIGURES } from "@/components/design-system/topic-figures";
+import { Button } from "@/components/ui/button";
+import TextHighlightWave from "@/components/ui/text-highlight-wave";
+import { DOCS_SECTIONS, type DocsSection } from "@/lib/design-system/data";
+import { DOCS_ROOT, docsHref, sectionHref } from "@/lib/design-system/nav";
+import { cn } from "@/lib/utils";
 
 const FULL_WIDTH_TOPICS = new Set([
   "colour",
@@ -35,35 +35,35 @@ const FULL_WIDTH_TOPICS = new Set([
   "integration-card",
   "surfaces",
   "error-state",
-])
+]);
 
-const GROW = { type: "spring", bounce: 0, duration: 0.55 } as const
+const GROW = { type: "spring", bounce: 0, duration: 0.55 } as const;
 
 /** power4.inOut */
-const CROSS = [0.77, 0, 0.175, 1] as const
+const CROSS = [0.77, 0, 0.175, 1] as const;
 /** power3.out */
-const ARRIVE = [0.215, 0.61, 0.355, 1] as const
+const ARRIVE = [0.215, 0.61, 0.355, 1] as const;
 
-type Rect = { top: number; bottom: number }
+type Rect = { top: number; bottom: number };
 
 function topicsOf(section: DocsSection) {
-  return section.groups.flatMap((group) => group.pages)
+  return section.groups.flatMap((group) => group.pages);
 }
 
 /** How far below its cell a tile starts, as a percentage of its height. Fixed, not random, to keep render pure. */
 function lift(index: number) {
-  return (index * 67) % 200
+  return (index * 67) % 200;
 }
 
 function rowRect(id: string): Rect {
   const box = document
     .querySelector(`[data-section-row="${id}"]`)
-    ?.getBoundingClientRect()
-  return { top: box?.top ?? 0, bottom: box?.bottom ?? 0 }
+    ?.getBoundingClientRect();
+  return { top: box?.top ?? 0, bottom: box?.bottom ?? 0 };
 }
 
 function ordinal(index: number) {
-  return String(index + 1).padStart(2, "0")
+  return String(index + 1).padStart(2, "0");
 }
 
 export function SectionMenu({
@@ -71,143 +71,143 @@ export function SectionMenu({
   initialSection = null,
   initialTopic = null,
 }: {
-  views: Record<string, React.ReactNode>
-  initialSection?: string | null
-  initialTopic?: string | null
+  views: Record<string, React.ReactNode>;
+  initialSection?: string | null;
+  initialTopic?: string | null;
 }) {
-  const reduced = useReducedMotion() ?? false
-  const [hovered, setHovered] = useState<string | null>(null)
+  const reduced = useReducedMotion() ?? false;
+  const [hovered, setHovered] = useState<string | null>(null);
   /* Keys the name's reveal, so every hover remounts it and replays the glow. */
-  const [turns, setTurns] = useState<Record<string, number>>({})
+  const [turns, setTurns] = useState<Record<string, number>>({});
   const enter = (id: string) => {
-    setHovered(id)
-    setTurns((current) => ({ ...current, [id]: (current[id] ?? 0) + 1 }))
-  }
+    setHovered(id);
+    setTurns((current) => ({ ...current, [id]: (current[id] ?? 0) + 1 }));
+  };
   const [open, setOpen] = useState<{ id: string; rect: Rect } | null>(
     initialSection ? { id: initialSection, rect: { top: 0, bottom: 0 } } : null,
-  )
+  );
   /* `landed` holds the contents back until the page has grown; `lastTopic` outlives the page so its tile stays above its neighbours until it lands. */
   const [topic, setTopic] = useState<{ id: string } | null>(
     initialTopic ? { id: initialTopic } : null,
-  )
-  const [landed, setLanded] = useState(Boolean(initialTopic))
-  const [lastTopic, setLastTopic] = useState<string | null>(initialTopic)
+  );
+  const [landed, setLanded] = useState(Boolean(initialTopic));
+  const [lastTopic, setLastTopic] = useState<string | null>(initialTopic);
 
   /* Read inside the popstate listener, which is bound once. */
-  const topicRef = useRef(topic)
+  const topicRef = useRef(topic);
   useEffect(() => {
-    topicRef.current = topic
-  })
+    topicRef.current = topic;
+  });
 
   /* Close steps back through history entries this page pushed, and only rewrites the address when it must go shallower than it loaded. */
-  const base = initialTopic ? 2 : initialSection ? 1 : 0
-  const depth = useRef(base)
+  const base = initialTopic ? 2 : initialSection ? 1 : 0;
+  const depth = useRef(base);
 
   useEffect(() => {
     const sync = () => {
       const [sectionId, topicId] = window.location.pathname
         .slice(DOCS_ROOT.length)
         .split("/")
-        .filter(Boolean)
-      const section = DOCS_SECTIONS.find((item) => item.id === sectionId)
-      depth.current = section ? (topicId ? 2 : 1) : 0
+        .filter(Boolean);
+      const section = DOCS_SECTIONS.find((item) => item.id === sectionId);
+      depth.current = section ? (topicId ? 2 : 1) : 0;
       if (!section) {
-        setTopic(null)
-        setOpen(null)
-        return
+        setTopic(null);
+        setOpen(null);
+        return;
       }
       setOpen((current) =>
         current?.id === section.id
           ? current
           : { id: section.id, rect: rowRect(section.id) },
-      )
+      );
       const next = topicsOf(section).some((page) => page.id === topicId)
         ? topicId
-        : null
+        : null;
       if (!next) {
-        setTopic(null)
+        setTopic(null);
       } else if (topicRef.current?.id !== next) {
-        setLanded(false)
-        setLastTopic(next)
-        setTopic({ id: next })
+        setLanded(false);
+        setLastTopic(next);
+        setTopic({ id: next });
       }
-    }
-    window.addEventListener("popstate", sync)
-    return () => window.removeEventListener("popstate", sync)
-  }, [])
+    };
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, []);
 
   /* The overview is its own page now (OverviewTour), so stepping out of a topic goes back to it, at that topic's section. */
   const closeTo = (target: 0 | 1) => {
-    const sectionId = open?.id
+    const sectionId = open?.id;
     window.location.assign(
       target === 1 && sectionId ? `${DOCS_ROOT}#${sectionId}` : DOCS_ROOT,
-    )
-  }
-  const closeTopic = () => closeTo(1)
-  const closeSection = () => closeTo(0)
+    );
+  };
+  const closeTopic = () => closeTo(1);
+  const closeSection = () => closeTo(0);
   /* For the Escape listener, which is bound before these are declared. */
-  const closers = useRef({ topic: closeTopic, section: closeSection })
+  const closers = useRef({ topic: closeTopic, section: closeSection });
   useEffect(() => {
-    closers.current = { topic: closeTopic, section: closeSection }
-  })
+    closers.current = { topic: closeTopic, section: closeSection };
+  });
 
   const cross = (delay = 0): Transition => ({
     duration: reduced ? 0 : 0.9,
     delay: reduced ? 0 : delay,
     ease: CROSS,
-  })
+  });
 
   useEffect(() => {
-    if (!open) return
-    const { overflow } = document.body.style
-    document.body.style.overflow = "hidden"
+    if (!open) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return
-      if (topic) closers.current.topic()
-      else closers.current.section()
-    }
-    window.addEventListener("keydown", onKey)
+      if (event.key !== "Escape") return;
+      if (topic) closers.current.topic();
+      else closers.current.section();
+    };
+    window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = overflow
-      window.removeEventListener("keydown", onKey)
-    }
-  }, [open, topic])
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open, topic]);
 
   const openSection = open
     ? (DOCS_SECTIONS.find((section) => section.id === open.id) ?? null)
-    : null
-  const sheet = openSection?.id === "foundations"
+    : null;
+  const sheet = openSection?.id === "foundations";
   useEffect(() => {
-    if (!topic) return
-    const timer = window.setTimeout(() => setLanded(true), reduced ? 0 : 300)
-    return () => window.clearTimeout(timer)
-  }, [topic, reduced])
+    if (!topic) return;
+    const timer = window.setTimeout(() => setLanded(true), reduced ? 0 : 300);
+    return () => window.clearTimeout(timer);
+  }, [topic, reduced]);
 
   const openTopic =
     topic && openSection
       ? (topicsOf(openSection).find((page) => page.id === topic.id) ?? null)
-      : null
+      : null;
   const openIndex = open
     ? DOCS_SECTIONS.findIndex((section) => section.id === open.id)
-    : -1
+    : -1;
 
   const rowClip = (rect: Rect) =>
-    `inset(${rect.top}px 0px calc(100% - ${rect.bottom}px) 0px)`
+    `inset(${rect.top}px 0px calc(100% - ${rect.bottom}px) 0px)`;
   const rowLine = (rect: Rect) => {
-    const middle = (rect.top + rect.bottom) / 2
-    return `inset(${middle}px 0px calc(100% - ${middle}px) 0px)`
-  }
+    const middle = (rect.top + rect.bottom) / 2;
+    return `inset(${middle}px 0px calc(100% - ${middle}px) 0px)`;
+  };
 
   return (
     <>
       <ul className="border-b">
         {DOCS_SECTIONS.map((section, index) => {
-          const SectionFigure = SECTION_FIGURES[section.id]
-          const isHovered = hovered === section.id && !open
-          const isOpen = open?.id === section.id
+          const SectionFigure = SECTION_FIGURES[section.id];
+          const isHovered = hovered === section.id && !open;
+          const isOpen = open?.id === section.id;
 
           const away =
-            open && !isOpen ? (index < openIndex ? "-100%" : "100%") : "0%"
+            open && !isOpen ? (index < openIndex ? "-100%" : "100%") : "0%";
 
           return (
             <li className="border-t" key={section.id}>
@@ -227,21 +227,21 @@ export function SectionMenu({
                     event.shiftKey ||
                     event.altKey
                   )
-                    return
-                  event.preventDefault()
-                  window.history.pushState(null, "", sectionHref(section.id))
-                  depth.current = 1
-                  const box = event.currentTarget.getBoundingClientRect()
-                  setHovered(null)
+                    return;
+                  event.preventDefault();
+                  window.history.pushState(null, "", sectionHref(section.id));
+                  depth.current = 1;
+                  const box = event.currentTarget.getBoundingClientRect();
+                  setHovered(null);
                   setOpen({
                     id: section.id,
                     rect: { top: box.top, bottom: box.bottom },
-                  })
+                  });
                 }}
                 onFocus={() => enter(section.id)}
                 /* On pointer move, not enter: closing the grid makes the browser report an enter on whichever row was under the close button. */
                 onPointerMove={() => {
-                  if (hovered !== section.id) enter(section.id)
+                  if (hovered !== section.id) enter(section.id);
                 }}
                 onPointerLeave={() => setHovered(null)}
               >
@@ -300,7 +300,7 @@ export function SectionMenu({
                 ) : null}
               </Link>
             </li>
-          )
+          );
         })}
       </ul>
 
@@ -399,7 +399,7 @@ export function SectionMenu({
               ) : (
                 <ul className="grid grid-cols-3 gap-4 md:grid-cols-4 lg:grid-cols-6">
                   {topicsOf(openSection).map((topic, i) => {
-                    const TopicFigure = TOPIC_FIGURES[topic.id]
+                    const TopicFigure = TOPIC_FIGURES[topic.id];
                     return (
                       <li key={topic.id}>
                         <Link
@@ -413,17 +413,17 @@ export function SectionMenu({
                               event.shiftKey ||
                               event.altKey
                             )
-                              return
-                            event.preventDefault()
+                              return;
+                            event.preventDefault();
                             window.history.pushState(
                               null,
                               "",
                               docsHref(topic.id),
-                            )
-                            depth.current = 2
-                            setLanded(false)
-                            setLastTopic(topic.id)
-                            setTopic({ id: topic.id })
+                            );
+                            depth.current = 2;
+                            setLanded(false);
+                            setLastTopic(topic.id);
+                            setTopic({ id: topic.id });
                           }}
                         >
                           <motion.span
@@ -485,7 +485,7 @@ export function SectionMenu({
                           </motion.div>
                         </Link>
                       </li>
-                    )
+                    );
                   })}
                 </ul>
               )}
@@ -504,12 +504,12 @@ export function SectionMenu({
                   }}
                 >
                   {(() => {
-                    const SectionFigure = SECTION_FIGURES[openSection.id]
+                    const SectionFigure = SECTION_FIGURES[openSection.id];
                     return (
                       <div className="overflow-hidden rounded-xl bg-primary-foreground/5 ring-1 ring-primary-foreground/15">
                         <SectionFigure className="text-primary-foreground/40" />
                       </div>
-                    )
+                    );
                   })()}
                 </motion.div>
               ) : null}
@@ -625,5 +625,5 @@ export function SectionMenu({
         ) : null}
       </AnimatePresence>
     </>
-  )
+  );
 }

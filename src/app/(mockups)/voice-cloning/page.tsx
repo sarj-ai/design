@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -9,14 +9,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { CloneVoiceFlow } from "@/components/mockups/voice-cloning/clone-voice-flow"
-import { PersonaVoice } from "@/components/mockups/voice-cloning/persona-voice"
-import { VoiceLibrary } from "@/components/mockups/voice-cloning/voice-library"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { CloneVoiceFlow } from "@/components/mockups/voice-cloning/clone-voice-flow";
+import { PersonaVoice } from "@/components/mockups/voice-cloning/persona-voice";
+import { VoiceLibrary } from "@/components/mockups/voice-cloning/voice-library";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   OUTCOMES,
   PERSONA,
@@ -24,66 +24,66 @@ import {
   type Viewer,
   type Voice,
   voicesFor,
-} from "@/lib/mockups/voice-cloning-data"
+} from "@/lib/mockups/voice-cloning-data";
 
 const SURFACES = [
   { id: "library", label: "Voice library" },
   { id: "persona", label: "Persona" },
-] as const
+] as const;
 
-type Surface = (typeof SURFACES)[number]["id"]
+type Surface = (typeof SURFACES)[number]["id"];
 
 const VIEWERS: { id: Viewer; label: string }[] = [
   { id: "client", label: "Client org" },
   { id: "sarj", label: "Super admin" },
-]
+];
 
 export default function VoiceCloningPage() {
-  const [surface, setSurface] = React.useState<Surface>("persona")
-  const [viewer, setViewer] = React.useState<Viewer>("client")
-  const [outcome, setOutcome] = React.useState<SampleOutcome>("clean")
+  const [surface, setSurface] = React.useState<Surface>("persona");
+  const [viewer, setViewer] = React.useState<Viewer>("client");
+  const [outcome, setOutcome] = React.useState<SampleOutcome>("clean");
   const [voices, setVoices] = React.useState<Record<Viewer, Voice[]>>(() => ({
     client: voicesFor("client"),
     sarj: voicesFor("sarj"),
-  }))
-  const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId)
-  const [cloning, setCloning] = React.useState(false)
+  }));
+  const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId);
+  const [cloning, setCloning] = React.useState(false);
 
-  const looking: Viewer = surface === "library" ? "sarj" : viewer
+  const looking: Viewer = surface === "library" ? "sarj" : viewer;
 
   const changeViewer = (next: Viewer) => {
-    setViewer(next)
-    setVoiceId(PERSONA.voiceId)
-  }
+    setViewer(next);
+    setVoiceId(PERSONA.voiceId);
+  };
 
   const deleted = (voice: Voice) => {
     setVoices((current) => ({
       ...current,
       [looking]: current[looking].filter((entry) => entry.id !== voice.id),
-    }))
-    if (voice.id === voiceId) setVoiceId(PERSONA.voiceId)
-  }
+    }));
+    if (voice.id === voiceId) setVoiceId(PERSONA.voiceId);
+  };
 
   const created = (voice: Voice) => {
     setVoices((current) => ({
       ...current,
       [looking]: [voice, ...current[looking]],
-    }))
+    }));
     if (surface === "persona") {
       if (
         voice.language === PERSONA.language &&
         voice.gender === PERSONA.gender
       ) {
-        setVoiceId(voice.id)
+        setVoiceId(voice.id);
       }
-      return
+      return;
     }
     toast(
       voice.status === "pending"
         ? `${voice.name} created. Publishing is pending approval.`
         : `${voice.name} created`,
-    )
-  }
+    );
+  };
 
   return (
     <MockupShell
@@ -108,7 +108,7 @@ export default function VoiceCloningPage() {
             aria-label="Viewer"
             disabled={surface === "library"}
             onValueChange={(next) => {
-              if (next) changeViewer(next as Viewer)
+              if (next) changeViewer(next as Viewer);
             }}
             size="sm"
             type="single"
@@ -124,7 +124,7 @@ export default function VoiceCloningPage() {
           <ToggleGroup
             aria-label="Surface"
             onValueChange={(next) => {
-              if (next) setSurface(next as Surface)
+              if (next) setSurface(next as Surface);
             }}
             size="sm"
             type="single"
@@ -178,5 +178,5 @@ export default function VoiceCloningPage() {
         />
       </TooltipProvider>
     </MockupShell>
-  )
+  );
 }

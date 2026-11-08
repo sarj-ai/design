@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { OrbAvatar } from "@/components/shared/orb-avatar"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/components/shared/data-table";
+import { OrbAvatar } from "@/components/shared/orb-avatar";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,17 +19,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,49 +37,49 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   CopyLinkIcon,
   InviteLinkIcon,
   InviteMemberIcon,
   RowActionsIcon,
   SearchListIcon,
-} from "@/components/mockups/org-access/icons"
+} from "@/components/mockups/org-access/icons";
 import {
   ELSEWHERE,
   GROUPS,
@@ -91,50 +91,50 @@ import {
   type Invite,
   type LinkExpiry,
   type Member,
-} from "@/lib/mockups/org-access-data"
+} from "@/lib/mockups/org-access-data";
 
-export type MembersState = "ready" | "loading" | "error" | "no-access"
+export type MembersState = "ready" | "loading" | "error" | "no-access";
 
 export function MembersView({ state = "ready" }: { state?: MembersState }) {
-  const [members, setMembers] = React.useState(MEMBERS)
-  const [invites, setInvites] = React.useState(INVITES)
-  const [query, setQuery] = React.useState("")
-  const [inviting, setInviting] = React.useState(false)
-  const [linking, setLinking] = React.useState(false)
+  const [members, setMembers] = React.useState(MEMBERS);
+  const [invites, setInvites] = React.useState(INVITES);
+  const [query, setQuery] = React.useState("");
+  const [inviting, setInviting] = React.useState(false);
+  const [linking, setLinking] = React.useState(false);
   /* Bumped on every open, so the link dialog starts from what was saved. */
-  const [linkKey, setLinkKey] = React.useState(0)
-  const [removing, setRemoving] = React.useState<Member | null>(null)
+  const [linkKey, setLinkKey] = React.useState(0);
+  const [removing, setRemoving] = React.useState<Member | null>(null);
   const [link, setLink] = React.useState<{
-    group: Group
-    expiry: LinkExpiry
-  } | null>(null)
+    group: Group;
+    expiry: LinkExpiry;
+  } | null>(null);
 
-  const owners = members.filter((m) => m.owner).length
-  const needle = query.trim().toLowerCase()
-  const match = (text: string) => text.toLowerCase().includes(needle)
-  const shownInvites = invites.filter((i) => match(i.email))
-  const shownMembers = members.filter((m) => match(m.name) || match(m.email))
+  const owners = members.filter((m) => m.owner).length;
+  const needle = query.trim().toLowerCase();
+  const match = (text: string) => text.toLowerCase().includes(needle);
+  const shownInvites = invites.filter((i) => match(i.email));
+  const shownMembers = members.filter((m) => match(m.name) || match(m.email));
 
   const revoke = (invite: Invite) => {
-    setInvites((current) => current.filter((i) => i.id !== invite.id))
+    setInvites((current) => current.filter((i) => i.id !== invite.id));
     toast(`Invite to ${invite.email} revoked`, {
       action: {
         label: "Undo",
         onClick: () => setInvites((current) => [invite, ...current]),
       },
-    })
-  }
+    });
+  };
 
   const setOwner = (member: Member, owner: boolean) => {
     setMembers((current) =>
       current.map((m) => (m.id === member.id ? { ...m, owner } : m)),
-    )
+    );
     toast.success(
       owner
         ? `${member.name} is now an owner`
         : `${member.name} is no longer an owner`,
-    )
-  }
+    );
+  };
 
   if (state === "no-access") {
     return (
@@ -150,10 +150,10 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
           </EmptyHeader>
         </Empty>
       </div>
-    )
+    );
   }
 
-  const rows = shownInvites.length + shownMembers.length
+  const rows = shownInvites.length + shownMembers.length;
 
   return (
     <div className="flex flex-col gap-6 p-3 lg:p-4">
@@ -174,8 +174,8 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
           </InputGroup>
           <Button
             onClick={() => {
-              setLinkKey((k) => k + 1)
-              setLinking(true)
+              setLinkKey((k) => k + 1);
+              setLinking(true);
             }}
             variant="outline"
           >
@@ -301,7 +301,7 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
 
               {state === "ready" &&
                 shownMembers.map((member) => {
-                  const lastOwner = member.owner === true && owners === 1
+                  const lastOwner = member.owner === true && owners === 1;
                   return (
                     <TableRow key={member.id}>
                       <TableCell>
@@ -377,7 +377,7 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
                         </DropdownMenu>
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 })}
             </TableBody>
           </DataTable>
@@ -388,8 +388,8 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
         invites={invites}
         members={members}
         onInvite={(invite) => {
-          setInvites((current) => [invite, ...current])
-          toast.success(`Invite sent to ${invite.email}`)
+          setInvites((current) => [invite, ...current]);
+          toast.success(`Invite sent to ${invite.email}`);
         }}
         onOpenChange={setInviting}
         open={inviting}
@@ -400,12 +400,12 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
         link={link}
         onOpenChange={setLinking}
         onSave={(next) => {
-          setLink(next)
+          setLink(next);
           toast.success(
             next
               ? `Invite link on, expires in ${next.expiry}`
               : "Invite link off",
-          )
+          );
         }}
         open={linking}
       />
@@ -428,9 +428,9 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
               onClick={() => {
                 setMembers((current) =>
                   current.filter((m) => m.id !== removing?.id),
-                )
-                toast.success(`${removing?.name} removed from ${ORG.name}`)
-                setRemoving(null)
+                );
+                toast.success(`${removing?.name} removed from ${ORG.name}`);
+                setRemoving(null);
               }}
               variant="destructive"
             >
@@ -440,7 +440,7 @@ export function MembersView({ state = "ready" }: { state?: MembersState }) {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
 
 function InviteDialog({
@@ -450,17 +450,17 @@ function InviteDialog({
   invites,
   onInvite,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  members: Member[]
-  invites: Invite[]
-  onInvite: (invite: Invite) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  members: Member[];
+  invites: Invite[];
+  onInvite: (invite: Invite) => void;
 }) {
-  const [email, setEmail] = React.useState("")
-  const [group, setGroup] = React.useState<Group>("Viewer")
-  const [checked, setChecked] = React.useState(false)
+  const [email, setEmail] = React.useState("");
+  const [group, setGroup] = React.useState<Group>("Viewer");
+  const [checked, setChecked] = React.useState(false);
 
-  const address = email.trim().toLowerCase()
+  const address = email.trim().toLowerCase();
   const error = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)
     ? "Enter an email address"
     : members.some((m) => m.email === address)
@@ -469,29 +469,29 @@ function InviteDialog({
         ? "Already invited. Resend it from the list."
         : ELSEWHERE[address]
           ? `Already in ${ELSEWHERE[address]}. A person can be in one organization for now.`
-          : null
+          : null;
 
   const close = (next: boolean) => {
     if (!next) {
-      setEmail("")
-      setGroup("Viewer")
-      setChecked(false)
+      setEmail("");
+      setGroup("Viewer");
+      setChecked(false);
     }
-    onOpenChange(next)
-  }
+    onOpenChange(next);
+  };
 
   const send = () => {
-    setChecked(true)
-    if (error) return
+    setChecked(true);
+    if (error) return;
     onInvite({
       id: `i${Date.now()}`,
       email: address,
       group,
       invitedBy: "You",
       sent: "Today",
-    })
-    close(false)
-  }
+    });
+    close(false);
+  };
 
   return (
     <Dialog onOpenChange={close} open={open}>
@@ -502,8 +502,8 @@ function InviteDialog({
         <form
           className="flex flex-col gap-6"
           onSubmit={(event) => {
-            event.preventDefault()
-            send()
+            event.preventDefault();
+            send();
           }}
         >
           <FieldGroup>
@@ -552,7 +552,7 @@ function InviteDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function InviteLinkDialog({
@@ -561,17 +561,17 @@ function InviteLinkDialog({
   link,
   onSave,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  link: { group: Group; expiry: LinkExpiry } | null
-  onSave: (link: { group: Group; expiry: LinkExpiry } | null) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  link: { group: Group; expiry: LinkExpiry } | null;
+  onSave: (link: { group: Group; expiry: LinkExpiry } | null) => void;
 }) {
-  const [on, setOn] = React.useState(link !== null)
-  const [group, setGroup] = React.useState<Group>(link?.group ?? "Viewer")
+  const [on, setOn] = React.useState(link !== null);
+  const [group, setGroup] = React.useState<Group>(link?.group ?? "Viewer");
   const [expiry, setExpiry] = React.useState<LinkExpiry>(
     link?.expiry ?? "7 days",
-  )
-  const url = "https://platform.sarj.ai/join/zk-7Qm2xV"
+  );
+  const url = "https://platform.sarj.ai/join/zk-7Qm2xV";
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -656,8 +656,8 @@ function InviteLinkDialog({
           </Button>
           <Button
             onClick={() => {
-              onSave(on ? { group, expiry } : null)
-              onOpenChange(false)
+              onSave(on ? { group, expiry } : null);
+              onOpenChange(false);
             }}
           >
             Save
@@ -665,5 +665,5 @@ function InviteLinkDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

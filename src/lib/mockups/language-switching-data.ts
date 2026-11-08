@@ -1,22 +1,22 @@
-export type LanguageCode = "ar" | "en" | "ur"
+export type LanguageCode = "ar" | "en" | "ur";
 
 export const LANGUAGE_NAMES: Record<LanguageCode, string> = {
   ar: "Arabic",
   en: "English",
   ur: "Urdu",
-}
+};
 
 export const RTL: Record<LanguageCode, boolean> = {
   ar: true,
   en: false,
   ur: true,
-}
+};
 
 type Persona = {
-  id: string
-  name: string
-  language: LanguageCode
-}
+  id: string;
+  name: string;
+  language: LanguageCode;
+};
 
 export const PERSONAS: Persona[] = [
   {
@@ -39,30 +39,30 @@ export const PERSONAS: Persona[] = [
     language: "en",
     name: "Sarah",
   },
-]
+];
 
 export type ScenarioLanguage = {
-  code: LanguageCode
-  personaId: string | null
-}
+  code: LanguageCode;
+  personaId: string | null;
+};
 
 export type SwitchConfig = {
-  switchVoice: boolean
-  transitionPhrase: Partial<Record<LanguageCode, string>>
-  target: Partial<Record<LanguageCode, string>>
-  handoffPhrase: Partial<Record<LanguageCode, string>>
-  transferSound: Partial<Record<LanguageCode, boolean>>
-}
+  switchVoice: boolean;
+  transitionPhrase: Partial<Record<LanguageCode, string>>;
+  target: Partial<Record<LanguageCode, string>>;
+  handoffPhrase: Partial<Record<LanguageCode, string>>;
+  transferSound: Partial<Record<LanguageCode, boolean>>;
+};
 
 export type Preset = {
-  id: string
-  label: string
-  scenario: string
-  start: LanguageCode
-  languages: ScenarioLanguage[]
-  config: SwitchConfig
-  draft?: SwitchConfig
-}
+  id: string;
+  label: string;
+  scenario: string;
+  start: LanguageCode;
+  languages: ScenarioLanguage[];
+  config: SwitchConfig;
+  draft?: SwitchConfig;
+};
 
 const MIGRATED: SwitchConfig = {
   handoffPhrase: {},
@@ -70,7 +70,7 @@ const MIGRATED: SwitchConfig = {
   target: {},
   transferSound: {},
   transitionPhrase: {},
-}
+};
 
 export const PRESETS: Preset[] = [
   {
@@ -113,16 +113,16 @@ export const PRESETS: Preset[] = [
     scenario: "Order status",
     start: "en",
   },
-]
+];
 
 export const TRANSITION_EXAMPLE: Record<LanguageCode, string> = {
   ar: "تمام، نكمل بالعربي.",
   en: "Sure, let's continue in English.",
   ur: "ٹھیک ہے، اردو میں بات کرتے ہیں۔",
-}
+};
 
 export const HANDOFF_EXAMPLE: Record<LanguageCode, string> = {
   ar: "لحظة من فضلك، بحوّلك لزميلي يكمل معك بالعربي.",
   en: "One moment, my colleague will continue with you in English.",
   ur: "ایک لمحہ، میرا ساتھی اردو میں آپ کے ساتھ بات جاری رکھے گا۔",
-}
+};

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -9,10 +9,10 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/item";
+import { Switch } from "@/components/ui/switch";
 
-import { ConfigureIcon, FillerWordsIcon, ListenerCuesIcon } from "./icons"
+import { ConfigureIcon, FillerWordsIcon, ListenerCuesIcon } from "./icons";
 
 export function BackchannelSettings({
   fillerWords,
@@ -21,11 +21,11 @@ export function BackchannelSettings({
   onFillerWordsChange,
   onListenerCuesChange,
 }: {
-  fillerWords: boolean
-  listenerCues: boolean
-  onConfigure: () => void
-  onFillerWordsChange: (enabled: boolean) => void
-  onListenerCuesChange: (enabled: boolean) => void
+  fillerWords: boolean;
+  listenerCues: boolean;
+  onConfigure: () => void;
+  onFillerWordsChange: (enabled: boolean) => void;
+  onListenerCuesChange: (enabled: boolean) => void;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -77,5 +77,5 @@ export function BackchannelSettings({
         </ItemActions>
       </Item>
     </div>
-  )
+  );
 }

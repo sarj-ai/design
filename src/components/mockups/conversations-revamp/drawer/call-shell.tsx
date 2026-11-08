@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import {
   CALL_DETAIL,
   type CallIdentity,
   type CallState,
   type Channel,
   type RevampTurn,
-} from "@/lib/mockups/conversations-revamp-drawer-data"
+} from "@/lib/mockups/conversations-revamp-drawer-data";
 import {
   AgentIcon,
   CallerIcon,
@@ -27,7 +27,7 @@ import {
   OwnerIcon,
   QueuedIcon,
   ScheduledIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function CallHeader({
   actions,
@@ -35,18 +35,18 @@ export function CallHeader({
   state = "complete",
   title,
 }: {
-  actions?: React.ReactNode
-  channel?: Channel
-  state?: CallState
-  title?: CallIdentity
+  actions?: React.ReactNode;
+  channel?: Channel;
+  state?: CallState;
+  title?: CallIdentity;
 } = {}) {
-  const call = CALL_DETAIL
-  const scenario = title?.scenario ?? call.scenario
-  const phoneNumber = title?.phoneNumber ?? call.phoneNumber
-  const startedAt = title?.startedAt ?? call.startedAt
-  const duration = title?.duration ?? call.connectionDuration
-  const ran = state === "complete"
-  const isChat = channel === "chat"
+  const call = CALL_DETAIL;
+  const scenario = title?.scenario ?? call.scenario;
+  const phoneNumber = title?.phoneNumber ?? call.phoneNumber;
+  const startedAt = title?.startedAt ?? call.startedAt;
+  const duration = title?.duration ?? call.connectionDuration;
+  const ran = state === "complete";
+  const isChat = channel === "chat";
 
   return (
     <div className="flex shrink-0 flex-col gap-2 border-b p-4">
@@ -119,7 +119,7 @@ export function CallHeader({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function Seekable({
@@ -129,14 +129,14 @@ export function Seekable({
   label,
   onActivate,
 }: {
-  children: React.ReactNode
-  className?: string
-  enabled?: boolean
-  label: string
-  onActivate: () => void
+  children: React.ReactNode;
+  className?: string;
+  enabled?: boolean;
+  label: string;
+  onActivate: () => void;
 }) {
   if (!enabled) {
-    return <div className={className}>{children}</div>
+    return <div className={className}>{children}</div>;
   }
 
   return (
@@ -149,8 +149,8 @@ export function Seekable({
       onClick={onActivate}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault()
-          onActivate()
+          event.preventDefault();
+          onActivate();
         }
       }}
       role="button"
@@ -158,7 +158,7 @@ export function Seekable({
     >
       {children}
     </div>
-  )
+  );
 }
 
 export function SpeakerAvatar({ role }: { role: RevampTurn["role"] }) {
@@ -179,5 +179,5 @@ export function SpeakerAvatar({ role }: { role: RevampTurn["role"] }) {
         <AgentIcon className="size-4" />
       )}
     </span>
-  )
+  );
 }

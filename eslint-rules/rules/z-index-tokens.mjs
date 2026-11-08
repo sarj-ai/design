@@ -1,6 +1,6 @@
-import { createClassVisitor } from "../lib/classes.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
 
-const Z_UTILITY = /^-?z-(.+)$/
+const Z_UTILITY = /^-?z-(.+)$/;
 
 const LAYERS = {
   "z-base": "normal flow",
@@ -12,11 +12,11 @@ const LAYERS = {
   "z-popover": "popover or select opened from inside a modal",
   "z-toast": "toasts",
   "z-tooltip": "always on top",
-}
+};
 
 const LAYER_LIST = Object.entries(LAYERS)
   .map(([name, use]) => `${name} (${use})`)
-  .join(" · ")
+  .join(" · ");
 
 const zIndexTokens = {
   meta: {
@@ -35,17 +35,17 @@ const zIndexTokens = {
   create(context) {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
-        if (!Z_UTILITY.test(base)) continue
-        if (base === "z-auto" || base in LAYERS) continue
+        if (!Z_UTILITY.test(base)) continue;
+        if (base === "z-auto" || base in LAYERS) continue;
 
         context.report({
           node,
           messageId: "rawZIndex",
           data: { cls: raw, layers: LAYER_LIST },
-        })
+        });
       }
-    })
+    });
   },
-}
+};
 
-export default zIndexTokens
+export default zIndexTokens;

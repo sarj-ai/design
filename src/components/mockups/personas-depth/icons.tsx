@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Alert02Icon,
@@ -14,22 +14,22 @@ import {
   Target02Icon,
   UserAdd01Icon,
   UserMultipleIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const SearchIcon = icon(Search01Icon, "SearchIcon")
-export const AddPersonaIcon = icon(UserAdd01Icon, "AddPersonaIcon")
-export const EditIcon = icon(Edit02Icon, "EditIcon")
-export const DeleteIcon = icon(Delete02Icon, "DeleteIcon")
-export const RowMenuIcon = icon(MoreHorizontalIcon, "RowMenuIcon")
-export const MakeDefaultIcon = icon(StarIcon, "MakeDefaultIcon")
-export const ScenariosIcon = icon(Target02Icon, "ScenariosIcon")
+export const SearchIcon = icon(Search01Icon, "SearchIcon");
+export const AddPersonaIcon = icon(UserAdd01Icon, "AddPersonaIcon");
+export const EditIcon = icon(Edit02Icon, "EditIcon");
+export const DeleteIcon = icon(Delete02Icon, "DeleteIcon");
+export const RowMenuIcon = icon(MoreHorizontalIcon, "RowMenuIcon");
+export const MakeDefaultIcon = icon(StarIcon, "MakeDefaultIcon");
+export const ScenariosIcon = icon(Target02Icon, "ScenariosIcon");
 
-export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon")
-export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon")
-export const VoiceWaveIcon = icon(AudioWave01Icon, "VoiceWaveIcon")
+export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon");
+export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon");
+export const VoiceWaveIcon = icon(AudioWave01Icon, "VoiceWaveIcon");
 
-export const LoadErrorIcon = icon(Alert02Icon, "LoadErrorIcon")
-export const RetryIcon = icon(Refresh01Icon, "RetryIcon")
-export const NoPersonasIcon = icon(UserMultipleIcon, "NoPersonasIcon")
+export const LoadErrorIcon = icon(Alert02Icon, "LoadErrorIcon");
+export const RetryIcon = icon(Refresh01Icon, "RetryIcon");
+export const NoPersonasIcon = icon(UserMultipleIcon, "NoPersonasIcon");

@@ -1,4 +1,4 @@
-import type { SurfaceId, SurfaceRuleId } from "@/lib/design-system/data"
+import type { SurfaceId, SurfaceRuleId } from "@/lib/design-system/data";
 
 // Paths are relative to products/platform/apps/web/src in sarj-ai/platform; line numbers are where the overlay opens.
 
@@ -8,7 +8,7 @@ export type Doing =
   | "Picking"
   | "Reading"
   | "Confirming"
-  | "Told it failed"
+  | "Told it failed";
 
 export type Today =
   | "Dialog"
@@ -19,10 +19,15 @@ export type Today =
   | "Browser confirm"
   | "Nothing"
   | "Inline"
-  | "Page"
+  | "Page";
 
 export type Verdict =
-  "keep" | "reshape" | "move" | "add-confirm" | "drop-confirm" | "add-undo"
+  | "keep"
+  | "reshape"
+  | "move"
+  | "add-confirm"
+  | "drop-confirm"
+  | "add-undo";
 
 export const VERDICT_LABEL: Record<Verdict, string> = {
   keep: "Keep",
@@ -31,21 +36,21 @@ export const VERDICT_LABEL: Record<Verdict, string> = {
   "add-confirm": "Add confirm",
   "drop-confirm": "Drop confirm",
   "add-undo": "Add undo",
-}
+};
 
 export type AuditRow = {
-  id: string
-  area: string
-  what: string
-  file: string
-  doing: Doing
-  today: Today
-  width?: string
-  should: SurfaceId
-  verdict: Verdict
-  breaks: SurfaceRuleId[]
-  fix: string
-}
+  id: string;
+  area: string;
+  what: string;
+  file: string;
+  doing: Doing;
+  today: Today;
+  width?: string;
+  should: SurfaceId;
+  verdict: Verdict;
+  breaks: SurfaceRuleId[];
+  fix: string;
+};
 
 export const SURFACE_AUDIT: AuditRow[] = [
   {
@@ -1526,4 +1531,4 @@ export const SURFACE_AUDIT: AuditRow[] = [
     breaks: ["undo-first", "confirm-copy", "widths"],
     fix: "Unblock exists and nothing of ours goes down, so it does not ask. Block, and say so in a toast with Undo.",
   },
-]
+];

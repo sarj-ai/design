@@ -1,45 +1,45 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { Dialog as DialogPrimitive } from "radix-ui"
+import * as React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Dialog as DialogPrimitive } from "radix-ui";
 
-import { CloseIcon, StepBackIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { CloseIcon, StepBackIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 /** power3.out, the motion scale's ease-out-cubic. */
-const EASE = [0.215, 0.61, 0.355, 1] as const
+const EASE = [0.215, 0.61, 0.355, 1] as const;
 
 const DOT = {
   rest: 0.15,
   enter: 0.5,
   radius: 9999,
   spring: { type: "spring", visualDuration: 0.35, bounce: 0 },
-} as const
+} as const;
 
 type CreationFlowProps = {
-  title: string
-  question: string
+  title: string;
+  question: string;
   /** Changes when the screen does; drives the slide between screens. */
-  stepKey: string
-  step: number
-  steps: number
+  stepKey: string;
+  step: number;
+  steps: number;
   /** 1 going forward, -1 going back: which way the screens slide. */
-  direction: number
+  direction: number;
   /** Null hides Back. */
-  onBack: (() => void) | null
-  onClose: () => void
-  children: React.ReactNode
-}
+  onBack: (() => void) | null;
+  onClose: () => void;
+  children: React.ReactNode;
+};
 
 export function CreationFlow({
   framed = false,
   open = true,
   ...props
 }: CreationFlowProps & {
-  framed?: boolean
-  open?: boolean
+  framed?: boolean;
+  open?: boolean;
 }) {
   if (framed) {
     return (
@@ -47,7 +47,7 @@ export function CreationFlow({
       <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border bg-background">
         <FlowBody {...props} />
       </div>
-    )
+    );
   }
 
   return (
@@ -67,7 +67,7 @@ export function CreationFlow({
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
-  )
+  );
 }
 
 function FlowBody({
@@ -81,7 +81,7 @@ function FlowBody({
   onClose,
   children,
 }: CreationFlowProps) {
-  const reduced = useReducedMotion() ?? false
+  const reduced = useReducedMotion() ?? false;
 
   return (
     <>
@@ -141,11 +141,11 @@ function FlowBody({
 
       <StepDots step={step} steps={steps} />
     </>
-  )
+  );
 }
 
 function StepDots({ step, steps }: { step: number; steps: number }) {
-  const reduced = useReducedMotion() ?? false
+  const reduced = useReducedMotion() ?? false;
 
   return (
     <div className="flex h-14 shrink-0 items-center justify-center">
@@ -175,5 +175,5 @@ function StepDots({ step, steps }: { step: number; steps: number }) {
         </AnimatePresence>
       </div>
     </div>
-  )
+  );
 }

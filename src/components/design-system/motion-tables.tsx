@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   ReferenceLabel,
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Button } from "@/components/ui/button"
-import type { MotionRule } from "@/lib/design-system/data"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/reference-table";
+import { Button } from "@/components/ui/button";
+import type { MotionRule } from "@/lib/design-system/data";
+import { cn } from "@/lib/utils";
 
 /** The rail's w-64 minus the runner's size-4. */
-const TRAVEL = 240
+const TRAVEL = 240;
 
 const CURVES = [
   {
@@ -31,7 +31,7 @@ const CURVES = [
     when: "Constant motion only — marquees, spinners, a progress bar.",
     why: "Nothing decelerates at a constant speed, so on anything interactive it reads as mechanical.",
   },
-]
+];
 
 const BANNED = [
   {
@@ -49,7 +49,7 @@ const BANNED = [
     instead: "the token",
     why: "A raw curve in a component is a curve nobody else will match.",
   },
-]
+];
 
 const DURATIONS = [
   { cls: "duration-150", use: "Hover and press." },
@@ -59,7 +59,7 @@ const DURATIONS = [
     cls: "duration-300",
     use: "The cap. A container morphing to fit new content.",
   },
-]
+];
 
 const ANIMATABLE = [
   {
@@ -82,7 +82,7 @@ const ANIMATABLE = [
     verdict: "Never",
     why: "Opts in every property that changes, including layout ones, so an unrelated class change starts causing per-frame reflow. Name what actually moves.",
   },
-]
+];
 
 const REDUCED = [
   {
@@ -100,7 +100,7 @@ const REDUCED = [
     pair: "Still required",
     why: "“It is only a fade” is one argument made once per element, and the sum of them is a page that still moves.",
   },
-]
+];
 
 const PERFORMANCE = [
   {
@@ -135,7 +135,7 @@ const PERFORMANCE = [
     rule: "Lint only reads classNames",
     why: "A transition-[height] class is caught. The same animation written as a height prop on a motion component is not, because the rule inspects class strings and never sees a prop. Both container morphs above are that shape, so they pass silently — anything animated through the motion package is yours to check by hand.",
   },
-]
+];
 
 function Rail({ className, run }: { className: string; run: boolean }) {
   return (
@@ -148,17 +148,17 @@ function Rail({ className, run }: { className: string; run: boolean }) {
         style={{ transform: run ? `translateX(${TRAVEL}px)` : "translateX(0)" }}
       />
     </div>
-  )
+  );
 }
 
 function Replay({
   children,
   label,
 }: {
-  children: (run: boolean) => React.ReactNode
-  label: string
+  children: (run: boolean) => React.ReactNode;
+  label: string;
 }) {
-  const [run, setRun] = React.useState(false)
+  const [run, setRun] = React.useState(false);
 
   return (
     <div className="flex flex-col gap-4">
@@ -172,7 +172,7 @@ function Replay({
       </Button>
       {children(run)}
     </div>
-  )
+  );
 }
 
 export function MotionTable({ id }: { id: MotionRule["id"] }) {
@@ -227,7 +227,7 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
             }))}
           />
         </div>
-      )
+      );
 
     case "duration":
       return (
@@ -262,7 +262,7 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
             }))}
           />
         </div>
-      )
+      );
 
     case "animatable":
       return (
@@ -281,7 +281,7 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "motion-performance":
       return (
@@ -295,7 +295,7 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "reduced-motion":
       return (
@@ -314,6 +314,6 @@ export function MotionTable({ id }: { id: MotionRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
   }
 }

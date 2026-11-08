@@ -1,14 +1,14 @@
 // The open menu is portalled out of the card, so it carries `data-tour-menu`, not `data-tour`.
-const INSTALL = '[data-tour="install"]'
-const INSTALL_ROWS = '[data-tour-menu="install"] [role="menuitem"]'
+const INSTALL = '[data-tour="install"]';
+const INSTALL_ROWS = '[data-tour-menu="install"] [role="menuitem"]';
 
 export type Beat = {
-  id: string
-  say: string
-  target?: string
-  advance: "reach" | "click" | "button"
-  action?: string
-}
+  id: string;
+  say: string;
+  target?: string;
+  advance: "reach" | "click" | "button";
+  action?: string;
+};
 
 export const TOUR: Beat[] = [
   {
@@ -35,4 +35,4 @@ export const TOUR: Beat[] = [
     advance: "button",
     action: "Got it",
   },
-]
+];

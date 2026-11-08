@@ -2,8 +2,8 @@ import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { EMPTY_VALUES } from "@/lib/design-system/data"
+} from "@/components/design-system/reference-table";
+import { EMPTY_VALUES } from "@/lib/design-system/data";
 
 export function EmptyValueNotes() {
   return (
@@ -34,5 +34,5 @@ export function EmptyValueNotes() {
         }))}
       />
     </section>
-  )
+  );
 }

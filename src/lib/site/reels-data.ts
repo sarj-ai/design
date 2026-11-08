@@ -2,22 +2,22 @@ import {
   CallOutgoing01Icon,
   NewReleasesIcon,
   Video01Icon,
-} from "@hugeicons/core-free-icons"
-import type { IconSvgElement } from "@hugeicons/react"
+} from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
 
-import { FPS } from "@/lib/reels/anim"
+import { FPS } from "@/lib/reels/anim";
 
 export type Reel = {
-  href: string
-  title: string
-  meta: string
-  description: string
-  icon: IconSvgElement
+  href: string;
+  title: string;
+  meta: string;
+  description: string;
+  icon: IconSvgElement;
   /** Total frames. Must match the composition's `DURATION`, or the file's length times `FPS`. */
-  duration: number
+  duration: number;
   /** Under `public/`. Keep it under 25 MB: Cloudflare will not serve a bigger static asset. */
-  video?: string
-}
+  video?: string;
+};
 
 export const REELS: Reel[] = [
   {
@@ -51,10 +51,10 @@ export const REELS: Reel[] = [
     video: "/reels/release-32/reel.mp4",
   },
   // `npm run new:reel` appends new reels above this line.
-]
+];
 
 export function reelAt(href: string): Reel {
-  const reel = REELS.find((entry) => entry.href === href)
-  if (!reel) throw new Error(`No reel at ${href} in REELS`)
-  return reel
+  const reel = REELS.find((entry) => entry.href === href);
+  if (!reel) throw new Error(`No reel at ${href} in REELS`);
+  return reel;
 }

@@ -1,1 +1,1 @@
-export const SECTION_FIGURE_VIEWBOX = "0 0 960 240"
+export const SECTION_FIGURE_VIEWBOX = "0 0 960 240";

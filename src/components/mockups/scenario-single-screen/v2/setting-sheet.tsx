@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -11,7 +11,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 
 /** `sm:max-w-xl!`: SheetContent's `data-[side=right]:sm:max-w-sm` outranks a plain utility. */
 export function SettingSheet({
@@ -21,11 +21,11 @@ export function SettingSheet({
   open,
   title,
 }: {
-  children: React.ReactNode
-  description: string
-  onOpenChange: (open: boolean) => void
-  open: boolean
-  title: string
+  children: React.ReactNode;
+  description: string;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  title: string;
 }) {
   return (
     <Sheet onOpenChange={onOpenChange} open={open}>
@@ -45,7 +45,7 @@ export function SettingSheet({
         <SheetFooter className="flex-row justify-end border-t">
           <Button
             onClick={() => {
-              onOpenChange(false)
+              onOpenChange(false);
             }}
           >
             Done
@@ -53,7 +53,7 @@ export function SettingSheet({
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 export function SheetSection({
@@ -61,9 +61,9 @@ export function SheetSection({
   description,
   title,
 }: {
-  children: React.ReactNode
-  description?: string
-  title: string
+  children: React.ReactNode;
+  description?: string;
+  title: string;
 }) {
   return (
     <section className="flex flex-col gap-3">
@@ -75,5 +75,5 @@ export function SheetSection({
       </div>
       {children}
     </section>
-  )
+  );
 }

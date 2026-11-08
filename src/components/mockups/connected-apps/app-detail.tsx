@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -11,21 +11,21 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   liveTokens,
   TOKEN_CAP,
   type ConnectedApp,
   type Token,
-} from "@/lib/mockups/connected-apps-data"
-import { CreateTokenDialog } from "@/components/mockups/connected-apps/create-token-dialog"
-import { TokenTable } from "@/components/mockups/connected-apps/token-table"
+} from "@/lib/mockups/connected-apps-data";
+import { CreateTokenDialog } from "@/components/mockups/connected-apps/create-token-dialog";
+import { TokenTable } from "@/components/mockups/connected-apps/token-table";
 import {
   AccessTokenIcon,
   BackToIntegrationsIcon,
   ConnectedAppIcon,
   CreateTokenIcon,
-} from "@/components/mockups/connected-apps/icons"
+} from "@/components/mockups/connected-apps/icons";
 
 export function AppDetail({
   app,
@@ -34,20 +34,20 @@ export function AppDetail({
   onRevoke,
   tokens,
 }: {
-  app: ConnectedApp
-  onBack: () => void
-  onCreated: (token: Token) => void
-  onRevoke: (token: Token) => void
-  tokens: Token[]
+  app: ConnectedApp;
+  onBack: () => void;
+  onCreated: (token: Token) => void;
+  onRevoke: (token: Token) => void;
+  tokens: Token[];
 }) {
-  const [createOpen, setCreateOpen] = React.useState(false)
+  const [createOpen, setCreateOpen] = React.useState(false);
 
   const rows = tokens
     .filter((token) => token.appId === app.id)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
-  const holding = liveTokens(tokens, app.id).length
-  const atCap = holding >= TOKEN_CAP
+  const holding = liveTokens(tokens, app.id).length;
+  const atCap = holding >= TOKEN_CAP;
 
   return (
     <div className="flex flex-col gap-6">
@@ -124,5 +124,5 @@ export function AppDetail({
         open={createOpen}
       />
     </div>
-  )
+  );
 }

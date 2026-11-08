@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { CallDrawer } from "@/components/mockups/review-tracking/call-drawer"
-import { ConversationsFrame } from "@/components/mockups/review-tracking/conversations-frame"
-import { ReviewTable } from "@/components/mockups/review-tracking/review-table"
-import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
+import { Button } from "@/components/ui/button";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { CallDrawer } from "@/components/mockups/review-tracking/call-drawer";
+import { ConversationsFrame } from "@/components/mockups/review-tracking/conversations-frame";
+import { ReviewTable } from "@/components/mockups/review-tracking/review-table";
+import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data";
 import {
   CALL_IDS,
   REVIEW_CALLS,
   REVIEWED,
-} from "@/lib/mockups/review-tracking-data"
+} from "@/lib/mockups/review-tracking-data";
 
 function useOpenCall() {
-  const [open, setOpen] = React.useState<CallRow | null>(null)
-  return { open, show: setOpen, close: () => setOpen(null) }
+  const [open, setOpen] = React.useState<CallRow | null>(null);
+  return { open, show: setOpen, close: () => setOpen(null) };
 }
 
 export function ElevenLabsIdea() {
-  const { open, show, close } = useOpenCall()
+  const { open, show, close } = useOpenCall();
 
   return (
     <ConversationsFrame calls={REVIEW_CALLS}>
@@ -45,13 +45,13 @@ export function ElevenLabsIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 const VAPI_TABS: {
-  id: string
-  label: string
-  match: (call: CallRow) => boolean
+  id: string;
+  label: string;
+  match: (call: CallRow) => boolean;
 }[] = [
   { id: "all", label: "All calls", match: () => true },
   {
@@ -69,12 +69,12 @@ const VAPI_TABS: {
     label: "Failed",
     match: (call) => call.outcome === "not_met",
   },
-]
+];
 
 export function VapiIdea() {
-  const [tab, setTab] = React.useState("all")
-  const { open, show, close } = useOpenCall()
-  const match = VAPI_TABS.find((entry) => entry.id === tab)?.match
+  const [tab, setTab] = React.useState("all");
+  const { open, show, close } = useOpenCall();
+  const match = VAPI_TABS.find((entry) => entry.id === tab)?.match;
 
   return (
     <ConversationsFrame
@@ -119,22 +119,22 @@ export function VapiIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }
 
 export function IntercomIdea() {
-  const [closed, setClosed] = React.useState<string[]>(REVIEWED)
-  const [tab, setTab] = React.useState("open")
-  const { open, show, close } = useOpenCall()
+  const [closed, setClosed] = React.useState<string[]>(REVIEWED);
+  const [tab, setTab] = React.useState("open");
+  const { open, show, close } = useOpenCall();
   const openCount = REVIEW_CALLS.filter(
     (call) => !closed.includes(call.id),
-  ).length
+  ).length;
 
   function toggle(call: CallRow) {
-    const isClosed = closed.includes(call.id)
+    const isClosed = closed.includes(call.id);
     setClosed((list) =>
       isClosed ? list.filter((id) => id !== call.id) : [...list, call.id],
-    )
+    );
     if (!isClosed) {
       toast("Conversation closed", {
         action: {
@@ -142,7 +142,7 @@ export function IntercomIdea() {
           onClick: () =>
             setClosed((list) => list.filter((id) => id !== call.id)),
         },
-      })
+      });
     }
   }
 
@@ -195,5 +195,5 @@ export function IntercomIdea() {
         </>
       )}
     </ConversationsFrame>
-  )
+  );
 }

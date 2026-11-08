@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { ModelSettingsTab } from "@/components/mockups/call-turn-timing/model-settings-tab"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Card, CardContent } from "@/components/ui/card"
+import { AppShell } from "@/components/shell/app-shell";
+import { ModelSettingsTab } from "@/components/mockups/call-turn-timing/model-settings-tab";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { CALL_CASES } from "@/lib/mockups/call-turn-timing-data"
+} from "@/components/ui/select";
+import { CALL_CASES } from "@/lib/mockups/call-turn-timing-data";
 
 export default function CallTurnTimingPage() {
-  const [caseId, setCaseId] = React.useState(CALL_CASES[0].id)
+  const [caseId, setCaseId] = React.useState(CALL_CASES[0].id);
   const active =
-    CALL_CASES.find((entry) => entry.id === caseId) ?? CALL_CASES[0]
+    CALL_CASES.find((entry) => entry.id === caseId) ?? CALL_CASES[0];
 
   return (
     <MockupShell
@@ -62,5 +62,5 @@ export default function CallTurnTimingPage() {
         </main>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

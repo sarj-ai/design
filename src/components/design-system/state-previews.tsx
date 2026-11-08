@@ -2,10 +2,10 @@ import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ErrorState } from "@/components/design-system/error-state"
-import { NoResultsIcon, SourceIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
+} from "@/components/shared/data-table";
+import { ErrorState } from "@/components/design-system/error-state";
+import { NoResultsIcon, SourceIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -13,11 +13,11 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Skeleton } from "@/components/ui/skeleton"
-import { TableBody, TableCell, TableRow } from "@/components/ui/table"
+} from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 
-const COLUMNS = ["Source", "Type", "Size", "Added"]
+const COLUMNS = ["Source", "Type", "Size", "Added"];
 
 export function LoadingPreview() {
   return (
@@ -43,13 +43,13 @@ export function LoadingPreview() {
         ))}
       </TableBody>
     </DataTable>
-  )
+  );
 }
 
 /** Fixed rather than random so the skeleton does not reshuffle on every render. */
 function cellWidth(index: number) {
-  const widths = ["h-4 w-40", "h-4 w-20", "h-4 w-14", "h-4 w-24"]
-  return `${widths[index]} motion-reduce:animate-none`
+  const widths = ["h-4 w-40", "h-4 w-20", "h-4 w-14", "h-4 w-24"];
+  return `${widths[index]} motion-reduce:animate-none`;
 }
 
 export function EmptyStatePreview() {
@@ -71,7 +71,7 @@ export function EmptyStatePreview() {
         </EmptyContent>
       </Empty>
     </div>
-  )
+  );
 }
 
 export function NoResultsPreview() {
@@ -107,7 +107,7 @@ export function NoResultsPreview() {
         </TableRow>
       </TableBody>
     </DataTable>
-  )
+  );
 }
 
 export function ErrorStatePreview() {
@@ -115,5 +115,5 @@ export function ErrorStatePreview() {
     <div className="rounded-lg border">
       <ErrorState onRetry={() => {}} title="Could not load sources" />
     </div>
-  )
+  );
 }

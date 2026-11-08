@@ -1,39 +1,39 @@
 /** Mirrors `TranscriptMessage` from `@sarj/precedent-node`; `startAt` is epoch seconds. */
 
-export type TranscriptRole = "assistant" | "user" | "human agent"
+export type TranscriptRole = "assistant" | "user" | "human agent";
 
 export type TranscriptMessage =
   | {
-      type: "message"
-      role: TranscriptRole
-      content: string
-      startAt: number
+      type: "message";
+      role: TranscriptRole;
+      content: string;
+      startAt: number;
     }
   | {
-      type: "function_call"
-      toolCallId: string
-      toolName: string
-      arguments: string
-      startAt: number
+      type: "function_call";
+      toolCallId: string;
+      toolName: string;
+      arguments: string;
+      startAt: number;
     }
   | {
-      type: "function_call_output"
-      toolCallId: string
-      toolName: string
-      output: string
-      isError: boolean
-      durationMs: number | null
-      startAt: number
-    }
+      type: "function_call_output";
+      toolCallId: string;
+      toolName: string;
+      output: string;
+      isError: boolean;
+      durationMs: number | null;
+      startAt: number;
+    };
 
 type CallCase = {
-  id: string
-  label: string
-  startedAt: number
-  messages: TranscriptMessage[]
-}
+  id: string;
+  label: string;
+  startedAt: number;
+  messages: TranscriptMessage[];
+};
 
-const T0 = 1_760_520_000
+const T0 = 1_760_520_000;
 
 const AVAILABLE = `AVAILABLE: Human transfer IS available right now. Current local time is Tuesday 14:32 (Asia/Riyadh).
 Schedule (timezone: Asia/Riyadh):
@@ -42,7 +42,7 @@ Schedule (timezone: Asia/Riyadh):
   - Tuesday: 09:00 - 17:00
   - Wednesday: 09:00 - 17:00
   - Thursday: 09:00 - 15:00
-You may call transfer_call now.`
+You may call transfer_call now.`;
 
 export const CALL_CASES: CallCase[] = [
   {
@@ -270,4 +270,4 @@ export const CALL_CASES: CallCase[] = [
       },
     ],
   },
-]
+];

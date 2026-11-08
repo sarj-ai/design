@@ -6,7 +6,7 @@ export const TONES = {
   teal: ["bg-chart-3"],
   amber: ["bg-chart-4"],
   rose: ["bg-chart-5"],
-} as const
+} as const;
 
-export type OrbTone = keyof typeof TONES
-export const ORB_TONES = Object.keys(TONES) as OrbTone[]
+export type OrbTone = keyof typeof TONES;
+export const ORB_TONES = Object.keys(TONES) as OrbTone[];

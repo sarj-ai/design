@@ -1,74 +1,74 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
+} from "@/components/ui/input-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   PRONUNCIATION_TERMS,
   type PronunciationTerm,
-} from "@/lib/mockups/persona-pronunciation-data"
+} from "@/lib/mockups/persona-pronunciation-data";
 import {
   BulkUploadIcon,
   DeleteTermIcon,
   HearIcon,
   SearchIcon,
   StopHearingIcon,
-} from "@/components/mockups/persona-pronunciation/icons"
+} from "@/components/mockups/persona-pronunciation/icons";
 
-type TermField = "word" | "replacement"
+type TermField = "word" | "replacement";
 
-const PREVIEW_MS = 1500
+const PREVIEW_MS = 1500;
 
 export function PronunciationTerms() {
-  const [terms, setTerms] = React.useState(PRONUNCIATION_TERMS)
-  const [query, setQuery] = React.useState("")
-  const [word, setWord] = React.useState("")
-  const [replacement, setReplacement] = React.useState("")
+  const [terms, setTerms] = React.useState(PRONUNCIATION_TERMS);
+  const [query, setQuery] = React.useState("");
+  const [word, setWord] = React.useState("");
+  const [replacement, setReplacement] = React.useState("");
   /** "draft" for the add row, otherwise the term id. */
-  const [playing, setPlaying] = React.useState<string | null>(null)
+  const [playing, setPlaying] = React.useState<string | null>(null);
   const [editing, setEditing] = React.useState<{
-    id: string
-    field: TermField
-  } | null>(null)
+    id: string;
+    field: TermField;
+  } | null>(null);
 
-  const trimmedWord = word.trim()
-  const trimmedReplacement = replacement.trim()
+  const trimmedWord = word.trim();
+  const trimmedReplacement = replacement.trim();
   const duplicate =
-    trimmedWord.length > 0 && terms.some((term) => term.word === trimmedWord)
+    trimmedWord.length > 0 && terms.some((term) => term.word === trimmedWord);
   const canAdd =
-    trimmedWord.length > 0 && trimmedReplacement.length > 0 && !duplicate
+    trimmedWord.length > 0 && trimmedReplacement.length > 0 && !duplicate;
 
-  const needle = query.trim()
+  const needle = query.trim();
   const shown = needle
     ? terms.filter(
         (term) =>
           term.word.includes(needle) || term.replacement.includes(needle),
       )
-    : terms
+    : terms;
 
   function play(id: string) {
     if (playing === id) {
-      setPlaying(null)
-      return
+      setPlaying(null);
+      return;
     }
-    setPlaying(id)
+    setPlaying(id);
     window.setTimeout(
       () => setPlaying((current) => (current === id ? null : current)),
       PREVIEW_MS,
-    )
+    );
   }
 
   function add() {
-    if (!canAdd) return
+    if (!canAdd) return;
     setTerms([
       {
         id: `t${Date.now()}`,
@@ -76,27 +76,27 @@ export function PronunciationTerms() {
         replacement: trimmedReplacement,
       },
       ...terms,
-    ])
-    setWord("")
-    setReplacement("")
+    ]);
+    setWord("");
+    setReplacement("");
   }
 
   function clear() {
-    setWord("")
-    setReplacement("")
+    setWord("");
+    setReplacement("");
   }
 
   function remove(id: string) {
-    setTerms(terms.filter((term) => term.id !== id))
+    setTerms(terms.filter((term) => term.id !== id));
   }
 
   function commit(id: string, field: TermField, value: string) {
-    const next = value.trim()
-    setEditing(null)
-    if (!next) return
+    const next = value.trim();
+    setEditing(null);
+    if (!next) return;
     setTerms(
       terms.map((term) => (term.id === id ? { ...term, [field]: next } : term)),
-    )
+    );
   }
 
   return (
@@ -136,7 +136,7 @@ export function PronunciationTerms() {
               value={word}
               onChange={(event) => setWord(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === "Enter") add()
+                if (event.key === "Enter") add();
               }}
             />
             <Input
@@ -147,7 +147,7 @@ export function PronunciationTerms() {
               value={replacement}
               onChange={(event) => setReplacement(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === "Enter") add()
+                if (event.key === "Enter") add();
               }}
             />
             <Button
@@ -257,7 +257,7 @@ export function PronunciationTerms() {
         </ScrollArea>
       </div>
     </section>
-  )
+  );
 }
 
 function EditableTerm({
@@ -268,14 +268,14 @@ function EditableTerm({
   onCommit,
   onCancel,
 }: {
-  term: PronunciationTerm
-  field: TermField
-  editing: boolean
-  onEdit: () => void
-  onCommit: (value: string) => void
-  onCancel: () => void
+  term: PronunciationTerm;
+  field: TermField;
+  editing: boolean;
+  onEdit: () => void;
+  onCommit: (value: string) => void;
+  onCancel: () => void;
 }) {
-  const value = term[field]
+  const value = term[field];
 
   if (editing) {
     return (
@@ -286,11 +286,11 @@ function EditableTerm({
         dir="auto"
         onBlur={(event) => onCommit(event.target.value)}
         onKeyDown={(event) => {
-          if (event.key === "Enter") event.currentTarget.blur()
-          if (event.key === "Escape") onCancel()
+          if (event.key === "Enter") event.currentTarget.blur();
+          if (event.key === "Escape") onCancel();
         }}
       />
-    )
+    );
   }
 
   return (
@@ -308,5 +308,5 @@ function EditableTerm({
         {value}
       </span>
     </Button>
-  )
+  );
 }

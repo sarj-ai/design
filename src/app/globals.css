@@ -447,7 +447,11 @@
 
 .raised-button {
   color: var(--background);
-  background-color: color-mix(in oklch, var(--foreground) 88%, var(--background));
+  background-color: color-mix(
+    in oklch,
+    var(--foreground) 88%,
+    var(--background)
+  );
   box-shadow:
     inset 0 0 0 1px color-mix(in oklch, var(--background) 12%, transparent),
     inset 0 2px 3px color-mix(in oklch, var(--background) 10%, transparent),
@@ -456,7 +460,11 @@
 
 .raised-button:hover {
   color: var(--background);
-  background-color: color-mix(in oklch, var(--foreground) 82%, var(--background));
+  background-color: color-mix(
+    in oklch,
+    var(--foreground) 82%,
+    var(--background)
+  );
   transform: translateY(-2px);
   box-shadow:
     0 7px 4px color-mix(in oklch, black 13%, transparent),
@@ -515,7 +523,8 @@
     0 24px 24px -12px color-mix(in oklch, var(--foreground) 4%, transparent),
     0 48px 48px -24px color-mix(in oklch, var(--foreground) 4%, transparent),
     0 0 0 1px color-mix(in oklch, var(--foreground) 4%, transparent),
-    inset 0 -1px 1px -0.5px color-mix(in oklch, var(--foreground) 6%, transparent);
+    inset 0 -1px 1px -0.5px
+      color-mix(in oklch, var(--foreground) 6%, transparent);
 }
 
 /*
@@ -552,7 +561,11 @@
   z-index: 1;
   padding: 1.5px;
   border-radius: inherit;
-  background: conic-gradient(from var(--spot-angle), transparent 0 55%, var(--primary) 100%);
+  background: conic-gradient(
+    from var(--spot-angle),
+    transparent 0 55%,
+    var(--primary) 100%
+  );
   mask:
     linear-gradient(black 0 0) content-box exclude,
     linear-gradient(black 0 0);
@@ -615,7 +628,11 @@
   inset: -7px;
   border-radius: 9999px;
   background: conic-gradient(from 0deg, transparent 0 60%, var(--primary) 100%);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), black calc(100% - 1px));
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 1.5px),
+    black calc(100% - 1px)
+  );
   animation: badge-orbit 3s linear infinite;
 }
 
@@ -636,7 +653,11 @@
  * last 2rem, so content scrolling under it dissolves instead of being cut at a hard edge.
  */
 .site-nav-band {
-  background: linear-gradient(to bottom, var(--background) calc(100% - 2rem), transparent);
+  background: linear-gradient(
+    to bottom,
+    var(--background) calc(100% - 2rem),
+    transparent
+  );
 }
 
 /*
@@ -653,8 +674,10 @@
   -webkit-backdrop-filter: blur(24px) saturate(1.5);
   backdrop-filter: blur(24px) saturate(1.5);
   box-shadow:
-    inset 0 0 0 1px color-mix(in oklch, var(--primary-foreground) 14%, transparent),
-    inset 0 1px 0 color-mix(in oklch, var(--primary-foreground) 18%, transparent);
+    inset 0 0 0 1px
+      color-mix(in oklch, var(--primary-foreground) 14%, transparent),
+    inset 0 1px 0
+      color-mix(in oklch, var(--primary-foreground) 18%, transparent);
 }
 
 .site-nav-glass .site-nav-pill img {
@@ -699,7 +722,9 @@
   transition: opacity 150ms var(--ease-out-cubic);
 }
 
-.site-nav-glass .site-nav-pill:has(.nav-search-field [aria-expanded="true"]) .nav-glass-button {
+.site-nav-glass
+  .site-nav-pill:has(.nav-search-field [aria-expanded="true"])
+  .nav-glass-button {
   opacity: 0;
   pointer-events: none;
 }
@@ -865,7 +890,6 @@
     transform: rotate(-12deg) scale(1.08);
   }
 
-
   .order-rail-item:hover {
     transform: translateX(2px);
   }
@@ -1023,7 +1047,8 @@
   line-height: 1;
   letter-spacing: -0.04em;
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklch, var(--foreground) 18%, transparent);
+  -webkit-text-stroke: 1px
+    color-mix(in oklch, var(--foreground) 18%, transparent);
 }
 
 /* Only the outline fades into the foot of the page; the hover trail stays at full strength. */

@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge"
-import type { Status } from "@/lib/mockups/publish-approval-data"
+import { Badge } from "@/components/ui/badge";
+import type { Status } from "@/lib/mockups/publish-approval-data";
 
 const LOOK: Record<Status, { label: string; className: string }> = {
   pending: {
@@ -18,13 +18,13 @@ const LOOK: Record<Status, { label: string; className: string }> = {
     label: "Withdrawn",
     className: "bg-muted text-muted-foreground",
   },
-}
+};
 
 export function StatusBadge({ status }: { status: Status }) {
-  const look = LOOK[status]
+  const look = LOOK[status];
   return (
     <Badge className={look.className} variant="secondary">
       {look.label}
     </Badge>
-  )
+  );
 }

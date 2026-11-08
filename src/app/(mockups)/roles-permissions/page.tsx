@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,10 +14,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   diffGrants,
   GRANTS,
@@ -25,49 +25,49 @@ import {
   ROLES,
   type PermissionId,
   type Role,
-} from "@/lib/mockups/roles-permissions-data"
-import { CreateRoleDialog } from "@/components/mockups/roles-permissions/create-role-dialog"
-import { CreateRoleIcon } from "@/components/mockups/roles-permissions/icons"
-import { RolesMatrix } from "@/components/mockups/roles-permissions/roles-matrix"
-import { SaveChangesDialog } from "@/components/mockups/roles-permissions/save-changes-dialog"
+} from "@/lib/mockups/roles-permissions-data";
+import { CreateRoleDialog } from "@/components/mockups/roles-permissions/create-role-dialog";
+import { CreateRoleIcon } from "@/components/mockups/roles-permissions/icons";
+import { RolesMatrix } from "@/components/mockups/roles-permissions/roles-matrix";
+import { SaveChangesDialog } from "@/components/mockups/roles-permissions/save-changes-dialog";
 
-type Seat = "super-admin" | "org-admin"
+type Seat = "super-admin" | "org-admin";
 
 export default function RolesPermissionsPage() {
-  const [seat, setSeat] = React.useState<Seat>("super-admin")
-  const [roles, setRoles] = React.useState<Role[]>(ROLES)
+  const [seat, setSeat] = React.useState<Seat>("super-admin");
+  const [roles, setRoles] = React.useState<Role[]>(ROLES);
   const [grants, setGrants] =
-    React.useState<Record<string, PermissionId[]>>(GRANTS)
-  const [editingRoleId, setEditingRoleId] = React.useState<string | null>(null)
-  const [draft, setDraft] = React.useState<PermissionId[]>([])
-  const [creating, setCreating] = React.useState(false)
-  const [confirming, setConfirming] = React.useState(false)
-  const [discarding, setDiscarding] = React.useState(false)
+    React.useState<Record<string, PermissionId[]>>(GRANTS);
+  const [editingRoleId, setEditingRoleId] = React.useState<string | null>(null);
+  const [draft, setDraft] = React.useState<PermissionId[]>([]);
+  const [creating, setCreating] = React.useState(false);
+  const [confirming, setConfirming] = React.useState(false);
+  const [discarding, setDiscarding] = React.useState(false);
 
-  const canEdit = seat === "super-admin"
-  const editing = roles.find((role) => role.id === editingRoleId)
+  const canEdit = seat === "super-admin";
+  const editing = roles.find((role) => role.id === editingRoleId);
   const diff = editing
     ? diffGrants(grants[editing.id] ?? [], draft)
-    : { granted: [], revoked: [] }
-  const changes = diff.granted.length + diff.revoked.length
+    : { granted: [], revoked: [] };
+  const changes = diff.granted.length + diff.revoked.length;
 
   function startEdit(roleId: string) {
-    setEditingRoleId(roleId)
-    setDraft([...(grants[roleId] ?? [])])
+    setEditingRoleId(roleId);
+    setDraft([...(grants[roleId] ?? [])]);
   }
 
   function cancelEdit() {
-    setEditingRoleId(null)
-    setDraft([])
-    setDiscarding(false)
+    setEditingRoleId(null);
+    setDraft([]);
+    setDiscarding(false);
   }
 
   function requestCancel() {
     if (changes === 0) {
-      cancelEdit()
-      return
+      cancelEdit();
+      return;
     }
-    setDiscarding(true)
+    setDiscarding(true);
   }
 
   function toggle(permission: PermissionId, granted: boolean) {
@@ -75,27 +75,27 @@ export default function RolesPermissionsPage() {
       granted
         ? [...current, permission]
         : current.filter((id) => id !== permission),
-    )
+    );
   }
 
   function save() {
-    if (!editing) return
-    setGrants((current) => ({ ...current, [editing.id]: draft }))
-    setConfirming(false)
+    if (!editing) return;
+    setGrants((current) => ({ ...current, [editing.id]: draft }));
+    setConfirming(false);
     toast(`${editing.name} updated`, {
       description: `${editing.people} people in ${editing.organizations} organizations now have this access.`,
-    })
-    cancelEdit()
+    });
+    cancelEdit();
   }
 
   function createRole({
     name,
     permissions,
   }: {
-    name: string
-    permissions: PermissionId[]
+    name: string;
+    permissions: PermissionId[];
   }) {
-    const id = `role-${roles.length + 1}`
+    const id = `role-${roles.length + 1}`;
     setRoles((current) => [
       ...current,
       {
@@ -106,11 +106,11 @@ export default function RolesPermissionsPage() {
         organizations: 0,
         locked: false,
       },
-    ])
-    setGrants((current) => ({ ...current, [id]: permissions }))
-    setCreating(false)
-    setEditingRoleId(id)
-    setDraft(permissions)
+    ]);
+    setGrants((current) => ({ ...current, [id]: permissions }));
+    setCreating(false);
+    setEditingRoleId(id);
+    setDraft(permissions);
   }
 
   return (
@@ -120,9 +120,9 @@ export default function RolesPermissionsPage() {
           <span className="text-xs text-muted-foreground">Seat</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (!value) return
-              setSeat(value as Seat)
-              cancelEdit()
+              if (!value) return;
+              setSeat(value as Seat);
+              cancelEdit();
             }}
             size="sm"
             type="single"
@@ -224,5 +224,5 @@ export default function RolesPermissionsPage() {
         role={editing}
       />
     </MockupShell>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
-import { SECTION_FIGURE_VIEWBOX } from "./frame"
+import { SECTION_FIGURE_VIEWBOX } from "./frame";
 
 /* 3.5 units to the pixel. */
-const SCALE = 3.5
-const BASELINE = 183
+const SCALE = 3.5;
+const BASELINE = 183;
 
 /* Must match the button heights in ui/button.tsx and CONTROL_STEPS in lib/design-system/data.ts. */
 const CONTROLS = [
@@ -13,10 +13,10 @@ const CONTROLS = [
   { px: 28, x: 572, width: 128, radius: 8 },
   { px: 24, x: 776, width: 112, radius: 8 },
 ].map((control) => {
-  const height = control.px * SCALE
-  const top = BASELINE - height
-  return { ...control, height, top, dim: control.x - 20 }
-})
+  const height = control.px * SCALE;
+  const top = BASELINE - height;
+  return { ...control, height, top, dim: control.x - 20 };
+});
 
 export function FoundationsFigure({ className }: FigureProps) {
   return (
@@ -56,15 +56,15 @@ export function FoundationsFigure({ className }: FigureProps) {
 
       <g className="text-xs" fill="currentColor" textAnchor="middle">
         {CONTROLS.map((c) => {
-          const x = c.dim - 22
-          const y = (c.top + BASELINE) / 2
+          const x = c.dim - 22;
+          const y = (c.top + BASELINE) / 2;
           return (
             <text key={c.px} transform={`rotate(-90 ${x} ${y})`} x={x} y={y}>
               {c.px}px
             </text>
-          )
+          );
         })}
       </g>
     </Figure>
-  )
+  );
 }

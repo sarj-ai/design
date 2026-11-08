@@ -1,52 +1,52 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@/components/ui/input-group";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
-import { PrimaryTabs } from "@/components/design-system/tabs-preview"
-import { SearchRequestsIcon } from "@/components/mockups/publish-approval/icons"
-import { StatusBadge } from "@/components/mockups/publish-approval/status-badge"
+} from "@/components/shared/data-table";
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
+import { PrimaryTabs } from "@/components/design-system/tabs-preview";
+import { SearchRequestsIcon } from "@/components/mockups/publish-approval/icons";
+import { StatusBadge } from "@/components/mockups/publish-approval/status-badge";
 import {
   type ApprovalRequest,
   type CaseId,
   type Viewer,
   who,
-} from "@/lib/mockups/publish-approval-data"
+} from "@/lib/mockups/publish-approval-data";
 
 const VIEWS = [
   { id: "waiting", label: "Waiting" },
   { id: "closed", label: "Closed" },
-]
+];
 
-type Load = "loading" | "failed" | "ready"
+type Load = "loading" | "failed" | "ready";
 
 export function ApprovalsPage({
   requests,
@@ -54,40 +54,40 @@ export function ApprovalsPage({
   caseId,
   onOpen,
 }: {
-  requests: ApprovalRequest[]
-  viewer: Viewer
-  caseId: CaseId
-  onOpen: (id: string, list: string[]) => void
+  requests: ApprovalRequest[];
+  viewer: Viewer;
+  caseId: CaseId;
+  onOpen: (id: string, list: string[]) => void;
 }) {
-  const [view, setView] = React.useState("waiting")
-  const [query, setQuery] = React.useState("")
-  const [requester, setRequester] = React.useState<string | null>(null)
-  const [load, setLoad] = React.useState<Load>("loading")
-  const [attempt, setAttempt] = React.useState(0)
+  const [view, setView] = React.useState("waiting");
+  const [query, setQuery] = React.useState("");
+  const [requester, setRequester] = React.useState<string | null>(null);
+  const [load, setLoad] = React.useState<Load>("loading");
+  const [attempt, setAttempt] = React.useState(0);
 
   React.useEffect(() => {
     const timer = setTimeout(
       () =>
         setLoad(caseId === "load-fails" && attempt === 0 ? "failed" : "ready"),
       600,
-    )
-    return () => clearTimeout(timer)
-  }, [attempt, caseId])
+    );
+    return () => clearTimeout(timer);
+  }, [attempt, caseId]);
 
   const requesters = [...new Set(requests.map((request) => request.by))].map(
     (name) => ({ value: name, label: who(name, viewer) }),
-  )
+  );
   const matches = (request: ApprovalRequest) =>
     request.item.toLowerCase().includes(query.trim().toLowerCase()) &&
-    (requester === null || request.by === requester)
-  const filtering = query.trim() !== "" || requester !== null
+    (requester === null || request.by === requester);
+  const filtering = query.trim() !== "" || requester !== null;
   const clear = () => {
-    setQuery("")
-    setRequester(null)
-  }
+    setQuery("");
+    setRequester(null);
+  };
 
-  const waiting = requests.filter((r) => r.status === "pending")
-  const closed = requests.filter((r) => r.status !== "pending")
+  const waiting = requests.filter((r) => r.status === "pending");
+  const closed = requests.filter((r) => r.status !== "pending");
 
   return (
     <main className="mx-auto flex w-full max-w-350 flex-col gap-4 p-8">
@@ -140,8 +140,8 @@ export function ApprovalsPage({
             <EmptyContent>
               <Button
                 onClick={() => {
-                  setLoad("loading")
-                  setAttempt((count) => count + 1)
+                  setLoad("loading");
+                  setAttempt((count) => count + 1);
                 }}
                 size="lg"
                 variant="outline"
@@ -178,7 +178,7 @@ export function ApprovalsPage({
         )}
       </PrimaryTabs>
     </main>
-  )
+  );
 }
 
 function RequestTable({
@@ -190,15 +190,15 @@ function RequestTable({
   onClear,
   onOpen,
 }: {
-  rows: ApprovalRequest[]
-  closed: boolean
-  viewer: Viewer
-  empty: string
-  filtering: boolean
-  onClear: () => void
-  onOpen: (id: string, list: string[]) => void
+  rows: ApprovalRequest[];
+  closed: boolean;
+  viewer: Viewer;
+  empty: string;
+  filtering: boolean;
+  onClear: () => void;
+  onOpen: (id: string, list: string[]) => void;
 }) {
-  const [pageSize, setPageSize] = React.useState(10)
+  const [pageSize, setPageSize] = React.useState(10);
 
   if (rows.length === 0) {
     return (
@@ -214,11 +214,11 @@ function RequestTable({
           </EmptyContent>
         ) : null}
       </Empty>
-    )
+    );
   }
 
-  const visible = rows.slice(0, pageSize)
-  const ids = visible.map((row) => row.id)
+  const visible = rows.slice(0, pageSize);
+  const ids = visible.map((row) => row.id);
 
   return (
     <div className="flex flex-col gap-4">
@@ -246,7 +246,7 @@ function RequestTable({
               key={row.id}
               onClick={() => onOpen(row.id, ids)}
               onKeyDown={(event) => {
-                if (event.key === "Enter") onOpen(row.id, ids)
+                if (event.key === "Enter") onOpen(row.id, ids);
               }}
               tabIndex={0}
             >
@@ -290,7 +290,7 @@ function RequestTable({
         atEnd={visible.length === rows.length}
       />
     </div>
-  )
+  );
 }
 
 function TableSkeleton() {
@@ -303,5 +303,5 @@ function TableSkeleton() {
         />
       ))}
     </div>
-  )
+  );
 }

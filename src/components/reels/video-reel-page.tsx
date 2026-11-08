@@ -1,11 +1,11 @@
-import { SiteNav } from "@/components/shell/site-nav"
-import posters from "@/lib/site/reel-posters.json"
-import type { Reel } from "@/lib/site/reels-data"
+import { SiteNav } from "@/components/shell/site-nav";
+import posters from "@/lib/site/reel-posters.json";
+import type { Reel } from "@/lib/site/reels-data";
 
 export function VideoReelPage({ reel }: { reel: Reel }) {
-  const slug = reel.href.replace("/reels/", "")
+  const slug = reel.href.replace("/reels/", "");
   const fingerprint =
-    posters.fingerprints[slug as keyof typeof posters.fingerprints]
+    posters.fingerprints[slug as keyof typeof posters.fingerprints];
 
   return (
     <div className="flex min-h-full grow flex-col">
@@ -26,5 +26,5 @@ export function VideoReelPage({ reel }: { reel: Reel }) {
         />
       </main>
     </div>
-  )
+  );
 }

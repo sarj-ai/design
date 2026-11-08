@@ -1,17 +1,17 @@
-export const MAX_WAIT_CEILING_SECONDS = 10
+export const MAX_WAIT_CEILING_SECONDS = 10;
 
-export const RECOMMENDED_MAX_WAIT_FLOOR_SECONDS = 0.5
+export const RECOMMENDED_MAX_WAIT_FLOOR_SECONDS = 0.5;
 
-export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3
+export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3;
 
-export type DetectionModelId = "livekit_v1_mini" | "sarj_eou" | "vad"
+export type DetectionModelId = "livekit_v1_mini" | "sarj_eou" | "vad";
 
 type DetectionModel = {
-  id: DetectionModelId
-  label: string
-  support: string
-  semantic: boolean
-}
+  id: DetectionModelId;
+  label: string;
+  support: string;
+  semantic: boolean;
+};
 
 export const DETECTION_MODELS: DetectionModel[] = [
   {
@@ -33,21 +33,21 @@ export const DETECTION_MODELS: DetectionModel[] = [
       "Listens for silence only. No semantic model runs, so there is no wait window to tune.",
     semantic: false,
   },
-]
+];
 
 export const SAVED_GLOBAL = {
   detectionModelId: "livekit_v1_mini" as DetectionModelId,
   maxWaitSeconds: 1,
   minWaitSeconds: 0.2,
-}
+};
 
 export const PERSONA = {
   name: "نورة",
   role: "Collections",
   /** Saved override, or null while it follows the global values. */
   override: null as null | { maxWaitSeconds: number; minWaitSeconds: number },
-}
+};
 
 export function formatSeconds(seconds: number): string {
-  return `${Number(seconds.toFixed(1))}s`
+  return `${Number(seconds.toFixed(1))}s`;
 }

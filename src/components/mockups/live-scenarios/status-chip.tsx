@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 
 export function LiveBadge() {
   return (
@@ -9,29 +9,29 @@ export function LiveBadge() {
       <span aria-hidden className="size-1.5 rounded-full bg-success" />
       Live
     </Badge>
-  )
+  );
 }
 
 export function StatusChip({
   live,
   deleted = false,
 }: {
-  live: boolean
-  deleted?: boolean
+  live: boolean;
+  deleted?: boolean;
 }) {
   if (deleted) {
     return (
       <Badge className="bg-muted text-muted-foreground" variant="secondary">
         Deleted
       </Badge>
-    )
+    );
   }
 
-  if (live) return <LiveBadge />
+  if (live) return <LiveBadge />;
 
   return (
     <Badge className="bg-muted text-muted-foreground" variant="secondary">
       Active
     </Badge>
-  )
+  );
 }

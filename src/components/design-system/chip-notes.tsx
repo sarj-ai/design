@@ -4,14 +4,14 @@ import {
   InboundIcon,
   RunningIcon,
   ScheduledIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Badge } from "@/components/ui/badge"
-import { CHIP_NOTES } from "@/lib/design-system/data"
+} from "@/components/design-system/reference-table";
+import { Badge } from "@/components/ui/badge";
+import { CHIP_NOTES } from "@/lib/design-system/data";
 
 const CHIP_ICONS = {
   completed: CompletedIcon,
@@ -19,7 +19,7 @@ const CHIP_ICONS = {
   inbound: InboundIcon,
   running: RunningIcon,
   scheduled: ScheduledIcon,
-}
+};
 
 function ChipTable() {
   return (
@@ -30,7 +30,7 @@ function ChipTable() {
         { header: "What it means" },
       ]}
       rows={CHIP_NOTES.map((chip) => {
-        const Icon = chip.icon ? CHIP_ICONS[chip.icon] : null
+        const Icon = chip.icon ? CHIP_ICONS[chip.icon] : null;
 
         return {
           key: chip.label,
@@ -42,10 +42,10 @@ function ChipTable() {
             <ReferenceName key="token">{chip.token}</ReferenceName>,
             <ReferenceNote key="why">{chip.why}</ReferenceNote>,
           ],
-        }
+        };
       })}
     />
-  )
+  );
 }
 
 export function ChipNotes() {
@@ -60,5 +60,5 @@ export function ChipNotes() {
 
       <ChipTable />
     </section>
-  )
+  );
 }

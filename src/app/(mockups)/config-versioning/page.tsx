@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -9,38 +9,38 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { ConversationVersion } from "@/components/mockups/config-versioning/conversation-version"
-import { VersionedEditor } from "@/components/mockups/config-versioning/versioned-editor"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { ConversationVersion } from "@/components/mockups/config-versioning/conversation-version";
+import { VersionedEditor } from "@/components/mockups/config-versioning/versioned-editor";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   CASES,
   type CaseId,
   LIVE_SCENARIO,
   TEST_SCENARIO,
-} from "@/lib/mockups/config-versioning-data"
+} from "@/lib/mockups/config-versioning-data";
 
 const SURFACES = [
   { id: "live", label: "Live scenario" },
   { id: "test", label: "Not-live scenario" },
   { id: "conversation", label: "Conversation details" },
-] as const
+] as const;
 
-type Surface = (typeof SURFACES)[number]["id"]
+type Surface = (typeof SURFACES)[number]["id"];
 
 export default function ConfigVersioningPage() {
-  const [surface, setSurface] = React.useState<Surface>("live")
-  const [caseId, setCaseId] = React.useState<CaseId>("normal")
-  const [openAt, setOpenAt] = React.useState<number | undefined>()
+  const [surface, setSurface] = React.useState<Surface>("live");
+  const [caseId, setCaseId] = React.useState<CaseId>("normal");
+  const [openAt, setOpenAt] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    toast.dismiss()
-  }, [surface, caseId])
+    toast.dismiss();
+  }, [surface, caseId]);
 
-  const subject = surface === "test" ? TEST_SCENARIO : LIVE_SCENARIO
+  const subject = surface === "test" ? TEST_SCENARIO : LIVE_SCENARIO;
 
   return (
     <MockupShell
@@ -64,9 +64,9 @@ export default function ConfigVersioningPage() {
           <ToggleGroup
             aria-label="Surface"
             onValueChange={(next) => {
-              if (!next) return
-              setSurface(next as Surface)
-              setOpenAt(undefined)
+              if (!next) return;
+              setSurface(next as Surface);
+              setOpenAt(undefined);
             }}
             size="sm"
             type="single"
@@ -95,8 +95,8 @@ export default function ConfigVersioningPage() {
           {surface === "conversation" ? (
             <ConversationVersion
               onOpenVersion={(n) => {
-                setSurface("live")
-                setOpenAt(n)
+                setSurface("live");
+                setOpenAt(n);
               }}
             />
           ) : (
@@ -111,5 +111,5 @@ export default function ConfigVersioningPage() {
         </AppShell>
       </TooltipProvider>
     </MockupShell>
-  )
+  );
 }

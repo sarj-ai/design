@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import * as React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   MAX_WAIT_CEILING_SECONDS,
   RECOMMENDED_MAX_WAIT_CEILING_SECONDS,
   RECOMMENDED_MAX_WAIT_FLOOR_SECONDS,
   formatSeconds,
-} from "@/lib/mockups/eou-timing-data"
+} from "@/lib/mockups/eou-timing-data";
 
-import { FieldHelpIcon, OutOfBandIcon } from "./icons"
+import { FieldHelpIcon, OutOfBandIcon } from "./icons";
 
 export type WaitWindowValue = {
-  maxWaitSeconds: number
-  minWaitSeconds: number
-}
+  maxWaitSeconds: number;
+  minWaitSeconds: number;
+};
 
 export function WaitWindow({
   disabled = false,
@@ -36,25 +36,25 @@ export function WaitWindow({
   onChange,
   value,
 }: {
-  disabled?: boolean
-  idPrefix: string
-  onChange: (value: WaitWindowValue) => void
-  value: WaitWindowValue
+  disabled?: boolean;
+  idPrefix: string;
+  onChange: (value: WaitWindowValue) => void;
+  value: WaitWindowValue;
 }) {
-  const { maxWaitSeconds, minWaitSeconds } = value
-  const belowFloor = maxWaitSeconds < RECOMMENDED_MAX_WAIT_FLOOR_SECONDS
-  const aboveCeiling = maxWaitSeconds > RECOMMENDED_MAX_WAIT_CEILING_SECONDS
+  const { maxWaitSeconds, minWaitSeconds } = value;
+  const belowFloor = maxWaitSeconds < RECOMMENDED_MAX_WAIT_FLOOR_SECONDS;
+  const aboveCeiling = maxWaitSeconds > RECOMMENDED_MAX_WAIT_CEILING_SECONDS;
 
   const handleNumber =
     (field: keyof WaitWindowValue) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const next = Number(event.target.value)
-      if (Number.isNaN(next)) return
+      const next = Number(event.target.value);
+      if (Number.isNaN(next)) return;
       onChange({
         ...value,
         [field]: Math.min(Math.max(next, 0), MAX_WAIT_CEILING_SECONDS),
-      })
-    }
+      });
+    };
 
   return (
     <div className="flex flex-col gap-4">
@@ -85,7 +85,7 @@ export function WaitWindow({
         belowFloor={belowFloor && !disabled}
       />
     </div>
-  )
+  );
 }
 
 function WaitField({
@@ -97,14 +97,14 @@ function WaitField({
   onChange,
   value,
 }: {
-  disabled: boolean
-  help: string
-  id: string
-  label: string
+  disabled: boolean;
+  help: string;
+  id: string;
+  label: string;
   /** Spoken name for the help button; the visible label's "(seconds)" is noise when read aloud. */
-  name: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  value: number
+  name: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: number;
 }) {
   return (
     <Field>
@@ -136,7 +136,7 @@ function WaitField({
         </InputGroupAddon>
       </InputGroup>
     </Field>
-  )
+  );
 }
 
 /** Shipped copy, word for word. */
@@ -144,15 +144,15 @@ function BandWarning({
   aboveCeiling,
   belowFloor,
 }: {
-  aboveCeiling: boolean
-  belowFloor: boolean
+  aboveCeiling: boolean;
+  belowFloor: boolean;
 }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotion();
   const message = belowFloor
     ? `A maximum wait below ${formatSeconds(RECOMMENDED_MAX_WAIT_FLOOR_SECONDS)} increases the chance of interrupting callers mid-sentence.`
     : aboveCeiling
       ? `A maximum wait above ${formatSeconds(RECOMMENDED_MAX_WAIT_CEILING_SECONDS)} leaves callers waiting whenever the model is unsure, which is the delay this setting exists to reduce.`
-      : null
+      : null;
 
   return (
     <AnimatePresence initial={false} mode="wait">
@@ -175,5 +175,5 @@ function BandWarning({
         </motion.div>
       ) : null}
     </AnimatePresence>
-  )
+  );
 }

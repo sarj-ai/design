@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { EditPersonaDialog } from "@/components/mockups/voice-ownership/edit-persona-dialog"
-import { PersonaList } from "@/components/mockups/voice-ownership/persona-list"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { EditPersonaDialog } from "@/components/mockups/voice-ownership/edit-persona-dialog";
+import { PersonaList } from "@/components/mockups/voice-ownership/persona-list";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   EDITING_ID,
   PERSONAS,
   type Persona,
-} from "@/lib/mockups/voice-ownership-data"
+} from "@/lib/mockups/voice-ownership-data";
 
 const ORG_VOICES = [
   { id: "some", label: "Has own voices" },
   { id: "none", label: "No own voices" },
-] as const
+] as const;
 
-type OrgVoices = (typeof ORG_VOICES)[number]["id"]
+type OrgVoices = (typeof ORG_VOICES)[number]["id"];
 
 export default function VoiceOwnershipPage() {
-  const [orgVoices, setOrgVoices] = React.useState<OrgVoices>("some")
+  const [orgVoices, setOrgVoices] = React.useState<OrgVoices>("some");
   const [editing, setEditing] = React.useState<Persona | null>(
     () => PERSONAS.find((persona) => persona.id === EDITING_ID) ?? null,
-  )
+  );
 
   return (
     <MockupShell
@@ -32,7 +32,7 @@ export default function VoiceOwnershipPage() {
         <ToggleGroup
           aria-label="Organization voices"
           onValueChange={(next) => {
-            if (next) setOrgVoices(next as OrgVoices)
+            if (next) setOrgVoices(next as OrgVoices);
           }}
           size="sm"
           type="single"
@@ -54,10 +54,10 @@ export default function VoiceOwnershipPage() {
       <EditPersonaDialog
         hasOrgVoices={orgVoices === "some"}
         onOpenChange={(open) => {
-          if (!open) setEditing(null)
+          if (!open) setEditing(null);
         }}
         persona={editing}
       />
     </MockupShell>
-  )
+  );
 }

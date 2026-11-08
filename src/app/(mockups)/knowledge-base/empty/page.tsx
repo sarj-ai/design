@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useSearchParams } from "next/navigation"
+import * as React from "react";
+import { useSearchParams } from "next/navigation";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { NEW_KNOWLEDGE_BASE } from "@/lib/mockups/knowledge-base-data"
-import { KnowledgeBaseDetail } from "@/components/mockups/knowledge-base/knowledge-base-detail"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { NEW_KNOWLEDGE_BASE } from "@/lib/mockups/knowledge-base-data";
+import { KnowledgeBaseDetail } from "@/components/mockups/knowledge-base/knowledge-base-detail";
 
 export default function KnowledgeBaseEmptyPage() {
   return (
@@ -17,16 +17,16 @@ export default function KnowledgeBaseEmptyPage() {
         <JustCreated />
       </React.Suspense>
     </MockupShell>
-  )
+  );
 }
 
 function JustCreated() {
-  const name = useSearchParams().get("name")?.trim()
+  const name = useSearchParams().get("name")?.trim();
 
   return (
     <KnowledgeBaseDetail
       base={name ? { ...NEW_KNOWLEDGE_BASE, name } : NEW_KNOWLEDGE_BASE}
       initialSources={[]}
     />
-  )
+  );
 }

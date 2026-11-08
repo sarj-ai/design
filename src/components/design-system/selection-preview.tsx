@@ -1,25 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   ReferenceLabel,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/reference-table";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemTitle,
+} from "@/components/ui/item";
+import { cn } from "@/lib/utils";
 
 const AGENTS = [
   { id: "support", name: "Support triage", languages: ["English", "Arabic"] },
   { id: "collections", name: "Collections", languages: ["Arabic"] },
   { id: "onboarding", name: "Onboarding", languages: ["English", "Arabic"] },
-]
+];
 
 /** The ring doubles the 1px border without taking space, so nothing reflows when a card is picked. */
-const SELECTED = "border-primary ring-1 ring-primary"
+const SELECTED = "border-primary ring-1 ring-primary";
 
 const RULES = [
   {
@@ -42,18 +47,18 @@ const RULES = [
     what: "bg-muted/50, on the unselected only",
     why: "Half strength because a badge is bg-secondary and that is the same grey — at full muted the chips on a hovered card dissolve into it. The selected card is already at its final state, so it does not take a hover at all.",
   },
-]
+];
 
 export function SelectionPreview() {
-  const [one, setOne] = React.useState(AGENTS[0].id)
-  const [several, setSeveral] = React.useState<string[]>([AGENTS[0].id])
+  const [one, setOne] = React.useState(AGENTS[0].id);
+  const [several, setSeveral] = React.useState<string[]>([AGENTS[0].id]);
 
   const toggle = (id: string) =>
     setSeveral((current) =>
       current.includes(id)
         ? current.filter((entry) => entry !== id)
         : [...current, id],
-    )
+    );
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,7 +68,7 @@ export function SelectionPreview() {
 
           <div className="flex flex-col gap-2">
             {AGENTS.map((agent) => {
-              const selected = agent.id === one
+              const selected = agent.id === one;
 
               return (
                 <Item
@@ -93,7 +98,7 @@ export function SelectionPreview() {
                     </ItemContent>
                   </button>
                 </Item>
-              )
+              );
             })}
           </div>
         </div>
@@ -103,7 +108,7 @@ export function SelectionPreview() {
 
           <div className="flex flex-col gap-2">
             {AGENTS.map((agent) => {
-              const selected = several.includes(agent.id)
+              const selected = several.includes(agent.id);
 
               return (
                 <Item
@@ -141,7 +146,7 @@ export function SelectionPreview() {
                     </ItemActions>
                   </button>
                 </Item>
-              )
+              );
             })}
           </div>
         </div>
@@ -163,5 +168,5 @@ export function SelectionPreview() {
         }))}
       />
     </div>
-  )
+  );
 }

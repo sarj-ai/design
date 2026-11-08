@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Input } from "@/components/ui/input";
 
-import { RemoveTriggerIcon } from "./icons"
+import { RemoveTriggerIcon } from "./icons";
 
 export function GenericFillerField({
   disabled,
@@ -14,18 +14,18 @@ export function GenericFillerField({
   onAdd,
   onRemove,
 }: {
-  disabled: boolean
-  fillers: string[]
-  onAdd: (filler: string) => void
-  onRemove: (filler: string) => void
+  disabled: boolean;
+  fillers: string[];
+  onAdd: (filler: string) => void;
+  onRemove: (filler: string) => void;
 }) {
-  const [draft, setDraft] = React.useState("")
+  const [draft, setDraft] = React.useState("");
 
   function commit() {
-    const value = draft.trim()
-    if (!value || fillers.includes(value)) return
-    onAdd(value)
-    setDraft("")
+    const value = draft.trim();
+    if (!value || fillers.includes(value)) return;
+    onAdd(value);
+    setDraft("");
   }
 
   return (
@@ -56,9 +56,9 @@ export function GenericFillerField({
           onBlur={commit}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
-            if (event.key !== "Enter") return
-            event.preventDefault()
-            commit()
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            commit();
           }}
           placeholder="Add a filler word, then press Enter"
           value={draft}
@@ -74,5 +74,5 @@ export function GenericFillerField({
         </Button>
       </ButtonGroup>
     </div>
-  )
+  );
 }

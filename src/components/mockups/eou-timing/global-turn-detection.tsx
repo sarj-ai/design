@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Card,
@@ -8,43 +8,43 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   DETECTION_MODELS,
   SAVED_GLOBAL,
   type DetectionModelId,
-} from "@/lib/mockups/eou-timing-data"
+} from "@/lib/mockups/eou-timing-data";
 
-import { FieldHelpIcon, ScopeNoteIcon } from "./icons"
-import { WaitWindow, type WaitWindowValue } from "./wait-window"
+import { FieldHelpIcon, ScopeNoteIcon } from "./icons";
+import { WaitWindow, type WaitWindowValue } from "./wait-window";
 
 export function GlobalTurnDetection({
   onWindowChange,
   window,
 }: {
-  onWindowChange: (value: WaitWindowValue) => void
-  window: WaitWindowValue
+  onWindowChange: (value: WaitWindowValue) => void;
+  window: WaitWindowValue;
 }) {
   const [modelId, setModelId] = React.useState<DetectionModelId>(
     SAVED_GLOBAL.detectionModelId,
-  )
+  );
   const model =
     DETECTION_MODELS.find((entry) => entry.id === modelId) ??
-    DETECTION_MODELS[0]
+    DETECTION_MODELS[0];
 
   return (
     <Card>
@@ -118,5 +118,5 @@ export function GlobalTurnDetection({
         ) : null}
       </CardContent>
     </Card>
-  )
+  );
 }

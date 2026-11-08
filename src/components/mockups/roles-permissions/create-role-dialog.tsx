@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,46 +11,46 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel, FieldTitle } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel, FieldTitle } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   GRANTS,
   ROLES,
   type PermissionId,
-} from "@/lib/mockups/roles-permissions-data"
+} from "@/lib/mockups/roles-permissions-data";
 
 export function CreateRoleDialog({
   onCreate,
   onOpenChange,
   open,
 }: {
-  onCreate: (role: { name: string; permissions: PermissionId[] }) => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  onCreate: (role: { name: string; permissions: PermissionId[] }) => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
-  const [name, setName] = React.useState("")
-  const [startFrom, setStartFrom] = React.useState("org-admin")
+  const [name, setName] = React.useState("");
+  const [startFrom, setStartFrom] = React.useState("org-admin");
 
   function reset() {
-    setName("")
-    setStartFrom("org-admin")
+    setName("");
+    setStartFrom("org-admin");
   }
 
   function submit() {
     onCreate({
       name: name.trim(),
       permissions: startFrom === "blank" ? [] : [...(GRANTS[startFrom] ?? [])],
-    })
-    reset()
+    });
+    reset();
   }
 
   return (
     <Dialog
       onOpenChange={(next) => {
-        if (!next) reset()
-        onOpenChange(next)
+        if (!next) reset();
+        onOpenChange(next);
       }}
       open={open}
     >
@@ -112,5 +112,5 @@ export function CreateRoleDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

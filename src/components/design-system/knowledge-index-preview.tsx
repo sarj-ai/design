@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
+} from "@/components/shared/data-table";
 import {
   DateFilter,
   FilterBar,
   SelectFilter,
   type DateRange,
-} from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { ActionTile, PageHeader } from "@/components/shared/page-header"
+} from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { ActionTile, PageHeader } from "@/components/shared/page-header";
 import {
   AddFilesIcon,
   AddTextIcon,
@@ -41,16 +41,16 @@ import {
   RowMenuIcon,
   SearchIcon,
   SyncDocumentsIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 
 type Doc = {
-  id: string
-  name: string
-  kind: "URL" | "PDF" | "DOCX" | "Text" | "Folder"
-  detail: string
-  createdBy: string
-  updated: string
-}
+  id: string;
+  name: string;
+  kind: "URL" | "PDF" | "DOCX" | "Text" | "Folder";
+  detail: string;
+  createdBy: string;
+  updated: string;
+};
 
 const DOCS: Doc[] = [
   {
@@ -101,42 +101,42 @@ const DOCS: Doc[] = [
     createdBy: "fjanahi",
     updated: "25 Sep 2026, 16:30",
   },
-]
+];
 
-const TODAY = new Date(2026, 8, 28)
+const TODAY = new Date(2026, 8, 28);
 
 function inRange(stamp: string, range: DateRange | undefined) {
-  if (!range?.from) return true
-  const at = new Date(stamp.replace(",", "")).getTime()
-  const from = new Date(range.from).setHours(0, 0, 0, 0)
-  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999)
-  return at >= from && at <= to
+  if (!range?.from) return true;
+  const at = new Date(stamp.replace(",", "")).getTime();
+  const from = new Date(range.from).setHours(0, 0, 0, 0);
+  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999);
+  return at >= from && at <= to;
 }
 
 const TYPES = ["URL", "PDF", "DOCX", "Text", "Folder"].map((kind) => ({
   value: kind,
   label: kind,
-}))
+}));
 
 const CREATORS = Array.from(new Set(DOCS.map((doc) => doc.createdBy))).map(
   (name) => ({ value: name, label: name }),
-)
+);
 
 export function KnowledgeIndexPreview() {
-  const [query, setQuery] = React.useState("")
-  const [types, setTypes] = React.useState<string[]>([])
-  const [creators, setCreators] = React.useState<string[]>([])
-  const [updated, setUpdated] = React.useState<DateRange | undefined>()
+  const [query, setQuery] = React.useState("");
+  const [types, setTypes] = React.useState<string[]>([]);
+  const [creators, setCreators] = React.useState<string[]>([]);
+  const [updated, setUpdated] = React.useState<DateRange | undefined>();
 
   const activeCount = [types.length, creators.length, updated?.from].filter(
     Boolean,
-  ).length
+  ).length;
 
   const matches = (doc: Doc) =>
     doc.name.toLowerCase().includes(query.trim().toLowerCase()) &&
     (!types.length || types.includes(doc.kind)) &&
     (!creators.length || creators.includes(doc.createdBy)) &&
-    inRange(doc.updated, updated)
+    inRange(doc.updated, updated);
 
   return (
     <div className="flex flex-col gap-4">
@@ -166,9 +166,9 @@ export function KnowledgeIndexPreview() {
         <FilterBar
           activeCount={activeCount}
           onClearAll={() => {
-            setTypes([])
-            setCreators([])
-            setUpdated(undefined)
+            setTypes([]);
+            setCreators([]);
+            setUpdated(undefined);
           }}
         >
           <SelectFilter
@@ -194,16 +194,16 @@ export function KnowledgeIndexPreview() {
 
       <DocList rows={DOCS.filter(matches)} />
     </div>
-  )
+  );
 }
 
 function DocList({ rows }: { rows: Doc[] }) {
-  const [pageSize, setPageSize] = React.useState(10)
-  const [page, setPage] = React.useState(0)
+  const [pageSize, setPageSize] = React.useState(10);
+  const [page, setPage] = React.useState(0);
 
-  const pages = Math.max(1, Math.ceil(rows.length / pageSize))
-  const current = Math.min(page, pages - 1)
-  const visible = rows.slice(current * pageSize, (current + 1) * pageSize)
+  const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const current = Math.min(page, pages - 1);
+  const visible = rows.slice(current * pageSize, (current + 1) * pageSize);
 
   return (
     <div className="flex flex-col gap-4">
@@ -270,8 +270,8 @@ function DocList({ rows }: { rows: Doc[] }) {
         noun="documents"
         pageSize={pageSize}
         onPageSizeChange={(size) => {
-          setPageSize(size)
-          setPage(0)
+          setPageSize(size);
+          setPage(0);
         }}
         atStart={current === 0}
         atEnd={current >= pages - 1}
@@ -280,5 +280,5 @@ function DocList({ rows }: { rows: Doc[] }) {
         onNext={() => setPage(current + 1)}
       />
     </div>
-  )
+  );
 }

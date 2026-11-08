@@ -1,4 +1,4 @@
-import { defineCloudflareConfig } from "@opennextjs/cloudflare"
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 
 /**
  * Every route here is prerendered at build time and the only dynamic one is
@@ -11,4 +11,4 @@ import { defineCloudflareConfig } from "@opennextjs/cloudflare"
  */
 export default defineCloudflareConfig({
   enableCacheInterception: false,
-})
+});

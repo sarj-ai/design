@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { PanelImperativeHandle } from "react-resizable-panels"
+import * as React from "react";
+import type { PanelImperativeHandle } from "react-resizable-panels";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,28 +13,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
+} from "@/components/ui/resizable";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTitle,
-} from "@/components/ui/sheet"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   CALL_DETAIL,
   CALL_FLAGS,
@@ -45,21 +45,21 @@ import {
   type CallState,
   type Channel,
   type IssueType,
-} from "@/lib/mockups/conversations-revamp-drawer-data"
-import { CallHeader } from "@/components/mockups/conversations-revamp/drawer/call-shell"
-import { PreCallPanel } from "@/components/mockups/conversations-revamp/drawer/pre-call-panel"
-import { CompletedScheduleSummary } from "@/components/mockups/conversations-revamp/drawer/completed-schedule-summary"
-import { LinkedCall } from "@/components/mockups/conversations-revamp/drawer/linked-call"
+} from "@/lib/mockups/conversations-revamp-drawer-data";
+import { CallHeader } from "@/components/mockups/conversations-revamp/drawer/call-shell";
+import { PreCallPanel } from "@/components/mockups/conversations-revamp/drawer/pre-call-panel";
+import { CompletedScheduleSummary } from "@/components/mockups/conversations-revamp/drawer/completed-schedule-summary";
+import { LinkedCall } from "@/components/mockups/conversations-revamp/drawer/linked-call";
 import {
   ISSUE_TONE,
   SectionRegister,
-} from "@/components/mockups/conversations-revamp/drawer/section-register"
-import { TranscriptPanel } from "@/components/mockups/conversations-revamp/drawer/transcript-views"
-import { formatTimeSeconds } from "@/components/mockups/conversations-revamp/drawer/recording-player"
+} from "@/components/mockups/conversations-revamp/drawer/section-register";
+import { TranscriptPanel } from "@/components/mockups/conversations-revamp/drawer/transcript-views";
+import { formatTimeSeconds } from "@/components/mockups/conversations-revamp/drawer/recording-player";
 import {
   FlagIcon,
   ShowPanelIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function FourthDrawer({
   channel = "call",
@@ -70,30 +70,30 @@ export function FourthDrawer({
   state = "complete",
   title,
 }: {
-  channel?: Channel
-  onCancelCall?: () => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
-  specifics?: CallSpecifics
-  title?: CallIdentity
-  state?: CallState
+  channel?: Channel;
+  onCancelCall?: () => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  specifics?: CallSpecifics;
+  title?: CallIdentity;
+  state?: CallState;
 }) {
-  const call = CALL_DETAIL
-  const [at, setAt] = React.useState(0)
-  const content = React.useRef<HTMLDivElement>(null)
+  const call = CALL_DETAIL;
+  const [at, setAt] = React.useState(0);
+  const content = React.useRef<HTMLDivElement>(null);
 
-  const transcript = React.useRef<PanelImperativeHandle>(null)
-  const panel = React.useRef<PanelImperativeHandle>(null)
+  const transcript = React.useRef<PanelImperativeHandle>(null);
+  const panel = React.useRef<PanelImperativeHandle>(null);
   const [hidden, setHidden] = React.useState<"none" | "panel" | "transcript">(
     "none",
-  )
+  );
 
   const markers = CALL_FLAGS.map((flag) => ({
     id: flag.id,
     label: ISSUE_TYPE_LABELS[flag.issueType],
     timestampMs: flag.timestampMs,
     tone: ISSUE_TONE[flag.issueType],
-  }))
+  }));
 
   return (
     <Sheet onOpenChange={onOpenChange} open={open}>
@@ -105,9 +105,9 @@ export function FourthDrawer({
         // The resize handle stops pointerdown natively, so the dialog reads a
         // press on it as outside. Ignore presses that land inside the panel.
         onPointerDownOutside={(event) => {
-          const target = event.detail.originalEvent.target
+          const target = event.detail.originalEvent.target;
           if (target instanceof Node && content.current?.contains(target)) {
-            event.preventDefault()
+            event.preventDefault();
           }
         }}
         ref={content}
@@ -127,10 +127,10 @@ export function FourthDrawer({
               hidden === "none" ? null : (
                 <Button
                   onClick={() => {
-                    ;(hidden === "transcript"
+                    (hidden === "transcript"
                       ? transcript
                       : panel
-                    ).current?.expand()
+                    ).current?.expand();
                   }}
                   size="sm"
                   variant="outline"
@@ -192,7 +192,7 @@ export function FourthDrawer({
                         : current === "transcript"
                           ? "none"
                           : current,
-                    )
+                    );
                   }}
                   panelRef={transcript}
                 >
@@ -219,7 +219,7 @@ export function FourthDrawer({
                         : current === "panel"
                           ? "none"
                           : current,
-                    )
+                    );
                   }}
                   panelRef={panel}
                 >
@@ -231,27 +231,27 @@ export function FourthDrawer({
         </div>
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
-const COMMENT_LIMIT = 1000
+const COMMENT_LIMIT = 1000;
 
 function FlagDialog({ at }: { at: number }) {
-  const [open, setOpen] = React.useState(false)
-  const [issueType, setIssueType] = React.useState<IssueType | "">("")
-  const [comment, setComment] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [issueType, setIssueType] = React.useState<IssueType | "">("");
+  const [comment, setComment] = React.useState("");
 
   function close() {
-    setOpen(false)
-    setIssueType("")
-    setComment("")
+    setOpen(false);
+    setIssueType("");
+    setComment("");
   }
 
   return (
     <Dialog
       onOpenChange={(next) => {
-        if (next) setOpen(true)
-        else close()
+        if (next) setOpen(true);
+        else close();
       }}
       open={open}
     >
@@ -274,7 +274,7 @@ function FlagDialog({ at }: { at: number }) {
           <FieldLabel htmlFor="flag-issue-type">Issue type</FieldLabel>
           <Select
             onValueChange={(value) => {
-              setIssueType(value as IssueType)
+              setIssueType(value as IssueType);
             }}
             value={issueType}
           >
@@ -302,7 +302,7 @@ function FlagDialog({ at }: { at: number }) {
             id="flag-comment"
             maxLength={COMMENT_LIMIT}
             onChange={(event) => {
-              setComment(event.target.value)
+              setComment(event.target.value);
             }}
             placeholder="What went wrong at this moment?"
             rows={4}
@@ -323,5 +323,5 @@ function FlagDialog({ at }: { at: number }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

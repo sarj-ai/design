@@ -1,13 +1,13 @@
-import type { LanguageCode } from "@/lib/mockups/scenario-single-screen-data"
+import type { LanguageCode } from "@/lib/mockups/scenario-single-screen-data";
 
-type SectionId = "context" | "escalation" | "identity" | "scope" | "tone"
+type SectionId = "context" | "escalation" | "identity" | "scope" | "tone";
 
 interface SectionMeta {
-  example: string
-  heading: string
-  help: string
-  id: SectionId
-  label: string
+  example: string;
+  heading: string;
+  help: string;
+  id: SectionId;
+  label: string;
 }
 
 export const SECTION_META: SectionMeta[] = [
@@ -49,23 +49,23 @@ export const SECTION_META: SectionMeta[] = [
     id: "escalation",
     label: "When to hand over to a person",
   },
-]
+];
 
 export const FLOW_META = {
   example: "Greet the guest",
   heading: "Conversation flow",
   help: "The agent works down these in order. One instruction per step.",
   label: "How the call should go",
-}
+};
 
 export interface SectionedPrompt {
-  context: string
-  escalation: string
-  flow: string[]
-  identity: string
-  language: LanguageCode
-  scope: string
-  tone: string
+  context: string;
+  escalation: string;
+  flow: string[];
+  identity: string;
+  language: LanguageCode;
+  scope: string;
+  tone: string;
 }
 
 export const SECTIONED_PROMPTS: SectionedPrompt[] = [
@@ -116,41 +116,41 @@ export const SECTIONED_PROMPTS: SectionedPrompt[] = [
       'آپ کا واحد کام ریسٹورنٹ کی بکنگ میں مدد کرنا ہے۔ کسی اور چیز کے بارے میں پوچھے جانے پر کہیں: "معذرت، میں صرف ریسٹورنٹ کی بکنگ میں مدد کر سکتا ہوں۔"',
     tone: "",
   },
-]
+];
 
 /** What the model is sent. Empty sections are left out: a bare heading reads to the model as an instruction. */
 export function assemblePrompt(prompt: SectionedPrompt): string {
-  const blocks: string[] = []
+  const blocks: string[] = [];
 
   for (const meta of SECTION_META) {
     /* v1's markdown interleaves Flow by heading order, so it gets its own slot rather than going at the end. */
     if (meta.id === "context") {
       if (prompt.context.trim()) {
-        blocks.push(`# ${meta.heading}\n${prompt.context.trim()}`)
+        blocks.push(`# ${meta.heading}\n${prompt.context.trim()}`);
       }
       if (prompt.flow.length) {
-        blocks.push(`# ${FLOW_META.heading}\n${prompt.flow.join("\n")}`)
+        blocks.push(`# ${FLOW_META.heading}\n${prompt.flow.join("\n")}`);
       }
-      continue
+      continue;
     }
 
-    const body = prompt[meta.id].trim()
-    if (body) blocks.push(`# ${meta.heading}\n${body}`)
+    const body = prompt[meta.id].trim();
+    if (body) blocks.push(`# ${meta.heading}\n${body}`);
   }
 
-  return blocks.join("\n\n")
+  return blocks.join("\n\n");
 }
 
 export function filledCount(prompt: SectionedPrompt): number {
-  const prose = SECTION_META.filter((meta) => prompt[meta.id].trim()).length
-  return prose + (prompt.flow.length ? 1 : 0)
+  const prose = SECTION_META.filter((meta) => prompt[meta.id].trim()).length;
+  return prose + (prompt.flow.length ? 1 : 0);
 }
 
-export const SECTION_TOTAL = SECTION_META.length + 1
+export const SECTION_TOTAL = SECTION_META.length + 1;
 
 export function variableLabel(name: string): string {
-  const words = name.replace(/_/g, " ").trim()
-  return words.charAt(0).toUpperCase() + words.slice(1)
+  const words = name.replace(/_/g, " ").trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-export const IMPLICIT_VARIABLES = ["agent_name"]
+export const IMPLICIT_VARIABLES = ["agent_name"];

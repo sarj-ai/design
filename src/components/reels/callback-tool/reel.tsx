@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { FPS, interpolate, seconds, stagger } from "@/lib/reels/anim"
-import { tour } from "@/lib/reels/cursor"
-import { Appear, Scene, useFrame } from "@/components/reels/stage"
-import { Shot } from "@/components/reels/shot"
-import { Cursor } from "@/components/reels/cursor"
-import { Brandmark, Headline, Kicker, Lead } from "@/components/reels/type"
+import { FPS, interpolate, seconds, stagger } from "@/lib/reels/anim";
+import { tour } from "@/lib/reels/cursor";
+import { Appear, Scene, useFrame } from "@/components/reels/stage";
+import { Shot } from "@/components/reels/shot";
+import { Cursor } from "@/components/reels/cursor";
+import { Brandmark, Headline, Kicker, Lead } from "@/components/reels/type";
 
-const SHOT = { width: 2880, height: 1545 } as const
+const SHOT = { width: 2880, height: 1545 } as const;
 
 /** Regions of `scenario-editor.png`, in that file's own pixels. */
 const EDITOR = {
@@ -15,7 +15,7 @@ const EDITOR = {
   attempts: { x: 936, y: 457, width: 256, height: 123 },
   window: { x: 936, y: 862, width: 500, height: 99 },
   save: { x: 2127, y: 1030, width: 281, height: 58 },
-}
+};
 
 const SETUP = tour(SHOT, EDITOR, (s) =>
   s
@@ -33,16 +33,16 @@ const SETUP = tour(SHOT, EDITOR, (s) =>
     .click()
     .wait(0.8)
     .leave(),
-)
+);
 
-const HOOK = { from: 0, duration: seconds(4.5) }
-const TITLE = { from: 125, duration: seconds(5.2) }
-const CONFIGURE = { from: 270, duration: seconds(10) }
-const ON_CALL = { from: 560, duration: seconds(9.7) }
-const OUTCOME = { from: 840, duration: seconds(6) }
-const END = { from: 1010, duration: seconds(4.3) }
+const HOOK = { from: 0, duration: seconds(4.5) };
+const TITLE = { from: 125, duration: seconds(5.2) };
+const CONFIGURE = { from: 270, duration: seconds(10) };
+const ON_CALL = { from: 560, duration: seconds(9.7) };
+const OUTCOME = { from: 840, duration: seconds(6) };
+const END = { from: 1010, duration: seconds(4.3) };
 
-export const DURATION = 38 * FPS
+export const DURATION = 38 * FPS;
 
 export function CallbackToolReel() {
   return (
@@ -157,12 +157,12 @@ export function CallbackToolReel() {
         <EndCard />
       </Scene>
     </>
-  )
+  );
 }
 
 function EndCard() {
-  const frame = useFrame()
-  const lines = ["Callback tool", "Release 16", "sarj.ai"]
+  const frame = useFrame();
+  const lines = ["Callback tool", "Release 16", "sarj.ai"];
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-8">
@@ -205,5 +205,5 @@ function EndCard() {
         ))}
       </div>
     </div>
-  )
+  );
 }

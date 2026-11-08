@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -10,25 +10,25 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Kbd } from "@/components/ui/kbd"
+} from "@/components/ui/drawer";
+import { Kbd } from "@/components/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   DirectionChip,
   OutcomeBadge,
   ScenarioChip,
   StatusBadge,
-} from "@/components/mockups/conversations-revamp/list/status-badges"
+} from "@/components/mockups/conversations-revamp/list/status-badges";
 import {
   CloseIcon,
   NextCallIcon,
   PreviousCallIcon,
-} from "@/components/mockups/review-tracking/icons"
-import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/components/mockups/review-tracking/icons";
+import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data";
 
 export function CallDrawer({
   call,
@@ -38,35 +38,35 @@ export function CallDrawer({
   actions,
   description,
 }: {
-  call: CallRow | null
+  call: CallRow | null;
   /** The list the arrows walk, in on-screen order. */
-  calls: CallRow[]
-  onStep: (call: CallRow) => void
-  onClose: () => void
-  actions?: React.ReactNode
+  calls: CallRow[];
+  onStep: (call: CallRow) => void;
+  onClose: () => void;
+  actions?: React.ReactNode;
   /** Replaces the phone and scenario line. */
-  description?: React.ReactNode
+  description?: React.ReactNode;
 }) {
-  const index = call ? calls.findIndex((item) => item.id === call.id) : -1
-  const previous = index > 0 ? calls[index - 1] : null
-  const next = index >= 0 && index < calls.length - 1 ? calls[index + 1] : null
+  const index = call ? calls.findIndex((item) => item.id === call.id) : -1;
+  const previous = index > 0 ? calls[index - 1] : null;
+  const next = index >= 0 && index < calls.length - 1 ? calls[index + 1] : null;
 
   React.useEffect(() => {
-    if (!call) return
+    if (!call) return;
     function onKey(event: KeyboardEvent) {
-      if (event.target instanceof HTMLInputElement) return
-      if (event.key === "ArrowUp" && previous) onStep(previous)
-      if (event.key === "ArrowDown" && next) onStep(next)
+      if (event.target instanceof HTMLInputElement) return;
+      if (event.key === "ArrowUp" && previous) onStep(previous);
+      if (event.key === "ArrowDown" && next) onStep(next);
     }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [call, previous, next, onStep])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [call, previous, next, onStep]);
 
   return (
     <Drawer
       direction="right"
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onClose();
       }}
       open={call !== null}
     >
@@ -140,22 +140,22 @@ export function CallDrawer({
         ) : null}
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
 function Fact({
   label,
   children,
 }: {
-  label: string
-  children: React.ReactNode
+  label: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col items-start gap-1">
       <dt className="text-xs text-muted-foreground">{label}</dt>
       <dd>{children}</dd>
     </div>
-  )
+  );
 }
 
 function StepButton({
@@ -165,11 +165,11 @@ function StepButton({
   onClick,
   Icon,
 }: {
-  label: string
-  keyLabel: string
-  disabled: boolean
-  onClick: () => void
-  Icon: React.ComponentType
+  label: string;
+  keyLabel: string;
+  disabled: boolean;
+  onClick: () => void;
+  Icon: React.ComponentType;
 }) {
   return (
     <Tooltip>
@@ -188,5 +188,5 @@ function StepButton({
         {label} <Kbd>{keyLabel}</Kbd>
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }

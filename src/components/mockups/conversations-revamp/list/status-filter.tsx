@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import {
   STATUS_GROUPS,
   type StatusGroupId,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 import {
   ChevronDownIcon,
   SelectedIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 
 export function StatusFilter({
   defaultOpen = false,
 }: {
-  defaultOpen?: boolean
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = React.useState(defaultOpen)
-  const [selected, setSelected] = React.useState<StatusGroupId[]>([])
+  const [open, setOpen] = React.useState(defaultOpen);
+  const [selected, setSelected] = React.useState<StatusGroupId[]>([]);
 
   function toggle(group: StatusGroupId) {
     setSelected((current) =>
       current.includes(group)
         ? current.filter((item) => item !== group)
         : [...current, group],
-    )
+    );
   }
 
   return (
@@ -72,7 +72,7 @@ export function StatusFilter({
         <div className="flex flex-col">
           <div className="p-1">
             {STATUS_GROUPS.map((group) => {
-              const isSelected = selected.includes(group.id)
+              const isSelected = selected.includes(group.id);
 
               return (
                 <div
@@ -82,7 +82,7 @@ export function StatusFilter({
                   )}
                   key={group.id}
                   onClick={() => {
-                    toggle(group.id)
+                    toggle(group.id);
                   }}
                 >
                   <Checkbox
@@ -96,7 +96,7 @@ export function StatusFilter({
                     <SelectedIcon className="size-4 text-primary opacity-50" />
                   ) : null}
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -105,7 +105,7 @@ export function StatusFilter({
               <Button
                 className="flex-1"
                 onClick={() => {
-                  setSelected([])
+                  setSelected([]);
                 }}
                 size="sm"
                 variant="ghost"
@@ -117,5 +117,5 @@ export function StatusFilter({
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

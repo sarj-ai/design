@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemActions,
@@ -18,9 +18,9 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -28,27 +28,27 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   CreateInListIcon,
   RowMenuIcon,
   SectionToggleIcon,
-} from "@/components/design-system/icons"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/icons";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { cn } from "@/lib/utils";
 
-type SectionId = "first-message" | "variables" | "analytics" | "tools" | "kb"
+type SectionId = "first-message" | "variables" | "analytics" | "tools" | "kb";
 
 type Section = {
-  id: SectionId
-  title: string
-  description: string
-  count?: number
-  toggle?: string
-  add?: string
-}
+  id: SectionId;
+  title: string;
+  description: string;
+  count?: number;
+  toggle?: string;
+  add?: string;
+};
 
 const SECTIONS: Section[] = [
   {
@@ -87,36 +87,36 @@ const SECTIONS: Section[] = [
     count: 2,
     add: "Attach",
   },
-]
+];
 
 const VARIABLES = [
   { name: "name", type: "Text", required: true },
   { name: "account_number", type: "Text", required: true },
   { name: "due_date", type: "Date", required: false },
   { name: "amount_due", type: "Number", required: false },
-]
+];
 
 const FIELDS = [
   { name: "Payment promised", type: "Yes or no" },
   { name: "Promise date", type: "Date" },
   { name: "Reason for delay", type: "Text" },
-]
+];
 
 const TOOLS = [
   { name: "End call", detail: "Hangs up with a polite goodbye" },
   { name: "Schedule callback", detail: "Books a time to call back" },
   { name: "Collect digits", detail: "Reads a number typed on the keypad" },
-]
+];
 
 const KNOWLEDGE = [
   { name: "Payment FAQ", detail: "When the customer asks how to pay" },
   { name: "Late fees 2026", detail: "When the customer disputes a fee" },
-]
+];
 
 const FIRST_MESSAGE =
-  "Hi {{name}}, this is Sara from Sarj. Is now a good time to talk?"
+  "Hi {{name}}, this is Sara from Sarj. Is now a good time to talk?";
 
-type Toggles = Record<SectionId, boolean>
+type Toggles = Record<SectionId, boolean>;
 
 function useToggles() {
   const [on, setOn] = React.useState<Toggles>({
@@ -125,32 +125,32 @@ function useToggles() {
     analytics: true,
     tools: true,
     kb: true,
-  })
+  });
   const set = (id: SectionId, value: boolean) =>
-    setOn((current) => ({ ...current, [id]: value }))
-  return { on, set }
+    setOn((current) => ({ ...current, [id]: value }));
+  return { on, set };
 }
 
 function summary(id: SectionId, on: boolean) {
-  if (!on) return "Off"
+  if (!on) return "Off";
   switch (id) {
     case "first-message":
-      return FIRST_MESSAGE
+      return FIRST_MESSAGE;
     case "variables":
-      return `${VARIABLES.filter((v) => v.required).length} required`
+      return `${VARIABLES.filter((v) => v.required).length} required`;
     case "analytics":
-      return FIELDS.map((field) => field.name).join(", ")
+      return FIELDS.map((field) => field.name).join(", ");
     case "tools":
-      return TOOLS.map((tool) => tool.name).join(", ")
+      return TOOLS.map((tool) => tool.name).join(", ");
     case "kb":
-      return KNOWLEDGE.map((kb) => kb.name).join(", ")
+      return KNOWLEDGE.map((kb) => kb.name).join(", ");
   }
 }
 
 function Body({ id }: { id: SectionId }) {
   switch (id) {
     case "first-message":
-      return <Input aria-label="First message" defaultValue={FIRST_MESSAGE} />
+      return <Input aria-label="First message" defaultValue={FIRST_MESSAGE} />;
     case "variables":
       return (
         <Table>
@@ -181,15 +181,15 @@ function Body({ id }: { id: SectionId }) {
             ))}
           </TableBody>
         </Table>
-      )
+      );
     case "analytics":
       return (
         <Rows rows={FIELDS.map((f) => ({ name: f.name, detail: f.type }))} />
-      )
+      );
     case "tools":
-      return <Rows rows={TOOLS} />
+      return <Rows rows={TOOLS} />;
     case "kb":
-      return <Rows rows={KNOWLEDGE} />
+      return <Rows rows={KNOWLEDGE} />;
   }
 }
 
@@ -214,7 +214,7 @@ function Rows({ rows }: { rows: { name: string; detail: string }[] }) {
         </Item>
       ))}
     </ItemGroup>
-  )
+  );
 }
 
 function Control({
@@ -222,9 +222,9 @@ function Control({
   on,
   onToggle,
 }: {
-  section: Section
-  on: boolean
-  onToggle: (value: boolean) => void
+  section: Section;
+  on: boolean;
+  onToggle: (value: boolean) => void;
 }) {
   if (section.toggle)
     return (
@@ -233,23 +233,23 @@ function Control({
         checked={on}
         onCheckedChange={onToggle}
       />
-    )
+    );
   if (section.add)
     return (
       <Button size="sm" variant="outline">
         <CreateInListIcon />
         {section.add}
       </Button>
-    )
-  return null
+    );
+  return null;
 }
 
 function Title({
   section,
   onBand = false,
 }: {
-  section: Section
-  onBand?: boolean
+  section: Section;
+  onBand?: boolean;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -260,11 +260,11 @@ function Title({
         </Badge>
       ) : null}
     </div>
-  )
+  );
 }
 
 function TitleRowTake() {
-  const { on, set } = useToggles()
+  const { on, set } = useToggles();
   return (
     <div className="flex flex-col gap-4">
       {SECTIONS.map((section) => (
@@ -288,11 +288,11 @@ function TitleRowTake() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 function BandTake() {
-  const { on, set } = useToggles()
+  const { on, set } = useToggles();
   return (
     <div className="flex flex-col gap-4">
       {SECTIONS.map((section) => (
@@ -314,11 +314,11 @@ function BandTake() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 function SideColumnTake() {
-  const { on, set } = useToggles()
+  const { on, set } = useToggles();
   return (
     <Card>
       <CardContent className="flex flex-col gap-6">
@@ -347,11 +347,11 @@ function SideColumnTake() {
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function SummaryTake() {
-  const { on, set } = useToggles()
+  const { on, set } = useToggles();
   return (
     <div className="flex flex-col gap-3">
       {SECTIONS.map((section, index) => (
@@ -408,7 +408,7 @@ function SummaryTake() {
         </Collapsible>
       ))}
     </div>
-  )
+  );
 }
 
 const TAKES = [
@@ -416,10 +416,10 @@ const TAKES = [
   { id: "band", label: "Band", View: BandTake },
   { id: "side-column", label: "Side column", View: SideColumnTake },
   { id: "summary", label: "Summary", View: SummaryTake },
-]
+];
 
 export function SectionCardPreview() {
-  const [take, setTake] = React.useState("title-row")
+  const [take, setTake] = React.useState("title-row");
 
   return (
     <SecondaryTabs items={TAKES} onValueChange={setTake} value={take}>
@@ -432,5 +432,5 @@ export function SectionCardPreview() {
         </TabsContent>
       ))}
     </SecondaryTabs>
-  )
+  );
 }

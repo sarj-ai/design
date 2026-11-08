@@ -5,7 +5,7 @@ import {
   jsxName,
   textOf,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
 const DESTROYING = new Set([
   "delete",
@@ -26,7 +26,7 @@ const DESTROYING = new Set([
   "leave",
   "end",
   "cancel",
-])
+]);
 
 const destructiveVariant = {
   meta: {
@@ -45,36 +45,36 @@ const destructiveVariant = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const opening = element.openingElement
-        const name = imports.ui(jsxName(opening))
-        if (name !== "Button" && name !== "AlertDialogAction") return
-        if (attrString(getAttr(opening, "variant")) !== "destructive") return
+        const opening = element.openingElement;
+        const name = imports.ui(jsxName(opening));
+        if (name !== "Button" && name !== "AlertDialogAction") return;
+        if (attrString(getAttr(opening, "variant")) !== "destructive") return;
 
         for (const ancestor of jsxAncestors(element)) {
           if (imports.ui(jsxName(ancestor.openingElement)) === "TableCell") {
-            context.report({ node: opening, messageId: "inRow" })
-            return
+            context.report({ node: opening, messageId: "inRow" });
+            return;
           }
         }
 
-        const { text, dynamic } = textOf(element)
-        if (!text || dynamic) return
-        const verb = text.toLowerCase().split(/\s+/)[0]
+        const { text, dynamic } = textOf(element);
+        if (!text || dynamic) return;
+        const verb = text.toLowerCase().split(/\s+/)[0];
         if (!DESTROYING.has(verb)) {
           context.report({
             node: opening,
             messageId: "notDestroying",
             data: { label: text },
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default destructiveVariant
+export default destructiveVariant;

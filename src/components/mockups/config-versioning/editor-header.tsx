@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { LiveSwitch } from "@/components/shared/live-switch"
+} from "@/components/ui/dropdown-menu";
+import { LiveSwitch } from "@/components/shared/live-switch";
 import {
   HistoryIcon,
   MoreActionsIcon,
   RunScenarioIcon,
-} from "@/components/mockups/config-versioning/icons"
-import type { Subject } from "@/lib/mockups/config-versioning-data"
+} from "@/components/mockups/config-versioning/icons";
+import type { Subject } from "@/lib/mockups/config-versioning-data";
 
 export function EditorHeader({
   subject,
@@ -23,16 +23,16 @@ export function EditorHeader({
   onOpenHistory,
   onToggleLive,
 }: {
-  subject: Subject
+  subject: Subject;
   /** Unused; kept because DES-204's editor still passes it. */
-  base?: number
-  canEdit: boolean
+  base?: number;
+  canEdit: boolean;
   /** Permission to toggle Live. Defaults to `canEdit`. */
-  canToggle?: boolean
-  onOpenHistory: () => void
-  onToggleLive: (on: boolean) => void
+  canToggle?: boolean;
+  onOpenHistory: () => void;
+  onToggleLive: (on: boolean) => void;
 }) {
-  const [applied] = subject.log
+  const [applied] = subject.log;
 
   return (
     <header className="flex items-start justify-between gap-6">
@@ -77,5 +77,5 @@ export function EditorHeader({
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

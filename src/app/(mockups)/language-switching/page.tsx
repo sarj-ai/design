@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { PersonaCard } from "@/components/mockups/language-switching/persona-card"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Button } from "@/components/ui/button"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { PersonaCard } from "@/components/mockups/language-switching/persona-card";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   LANGUAGE_NAMES,
   PRESETS,
   type LanguageCode,
   type Preset,
-} from "@/lib/mockups/language-switching-data"
+} from "@/lib/mockups/language-switching-data";
 
 export default function LanguageSwitchingPage() {
-  const [presetId, setPresetId] = React.useState(PRESETS[0].id)
-  const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0]
+  const [presetId, setPresetId] = React.useState(PRESETS[0].id);
+  const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
 
   return (
     <MockupShell
@@ -25,7 +25,7 @@ export default function LanguageSwitchingPage() {
       actions={
         <ToggleGroup
           onValueChange={(next) => {
-            if (next) setPresetId(next)
+            if (next) setPresetId(next);
           }}
           size="sm"
           type="single"
@@ -48,33 +48,33 @@ export default function LanguageSwitchingPage() {
         <ScenarioPersona key={preset.id} preset={preset} />
       </AppShell>
     </MockupShell>
-  )
+  );
 }
 
 function ScenarioPersona({ preset }: { preset: Preset }) {
-  const [config, setConfig] = React.useState(preset.draft ?? preset.config)
-  const [languages, setLanguages] = React.useState(preset.languages)
+  const [config, setConfig] = React.useState(preset.draft ?? preset.config);
+  const [languages, setLanguages] = React.useState(preset.languages);
   /* Empty until a save fails; from then on the check runs on every change. */
-  const [checked, setChecked] = React.useState(false)
+  const [checked, setChecked] = React.useState(false);
 
   const missing = config.switchVoice
     ? languages
         .map((l) => l.code)
         .filter((code) => code !== preset.start && !config.target[code])
-    : []
-  const invalid = new Set<LanguageCode>(checked ? missing : [])
+    : [];
+  const invalid = new Set<LanguageCode>(checked ? missing : []);
 
   const save = () => {
     if (missing.length > 0) {
-      setChecked(true)
+      setChecked(true);
       toast.error(
         `Choose a persona for ${missing.map((c) => LANGUAGE_NAMES[c]).join(" and ")} to save`,
-      )
-      return
+      );
+      return;
     }
-    setChecked(false)
-    toast.success(`${preset.scenario} saved`)
-  }
+    setChecked(false);
+    toast.success(`${preset.scenario} saved`);
+  };
 
   return (
     <div className="flex flex-1 flex-col p-3 lg:p-4">
@@ -90,5 +90,5 @@ function ScenarioPersona({ preset }: { preset: Preset }) {
         />
       </div>
     </div>
-  )
+  );
 }

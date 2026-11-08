@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AlertDialog,
@@ -11,22 +11,22 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
-import { Card } from "@/components/ui/card"
+} from "@/components/shared/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
+import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
@@ -34,20 +34,20 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -55,19 +55,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   GENDERS,
   LANGUAGES,
   PERSONAS,
   voiceById,
   type Persona,
-} from "@/lib/mockups/personas-depth-data"
+} from "@/lib/mockups/personas-depth-data";
 import {
   AddPersonaIcon,
   DeleteIcon,
@@ -81,45 +81,45 @@ import {
   ScenariosIcon,
   SearchIcon,
   StopPreviewIcon,
-} from "@/components/mockups/personas-depth/icons"
+} from "@/components/mockups/personas-depth/icons";
 import {
   PersonaDialog,
   type PersonaDraft,
-} from "@/components/mockups/personas-depth/persona-dialog"
-import { PersonaWizard } from "@/components/mockups/personas-depth/persona-wizard"
-import { ScenarioAssignmentDialog } from "@/components/mockups/personas-depth/scenario-assignment-dialog"
+} from "@/components/mockups/personas-depth/persona-dialog";
+import { PersonaWizard } from "@/components/mockups/personas-depth/persona-wizard";
+import { ScenarioAssignmentDialog } from "@/components/mockups/personas-depth/scenario-assignment-dialog";
 
-export type PreviewState = "data" | "loading" | "empty" | "error"
+export type PreviewState = "data" | "loading" | "empty" | "error";
 
-type GroupBy = "none" | "language" | "gender"
+type GroupBy = "none" | "language" | "gender";
 
-const COLUMN_COUNT = 6
+const COLUMN_COUNT = 6;
 
 export function PersonasIndex({ state }: { state: PreviewState }) {
-  const [personas, setPersonas] = React.useState<Persona[]>(PERSONAS)
-  const [search, setSearch] = React.useState("")
-  const [languageFilter, setLanguageFilter] = React.useState("all")
-  const [genderFilter, setGenderFilter] = React.useState("all")
-  const [groupBy, setGroupBy] = React.useState<GroupBy>("none")
-  const [playingId, setPlayingId] = React.useState<string | null>(null)
+  const [personas, setPersonas] = React.useState<Persona[]>(PERSONAS);
+  const [search, setSearch] = React.useState("");
+  const [languageFilter, setLanguageFilter] = React.useState("all");
+  const [genderFilter, setGenderFilter] = React.useState("all");
+  const [groupBy, setGroupBy] = React.useState<GroupBy>("none");
+  const [playingId, setPlayingId] = React.useState<string | null>(null);
 
-  const [wizardOpen, setWizardOpen] = React.useState(false)
-  const [editorOpen, setEditorOpen] = React.useState(false)
-  const [editing, setEditing] = React.useState<Persona | null>(null)
-  const [scenariosFor, setScenariosFor] = React.useState<Persona | null>(null)
-  const [deleting, setDeleting] = React.useState<Persona | null>(null)
+  const [wizardOpen, setWizardOpen] = React.useState(false);
+  const [editorOpen, setEditorOpen] = React.useState(false);
+  const [editing, setEditing] = React.useState<Persona | null>(null);
+  const [scenariosFor, setScenariosFor] = React.useState<Persona | null>(null);
+  const [deleting, setDeleting] = React.useState<Persona | null>(null);
 
   const filtered = personas.filter((persona) => {
     if (languageFilter !== "all" && persona.language !== languageFilter)
-      return false
-    if (genderFilter !== "all" && persona.gender !== genderFilter) return false
+      return false;
+    if (genderFilter !== "all" && persona.gender !== genderFilter) return false;
     if (search && !persona.name.toLowerCase().includes(search.toLowerCase()))
-      return false
-    return true
-  })
+      return false;
+    return true;
+  });
 
   const filtersActive =
-    search !== "" || languageFilter !== "all" || genderFilter !== "all"
+    search !== "" || languageFilter !== "all" || genderFilter !== "all";
 
   const groups: { label: string | null; rows: Persona[] }[] =
     groupBy === "none"
@@ -133,15 +133,15 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
                 : persona.gender === key,
             ),
           }))
-          .filter((group) => group.rows.length > 0)
+          .filter((group) => group.rows.length > 0);
 
   function openCreate() {
-    setWizardOpen(true)
+    setWizardOpen(true);
   }
 
   function openEdit(persona: Persona) {
-    setEditing(persona)
-    setEditorOpen(true)
+    setEditing(persona);
+    setEditorOpen(true);
   }
 
   function createDraft(draft: PersonaDraft) {
@@ -154,7 +154,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
         scenarioIds: [],
         createdAt: "Aug 16, 2026",
       },
-    ])
+    ]);
   }
 
   function submitDraft(draft: PersonaDraft) {
@@ -163,9 +163,9 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
         previous.map((persona) =>
           persona.id === editing.id ? { ...persona, ...draft } : persona,
         ),
-      )
+      );
     } else {
-      createDraft(draft)
+      createDraft(draft);
     }
   }
 
@@ -176,7 +176,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
           ? { ...persona, isDefault: persona.id === target.id }
           : persona,
       ),
-    )
+    );
   }
 
   function changeScenarios(personaId: string, scenarioIds: string[]) {
@@ -184,20 +184,20 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
       previous.map((persona) =>
         persona.id === personaId ? { ...persona, scenarioIds } : persona,
       ),
-    )
+    );
     setScenariosFor((previous) =>
       previous && previous.id === personaId
         ? { ...previous, scenarioIds }
         : previous,
-    )
+    );
   }
 
   function confirmDelete() {
-    if (!deleting) return
+    if (!deleting) return;
     setPersonas((previous) =>
       previous.filter((persona) => persona.id !== deleting.id),
-    )
-    setDeleting(null)
+    );
+    setDeleting(null);
   }
 
   if (state === "error") {
@@ -223,7 +223,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
           </Button>
         </EmptyContent>
       </Empty>
-    )
+    );
   }
 
   if (state === "empty") {
@@ -255,7 +255,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
           onSubmit={createDraft}
         />
       </>
-    )
+    );
   }
 
   return (
@@ -325,9 +325,9 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
               variant="ghost"
               size="sm"
               onClick={() => {
-                setSearch("")
-                setLanguageFilter("all")
-                setGenderFilter("all")
+                setSearch("");
+                setLanguageFilter("all");
+                setGenderFilter("all");
               }}
             >
               Clear
@@ -406,9 +406,9 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            setSearch("")
-                            setLanguageFilter("all")
-                            setGenderFilter("all")
+                            setSearch("");
+                            setLanguageFilter("all");
+                            setGenderFilter("all");
                           }}
                         >
                           Clear filters
@@ -431,9 +431,9 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
                       ) : null}
 
                       {group.rows.map((persona) => {
-                        const voice = voiceById(persona.voiceId)
-                        const playing = playingId === persona.voiceId
-                        const scenarioCount = persona.scenarioIds.length
+                        const voice = voiceById(persona.voiceId);
+                        const playing = playingId === persona.voiceId;
+                        const scenarioCount = persona.scenarioIds.length;
 
                         return (
                           <TableRow
@@ -624,7 +624,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
                               </div>
                             </TableCell>
                           </TableRow>
-                        )
+                        );
                       })}
                     </React.Fragment>
                   ))
@@ -651,7 +651,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
       <ScenarioAssignmentDialog
         persona={scenariosFor}
         onOpenChange={(open) => {
-          if (!open) setScenariosFor(null)
+          if (!open) setScenariosFor(null);
         }}
         onChangeScenarios={changeScenarios}
       />
@@ -659,7 +659,7 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
       <AlertDialog
         open={deleting !== null}
         onOpenChange={(open) => {
-          if (!open) setDeleting(null)
+          if (!open) setDeleting(null);
         }}
       >
         <AlertDialogContent>
@@ -685,5 +685,5 @@ export function PersonasIndex({ state }: { state: PreviewState }) {
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,23 +10,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { NOW, type ConnectedApp } from "@/lib/mockups/connected-apps-data"
+} from "@/components/ui/dialog";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { NOW, type ConnectedApp } from "@/lib/mockups/connected-apps-data";
 
 export function CreateAppDialog({
   onCreate,
   onOpenChange,
   open,
 }: {
-  onCreate: (app: ConnectedApp) => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  onCreate: (app: ConnectedApp) => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
-  const [name, setName] = React.useState("")
-  const [description, setDescription] = React.useState("")
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("");
 
   function create() {
     onCreate({
@@ -35,10 +35,10 @@ export function CreateAppDialog({
       description: description.trim(),
       id: `app-${Date.now()}`,
       name: name.trim(),
-    })
-    setName("")
-    setDescription("")
-    onOpenChange(false)
+    });
+    setName("");
+    setDescription("");
+    onOpenChange(false);
   }
 
   return (
@@ -90,5 +90,5 @@ export function CreateAppDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

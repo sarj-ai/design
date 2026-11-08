@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { FilterBar, SelectFilter } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/components/ui/input-group";
+import { FilterBar, SelectFilter } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   ExportIcon,
   RefreshIcon,
   SearchIcon,
-} from "@/components/mockups/review-tracking/icons"
-import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
-import { TOTAL_CALLS } from "@/lib/mockups/review-tracking-data"
+} from "@/components/mockups/review-tracking/icons";
+import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data";
+import { TOTAL_CALLS } from "@/lib/mockups/review-tracking-data";
 
-type Slot = React.ReactNode | ((rows: CallRow[]) => React.ReactNode)
+type Slot = React.ReactNode | ((rows: CallRow[]) => React.ReactNode);
 
 function render(slot: Slot, rows: CallRow[]) {
-  return typeof slot === "function" ? slot(rows) : slot
+  return typeof slot === "function" ? slot(rows) : slot;
 }
 
 function options(values: string[], label = (value: string) => value) {
   return Array.from(new Set(values)).map((value) => ({
     value,
     label: label(value),
-  }))
+  }));
 }
 
 function sentence(value: string) {
-  const words = value.replace(/_/g, " ")
-  return words.charAt(0).toUpperCase() + words.slice(1)
+  const words = value.replace(/_/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 export function ConversationsFrame({
@@ -48,34 +48,34 @@ export function ConversationsFrame({
   narrow,
   children,
 }: {
-  calls: CallRow[]
+  calls: CallRow[];
   /** Buttons added to the search row before Export, given the rows on screen. */
-  searchExtras?: Slot
-  filterExtras?: React.ReactNode
-  extraActive?: number
-  onClearExtras?: () => void
+  searchExtras?: Slot;
+  filterExtras?: React.ReactNode;
+  extraActive?: number;
+  onClearExtras?: () => void;
   /** A line between the filters and the table. */
-  above?: Slot
-  narrow?: (rows: CallRow[]) => CallRow[]
-  children: (rows: CallRow[]) => React.ReactNode
+  above?: Slot;
+  narrow?: (rows: CallRow[]) => CallRow[];
+  children: (rows: CallRow[]) => React.ReactNode;
 }) {
-  const [statuses, setStatuses] = React.useState<string[]>([])
-  const [outcomes, setOutcomes] = React.useState<string[]>([])
-  const [scenarios, setScenarios] = React.useState<string[]>([])
-  const [pageSize, setPageSize] = React.useState(25)
+  const [statuses, setStatuses] = React.useState<string[]>([]);
+  const [outcomes, setOutcomes] = React.useState<string[]>([]);
+  const [scenarios, setScenarios] = React.useState<string[]>([]);
+  const [pageSize, setPageSize] = React.useState(25);
 
   const filtered = calls.filter(
     (call) =>
       (!statuses.length || statuses.includes(call.status)) &&
       (!outcomes.length || outcomes.includes(call.outcome)) &&
       (!scenarios.length || scenarios.includes(call.scenario)),
-  )
-  const rows = narrow ? narrow(filtered) : filtered
+  );
+  const rows = narrow ? narrow(filtered) : filtered;
   const activeCount =
     [statuses.length, outcomes.length, scenarios.length].filter(Boolean)
-      .length + extraActive
+      .length + extraActive;
   const total =
-    activeCount || rows.length !== calls.length ? rows.length : TOTAL_CALLS
+    activeCount || rows.length !== calls.length ? rows.length : TOTAL_CALLS;
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-3 lg:p-4">
@@ -105,10 +105,10 @@ export function ConversationsFrame({
         <FilterBar
           activeCount={activeCount}
           onClearAll={() => {
-            setStatuses([])
-            setOutcomes([])
-            setScenarios([])
-            onClearExtras?.()
+            setStatuses([]);
+            setOutcomes([]);
+            setScenarios([]);
+            onClearExtras?.();
           }}
         >
           <SelectFilter
@@ -156,5 +156,5 @@ export function ConversationsFrame({
         total={total}
       />
     </div>
-  )
+  );
 }

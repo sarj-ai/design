@@ -2,16 +2,16 @@ import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Button } from "@/components/ui/button"
+} from "@/components/design-system/reference-table";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { BUTTON_ROLES } from "@/lib/design-system/data"
+} from "@/components/ui/card";
+import { BUTTON_ROLES } from "@/lib/design-system/data";
 
 export function ButtonRoles() {
   return (
@@ -44,5 +44,5 @@ export function ButtonRoles() {
         />
       </CardContent>
     </Card>
-  )
+  );
 }

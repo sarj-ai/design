@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -9,9 +9,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { Permission, Role } from "@/lib/mockups/roles-permissions-data"
+} from "@/components/ui/alert-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Permission, Role } from "@/lib/mockups/roles-permissions-data";
 
 export function SaveChangesDialog({
   granted,
@@ -21,14 +21,14 @@ export function SaveChangesDialog({
   revoked,
   role,
 }: {
-  granted: Permission[]
-  onConfirm: () => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
-  revoked: Permission[]
-  role: Role | undefined
+  granted: Permission[];
+  onConfirm: () => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  revoked: Permission[];
+  role: Role | undefined;
 }) {
-  if (!role) return null
+  if (!role) return null;
 
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
@@ -61,15 +61,15 @@ export function SaveChangesDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
 
 function ChangeList({
   heading,
   permissions,
 }: {
-  heading: string
-  permissions: Permission[]
+  heading: string;
+  permissions: Permission[];
 }) {
   return (
     <div className="flex flex-col gap-1">
@@ -80,5 +80,5 @@ function ChangeList({
         ))}
       </ul>
     </div>
-  )
+  );
 }

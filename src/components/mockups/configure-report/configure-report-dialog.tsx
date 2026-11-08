@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,14 +11,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   COLLECTED_OPTIONS,
   INITIAL_COLLECTED,
@@ -28,32 +28,32 @@ import {
   TEMPLATES,
   VARIABLE_OPTIONS,
   type Column,
-} from "@/lib/mockups/configure-report-data"
-import { ColumnChips } from "@/components/mockups/configure-report/column-chips"
-import { ColumnPicker } from "@/components/mockups/configure-report/column-picker"
-import { BackgroundTaskIcon } from "@/components/mockups/configure-report/icons"
+} from "@/lib/mockups/configure-report-data";
+import { ColumnChips } from "@/components/mockups/configure-report/column-chips";
+import { ColumnPicker } from "@/components/mockups/configure-report/column-picker";
+import { BackgroundTaskIcon } from "@/components/mockups/configure-report/icons";
 
 export function ConfigureReportDialog({
   onOpenChange,
   open,
 }: {
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
-  const [template, setTemplate] = React.useState("default")
-  const [standard, setStandard] = React.useState<Column[]>(INITIAL_STANDARD)
-  const [variables, setVariables] = React.useState<Column[]>(INITIAL_VARIABLES)
-  const [collected, setCollected] = React.useState<Column[]>(INITIAL_COLLECTED)
+  const [template, setTemplate] = React.useState("default");
+  const [standard, setStandard] = React.useState<Column[]>(INITIAL_STANDARD);
+  const [variables, setVariables] = React.useState<Column[]>(INITIAL_VARIABLES);
+  const [collected, setCollected] = React.useState<Column[]>(INITIAL_COLLECTED);
 
   const drop = (id: string) => (columns: Column[]) =>
-    columns.filter((column) => column.id !== id)
+    columns.filter((column) => column.id !== id);
 
   const reorder = (from: number, to: number) => (columns: Column[]) => {
-    const next = [...columns]
-    const [moved] = next.splice(from, 1)
-    next.splice(to, 0, moved)
-    return next
-  }
+    const next = [...columns];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    return next;
+  };
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -190,5 +190,5 @@ export function ConfigureReportDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

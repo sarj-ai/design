@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -19,16 +19,16 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from "@/components/ui/item";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   DeleteVoiceIcon,
   RecordIcon,
-} from "@/components/mockups/voice-cloning/icons"
-import { DeleteVoiceConfirm } from "@/components/mockups/voice-cloning/voice-library"
-import { PERSONA, type Voice } from "@/lib/mockups/voice-cloning-data"
-import { cn } from "@/lib/utils"
+} from "@/components/mockups/voice-cloning/icons";
+import { DeleteVoiceConfirm } from "@/components/mockups/voice-cloning/voice-library";
+import { PERSONA, type Voice } from "@/lib/mockups/voice-cloning-data";
+import { cn } from "@/lib/utils";
 
 export function PersonaVoice({
   voices,
@@ -37,19 +37,19 @@ export function PersonaVoice({
   onClone,
   onDelete,
 }: {
-  voices: Voice[]
-  voiceId: string
-  onVoiceChange: (id: string) => void
-  onClone: () => void
-  onDelete: (voice: Voice) => void
+  voices: Voice[];
+  voiceId: string;
+  onVoiceChange: (id: string) => void;
+  onClone: () => void;
+  onDelete: (voice: Voice) => void;
 }) {
-  const [deleting, setDeleting] = React.useState<Voice | null>(null)
+  const [deleting, setDeleting] = React.useState<Voice | null>(null);
   const offered = voices.filter(
     (voice) =>
       voice.language === PERSONA.language &&
       voice.gender === PERSONA.gender &&
       voice.status !== "inactive",
-  )
+  );
   const groups = [
     {
       label: "Your organization",
@@ -59,7 +59,7 @@ export function PersonaVoice({
       label: "Sarj library",
       voices: offered.filter((voice) => voice.scope === "catalog"),
     },
-  ].filter((group) => group.voices.length > 0)
+  ].filter((group) => group.voices.length > 0);
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-8">
@@ -110,16 +110,16 @@ export function PersonaVoice({
 
       <DeleteVoiceConfirm
         onConfirm={(voice) => {
-          onDelete(voice)
-          toast(`${voice.name} deleted`)
+          onDelete(voice);
+          toast(`${voice.name} deleted`);
         }}
         onOpenChange={(open) => {
-          if (!open) setDeleting(null)
+          if (!open) setDeleting(null);
         }}
         voice={deleting}
       />
     </main>
-  )
+  );
 }
 
 /** The label is stretched over the card; Delete sits above it so deleting never selects. */
@@ -128,9 +128,9 @@ function VoiceCard({
   selected,
   onDelete,
 }: {
-  voice: Voice
-  selected: boolean
-  onDelete: (() => void) | null
+  voice: Voice;
+  selected: boolean;
+  onDelete: (() => void) | null;
 }) {
   return (
     <Item
@@ -169,5 +169,5 @@ function VoiceCard({
         </ItemActions>
       ) : null}
     </Item>
-  )
+  );
 }

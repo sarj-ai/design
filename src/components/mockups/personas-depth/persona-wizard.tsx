@@ -1,38 +1,37 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import { motion, useReducedMotion } from "motion/react";
 
-import { motion, useReducedMotion } from "motion/react"
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/item";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   voiceById,
   type PersonaGender,
   type PersonaLanguage,
-} from "@/lib/mockups/personas-depth-data"
-import type { PersonaDraft } from "@/components/mockups/personas-depth/persona-dialog"
-import { VoicePicker } from "@/components/mockups/personas-depth/voice-picker"
+} from "@/lib/mockups/personas-depth-data";
+import type { PersonaDraft } from "@/components/mockups/personas-depth/persona-dialog";
+import { VoicePicker } from "@/components/mockups/personas-depth/voice-picker";
 
 const STEP_SPRING = {
   type: "spring",
   visualDuration: 0.26,
   bounce: 0.14,
-} as const
+} as const;
 
 const STEPS = [
   "name",
@@ -41,28 +40,28 @@ const STEPS = [
   "voice",
   "prompt",
   "review",
-] as const
-type Step = (typeof STEPS)[number]
+] as const;
+type Step = (typeof STEPS)[number];
 
 const LANGUAGE_OPTIONS: { value: PersonaLanguage; hint: string }[] = [
   { value: "Arabic", hint: "العربية" },
   { value: "English", hint: "English" },
   { value: "Urdu", hint: "اردو" },
-]
+];
 
 const GENDER_OPTIONS: { value: PersonaGender; hint: string }[] = [
   { value: "Female", hint: "Female voices only" },
   { value: "Male", hint: "Male voices only" },
-]
+];
 
 export function PersonaWizard({
   open,
   onOpenChange,
   onSubmit,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (draft: PersonaDraft) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (draft: PersonaDraft) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -74,43 +73,43 @@ export function PersonaWizard({
         <WizardBody onSubmit={onSubmit} onClose={() => onOpenChange(false)} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function WizardBody({
   onSubmit,
   onClose,
 }: {
-  onSubmit: (draft: PersonaDraft) => void
-  onClose: () => void
+  onSubmit: (draft: PersonaDraft) => void;
+  onClose: () => void;
 }) {
-  const [stepIndex, setStepIndex] = React.useState(0)
-  const [name, setName] = React.useState("")
-  const [language, setLanguage] = React.useState<PersonaLanguage>("Arabic")
-  const [gender, setGender] = React.useState<PersonaGender>("Female")
-  const [voiceId, setVoiceId] = React.useState("")
-  const [prompt, setPrompt] = React.useState("")
+  const [stepIndex, setStepIndex] = React.useState(0);
+  const [name, setName] = React.useState("");
+  const [language, setLanguage] = React.useState<PersonaLanguage>("Arabic");
+  const [gender, setGender] = React.useState<PersonaGender>("Female");
+  const [voiceId, setVoiceId] = React.useState("");
+  const [prompt, setPrompt] = React.useState("");
 
-  const step: Step = STEPS[stepIndex]
-  const voice = voiceById(voiceId)
+  const step: Step = STEPS[stepIndex];
+  const voice = voiceById(voiceId);
 
   function next() {
-    setStepIndex((index) => Math.min(index + 1, STEPS.length - 1))
+    setStepIndex((index) => Math.min(index + 1, STEPS.length - 1));
   }
 
   function back() {
-    setStepIndex((index) => Math.max(index - 1, 0))
+    setStepIndex((index) => Math.max(index - 1, 0));
   }
 
   /** The delay lets the picked card paint its selected state before the step flips. */
   function pickAndAdvance(apply: () => void) {
-    apply()
-    window.setTimeout(next, 120)
+    apply();
+    window.setTimeout(next, 120);
   }
 
   function create() {
-    onSubmit({ name: name.trim(), language, gender, voiceId, prompt })
-    onClose()
+    onSubmit({ name: name.trim(), language, gender, voiceId, prompt });
+    onClose();
   }
 
   const heading: Record<Step, { title: string; hint: string }> = {
@@ -138,7 +137,7 @@ function WizardBody({
       title: "Ready to create",
       hint: "Conversation behavior starts from the language defaults — tune it later from Edit.",
     },
-  }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -185,8 +184,8 @@ function WizardBody({
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && name.trim()) {
-                event.preventDefault()
-                next()
+                event.preventDefault();
+                next();
               }
             }}
             placeholder="Aisha — Yelo Support"
@@ -204,8 +203,8 @@ function WizardBody({
                 selected={language === option.value}
                 onPick={() =>
                   pickAndAdvance(() => {
-                    if (option.value !== language) setVoiceId("")
-                    setLanguage(option.value)
+                    if (option.value !== language) setVoiceId("");
+                    setLanguage(option.value);
                   })
                 }
               />
@@ -223,8 +222,8 @@ function WizardBody({
                 selected={gender === option.value}
                 onPick={() =>
                   pickAndAdvance(() => {
-                    if (option.value !== gender) setVoiceId("")
-                    setGender(option.value)
+                    if (option.value !== gender) setVoiceId("");
+                    setGender(option.value);
                   })
                 }
               />
@@ -249,8 +248,8 @@ function WizardBody({
             onChange={(event) => setPrompt(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault()
-                next()
+                event.preventDefault();
+                next();
               }
             }}
             placeholder="Define the agent's identity, personality, and tone. Shift+Enter for a new line."
@@ -296,26 +295,26 @@ function WizardBody({
         ) : null}
       </div>
     </div>
-  )
+  );
 }
 
 /** Clips only while the height moves: a permanent overflow-hidden cuts off focus rings. */
 function StepBody({ children }: { children: React.ReactNode }) {
-  const reduce = useReducedMotion()
-  const innerRef = React.useRef<HTMLDivElement>(null)
-  const [height, setHeight] = React.useState<"auto" | number>("auto")
-  const [morphing, setMorphing] = React.useState(false)
+  const reduce = useReducedMotion();
+  const innerRef = React.useRef<HTMLDivElement>(null);
+  const [height, setHeight] = React.useState<"auto" | number>("auto");
+  const [morphing, setMorphing] = React.useState(false);
 
   React.useLayoutEffect(() => {
-    const inner = innerRef.current
-    if (!inner) return
+    const inner = innerRef.current;
+    if (!inner) return;
 
     const observer = new ResizeObserver(([entry]) => {
-      setHeight(entry.contentRect.height)
-    })
-    observer.observe(inner)
-    return () => observer.disconnect()
-  }, [])
+      setHeight(entry.contentRect.height);
+    });
+    observer.observe(inner);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <motion.div
@@ -330,7 +329,7 @@ function StepBody({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </motion.div>
-  )
+  );
 }
 
 function OptionCard({
@@ -339,10 +338,10 @@ function OptionCard({
   selected,
   onPick,
 }: {
-  title: string
-  hint: string
-  selected: boolean
-  onPick: () => void
+  title: string;
+  hint: string;
+  selected: boolean;
+  onPick: () => void;
 }) {
   return (
     <Item
@@ -362,7 +361,7 @@ function OptionCard({
         </ItemContent>
       </button>
     </Item>
-  )
+  );
 }
 
 function ReviewRow({
@@ -370,9 +369,9 @@ function ReviewRow({
   value,
   muted = false,
 }: {
-  label: string
-  value: string
-  muted?: boolean
+  label: string;
+  value: string;
+  muted?: boolean;
 }) {
   return (
     <div className="flex items-start gap-4">
@@ -388,5 +387,5 @@ function ReviewRow({
         {value}
       </span>
     </div>
-  )
+  );
 }

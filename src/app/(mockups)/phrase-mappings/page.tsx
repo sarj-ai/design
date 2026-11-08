@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Button } from "@/components/ui/button"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   GLOBAL_VOICE,
   PERSONA,
@@ -21,48 +21,48 @@ import {
   SAMPLE_CONFIG,
   type FillerConfig,
   type SampleLanguage,
-} from "@/lib/mockups/phrase-mappings-data"
-import { BackchannelSettings } from "@/components/mockups/phrase-mappings/backchannel-settings"
-import { FillerWordsDrawer } from "@/components/mockups/phrase-mappings/filler-words-drawer"
+} from "@/lib/mockups/phrase-mappings-data";
+import { BackchannelSettings } from "@/components/mockups/phrase-mappings/backchannel-settings";
+import { FillerWordsDrawer } from "@/components/mockups/phrase-mappings/filler-words-drawer";
 
-type Scope = "global" | "persona"
+type Scope = "global" | "persona";
 
 export default function PhraseMappingsPage() {
-  const [scope, setScope] = React.useState<Scope>("persona")
+  const [scope, setScope] = React.useState<Scope>("persona");
 
-  const [language, setLanguage] = React.useState<SampleLanguage>("ar")
+  const [language, setLanguage] = React.useState<SampleLanguage>("ar");
 
   const [globals, setGlobals] = React.useState<FillerConfig>(
     SAMPLE_CONFIG[language],
-  )
+  );
 
   // `null` while the persona inherits; an override replaces the whole set.
   const [override, setOverride] = React.useState<FillerConfig | null>(() =>
     personaOverride(SAMPLE_CONFIG[language]),
-  )
+  );
 
-  const [fillerWords, setFillerWords] = React.useState(true)
+  const [fillerWords, setFillerWords] = React.useState(true);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(true)
+  const [drawerOpen, setDrawerOpen] = React.useState(true);
 
-  const isPersona = scope === "persona"
-  const config = isPersona && override ? override : globals
+  const isPersona = scope === "persona";
+  const config = isPersona && override ? override : globals;
 
   function switchLanguage(next: SampleLanguage) {
-    setLanguage(next)
-    setGlobals(SAMPLE_CONFIG[next])
+    setLanguage(next);
+    setGlobals(SAMPLE_CONFIG[next]);
     setOverride((current) =>
       current === null ? null : personaOverride(SAMPLE_CONFIG[next]),
-    )
+    );
   }
 
   const setConfig = (next: FillerConfig) => {
     if (isPersona && override) {
-      setOverride(next)
-      return
+      setOverride(next);
+      return;
     }
-    setGlobals(next)
-  }
+    setGlobals(next);
+  };
 
   return (
     <MockupShell
@@ -73,7 +73,7 @@ export default function PhraseMappingsPage() {
           <span className="text-xs text-muted-foreground">Scope</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (value) setScope(value as Scope)
+              if (value) setScope(value as Scope);
             }}
             size="sm"
             type="single"
@@ -91,7 +91,7 @@ export default function PhraseMappingsPage() {
           <span className="text-xs text-muted-foreground">Sample</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (value) switchLanguage(value as SampleLanguage)
+              if (value) switchLanguage(value as SampleLanguage);
             }}
             size="sm"
             type="single"
@@ -107,8 +107,8 @@ export default function PhraseMappingsPage() {
       <AppShell
         active={isPersona ? "Personas" : "Global Settings"}
         onNavigate={(title) => {
-          if (title === "Personas") setScope("persona")
-          if (title === "Global Settings") setScope("global")
+          if (title === "Personas") setScope("persona");
+          if (title === "Global Settings") setScope("global");
         }}
       >
         <main className="mx-auto flex w-full max-w-350 flex-col gap-6 p-3 lg:p-4">
@@ -143,8 +143,8 @@ export default function PhraseMappingsPage() {
                 fillerWords={fillerWords}
                 onConfigure={() => setDrawerOpen(true)}
                 onFillerWordsChange={(enabled) => {
-                  setFillerWords(enabled)
-                  if (!enabled) setDrawerOpen(false)
+                  setFillerWords(enabled);
+                  if (!enabled) setDrawerOpen(false);
                 }}
               />
             </CardContent>
@@ -164,5 +164,5 @@ export default function PhraseMappingsPage() {
         voice={isPersona ? PERSONA.voice : GLOBAL_VOICE}
       />
     </MockupShell>
-  )
+  );
 }

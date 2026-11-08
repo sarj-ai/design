@@ -1,6 +1,6 @@
-import { jsxDescendants, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { jsxDescendants, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
-const BUTTONS = new Set(["Button"])
+const BUTTONS = new Set(["Button"]);
 
 const emptyState = {
   meta: {
@@ -18,40 +18,40 @@ const emptyState = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const name = imports.ui(jsxName(element.openingElement))
+        const name = imports.ui(jsxName(element.openingElement));
 
         if (name === "Empty") {
           const hasTitle = [...jsxDescendants(element)].some(
             (child) =>
               imports.ui(jsxName(child.openingElement)) === "EmptyTitle",
-          )
+          );
           if (!hasTitle) {
             context.report({
               node: element.openingElement,
               messageId: "noTitle",
-            })
+            });
           }
-          return
+          return;
         }
 
-        if (name !== "EmptyContent") return
+        if (name !== "EmptyContent") return;
         const buttons = [...jsxDescendants(element)].filter((child) =>
           BUTTONS.has(imports.ui(jsxName(child.openingElement))),
-        )
+        );
         if (buttons.length > 1) {
           context.report({
             node: buttons[1].openingElement,
             messageId: "twoActions",
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default emptyState
+export default emptyState;

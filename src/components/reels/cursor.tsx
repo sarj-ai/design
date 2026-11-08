@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { FPS, interpolate } from "@/lib/reels/anim"
-import { poseAt, sinceClick, type Tour } from "@/lib/reels/cursor"
-import { useFrame } from "@/components/reels/stage"
-import { useShotScale } from "@/components/reels/shot"
+import { FPS, interpolate } from "@/lib/reels/anim";
+import { poseAt, sinceClick, type Tour } from "@/lib/reels/cursor";
+import { useFrame } from "@/components/reels/stage";
+import { useShotScale } from "@/components/reels/shot";
 
-const SIZE = 38
-const RIPPLE = { duration: 0.45, size: 98 }
+const SIZE = 38;
+const RIPPLE = { duration: 0.45, size: 98 };
 
 export function Cursor({ tour }: { tour: Tour }) {
-  const frame = useFrame()
-  const shotScale = useShotScale()
-  const seconds = frame / FPS
+  const frame = useFrame();
+  const shotScale = useShotScale();
+  const seconds = frame / FPS;
 
-  const pose = poseAt(tour, seconds)
-  const since = sinceClick(tour, seconds)
+  const pose = poseAt(tour, seconds);
+  const since = sinceClick(tour, seconds);
 
-  const counter = 1 / shotScale
+  const counter = 1 / shotScale;
 
   return (
     <div
@@ -75,5 +75,5 @@ export function Cursor({ tour }: { tour: Tour }) {
         />
       </svg>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -12,9 +12,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -22,43 +22,43 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { PageHeader } from "@/components/shared/page-header"
-import { AppShell } from "@/components/shell/app-shell"
+} from "@/components/shared/data-table";
+import { PageHeader } from "@/components/shared/page-header";
+import { AppShell } from "@/components/shell/app-shell";
 import {
   ApiKeyIcon,
   ApiReferenceIcon,
@@ -71,7 +71,7 @@ import {
   McpIcon,
   RevealIcon,
   WebhookLinkIcon,
-} from "@/components/mockups/developers/icons"
+} from "@/components/mockups/developers/icons";
 import {
   API_KEYS,
   DOCS_URL,
@@ -83,19 +83,19 @@ import {
   WEBHOOK_URL,
   type ApiKey,
   type QuickstartLanguage,
-} from "@/lib/mockups/developers-data"
+} from "@/lib/mockups/developers-data";
 
-type Tab = "overview" | "api-keys" | "webhooks" | "variables"
+type Tab = "overview" | "api-keys" | "webhooks" | "variables";
 
-const DEVELOPER_ONLY = ["API Keys", "Variables", "Webhooks", "Developer Docs"]
+const DEVELOPER_ONLY = ["API Keys", "Variables", "Webhooks", "Developer Docs"];
 
 export function DevelopersPage({
   framed = false,
 }: {
   /** Inside a design-system frame, with no mockup shell header for the sidebar to clear. */
-  framed?: boolean
+  framed?: boolean;
 }) {
-  const [tab, setTab] = React.useState<Tab>("overview")
+  const [tab, setTab] = React.useState<Tab>("overview");
 
   return (
     <AppShell
@@ -145,7 +145,7 @@ export function DevelopersPage({
         </Tabs>
       </div>
     </AppShell>
-  )
+  );
 }
 
 function Overview({ onOpenTab }: { onOpenTab: (tab: Tab) => void }) {
@@ -201,7 +201,7 @@ function Overview({ onOpenTab }: { onOpenTab: (tab: Tab) => void }) {
         </div>
       </section>
     </div>
-  )
+  );
 }
 
 function QuickLink({
@@ -211,11 +211,11 @@ function QuickLink({
   href,
   onClick,
 }: {
-  icon: React.ReactNode
-  title: string
-  detail: string
-  href?: string
-  onClick?: () => void
+  icon: React.ReactNode;
+  title: string;
+  detail: string;
+  href?: string;
+  onClick?: () => void;
 }) {
   const body = (
     <>
@@ -226,10 +226,10 @@ function QuickLink({
       </ItemContent>
       {href ? <ExternalIcon className="size-4 text-muted-foreground" /> : null}
     </>
-  )
+  );
 
   const className =
-    "text-start transition-colors duration-150 ease-out-cubic hover:bg-muted motion-reduce:transition-none"
+    "text-start transition-colors duration-150 ease-out-cubic hover:bg-muted motion-reduce:transition-none";
 
   if (href) {
     return (
@@ -238,7 +238,7 @@ function QuickLink({
           {body}
         </a>
       </Item>
-    )
+    );
   }
 
   return (
@@ -247,21 +247,21 @@ function QuickLink({
         {body}
       </button>
     </Item>
-  )
+  );
 }
 
 function CodeBlock() {
-  const [language, setLanguage] = React.useState<QuickstartLanguage>("curl")
-  const [copied, setCopied] = React.useState(false)
-  const code = QUICKSTART[language]
+  const [language, setLanguage] = React.useState<QuickstartLanguage>("curl");
+  const [copied, setCopied] = React.useState(false);
+  const code = QUICKSTART[language];
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(code)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     } catch {
-      toast.error("Could not copy — select the code instead")
+      toast.error("Could not copy — select the code instead");
     }
   }
 
@@ -312,21 +312,21 @@ function CodeBlock() {
         </Select>
       </div>
     </div>
-  )
+  );
 }
 
 function ApiKeys() {
-  const [keys, setKeys] = React.useState(API_KEYS)
-  const [created, setCreated] = React.useState<string | null>(null)
-  const [deleting, setDeleting] = React.useState<ApiKey | null>(null)
+  const [keys, setKeys] = React.useState(API_KEYS);
+  const [created, setCreated] = React.useState<string | null>(null);
+  const [deleting, setDeleting] = React.useState<ApiKey | null>(null);
 
   function create() {
-    const secret = `sk_live_${Math.random().toString(36).slice(2, 14)}`
+    const secret = `sk_live_${Math.random().toString(36).slice(2, 14)}`;
     setKeys((current) => [
       { id: secret, prefix: secret.slice(0, 12), created: "Just now" },
       ...current,
-    ])
-    setCreated(secret)
+    ]);
+    setCreated(secret);
   }
 
   return (
@@ -431,8 +431,8 @@ function ApiKeys() {
               onClick={() => {
                 setKeys((current) =>
                   current.filter((key) => key.id !== deleting?.id),
-                )
-                setDeleting(null)
+                );
+                setDeleting(null);
               }}
             >
               Delete
@@ -441,12 +441,12 @@ function ApiKeys() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
 
 function Webhook() {
-  const [url, setUrl] = React.useState(WEBHOOK_URL)
-  const [saved, setSaved] = React.useState(WEBHOOK_URL)
+  const [url, setUrl] = React.useState(WEBHOOK_URL);
+  const [saved, setSaved] = React.useState(WEBHOOK_URL);
 
   return (
     <Card className="max-w-2xl">
@@ -472,8 +472,8 @@ function Webhook() {
           <Button
             disabled={url === saved}
             onClick={() => {
-              setSaved(url)
-              toast.success("Webhook saved")
+              setSaved(url);
+              toast.success("Webhook saved");
             }}
           >
             Save
@@ -481,11 +481,11 @@ function Webhook() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function Variables() {
-  const [shown, setShown] = React.useState<Set<string>>(new Set())
+  const [shown, setShown] = React.useState<Set<string>>(new Set());
 
   return (
     <div className="flex flex-col gap-4">
@@ -510,7 +510,7 @@ function Variables() {
         </TableHeader>
         <TableBody>
           {VARIABLES.map((variable) => {
-            const visible = !variable.secret || shown.has(variable.key)
+            const visible = !variable.secret || shown.has(variable.key);
             return (
               <TableRow key={variable.key}>
                 <TableCell className="font-mono">{variable.key}</TableCell>
@@ -526,11 +526,11 @@ function Variables() {
                         variant="ghost"
                         onClick={() =>
                           setShown((current) => {
-                            const next = new Set(current)
+                            const next = new Set(current);
                             if (next.has(variable.key))
-                              next.delete(variable.key)
-                            else next.add(variable.key)
-                            return next
+                              next.delete(variable.key);
+                            else next.add(variable.key);
+                            return next;
                           })
                         }
                       >
@@ -543,10 +543,10 @@ function Variables() {
                   {variable.description}
                 </TableCell>
               </TableRow>
-            )
+            );
           })}
         </TableBody>
       </DataTable>
     </div>
-  )
+  );
 }

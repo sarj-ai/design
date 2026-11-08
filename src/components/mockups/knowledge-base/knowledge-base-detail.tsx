@@ -1,71 +1,71 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/empty";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/input-group";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   KNOWLEDGE_BASE,
   SOURCE_LABELS,
   pendingSource,
   type Source,
   type SourceKind,
-} from "@/lib/mockups/knowledge-base-data"
-import { AppShell } from "@/components/shell/app-shell"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/lib/mockups/knowledge-base-data";
+import { AppShell } from "@/components/shell/app-shell";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   AddSourceDialog,
   AddSources,
   type AddKind,
-} from "@/components/mockups/knowledge-base/add-sources"
-import { SourceTable } from "@/components/mockups/knowledge-base/source-table"
-import { SummaryField } from "@/components/mockups/knowledge-base/summary-field"
+} from "@/components/mockups/knowledge-base/add-sources";
+import { SourceTable } from "@/components/mockups/knowledge-base/source-table";
+import { SummaryField } from "@/components/mockups/knowledge-base/summary-field";
 import {
   AddFilterIcon,
   KnowledgeIcon,
   SearchIcon,
   SortIcon,
-} from "@/components/mockups/knowledge-base/icons"
+} from "@/components/mockups/knowledge-base/icons";
 
 export function KnowledgeBaseDetail({
   base = KNOWLEDGE_BASE,
   initialSources,
   initialDialog = null,
 }: {
-  base?: typeof KNOWLEDGE_BASE
-  initialSources: Source[]
-  initialDialog?: AddKind | null
+  base?: typeof KNOWLEDGE_BASE;
+  initialSources: Source[];
+  initialDialog?: AddKind | null;
 }) {
-  const [sources, setSources] = React.useState(initialSources)
-  const [dialog, setDialog] = React.useState<AddKind | null>(initialDialog)
-  const [query, setQuery] = React.useState("")
-  const [kind, setKind] = React.useState<SourceKind | "all">("all")
-  const [creator, setCreator] = React.useState<string>("all")
-  const [sort, setSort] = React.useState<SortKey>("added")
+  const [sources, setSources] = React.useState(initialSources);
+  const [dialog, setDialog] = React.useState<AddKind | null>(initialDialog);
+  const [query, setQuery] = React.useState("");
+  const [kind, setKind] = React.useState<SourceKind | "all">("all");
+  const [creator, setCreator] = React.useState<string>("all");
+  const [sort, setSort] = React.useState<SortKey>("added");
 
-  const filePicker = React.useRef<HTMLInputElement>(null)
+  const filePicker = React.useRef<HTMLInputElement>(null);
 
-  const creators = Array.from(new Set(sources.map((source) => source.addedBy)))
+  const creators = Array.from(new Set(sources.map((source) => source.addedBy)));
 
   const matched = sources.filter(
     (source) =>
@@ -74,19 +74,19 @@ export function KnowledgeBaseDetail({
       `${source.name} ${source.url ?? ""}`
         .toLowerCase()
         .includes(query.trim().toLowerCase()),
-  )
+  );
   /* Sources are stored newest first, so only "Title" needs sorting. */
   const visible =
     sort === "title"
       ? [...matched].sort((a, b) => a.name.localeCompare(b.name))
-      : matched
+      : matched;
 
   function openAdd(next: AddKind) {
     if (next === "files") {
-      filePicker.current?.click()
-      return
+      filePicker.current?.click();
+      return;
     }
-    setDialog(next)
+    setDialog(next);
   }
 
   function addTyped(
@@ -106,11 +106,11 @@ export function KnowledgeBaseDetail({
         addedAt: "Just now",
       },
       ...current,
-    ])
+    ]);
   }
 
   function addFiles(files: FileList | null) {
-    if (!files?.length) return
+    if (!files?.length) return;
 
     setSources((current) => [
       ...Array.from(files).map((file, index) =>
@@ -121,7 +121,7 @@ export function KnowledgeBaseDetail({
         ),
       ),
       ...current,
-    ])
+    ]);
   }
 
   return (
@@ -143,8 +143,8 @@ export function KnowledgeBaseDetail({
           accept=".pdf,.docx,.txt,.md"
           className="hidden"
           onChange={(event) => {
-            addFiles(event.target.files)
-            event.target.value = ""
+            addFiles(event.target.files);
+            event.target.value = "";
           }}
         />
 
@@ -248,15 +248,15 @@ export function KnowledgeBaseDetail({
         />
       </div>
     </AppShell>
-  )
+  );
 }
 
-type SortKey = "added" | "title"
+type SortKey = "added" | "title";
 
 const SORT_LABELS: Record<SortKey, string> = {
   added: "Date added",
   title: "Title",
-}
+};
 
 function FilterChip({
   field,
@@ -264,12 +264,12 @@ function FilterChip({
   options,
   onChange,
 }: {
-  field: string
-  value: string
-  options: { value: string; label: string }[]
-  onChange: (value: string) => void
+  field: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (value: string) => void;
 }) {
-  const chosen = options.find((option) => option.value === value)
+  const chosen = options.find((option) => option.value === value);
 
   return (
     <DropdownMenu modal={false}>
@@ -296,5 +296,5 @@ function FilterChip({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

@@ -2,8 +2,8 @@ import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { LINT_RULES } from "@/lib/design-system/data"
+} from "@/components/design-system/reference-table";
+import { LINT_RULES } from "@/lib/design-system/data";
 
 export function LintRules() {
   return (
@@ -22,5 +22,5 @@ export function LintRules() {
         ],
       }))}
     />
-  )
+  );
 }

@@ -1,10 +1,10 @@
-type DetectionPathId = "livekit_v1_mini" | "sarj_eou" | "vad"
+type DetectionPathId = "livekit_v1_mini" | "sarj_eou" | "vad";
 
 export type DetectionPath = {
-  id: DetectionPathId
-  label: string
-  description: string
-}
+  id: DetectionPathId;
+  label: string;
+  description: string;
+};
 
 const DETECTION_PATHS: Record<DetectionPathId, DetectionPath> = {
   livekit_v1_mini: {
@@ -25,48 +25,48 @@ const DETECTION_PATHS: Record<DetectionPathId, DetectionPath> = {
     description:
       "Silence only. Waits out a pause using voice activity detection; no semantic model runs.",
   },
-}
+};
 
-export type WaitSource = "global" | "persona"
+export type WaitSource = "global" | "persona";
 
 export type TurnTimingRecord = {
-  configured: DetectionPath
+  configured: DetectionPath;
   /** What actually ran. Differs from `configured` only after a fallback. */
-  ran: DetectionPath
-  fallbackReason: null | string
-  minWaitSeconds: number
-  maxWaitSeconds: number
-  waitSource: WaitSource
-  persona: string
-  turnCount: number
-  turnsAtMaximum: number
-  firstTurnWaitSeconds: number
-}
+  ran: DetectionPath;
+  fallbackReason: null | string;
+  minWaitSeconds: number;
+  maxWaitSeconds: number;
+  waitSource: WaitSource;
+  persona: string;
+  turnCount: number;
+  turnsAtMaximum: number;
+  firstTurnWaitSeconds: number;
+};
 
 export type CallCase = {
-  id: string
-  label: string
-  summary: string
+  id: string;
+  label: string;
+  summary: string;
   call: {
-    id: string
-    organization: string
-    direction: string
-    duration: string
-    language: string
-  }
-  voice: { name: string; language: string; gender: string }
+    id: string;
+    organization: string;
+    direction: string;
+    duration: string;
+    language: string;
+  };
+  voice: { name: string; language: string; gender: string };
   /** `null` for a call placed before turn timing was recorded. */
-  timing: null | TurnTimingRecord
-}
+  timing: null | TurnTimingRecord;
+};
 
 export const MODEL_SETTINGS = {
   llm: { provider: "Anthropic", model: "claude-sonnet-4-5" },
   stt: { provider: "Deepgram", model: "nova-3" },
   tts: { provider: "ElevenLabs", model: "eleven_flash_v2_5" },
-}
+};
 
-const ARABIC_VOICE = { name: "Layla", language: "Arabic", gender: "Female" }
-const ENGLISH_VOICE = { name: "Amira", language: "English", gender: "Female" }
+const ARABIC_VOICE = { name: "Layla", language: "Arabic", gender: "Female" };
+const ENGLISH_VOICE = { name: "Amira", language: "English", gender: "Female" };
 
 export const CALL_CASES: CallCase[] = [
   {
@@ -163,10 +163,10 @@ export const CALL_CASES: CallCase[] = [
     voice: ARABIC_VOICE,
     timing: null,
   },
-]
+];
 
-export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3
+export const RECOMMENDED_MAX_WAIT_CEILING_SECONDS = 3;
 
 export function formatSeconds(seconds: number): string {
-  return `${seconds.toFixed(1)}s`
+  return `${seconds.toFixed(1)}s`;
 }

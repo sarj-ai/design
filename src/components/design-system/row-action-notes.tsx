@@ -2,13 +2,13 @@ import {
   DeleteIcon,
   EditRowIcon,
   RowMenuIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 import {
   ReferenceLabel,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Button } from "@/components/ui/button"
+} from "@/components/design-system/reference-table";
+import { Button } from "@/components/ui/button";
 
 export function RowActionNotes() {
   return (
@@ -97,5 +97,5 @@ export function RowActionNotes() {
         ]}
       />
     </section>
-  )
+  );
 }

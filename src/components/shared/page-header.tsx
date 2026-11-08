@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Item } from "@/components/ui/item"
+import { Item } from "@/components/ui/item";
 
 export function PageHeader({
   title,
@@ -10,12 +10,12 @@ export function PageHeader({
   aside,
   actions,
 }: {
-  title: React.ReactNode
-  description?: React.ReactNode
+  title: React.ReactNode;
+  description?: React.ReactNode;
   /** Page state, shown on the right of the title — never an action. */
-  aside?: React.ReactNode
+  aside?: React.ReactNode;
   /** `ActionTile`s. A page with nothing to add has none. */
-  actions?: React.ReactNode
+  actions?: React.ReactNode;
 }) {
   return (
     <header className="flex flex-col gap-6">
@@ -31,7 +31,7 @@ export function PageHeader({
 
       {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
     </header>
-  )
+  );
 }
 
 export function ActionTile({
@@ -39,9 +39,9 @@ export function ActionTile({
   label,
   onClick,
 }: {
-  icon: React.ReactNode
-  label: string
-  onClick?: () => void
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
 }) {
   return (
     <Item
@@ -56,5 +56,5 @@ export function ActionTile({
         <span className="font-medium">{label}</span>
       </button>
     </Item>
-  )
+  );
 }

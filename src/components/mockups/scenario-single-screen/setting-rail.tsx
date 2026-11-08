@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -11,8 +11,8 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { OpenSettingIcon } from "@/components/mockups/scenario-single-screen/icons"
+} from "@/components/ui/item";
+import { OpenSettingIcon } from "@/components/mockups/scenario-single-screen/icons";
 
 export function SettingRow({
   icon: Icon,
@@ -20,10 +20,10 @@ export function SettingRow({
   title,
   value,
 }: {
-  icon: React.ComponentType
-  onOpen: () => void
-  title: string
-  value: string
+  icon: React.ComponentType;
+  onOpen: () => void;
+  title: string;
+  value: string;
 }) {
   return (
     <Item asChild size="sm">
@@ -44,15 +44,15 @@ export function SettingRow({
         </ItemActions>
       </button>
     </Item>
-  )
+  );
 }
 
 export function RailGroup({
   children,
   title,
 }: {
-  children: React.ReactNode
-  title: string
+  children: React.ReactNode;
+  title: string;
 }) {
   return (
     <Card size="sm">
@@ -63,5 +63,5 @@ export function RailGroup({
         <ItemGroup className="gap-0">{children}</ItemGroup>
       </CardContent>
     </Card>
-  )
+  );
 }

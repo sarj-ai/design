@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   AddFilter,
   ChoiceFilter,
@@ -19,91 +19,91 @@ import {
   ToggleFilter,
   type Range,
   type DateRange,
-} from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
-import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table"
-import { FieldsDropdown } from "@/components/mockups/conversations-revamp/list/fields-dropdown"
+} from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
+import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table";
+import { FieldsDropdown } from "@/components/mockups/conversations-revamp/list/fields-dropdown";
 import {
   ExportIcon,
   RefreshIcon,
   SearchIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 import {
   CALLS,
   DEFAULT_COLUMNS,
   TOTAL_RESULTS,
   type CallRow,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 
 /** The day the mock calls were placed, so the date presets land on them. */
-const TODAY = new Date(2026, 7, 11)
+const TODAY = new Date(2026, 7, 11);
 
 function label(value: string) {
-  const words = value.replace(/_/g, " ")
-  return words.charAt(0).toUpperCase() + words.slice(1)
+  const words = value.replace(/_/g, " ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 function options(values: string[]) {
   return Array.from(new Set(values)).map((value) => ({
     value,
     label: label(value),
-  }))
+  }));
 }
 
-const STATUS_OPTIONS = options(CALLS.map((call) => call.status))
-const OUTCOME_OPTIONS = options(CALLS.map((call) => call.outcome))
+const STATUS_OPTIONS = options(CALLS.map((call) => call.status));
+const OUTCOME_OPTIONS = options(CALLS.map((call) => call.outcome));
 const SCENARIO_OPTIONS = Array.from(
   new Set(CALLS.map((call) => call.scenario)),
-).map((scenario) => ({ value: scenario, label: scenario }))
+).map((scenario) => ({ value: scenario, label: scenario }));
 
 const DIRECTION_OPTIONS = [
   { value: "inbound", label: "Inbound" },
   { value: "outbound", label: "Outbound" },
-]
+];
 
 const MORE_FILTERS = [
   { id: "direction", label: "Direction" },
   { id: "duration", label: "Duration" },
   { id: "scheduled", label: "Scheduled only" },
-]
+];
 
-const DURATION_PRESETS: Range[] = [{ max: 1 }, { min: 1, max: 5 }, { min: 5 }]
+const DURATION_PRESETS: Range[] = [{ max: 1 }, { min: 1, max: 5 }, { min: 5 }];
 
 function minutes(duration: string) {
-  const [m, s] = duration.split(":").map(Number)
-  return (m || 0) + (s || 0) / 60
+  const [m, s] = duration.split(":").map(Number);
+  return (m || 0) + (s || 0) / 60;
 }
 
 function inDuration(duration: string, range: Range | null) {
-  if (!range) return true
-  const value = minutes(duration)
+  if (!range) return true;
+  const value = minutes(duration);
   return (
     (range.min === undefined || value >= range.min) &&
     (range.max === undefined || value <= range.max)
-  )
+  );
 }
 
 function inRange(stamp: string, range: DateRange | undefined) {
-  if (!range?.from) return true
-  const at = new Date(stamp.replace(/, (\d)/, " $1")).getTime()
-  const from = new Date(range.from).setHours(0, 0, 0, 0)
-  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999)
-  return at >= from && at <= to
+  if (!range?.from) return true;
+  const at = new Date(stamp.replace(/, (\d)/, " $1")).getTime();
+  const from = new Date(range.from).setHours(0, 0, 0, 0);
+  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999);
+  return at >= from && at <= to;
 }
 
 export function ConversationsIndexPreview() {
-  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS)
-  const [query, setQuery] = React.useState("")
-  const [statuses, setStatuses] = React.useState<string[]>([])
-  const [outcomes, setOutcomes] = React.useState<string[]>([])
-  const [scenarios, setScenarios] = React.useState<string[]>([])
-  const [date, setDate] = React.useState<DateRange | undefined>()
-  const [direction, setDirection] = React.useState<string | null>(null)
-  const [duration, setDuration] = React.useState<Range | null>(null)
-  const [scheduledOnly, setScheduledOnly] = React.useState(false)
-  const [added, setAdded] = React.useState<string[]>([])
-  const [pageSize, setPageSize] = React.useState(25)
+  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS);
+  const [query, setQuery] = React.useState("");
+  const [statuses, setStatuses] = React.useState<string[]>([]);
+  const [outcomes, setOutcomes] = React.useState<string[]>([]);
+  const [scenarios, setScenarios] = React.useState<string[]>([]);
+  const [date, setDate] = React.useState<DateRange | undefined>();
+  const [direction, setDirection] = React.useState<string | null>(null);
+  const [duration, setDuration] = React.useState<Range | null>(null);
+  const [scheduledOnly, setScheduledOnly] = React.useState(false);
+  const [added, setAdded] = React.useState<string[]>([]);
+  const [pageSize, setPageSize] = React.useState(25);
 
   const activeCount = [
     statuses.length,
@@ -113,9 +113,9 @@ export function ConversationsIndexPreview() {
     direction,
     duration,
     scheduledOnly,
-  ].filter(Boolean).length
+  ].filter(Boolean).length;
 
-  const digits = query.replace(/\D/g, "")
+  const digits = query.replace(/\D/g, "");
   const rows = CALLS.filter(
     (call: CallRow) =>
       (!digits ||
@@ -127,8 +127,8 @@ export function ConversationsIndexPreview() {
       (!direction || call.direction === direction) &&
       inDuration(call.duration, duration) &&
       (!scheduledOnly || call.status === "scheduled"),
-  )
-  const total = activeCount || digits ? rows.length : TOTAL_RESULTS
+  );
+  const total = activeCount || digits ? rows.length : TOTAL_RESULTS;
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-3 lg:p-4">
@@ -160,13 +160,13 @@ export function ConversationsIndexPreview() {
         <FilterBar
           activeCount={activeCount}
           onClearAll={() => {
-            setStatuses([])
-            setOutcomes([])
-            setScenarios([])
-            setDate(undefined)
-            setDirection(null)
-            setDuration(null)
-            setScheduledOnly(false)
+            setStatuses([]);
+            setOutcomes([]);
+            setScenarios([]);
+            setDate(undefined);
+            setDirection(null);
+            setDuration(null);
+            setScheduledOnly(false);
           }}
         >
           <SelectFilter
@@ -241,5 +241,5 @@ export function ConversationsIndexPreview() {
         atEnd={rows.length >= total}
       />
     </div>
-  )
+  );
 }

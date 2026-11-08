@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ArrowDown01Icon,
@@ -29,38 +29,38 @@ import {
   VariableIcon,
   VoiceIcon,
   WebhookIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const PlaygroundIcon = icon(PlayIcon, "PlaygroundIcon")
-export const PersonasIcon = icon(RoboticIcon, "PersonasIcon")
-export const ScenariosIcon = icon(GoogleDocIcon, "ScenariosIcon")
-export const KnowledgeIcon = icon(BookOpen02Icon, "KnowledgeIcon")
-export const BatchCallsIcon = icon(Queue02Icon, "BatchCallsIcon")
-export const TemplateIcon = icon(DashboardCircleIcon, "TemplateIcon")
-export const GlobalPromptsIcon = icon(Globe02Icon, "GlobalPromptsIcon")
-export const VoiceLibraryIcon = icon(VoiceIcon, "VoiceLibraryIcon")
-export const DashboardIcon = icon(Chart03Icon, "DashboardIcon")
-export const ConversationsIcon = icon(CallRinging04Icon, "ConversationsIcon")
-export const MessagingIcon = icon(Message02Icon, "MessagingIcon")
-export const QualityIcon = icon(DashboardBrowsingIcon, "QualityIcon")
-export const ReportsIcon = icon(ChartColumnIcon, "ReportsIcon")
-export const TasksIcon = icon(TaskDaily01Icon, "TasksIcon")
-export const KeyIcon = icon(Key01Icon, "KeyIcon")
-export const VariablesIcon = icon(VariableIcon, "VariablesIcon")
-export const WebhooksIcon = icon(WebhookIcon, "WebhooksIcon")
-export const IntegrationsIcon = icon(BlockGameIcon, "IntegrationsIcon")
-export const DeveloperDocsIcon = icon(CodeIcon, "DeveloperDocsIcon")
-export const BuildingIcon = icon(Building02Icon, "BuildingIcon")
-export const RolesIcon = icon(ShieldKeyIcon, "RolesIcon")
-export const MobileIcon = icon(SmartPhone01Icon, "MobileIcon")
-export const ModelsIcon = icon(CpuIcon, "ModelsIcon")
-export const TelephonyIcon = icon(TelephoneIcon, "TelephonyIcon")
-export const SettingsIcon = icon(Settings01Icon, "SettingsIcon")
+export const PlaygroundIcon = icon(PlayIcon, "PlaygroundIcon");
+export const PersonasIcon = icon(RoboticIcon, "PersonasIcon");
+export const ScenariosIcon = icon(GoogleDocIcon, "ScenariosIcon");
+export const KnowledgeIcon = icon(BookOpen02Icon, "KnowledgeIcon");
+export const BatchCallsIcon = icon(Queue02Icon, "BatchCallsIcon");
+export const TemplateIcon = icon(DashboardCircleIcon, "TemplateIcon");
+export const GlobalPromptsIcon = icon(Globe02Icon, "GlobalPromptsIcon");
+export const VoiceLibraryIcon = icon(VoiceIcon, "VoiceLibraryIcon");
+export const DashboardIcon = icon(Chart03Icon, "DashboardIcon");
+export const ConversationsIcon = icon(CallRinging04Icon, "ConversationsIcon");
+export const MessagingIcon = icon(Message02Icon, "MessagingIcon");
+export const QualityIcon = icon(DashboardBrowsingIcon, "QualityIcon");
+export const ReportsIcon = icon(ChartColumnIcon, "ReportsIcon");
+export const TasksIcon = icon(TaskDaily01Icon, "TasksIcon");
+export const KeyIcon = icon(Key01Icon, "KeyIcon");
+export const VariablesIcon = icon(VariableIcon, "VariablesIcon");
+export const WebhooksIcon = icon(WebhookIcon, "WebhooksIcon");
+export const IntegrationsIcon = icon(BlockGameIcon, "IntegrationsIcon");
+export const DeveloperDocsIcon = icon(CodeIcon, "DeveloperDocsIcon");
+export const BuildingIcon = icon(Building02Icon, "BuildingIcon");
+export const RolesIcon = icon(ShieldKeyIcon, "RolesIcon");
+export const MobileIcon = icon(SmartPhone01Icon, "MobileIcon");
+export const ModelsIcon = icon(CpuIcon, "ModelsIcon");
+export const TelephonyIcon = icon(TelephoneIcon, "TelephonyIcon");
+export const SettingsIcon = icon(Settings01Icon, "SettingsIcon");
 export const MessagingSettingsIcon = icon(
   BubbleChatIcon,
   "MessagingSettingsIcon",
-)
-export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon")
-export const NewItemIcon = icon(PlusSignIcon, "NewItemIcon")
+);
+export const ChevronDownIcon = icon(ArrowDown01Icon, "ChevronDownIcon");
+export const NewItemIcon = icon(PlusSignIcon, "NewItemIcon");

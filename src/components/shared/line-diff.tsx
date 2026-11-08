@@ -1,48 +1,48 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-type DiffLine = { kind: "same" | "removed" | "added"; text: string }
+type DiffLine = { kind: "same" | "removed" | "added"; text: string };
 
 /** Line-level diff by longest common subsequence; quadratic, fine for short prompts. */
 function diffLines(before: string, after: string): DiffLine[] {
-  const a = before.split("\n")
-  const b = after.split("\n")
+  const a = before.split("\n");
+  const b = after.split("\n");
   const table = Array.from({ length: a.length + 1 }, () =>
     Array<number>(b.length + 1).fill(0),
-  )
+  );
   for (let i = a.length - 1; i >= 0; i--)
     for (let j = b.length - 1; j >= 0; j--)
       table[i][j] =
         a[i] === b[j]
           ? table[i + 1][j + 1] + 1
-          : Math.max(table[i + 1][j], table[i][j + 1])
+          : Math.max(table[i + 1][j], table[i][j + 1]);
 
-  const out: DiffLine[] = []
-  let i = 0
-  let j = 0
+  const out: DiffLine[] = [];
+  let i = 0;
+  let j = 0;
   while (i < a.length && j < b.length) {
     if (a[i] === b[j]) {
-      out.push({ kind: "same", text: a[i] })
-      i++
-      j++
+      out.push({ kind: "same", text: a[i] });
+      i++;
+      j++;
     } else if (table[i + 1][j] >= table[i][j + 1]) {
-      out.push({ kind: "removed", text: a[i++] })
+      out.push({ kind: "removed", text: a[i++] });
     } else {
-      out.push({ kind: "added", text: b[j++] })
+      out.push({ kind: "added", text: b[j++] });
     }
   }
-  while (i < a.length) out.push({ kind: "removed", text: a[i++] })
-  while (j < b.length) out.push({ kind: "added", text: b[j++] })
-  return out
+  while (i < a.length) out.push({ kind: "removed", text: a[i++] });
+  while (j < b.length) out.push({ kind: "added", text: b[j++] });
+  return out;
 }
 
-const LINE = "flex gap-2 px-3 py-1 whitespace-pre-wrap"
-const REMOVED = "bg-destructive-tint text-destructive-tint-foreground"
-const ADDED = "bg-success-tint text-success-tint-foreground"
+const LINE = "flex gap-2 px-3 py-1 whitespace-pre-wrap";
+const REMOVED = "bg-destructive-tint text-destructive-tint-foreground";
+const ADDED = "bg-success-tint text-success-tint-foreground";
 
 export function LineDiff({ before, after }: { before: string; after: string }) {
   return (
@@ -65,17 +65,17 @@ export function LineDiff({ before, after }: { before: string; after: string }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function SideBySideDiff({
   before,
   after,
 }: {
-  before: string
-  after: string
+  before: string;
+  after: string;
 }) {
-  const lines = diffLines(before, after)
+  const lines = diffLines(before, after);
   return (
     <div className="grid grid-cols-2 overflow-hidden rounded-lg border text-xs">
       <div className="border-e">
@@ -111,23 +111,23 @@ export function SideBySideDiff({
           ))}
       </div>
     </div>
-  )
+  );
 }
 
 export function diffStat(before: string, after: string) {
-  const lines = diffLines(before, after)
+  const lines = diffLines(before, after);
   return {
     added: lines.filter((line) => line.kind === "added").length,
     removed: lines.filter((line) => line.kind === "removed").length,
-  }
+  };
 }
 
 export function DiffStat({
   added,
   removed,
 }: {
-  added: number
-  removed: number
+  added: number;
+  removed: number;
 }) {
   return (
     <span className="flex items-center gap-2 text-xs font-medium tabular-nums">
@@ -138,61 +138,61 @@ export function DiffStat({
         −{removed}
       </span>
     </span>
-  )
+  );
 }
 
-type Side = { text: string; n: number; changed: boolean } | null
-type Row = { changed: boolean; left: Side; right: Side }
+type Side = { text: string; n: number; changed: boolean } | null;
+type Row = { changed: boolean; left: Side; right: Side };
 
 function alignedRows(before: string, after: string): Row[] {
-  const rows: Row[] = []
-  let oldN = 0
-  let newN = 0
-  let removed: Side[] = []
-  let added: Side[] = []
+  const rows: Row[] = [];
+  let oldN = 0;
+  let newN = 0;
+  let removed: Side[] = [];
+  let added: Side[] = [];
   const flush = () => {
     for (let i = 0; i < Math.max(removed.length, added.length); i++)
       rows.push({
         changed: true,
         left: removed[i] ?? null,
         right: added[i] ?? null,
-      })
-    removed = []
-    added = []
-  }
+      });
+    removed = [];
+    added = [];
+  };
   for (const line of diffLines(before, after)) {
     if (line.kind === "same") {
-      flush()
-      oldN++
-      newN++
+      flush();
+      oldN++;
+      newN++;
       rows.push({
         changed: false,
         left: { text: line.text, n: oldN, changed: false },
         right: { text: line.text, n: newN, changed: false },
-      })
+      });
     } else if (line.kind === "removed") {
-      removed.push({ text: line.text, n: ++oldN, changed: true })
+      removed.push({ text: line.text, n: ++oldN, changed: true });
     } else {
-      added.push({ text: line.text, n: ++newN, changed: true })
+      added.push({ text: line.text, n: ++newN, changed: true });
     }
   }
-  flush()
-  return rows
+  flush();
+  return rows;
 }
 
 function unifiedRows(before: string, after: string) {
-  let oldN = 0
-  let newN = 0
+  let oldN = 0;
+  let newN = 0;
   return diffLines(before, after).map((line) => {
-    if (line.kind !== "added") oldN++
-    if (line.kind !== "removed") newN++
+    if (line.kind !== "added") oldN++;
+    if (line.kind !== "removed") newN++;
     return {
       changed: line.kind !== "same",
       kind: line.kind,
       text: line.text,
       n: line.kind === "removed" ? oldN : newN,
-    }
-  })
+    };
+  });
 }
 
 function fold<T extends { changed: boolean }>(rows: T[], context: number) {
@@ -200,26 +200,26 @@ function fold<T extends { changed: boolean }>(rows: T[], context: number) {
     rows
       .slice(Math.max(0, index - context), index + context + 1)
       .some((row) => row.changed),
-  )
-  const out: ({ row: T } | { hidden: T[]; id: number })[] = []
+  );
+  const out: ({ row: T } | { hidden: T[]; id: number })[] = [];
   rows.forEach((row, index) => {
     if (near[index]) {
-      out.push({ row })
-      return
+      out.push({ row });
+      return;
     }
-    const last = out[out.length - 1]
-    if (last && "hidden" in last) last.hidden.push(row)
-    else out.push({ hidden: [row], id: index })
-  })
+    const last = out[out.length - 1];
+    if (last && "hidden" in last) last.hidden.push(row);
+    else out.push({ hidden: [row], id: index });
+  });
   return out.flatMap((piece) =>
     "hidden" in piece && piece.hidden.length === 1
       ? [{ row: piece.hidden[0] }]
       : [piece],
-  )
+  );
 }
 
 const NUMBER =
-  "w-7 shrink-0 text-end text-muted-foreground/60 tabular-nums select-none"
+  "w-7 shrink-0 text-end text-muted-foreground/60 tabular-nums select-none";
 
 export function FoldedDiff({
   before,
@@ -228,19 +228,20 @@ export function FoldedDiff({
   context = 1,
   bare = false,
 }: {
-  before: string
-  after: string
-  layout?: "unified" | "split"
-  context?: number
-  bare?: boolean
+  before: string;
+  after: string;
+  layout?: "unified" | "split";
+  context?: number;
+  bare?: boolean;
 }) {
-  const [opened, setOpened] = React.useState<Set<number>>(new Set())
-  const open = (id: number) => setOpened((current) => new Set([...current, id]))
+  const [opened, setOpened] = React.useState<Set<number>>(new Set());
+  const open = (id: number) =>
+    setOpened((current) => new Set([...current, id]));
 
-  const frame = cn("text-xs", !bare && "overflow-hidden rounded-lg border")
+  const frame = cn("text-xs", !bare && "overflow-hidden rounded-lg border");
 
   if (layout === "split") {
-    const pieces = fold(alignedRows(before, after), context)
+    const pieces = fold(alignedRows(before, after), context);
     return (
       <div className={frame}>
         {pieces.map((piece, index) =>
@@ -260,10 +261,10 @@ export function FoldedDiff({
           ),
         )}
       </div>
-    )
+    );
   }
 
-  const pieces = fold(unifiedRows(before, after), context)
+  const pieces = fold(unifiedRows(before, after), context);
   return (
     <div className={frame}>
       {pieces.map((piece, index) =>
@@ -296,7 +297,7 @@ export function FoldedDiff({
         ),
       )}
     </div>
-  )
+  );
 }
 
 function SplitCell({
@@ -304,9 +305,9 @@ function SplitCell({
   tone,
   className,
 }: {
-  side: Side
-  tone: string
-  className?: string
+  side: Side;
+  tone: string;
+  className?: string;
 }) {
   return (
     <div
@@ -322,7 +323,7 @@ function SplitCell({
       <span className={NUMBER}>{side?.n ?? ""}</span>
       <span>{side?.text ?? ""}</span>
     </div>
-  )
+  );
 }
 
 function FoldRow({ count, onOpen }: { count: number; onOpen: () => void }) {
@@ -332,5 +333,5 @@ function FoldRow({ count, onOpen }: { count: number; onOpen: () => void }) {
         {count === 1 ? "1 unchanged line" : `${count} unchanged lines`}
       </Button>
     </div>
-  )
+  );
 }

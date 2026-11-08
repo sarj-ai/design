@@ -1,10 +1,10 @@
-import { createClassVisitor } from "../lib/classes.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
 
 const SCROLLBAR_STYLE = new Set([
   "scrollbarWidth",
   "scrollbarColor",
   "scrollbarGutter",
-])
+]);
 
 const noScrollbarStyle = {
   meta: {
@@ -29,27 +29,27 @@ const noScrollbarStyle = {
           /^scrollbar(-|$)/.test(base) ||
           variants.some((v) => v.includes("scrollbar"))
         ) {
-          context.report({ node, messageId: "scrollbar", data: { cls: raw } })
+          context.report({ node, messageId: "scrollbar", data: { cls: raw } });
         }
       }
-    })
+    });
 
     return {
       ...classes,
       JSXAttribute(node) {
-        classes.JSXAttribute(node)
-        if (node.name?.name !== "style") return
-        const expr = node.value?.expression
-        if (expr?.type !== "ObjectExpression") return
+        classes.JSXAttribute(node);
+        if (node.name?.name !== "style") return;
+        const expr = node.value?.expression;
+        if (expr?.type !== "ObjectExpression") return;
         for (const prop of expr.properties) {
-          const key = prop.key?.name ?? prop.key?.value
+          const key = prop.key?.name ?? prop.key?.value;
           if (SCROLLBAR_STYLE.has(key)) {
-            context.report({ node: prop, messageId: "style", data: { key } })
+            context.report({ node: prop, messageId: "style", data: { key } });
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default noScrollbarStyle
+export default noScrollbarStyle;

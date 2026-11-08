@@ -1,11 +1,11 @@
-import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
 const HEADERS = new Set([
   "DrawerHeader",
   "SheetHeader",
   "DialogHeader",
   "AlertDialogHeader",
-])
+]);
 
 const CONTROLS = new Set([
   "Button",
@@ -17,10 +17,10 @@ const CONTROLS = new Set([
   "TooltipTrigger",
   "InputGroupAddon",
   "Kbd",
-])
+]);
 
 const isIconName = (name) =>
-  !!name && (/Icon$/.test(name) || name === "HugeiconsIcon")
+  !!name && (/Icon$/.test(name) || name === "HugeiconsIcon");
 
 const noHeaderIcon = {
   meta: {
@@ -39,42 +39,42 @@ const noHeaderIcon = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const opening = element.openingElement
-        const local = jsxName(opening)
-        const primitive = imports.ui(local)
+        const opening = element.openingElement;
+        const local = jsxName(opening);
+        const primitive = imports.ui(local);
 
         if (primitive === "AlertDialogMedia") {
           context.report({
             node: opening,
             messageId: "media",
             data: { name: primitive },
-          })
-          return
+          });
+          return;
         }
 
-        const tile = primitive === "ItemMedia" || primitive === "Avatar"
-        if (!tile && !isIconName(local)) return
+        const tile = primitive === "ItemMedia" || primitive === "Avatar";
+        if (!tile && !isIconName(local)) return;
 
         for (const ancestor of jsxAncestors(element)) {
-          const name = imports.ui(jsxName(ancestor.openingElement))
-          if (CONTROLS.has(name)) return
+          const name = imports.ui(jsxName(ancestor.openingElement));
+          if (CONTROLS.has(name)) return;
           if (HEADERS.has(name)) {
             context.report({
               node: opening,
               messageId: tile ? "media" : "headerIcon",
               data: { icon: local, name: local, header: name },
-            })
-            return
+            });
+            return;
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default noHeaderIcon
+export default noHeaderIcon;

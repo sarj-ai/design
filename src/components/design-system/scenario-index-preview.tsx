@@ -1,46 +1,46 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
+} from "@/components/shared/data-table";
 import {
   AddFilter,
   DateFilter,
   FilterBar,
   SelectFilter,
   type DateRange,
-} from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   LanguageChip,
   NotApplicable,
-} from "@/components/design-system/call-table"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
+} from "@/components/design-system/call-table";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
 import {
   CreateScenarioIcon,
   CreateTemplateIcon,
@@ -49,17 +49,17 @@ import {
   PlaygroundIcon,
   RowMenuIcon,
   SearchIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 
 type Scenario = {
-  id: string
-  name: string
-  languages: string[]
-  created: string
-  updated: string
+  id: string;
+  name: string;
+  languages: string[];
+  created: string;
+  updated: string;
   /** Null when nobody has edited it since it was created. */
-  updatedBy: string | null
-}
+  updatedBy: string | null;
+};
 
 const ACTIVE: Scenario[] = [
   {
@@ -158,7 +158,7 @@ const ACTIVE: Scenario[] = [
     updated: "26 Sep 2026, 14:48",
     updatedBy: "talzamel",
   },
-]
+];
 
 const DELETED: Scenario[] = [
   {
@@ -177,26 +177,26 @@ const DELETED: Scenario[] = [
     updated: "20 Sep 2026, 17:11",
     updatedBy: "fjanahi",
   },
-]
+];
 
 const VIEWS = [
   { id: "active", label: "Active", Icon: ActiveIcon },
   { id: "deleted", label: "Recently deleted", Icon: DeletedIcon },
-]
+];
 
 /** The day the mock data was captured, so the date presets land on it. */
-const TODAY = new Date(2026, 8, 28)
+const TODAY = new Date(2026, 8, 28);
 
 function parse(stamp: string) {
-  return new Date(stamp.replace(",", ""))
+  return new Date(stamp.replace(",", ""));
 }
 
 function inRange(stamp: string, range: DateRange | undefined) {
-  if (!range?.from) return true
-  const at = parse(stamp).getTime()
-  const from = new Date(range.from).setHours(0, 0, 0, 0)
-  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999)
-  return at >= from && at <= to
+  if (!range?.from) return true;
+  const at = parse(stamp).getTime();
+  const from = new Date(range.from).setHours(0, 0, 0, 0);
+  const to = new Date(range.to ?? range.from).setHours(23, 59, 59, 999);
+  return at >= from && at <= to;
 }
 
 const EDITORS = Array.from(
@@ -205,29 +205,29 @@ const EDITORS = Array.from(
       row.updatedBy ? [row.updatedBy] : [],
     ),
   ),
-).map((name) => ({ value: name, label: name }))
+).map((name) => ({ value: name, label: name }));
 
 const LANGUAGE_OPTIONS = [
   { value: "AR", label: "Arabic" },
   { value: "EN", label: "English" },
   { value: "UR", label: "Urdu" },
-]
+];
 
 export function ScenarioIndexPreview() {
-  const [view, setView] = React.useState("active")
-  const [query, setQuery] = React.useState("")
-  const [updated, setUpdated] = React.useState<DateRange | undefined>()
-  const [languages, setLanguages] = React.useState<string[]>([])
-  const [editors, setEditors] = React.useState<string[]>([])
-  const [created, setCreated] = React.useState<DateRange | undefined>()
-  const [showCreated, setShowCreated] = React.useState(false)
+  const [view, setView] = React.useState("active");
+  const [query, setQuery] = React.useState("");
+  const [updated, setUpdated] = React.useState<DateRange | undefined>();
+  const [languages, setLanguages] = React.useState<string[]>([]);
+  const [editors, setEditors] = React.useState<string[]>([]);
+  const [created, setCreated] = React.useState<DateRange | undefined>();
+  const [showCreated, setShowCreated] = React.useState(false);
 
   const activeCount = [
     updated?.from,
     languages.length,
     editors.length,
     created?.from,
-  ].filter(Boolean).length
+  ].filter(Boolean).length;
 
   const matches = (row: Scenario) =>
     row.name.toLowerCase().includes(query.trim().toLowerCase()) &&
@@ -235,7 +235,7 @@ export function ScenarioIndexPreview() {
     inRange(row.created, created) &&
     (!languages.length ||
       languages.some((code) => row.languages.includes(code))) &&
-    (!editors.length || (row.updatedBy && editors.includes(row.updatedBy)))
+    (!editors.length || (row.updatedBy && editors.includes(row.updatedBy)));
 
   return (
     <div className="flex flex-col gap-4">
@@ -271,11 +271,11 @@ export function ScenarioIndexPreview() {
           <FilterBar
             activeCount={activeCount}
             onClearAll={() => {
-              setUpdated(undefined)
-              setLanguages([])
-              setEditors([])
-              setCreated(undefined)
-              setShowCreated(false)
+              setUpdated(undefined);
+              setLanguages([]);
+              setEditors([]);
+              setCreated(undefined);
+              setShowCreated(false);
             }}
           >
             <DateFilter
@@ -301,8 +301,8 @@ export function ScenarioIndexPreview() {
                 field="Created"
                 value={created}
                 onChange={(next) => {
-                  setCreated(next)
-                  if (!next) setShowCreated(false)
+                  setCreated(next);
+                  if (!next) setShowCreated(false);
                 }}
                 today={TODAY}
               />
@@ -322,23 +322,23 @@ export function ScenarioIndexPreview() {
         </TabsContent>
       </SecondaryTabs>
     </div>
-  )
+  );
 }
 
 function ScenarioList({
   rows,
   deleted,
 }: {
-  rows: Scenario[]
-  deleted: boolean
+  rows: Scenario[];
+  deleted: boolean;
 }) {
-  const [pageSize, setPageSize] = React.useState(10)
-  const [page, setPage] = React.useState(0)
+  const [pageSize, setPageSize] = React.useState(10);
+  const [page, setPage] = React.useState(0);
 
-  const matched = rows
-  const pages = Math.max(1, Math.ceil(matched.length / pageSize))
-  const current = Math.min(page, pages - 1)
-  const visible = matched.slice(current * pageSize, (current + 1) * pageSize)
+  const matched = rows;
+  const pages = Math.max(1, Math.ceil(matched.length / pageSize));
+  const current = Math.min(page, pages - 1);
+  const visible = matched.slice(current * pageSize, (current + 1) * pageSize);
 
   return (
     <div className="flex flex-col gap-4">
@@ -442,8 +442,8 @@ function ScenarioList({
         noun="scenarios"
         pageSize={pageSize}
         onPageSizeChange={(size) => {
-          setPageSize(size)
-          setPage(0)
+          setPageSize(size);
+          setPage(0);
         }}
         atStart={current === 0}
         atEnd={current >= pages - 1}
@@ -452,5 +452,5 @@ function ScenarioList({
         onNext={() => setPage(current + 1)}
       />
     </div>
-  )
+  );
 }

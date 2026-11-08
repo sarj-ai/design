@@ -4,7 +4,7 @@ import {
   hasSpread,
   jsxName,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
 const selectPosition = {
   meta: {
@@ -18,23 +18,23 @@ const selectPosition = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXOpeningElement(opening) {
-        if (imports.ui(jsxName(opening)) !== "SelectContent") return
-        if (hasSpread(opening)) return
-        const attr = getAttr(opening, "position")
+        if (imports.ui(jsxName(opening)) !== "SelectContent") return;
+        if (hasSpread(opening)) return;
+        const attr = getAttr(opening, "position");
         if (
           attr &&
           (attrString(attr) === "popper" || attrString(attr) === null)
         )
-          return
-        context.report({ node: opening, messageId: "position" })
+          return;
+        context.report({ node: opening, messageId: "position" });
       },
-    }
+    };
   },
-}
+};
 
-export default selectPosition
+export default selectPosition;

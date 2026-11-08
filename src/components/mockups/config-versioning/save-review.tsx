@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -11,12 +11,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { LineDiff } from "@/components/shared/line-diff"
-import { CloseIcon } from "@/components/mockups/config-versioning/icons"
-import type { Subject, Version } from "@/lib/mockups/config-versioning-data"
+} from "@/components/ui/drawer";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { LineDiff } from "@/components/shared/line-diff";
+import { CloseIcon } from "@/components/mockups/config-versioning/icons";
+import type { Subject, Version } from "@/lib/mockups/config-versioning-data";
 
 export function SaveReview({
   open,
@@ -29,30 +29,30 @@ export function SaveReview({
   onSave,
   liveLine,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  subject: Subject
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  subject: Subject;
   /** The version the draft was edited from. */
-  base: number
-  draft: Record<string, string>
+  base: number;
+  draft: Record<string, string>;
   /** A version someone else saved after this page loaded. */
-  rival: Version | null
-  failed?: boolean
-  onSave: (note: string) => void
-  liveLine?: string
+  rival: Version | null;
+  failed?: boolean;
+  onSave: (note: string) => void;
+  liveLine?: string;
 }) {
-  const [note, setNote] = React.useState("")
-  const newest = subject.versions[0]
+  const [note, setNote] = React.useState("");
+  const newest = subject.versions[0];
   const changed = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
-  )
+  );
 
   return (
     <Drawer
       direction="right"
       onOpenChange={(next) => {
-        if (!next) setNote("")
-        onOpenChange(next)
+        if (!next) setNote("");
+        onOpenChange(next);
       }}
       open={open}
     >
@@ -134,7 +134,7 @@ export function SaveReview({
           </DrawerClose>
           <Button
             onClick={() => {
-              onSave(note.trim())
+              onSave(note.trim());
             }}
           >
             {failed ? "Try again" : rival ? "Save anyway" : "Save"}
@@ -142,5 +142,5 @@ export function SaveReview({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

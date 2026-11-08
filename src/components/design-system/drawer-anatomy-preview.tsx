@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -12,8 +12,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -21,34 +21,34 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/drawer";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
-import { FieldHint } from "@/components/design-system/field-hint"
-import { CloseIcon } from "@/components/design-system/icons"
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { FieldHint } from "@/components/design-system/field-hint";
+import { CloseIcon } from "@/components/design-system/icons";
 
 type Settings = {
-  enabled: boolean
-  window: string
-  instructions: string
-  action: string
-  message: string
-  language: string
-  retry: boolean
-  attempts: string
-  gap: string
-  giveUp: string
-}
+  enabled: boolean;
+  window: string;
+  instructions: string;
+  action: string;
+  message: string;
+  language: string;
+  retry: boolean;
+  attempts: string;
+  gap: string;
+  giveUp: string;
+};
 
 const INITIAL: Settings = {
   enabled: true,
@@ -63,60 +63,60 @@ const INITIAL: Settings = {
   attempts: "3",
   gap: "30",
   giveUp: "24",
-}
+};
 
 const WINDOWS = [
   { value: "5", label: "First 5 seconds" },
   { value: "10", label: "First 10 seconds" },
   { value: "15", label: "First 15 seconds" },
-]
+];
 
 const LANGUAGES = [
   { value: "ar", label: "Arabic" },
   { value: "en", label: "English" },
-]
+];
 
 function spoken(text: string) {
-  const words = text.trim().split(/\s+/).filter(Boolean).length
-  return Math.ceil(words / 2.5)
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return Math.ceil(words / 2.5);
 }
 
 const ACTIONS = [
   { value: "leave", label: "Leave a message, then hang up" },
   { value: "hangup", label: "Hang up straight away" },
   { value: "retry", label: "Hang up and retry later" },
-]
+];
 
 export function DrawerAnatomyPreview() {
-  const [open, setOpen] = React.useState(false)
-  const [saved, setSaved] = React.useState(INITIAL)
-  const [draft, setDraft] = React.useState(INITIAL)
-  const [confirming, setConfirming] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
+  const [saved, setSaved] = React.useState(INITIAL);
+  const [draft, setDraft] = React.useState(INITIAL);
+  const [confirming, setConfirming] = React.useState(false);
 
-  const dirty = JSON.stringify(draft) !== JSON.stringify(saved)
+  const dirty = JSON.stringify(draft) !== JSON.stringify(saved);
 
   function set(patch: Partial<Settings>) {
-    setDraft((current) => ({ ...current, ...patch }))
+    setDraft((current) => ({ ...current, ...patch }));
   }
 
   /* Every way out (Close, Cancel, Esc, overlay) comes through here, so unsaved edits are guarded once. */
   function requestClose(next: boolean) {
     if (next) {
-      setDraft(saved)
-      setOpen(true)
-      return
+      setDraft(saved);
+      setOpen(true);
+      return;
     }
     if (dirty) {
-      setConfirming(true)
-      return
+      setConfirming(true);
+      return;
     }
-    setOpen(false)
+    setOpen(false);
   }
 
   function save() {
-    setSaved(draft)
-    setOpen(false)
-    toast.success("Voicemail detection saved")
+    setSaved(draft);
+    setOpen(false);
+    toast.success("Voicemail detection saved");
   }
 
   return (
@@ -333,9 +333,9 @@ export function DrawerAnatomyPreview() {
             <AlertDialogAction
               variant="destructive"
               onClick={() => {
-                setDraft(saved)
-                setConfirming(false)
-                setOpen(false)
+                setDraft(saved);
+                setConfirming(false);
+                setOpen(false);
               }}
             >
               Discard
@@ -344,17 +344,17 @@ export function DrawerAnatomyPreview() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
 
 function Section({
   legend,
   children,
 }: {
-  legend: string
-  children: React.ReactNode
+  legend: string;
+  children: React.ReactNode;
 }) {
-  const id = React.useId()
+  const id = React.useId();
 
   return (
     <section aria-labelledby={id}>
@@ -366,7 +366,7 @@ function Section({
       </h3>
       <FieldGroup className="gap-4 p-4">{children}</FieldGroup>
     </section>
-  )
+  );
 }
 
 function NumberField({
@@ -375,10 +375,10 @@ function NumberField({
   value,
   onChange,
 }: {
-  id: string
-  label: string
-  value: string
-  onChange: (value: string) => void
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
 }) {
   return (
     <Field>
@@ -392,5 +392,5 @@ function NumberField({
         onChange={(event) => onChange(event.target.value)}
       />
     </Field>
-  )
+  );
 }

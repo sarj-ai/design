@@ -13,23 +13,23 @@ type CallStatus =
   | "transferred"
   | "transferring"
   | "user_rejected"
-  | "voicemail"
+  | "voicemail";
 
-type OutcomeStatus = "met" | "not_met"
+type OutcomeStatus = "met" | "not_met";
 
 export const OUTCOME_LABELS: Record<OutcomeStatus, string> = {
   met: "met",
   not_met: "not met",
-}
+};
 
-type CallDirection = "inbound" | "outbound"
+type CallDirection = "inbound" | "outbound";
 
 type TranscriptTurn = {
-  role: "agent" | "caller" | "human agent"
-  content: string
+  role: "agent" | "caller" | "human agent";
+  content: string;
   /** Seconds into the recording, printed under the bubble. */
-  at: number
-}
+  at: number;
+};
 
 export const CALL_DETAIL = {
   id: "call_9f2c41ab7d3e4c08",
@@ -133,35 +133,35 @@ export const CALL_DETAIL = {
     reference_read_back: true,
     sms_requested: true,
   } as Record<string, boolean | string>,
-}
+};
 
-export type TurnKind = "backchannel" | "speech" | "tool"
+export type TurnKind = "backchannel" | "speech" | "tool";
 
 export type RevampTurn = {
-  role: "agent" | "caller" | "human agent"
-  kind: TurnKind
-  content: string
+  role: "agent" | "caller" | "human agent";
+  kind: TurnKind;
+  content: string;
   /** Seconds into the recording. */
-  at: number
-  corrections?: { from: string; to: string }[]
-  tool?: { name: string; args: string; ms: number; response: string }
-}
+  at: number;
+  corrections?: { from: string; to: string }[];
+  tool?: { name: string; args: string; ms: number; response: string };
+};
 
-export const RECORDING_SECONDS = 204
+export const RECORDING_SECONDS = 204;
 
 type Outcome = {
-  title: string
-  status: OutcomeStatus
-  reason: string
-  generatedAt: string
-  criteria: { achieved: boolean; isPrimary: boolean; text: string }[]
-}
+  title: string;
+  status: OutcomeStatus;
+  reason: string;
+  generatedAt: string;
+  criteria: { achieved: boolean; isPrimary: boolean; text: string }[];
+};
 
 export const CALL_VERDICTS: { label: string; ok: boolean; value: string }[] = [
   { label: "Call status", ok: true, value: "Connected" },
   { label: "Outcome", ok: true, value: "Met" },
   { label: "Agent outcome", ok: true, value: "Helpful" },
-]
+];
 
 export const OUTCOMES: Outcome[] = [
   {
@@ -222,7 +222,7 @@ export const OUTCOMES: Outcome[] = [
       },
     ],
   },
-]
+];
 
 export const COLLECTED: { label: string; value: string }[] = [
   { label: "Payment promised", value: "Yes" },
@@ -231,7 +231,7 @@ export const COLLECTED: { label: string; value: string }[] = [
   { label: "Reference read back", value: "Yes" },
   { label: "SMS requested", value: "Yes" },
   { label: "Payment method", value: "Transfer from Noon" },
-]
+];
 
 export const TECHNICAL: { label: string; value: string }[] = [
   { label: "Created", value: "Aug 11, 2026, 2:41:02 PM" },
@@ -243,20 +243,20 @@ export const TECHNICAL: { label: string; value: string }[] = [
   { label: "Callee", value: "+966 55 812 4477" },
   { label: "Total calls", value: "3" },
   { label: "Answer rate", value: "67%" },
-]
+];
 
 export type TranscriptionError = {
-  incorrect_text: string
-  correction: string
-  type: "phrase" | "word"
-}
+  incorrect_text: string;
+  correction: string;
+  type: "phrase" | "word";
+};
 
 export type V4Turn = Omit<RevampTurn, "corrections"> & {
   /** Absent when the enhanced pass left the line alone. */
-  enhanced?: string
-  addedInEnhanced?: boolean
-  errors?: TranscriptionError[]
-}
+  enhanced?: string;
+  addedInEnhanced?: boolean;
+  errors?: TranscriptionError[];
+};
 
 export const V4_TRANSCRIPT: V4Turn[] = [
   {
@@ -354,21 +354,21 @@ export const V4_TRANSCRIPT: V4Turn[] = [
     enhanced: "Exactly right. Thank you for your time, and have a good day.",
     at: 47,
   },
-]
+];
 
 export const SUMMARY = {
   text: "Saud confirmed the outstanding SAR 4,820 and committed to paying on 18 August by transfer from Noon. The agent recorded the promise, read back reference 4729, and the customer repeated it correctly and asked for it by SMS. The instalment plan was never offered, and a question about early-payment discount went unanswered.",
   generatedAt: "Aug 11, 2026, 2:45 PM",
-}
+};
 
-type InsightCategory = "knowledge" | "platform" | "prompt" | "tool"
+type InsightCategory = "knowledge" | "platform" | "prompt" | "tool";
 
 type Insight = {
-  id: string
-  title: string
-  description: string
-  category: InsightCategory
-}
+  id: string;
+  title: string;
+  description: string;
+  category: InsightCategory;
+};
 
 export const INSIGHT_CATEGORY_LABELS: Record<InsightCategory, string> = {
   knowledge:
@@ -378,7 +378,7 @@ export const INSIGHT_CATEGORY_LABELS: Record<InsightCategory, string> = {
   prompt:
     "Conversational behaviour with no tool involved: script, wording, or call flow.",
   tool: "One of the agent's tools or integrations — missing, failed, or never invoked.",
-}
+};
 
 export const INSIGHTS: Insight[] = [
   {
@@ -416,10 +416,15 @@ export const INSIGHTS: Insight[] = [
       "The agent promised to send reference 4729 by SMS. No send_sms tool is configured on this scenario, so nothing was sent.",
     category: "tool",
   },
-]
+];
 
 export type IssueType =
-  "connectivity" | "flow" | "latency" | "other" | "pronunciation" | "silence"
+  | "connectivity"
+  | "flow"
+  | "latency"
+  | "other"
+  | "pronunciation"
+  | "silence";
 
 export const ISSUE_TYPE_LABELS: Record<IssueType, string> = {
   connectivity: "Connectivity",
@@ -428,7 +433,7 @@ export const ISSUE_TYPE_LABELS: Record<IssueType, string> = {
   other: "Other",
   pronunciation: "Pronunciation",
   silence: "Silence",
-}
+};
 
 export const ISSUE_TYPE_ORDER: IssueType[] = [
   "pronunciation",
@@ -437,18 +442,18 @@ export const ISSUE_TYPE_ORDER: IssueType[] = [
   "silence",
   "latency",
   "other",
-]
+];
 
 type CallFlag = {
-  id: string
-  issueType: IssueType
-  timestampMs: number
-  comment?: string
-  user: string
-  createdAt: string
-}
+  id: string;
+  issueType: IssueType;
+  timestampMs: number;
+  comment?: string;
+  user: string;
+  createdAt: string;
+};
 
-export const FLAG_LIMIT = 10
+export const FLAG_LIMIT = 10;
 
 export const CALL_FLAGS: CallFlag[] = [
   {
@@ -475,44 +480,44 @@ export const CALL_FLAGS: CallFlag[] = [
     user: "hbinmahfoodh@sarj.ai",
     createdAt: "Aug 11, 2026, 3:11 PM",
   },
-]
+];
 
-export type CallState = "complete" | "queued" | "scheduled"
+export type CallState = "complete" | "queued" | "scheduled";
 
-export type Channel = "call" | "chat"
+export type Channel = "call" | "chat";
 
 export type CallIdentity = {
-  id: string
-  scenario: string
-  phoneNumber: null | string
-  startedAt: string
-  duration: string
-}
+  id: string;
+  scenario: string;
+  phoneNumber: null | string;
+  startedAt: string;
+  duration: string;
+};
 
-export type ScheduleOrigin = "follow_up" | "requested"
+export type ScheduleOrigin = "follow_up" | "requested";
 
 export type ScheduleDetail = {
-  origin: ScheduleOrigin
-  confidence?: string
-  trigger: string
-  dialsAt: string
-  reschedules: { limit: number; used: number }
-  dialAttempts: { limit: number; used: number }
-  contextBrief: string
-}
+  origin: ScheduleOrigin;
+  confidence?: string;
+  trigger: string;
+  dialsAt: string;
+  reschedules: { limit: number; used: number };
+  dialAttempts: { limit: number; used: number };
+  contextBrief: string;
+};
 
 export type CallLink = {
-  callId: string
-  scenario: string
-  when: string
-  status: string
-}
+  callId: string;
+  scenario: string;
+  when: string;
+  status: string;
+};
 
 export type CallSpecifics = {
-  schedule?: ScheduleDetail
-  ranFrom?: CallLink
-  booked?: CallLink
-}
+  schedule?: ScheduleDetail;
+  ranFrom?: CallLink;
+  booked?: CallLink;
+};
 
 export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
   call_b6913fe0c7d4428a: {
@@ -578,4 +583,4 @@ export const CALL_SPECIFICS: Record<string, CallSpecifics> = {
       trigger: "Callback",
     },
   },
-}
+};

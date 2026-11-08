@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Alert02Icon,
@@ -11,25 +11,25 @@ import {
   Settings01Icon,
   StopIcon,
   UserSharingIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const FillerWordsIcon = icon(Message01Icon, "FillerWordsIcon")
-export const ConfigureIcon = icon(Settings01Icon, "ConfigureIcon")
+export const FillerWordsIcon = icon(Message01Icon, "FillerWordsIcon");
+export const ConfigureIcon = icon(Settings01Icon, "ConfigureIcon");
 
-export const AddMappingIcon = icon(PlusSignIcon, "AddMappingIcon")
-export const DeleteMappingIcon = icon(Delete02Icon, "DeleteMappingIcon")
+export const AddMappingIcon = icon(PlusSignIcon, "AddMappingIcon");
+export const DeleteMappingIcon = icon(Delete02Icon, "DeleteMappingIcon");
 
-export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon")
-export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon")
+export const PlayPreviewIcon = icon(PlayIcon, "PlayPreviewIcon");
+export const StopPreviewIcon = icon(StopIcon, "StopPreviewIcon");
 
-export const RemoveTriggerIcon = icon(Cancel01Icon, "RemoveTriggerIcon")
+export const RemoveTriggerIcon = icon(Cancel01Icon, "RemoveTriggerIcon");
 
-export const ConflictIcon = icon(Alert02Icon, "ConflictIcon")
+export const ConflictIcon = icon(Alert02Icon, "ConflictIcon");
 
-export const RespondsWithIcon = icon(ArrowRight01Icon, "RespondsWithIcon")
+export const RespondsWithIcon = icon(ArrowRight01Icon, "RespondsWithIcon");
 
-export const OverrideIcon = icon(UserSharingIcon, "OverrideIcon")
+export const OverrideIcon = icon(UserSharingIcon, "OverrideIcon");
 
-export const CloseIcon = icon(Cancel01Icon, "CloseIcon")
+export const CloseIcon = icon(Cancel01Icon, "CloseIcon");

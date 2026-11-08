@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CALLS,
   CONFIGURED_ALERTS,
@@ -24,29 +24,29 @@ import {
   SEVERITY_LABELS,
   SEVERITY_ORDER,
   type ConfiguredAlert,
-} from "@/lib/mockups/behavioral-alerts-data"
+} from "@/lib/mockups/behavioral-alerts-data";
 import {
   DEFAULT_COLUMNS,
   TOTAL_RESULTS,
   type CallRow as ListCallRow,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
-import { CallDrawer } from "@/components/mockups/behavioral-alerts/call-drawer"
-import { SEVERITY_DOT } from "@/components/mockups/behavioral-alerts/severity"
-import { ScenarioAlertsSection } from "@/components/mockups/behavioral-alerts/scenario-alerts-section"
-import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table"
-import { SearchFilters } from "@/components/mockups/conversations-revamp/list/search-filters"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { CallDrawer } from "@/components/mockups/behavioral-alerts/call-drawer";
+import { SEVERITY_DOT } from "@/components/mockups/behavioral-alerts/severity";
+import { ScenarioAlertsSection } from "@/components/mockups/behavioral-alerts/scenario-alerts-section";
+import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table";
+import { SearchFilters } from "@/components/mockups/conversations-revamp/list/search-filters";
 import {
   NextIcon,
   PreviousIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 
-type Surface = "call" | "scenario"
+type Surface = "call" | "scenario";
 
 const STATE_OPTIONS: { id: string; label: string }[] = [
   { id: "call-1", label: "Flags detected" },
@@ -55,21 +55,21 @@ const STATE_OPTIONS: { id: string; label: string }[] = [
   { id: "call-4", label: "Still analysing" },
   { id: "call-5", label: "No flags configured" },
   { id: "call-6", label: "No transcript" },
-]
+];
 
 function formatDuration(seconds: number) {
-  return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`
+  return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
 }
 
 function FlagMarker({ callId }: { callId: string }) {
   const detections =
-    CALLS.find((call) => call.id === callId)?.analysis.detections ?? []
-  if (detections.length === 0) return null
+    CALLS.find((call) => call.id === callId)?.analysis.detections ?? [];
+  if (detections.length === 0) return null;
 
   const worst =
     SEVERITY_ORDER.find((severity) =>
       detections.some((detection) => detection.severity === severity),
-    ) ?? "mild"
+    ) ?? "mild";
 
   return (
     <Tooltip>
@@ -87,11 +87,11 @@ function FlagMarker({ callId }: { callId: string }) {
         {` · worst ${SEVERITY_LABELS[worst]}`}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 const LIST_ROWS: ListCallRow[] = CALLS.map((call) => {
-  const journey = call.analysis.journey
+  const journey = call.analysis.journey;
 
   return {
     agentOutcome: !journey
@@ -113,24 +113,24 @@ const LIST_ROWS: ListCallRow[] = CALLS.map((call) => {
     scenario: call.scenario,
     status: call.status,
     user: OWNER.email,
-  }
-})
+  };
+});
 
 export default function BehavioralAlertsPage() {
-  const [surface, setSurface] = React.useState<Surface>("call")
-  const [openCallId, setOpenCallId] = React.useState<null | string>("call-1")
-  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS)
+  const [surface, setSurface] = React.useState<Surface>("call");
+  const [openCallId, setOpenCallId] = React.useState<null | string>("call-1");
+  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS);
   const [alerts, setAlerts] =
-    React.useState<ConfiguredAlert[]>(CONFIGURED_ALERTS)
+    React.useState<ConfiguredAlert[]>(CONFIGURED_ALERTS);
 
-  const openCall = CALLS.find((call) => call.id === openCallId) ?? null
+  const openCall = CALLS.find((call) => call.id === openCallId) ?? null;
 
   function navigate(title: string) {
     if (title === "Scenarios") {
-      setOpenCallId(null)
-      setSurface("scenario")
+      setOpenCallId(null);
+      setSurface("scenario");
     }
-    if (title === "Conversations") setSurface("call")
+    if (title === "Conversations") setSurface("call");
   }
 
   return (
@@ -139,8 +139,8 @@ export default function BehavioralAlertsPage() {
         <>
           <ToggleGroup
             onValueChange={(value) => {
-              if (!value) return
-              setSurface(value as Surface)
+              if (!value) return;
+              setSurface(value as Surface);
             }}
             size="sm"
             type="single"
@@ -174,8 +174,8 @@ export default function BehavioralAlertsPage() {
           ) : (
             <ToggleGroup
               onValueChange={(value) => {
-                if (!value) return
-                setAlerts(value === "empty" ? [] : CONFIGURED_ALERTS)
+                if (!value) return;
+                setAlerts(value === "empty" ? [] : CONFIGURED_ALERTS);
               }}
               size="sm"
               type="single"
@@ -209,7 +209,7 @@ export default function BehavioralAlertsPage() {
                   calls={LIST_ROWS}
                   columns={columns}
                   onCallClick={(call) => {
-                    setOpenCallId(call.id)
+                    setOpenCallId(call.id);
                   }}
                   rowMarker={(call) => <FlagMarker callId={call.id} />}
                 />
@@ -261,11 +261,11 @@ export default function BehavioralAlertsPage() {
           <CallDrawer
             call={openCall}
             onConfigureAlerts={() => {
-              setOpenCallId(null)
-              setSurface("scenario")
+              setOpenCallId(null);
+              setSurface("scenario");
             }}
             onOpenChange={(next) => {
-              if (!next) setOpenCallId(null)
+              if (!next) setOpenCallId(null);
             }}
             open={openCall !== null}
           />
@@ -307,5 +307,5 @@ export default function BehavioralAlertsPage() {
         </AppShell>
       )}
     </MockupShell>
-  )
+  );
 }

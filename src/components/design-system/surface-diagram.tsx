@@ -1,5 +1,5 @@
-import type { SurfaceId } from "@/lib/design-system/data"
-import { cn } from "@/lib/utils"
+import type { SurfaceId } from "@/lib/design-system/data";
+import { cn } from "@/lib/utils";
 
 export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
   if (variant === "inline") {
@@ -11,7 +11,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
         <Row />
         <Row />
       </Frame>
-    )
+    );
   }
 
   if (variant === "popover") {
@@ -30,7 +30,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
         <Row />
         <Row />
       </Frame>
-    )
+    );
   }
 
   if (variant === "undo") {
@@ -44,7 +44,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
           <div className="h-1 w-1/4 rounded-sm bg-primary-foreground" />
         </div>
       </Frame>
-    )
+    );
   }
 
   if (variant === "dialog" || variant === "confirm") {
@@ -65,7 +65,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
           </div>
         </div>
       </Frame>
-    )
+    );
   }
 
   if (variant === "drawer") {
@@ -84,7 +84,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
           </div>
         </div>
       </Frame>
-    )
+    );
   }
 
   if (variant === "record") {
@@ -105,7 +105,7 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
           <div className="w-1/3 rounded-sm bg-primary-foreground/20" />
         </div>
       </Frame>
-    )
+    );
   }
 
   return (
@@ -123,15 +123,15 @@ export function SurfaceDiagram({ variant }: { variant: SurfaceId }) {
         </div>
       </div>
     </Frame>
-  )
+  );
 }
 
 function Frame({
   className,
   children,
 }: {
-  className?: string
-  children: React.ReactNode
+  className?: string;
+  children: React.ReactNode;
 }) {
   return (
     <div
@@ -143,7 +143,7 @@ function Frame({
     >
       {children}
     </div>
-  )
+  );
 }
 
 function Bar({ className }: { className?: string }) {
@@ -151,9 +151,9 @@ function Bar({ className }: { className?: string }) {
     <div
       className={cn("h-2 shrink-0 rounded-sm bg-foreground/10", className)}
     />
-  )
+  );
 }
 
 function Row() {
-  return <div className="h-5 shrink-0 rounded-sm bg-foreground/10" />
+  return <div className="h-5 shrink-0 rounded-sm bg-foreground/10" />;
 }

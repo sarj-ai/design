@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { errorId, FieldHeader } from "@/components/design-system/field-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { errorId, FieldHeader } from "@/components/design-system/field-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Drawer,
   DrawerClose,
@@ -18,28 +18,28 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Field } from "@/components/ui/field"
-import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/drawer";
+import { Field } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { SideBySideDiff } from "@/components/shared/line-diff"
+} from "@/components/ui/tooltip";
+import { SideBySideDiff } from "@/components/shared/line-diff";
 import {
   CloseIcon,
   NextRequestIcon,
   PreviousRequestIcon,
-} from "@/components/mockups/publish-approval/icons"
-import { StatusBadge } from "@/components/mockups/publish-approval/status-badge"
+} from "@/components/mockups/publish-approval/icons";
+import { StatusBadge } from "@/components/mockups/publish-approval/status-badge";
 import {
   type ApprovalRequest,
   canDecide,
   type Viewer,
   who,
-} from "@/lib/mockups/publish-approval-data"
+} from "@/lib/mockups/publish-approval-data";
 
 export function ReviewDrawer({
   request,
@@ -52,38 +52,38 @@ export function ReviewDrawer({
   onReject,
   onWithdraw,
 }: {
-  request: ApprovalRequest | null
-  onClose: () => void
-  viewer: Viewer
+  request: ApprovalRequest | null;
+  onClose: () => void;
+  viewer: Viewer;
   /** The requests ↑ and ↓ step through, in list order. */
-  list: string[]
-  onStep: (id: string) => void
-  failApprove: boolean
-  onApprove: (id: string) => Promise<boolean>
-  onReject: (id: string, reason: string) => void
-  onWithdraw: (id: string) => void
+  list: string[];
+  onStep: (id: string) => void;
+  failApprove: boolean;
+  onApprove: (id: string) => Promise<boolean>;
+  onReject: (id: string, reason: string) => void;
+  onWithdraw: (id: string) => void;
 }) {
-  const index = request ? list.indexOf(request.id) : -1
-  const previous = index > 0 ? list[index - 1] : null
-  const next = index >= 0 && index < list.length - 1 ? list[index + 1] : null
+  const index = request ? list.indexOf(request.id) : -1;
+  const previous = index > 0 ? list[index - 1] : null;
+  const next = index >= 0 && index < list.length - 1 ? list[index + 1] : null;
 
   React.useEffect(() => {
-    if (!request) return
+    if (!request) return;
     function onKey(event: KeyboardEvent) {
-      const target = event.target as HTMLElement
-      if (target.closest("textarea, input")) return
-      if (event.key === "ArrowUp" && previous) onStep(previous)
-      if (event.key === "ArrowDown" && next) onStep(next)
+      const target = event.target as HTMLElement;
+      if (target.closest("textarea, input")) return;
+      if (event.key === "ArrowUp" && previous) onStep(previous);
+      if (event.key === "ArrowDown" && next) onStep(next);
     }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [request, previous, next, onStep])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [request, previous, next, onStep]);
 
   return (
     <Drawer
       direction="right"
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onClose();
       }}
       open={request !== null}
     >
@@ -104,7 +104,7 @@ export function ReviewDrawer({
         ) : null}
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
 function Review({
@@ -118,38 +118,38 @@ function Review({
   onReject,
   onWithdraw,
 }: {
-  request: ApprovalRequest
-  viewer: Viewer
-  previous: string | null
-  next: string | null
-  onStep: (id: string) => void
-  failApprove: boolean
-  onApprove: (id: string) => Promise<boolean>
-  onReject: (id: string, reason: string) => void
-  onWithdraw: (id: string) => void
+  request: ApprovalRequest;
+  viewer: Viewer;
+  previous: string | null;
+  next: string | null;
+  onStep: (id: string) => void;
+  failApprove: boolean;
+  onApprove: (id: string) => Promise<boolean>;
+  onReject: (id: string, reason: string) => void;
+  onWithdraw: (id: string) => void;
 }) {
-  const [rejecting, setRejecting] = React.useState(false)
-  const [approving, setApproving] = React.useState(false)
-  const [failed, setFailed] = React.useState(false)
-  const attempts = React.useRef(0)
+  const [rejecting, setRejecting] = React.useState(false);
+  const [approving, setApproving] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+  const attempts = React.useRef(0);
 
-  const pending = request.status === "pending"
-  const decides = canDecide(request, viewer)
-  const mine = request.by === viewer.name
-  const where = request.org
+  const pending = request.status === "pending";
+  const decides = canDecide(request, viewer);
+  const mine = request.by === viewer.name;
+  const where = request.org;
 
   async function approve() {
-    setApproving(true)
-    setFailed(false)
-    attempts.current += 1
+    setApproving(true);
+    setFailed(false);
+    attempts.current += 1;
     const ok =
       failApprove && attempts.current === 1
         ? await new Promise<boolean>((resolve) =>
             setTimeout(() => resolve(false), 900),
           )
-        : await onApprove(request.id)
-    setApproving(false)
-    if (!ok) setFailed(true)
+        : await onApprove(request.id);
+    setApproving(false);
+    if (!ok) setFailed(true);
   }
 
   return (
@@ -282,17 +282,17 @@ function Review({
         </div>
       </div>
     </>
-  )
+  );
 }
 
 function Standing({
   request,
   viewer,
 }: {
-  request: ApprovalRequest
-  viewer: Viewer
+  request: ApprovalRequest;
+  viewer: Viewer;
 }) {
-  const decision = request.decision
+  const decision = request.decision;
   switch (request.status) {
     case "pending":
       return (
@@ -300,21 +300,21 @@ function Standing({
           Waiting {request.waiting} · callers hear v{request.live} until it’s
           approved
         </span>
-      )
+      );
     case "approved":
       return (
         <span>
           {who(decision!.by, viewer)}, {decision!.at} · callers hear v
           {request.version} from then
         </span>
-      )
+      );
     case "rejected":
     case "withdrawn":
       return (
         <span>
           {who(decision!.by, viewer)}, {decision!.at}
         </span>
-      )
+      );
   }
 }
 
@@ -322,8 +322,8 @@ function Block({
   label,
   children,
 }: {
-  label: string
-  children: React.ReactNode
+  label: string;
+  children: React.ReactNode;
 }) {
   return (
     <section className="flex flex-col gap-1">
@@ -332,7 +332,7 @@ function Block({
         {children}
       </p>
     </section>
-  )
+  );
 }
 
 function RejectReason({
@@ -340,14 +340,14 @@ function RejectReason({
   onCancel,
   onReject,
 }: {
-  version: number
-  onCancel: () => void
-  onReject: (reason: string) => void
+  version: number;
+  onCancel: () => void;
+  onReject: (reason: string) => void;
 }) {
-  const [reason, setReason] = React.useState("")
-  const [submitted, setSubmitted] = React.useState(false)
+  const [reason, setReason] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
   const error =
-    submitted && reason.trim() === "" ? "Say what needs to change." : null
+    submitted && reason.trim() === "" ? "Say what needs to change." : null;
 
   return (
     <Card>
@@ -375,19 +375,19 @@ function RejectReason({
         </Button>
         <Button
           onClick={() => {
-            setSubmitted(true)
-            if (reason.trim()) onReject(reason.trim())
+            setSubmitted(true);
+            if (reason.trim()) onReject(reason.trim());
           }}
         >
           Reject v{version}
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 function ExactChanges({ request }: { request: ApprovalRequest }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
 
   return (
     <Collapsible
@@ -416,5 +416,5 @@ function ExactChanges({ request }: { request: ApprovalRequest }) {
         ))}
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }

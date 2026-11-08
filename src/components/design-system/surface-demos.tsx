@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
-import { FieldHint } from "@/components/design-system/field-hint"
-import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview"
+import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview";
+import { FieldHint } from "@/components/design-system/field-hint";
+import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview";
 
 import {
   AlertDialog,
@@ -18,10 +18,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Command,
   CommandEmpty,
@@ -29,7 +29,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogClose,
@@ -39,7 +39,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -47,15 +47,15 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/drawer";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Item,
   ItemActions,
@@ -63,19 +63,19 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   ArchiveIcon,
   CloseIcon,
@@ -83,36 +83,36 @@ import {
   CreateInListIcon,
   NextRecordIcon,
   PreviousRecordIcon,
-} from "@/components/design-system/icons"
-import { DEMO_VOICES, type SurfaceId } from "@/lib/design-system/data"
+} from "@/components/design-system/icons";
+import { DEMO_VOICES, type SurfaceId } from "@/lib/design-system/data";
 
 export function SurfaceDemo({ variant }: { variant: SurfaceId }) {
   switch (variant) {
     case "inline":
-      return <InlineDemo />
+      return <InlineDemo />;
     case "popover":
-      return <AttachKnowledgeDemo />
+      return <AttachKnowledgeDemo />;
     case "undo":
-      return <ArchiveDemo />
+      return <ArchiveDemo />;
     case "dialog":
-      return <CreateApiKeyDialog />
+      return <CreateApiKeyDialog />;
     case "confirm":
-      return <DeletePersonaDialog />
+      return <DeletePersonaDialog />;
     case "drawer":
-      return <DrawerAnatomyPreview />
+      return <DrawerAnatomyPreview />;
     case "record":
-      return <CallRecordDemo />
+      return <CallRecordDemo />;
     case "page":
-      return <CreationFlowPreview />
+      return <CreationFlowPreview />;
   }
 }
 
 function InlineDemo() {
-  const [editing, setEditing] = React.useState(false)
-  const [voice, setVoice] = React.useState(DEMO_VOICES[0].id)
-  const [draft, setDraft] = React.useState(voice)
+  const [editing, setEditing] = React.useState(false);
+  const [voice, setVoice] = React.useState(DEMO_VOICES[0].id);
+  const [draft, setDraft] = React.useState(voice);
 
-  const current = DEMO_VOICES.find((entry) => entry.id === voice)
+  const current = DEMO_VOICES.find((entry) => entry.id === voice);
 
   if (!editing) {
     return (
@@ -125,8 +125,8 @@ function InlineDemo() {
         </div>
         <Button
           onClick={() => {
-            setDraft(voice)
-            setEditing(true)
+            setDraft(voice);
+            setEditing(true);
           }}
           size="sm"
           variant="outline"
@@ -134,7 +134,7 @@ function InlineDemo() {
           Change
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -158,8 +158,8 @@ function InlineDemo() {
         </Button>
         <Button
           onClick={() => {
-            setVoice(draft)
-            setEditing(false)
+            setVoice(draft);
+            setEditing(false);
           }}
           size="sm"
         >
@@ -167,7 +167,7 @@ function InlineDemo() {
         </Button>
       </div>
     </Field>
-  )
+  );
 }
 
 const KNOWLEDGE_BASES = [
@@ -175,21 +175,21 @@ const KNOWLEDGE_BASES = [
   { id: "pricing", label: "Pricing 2026", language: "EN" },
   { id: "branches", label: "Branch hours", language: "AR" },
   { id: "card-faq", label: "Card FAQ", language: "AR" },
-]
+];
 
 function AttachKnowledgeDemo() {
-  const [bases, setBases] = React.useState(KNOWLEDGE_BASES)
-  const [picked, setPicked] = React.useState<string[]>(["returns"])
-  const [open, setOpen] = React.useState(false)
-  const [creating, setCreating] = React.useState(false)
-  const [name, setName] = React.useState("")
+  const [bases, setBases] = React.useState(KNOWLEDGE_BASES);
+  const [picked, setPicked] = React.useState<string[]>(["returns"]);
+  const [open, setOpen] = React.useState(false);
+  const [creating, setCreating] = React.useState(false);
+  const [name, setName] = React.useState("");
 
   const toggle = (id: string) =>
     setPicked((current) =>
       current.includes(id)
         ? current.filter((entry) => entry !== id)
         : [...current, id],
-    )
+    );
 
   return (
     <div className="flex flex-col items-start gap-3">
@@ -226,8 +226,8 @@ function AttachKnowledgeDemo() {
             <Button
               className="w-full justify-start"
               onClick={() => {
-                setOpen(false)
-                setCreating(true)
+                setOpen(false);
+                setCreating(true);
               }}
               size="sm"
               variant="ghost"
@@ -249,8 +249,8 @@ function AttachKnowledgeDemo() {
 
       <Dialog
         onOpenChange={(next) => {
-          setCreating(next)
-          if (!next) setName("")
+          setCreating(next);
+          if (!next) setName("");
         }}
         open={creating}
       >
@@ -258,14 +258,19 @@ function AttachKnowledgeDemo() {
           <form
             className="flex flex-col gap-4"
             onSubmit={(event) => {
-              event.preventDefault()
-              const label = name.trim() || "Untitled knowledge base"
-              const id = `kb-${bases.length}`
-              setBases((current) => [...current, { id, label, language: "AR" }])
-              setPicked((current) => [...current, id])
-              setCreating(false)
-              setName("")
-              toast(`${label} created and attached`)
+              event.preventDefault();
+              const trimmedName = name.trim();
+              const label =
+                trimmedName === "" ? "Untitled knowledge base" : trimmedName;
+              const id = `kb-${String(bases.length)}`;
+              setBases((current) => [
+                ...current,
+                { id, label, language: "AR" },
+              ]);
+              setPicked((current) => [...current, id]);
+              setCreating(false);
+              setName("");
+              toast(`${label} created and attached`);
             }}
           >
             <DialogHeader>
@@ -290,20 +295,20 @@ function AttachKnowledgeDemo() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
 
 const SCENARIO_NAMES = [
   "Appointment booking",
   "Delivery confirmation",
   "Renewal follow-up",
-]
+];
 
 function ArchiveDemo() {
-  const [rows, setRows] = React.useState(SCENARIO_NAMES)
+  const [rows, setRows] = React.useState(SCENARIO_NAMES);
 
   const archive = (name: string) => {
-    setRows((current) => current.filter((entry) => entry !== name))
+    setRows((current) => current.filter((entry) => entry !== name));
     toast(`${name} moved to Recently deleted`, {
       action: {
         label: "Undo",
@@ -314,8 +319,8 @@ function ArchiveDemo() {
             ),
           ),
       },
-    })
-  }
+    });
+  };
 
   if (!rows.length) {
     return (
@@ -331,7 +336,7 @@ function ArchiveDemo() {
           Restore all
         </Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -354,25 +359,25 @@ function ArchiveDemo() {
         </Item>
       ))}
     </ItemGroup>
-  )
+  );
 }
 
-const DEMO_KEY = "sk_live_4f9a2c7e1b8d3a60e5c1"
+const DEMO_KEY = "EXAMPLE_KEY_DO_NOT_USE";
 
 function CreateApiKeyDialog() {
-  const [open, setOpen] = React.useState(false)
-  const [name, setName] = React.useState("")
-  const [missing, setMissing] = React.useState(false)
-  const [created, setCreated] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
+  const [name, setName] = React.useState("");
+  const [missing, setMissing] = React.useState(false);
+  const [created, setCreated] = React.useState(false);
 
   return (
     <Dialog
       onOpenChange={(next) => {
-        setOpen(next)
+        setOpen(next);
         if (!next) {
-          setName("")
-          setMissing(false)
-          setCreated(false)
+          setName("");
+          setMissing(false);
+          setCreated(false);
         }
       }}
       open={open}
@@ -415,8 +420,8 @@ function CreateApiKeyDialog() {
               </DialogClose>
               <Button
                 onClick={() => {
-                  toast("Key copied")
-                  setOpen(false)
+                  toast("Key copied");
+                  setOpen(false);
                 }}
               >
                 Copy and close
@@ -427,12 +432,12 @@ function CreateApiKeyDialog() {
           <form
             className="flex flex-col gap-4"
             onSubmit={(event) => {
-              event.preventDefault()
+              event.preventDefault();
               if (!name.trim()) {
-                setMissing(true)
-                return
+                setMissing(true);
+                return;
               }
-              setCreated(true)
+              setCreated(true);
             }}
           >
             <DialogHeader>
@@ -449,8 +454,8 @@ function CreateApiKeyDialog() {
                 aria-invalid={missing}
                 id="surface-key-name"
                 onChange={(event) => {
-                  setName(event.target.value)
-                  setMissing(false)
+                  setName(event.target.value);
+                  setMissing(false);
                 }}
                 placeholder="Zoho sync"
                 value={name}
@@ -467,13 +472,13 @@ function CreateApiKeyDialog() {
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-const PERSONA = "Reservations"
+const PERSONA = "Reservations";
 
 function DeletePersonaDialog() {
-  const [typed, setTyped] = React.useState("")
+  const [typed, setTyped] = React.useState("");
 
   return (
     <AlertDialog onOpenChange={(next) => (next ? null : setTyped(""))}>
@@ -521,36 +526,39 @@ function DeletePersonaDialog() {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
 
 /** ↑ and ↓ step through the list wherever focus is, except in a field. */
 export function useRecordKeys(active: boolean, step: (by: number) => void) {
-  const latest = React.useRef(step)
+  const latest = React.useRef(step);
   React.useEffect(() => {
-    latest.current = step
-  })
+    latest.current = step;
+  });
   React.useEffect(() => {
-    if (!active) return
+    if (!active) return;
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null
-      if (target?.closest("input, textarea, [contenteditable]")) return
-      if (event.key === "ArrowDown") latest.current(1)
-      if (event.key === "ArrowUp") latest.current(-1)
-    }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [active])
+      const target = event.target;
+      if (target !== null && !(target instanceof Element)) {
+        throw new TypeError("target?.closest is not a function");
+      }
+      if (target?.closest("input, textarea, [contenteditable]")) return;
+      if (event.key === "ArrowDown") latest.current(1);
+      if (event.key === "ArrowUp") latest.current(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active]);
 }
 
-type DemoCall = {
-  id: string
-  caller: string
-  scenario: string
-  outcome: string
-  duration: string
-  started: string
-  turns: { speaker: "Agent" | "Caller"; text: string }[]
+interface DemoCall {
+  id: string;
+  caller: string;
+  scenario: string;
+  outcome: string;
+  duration: string;
+  started: string;
+  turns: { speaker: "Agent" | "Caller"; text: string }[];
 }
 
 const DEMO_CALLS: DemoCall[] = [
@@ -598,18 +606,18 @@ const DEMO_CALLS: DemoCall[] = [
       },
     ],
   },
-]
+];
 
 function CallRecordDemo() {
-  const [open, setOpen] = React.useState(false)
-  const [index, setIndex] = React.useState(0)
-  const call = DEMO_CALLS[index]
+  const [open, setOpen] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
+  const call = DEMO_CALLS[index];
 
   const step = (by: number) =>
     setIndex((current) =>
       Math.min(DEMO_CALLS.length - 1, Math.max(0, current + by)),
-    )
-  useRecordKeys(open, step)
+    );
+  useRecordKeys(open, step);
 
   return (
     <>
@@ -624,8 +632,8 @@ function CallRecordDemo() {
           >
             <button
               onClick={() => {
-                setIndex(position)
-                setOpen(true)
+                setIndex(position);
+                setOpen(true);
               }}
               type="button"
             >
@@ -710,5 +718,5 @@ function CallRecordDemo() {
         </DrawerContent>
       </Drawer>
     </>
-  )
+  );
 }

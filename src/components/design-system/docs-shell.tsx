@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { SiteNav } from "@/components/shell/site-nav"
-import { CopyDesignSystemButton } from "@/components/design-system/overview/copy-design-system"
-import { OverviewTour } from "@/components/design-system/overview/overview-tour"
-import { type DocsPage, type DocsSection } from "@/lib/design-system/data"
+import { SiteNav } from "@/components/shell/site-nav";
+import { CopyDesignSystemButton } from "@/components/design-system/overview/copy-design-system";
+import { OverviewTour } from "@/components/design-system/overview/overview-tour";
+import { type DocsPage, type DocsSection } from "@/lib/design-system/data";
 
 /**
  * Every design-system address is the tour: the overview, a section (landing on its chapter) and a
@@ -16,9 +16,9 @@ export function DesignSystemDocs({
   section,
   views,
 }: {
-  page: DocsPage | null
-  section: DocsSection | null
-  views: Record<string, React.ReactNode>
+  page: DocsPage | null;
+  section: DocsSection | null;
+  views: Record<string, React.ReactNode>;
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -32,5 +32,5 @@ export function DesignSystemDocs({
         views={views}
       />
     </div>
-  )
+  );
 }

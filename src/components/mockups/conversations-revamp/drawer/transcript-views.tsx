@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Separator } from "@/components/ui/separator"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/input-group";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import {
   RECORDING_SECONDS,
   V4_TRANSCRIPT,
   type Channel,
   type TranscriptionError,
   type V4Turn,
-} from "@/lib/mockups/conversations-revamp-drawer-data"
+} from "@/lib/mockups/conversations-revamp-drawer-data";
 import {
   RecordingPlayer,
   formatTimeSeconds,
-} from "@/components/mockups/conversations-revamp/drawer/recording-player"
+} from "@/components/mockups/conversations-revamp/drawer/recording-player";
 import {
   Seekable,
   SpeakerAvatar,
-} from "@/components/mockups/conversations-revamp/drawer/call-shell"
+} from "@/components/mockups/conversations-revamp/drawer/call-shell";
 import {
   AddedIcon,
   BackchannelIcon,
@@ -40,55 +40,55 @@ import {
   PrevMatchIcon,
   SearchIcon,
   ToolIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 function enhancedText(turn: V4Turn) {
-  return turn.enhanced ?? turn.content
+  return turn.enhanced ?? turn.content;
 }
 
-type Heard = { at: number; text: string }
+type Heard = { at: number; text: string };
 
 // Corrections are keyed by text, not offset. Search from the previous hit so
 // repeats land on distinct occurrences; misses go to `unplaced`.
 function corrections(turn: V4Turn) {
-  const text = enhancedText(turn)
-  const heard: Heard[] = []
-  const unplaced: TranscriptionError[] = []
-  let cursor = 0
+  const text = enhancedText(turn);
+  const heard: Heard[] = [];
+  const unplaced: TranscriptionError[] = [];
+  let cursor = 0;
 
   for (const error of turn.errors ?? []) {
-    const at = text.indexOf(error.correction, cursor)
+    const at = text.indexOf(error.correction, cursor);
 
     if (at === -1) {
-      unplaced.push(error)
-      continue
+      unplaced.push(error);
+      continue;
     }
 
-    heard.push({ at, text: error.incorrect_text })
-    cursor = at + error.correction.length
+    heard.push({ at, text: error.incorrect_text });
+    cursor = at + error.correction.length;
   }
 
-  return { heard, unplaced }
+  return { heard, unplaced };
 }
 
-type Run = { key: string; text: string; turnIndex: number }
+type Run = { key: string; text: string; turnIndex: number };
 
 function findMatches(text: string, query: string): [number, number][] {
-  const needle = query.trim().toLowerCase()
-  if (!needle) return []
+  const needle = query.trim().toLowerCase();
+  if (!needle) return [];
 
-  const haystack = text.toLowerCase()
-  const found: [number, number][] = []
-  let from = 0
+  const haystack = text.toLowerCase();
+  const found: [number, number][] = [];
+  let from = 0;
 
   for (;;) {
-    const index = haystack.indexOf(needle, from)
-    if (index === -1) break
-    found.push([index, index + needle.length])
-    from = index + needle.length
+    const index = haystack.indexOf(needle, from);
+    if (index === -1) break;
+    found.push([index, index + needle.length]);
+    from = index + needle.length;
   }
 
-  return found
+  return found;
 }
 
 export function TranscriptPanel({
@@ -98,84 +98,84 @@ export function TranscriptPanel({
   flags,
   onSeek,
 }: {
-  actions?: React.ReactNode
-  at: number
-  channel?: Channel
-  flags?: { id: string; label: string; timestampMs: number; tone: string }[]
-  onSeek: (seconds: number) => void
+  actions?: React.ReactNode;
+  at: number;
+  channel?: Channel;
+  flags?: { id: string; label: string; timestampMs: number; tone: string }[];
+  onSeek: (seconds: number) => void;
 }) {
-  const [query, setQuery] = React.useState("")
-  const [active, setActive] = React.useState(0)
-  const turnRefs = React.useRef<Record<number, HTMLDivElement | null>>({})
+  const [query, setQuery] = React.useState("");
+  const [active, setActive] = React.useState(0);
+  const turnRefs = React.useRef<Record<number, HTMLDivElement | null>>({});
 
   const runs = React.useMemo(() => {
-    const collected: Run[] = []
+    const collected: Run[] = [];
 
     V4_TRANSCRIPT.forEach((turn, index) => {
-      if (turn.kind === "tool") return
+      if (turn.kind === "tool") return;
 
       collected.push({
         key: `${index}-line`,
         text: enhancedText(turn),
         turnIndex: index,
-      })
+      });
 
       for (const heard of corrections(turn).heard) {
         collected.push({
           key: `${index}-heard-${heard.at}`,
           text: heard.text,
           turnIndex: index,
-        })
+        });
       }
-    })
+    });
 
-    return collected
-  }, [])
+    return collected;
+  }, []);
 
   const matches = React.useMemo(() => {
-    const ranges = new Map<string, [number, number][]>()
-    const offsets = new Map<string, number>()
-    let total = 0
+    const ranges = new Map<string, [number, number][]>();
+    const offsets = new Map<string, number>();
+    let total = 0;
 
     for (const run of runs) {
-      const found = findMatches(run.text, query)
-      ranges.set(run.key, found)
-      offsets.set(run.key, total)
-      total += found.length
+      const found = findMatches(run.text, query);
+      ranges.set(run.key, found);
+      offsets.set(run.key, total);
+      total += found.length;
     }
 
-    return { offsets, ranges, runs, total }
-  }, [runs, query])
+    return { offsets, ranges, runs, total };
+  }, [runs, query]);
 
-  const search: Search = { ...matches, activeIndex: active }
+  const search: Search = { ...matches, activeIndex: active };
 
   function runSearch(next: string) {
-    setQuery(next)
-    setActive(0)
+    setQuery(next);
+    setActive(0);
   }
 
   React.useEffect(() => {
-    if (!matches.total) return
+    if (!matches.total) return;
 
     const run = matches.runs.find((item) => {
-      const offset = matches.offsets.get(item.key) ?? 0
-      const count = matches.ranges.get(item.key)?.length ?? 0
-      return active >= offset && active < offset + count
-    })
-    if (!run) return
+      const offset = matches.offsets.get(item.key) ?? 0;
+      const count = matches.ranges.get(item.key)?.length ?? 0;
+      return active >= offset && active < offset + count;
+    });
+    if (!run) return;
 
     turnRefs.current[run.turnIndex]?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
         : "smooth",
       block: "center",
-    })
-    onSeek(V4_TRANSCRIPT[run.turnIndex].at)
-  }, [active, matches, onSeek])
+    });
+    onSeek(V4_TRANSCRIPT[run.turnIndex].at);
+  }, [active, matches, onSeek]);
 
   function step(by: number) {
-    if (!matches.total) return
-    setActive((current) => (current + by + matches.total) % matches.total)
+    if (!matches.total) return;
+    setActive((current) => (current + by + matches.total) % matches.total);
   }
 
   return (
@@ -204,13 +204,13 @@ export function TranscriptPanel({
         </InputGroupAddon>
         <InputGroupInput
           onChange={(event) => {
-            runSearch(event.target.value)
+            runSearch(event.target.value);
           }}
           onKeyDown={(event) => {
-            if (event.key === "Escape") runSearch("")
+            if (event.key === "Escape") runSearch("");
             if (event.key === "Enter") {
-              event.preventDefault()
-              step(event.shiftKey ? -1 : 1)
+              event.preventDefault();
+              step(event.shiftKey ? -1 : 1);
             }
           }}
           placeholder="Search transcript"
@@ -230,7 +230,7 @@ export function TranscriptPanel({
               aria-label="Previous match"
               disabled={!search.total}
               onClick={() => {
-                step(-1)
+                step(-1);
               }}
               size="icon-xs"
             >
@@ -240,7 +240,7 @@ export function TranscriptPanel({
               aria-label="Next match"
               disabled={!search.total}
               onClick={() => {
-                step(1)
+                step(1);
               }}
               size="icon-xs"
             >
@@ -249,7 +249,7 @@ export function TranscriptPanel({
             <InputGroupButton
               aria-label="Clear search"
               onClick={() => {
-                runSearch("")
+                runSearch("");
               }}
               size="icon-xs"
             >
@@ -267,7 +267,7 @@ export function TranscriptPanel({
         turnRefs={turnRefs}
       />
     </div>
-  )
+  );
 }
 
 function TurnList({
@@ -277,16 +277,16 @@ function TurnList({
   search,
   turnRefs,
 }: {
-  channel: Channel
-  at: number
-  onSeek: (seconds: number) => void
-  search: Search
-  turnRefs: React.RefObject<Record<number, HTMLDivElement | null>>
+  channel: Channel;
+  at: number;
+  onSeek: (seconds: number) => void;
+  search: Search;
+  turnRefs: React.RefObject<Record<number, HTMLDivElement | null>>;
 }) {
   return (
     <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto p-1">
       {V4_TRANSCRIPT.map((turn, index) => {
-        const next = V4_TRANSCRIPT[index + 1]
+        const next = V4_TRANSCRIPT[index + 1];
 
         return (
           <TurnRow
@@ -295,25 +295,25 @@ function TurnList({
             key={index}
             onSeek={onSeek}
             ref={(node) => {
-              turnRefs.current[index] = node
+              turnRefs.current[index] = node;
             }}
             search={search}
             turn={turn}
             turnIndex={index}
           />
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 type Search = {
-  activeIndex: number
-  offsets: Map<string, number>
-  ranges: Map<string, [number, number][]>
-  runs: Run[]
-  total: number
-}
+  activeIndex: number;
+  offsets: Map<string, number>;
+  ranges: Map<string, [number, number][]>;
+  runs: Run[];
+  total: number;
+};
 
 function TurnRow({
   channel,
@@ -324,24 +324,24 @@ function TurnRow({
   turn,
   turnIndex,
 }: {
-  channel: Channel
-  isPlaying: boolean
-  onSeek: (seconds: number) => void
-  ref: (node: HTMLDivElement | null) => void
-  search: Search
-  turn: V4Turn
-  turnIndex: number
+  channel: Channel;
+  isPlaying: boolean;
+  onSeek: (seconds: number) => void;
+  ref: (node: HTMLDivElement | null) => void;
+  search: Search;
+  turn: V4Turn;
+  turnIndex: number;
 }) {
   if (turn.kind === "tool") {
     return (
       <div ref={ref}>
         <ToolRow onSeek={onSeek} turn={turn} />
       </div>
-    )
+    );
   }
 
   if (turn.kind === "backchannel") {
-    const isCaller = turn.role === "caller"
+    const isCaller = turn.role === "caller";
 
     return (
       <div className={cn("flex", isCaller && "justify-end")} ref={ref}>
@@ -353,7 +353,7 @@ function TurnRow({
           )}
           label={`Seek to ${formatTimeSeconds(turn.at)}`}
           onActivate={() => {
-            onSeek(turn.at)
+            onSeek(turn.at);
           }}
         >
           <BackchannelIcon className="size-3" />
@@ -368,7 +368,7 @@ function TurnRow({
           <span className="tabular-nums">{formatTimeSeconds(turn.at)}</span>
         </Seekable>
       </div>
-    )
+    );
   }
 
   return (
@@ -381,7 +381,7 @@ function TurnRow({
       turn={turn}
       turnIndex={turnIndex}
     />
-  )
+  );
 }
 
 function SpeechTurn({
@@ -393,22 +393,22 @@ function SpeechTurn({
   turn,
   turnIndex,
 }: {
-  channel: Channel
-  isPlaying: boolean
-  onSeek: (seconds: number) => void
-  ref: (node: HTMLDivElement | null) => void
-  search: Search
-  turn: V4Turn
-  turnIndex: number
+  channel: Channel;
+  isPlaying: boolean;
+  onSeek: (seconds: number) => void;
+  ref: (node: HTMLDivElement | null) => void;
+  search: Search;
+  turn: V4Turn;
+  turnIndex: number;
 }) {
-  const [rawOpen, setRawOpen] = React.useState(false)
+  const [rawOpen, setRawOpen] = React.useState(false);
 
-  const isCaller = turn.role === "caller"
-  const text = enhancedText(turn)
-  const { heard, unplaced } = corrections(turn)
+  const isCaller = turn.role === "caller";
+  const text = enhancedText(turn);
+  const { heard, unplaced } = corrections(turn);
 
-  const raw = turn.content
-  const hasRaw = Boolean(raw.trim()) && raw !== text
+  const raw = turn.content;
+  const hasRaw = Boolean(raw.trim()) && raw !== text;
 
   return (
     <div className={cn("flex gap-3", isCaller && "flex-row-reverse")} ref={ref}>
@@ -431,7 +431,7 @@ function SpeechTurn({
           )}
           label={`Seek to ${formatTimeSeconds(turn.at)}`}
           onActivate={() => {
-            onSeek(turn.at)
+            onSeek(turn.at);
           }}
         >
           <Collapsible
@@ -459,10 +459,10 @@ function SpeechTurn({
                     onClick={(event) => {
                       // The bubble underneath seeks; opening the raw line must
                       // not.
-                      event.stopPropagation()
+                      event.stopPropagation();
                     }}
                     onKeyDown={(event) => {
-                      event.stopPropagation()
+                      event.stopPropagation();
                     }}
                   >
                     Raw
@@ -527,7 +527,7 @@ function SpeechTurn({
         ) : null}
       </div>
     </div>
-  )
+  );
 }
 
 function TurnLine({
@@ -536,13 +536,13 @@ function TurnLine({
   text,
   turnIndex,
 }: {
-  heard: Heard[]
-  search: Search
-  text: string
-  turnIndex: number
+  heard: Heard[];
+  search: Search;
+  text: string;
+  turnIndex: number;
 }) {
-  const parts: React.ReactNode[] = []
-  let cursor = 0
+  const parts: React.ReactNode[] = [];
+  let cursor = 0;
 
   for (const word of heard) {
     if (word.at > cursor) {
@@ -555,7 +555,7 @@ function TurnLine({
           text={text}
           to={word.at}
         />,
-      )
+      );
     }
 
     parts.push(
@@ -569,9 +569,9 @@ function TurnLine({
           />
         </span>{" "}
       </React.Fragment>,
-    )
+    );
 
-    cursor = word.at
+    cursor = word.at;
   }
 
   parts.push(
@@ -582,20 +582,20 @@ function TurnLine({
       search={search}
       text={text}
     />,
-  )
+  );
 
-  return parts
+  return parts;
 }
 
 function ToolRow({
   onSeek,
   turn,
 }: {
-  onSeek: (seconds: number) => void
-  turn: V4Turn
+  onSeek: (seconds: number) => void;
+  turn: V4Turn;
 }) {
-  const tool = turn.tool
-  if (!tool) return null
+  const tool = turn.tool;
+  if (!tool) return null;
 
   return (
     <Collapsible className="flex flex-col">
@@ -604,7 +604,7 @@ function ToolRow({
         <CollapsibleTrigger
           className="flex items-center gap-2 rounded-4xl bg-secondary px-3 py-1 text-xs text-secondary-foreground transition-colors duration-150 ease-out-cubic hover:bg-accent motion-reduce:transition-none"
           onClick={() => {
-            onSeek(turn.at)
+            onSeek(turn.at);
           }}
         >
           <ToolIcon className="size-3" />
@@ -639,7 +639,7 @@ function ToolRow({
         </div>
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }
 
 // `from`/`to` render a window of the run; search still runs over the whole
@@ -651,26 +651,26 @@ function Highlighted({
   text,
   to,
 }: {
-  from?: number
-  runKey: string
-  search: Search
-  text: string
-  to?: number
+  from?: number;
+  runKey: string;
+  search: Search;
+  text: string;
+  to?: number;
 }) {
-  const end = to ?? text.length
-  const ranges = search.ranges.get(runKey)
-  if (!ranges?.length) return text.slice(from, end)
+  const end = to ?? text.length;
+  const ranges = search.ranges.get(runKey);
+  if (!ranges?.length) return text.slice(from, end);
 
-  const offset = search.offsets.get(runKey) ?? 0
-  const parts: React.ReactNode[] = []
-  let cursor = from
+  const offset = search.offsets.get(runKey) ?? 0;
+  const parts: React.ReactNode[] = [];
+  let cursor = from;
 
   ranges.forEach(([start, stop], index) => {
-    const markStart = Math.max(start, from)
-    const markEnd = Math.min(stop, end)
-    if (markEnd <= markStart) return
+    const markStart = Math.max(start, from);
+    const markEnd = Math.min(stop, end);
+    if (markEnd <= markStart) return;
 
-    if (markStart > cursor) parts.push(text.slice(cursor, markStart))
+    if (markStart > cursor) parts.push(text.slice(cursor, markStart));
     parts.push(
       <mark
         className={cn(
@@ -681,11 +681,11 @@ function Highlighted({
       >
         {text.slice(markStart, markEnd)}
       </mark>,
-    )
-    cursor = markEnd
-  })
+    );
+    cursor = markEnd;
+  });
 
-  if (cursor < end) parts.push(text.slice(cursor, end))
+  if (cursor < end) parts.push(text.slice(cursor, end));
 
-  return parts
+  return parts;
 }

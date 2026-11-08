@@ -1,19 +1,19 @@
-import { NarrowIcon } from "@/components/design-system/icons"
+import { NarrowIcon } from "@/components/design-system/icons";
 import {
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Button } from "@/components/ui/button"
+} from "@/components/design-system/reference-table";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { CONTROL_STEPS } from "@/lib/design-system/data"
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { CONTROL_STEPS } from "@/lib/design-system/data";
 
 export function ControlScale() {
   return (
@@ -72,5 +72,5 @@ export function ControlScale() {
         </div>
       </section>
     </div>
-  )
+  );
 }

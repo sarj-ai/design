@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Button } from "@/components/ui/button"
-import { ConfigureReportDialog } from "@/components/mockups/configure-report/configure-report-dialog"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Button } from "@/components/ui/button";
+import { ConfigureReportDialog } from "@/components/mockups/configure-report/configure-report-dialog";
 
 export default function ConfigureReportPage() {
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(true);
 
   return (
     <MockupShell
@@ -32,5 +32,5 @@ export default function ConfigureReportPage() {
 
       <ConfigureReportDialog onOpenChange={setOpen} open={open} />
     </MockupShell>
-  )
+  );
 }

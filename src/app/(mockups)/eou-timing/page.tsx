@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { GlobalTurnDetection } from "@/components/mockups/eou-timing/global-turn-detection"
-import { PersonaTurnTiming } from "@/components/mockups/eou-timing/persona-turn-timing"
-import type { WaitWindowValue } from "@/components/mockups/eou-timing/wait-window"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { PERSONA, SAVED_GLOBAL } from "@/lib/mockups/eou-timing-data"
+import { AppShell } from "@/components/shell/app-shell";
+import { GlobalTurnDetection } from "@/components/mockups/eou-timing/global-turn-detection";
+import { PersonaTurnTiming } from "@/components/mockups/eou-timing/persona-turn-timing";
+import type { WaitWindowValue } from "@/components/mockups/eou-timing/wait-window";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { PERSONA, SAVED_GLOBAL } from "@/lib/mockups/eou-timing-data";
 
-type Home = "global" | "persona"
+type Home = "global" | "persona";
 
 export default function EouTimingPage() {
-  const [home, setHome] = React.useState<Home>("global")
+  const [home, setHome] = React.useState<Home>("global");
 
   const [globalWindow, setGlobalWindow] = React.useState<WaitWindowValue>({
     maxWaitSeconds: SAVED_GLOBAL.maxWaitSeconds,
     minWaitSeconds: SAVED_GLOBAL.minWaitSeconds,
-  })
+  });
 
-  const onGlobal = home === "global"
+  const onGlobal = home === "global";
 
   return (
     <MockupShell
@@ -28,7 +28,7 @@ export default function EouTimingPage() {
       actions={
         <ToggleGroup
           onValueChange={(next) => {
-            if (next) setHome(next as Home)
+            if (next) setHome(next as Home);
           }}
           size="sm"
           type="single"
@@ -46,8 +46,8 @@ export default function EouTimingPage() {
         active={onGlobal ? "Global Settings" : "Personas"}
         breadcrumb={onGlobal ? "Global Settings" : `Personas · ${PERSONA.name}`}
         onNavigate={(title) => {
-          if (title === "Global Settings") setHome("global")
-          if (title === "Personas") setHome("persona")
+          if (title === "Global Settings") setHome("global");
+          if (title === "Personas") setHome("persona");
         }}
       >
         <div className="flex flex-1 flex-col p-3 lg:p-4">
@@ -67,5 +67,5 @@ export default function EouTimingPage() {
         </div>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

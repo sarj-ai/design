@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 
-import { TONES, type OrbTone } from "@/components/shared/orb-tones"
-import { Avatar } from "@/components/ui/avatar"
+import { TONES, type OrbTone } from "@/components/shared/orb-tones";
+import { Avatar } from "@/components/ui/avatar";
 
 /** One shared offscreen WebGL context draws every avatar: browsers cap live contexts at around sixteen. */
 
-type Rgb = [number, number, number]
+type Rgb = [number, number, number];
 
 /* How far toward white the body and the light sit, for a one-token tone. */
-const BODY = 0.4
-const LIGHT = 0.75
+const BODY = 0.4;
+const LIGHT = 0.75;
 
 function toward(rgb: Rgb, amount: number): Rgb {
-  return rgb.map((c) => c + (1 - c) * amount) as Rgb
+  return rgb.map((c) => c + (1 - c) * amount) as Rgb;
 }
 
 function toneRgb(tone: OrbTone): Rgb[] {
-  const stops: readonly string[] = TONES[tone]
-  const [deep, body, light] = stops.map(classRgb)
-  return [deep, body ?? toward(deep, BODY), light ?? toward(deep, LIGHT)]
+  const stops: readonly string[] = TONES[tone];
+  const [deep, body, light] = stops.map(classRgb);
+  return [deep, body ?? toward(deep, BODY), light ?? toward(deep, LIGHT)];
 }
 
 const VERTEX = `
 attribute vec2 p;
 void main() { gl_Position = vec4(p, 0.0, 1.0); }
-`
+`;
 
 const FRAGMENT = `
 precision highp float;
@@ -99,54 +99,54 @@ void main() {
 
   gl_FragColor = vec4(col * mask, mask);
 }
-`
+`;
 
 type Renderer = {
-  gl: WebGLRenderingContext
+  gl: WebGLRenderingContext;
   uniforms: Record<
     "res" | "seed" | "time" | "a" | "b" | "c",
     WebGLUniformLocation | null
-  >
-}
+  >;
+};
 
-let renderer: Renderer | null | undefined
+let renderer: Renderer | null | undefined;
 
 function compile(gl: WebGLRenderingContext, type: number, source: string) {
-  const shader = gl.createShader(type)
-  if (!shader) return null
-  gl.shaderSource(shader, source)
-  gl.compileShader(shader)
-  return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null;
 }
 
 function getRenderer(): Renderer | null {
-  if (renderer !== undefined) return renderer
-  renderer = null
+  if (renderer !== undefined) return renderer;
+  renderer = null;
 
   const gl = document.createElement("canvas").getContext("webgl", {
     premultipliedAlpha: true,
-  })
-  if (!gl) return null
+  });
+  if (!gl) return null;
 
-  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX)
-  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT)
-  const program = gl.createProgram()
-  if (!vertex || !fragment || !program) return null
-  gl.attachShader(program, vertex)
-  gl.attachShader(program, fragment)
-  gl.linkProgram(program)
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null
-  gl.useProgram(program)
+  const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
+  const fragment = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
+  const program = gl.createProgram();
+  if (!vertex || !fragment || !program) return null;
+  gl.attachShader(program, vertex);
+  gl.attachShader(program, fragment);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
+  gl.useProgram(program);
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(
     gl.ARRAY_BUFFER,
     new Float32Array([-1, -1, 3, -1, -1, 3]),
     gl.STATIC_DRAW,
-  )
-  const position = gl.getAttribLocation(program, "p")
-  gl.enableVertexAttribArray(position)
-  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
+  );
+  const position = gl.getAttribLocation(program, "p");
+  gl.enableVertexAttribArray(position);
+  gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
 
   renderer = {
     gl,
@@ -158,81 +158,81 @@ function getRenderer(): Renderer | null {
       b: gl.getUniformLocation(program, "uB"),
       c: gl.getUniformLocation(program, "uC"),
     },
-  }
-  return renderer
+  };
+  return renderer;
 }
 
 // A hidden element wearing the class resolves the colour (possibly oklch or lab), and a 2D canvas turns it into sRGB.
-let probe: CanvasRenderingContext2D | null = null
+let probe: CanvasRenderingContext2D | null = null;
 
 export function classRgb(className: string): Rgb {
   probe ??= document
     .createElement("canvas")
-    .getContext("2d", { willReadFrequently: true })
-  if (!probe) return [0.5, 0.5, 0.5]
+    .getContext("2d", { willReadFrequently: true });
+  if (!probe) return [0.5, 0.5, 0.5];
 
-  const swatch = document.createElement("span")
-  swatch.className = `${className} hidden`
-  document.body.append(swatch)
-  const value = getComputedStyle(swatch).backgroundColor
-  swatch.remove()
+  const swatch = document.createElement("span");
+  swatch.className = `${className} hidden`;
+  document.body.append(swatch);
+  const value = getComputedStyle(swatch).backgroundColor;
+  swatch.remove();
 
-  probe.clearRect(0, 0, 1, 1)
-  probe.fillStyle = value
-  probe.fillRect(0, 0, 1, 1)
-  const [r, g, b] = probe.getImageData(0, 0, 1, 1).data
-  return [r / 255, g / 255, b / 255]
+  probe.clearRect(0, 0, 1, 1);
+  probe.fillStyle = value;
+  probe.fillRect(0, 0, 1, 1);
+  const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+  return [r / 255, g / 255, b / 255];
 }
 
 function hash(value: string) {
-  let h = 2166136261
+  let h = 2166136261;
   for (const char of value)
-    h = Math.imul(h ^ char.charCodeAt(0), 16777619) >>> 0
-  return h
+    h = Math.imul(h ^ char.charCodeAt(0), 16777619) >>> 0;
+  return h;
 }
 
 type Orb = {
-  canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D
-  seed: number
-  colours: [number, number, number][]
-  visible: boolean
-}
+  canvas: HTMLCanvasElement;
+  context: CanvasRenderingContext2D;
+  seed: number;
+  colours: [number, number, number][];
+  visible: boolean;
+};
 
-const orbs = new Set<Orb>()
-let frame = 0
-const start = typeof performance === "undefined" ? 0 : performance.now()
+const orbs = new Set<Orb>();
+let frame = 0;
+const start = typeof performance === "undefined" ? 0 : performance.now();
 
 // Seconds of drift per real second.
-const SPEED = 0.35
+const SPEED = 0.35;
 
 function paint(orb: Orb, time: number) {
-  const r = getRenderer()
-  if (!r) return
-  const { gl, uniforms } = r
-  const { width, height } = orb.canvas
-  if (!width || !height) return
+  const r = getRenderer();
+  if (!r) return;
+  const { gl, uniforms } = r;
+  const { width, height } = orb.canvas;
+  if (!width || !height) return;
 
-  const glCanvas = gl.canvas as HTMLCanvasElement
+  const glCanvas = gl.canvas as HTMLCanvasElement;
   if (glCanvas.width < width || glCanvas.height < height) {
-    glCanvas.width = Math.max(glCanvas.width, width)
-    glCanvas.height = Math.max(glCanvas.height, height)
+    glCanvas.width = Math.max(glCanvas.width, width);
+    glCanvas.height = Math.max(glCanvas.height, height);
   }
 
-  gl.viewport(0, 0, width, height)
-  gl.clearColor(0, 0, 0, 0)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  gl.uniform2f(uniforms.res, width, height)
-  gl.uniform1f(uniforms.seed, orb.seed)
-  gl.uniform1f(uniforms.time, time)
-  gl.uniform3fv(uniforms.a, orb.colours[0])
-  gl.uniform3fv(uniforms.b, orb.colours[1])
-  gl.uniform3fv(uniforms.c, orb.colours[2])
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
+  gl.viewport(0, 0, width, height);
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform2f(uniforms.res, width, height);
+  gl.uniform1f(uniforms.seed, orb.seed);
+  gl.uniform1f(uniforms.time, time);
+  gl.uniform3fv(uniforms.a, orb.colours[0]);
+  gl.uniform3fv(uniforms.b, orb.colours[1]);
+  gl.uniform3fv(uniforms.c, orb.colours[2]);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 
   /* The viewport sits at the bottom of the GL canvas, which may be taller
      than this avatar, so copy from that corner. */
-  orb.context.clearRect(0, 0, width, height)
+  orb.context.clearRect(0, 0, width, height);
   orb.context.drawImage(
     glCanvas,
     0,
@@ -243,20 +243,20 @@ function paint(orb: Orb, time: number) {
     0,
     width,
     height,
-  )
+  );
 }
 
 function tick(now: number) {
-  const time = ((now - start) / 1000) * SPEED
-  for (const orb of orbs) if (orb.visible) paint(orb, time)
-  frame = orbs.size ? requestAnimationFrame(tick) : 0
+  const time = ((now - start) / 1000) * SPEED;
+  for (const orb of orbs) if (orb.visible) paint(orb, time);
+  frame = orbs.size ? requestAnimationFrame(tick) : 0;
 }
 
 type OrbAvatarProps = React.ComponentProps<typeof Avatar> & {
   /** Who it stands for. Read out to screen readers and used as the seed. */
-  name: string
-  tone?: OrbTone
-}
+  name: string;
+  tone?: OrbTone;
+};
 
 export function OrbAvatar({
   name,
@@ -264,48 +264,48 @@ export function OrbAvatar({
   children,
   ...props
 }: OrbAvatarProps) {
-  const ref = useRef<HTMLCanvasElement>(null)
+  const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = ref.current
-    const context = canvas?.getContext("2d")
-    if (!canvas || !context) return
+    const canvas = ref.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
 
-    const ratio = window.devicePixelRatio || 1
-    canvas.width = Math.round(canvas.clientWidth * ratio)
-    canvas.height = Math.round(canvas.clientHeight * ratio)
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = Math.round(canvas.clientWidth * ratio);
+    canvas.height = Math.round(canvas.clientHeight * ratio);
 
-    const h = hash(name)
+    const h = hash(name);
     const orb: Orb = {
       canvas,
       context,
       seed: ((h >>> 4) % 997) / 7,
       colours: toneRgb(tone),
       visible: true,
-    }
+    };
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      paint(orb, 0)
-      return
+      paint(orb, 0);
+      return;
     }
 
     const observer = new IntersectionObserver(([entry]) => {
-      orb.visible = entry.isIntersecting
-    })
-    observer.observe(canvas)
+      orb.visible = entry.isIntersecting;
+    });
+    observer.observe(canvas);
 
-    orbs.add(orb)
-    frame ||= requestAnimationFrame(tick)
+    orbs.add(orb);
+    frame ||= requestAnimationFrame(tick);
 
     return () => {
-      observer.disconnect()
-      orbs.delete(orb)
+      observer.disconnect();
+      orbs.delete(orb);
       if (!orbs.size) {
-        cancelAnimationFrame(frame)
-        frame = 0
+        cancelAnimationFrame(frame);
+        frame = 0;
       }
-    }
-  }, [name, tone])
+    };
+  }, [name, tone]);
 
   return (
     <Avatar {...props}>
@@ -317,5 +317,5 @@ export function OrbAvatar({
       />
       {children}
     </Avatar>
-  )
+  );
 }

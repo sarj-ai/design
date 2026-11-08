@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { errorId, FieldHeader } from "@/components/design-system/field-header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { errorId, FieldHeader } from "@/components/design-system/field-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,11 +13,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field } from "@/components/ui/field"
-import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
-import { type CaseId, summaryFor } from "@/lib/mockups/publish-approval-data"
+} from "@/components/ui/dialog";
+import { Field } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
+import { type CaseId, summaryFor } from "@/lib/mockups/publish-approval-data";
 
 export function RequestDialog({
   open,
@@ -29,17 +29,17 @@ export function RequestDialog({
   caseId,
   onSend,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  version: number
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  version: number;
   /** The version callers hear now. */
-  live: number
-  org: string
+  live: number;
+  org: string;
   /** A version already waiting, which sending this withdraws. */
-  replacing: number | null
-  caseId: CaseId
+  replacing: number | null;
+  caseId: CaseId;
   /** Resolves false when sending failed. */
-  onSend: (request: { summary: string; note: string }) => Promise<boolean>
+  onSend: (request: { summary: string; note: string }) => Promise<boolean>;
 }) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -47,8 +47,8 @@ export function RequestDialog({
       <DialogContent
         className="sm:max-w-md"
         onOpenAutoFocus={(event) => {
-          event.preventDefault()
-          document.getElementById("request-note")?.focus()
+          event.preventDefault();
+          document.getElementById("request-note")?.focus();
         }}
       >
         <DialogHeader>
@@ -74,10 +74,10 @@ export function RequestDialog({
         ) : null}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-type Writing = "writing" | "failed" | "ready"
+type Writing = "writing" | "failed" | "ready";
 
 function RequestForm({
   version,
@@ -87,35 +87,35 @@ function RequestForm({
   caseId,
   onSend,
 }: {
-  version: number
-  live: number
-  org: string
-  replacing: number | null
-  caseId: CaseId
-  onSend: (request: { summary: string; note: string }) => Promise<boolean>
+  version: number;
+  live: number;
+  org: string;
+  replacing: number | null;
+  caseId: CaseId;
+  onSend: (request: { summary: string; note: string }) => Promise<boolean>;
 }) {
-  const [writing, setWriting] = React.useState<Writing>("writing")
-  const [summary, setSummary] = React.useState("")
-  const [note, setNote] = React.useState("")
-  const [submitted, setSubmitted] = React.useState(false)
-  const [sending, setSending] = React.useState(false)
-  const [failed, setFailed] = React.useState(false)
-  const attempts = React.useRef(0)
+  const [writing, setWriting] = React.useState<Writing>("writing");
+  const [summary, setSummary] = React.useState("");
+  const [note, setNote] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [failed, setFailed] = React.useState(false);
+  const attempts = React.useRef(0);
 
   React.useEffect(() => {
     const timer = setTimeout(
       () => {
         if (caseId === "summary-failed") {
-          setWriting("failed")
-          return
+          setWriting("failed");
+          return;
         }
-        setSummary(summaryFor(version, live))
-        setWriting("ready")
+        setSummary(summaryFor(version, live));
+        setWriting("ready");
       },
       caseId === "summary-writing" ? 4000 : 700,
-    )
-    return () => clearTimeout(timer)
-  }, [caseId, live, version])
+    );
+    return () => clearTimeout(timer);
+  }, [caseId, live, version]);
 
   const errors = submitted
     ? {
@@ -125,22 +125,22 @@ function RequestForm({
             : null,
         note: note.trim() === "" ? `Say why ${org} needs it.` : null,
       }
-    : { summary: null, note: null }
+    : { summary: null, note: null };
 
   async function send() {
-    setSubmitted(true)
-    if (writing === "writing" || !summary.trim() || !note.trim()) return
-    setSending(true)
-    setFailed(false)
-    attempts.current += 1
+    setSubmitted(true);
+    if (writing === "writing" || !summary.trim() || !note.trim()) return;
+    setSending(true);
+    setFailed(false);
+    attempts.current += 1;
     const ok =
       caseId === "send-fails" && attempts.current === 1
         ? await new Promise<boolean>((resolve) =>
             setTimeout(() => resolve(false), 900),
           )
-        : await onSend({ summary: summary.trim(), note: note.trim() })
-    setSending(false)
-    if (!ok) setFailed(true)
+        : await onSend({ summary: summary.trim(), note: note.trim() });
+    setSending(false);
+    if (!ok) setFailed(true);
   }
 
   return (
@@ -227,5 +227,5 @@ function RequestForm({
         </Button>
       </DialogFooter>
     </>
-  )
+  );
 }

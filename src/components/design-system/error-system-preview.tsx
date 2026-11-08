@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { LanguageChip } from "@/components/design-system/call-table"
-import { ErrorState, useRetry } from "@/components/design-system/error-state"
-import { FieldHeader, errorId } from "@/components/design-system/field-header"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { CallVolumeChart } from "@/components/mockups/dashboard/call-volume-chart"
-import { DashboardPage } from "@/components/mockups/dashboard/dashboard-page"
+import { LanguageChip } from "@/components/design-system/call-table";
+import { ErrorState, useRetry } from "@/components/design-system/error-state";
+import { FieldHeader, errorId } from "@/components/design-system/field-header";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { CallVolumeChart } from "@/components/mockups/dashboard/call-volume-chart";
+import { DashboardPage } from "@/components/mockups/dashboard/dashboard-page";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { PageHeader } from "@/components/shared/page-header"
-import { AppShell } from "@/components/shell/app-shell"
-import { Button } from "@/components/ui/button"
+} from "@/components/shared/data-table";
+import { PageHeader } from "@/components/shared/page-header";
+import { AppShell } from "@/components/shell/app-shell";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Field } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
-import { dashboardData } from "@/lib/mockups/dashboard-data"
+} from "@/components/ui/card";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
+import { dashboardData } from "@/lib/mockups/dashboard-data";
 
 /**
  * Errors, at every scope a Sarj screen has, smallest first.
@@ -53,10 +53,10 @@ const SCOPES = [
   { id: "list", label: "List" },
   { id: "page", label: "Page" },
   { id: "app", label: "App" },
-]
+];
 
 export function ErrorSystemPreview() {
-  const [scope, setScope] = React.useState("section")
+  const [scope, setScope] = React.useState("section");
 
   return (
     <SecondaryTabs items={SCOPES} onValueChange={setScope} value={scope}>
@@ -90,7 +90,7 @@ export function ErrorSystemPreview() {
         <AppScope />
       </TabsContent>
     </SecondaryTabs>
-  )
+  );
 }
 
 /** The real app, framed: `translate-x-0` keeps the sidebar inside the demo. */
@@ -98,8 +98,8 @@ function Frame({
   active,
   children,
 }: {
-  active: string
-  children: React.ReactNode
+  active: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
@@ -107,7 +107,7 @@ function Frame({
         <div className="p-3 lg:p-4">{children}</div>
       </AppShell>
     </div>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------ field */
@@ -115,8 +115,8 @@ function Frame({
 /** A value the reader typed is wrong: the message sits on the label's line,
  *  so the box does not move. Nothing above the field changes. */
 function FieldScope() {
-  const [name, setName] = React.useState("")
-  const error = name.trim() ? null : "Name the scenario."
+  const [name, setName] = React.useState("");
+  const error = name.trim() ? null : "Name the scenario.";
 
   return (
     <Card className="max-w-xl">
@@ -139,7 +139,7 @@ function FieldScope() {
         </Field>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 /* ----------------------------------------------------------------- action */
@@ -147,24 +147,24 @@ function FieldScope() {
 /** A save that did not happen: a toast with Try again, and the form exactly
  *  as the reader left it, so trying again sends the same thing. */
 function ActionScope() {
-  const attempts = React.useRef(0)
-  const [saving, setSaving] = React.useState(false)
+  const attempts = React.useRef(0);
+  const [saving, setSaving] = React.useState(false);
 
   const save = () => {
-    setSaving(true)
+    setSaving(true);
     setTimeout(() => {
-      setSaving(false)
-      attempts.current += 1
+      setSaving(false);
+      attempts.current += 1;
       if (attempts.current === 1) {
         toast.error("Could not save Payment reminder", {
           description: "Your changes are still here.",
           action: { label: "Try again", onClick: save },
-        })
-        return
+        });
+        return;
       }
-      toast.success("Payment reminder saved")
-    }, 700)
-  }
+      toast.success("Payment reminder saved");
+    }, 700);
+  };
 
   return (
     <Card className="max-w-xl">
@@ -183,7 +183,7 @@ function ActionScope() {
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
 
 /* ---------------------------------------------------------------- section */
@@ -192,8 +192,8 @@ function ActionScope() {
  *  The numbers that did load render; the chart's card keeps its title and
  *  its height, and only its body is the error. */
 function SectionScope() {
-  const chart = useRetry()
-  const data = dashboardData("month", { noCalls: false })
+  const chart = useRetry();
+  const data = dashboardData("month", { noCalls: false });
 
   return (
     <div className="flex flex-col gap-6">
@@ -235,12 +235,12 @@ function SectionScope() {
         />
       )}
     </div>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------- list */
 
-const COLUMNS = ["Name", "Languages", "Created"]
+const COLUMNS = ["Name", "Languages", "Created"];
 
 const PAYMENT_SCENARIOS = [
   { name: "Payment reminder", languages: ["AR", "EN"], created: "12 Oct 2026" },
@@ -250,12 +250,12 @@ const PAYMENT_SCENARIOS = [
     languages: ["AR", "EN", "UR"],
     created: "28 Sep 2026",
   },
-]
+];
 
 /** The rows failed. The header, the search the reader typed and the columns
  *  stay; the error takes the rows' place, and Try again keeps the search. */
 function ListScope() {
-  const rows = useRetry()
+  const rows = useRetry();
 
   return (
     <div className="flex flex-col gap-4">
@@ -302,7 +302,7 @@ function ListScope() {
         </TableBody>
       </DataTable>
     </div>
-  )
+  );
 }
 
 /* ------------------------------------------------------------------- page */
@@ -310,9 +310,9 @@ function ListScope() {
 /** Nothing on the page could load. The sidebar and the top bar stay, so the
  *  reader can go anywhere else; the page area names which page broke. */
 function PageScope() {
-  const page = useRetry()
+  const page = useRetry();
 
-  if (!page.failed) return <DashboardPage noCalls={false} />
+  if (!page.failed) return <DashboardPage noCalls={false} />;
 
   return (
     <div className="flex flex-col gap-6">
@@ -325,7 +325,7 @@ function PageScope() {
         />
       </div>
     </div>
-  )
+  );
 }
 
 /* -------------------------------------------------------------------- app */
@@ -333,14 +333,14 @@ function PageScope() {
 /** The shell itself could not start, so there is no sidebar to keep. The one
  *  scope that takes the whole window, and the last resort. */
 function AppScope() {
-  const app = useRetry()
+  const app = useRetry();
 
   if (!app.failed) {
     return (
       <Frame active="Dashboard">
         <DashboardPage noCalls={false} />
       </Frame>
-    )
+    );
   }
 
   return (
@@ -352,5 +352,5 @@ function AppScope() {
         title="Could not load Sarj"
       />
     </div>
-  )
+  );
 }

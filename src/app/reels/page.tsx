@@ -1,21 +1,21 @@
-import type * as React from "react"
-import Image from "next/image"
-import { HugeiconsIcon } from "@hugeicons/react"
+import type * as React from "react";
+import Image from "next/image";
+import { HugeiconsIcon } from "@hugeicons/react";
 
-import { REELS } from "@/lib/site/reels-data"
-import posters from "@/lib/site/reel-posters.json"
-import { SiteNav } from "@/components/shell/site-nav"
-import { CopySkillButton } from "@/components/reels/copy-skill-button"
-import { VideoPlayer } from "@/components/reels/video-player"
-import SKILL from "../../../.claude/skills/sarj-reel/SKILL.md"
+import { REELS } from "@/lib/site/reels-data";
+import posters from "@/lib/site/reel-posters.json";
+import { SiteNav } from "@/components/shell/site-nav";
+import { CopySkillButton } from "@/components/reels/copy-skill-button";
+import { VideoPlayer } from "@/components/reels/video-player";
+import SKILL from "../../../.claude/skills/sarj-reel/SKILL.md";
 
 /** Imported as raw text (see next.config.ts). Not readFileSync: the Cloudflare Worker has no file system at request time. */
-const SKILL_PATH = ".claude/skills/sarj-reel/SKILL.md"
+const SKILL_PATH = ".claude/skills/sarj-reel/SKILL.md";
 
 export const metadata = {
   title: "Reels showcase",
   description: "Release and feature videos built from the Sarj design system.",
-}
+};
 
 export default function ReelsIndex() {
   return (
@@ -29,13 +29,13 @@ export default function ReelsIndex() {
 
         <div className="grid gap-6 md:grid-cols-2">
           {REELS.map(({ href, title, meta, icon, video }, i) => {
-            const slug = href.replace("/reels/", "")
+            const slug = href.replace("/reels/", "");
             const fingerprint =
-              posters.fingerprints[slug as keyof typeof posters.fingerprints]
+              posters.fingerprints[slug as keyof typeof posters.fingerprints];
             const poster = fingerprint
               ? `/reels/${slug}/poster.webp?v=${fingerprint}`
-              : undefined
-            if (!video && !poster) return null
+              : undefined;
+            if (!video && !poster) return null;
 
             // The same browser-window frame as the mockup index. The poster filename is reused on every render, so its fingerprint is the cache key.
             return (
@@ -85,10 +85,10 @@ export default function ReelsIndex() {
                   </div>
                 </div>
               </article>
-            )
+            );
           })}
         </div>
       </main>
     </>
-  )
+  );
 }

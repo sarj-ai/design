@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -26,17 +26,17 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Kbd } from "@/components/ui/kbd"
-import { TabsContent } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { PageHeader } from "@/components/shared/page-header"
-import { SaveBar } from "@/components/shared/save-bar"
-import { CloseIcon } from "@/components/design-system/icons"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/drawer";
+import { Kbd } from "@/components/ui/kbd";
+import { TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { PageHeader } from "@/components/shared/page-header";
+import { SaveBar } from "@/components/shared/save-bar";
+import { CloseIcon } from "@/components/design-system/icons";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { cn } from "@/lib/utils";
 
-type Prompt = { id: string; title: string; language: string; body: string }
+type Prompt = { id: string; title: string; language: string; body: string };
 
 const PROMPTS: Prompt[] = [
   {
@@ -57,7 +57,7 @@ const PROMPTS: Prompt[] = [
     language: "AR",
     body: "افتتاح: طيب | تمام | أكيد\nتردد: يعني | خلني أشوف",
   },
-]
+];
 
 const VARIANTS = [
   { id: "pill", label: "Floating pill" },
@@ -65,17 +65,17 @@ const VARIANTS = [
   { id: "card", label: "Per card" },
   { id: "tray", label: "Docked tray" },
   { id: "drawer", label: "Review drawer" },
-]
+];
 
-type Variant = (typeof VARIANTS)[number]["id"]
+type Variant = (typeof VARIANTS)[number]["id"];
 
 function useDraft() {
-  const [saved, setSaved] = React.useState(PROMPTS)
-  const [draft, setDraft] = React.useState(PROMPTS)
+  const [saved, setSaved] = React.useState(PROMPTS);
+  const [draft, setDraft] = React.useState(PROMPTS);
 
   const changed = draft.filter(
     (prompt, index) => prompt.body !== saved[index].body,
-  )
+  );
 
   return {
     saved,
@@ -85,51 +85,51 @@ function useDraft() {
     edit(id: string, body: string) {
       setDraft((current) =>
         current.map((item) => (item.id === id ? { ...item, body } : item)),
-      )
+      );
     },
     revert(id: string) {
-      const original = saved.find((item) => item.id === id)
-      if (!original) return
+      const original = saved.find((item) => item.id === id);
+      if (!original) return;
       setDraft((current) =>
         current.map((item) => (item.id === id ? original : item)),
-      )
+      );
     },
     saveOne(id: string) {
-      const next = draft.find((item) => item.id === id)
-      if (!next) return
+      const next = draft.find((item) => item.id === id);
+      if (!next) return;
       setSaved((current) =>
         current.map((item) => (item.id === id ? next : item)),
-      )
-      toast.success(`${next.title} (${next.language}) saved`)
+      );
+      toast.success(`${next.title} (${next.language}) saved`);
     },
     discard() {
-      const before = draft
-      setDraft(saved)
+      const before = draft;
+      setDraft(saved);
       toast("Changes discarded", {
         action: { label: "Undo", onClick: () => setDraft(before) },
-      })
+      });
     },
     save() {
-      setSaved(draft)
+      setSaved(draft);
       toast.success(
         changed.length === 1
           ? "1 prompt saved"
           : `${changed.length} prompts saved`,
-      )
+      );
     },
-  }
+  };
 }
 
-type Draft = ReturnType<typeof useDraft>
+type Draft = ReturnType<typeof useDraft>;
 
-const name = (prompt: Prompt) => `${prompt.title} (${prompt.language})`
+const name = (prompt: Prompt) => `${prompt.title} (${prompt.language})`;
 
 function count(n: number) {
-  return n === 1 ? "1 change" : `${n} changes`
+  return n === 1 ? "1 change" : `${n} changes`;
 }
 
 export function SaveBarPreview() {
-  const [variant, setVariant] = React.useState<Variant>("pill")
+  const [variant, setVariant] = React.useState<Variant>("pill");
 
   return (
     <SecondaryTabs
@@ -144,25 +144,25 @@ export function SaveBarPreview() {
         </TabsContent>
       ))}
     </SecondaryTabs>
-  )
+  );
 }
 
 function VariantPage({ variant }: { variant: Variant }) {
-  const state = useDraft()
-  const [reviewing, setReviewing] = React.useState(false)
+  const state = useDraft();
+  const [reviewing, setReviewing] = React.useState(false);
 
   React.useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key === "s") {
-        event.preventDefault()
-        if (state.dirty) setReviewing(true)
+        event.preventDefault();
+        if (state.dirty) setReviewing(true);
       }
     }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [state.dirty])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [state.dirty]);
 
-  const openReview = () => setReviewing(true)
+  const openReview = () => setReviewing(true);
 
   return (
     <div className="relative h-160 overflow-y-auto rounded-xl border">
@@ -201,7 +201,7 @@ function VariantPage({ variant }: { variant: Variant }) {
         state={state}
       />
     </div>
-  )
+  );
 }
 
 function PromptCard({
@@ -210,10 +210,10 @@ function PromptCard({
   state,
   perCard,
 }: {
-  prompt: Prompt
-  edited: boolean
-  state: Draft
-  perCard: boolean
+  prompt: Prompt;
+  edited: boolean;
+  state: Draft;
+  perCard: boolean;
 }) {
   return (
     <Card>
@@ -253,15 +253,15 @@ function PromptCard({
         />
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function PillVariant({
   state,
   onReview,
 }: {
-  state: Draft
-  onReview: () => void
+  state: Draft;
+  onReview: () => void;
 }) {
   return (
     <SaveBar
@@ -269,15 +269,15 @@ function PillVariant({
       onDiscard={state.discard}
       onSave={onReview}
     />
-  )
+  );
 }
 
 function HeaderVariant({
   state,
   onReview,
 }: {
-  state: Draft
-  onReview: () => void
+  state: Draft;
+  onReview: () => void;
 }) {
   return (
     <PageHeader
@@ -302,17 +302,17 @@ function HeaderVariant({
         )
       }
     />
-  )
+  );
 }
 
 function TrayVariant({
   state,
   onReview,
 }: {
-  state: Draft
-  onReview: () => void
+  state: Draft;
+  onReview: () => void;
 }) {
-  if (!state.dirty) return null
+  if (!state.dirty) return null;
 
   return (
     <div className="sticky bottom-0 border-t bg-background">
@@ -354,12 +354,12 @@ function TrayVariant({
         </CollapsibleContent>
       </Collapsible>
     </div>
-  )
+  );
 }
 
 function DrawerVariant({ state }: { state: Draft }) {
-  const [open, setOpen] = React.useState(false)
-  const shown = state.dirty || open
+  const [open, setOpen] = React.useState(false);
+  const shown = state.dirty || open;
 
   return (
     <>
@@ -415,8 +415,8 @@ function DrawerVariant({ state }: { state: Draft }) {
             <Button
               disabled={!state.dirty}
               onClick={() => {
-                state.save()
-                setOpen(false)
+                state.save();
+                setOpen(false);
               }}
             >
               Save
@@ -425,7 +425,7 @@ function DrawerVariant({ state }: { state: Draft }) {
         </DrawerContent>
       </Drawer>
     </>
-  )
+  );
 }
 
 function ReviewDialog({
@@ -433,9 +433,9 @@ function ReviewDialog({
   onOpenChange,
   state,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  state: Draft
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  state: Draft;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -465,8 +465,8 @@ function ReviewDialog({
           </Button>
           <Button
             onClick={() => {
-              state.save()
-              onOpenChange(false)
+              state.save();
+              onOpenChange(false);
             }}
           >
             Save
@@ -474,42 +474,42 @@ function ReviewDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-type DiffLine = { kind: "same" | "removed" | "added"; text: string }
+type DiffLine = { kind: "same" | "removed" | "added"; text: string };
 
 /** Line-level diff by longest common subsequence — prompts are short. */
 function diffLines(before: string, after: string): DiffLine[] {
-  const a = before.split("\n")
-  const b = after.split("\n")
+  const a = before.split("\n");
+  const b = after.split("\n");
   const table = Array.from({ length: a.length + 1 }, () =>
     Array<number>(b.length + 1).fill(0),
-  )
+  );
   for (let i = a.length - 1; i >= 0; i--)
     for (let j = b.length - 1; j >= 0; j--)
       table[i][j] =
         a[i] === b[j]
           ? table[i + 1][j + 1] + 1
-          : Math.max(table[i + 1][j], table[i][j + 1])
+          : Math.max(table[i + 1][j], table[i][j + 1]);
 
-  const out: DiffLine[] = []
-  let i = 0
-  let j = 0
+  const out: DiffLine[] = [];
+  let i = 0;
+  let j = 0;
   while (i < a.length && j < b.length) {
     if (a[i] === b[j]) {
-      out.push({ kind: "same", text: a[i] })
-      i++
-      j++
+      out.push({ kind: "same", text: a[i] });
+      i++;
+      j++;
     } else if (table[i + 1][j] >= table[i][j + 1]) {
-      out.push({ kind: "removed", text: a[i++] })
+      out.push({ kind: "removed", text: a[i++] });
     } else {
-      out.push({ kind: "added", text: b[j++] })
+      out.push({ kind: "added", text: b[j++] });
     }
   }
-  while (i < a.length) out.push({ kind: "removed", text: a[i++] })
-  while (j < b.length) out.push({ kind: "added", text: b[j++] })
-  return out
+  while (i < a.length) out.push({ kind: "removed", text: a[i++] });
+  while (j < b.length) out.push({ kind: "added", text: b[j++] });
+  return out;
 }
 
 function LineDiff({ before, after }: { before: string; after: string }) {
@@ -535,5 +535,5 @@ function LineDiff({ before, after }: { before: string; after: string }) {
         </div>
       ))}
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Select,
@@ -6,12 +6,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   LANGUAGE_NAMES,
   PERSONAS,
   type LanguageCode,
-} from "@/lib/mockups/language-switching-data"
+} from "@/lib/mockups/language-switching-data";
 
 export function PersonaPicker({
   disabled = false,
@@ -21,14 +21,14 @@ export function PersonaPicker({
   onChange,
   value,
 }: {
-  disabled?: boolean
-  id: string
-  invalid?: boolean
-  language: LanguageCode
-  onChange: (personaId: string) => void
-  value: string | null
+  disabled?: boolean;
+  id: string;
+  invalid?: boolean;
+  language: LanguageCode;
+  onChange: (personaId: string) => void;
+  value: string | null;
 }) {
-  const options = PERSONAS.filter((persona) => persona.language === language)
+  const options = PERSONAS.filter((persona) => persona.language === language);
 
   return (
     <Select
@@ -53,5 +53,5 @@ export function PersonaPicker({
         )}
       </SelectContent>
     </Select>
-  )
+  );
 }

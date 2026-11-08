@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { cn } from "@/lib/utils"
-import { RemoveCaseIcon } from "@/components/mockups/transfer-routing/icons"
+} from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
+import { RemoveCaseIcon } from "@/components/mockups/transfer-routing/icons";
 
 export function CaseField({
   cases,
@@ -17,18 +17,18 @@ export function CaseField({
   onAdd,
   onRemove,
 }: {
-  cases: string[]
-  overlapping: Set<string>
-  onAdd: (value: string) => void
-  onRemove: (value: string) => void
+  cases: string[];
+  overlapping: Set<string>;
+  onAdd: (value: string) => void;
+  onRemove: (value: string) => void;
 }) {
-  const [draft, setDraft] = React.useState("")
+  const [draft, setDraft] = React.useState("");
 
   function commit() {
-    const value = draft.trim()
-    if (!value || cases.includes(value)) return
-    onAdd(value)
-    setDraft("")
+    const value = draft.trim();
+    if (!value || cases.includes(value)) return;
+    onAdd(value);
+    setDraft("");
   }
 
   return (
@@ -58,13 +58,13 @@ export function CaseField({
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         onKeyDown={(event) => {
-          if (event.key !== "Enter") return
-          event.preventDefault()
-          commit()
+          if (event.key !== "Enter") return;
+          event.preventDefault();
+          commit();
         }}
         onBlur={commit}
         placeholder="Add a reason and press Enter"
       />
     </InputGroup>
-  )
+  );
 }

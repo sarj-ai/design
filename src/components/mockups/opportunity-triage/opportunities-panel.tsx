@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   CopiedIcon,
   CopyIcon,
@@ -32,7 +32,7 @@ import {
   PlatformCategoryIcon,
   PromptCategoryIcon,
   ToolCategoryIcon,
-} from "@/components/mockups/opportunity-triage/icons"
+} from "@/components/mockups/opportunity-triage/icons";
 import {
   CATEGORIES,
   CURRENT_USER,
@@ -44,8 +44,8 @@ import {
   type DecisionKind,
   type Opportunity,
   type Status,
-} from "@/lib/mockups/opportunity-triage-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/opportunity-triage-data";
+import { cn } from "@/lib/utils";
 
 const CATEGORY_ICONS: Record<Category, React.ComponentType> = {
   tool: ToolCategoryIcon,
@@ -53,13 +53,13 @@ const CATEGORY_ICONS: Record<Category, React.ComponentType> = {
   prompt: PromptCategoryIcon,
   platform: PlatformCategoryIcon,
   other: OtherCategoryIcon,
-}
+};
 
 const VIEWS: { id: Status; label: string }[] = [
   { id: "open", label: "Open" },
   { id: "resolved", label: "Resolved" },
   { id: "dismissed", label: "Dismissed" },
-]
+];
 
 const EMPTY_VIEW: Record<Status, { title: string; description?: string }> = {
   open: {
@@ -69,12 +69,12 @@ const EMPTY_VIEW: Record<Status, { title: string; description?: string }> = {
   },
   resolved: { title: "Nothing resolved yet" },
   dismissed: { title: "Nothing dismissed yet" },
-}
+};
 
 const DECISION_VERB: Record<DecisionKind, string> = {
   resolved: "Resolved",
   dismissed: "Dismissed",
-}
+};
 
 export function OpportunitiesPanel({
   loading,
@@ -82,46 +82,46 @@ export function OpportunitiesPanel({
   opportunities,
   showNew,
 }: {
-  loading: boolean
-  onChange: (next: Opportunity[]) => void
-  opportunities: Opportunity[]
+  loading: boolean;
+  onChange: (next: Opportunity[]) => void;
+  opportunities: Opportunity[];
   /** New badges hold until the person leaves the tab. */
-  showNew: boolean
+  showNew: boolean;
 }) {
-  const [view, setView] = React.useState<Status>("open")
+  const [view, setView] = React.useState<Status>("open");
 
-  if (loading) return <PanelSkeleton />
+  if (loading) return <PanelSkeleton />;
 
   if (opportunities.length === 0) {
     return (
       <div className="py-12 text-center text-sm text-muted-foreground">
         No insights detected for this scenario yet.
       </div>
-    )
+    );
   }
 
-  const counts: Record<Status, number> = { open: 0, resolved: 0, dismissed: 0 }
-  for (const opportunity of opportunities) counts[statusOf(opportunity)] += 1
+  const counts: Record<Status, number> = { open: 0, resolved: 0, dismissed: 0 };
+  for (const opportunity of opportunities) counts[statusOf(opportunity)] += 1;
 
   const inView = opportunities.filter(
     (opportunity) => statusOf(opportunity) === view,
-  )
+  );
   const sections = CATEGORIES.map((category) => ({
     ...category,
     items: inView.filter(
       (opportunity) => opportunity.category === category.key,
     ),
-  })).filter((section) => section.items.length > 0)
+  })).filter((section) => section.items.length > 0);
 
   const replace = (next: Opportunity) =>
     onChange(
       opportunities.map((opportunity) =>
         opportunity.id === next.id ? next : opportunity,
       ),
-    )
+    );
 
   const decide = (opportunity: Opportunity, kind: DecisionKind | null) => {
-    const before = opportunity
+    const before = opportunity;
     replace({
       ...opportunity,
       decision:
@@ -134,23 +134,23 @@ export function OpportunitiesPanel({
             },
       callsSinceDecision: 0,
       isNew: false,
-    })
+    });
     const undo = {
       label: "Undo",
       onClick: () =>
         onChange(
           opportunities.map((each) => (each.id === before.id ? before : each)),
         ),
-    }
+    };
     if (kind === null) {
-      toast("Reopened", { action: undo })
+      toast("Reopened", { action: undo });
     } else {
       toast(DECISION_VERB[kind], {
         action: undo,
         description: "It comes back if newer calls show it again.",
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -158,7 +158,7 @@ export function OpportunitiesPanel({
         <ToggleGroup
           aria-label="Show"
           onValueChange={(next) => {
-            if (next) setView(next as Status)
+            if (next) setView(next as Status);
           }}
           size="sm"
           type="single"
@@ -200,7 +200,7 @@ export function OpportunitiesPanel({
           </Empty>
         ) : (
           sections.map((section) => {
-            const SectionIcon = CATEGORY_ICONS[section.key]
+            const SectionIcon = CATEGORY_ICONS[section.key];
             return (
               <section className="flex flex-col gap-3" key={section.key}>
                 <div className="flex items-center gap-2">
@@ -224,12 +224,12 @@ export function OpportunitiesPanel({
                   ))}
                 </div>
               </section>
-            )
+            );
           })
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function OpportunityRow({
@@ -238,23 +238,23 @@ function OpportunityRow({
   showNew,
   view,
 }: {
-  onDecide: (kind: DecisionKind | null) => void
-  opportunity: Opportunity
-  showNew: boolean
-  view: Status
+  onDecide: (kind: DecisionKind | null) => void;
+  opportunity: Opportunity;
+  showNew: boolean;
+  view: Status;
 }) {
-  const recurred = hasRecurred(opportunity)
-  const { decision } = opportunity
-  const [leaving, setLeaving] = React.useState(false)
+  const recurred = hasRecurred(opportunity);
+  const { decision } = opportunity;
+  const [leaving, setLeaving] = React.useState(false);
 
   const leave = (kind: DecisionKind | null) => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      onDecide(kind)
-      return
+      onDecide(kind);
+      return;
     }
-    setLeaving(true)
-    window.setTimeout(() => onDecide(kind), 150)
-  }
+    setLeaving(true);
+    window.setTimeout(() => onDecide(kind), 150);
+  };
 
   return (
     <Collapsible
@@ -353,7 +353,7 @@ function OpportunityRow({
         </div>
       </CollapsibleContent>
     </Collapsible>
-  )
+  );
 }
 
 function CallList({ callCount, calls }: { callCount: number; calls: Call[] }) {
@@ -384,7 +384,7 @@ function CallList({ callCount, calls }: { callCount: number; calls: Call[] }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function CallStatusBadge({ status }: { status: Call["status"] }) {
@@ -393,20 +393,20 @@ function CallStatusBadge({ status }: { status: Call["status"] }) {
       <Badge className="shrink-0 bg-success-tint text-success-tint-foreground">
         Completed
       </Badge>
-    )
+    );
   }
   if (status === "failed") {
     return (
       <Badge className="shrink-0" variant="destructive">
         Failed
       </Badge>
-    )
+    );
   }
   return (
     <Badge className="shrink-0" variant="secondary">
       No answer
     </Badge>
-  )
+  );
 }
 
 function CopyButton({
@@ -415,12 +415,12 @@ function CopyButton({
   label,
   tooltip,
 }: {
-  ariaLabel?: string
-  getText: () => string
-  label?: string
-  tooltip: string
+  ariaLabel?: string;
+  getText: () => string;
+  label?: string;
+  tooltip: string;
 }) {
-  const [copied, setCopied] = React.useState(false)
+  const [copied, setCopied] = React.useState(false);
 
   return (
     <Tooltip>
@@ -428,9 +428,9 @@ function CopyButton({
         <Button
           aria-label={ariaLabel}
           onClick={() => {
-            void navigator.clipboard?.writeText(getText())
-            setCopied(true)
-            window.setTimeout(() => setCopied(false), 2000)
+            void navigator.clipboard?.writeText(getText());
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2000);
           }}
           size={label === undefined ? "icon-xs" : "sm"}
           variant="ghost"
@@ -451,7 +451,7 @@ function CopyButton({
         {copied ? "Copied" : tooltip}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 function PanelSkeleton() {
@@ -463,21 +463,21 @@ function PanelSkeleton() {
       <Skeleton className="h-14 w-full rounded-lg motion-reduce:animate-none" />
       <Skeleton className="h-14 w-2/3 rounded-lg motion-reduce:animate-none" />
     </div>
-  )
+  );
 }
 
 function copyText(opportunity: Opportunity): string {
   const category =
     CATEGORIES.find((entry) => entry.key === opportunity.category)?.label ??
-    "Other"
-  return `${opportunity.title} (${category}, ${opportunity.callCount} calls)\n${opportunity.description}`
+    "Other";
+  return `${opportunity.title} (${category}, ${opportunity.callCount} calls)\n${opportunity.description}`;
 }
 
 function formatDay(isoDate: string): string {
   return new Date(`${isoDate}T12:00:00`).toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
-  })
+  });
 }
 
 function formatCallDate(createdAt: string): string {
@@ -486,11 +486,11 @@ function formatCallDate(createdAt: string): string {
     hour: "numeric",
     minute: "2-digit",
     month: "short",
-  })
+  });
 }
 
 function formatDuration(seconds: number): string {
-  const minutes = Math.floor(seconds / 60)
-  const rest = seconds % 60
-  return `${minutes}:${String(rest).padStart(2, "0")}`
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `${minutes}:${String(rest).padStart(2, "0")}`;
 }

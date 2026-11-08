@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { ConversationsPage } from "@/components/mockups/conversations-revamp/list/conversations-page"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { ConversationsPage } from "@/components/mockups/conversations-revamp/list/conversations-page";
 
 export default function ConversationsRevampPage() {
   return (
@@ -11,5 +11,5 @@ export default function ConversationsRevampPage() {
     >
       <ConversationsPage />
     </MockupShell>
-  )
+  );
 }

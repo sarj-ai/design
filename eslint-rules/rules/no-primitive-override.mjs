@@ -1,15 +1,15 @@
-import { collectStrings, parseClasses } from "../lib/classes.mjs"
+import { collectStrings, parseClasses } from "../lib/classes.mjs";
 
 // Only geometry a primitive owns is checked; colour and layout classes are deliberately left alone.
 
-const PADDING = /^p[xytrbles]?-/
-const RADIUS = /^rounded(-|$)/
+const PADDING = /^p[xytrbles]?-/;
+const RADIUS = /^rounded(-|$)/;
 /** `h-full`/`h-auto`/`h-fit` size to a parent; a fixed `h-9` overrides the primitive. */
-const FIXED_HEIGHT = /^h-(\d|\[|px$)/
-const BORDER = /^border(-\d|-\[|$)/
-const TEXT_SIZE = /^text-(xs|sm|base|lg|xl|[2-9]xl|\[)/
+const FIXED_HEIGHT = /^h-(\d|\[|px$)/;
+const BORDER = /^border(-\d|-\[|$)/;
+const TEXT_SIZE = /^text-(xs|sm|base|lg|xl|[2-9]xl|\[)/;
 const FONT_WEIGHT =
-  /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/
+  /^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/;
 
 // Anything not listed is a layout wrapper and goes unchecked.
 const OWNED = {
@@ -23,7 +23,7 @@ const OWNED = {
   Textarea: { padding: true, radius: true },
   SelectTrigger: { padding: true, radius: true, height: true },
   InputGroup: { padding: true, radius: true, height: true },
-}
+};
 
 const TYPE_ROLE = new Set([
   "CardTitle",
@@ -36,7 +36,7 @@ const TYPE_ROLE = new Set([
   "DrawerDescription",
   "AlertTitle",
   "AlertDescription",
-])
+]);
 
 const ADVICE = {
   Card: 'Card sets its padding from --card-spacing (16px, or 12px with size="sm") and uses `ring-1 ring-foreground/10` rather than a border. Pick one card size per view and let it be.',
@@ -53,7 +53,7 @@ const ADVICE = {
   Textarea: "Set rows to change its size.",
   SelectTrigger: "Use the size prop — sm | default.",
   InputGroup: "InputGroup sizes itself around the input it wraps.",
-}
+};
 
 const noPrimitiveOverride = {
   meta: {
@@ -72,29 +72,30 @@ const noPrimitiveOverride = {
   },
 
   create(context) {
-    const primitives = new Set()
+    const primitives = new Set();
 
     return {
       ImportDeclaration(node) {
-        if (!/^@\/components\/ui\//.test(node.source.value)) return
+        if (!/^@\/components\/ui\//.test(node.source.value)) return;
         for (const spec of node.specifiers) {
-          if (spec.local?.name) primitives.add(spec.local.name)
+          if (spec.local?.name) primitives.add(spec.local.name);
         }
       },
 
       JSXOpeningElement(node) {
-        const name = node.name?.type === "JSXIdentifier" ? node.name.name : null
-        if (!name || !primitives.has(name)) return
+        const name =
+          node.name?.type === "JSXIdentifier" ? node.name.name : null;
+        if (!name || !primitives.has(name)) return;
 
-        const owned = OWNED[name]
-        const hasTypeRole = TYPE_ROLE.has(name)
-        if (!owned && !hasTypeRole) return
+        const owned = OWNED[name];
+        const hasTypeRole = TYPE_ROLE.has(name);
+        if (!owned && !hasTypeRole) return;
 
         const classAttr = node.attributes.find(
           (attr) =>
             attr.type === "JSXAttribute" && attr.name?.name === "className",
-        )
-        if (!classAttr) return
+        );
+        if (!classAttr) return;
 
         for (const entry of collectStrings(classAttr.value)) {
           for (const { raw, base } of parseClasses(entry.value)) {
@@ -102,7 +103,7 @@ const noPrimitiveOverride = {
               (owned?.padding && PADDING.test(base) && "padding") ||
               (owned?.radius && RADIUS.test(base) && "radius") ||
               (owned?.height && FIXED_HEIGHT.test(base) && "height") ||
-              (owned?.border && BORDER.test(base) && "edge")
+              (owned?.border && BORDER.test(base) && "edge");
 
             if (geometry) {
               context.report({
@@ -114,7 +115,7 @@ const noPrimitiveOverride = {
                   property: geometry,
                   advice: ADVICE[name] ?? "",
                 },
-              })
+              });
             } else if (
               hasTypeRole &&
               (TEXT_SIZE.test(base) || FONT_WEIGHT.test(base))
@@ -123,13 +124,13 @@ const noPrimitiveOverride = {
                 node: entry.node,
                 messageId: "typography",
                 data: { cls: raw, name },
-              })
+              });
             }
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default noPrimitiveOverride
+export default noPrimitiveOverride;

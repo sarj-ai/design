@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function Seekable({
   children,
@@ -8,10 +8,10 @@ export function Seekable({
   label,
   onActivate,
 }: {
-  children: React.ReactNode
-  className?: string
-  label: string
-  onActivate: () => void
+  children: React.ReactNode;
+  className?: string;
+  label: string;
+  onActivate: () => void;
 }) {
   return (
     <div
@@ -23,8 +23,8 @@ export function Seekable({
       onClick={onActivate}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault()
-          onActivate()
+          event.preventDefault();
+          onActivate();
         }
       }}
       role="button"
@@ -32,5 +32,5 @@ export function Seekable({
     >
       {children}
     </div>
-  )
+  );
 }

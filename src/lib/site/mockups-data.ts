@@ -26,15 +26,15 @@ import {
   VoiceIdIcon,
   WorkHistoryIcon,
   Wrench01Icon,
-} from "@hugeicons/core-free-icons"
-import type { IconSvgElement } from "@hugeicons/react"
+} from "@hugeicons/core-free-icons";
+import type { IconSvgElement } from "@hugeicons/react";
 
 import {
   prepareField,
   prepareQuery,
   scoreTerm,
   type Term,
-} from "@/lib/site/fuzzy"
+} from "@/lib/site/fuzzy";
 
 // Must match Linear's Surface label group and SURFACES in scripts/new-mockup.mjs.
 const SURFACES = [
@@ -46,24 +46,24 @@ const SURFACES = [
   "Integrations Pages",
   "Playground",
   "Settings",
-] as const
+] as const;
 
-type Surface = (typeof SURFACES)[number]
+type Surface = (typeof SURFACES)[number];
 
 // Scripts edit and parse this array as text: keep entries separated by `},`, the sentinel line last,
 // and href, title, meta, surface, description adjacent in that order (scripts/lib/import-graph.mjs).
 type Mockup = {
-  href: string
-  title: string
-  meta: string
-  surface: Surface | null
-  description: string
-  icon: IconSvgElement
-  tickets: string[]
-  added: string
+  href: string;
+  title: string;
+  meta: string;
+  surface: Surface | null;
+  description: string;
+  icon: IconSvgElement;
+  tickets: string[];
+  added: string;
   /** Path under `src/` where `npm run registry` starts following imports. Defaults to the route. */
-  registryEntry?: string
-}
+  registryEntry?: string;
+};
 
 export const MOCKUPS: Mockup[] = [
   {
@@ -421,7 +421,7 @@ export const MOCKUPS: Mockup[] = [
     added: "2026-11-04T03:46:43.852Z",
   },
   // `npm run new` appends new mockups above this line.
-]
+];
 
 const SEARCH_FIELDS: { text: (mockup: Mockup) => string; weight: number }[] = [
   { text: (mockup) => mockup.title, weight: 3 },
@@ -430,95 +430,95 @@ const SEARCH_FIELDS: { text: (mockup: Mockup) => string; weight: number }[] = [
   { text: (mockup) => mockup.meta, weight: 1.5 },
   { text: (mockup) => mockup.href.slice(1), weight: 1.5 },
   { text: (mockup) => mockup.description, weight: 1 },
-]
+];
 
-const PHRASE_BONUS = 40
+const PHRASE_BONUS = 40;
 
 function scoreMockup(terms: Term[], mockup: Mockup, phrase: string): number {
-  let total = 0
+  let total = 0;
 
   for (const term of terms) {
-    let best: number | null = null
+    let best: number | null = null;
 
     for (const { text, weight } of SEARCH_FIELDS) {
-      const score = scoreTerm(term, prepareField(text(mockup)))
-      if (score === null) continue
+      const score = scoreTerm(term, prepareField(text(mockup)));
+      if (score === null) continue;
 
-      const weighted = score * weight
-      if (best === null || weighted > best) best = weighted
+      const weighted = score * weight;
+      if (best === null || weighted > best) best = weighted;
     }
 
-    if (best === null) return 0
-    total += best
+    if (best === null) return 0;
+    total += best;
   }
 
   if (terms.length > 1) {
     for (const { text, weight } of SEARCH_FIELDS) {
       if (prepareField(text(mockup)).normalized.includes(phrase)) {
-        total += PHRASE_BONUS * weight
-        break
+        total += PHRASE_BONUS * weight;
+        break;
       }
     }
   }
 
-  return total
+  return total;
 }
 
 export function searchMockups(query: string): Mockup[] {
-  const terms = prepareQuery(query)
-  if (!terms.length) return MOCKUPS
+  const terms = prepareQuery(query);
+  if (!terms.length) return MOCKUPS;
 
-  const phrase = terms.map((term) => term.normalized).join(" ")
+  const phrase = terms.map((term) => term.normalized).join(" ");
 
   return MOCKUPS.flatMap((mockup, index) => {
-    const score = scoreMockup(terms, mockup, phrase)
-    return score === 0 ? [] : [{ mockup, index, score }]
+    const score = scoreMockup(terms, mockup, phrase);
+    return score === 0 ? [] : [{ mockup, index, score }];
   })
     .sort((a, b) => b.score - a.score || a.index - b.index)
-    .map(({ mockup }) => mockup)
+    .map(({ mockup }) => mockup);
 }
 
 export function surfaceLabel(surface: Surface | null) {
-  return surface ?? "No surface label"
+  return surface ?? "No surface label";
 }
 
 export function surfaceId(surface: Surface | null) {
-  return surface ? surface.toLowerCase().replace(/\s+/g, "-") : "unlabelled"
+  return surface ? surface.toLowerCase().replace(/\s+/g, "-") : "unlabelled";
 }
 
-type SurfaceGroup = { surface: Surface | null; mockups: Mockup[] }
+type SurfaceGroup = { surface: Surface | null; mockups: Mockup[] };
 
 export function groupBySurface(
   mockups: Mockup[],
   { ranked = false }: { ranked?: boolean } = {},
 ): SurfaceGroup[] {
-  const surfaces: (Surface | null)[] = [...SURFACES, null]
+  const surfaces: (Surface | null)[] = [...SURFACES, null];
 
   const groups = surfaces.flatMap((surface) => {
-    const matches = mockups.filter((mockup) => mockup.surface === surface)
-    return matches.length ? [{ surface, mockups: matches }] : []
-  })
+    const matches = mockups.filter((mockup) => mockup.surface === surface);
+    return matches.length ? [{ surface, mockups: matches }] : [];
+  });
 
   return ranked
     ? groups.sort(
         (a, b) => mockups.indexOf(a.mockups[0]) - mockups.indexOf(b.mockups[0]),
       )
-    : groups
+    : groups;
 }
 
-export type Order = "newest" | "oldest" | "section"
+export type Order = "newest" | "oldest" | "section";
 
 export function sortByAdded(
   mockups: Mockup[],
   order: "newest" | "oldest",
 ): Mockup[] {
-  const sign = order === "newest" ? -1 : 1
+  const sign = order === "newest" ? -1 : 1;
   return [...mockups].sort(
     (a, b) =>
       sign *
       (Date.parse(a.added) - Date.parse(b.added) ||
         MOCKUPS.indexOf(a) - MOCKUPS.indexOf(b)),
-  )
+  );
 }
 
 // The zone is fixed so the prerendered page and the browser print the same day.
@@ -528,5 +528,5 @@ export function addedLabel(mockup: Mockup) {
     month: "short",
     year: "numeric",
     timeZone: "Asia/Riyadh",
-  })
+  });
 }

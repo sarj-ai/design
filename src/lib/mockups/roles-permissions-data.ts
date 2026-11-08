@@ -1,16 +1,16 @@
-export type PermissionId = string
+export type PermissionId = string;
 
 export type Permission = {
-  id: PermissionId
-  label: string
-}
+  id: PermissionId;
+  label: string;
+};
 
 export const SECTIONS = [
   { id: "own-org", label: "Own organization" },
   { id: "platform", label: "Cross-organization and platform" },
-] as const
+] as const;
 
-type SectionId = (typeof SECTIONS)[number]["id"]
+type SectionId = (typeof SECTIONS)[number]["id"];
 
 export const PERMISSIONS: Record<SectionId, Permission[]> = {
   "own-org": [
@@ -167,24 +167,24 @@ export const PERMISSIONS: Record<SectionId, Permission[]> = {
       label: "Flag and unflag a call",
     },
   ],
-}
+};
 
 export const ALL_PERMISSIONS: Permission[] = [
   ...PERMISSIONS["own-org"],
   ...PERMISSIONS.platform,
-]
+];
 
-const ALL_IDS = ALL_PERMISSIONS.map((permission) => permission.id)
-const OWN_ORG_IDS = PERMISSIONS["own-org"].map((permission) => permission.id)
+const ALL_IDS = ALL_PERMISSIONS.map((permission) => permission.id);
+const OWN_ORG_IDS = PERMISSIONS["own-org"].map((permission) => permission.id);
 
 export type Role = {
-  id: string
-  name: string
-  legacy: string | null
-  people: number
-  organizations: number
-  locked: boolean
-}
+  id: string;
+  name: string;
+  legacy: string | null;
+  people: number;
+  organizations: number;
+  locked: boolean;
+};
 
 export const ROLES: Role[] = [
   {
@@ -211,7 +211,7 @@ export const ROLES: Role[] = [
     organizations: 0,
     locked: true,
   },
-]
+];
 
 export const GRANTS: Record<string, PermissionId[]> = {
   "call-only": [
@@ -235,20 +235,20 @@ export const GRANTS: Record<string, PermissionId[]> = {
     "organization_settings:write",
   ],
   "super-admin": ALL_IDS,
-}
+};
 
-type Diff = { granted: Permission[]; revoked: Permission[] }
+type Diff = { granted: Permission[]; revoked: Permission[] };
 
 export function diffGrants(
   before: PermissionId[],
   after: PermissionId[],
 ): Diff {
-  const had = new Set(before)
-  const has = new Set(after)
+  const had = new Set(before);
+  const has = new Set(after);
   return {
     granted: ALL_PERMISSIONS.filter((p) => has.has(p.id) && !had.has(p.id)),
     revoked: ALL_PERMISSIONS.filter((p) => had.has(p.id) && !has.has(p.id)),
-  }
+  };
 }
 
 export const HIDDEN_NAV: Record<string, string[]> = {
@@ -264,4 +264,4 @@ export const HIDDEN_NAV: Record<string, string[]> = {
     "Messaging Settings",
   ],
   "super-admin": [],
-}
+};

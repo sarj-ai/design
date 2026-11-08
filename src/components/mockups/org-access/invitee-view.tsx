@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { toast } from "sonner"
+import Image from "next/image";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,8 +11,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { INVITEE, ORG, type InviteeState } from "@/lib/mockups/org-access-data"
+} from "@/components/ui/card";
+import { INVITEE, ORG, type InviteeState } from "@/lib/mockups/org-access-data";
 
 export function InviteeView({ state }: { state: InviteeState }) {
   const copy = {
@@ -32,7 +32,7 @@ export function InviteeView({ state }: { state: InviteeState }) {
       title: "You're not in an organization yet",
       body: `Ask an admin at your company to invite ${INVITEE.uninvited}.`,
     },
-  }[state]
+  }[state];
 
   return (
     <div className="flex min-h-full grow items-center justify-center p-8">
@@ -72,5 +72,5 @@ export function InviteeView({ state }: { state: InviteeState }) {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

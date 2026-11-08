@@ -1,55 +1,55 @@
-import { ButtonRoles } from "@/components/design-system/button-roles"
-import { ColourTable } from "@/components/design-system/colour-table"
-import { OrbAnatomy } from "@/components/design-system/orb-anatomy"
-import { OrbAvatar } from "@/components/shared/orb-avatar"
-import { ORB_TONES } from "@/components/shared/orb-tones"
+import { ButtonRoles } from "@/components/design-system/button-roles";
+import { ColourTable } from "@/components/design-system/colour-table";
+import { OrbAnatomy } from "@/components/design-system/orb-anatomy";
+import { OrbAvatar } from "@/components/shared/orb-avatar";
+import { ORB_TONES } from "@/components/shared/orb-tones";
 import {
   AvatarBadge,
   AvatarGroup,
   AvatarGroupCount,
-} from "@/components/ui/avatar"
-import { DesignSystemDocs } from "@/components/design-system/docs-shell"
-import { PatternAnatomy } from "@/components/design-system/pattern-anatomy"
-import { ButtonSizes } from "@/components/design-system/button-sizes"
-import { ChipNotes } from "@/components/design-system/chip-notes"
-import { SaveBarPreview } from "@/components/design-system/save-bar-preview"
-import { SectionCardPreview } from "@/components/design-system/section-card-preview"
-import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview"
-import { JsonViewPreview } from "@/components/design-system/json-view-preview"
-import { AlertPreview } from "@/components/design-system/alert-preview"
-import { RecordingPreview } from "@/components/design-system/recording-preview"
-import { AgentStatePreview } from "@/components/design-system/agent-state-preview"
-import { IntegrationCardPreview } from "@/components/design-system/integration-card-preview"
-import { DevelopersPage } from "@/components/mockups/developers/developers-page"
-import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview"
-import { EmptyValueNotes } from "@/components/design-system/empty-value-notes"
-import { FoundationTable } from "@/components/design-system/foundation-tables"
-import { FormDemo } from "@/components/design-system/form-demo"
-import { LanguageNotes } from "@/components/design-system/language-notes"
-import { IndexPageDemo } from "@/components/design-system/index-page-demo"
-import { AdminViewPagePreview } from "@/components/design-system/admin-view-preview"
-import { NotificationsPreview } from "@/components/design-system/notifications-preview"
-import { IndexPagePreview } from "@/components/design-system/page-preview"
-import { RowActionNotes } from "@/components/design-system/row-action-notes"
-import { MotionTable } from "@/components/design-system/motion-tables"
-import { RuleList } from "@/components/design-system/rule-list"
-import { StepperPreview } from "@/components/design-system/stepper-preview"
-import { SelectionPreview } from "@/components/design-system/selection-preview"
-import { TabsPreview } from "@/components/design-system/tabs-preview"
-import { SurfaceDecisionPreview } from "@/components/design-system/surface-decision-preview"
-import { ControlScale } from "@/components/design-system/control-scale"
-import { LayerTable } from "@/components/design-system/layer-table"
-import { LintRules } from "@/components/design-system/lint-rules"
-import { PaginationPreview } from "@/components/design-system/pagination-preview"
+} from "@/components/ui/avatar";
+import { DesignSystemDocs } from "@/components/design-system/docs-shell";
+import { PatternAnatomy } from "@/components/design-system/pattern-anatomy";
+import { ButtonSizes } from "@/components/design-system/button-sizes";
+import { ChipNotes } from "@/components/design-system/chip-notes";
+import { SaveBarPreview } from "@/components/design-system/save-bar-preview";
+import { SectionCardPreview } from "@/components/design-system/section-card-preview";
+import { CreationFlowPreview } from "@/components/design-system/creation-flow-preview";
+import { JsonViewPreview } from "@/components/design-system/json-view-preview";
+import { AlertPreview } from "@/components/design-system/alert-preview";
+import { RecordingPreview } from "@/components/design-system/recording-preview";
+import { AgentStatePreview } from "@/components/design-system/agent-state-preview";
+import { IntegrationCardPreview } from "@/components/design-system/integration-card-preview";
+import { DevelopersPage } from "@/components/mockups/developers/developers-page";
+import { DrawerAnatomyPreview } from "@/components/design-system/drawer-anatomy-preview";
+import { EmptyValueNotes } from "@/components/design-system/empty-value-notes";
+import { FoundationTable } from "@/components/design-system/foundation-tables";
+import { FormDemo } from "@/components/design-system/form-demo";
+import { LanguageNotes } from "@/components/design-system/language-notes";
+import { IndexPageDemo } from "@/components/design-system/index-page-demo";
+import { AdminViewPagePreview } from "@/components/design-system/admin-view-preview";
+import { NotificationsPreview } from "@/components/design-system/notifications-preview";
+import { IndexPagePreview } from "@/components/design-system/page-preview";
+import { RowActionNotes } from "@/components/design-system/row-action-notes";
+import { MotionTable } from "@/components/design-system/motion-tables";
+import { RuleList } from "@/components/design-system/rule-list";
+import { StepperPreview } from "@/components/design-system/stepper-preview";
+import { SelectionPreview } from "@/components/design-system/selection-preview";
+import { TabsPreview } from "@/components/design-system/tabs-preview";
+import { SurfaceDecisionPreview } from "@/components/design-system/surface-decision-preview";
+import { ControlScale } from "@/components/design-system/control-scale";
+import { LayerTable } from "@/components/design-system/layer-table";
+import { LintRules } from "@/components/design-system/lint-rules";
+import { PaginationPreview } from "@/components/design-system/pagination-preview";
 import {
   EmptyStatePreview,
   LoadingPreview,
   NoResultsPreview,
-} from "@/components/design-system/state-previews"
-import { ErrorSystemPreview } from "@/components/design-system/error-system-preview"
-import { TableAnatomy } from "@/components/design-system/table-anatomy"
-import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/design-system/state-previews";
+import { ErrorSystemPreview } from "@/components/design-system/error-system-preview";
+import { TableAnatomy } from "@/components/design-system/table-anatomy";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   EMPTY_STATE_RULES,
   ERROR_RULES,
@@ -59,25 +59,25 @@ import {
   MOTION_RULES,
   NO_RESULTS_RULES,
   PATTERNS,
-} from "@/lib/design-system/data"
-import { docsParams, resolveDocs } from "@/lib/design-system/nav"
-import { notFound } from "next/navigation"
+} from "@/lib/design-system/data";
+import { docsParams, resolveDocs } from "@/lib/design-system/nav";
+import { notFound } from "next/navigation";
 
-const ORB_NAMES = ["Sara", "Nour", "Yusuf"]
+const ORB_NAMES = ["Sara", "Nour", "Yusuf"];
 
 export async function generateStaticParams() {
-  return docsParams()
+  return docsParams();
 }
 
 export default async function DesignSystemPage({
   params,
 }: {
-  params: Promise<{ slug?: string[] }>
+  params: Promise<{ slug?: string[] }>;
 }) {
-  const { slug } = await params
-  const location = resolveDocs(slug)
+  const { slug } = await params;
+  const location = resolveDocs(slug);
 
-  if (!location) notFound()
+  if (!location) notFound();
 
   return (
     <DesignSystemDocs
@@ -286,5 +286,5 @@ export default async function DesignSystemPage({
         ),
       }}
     />
-  )
+  );
 }

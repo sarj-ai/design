@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import {
   EnterFullscreenIcon,
   ExitFullscreenIcon,
@@ -11,15 +11,15 @@ import {
   PlayReelIcon,
   SoundOffIcon,
   SoundOnIcon,
-} from "@/components/reels/icons"
-import { cn } from "@/lib/utils"
+} from "@/components/reels/icons";
+import { cn } from "@/lib/utils";
 
 /** How long the pointer can rest before the controls step aside for the picture. */
-const IDLE_MS = 2000
+const IDLE_MS = 2000;
 
 function clock(seconds: number) {
-  const s = Math.max(0, Math.floor(seconds))
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`
+  const s = Math.max(0, Math.floor(seconds));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
 /**
@@ -33,78 +33,78 @@ export function VideoPlayer({
   title,
   className,
 }: {
-  src: string
-  poster?: string
-  title: string
-  className?: string
+  src: string;
+  poster?: string;
+  title: string;
+  className?: string;
 }) {
-  const root = React.useRef<HTMLDivElement>(null)
-  const video = React.useRef<HTMLVideoElement>(null)
-  const idleTimer = React.useRef<number | undefined>(undefined)
+  const root = React.useRef<HTMLDivElement>(null);
+  const video = React.useRef<HTMLVideoElement>(null);
+  const idleTimer = React.useRef<number | undefined>(undefined);
 
-  const [playing, setPlaying] = React.useState(false)
-  const [started, setStarted] = React.useState(false)
-  const [muted, setMuted] = React.useState(false)
-  const [full, setFull] = React.useState(false)
-  const [idle, setIdle] = React.useState(false)
-  const [time, setTime] = React.useState(0)
-  const [duration, setDuration] = React.useState(0)
+  const [playing, setPlaying] = React.useState(false);
+  const [started, setStarted] = React.useState(false);
+  const [muted, setMuted] = React.useState(false);
+  const [full, setFull] = React.useState(false);
+  const [idle, setIdle] = React.useState(false);
+  const [time, setTime] = React.useState(0);
+  const [duration, setDuration] = React.useState(0);
 
   // `timeupdate` fires about four times a second, which steps the scrubber; a frame loop while playing keeps it smooth.
   React.useEffect(() => {
-    if (!playing) return
-    let id = 0
+    if (!playing) return;
+    let id = 0;
     const tick = () => {
-      if (video.current) setTime(video.current.currentTime)
-      id = requestAnimationFrame(tick)
-    }
-    id = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(id)
-  }, [playing])
+      if (video.current) setTime(video.current.currentTime);
+      id = requestAnimationFrame(tick);
+    };
+    id = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(id);
+  }, [playing]);
 
   React.useEffect(() => {
-    const sync = () => setFull(document.fullscreenElement === root.current)
-    document.addEventListener("fullscreenchange", sync)
-    return () => document.removeEventListener("fullscreenchange", sync)
-  }, [])
+    const sync = () => setFull(document.fullscreenElement === root.current);
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
 
-  React.useEffect(() => () => window.clearTimeout(idleTimer.current), [])
+  React.useEffect(() => () => window.clearTimeout(idleTimer.current), []);
 
   // Server-rendered, the video can load its metadata before hydration attaches `onLoadedMetadata`, so read the duration once on mount too.
   React.useEffect(() => {
-    const el = video.current
+    const el = video.current;
     if (el && el.readyState >= 1 && Number.isFinite(el.duration)) {
-      setDuration(el.duration)
+      setDuration(el.duration);
     }
-  }, [])
+  }, []);
 
   function wake() {
-    setIdle(false)
-    window.clearTimeout(idleTimer.current)
-    idleTimer.current = window.setTimeout(() => setIdle(true), IDLE_MS)
+    setIdle(false);
+    window.clearTimeout(idleTimer.current);
+    idleTimer.current = window.setTimeout(() => setIdle(true), IDLE_MS);
   }
 
   function toggle() {
-    const el = video.current
-    if (!el) return
-    if (el.paused) void el.play()
-    else el.pause()
-    wake()
+    const el = video.current;
+    if (!el) return;
+    if (el.paused) void el.play();
+    else el.pause();
+    wake();
   }
 
   function seek(next: number) {
-    const el = video.current
-    if (!el) return
-    el.currentTime = next
-    setTime(next)
+    const el = video.current;
+    if (!el) return;
+    el.currentTime = next;
+    setTime(next);
   }
 
   function fullscreen() {
-    if (document.fullscreenElement) void document.exitFullscreen()
-    else void root.current?.requestFullscreen()
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void root.current?.requestFullscreen();
   }
 
-  const hidden = playing && idle
+  const hidden = playing && idle;
 
   return (
     <div
@@ -126,8 +126,8 @@ export function VideoPlayer({
         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
         onPause={() => setPlaying(false)}
         onPlay={() => {
-          setPlaying(true)
-          setStarted(true)
+          setPlaying(true);
+          setStarted(true);
         }}
         playsInline
         poster={poster}
@@ -200,5 +200,5 @@ export function VideoPlayer({
         </div>
       ) : null}
     </div>
-  )
+  );
 }

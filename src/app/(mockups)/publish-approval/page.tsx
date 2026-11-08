@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -9,25 +9,25 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index"
-import { ApprovalEditor } from "@/components/mockups/publish-approval/approval-editor"
-import { ApprovalsPage } from "@/components/mockups/publish-approval/approvals-page"
-import { ApprovalsIcon } from "@/components/mockups/publish-approval/icons"
-import { ReviewDrawer } from "@/components/mockups/publish-approval/review-drawer"
-import { StatusBadge } from "@/components/mockups/publish-approval/status-badge"
-import { type Notice, Notifications } from "@/components/shared/notifications"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import type { Subject } from "@/lib/mockups/config-versioning-data"
-import { SCENARIOS, type ScenarioRow } from "@/lib/mockups/live-scenarios-data"
+} from "@/components/ui/tooltip";
+import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index";
+import { ApprovalEditor } from "@/components/mockups/publish-approval/approval-editor";
+import { ApprovalsPage } from "@/components/mockups/publish-approval/approvals-page";
+import { ApprovalsIcon } from "@/components/mockups/publish-approval/icons";
+import { ReviewDrawer } from "@/components/mockups/publish-approval/review-drawer";
+import { StatusBadge } from "@/components/mockups/publish-approval/status-badge";
+import { type Notice, Notifications } from "@/components/shared/notifications";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import type { Subject } from "@/lib/mockups/config-versioning-data";
+import { SCENARIOS, type ScenarioRow } from "@/lib/mockups/live-scenarios-data";
 import {
   type ApprovalRequest,
   CASES,
@@ -43,32 +43,32 @@ import {
   VIEWERS,
   who,
   withV15,
-} from "@/lib/mockups/publish-approval-data"
+} from "@/lib/mockups/publish-approval-data";
 
 const VIEWS = [
   { id: "editor", label: "Scenario" },
   { id: "index", label: "Scenarios" },
   { id: "approvals", label: "Approvals" },
-] as const
+] as const;
 
-type View = (typeof VIEWS)[number]["id"]
+type View = (typeof VIEWS)[number]["id"];
 
-type World = { subject: Subject; requests: ApprovalRequest[] }
+type World = { subject: Subject; requests: ApprovalRequest[] };
 
 function initialWorld(caseId: CaseId): World {
-  const others = caseId === "empty" ? [] : OTHER_REQUESTS
+  const others = caseId === "empty" ? [] : OTHER_REQUESTS;
   switch (caseId) {
     case "pending":
     case "approve-fails":
       return {
         subject: SCENARIO,
         requests: [mainRequest("pending"), ...others],
-      }
+      };
     case "newer":
       return {
         subject: withV15(SCENARIO),
         requests: [mainRequest("pending"), ...others],
-      }
+      };
     case "rejected":
       return {
         subject: SCENARIO,
@@ -81,9 +81,9 @@ function initialWorld(caseId: CaseId): World {
           }),
           ...others,
         ],
-      }
+      };
     default:
-      return { subject: SCENARIO, requests: others }
+      return { subject: SCENARIO, requests: others };
   }
 }
 
@@ -95,40 +95,40 @@ const SCENARIO_ROW: ScenarioRow = {
   updated: "12 Oct 2026, 14:02",
   updatedBy: "akhalil",
   live: { by: "Nouf Al-Harbi", at: "15 Sep 2026, 09:00" },
-}
+};
 
 export default function PublishApprovalPage() {
-  const [caseId, setCaseId] = React.useState<CaseId>("normal")
-  const [viewerId, setViewerId] = React.useState<ViewerId>("requester")
-  const [view, setView] = React.useState<View>("editor")
-  const [world, setWorld] = React.useState(() => initialWorld("normal"))
+  const [caseId, setCaseId] = React.useState<CaseId>("normal");
+  const [viewerId, setViewerId] = React.useState<ViewerId>("requester");
+  const [view, setView] = React.useState<View>("editor");
+  const [world, setWorld] = React.useState(() => initialWorld("normal"));
   const [open, setOpen] = React.useState<{ id: string; list: string[] } | null>(
     null,
-  )
-  const [read, setRead] = React.useState<Set<string>>(new Set())
-  const viewer = VIEWERS.find((entry) => entry.id === viewerId)!
+  );
+  const [read, setRead] = React.useState<Set<string>>(new Set());
+  const viewer = VIEWERS.find((entry) => entry.id === viewerId)!;
 
   React.useEffect(() => {
-    toast.dismiss()
-  }, [caseId, viewerId])
+    toast.dismiss();
+  }, [caseId, viewerId]);
 
   function pickCase(next: CaseId) {
-    setCaseId(next)
-    setWorld(initialWorld(next))
-    setOpen(null)
-    setRead(new Set())
-    if (next === "approve-fails") setViewerId("approver")
-    if (next === "load-fails" || next === "empty") setView("approvals")
+    setCaseId(next);
+    setWorld(initialWorld(next));
+    setOpen(null);
+    setRead(new Set());
+    if (next === "approve-fails") setViewerId("approver");
+    if (next === "load-fails" || next === "empty") setView("approvals");
     if (next !== "load-fails" && next !== "empty" && view === "approvals")
-      setView("editor")
+      setView("editor");
   }
 
-  const { subject, requests } = world
-  const visible = requests.filter((request) => canSee(request, viewer))
-  const mine = requests.filter((request) => request.item === subject.name)
+  const { subject, requests } = world;
+  const visible = requests.filter((request) => canSee(request, viewer));
+  const mine = requests.filter((request) => request.item === subject.name);
   const waitingOnMe = visible.filter(
     (request) => request.status === "pending" && canDecide(request, viewer),
-  )
+  );
 
   const notices: Notice[] = [
     ...waitingOnMe.map((request) => ({
@@ -151,7 +151,7 @@ export default function PublishApprovalPage() {
         detail: request.item,
         at: request.decision!.at,
       })),
-  ]
+  ];
 
   function update(id: string, change: Partial<ApprovalRequest>) {
     setWorld((current) => ({
@@ -159,7 +159,7 @@ export default function PublishApprovalPage() {
       requests: current.requests.map((request) =>
         request.id === id ? { ...request, ...change } : request,
       ),
-    }))
+    }));
   }
 
   function save(
@@ -167,7 +167,7 @@ export default function PublishApprovalPage() {
     editedFrom: number,
     note: string,
   ) {
-    const n = subject.versions[0].n + 1
+    const n = subject.versions[0].n + 1;
     setWorld((current) => ({
       ...current,
       subject: {
@@ -185,17 +185,17 @@ export default function PublishApprovalPage() {
           ...current.subject.versions,
         ],
       },
-    }))
-    return n
+    }));
+    return n;
   }
 
   async function request(input: {
-    version: number
-    summary: string
-    note: string
+    version: number;
+    summary: string;
+    note: string;
   }) {
-    await new Promise((resolve) => setTimeout(resolve, 900))
-    const live = subject.inUse
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const live = subject.inUse;
     const made: ApprovalRequest = {
       id: `bvs-${input.version}-${requests.length}`,
       item: subject.name,
@@ -210,7 +210,7 @@ export default function PublishApprovalPage() {
       changes: changesBetween(subject, live, input.version),
       status: "pending",
       decision: null,
-    }
+    };
     setWorld((current) => ({
       ...current,
       requests: [
@@ -225,15 +225,15 @@ export default function PublishApprovalPage() {
             : item,
         ),
       ],
-    }))
-    return true
+    }));
+    return true;
   }
 
   async function approve(id: string) {
-    await new Promise((resolve) => setTimeout(resolve, 900))
-    const target = requests.find((item) => item.id === id)
-    if (!target) return false
-    const before = world
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    const target = requests.find((item) => item.id === id);
+    if (!target) return false;
+    const before = world;
     setWorld((current) => ({
       requests: current.requests.map((item) =>
         item.id === id
@@ -260,40 +260,40 @@ export default function PublishApprovalPage() {
               ],
             }
           : current.subject,
-    }))
-    setOpen(null)
+    }));
+    setOpen(null);
     toast.success(`v${target.version} is in use`, {
       description: `Callers of ${target.item} get it from the next call.`,
       action: { label: "Undo", onClick: () => setWorld(before) },
-    })
-    return true
+    });
+    return true;
   }
 
   function reject(id: string, reason: string) {
-    const target = requests.find((item) => item.id === id)
+    const target = requests.find((item) => item.id === id);
     update(id, {
       status: "rejected",
       decision: { by: viewer.name, at: "Just now", reason },
-    })
-    setOpen(null)
+    });
+    setOpen(null);
     toast(`Rejected v${target?.version}`, {
       description: `${target ? who(target.by, viewer) : "The requester"} sees your reason. Callers keep hearing v${target?.live}.`,
-    })
+    });
   }
 
   function withdraw(id: string) {
-    const target = requests.find((item) => item.id === id)
+    const target = requests.find((item) => item.id === id);
     update(id, {
       status: "withdrawn",
       decision: { by: viewer.name, at: "Just now" },
-    })
-    setOpen(null)
+    });
+    setOpen(null);
     toast(`Request for v${target?.version} withdrawn`, {
       action: {
         label: "Undo",
         onClick: () => update(id, { status: "pending", decision: null }),
       },
-    })
+    });
   }
 
   function toggleLive(on: boolean) {
@@ -304,12 +304,12 @@ export default function PublishApprovalPage() {
         live: on,
         toggled: { by: viewer.name, at: "just now" },
       },
-    }))
+    }));
   }
 
   const shown = open
     ? (requests.find((item) => item.id === open.id) ?? null)
-    : null
+    : null;
 
   return (
     <MockupShell
@@ -348,7 +348,7 @@ export default function PublishApprovalPage() {
           <ToggleGroup
             aria-label="View"
             onValueChange={(next) => {
-              if (next) setView(next as View)
+              if (next) setView(next as View);
             }}
             size="sm"
             type="single"
@@ -386,8 +386,8 @@ export default function PublishApprovalPage() {
                 : "Approvals"
           }
           onNavigate={(title) => {
-            if (title === "Scenarios") setView("index")
-            if (title === "Approvals") setView("approvals")
+            if (title === "Scenarios") setView("index");
+            if (title === "Approvals") setView("approvals");
           }}
           scope={
             <Notifications
@@ -419,8 +419,8 @@ export default function PublishApprovalPage() {
               marker={(row) => {
                 const waiting = requests.find(
                   (item) => item.item === row.name && item.status === "pending",
-                )
-                if (!waiting) return null
+                );
+                if (!waiting) return null;
                 return (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -433,7 +433,7 @@ export default function PublishApprovalPage() {
                       {waiting.org}’s approval
                     </TooltipContent>
                   </Tooltip>
-                )
+                );
               }}
               rows={[SCENARIO_ROW, ...SCENARIOS]}
             />
@@ -461,5 +461,5 @@ export default function PublishApprovalPage() {
         </AppShell>
       </TooltipProvider>
     </MockupShell>
-  )
+  );
 }

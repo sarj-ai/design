@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldContent,
@@ -12,13 +12,13 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Item,
   ItemActions,
@@ -27,17 +27,17 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+} from "@/components/ui/item";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -45,8 +45,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import {
   AddIcon,
   CollectDigitsToolIcon,
@@ -60,8 +60,8 @@ import {
   TransferToolIcon,
   VoicemailToolIcon,
   ZohoTicketToolIcon,
-} from "@/components/mockups/scenario-single-screen/icons"
-import { SheetSection } from "@/components/mockups/scenario-single-screen/setting-sheet"
+} from "@/components/mockups/scenario-single-screen/icons";
+import { SheetSection } from "@/components/mockups/scenario-single-screen/setting-sheet";
 import {
   type Destination,
   type ExtractionField,
@@ -74,7 +74,7 @@ import {
   type TemplateVariable,
   type Tool,
   type ToolSlug,
-} from "@/lib/mockups/scenario-single-screen-data"
+} from "@/lib/mockups/scenario-single-screen-data";
 
 const TIMEZONES = [
   "Asia/Riyadh",
@@ -82,7 +82,7 @@ const TIMEZONES = [
   "Asia/Karachi",
   "Africa/Cairo",
   "Europe/London",
-]
+];
 
 const TOOL_ICONS: Record<ToolSlug, React.ComponentType> = {
   "code-switching": SwitchLanguageToolIcon,
@@ -94,14 +94,14 @@ const TOOL_ICONS: Record<ToolSlug, React.ComponentType> = {
   "transfer-to-human": TransferToolIcon,
   "voicemail-detection": VoicemailToolIcon,
   "zoho-desk-create-ticket": ZohoTicketToolIcon,
-}
+};
 
 export function PersonaDrawerBody({
   onPersonaChange,
   perLanguage,
 }: {
-  onPersonaChange: (language: LanguageCode, persona: string) => void
-  perLanguage: PerLanguage[]
+  onPersonaChange: (language: LanguageCode, persona: string) => void;
+  perLanguage: PerLanguage[];
 }) {
   return (
     <FieldGroup>
@@ -112,7 +112,7 @@ export function PersonaDrawerBody({
           </FieldLabel>
           <Select
             onValueChange={(persona) => {
-              onPersonaChange(entry.language, persona)
+              onPersonaChange(entry.language, persona);
             }}
             value={entry.persona}
           >
@@ -134,7 +134,7 @@ export function PersonaDrawerBody({
         </Field>
       ))}
     </FieldGroup>
-  )
+  );
 }
 
 export function LanguagesDrawerBody({
@@ -144,11 +144,11 @@ export function LanguagesDrawerBody({
   perLanguage,
   timezone,
 }: {
-  defaultLanguage: LanguageCode
-  onDefaultChange: (language: LanguageCode) => void
-  onTimezoneChange: (timezone: string) => void
-  perLanguage: PerLanguage[]
-  timezone: string
+  defaultLanguage: LanguageCode;
+  onDefaultChange: (language: LanguageCode) => void;
+  onTimezoneChange: (timezone: string) => void;
+  perLanguage: PerLanguage[];
+  timezone: string;
 }) {
   return (
     <>
@@ -158,7 +158,7 @@ export function LanguagesDrawerBody({
       >
         <RadioGroup
           onValueChange={(value) => {
-            onDefaultChange(value as LanguageCode)
+            onDefaultChange(value as LanguageCode);
           }}
           value={defaultLanguage}
         >
@@ -219,7 +219,7 @@ export function LanguagesDrawerBody({
         </Select>
       </SheetSection>
     </>
-  )
+  );
 }
 
 export function KnowledgeDrawerBody({
@@ -227,15 +227,15 @@ export function KnowledgeDrawerBody({
   onToggle,
   spokenLanguages,
 }: {
-  bases: KnowledgeBase[]
-  onToggle: (name: string) => void
-  spokenLanguages: LanguageCode[]
+  bases: KnowledgeBase[];
+  onToggle: (name: string) => void;
+  spokenLanguages: LanguageCode[];
 }) {
-  const [query, setQuery] = React.useState("")
+  const [query, setQuery] = React.useState("");
 
   const matches = bases.filter((base) =>
     base.name.toLowerCase().includes(query.toLowerCase()),
-  )
+  );
 
   return (
     <>
@@ -246,7 +246,7 @@ export function KnowledgeDrawerBody({
         <InputGroupInput
           aria-label="Search knowledge bases"
           onChange={(event) => {
-            setQuery(event.target.value)
+            setQuery(event.target.value);
           }}
           placeholder="Search knowledge bases…"
           value={query}
@@ -257,7 +257,7 @@ export function KnowledgeDrawerBody({
         {matches.map((base) => {
           const gaps = spokenLanguages.filter(
             (language) => !base.languages.includes(language),
-          )
+          );
 
           return (
             <Item key={base.name} size="sm" variant="outline">
@@ -266,7 +266,7 @@ export function KnowledgeDrawerBody({
                   checked={base.attached}
                   id={`kb-${base.name}`}
                   onCheckedChange={() => {
-                    onToggle(base.name)
+                    onToggle(base.name);
                   }}
                 />
               </ItemMedia>
@@ -292,24 +292,24 @@ export function KnowledgeDrawerBody({
                 </ItemActions>
               ) : null}
             </Item>
-          )
+          );
         })}
       </ItemGroup>
     </>
-  )
+  );
 }
 
 export function ToolsDrawerBody({
   onToggle,
   tools,
 }: {
-  onToggle: (slug: ToolSlug) => void
-  tools: Tool[]
+  onToggle: (slug: ToolSlug) => void;
+  tools: Tool[];
 }) {
   return (
     <FieldGroup>
       {tools.map((tool) => {
-        const Icon = TOOL_ICONS[tool.slug]
+        const Icon = TOOL_ICONS[tool.slug];
 
         return (
           <Field key={tool.slug} orientation="horizontal">
@@ -334,22 +334,22 @@ export function ToolsDrawerBody({
               aria-label={tool.label}
               checked={tool.enabled}
               onCheckedChange={() => {
-                onToggle(tool.slug)
+                onToggle(tool.slug);
               }}
             />
           </Field>
-        )
+        );
       })}
     </FieldGroup>
-  )
+  );
 }
 
 export function CriteriaDrawerBody({
   criteria,
   onCriteriaChange,
 }: {
-  criteria: SuccessCriterion[]
-  onCriteriaChange: (criteria: SuccessCriterion[]) => void
+  criteria: SuccessCriterion[];
+  onCriteriaChange: (criteria: SuccessCriterion[]) => void;
 }) {
   return (
     <>
@@ -366,7 +366,7 @@ export function CriteriaDrawerBody({
               <Button
                 aria-label={`Remove criterion ${index + 1}`}
                 onClick={() => {
-                  onCriteriaChange(criteria.filter((_, i) => i !== index))
+                  onCriteriaChange(criteria.filter((_, i) => i !== index));
                 }}
                 size="icon-sm"
                 variant="ghost"
@@ -381,7 +381,7 @@ export function CriteriaDrawerBody({
                   criteria.map((item, i) =>
                     i === index ? { ...item, text: event.target.value } : item,
                   ),
-                )
+                );
               }}
               rows={3}
               value={criterion.text}
@@ -392,7 +392,7 @@ export function CriteriaDrawerBody({
 
       <Button
         onClick={() => {
-          onCriteriaChange([...criteria, { primary: false, text: "" }])
+          onCriteriaChange([...criteria, { primary: false, text: "" }]);
         }}
         size="sm"
         variant="outline"
@@ -401,15 +401,15 @@ export function CriteriaDrawerBody({
         Add a criterion
       </Button>
     </>
-  )
+  );
 }
 
 export function VariablesDrawerBody({
   onVariablesChange,
   variables,
 }: {
-  onVariablesChange: (variables: TemplateVariable[]) => void
-  variables: TemplateVariable[]
+  onVariablesChange: (variables: TemplateVariable[]) => void;
+  variables: TemplateVariable[];
 }) {
   return (
     <>
@@ -441,7 +441,7 @@ export function VariablesDrawerBody({
                             ? { ...item, defaultValue: event.target.value }
                             : item,
                         ),
-                      )
+                      );
                     }}
                     placeholder="—"
                     value={variable.defaultValue}
@@ -463,7 +463,7 @@ export function VariablesDrawerBody({
                             ? { ...item, required: !item.required }
                             : item,
                         ),
-                      )
+                      );
                     }}
                   />
                 </TableCell>
@@ -478,7 +478,7 @@ export function VariablesDrawerBody({
         Add a variable
       </Button>
     </>
-  )
+  );
 }
 
 export function ExtractionDrawerBody({
@@ -488,11 +488,11 @@ export function ExtractionDrawerBody({
   onDestinationToggle,
   onEnabledChange,
 }: {
-  destinations: Destination[]
-  enabled: boolean
-  fields: ExtractionField[]
-  onDestinationToggle: (type: Destination["type"]) => void
-  onEnabledChange: (enabled: boolean) => void
+  destinations: Destination[];
+  enabled: boolean;
+  fields: ExtractionField[];
+  onDestinationToggle: (type: Destination["type"]) => void;
+  onEnabledChange: (enabled: boolean) => void;
 }) {
   return (
     <>
@@ -554,7 +554,7 @@ export function ExtractionDrawerBody({
                   aria-label={destination.label}
                   checked={destination.enabled}
                   onCheckedChange={() => {
-                    onDestinationToggle(destination.type)
+                    onDestinationToggle(destination.type);
                   }}
                 />
               ) : (
@@ -567,15 +567,15 @@ export function ExtractionDrawerBody({
         </FieldGroup>
       </SheetSection>
     </>
-  )
+  );
 }
 
 export function RecordingDrawerBody({
   onZohoChange,
   zohoCallActivity,
 }: {
-  onZohoChange: (enabled: boolean) => void
-  zohoCallActivity: boolean
+  onZohoChange: (enabled: boolean) => void;
+  zohoCallActivity: boolean;
 }) {
   return (
     <Field orientation="horizontal">
@@ -592,5 +592,5 @@ export function RecordingDrawerBody({
         onCheckedChange={onZohoChange}
       />
     </Field>
-  )
+  );
 }

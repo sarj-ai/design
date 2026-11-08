@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { toast } from "sonner"
+import * as React from "react";
+import Link from "next/link";
+import { toast } from "sonner";
 
-import { AdminViewSwitcher } from "@/components/design-system/admin-view-preview"
+import { AdminViewSwitcher } from "@/components/design-system/admin-view-preview";
 import {
   CompletedIcon,
   ErrorAlertIcon,
   HintIcon,
   WarningIcon,
-} from "@/components/design-system/icons"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
+} from "@/components/design-system/icons";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
 import {
   Alert,
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/empty";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { TabsContent } from "@/components/ui/tabs";
 
-type Intent = "neutral" | "success" | "warning" | "error"
+type Intent = "neutral" | "success" | "warning" | "error";
 
 const INTENTS: Record<
   Intent,
@@ -40,24 +40,24 @@ const INTENTS: Record<
   success: { Icon: CompletedIcon, variant: "default" },
   warning: { Icon: WarningIcon, variant: "default" },
   error: { Icon: ErrorAlertIcon, variant: "destructive" },
-}
+};
 
 function Notice({
   intent,
   children,
   className,
 }: {
-  intent: Intent
-  children: React.ReactNode
-  className?: string
+  intent: Intent;
+  children: React.ReactNode;
+  className?: string;
 }) {
-  const { Icon, variant } = INTENTS[intent]
+  const { Icon, variant } = INTENTS[intent];
   return (
     <Alert className={className} variant={variant}>
       <Icon />
       {children}
     </Alert>
-  )
+  );
 }
 
 function Case({
@@ -65,9 +65,9 @@ function Case({
   label,
   where,
 }: {
-  children: React.ReactNode
-  label: string
-  where: string
+  children: React.ReactNode;
+  label: string;
+  where: string;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -77,21 +77,21 @@ function Case({
       </div>
       {children}
     </div>
-  )
+  );
 }
 
-const GRID = "grid gap-x-10 gap-y-8 md:grid-cols-2"
+const GRID = "grid gap-x-10 gap-y-8 md:grid-cols-2";
 
 function Raw({ children }: { children: React.ReactNode }) {
   return (
     <code className="mt-1.5 block rounded-sm bg-muted px-2 py-1 font-mono text-xs">
       {children}
     </code>
-  )
+  );
 }
 
 function Mono({ children }: { children: React.ReactNode }) {
-  return <span className="font-mono text-xs">{children}</span>
+  return <span className="font-mono text-xs">{children}</span>;
 }
 
 function Intents() {
@@ -138,7 +138,7 @@ function Intents() {
         </Notice>
       </Case>
     </div>
-  )
+  );
 }
 
 function Content() {
@@ -262,12 +262,12 @@ function Content() {
         </Notice>
       </Case>
     </div>
-  )
+  );
 }
 
 function NotAnAlert() {
-  const [phone, setPhone] = React.useState("0551234567")
-  const invalid = !phone.startsWith("+")
+  const [phone, setPhone] = React.useState("0551234567");
+  const invalid = !phone.startsWith("+");
 
   return (
     <div className={GRID}>
@@ -333,17 +333,17 @@ function NotAnAlert() {
         </div>
       </Case>
     </div>
-  )
+  );
 }
 
 const VIEWS = [
   { id: "intents", label: "Intents" },
   { id: "content", label: "Content" },
   { id: "not-an-alert", label: "Not an alert" },
-]
+];
 
 export function AlertPreview() {
-  const [view, setView] = React.useState("intents")
+  const [view, setView] = React.useState("intents");
 
   return (
     <SecondaryTabs items={VIEWS} onValueChange={setView} value={view}>
@@ -357,5 +357,5 @@ export function AlertPreview() {
         <NotAnAlert />
       </TabsContent>
     </SecondaryTabs>
-  )
+  );
 }

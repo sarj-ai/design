@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { FieldHint } from "@/components/design-system/field-hint"
+import { FieldHint } from "@/components/design-system/field-hint";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
-import { PageHeader } from "@/components/shared/page-header"
-import { PrimaryTabs } from "@/components/design-system/tabs-preview"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/shared/data-table";
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar";
+import { PageHeader } from "@/components/shared/page-header";
+import { PrimaryTabs } from "@/components/design-system/tabs-preview";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -21,77 +21,77 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Empty,
   EmptyContent,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   CopyIdIcon,
   CreateOrganizationIcon,
   OrganizationsTabIcon,
   SearchListIcon,
   UnassignedUsersIcon,
-} from "@/components/mockups/org-access/icons"
+} from "@/components/mockups/org-access/icons";
 import {
   GROUPS,
   ORGANIZATIONS,
   UNASSIGNED_USERS,
   type Organization,
   type UnassignedUser,
-} from "@/lib/mockups/org-access-data"
+} from "@/lib/mockups/org-access-data";
 
 export function OrganizationsView({
   onOpen,
 }: {
-  onOpen: (name: string) => void
+  onOpen: (name: string) => void;
 }) {
-  const [orgs, setOrgs] = React.useState(ORGANIZATIONS)
-  const [users, setUsers] = React.useState(UNASSIGNED_USERS)
-  const [view, setView] = React.useState("organizations")
-  const [query, setQuery] = React.useState("")
-  const [settings, setSettings] = React.useState<string | null>(null)
-  const [creating, setCreating] = React.useState(false)
-  const [creatingUser, setCreatingUser] = React.useState(false)
-  const [owning, setOwning] = React.useState<Organization | null>(null)
+  const [orgs, setOrgs] = React.useState(ORGANIZATIONS);
+  const [users, setUsers] = React.useState(UNASSIGNED_USERS);
+  const [view, setView] = React.useState("organizations");
+  const [query, setQuery] = React.useState("");
+  const [settings, setSettings] = React.useState<string | null>(null);
+  const [creating, setCreating] = React.useState(false);
+  const [creatingUser, setCreatingUser] = React.useState(false);
+  const [owning, setOwning] = React.useState<Organization | null>(null);
 
-  const needle = query.trim().toLowerCase()
+  const needle = query.trim().toLowerCase();
   const shownOrgs = orgs.filter(
     (o) =>
       (o.name.toLowerCase().includes(needle) ||
         o.domain.toLowerCase().includes(needle)) &&
       (settings === null || o.customSettings === (settings === "custom")),
-  )
-  const shownUsers = users.filter((u) => u.email.includes(needle))
+  );
+  const shownUsers = users.filter((u) => u.email.includes(needle));
 
   return (
     <div className="flex flex-col gap-4 p-3 lg:p-4">
@@ -186,9 +186,9 @@ export function OrganizationsView({
                       <Button
                         aria-label={`Copy ID of ${org.name}`}
                         onClick={(event) => {
-                          event.stopPropagation()
-                          void navigator.clipboard.writeText(org.id)
-                          toast("Copied organization ID")
+                          event.stopPropagation();
+                          void navigator.clipboard.writeText(org.id);
+                          toast("Copied organization ID");
                         }}
                         size="icon-xs"
                         variant="ghost"
@@ -213,8 +213,8 @@ export function OrganizationsView({
                         <span className="text-warning">No owner</span>
                         <Button
                           onClick={(event) => {
-                            event.stopPropagation()
-                            setOwning(org)
+                            event.stopPropagation();
+                            setOwning(org);
                           }}
                           size="xs"
                           variant="outline"
@@ -255,8 +255,8 @@ export function OrganizationsView({
                   colSpan={7}
                   noun="organizations"
                   onClear={() => {
-                    setQuery("")
-                    setSettings(null)
+                    setQuery("");
+                    setSettings(null);
                   }}
                   query={query}
                 />
@@ -281,17 +281,17 @@ export function OrganizationsView({
                 <UnassignedUserRow
                   key={user.id}
                   onAdd={(orgId) => {
-                    const org = orgs.find((o) => o.id === orgId)
-                    if (!org) return
+                    const org = orgs.find((o) => o.id === orgId);
+                    if (!org) return;
                     setUsers((current) =>
                       current.filter((u) => u.id !== user.id),
-                    )
+                    );
                     setOrgs((current) =>
                       current.map((o) =>
                         o.id === orgId ? { ...o, members: o.members + 1 } : o,
                       ),
-                    )
-                    toast.success(`${user.email} added to ${org.name}`)
+                    );
+                    toast.success(`${user.email} added to ${org.name}`);
                   }}
                   orgs={orgs}
                   user={user}
@@ -312,10 +312,10 @@ export function OrganizationsView({
 
       <CreateOrganizationDialog
         onCreate={(org) => {
-          setOrgs((current) => [org, ...current])
+          setOrgs((current) => [org, ...current]);
           toast.success(`${org.name} created`, {
             description: `Owner invite sent to ${org.owner}`,
-          })
+          });
         }}
         onOpenChange={setCreating}
         open={creating}
@@ -327,8 +327,8 @@ export function OrganizationsView({
           setUsers((current) => [
             ...current,
             { id: crypto.randomUUID(), email, role: "Viewer" },
-          ])
-          toast.success(`${email} created`)
+          ]);
+          toast.success(`${email} created`);
         }}
         onOpenChange={setCreatingUser}
         open={creatingUser}
@@ -340,19 +340,19 @@ export function OrganizationsView({
         onSet={(org, owner) => {
           setOrgs((current) =>
             current.map((o) => (o.id === org.id ? { ...o, owner } : o)),
-          )
-          toast.success(`${owner} is now the owner of ${org.name}`)
+          );
+          toast.success(`${owner} is now the owner of ${org.name}`);
         }}
         org={owning}
       />
     </div>
-  )
+  );
 }
 
 const SETTINGS_OPTIONS = [
   { label: "Custom", value: "custom" },
   { label: "Global", value: "global" },
-]
+];
 
 function NoResults({
   colSpan,
@@ -360,10 +360,10 @@ function NoResults({
   query,
   onClear,
 }: {
-  colSpan: number
-  noun: string
-  query: string
-  onClear: () => void
+  colSpan: number;
+  noun: string;
+  query: string;
+  onClear: () => void;
 }) {
   return (
     <TableRow className="hover:bg-transparent">
@@ -380,7 +380,7 @@ function NoResults({
         </Empty>
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function UnassignedUserRow({
@@ -388,12 +388,12 @@ function UnassignedUserRow({
   orgs,
   onAdd,
 }: {
-  user: UnassignedUser
-  orgs: Organization[]
-  onAdd: (orgId: string) => void
+  user: UnassignedUser;
+  orgs: Organization[];
+  onAdd: (orgId: string) => void;
 }) {
-  const [role, setRole] = React.useState<string>(user.role)
-  const [orgId, setOrgId] = React.useState(orgs[0]?.id ?? "")
+  const [role, setRole] = React.useState<string>(user.role);
+  const [orgId, setOrgId] = React.useState(orgs[0]?.id ?? "");
 
   return (
     <TableRow>
@@ -460,7 +460,7 @@ function UnassignedUserRow({
         </Button>
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function CreateUserDialog({
@@ -468,23 +468,23 @@ function CreateUserDialog({
   onOpenChange,
   onCreate,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onCreate: (email: string) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onCreate: (email: string) => void;
 }) {
-  const [email, setEmail] = React.useState("")
-  const [checked, setChecked] = React.useState(false)
+  const [email, setEmail] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
   const error = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
     ? null
-    : "Enter an email"
+    : "Enter an email";
 
   const close = (next: boolean) => {
     if (!next) {
-      setEmail("")
-      setChecked(false)
+      setEmail("");
+      setChecked(false);
     }
-    onOpenChange(next)
-  }
+    onOpenChange(next);
+  };
 
   return (
     <Dialog onOpenChange={close} open={open}>
@@ -498,11 +498,11 @@ function CreateUserDialog({
         <form
           className="flex flex-col gap-6"
           onSubmit={(event) => {
-            event.preventDefault()
-            setChecked(true)
-            if (error) return
-            onCreate(email.trim().toLowerCase())
-            close(false)
+            event.preventDefault();
+            setChecked(true);
+            if (error) return;
+            onCreate(email.trim().toLowerCase());
+            close(false);
           }}
         >
           <Field data-invalid={checked && error ? true : undefined}>
@@ -531,7 +531,7 @@ function CreateUserDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function CreateOrganizationDialog({
@@ -540,38 +540,38 @@ function CreateOrganizationDialog({
   orgs,
   onCreate,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  orgs: Organization[]
-  onCreate: (org: Organization) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  orgs: Organization[];
+  onCreate: (org: Organization) => void;
 }) {
-  const [name, setName] = React.useState("")
-  const [domain, setDomain] = React.useState("")
-  const [owner, setOwner] = React.useState("")
-  const [checked, setChecked] = React.useState(false)
+  const [name, setName] = React.useState("");
+  const [domain, setDomain] = React.useState("");
+  const [owner, setOwner] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
 
-  const cleanDomain = domain.trim().toLowerCase()
+  const cleanDomain = domain.trim().toLowerCase();
   const sharing = cleanDomain
     ? orgs.filter((o) => o.domain === cleanDomain).map((o) => o.name)
-    : []
-  const nameError = name.trim() ? null : "Enter a name"
+    : [];
+  const nameError = name.trim() ? null : "Enter a name";
   const ownerError = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(owner.trim())
     ? null
-    : "Enter the owner's email"
+    : "Enter the owner's email";
 
   const close = (next: boolean) => {
     if (!next) {
-      setName("")
-      setDomain("")
-      setOwner("")
-      setChecked(false)
+      setName("");
+      setDomain("");
+      setOwner("");
+      setChecked(false);
     }
-    onOpenChange(next)
-  }
+    onOpenChange(next);
+  };
 
   const create = () => {
-    setChecked(true)
-    if (nameError || ownerError) return
+    setChecked(true);
+    if (nameError || ownerError) return;
     onCreate({
       id: crypto.randomUUID(),
       name: name.trim(),
@@ -581,9 +581,9 @@ function CreateOrganizationDialog({
       members: 0,
       retention: "2 years",
       customSettings: false,
-    })
-    close(false)
-  }
+    });
+    close(false);
+  };
 
   return (
     <Dialog onOpenChange={close} open={open}>
@@ -594,8 +594,8 @@ function CreateOrganizationDialog({
         <form
           className="flex flex-col gap-6"
           onSubmit={(event) => {
-            event.preventDefault()
-            create()
+            event.preventDefault();
+            create();
           }}
         >
           <FieldGroup>
@@ -660,7 +660,7 @@ function CreateOrganizationDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function SetOwnerDialog({
@@ -668,13 +668,13 @@ function SetOwnerDialog({
   onOpenChange,
   onSet,
 }: {
-  org: Organization | null
-  onOpenChange: (open: boolean) => void
-  onSet: (org: Organization, owner: string) => void
+  org: Organization | null;
+  onOpenChange: (open: boolean) => void;
+  onSet: (org: Organization, owner: string) => void;
 }) {
-  const [picked, setPicked] = React.useState("")
-  const candidates = org?.candidates ?? []
-  const choice = candidates.find((c) => c.name === picked)
+  const [picked, setPicked] = React.useState("");
+  const candidates = org?.candidates ?? [];
+  const choice = candidates.find((c) => c.name === picked);
 
   return (
     <Dialog onOpenChange={onOpenChange} open={org !== null}>
@@ -710,8 +710,8 @@ function SetOwnerDialog({
           <Button
             disabled={!choice}
             onClick={() => {
-              if (org && choice) onSet(org, choice.name)
-              onOpenChange(false)
+              if (org && choice) onSet(org, choice.name);
+              onOpenChange(false);
             }}
           >
             Set owner
@@ -719,5 +719,5 @@ function SetOwnerDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

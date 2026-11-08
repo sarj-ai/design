@@ -1,6 +1,6 @@
-import Image from "next/image"
+import Image from "next/image";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function SarjMark({ className }: { className?: string }) {
   return (
@@ -12,5 +12,5 @@ export function SarjMark({ className }: { className?: string }) {
       src="/logo.png"
       width={56}
     />
-  )
+  );
 }

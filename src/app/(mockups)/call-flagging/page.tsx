@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { FlagCallDialog } from "@/components/mockups/call-flagging/flag-call-dialog"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { FlagCallDialog } from "@/components/mockups/call-flagging/flag-call-dialog";
 
 export default function CallFlaggingPage() {
   return (
@@ -13,5 +13,5 @@ export default function CallFlaggingPage() {
         <FlagCallDialog />
       </main>
     </MockupShell>
-  )
+  );
 }

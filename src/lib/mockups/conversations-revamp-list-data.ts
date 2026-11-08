@@ -14,37 +14,37 @@ export type CallStatus =
   | "transferred"
   | "transferring"
   | "user_rejected"
-  | "voicemail"
+  | "voicemail";
 
-export type ScheduleOrigin = "follow_up" | "requested"
+export type ScheduleOrigin = "follow_up" | "requested";
 
 export const SCHEDULE_ORIGIN_LABELS: Record<ScheduleOrigin, string> = {
   follow_up: "follow up",
   requested: "requested",
-}
+};
 
-export type OutcomeStatus = "met" | "not_met" | "unavailable"
+export type OutcomeStatus = "met" | "not_met" | "unavailable";
 
-export type AgentOutcomeStatus = "helpful" | "not_helpful" | "unavailable"
+export type AgentOutcomeStatus = "helpful" | "not_helpful" | "unavailable";
 
-export type CallDirection = "inbound" | "outbound"
+export type CallDirection = "inbound" | "outbound";
 
 export type CallRow = {
-  id: string
-  createdAt: string
-  user: string
-  interactionType: "call" | "chat"
-  direction: CallDirection | null
-  phoneNumber: null | string
-  scenario: string
-  status: CallStatus
-  scheduleOrigin?: ScheduleOrigin
-  outcome: OutcomeStatus
-  outcomeReason: null | string
-  agentOutcome: AgentOutcomeStatus
+  id: string;
+  createdAt: string;
+  user: string;
+  interactionType: "call" | "chat";
+  direction: CallDirection | null;
+  phoneNumber: null | string;
+  scenario: string;
+  status: CallStatus;
+  scheduleOrigin?: ScheduleOrigin;
+  outcome: OutcomeStatus;
+  outcomeReason: null | string;
+  agentOutcome: AgentOutcomeStatus;
   /** m:ss, the way formatDuration prints it. */
-  duration: string
-}
+  duration: string;
+};
 
 export type ColumnId =
   | "agentOutcome"
@@ -54,11 +54,11 @@ export type ColumnId =
   | "phoneNumber"
   | "scenario"
   | "status"
-  | "time"
+  | "time";
 
 export const COLUMN_HELP: Partial<Record<ColumnId, string>> = {
   status: "What each state in this column means.",
-}
+};
 
 export const STATUS_LEGEND: { detail: string; status: CallStatus }[] = [
   {
@@ -81,7 +81,7 @@ export const STATUS_LEGEND: { detail: string; status: CallStatus }[] = [
     detail: "Never connected, or ended early. The cause follows the dash.",
     status: "failed",
   },
-]
+];
 
 export const COLUMN_LABELS: Record<ColumnId, string> = {
   agentOutcome: "Agent outcome",
@@ -92,9 +92,9 @@ export const COLUMN_LABELS: Record<ColumnId, string> = {
   scenario: "Scenario",
   status: "Call status",
   time: "Time",
-}
+};
 
-export type ColumnSetting = { id: ColumnId; visible: boolean }
+export type ColumnSetting = { id: ColumnId; visible: boolean };
 
 export const DEFAULT_COLUMNS: ColumnSetting[] = [
   { id: "time", visible: true },
@@ -105,16 +105,20 @@ export const DEFAULT_COLUMNS: ColumnSetting[] = [
   { id: "outcome", visible: true },
   { id: "agentOutcome", visible: true },
   { id: "duration", visible: true },
-]
+];
 
 export type StatusGroupId =
-  "completed" | "failed" | "in_progress" | "queued" | "scheduled"
+  | "completed"
+  | "failed"
+  | "in_progress"
+  | "queued"
+  | "scheduled";
 
 export const STATUS_GROUPS: {
-  id: StatusGroupId
-  label: string
+  id: StatusGroupId;
+  label: string;
   /** Every CallStatus must appear in exactly one group. */
-  statuses: CallStatus[]
+  statuses: CallStatus[];
 }[] = [
   {
     id: "queued",
@@ -149,7 +153,7 @@ export const STATUS_GROUPS: {
       "expired",
     ],
   },
-]
+];
 
 export const CALLS: CallRow[] = [
   {
@@ -326,6 +330,6 @@ export const CALLS: CallRow[] = [
     agentOutcome: "helpful",
     duration: "4:16",
   },
-]
+];
 
-export const TOTAL_RESULTS = 1284
+export const TOTAL_RESULTS = 1284;

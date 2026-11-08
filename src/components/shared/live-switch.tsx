@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/ui/spinner"
-import { Switch } from "@/components/ui/switch"
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
 export function LiveSwitch({
   live,
@@ -17,19 +17,19 @@ export function LiveSwitch({
   toggled,
   pending = false,
 }: {
-  live: boolean
+  live: boolean;
   /** Turning live on or off is its own permission, separate from editing. */
-  canToggle: boolean
-  onToggle: (on: boolean) => void
+  canToggle: boolean;
+  onToggle: (on: boolean) => void;
   /** Who last turned it on or off, and when. */
-  toggled: { by: string; at: string } | null
-  pending?: boolean
+  toggled: { by: string; at: string } | null;
+  pending?: boolean;
 }) {
   const hint = !canToggle
     ? "You don't have permission to turn this on or off."
     : toggled
       ? `Turned ${live ? "on" : "off"} by ${toggled.by === "You" ? "you" : toggled.by}, ${toggled.at}`
-      : null
+      : null;
 
   const control = (
     <Button
@@ -49,14 +49,14 @@ export function LiveSwitch({
         />
       </Label>
     </Button>
-  )
+  );
 
-  if (!hint) return control
+  if (!hint) return control;
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>{control}</TooltipTrigger>
       <TooltipContent>{hint}</TooltipContent>
     </Tooltip>
-  )
+  );
 }

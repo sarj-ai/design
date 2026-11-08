@@ -2,8 +2,8 @@ import {
   ReferenceLabel,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import type { Rule } from "@/lib/design-system/data"
+} from "@/components/design-system/reference-table";
+import type { Rule } from "@/lib/design-system/data";
 
 export function RuleList({ rules }: { rules: Rule[] }) {
   return (
@@ -17,5 +17,5 @@ export function RuleList({ rules }: { rules: Rule[] }) {
         ],
       }))}
     />
-  )
+  );
 }

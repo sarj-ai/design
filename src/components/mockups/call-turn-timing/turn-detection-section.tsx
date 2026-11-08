@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Item,
   ItemActions,
@@ -17,17 +17,17 @@ import {
   ItemGroup,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   RECOMMENDED_MAX_WAIT_CEILING_SECONDS,
   formatSeconds,
   type TurnTimingRecord,
-} from "@/lib/mockups/call-turn-timing-data"
+} from "@/lib/mockups/call-turn-timing-data";
 
 import {
   DetectionPathIcon,
@@ -37,13 +37,13 @@ import {
   ReachedMaximumIcon,
   TurnDetectionIcon,
   WithinWindowIcon,
-} from "./icons"
+} from "./icons";
 
 export function TurnDetectionSection({
   timing,
 }: {
   /** `null` for a call placed before turn timing was recorded. */
-  timing: null | TurnTimingRecord
+  timing: null | TurnTimingRecord;
 }) {
   return (
     <section className="flex flex-col gap-4">
@@ -57,13 +57,13 @@ export function TurnDetectionSection({
 
       {timing ? <RecordedTiming timing={timing} /> : <NotRecorded />}
     </section>
-  )
+  );
 }
 
 function RecordedTiming({ timing }: { timing: TurnTimingRecord }) {
-  const fellBack = timing.fallbackReason !== null
+  const fellBack = timing.fallbackReason !== null;
   const firstTurnReachedMaximum =
-    timing.firstTurnWaitSeconds >= timing.maxWaitSeconds
+    timing.firstTurnWaitSeconds >= timing.maxWaitSeconds;
 
   return (
     <div className="flex flex-col gap-6">
@@ -196,7 +196,7 @@ function RecordedTiming({ timing }: { timing: TurnTimingRecord }) {
         ) : null}
       </Block>
     </div>
-  )
+  );
 }
 
 function NotRecorded() {
@@ -214,12 +214,12 @@ function NotRecorded() {
         </EmptyDescription>
       </EmptyHeader>
     </Empty>
-  )
+  );
 }
 
 function OutcomeBadge({ timing }: { timing: TurnTimingRecord }) {
   if (timing.fallbackReason !== null) {
-    return <Badge variant="destructive">Fell back</Badge>
+    return <Badge variant="destructive">Fell back</Badge>;
   }
 
   if (timing.turnsAtMaximum > 0) {
@@ -228,7 +228,7 @@ function OutcomeBadge({ timing }: { timing: TurnTimingRecord }) {
         <ReachedMaximumIcon />
         Reached the maximum
       </Badge>
-    )
+    );
   }
 
   return (
@@ -236,7 +236,7 @@ function OutcomeBadge({ timing }: { timing: TurnTimingRecord }) {
       <WithinWindowIcon />
       Within the window
     </Badge>
-  )
+  );
 }
 
 function Block({
@@ -245,10 +245,10 @@ function Block({
   action,
   children,
 }: {
-  title: string
-  help: string
-  action?: React.ReactNode
-  children: React.ReactNode
+  title: string;
+  help: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -261,15 +261,15 @@ function Block({
       </div>
       {children}
     </div>
-  )
+  );
 }
 
 function HelpDot({
   children,
   label,
 }: {
-  children: React.ReactNode
-  label: string
+  children: React.ReactNode;
+  label: string;
 }) {
   return (
     <Tooltip>
@@ -281,7 +281,7 @@ function HelpDot({
       </TooltipTrigger>
       <TooltipContent className="max-w-64">{children}</TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 /** `caption` is this call's verdict and stays visible; `help` is the definition, on the (i). */
@@ -292,11 +292,11 @@ function Stat({
   help,
   tone = "default",
 }: {
-  label: string
-  value: string
-  caption: string
-  help?: string
-  tone?: "default" | "warning"
+  label: string;
+  value: string;
+  caption: string;
+  help?: string;
+  tone?: "default" | "warning";
 }) {
   return (
     <div className="flex flex-col gap-1 rounded-lg bg-muted p-4">
@@ -317,5 +317,5 @@ function Stat({
       </span>
       <p className="text-sm text-muted-foreground">{caption}</p>
     </div>
-  )
+  );
 }

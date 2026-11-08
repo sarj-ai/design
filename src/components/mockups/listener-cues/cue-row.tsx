@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -11,14 +11,14 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import type { Cue } from "@/lib/mockups/listener-cues-data"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import type { Cue } from "@/lib/mockups/listener-cues-data";
 
-import { PreviewCueIcon, RemoveCueIcon } from "./icons"
+import { PreviewCueIcon, RemoveCueIcon } from "./icons";
 
 export function CueRow({
   canRemove,
@@ -28,13 +28,13 @@ export function CueRow({
   onWeightChange,
   weight,
 }: {
-  canRemove: boolean
-  cue: Cue
-  disabled: boolean
-  onRemove: () => void
-  onWeightChange: (weight: number) => void
+  canRemove: boolean;
+  cue: Cue;
+  disabled: boolean;
+  onRemove: () => void;
+  onWeightChange: (weight: number) => void;
   /** The rounded share shown to the reader — the stored weight is exact. */
-  weight: number
+  weight: number;
 }) {
   return (
     <Card size="sm">
@@ -116,5 +116,5 @@ export function CueRow({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,62 +1,61 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-
+import { cn } from "@/lib/utils";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
+} from "@/components/shared/data-table";
 import {
   ClearIcon,
   HighVolumeIcon,
   SearchIcon,
   SortAscIcon,
   SortDescIcon,
-} from "@/components/mockups/phone-numbers/icons"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/mockups/phone-numbers/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   CALL_ACTIVITY,
   ORGANIZATIONS,
   TIME_RANGES,
   type CallActivityRow,
-} from "@/lib/mockups/phone-numbers-data"
+} from "@/lib/mockups/phone-numbers-data";
 
-const ALL = "all"
-const HIGH_VOLUME_THRESHOLD = 10
+const ALL = "all";
+const HIGH_VOLUME_THRESHOLD = 10;
 
 type SortField =
   | "inbound_count"
   | "organization_name"
   | "outbound_count"
   | "phone_number"
-  | "total_call_count"
+  | "total_call_count";
 
 const VALUE_OF: Record<SortField, (row: CallActivityRow) => number | string> = {
   phone_number: (row) => row.phoneNumber,
@@ -64,37 +63,37 @@ const VALUE_OF: Record<SortField, (row: CallActivityRow) => number | string> = {
   total_call_count: (row) => row.totalCallCount,
   inbound_count: (row) => row.inboundCount,
   outbound_count: (row) => row.outboundCount,
-}
+};
 
 export function CallActivityTab() {
-  const [organizationId, setOrganizationId] = React.useState(ALL)
-  const [range, setRange] = React.useState(ALL)
-  const [search, setSearch] = React.useState("")
-  const [sortBy, setSortBy] = React.useState<SortField>("total_call_count")
-  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc")
+  const [organizationId, setOrganizationId] = React.useState(ALL);
+  const [range, setRange] = React.useState(ALL);
+  const [search, setSearch] = React.useState("");
+  const [sortBy, setSortBy] = React.useState<SortField>("total_call_count");
+  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc">("desc");
 
   const sort = (field: SortField) => {
     if (sortBy === field) {
-      setSortOrder(sortOrder === "desc" ? "asc" : "desc")
-      return
+      setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+      return;
     }
-    setSortBy(field)
-    setSortOrder("desc")
-  }
+    setSortBy(field);
+    setSortOrder("desc");
+  };
 
   const rows = CALL_ACTIVITY.filter(
     (row) =>
       (organizationId === ALL || row.organizationId === organizationId) &&
       (search.trim() === "" || row.phoneNumber.includes(search.trim())),
   ).toSorted((a, b) => {
-    const left = VALUE_OF[sortBy](a)
-    const right = VALUE_OF[sortBy](b)
+    const left = VALUE_OF[sortBy](a);
+    const right = VALUE_OF[sortBy](b);
     const compared =
       typeof left === "number" && typeof right === "number"
         ? left - right
-        : String(left).localeCompare(String(right))
-    return sortOrder === "desc" ? -compared : compared
-  })
+        : String(left).localeCompare(String(right));
+    return sortOrder === "desc" ? -compared : compared;
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -140,7 +139,7 @@ export function CallActivityTab() {
             <InputGroupInput
               aria-label="Search phone numbers"
               onChange={(event) => {
-                setSearch(event.target.value)
+                setSearch(event.target.value);
               }}
               placeholder="Search phone numbers…"
               value={search}
@@ -149,7 +148,7 @@ export function CallActivityTab() {
           {search ? (
             <Button
               onClick={() => {
-                setSearch("")
+                setSearch("");
               }}
               size="sm"
               variant="outline"
@@ -292,7 +291,7 @@ export function CallActivityTab() {
         </TableBody>
       </DataTable>
     </div>
-  )
+  );
 }
 
 const RELATIVE = new Intl.DateTimeFormat("en-GB", {
@@ -300,7 +299,7 @@ const RELATIVE = new Intl.DateTimeFormat("en-GB", {
   month: "short",
   year: "numeric",
   timeZone: "UTC",
-})
+});
 
 function SortableHead({
   field,
@@ -310,15 +309,15 @@ function SortableHead({
   sortBy,
   sortOrder,
 }: {
-  field: SortField
-  label: string
-  numeric?: boolean
-  onSort: (field: SortField) => void
-  sortBy: SortField
-  sortOrder: "asc" | "desc"
+  field: SortField;
+  label: string;
+  numeric?: boolean;
+  onSort: (field: SortField) => void;
+  sortBy: SortField;
+  sortOrder: "asc" | "desc";
 }) {
-  const isActive = sortBy === field
-  const Caret = isActive && sortOrder === "asc" ? SortAscIcon : SortDescIcon
+  const isActive = sortBy === field;
+  const Caret = isActive && sortOrder === "asc" ? SortAscIcon : SortDescIcon;
 
   return (
     <DataTableHead
@@ -330,14 +329,14 @@ function SortableHead({
       <span
         className={cn("flex items-center gap-1", numeric && "justify-end")}
         onClick={() => {
-          onSort(field)
+          onSort(field);
         }}
       >
         {label}
         <Caret className={cn("size-3", !isActive && "opacity-30")} />
       </span>
     </DataTableHead>
-  )
+  );
 }
 
 function AnswerRate({ answered, total }: { answered: number; total: number }) {
@@ -346,21 +345,21 @@ function AnswerRate({ answered, total }: { answered: number; total: number }) {
       <span aria-label="No calls yet" className="text-muted-foreground">
         —
       </span>
-    )
+    );
   }
-  const rate = (answered / total) * 100
+  const rate = (answered / total) * 100;
   const tone =
     rate > 50
       ? "bg-success-tint text-success-tint-foreground"
       : rate >= 20
         ? "bg-warning-tint text-warning-tint-foreground"
-        : "bg-destructive-tint text-destructive-tint-foreground"
+        : "bg-destructive-tint text-destructive-tint-foreground";
 
   return (
     <Badge className={tone} variant="secondary">
       {Math.round(rate)}%
     </Badge>
-  )
+  );
 }
 
 function ActiveSince({ row }: { row: CallActivityRow }) {
@@ -369,10 +368,10 @@ function ActiveSince({ row }: { row: CallActivityRow }) {
       <span aria-label="Never active" className="text-muted-foreground">
         —
       </span>
-    )
+    );
   }
-  const since = RELATIVE.format(new Date(row.firstCallAt))
-  if (row.lastCallAt === null) return <span>{since}</span>
+  const since = RELATIVE.format(new Date(row.firstCallAt));
+  if (row.lastCallAt === null) return <span>{since}</span>;
 
   return (
     <Tooltip>
@@ -383,5 +382,5 @@ function ActiveSince({ row }: { row: CallActivityRow }) {
         Last call {RELATIVE.format(new Date(row.lastCallAt))}
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import { z } from "zod"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
 
 import {
   addedTokens,
@@ -9,19 +9,19 @@ import {
   findDesigns,
   getDesign,
   installCommand,
-} from "@/lib/mcp/designs"
+} from "@/lib/mcp/designs";
 
 function json(value: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }],
-  }
+  };
 }
 
 function fail(message: string) {
   return {
     content: [{ type: "text" as const, text: message }],
     isError: true,
-  }
+  };
 }
 
 function summary(design: Design) {
@@ -33,19 +33,19 @@ function summary(design: Design) {
     surface: design.surface,
     tickets: design.tickets.map((ticket) => ticket.id),
     page: design.page,
-  }
+  };
 }
 
 /** shadcn rewrites installed imports by basename, so two shipped files sharing one compile against the wrong file. */
 function clashes(design: Design): string[][] {
-  const byBasename = new Map<string, string[]>()
+  const byBasename = new Map<string, string[]>();
 
   for (const file of design.item?.files ?? []) {
-    const basename = file.path.split("/").pop() ?? file.path
-    byBasename.set(basename, [...(byBasename.get(basename) ?? []), file.path])
+    const basename = file.path.split("/").pop() ?? file.path;
+    byBasename.set(basename, [...(byBasename.get(basename) ?? []), file.path]);
   }
 
-  return [...byBasename.values()].filter((paths) => paths.length > 1)
+  return [...byBasename.values()].filter((paths) => paths.length > 1);
 }
 
 function notes(design: Design) {
@@ -58,27 +58,27 @@ function notes(design: Design) {
     "The platform's tsconfig turns on exactOptionalPropertyTypes and noUncheckedIndexedAccess, which this repo's does not: expect a few TS2375 (an optional prop passed as `x | undefined`) and TS18048 (an indexed value 'possibly undefined') errors per screen on top of the asChild ones. They are real under those flags and compile cleanly here.",
     "Budget a cleanup pass. The platform's eslint (simple-import-sort, perfectionist/sort-jsx-props, consistent-type-assertions, @sarj/prefer-immutable-module-constant and friends) reports one to eight errors per installed file; the import and prop ordering ones autofix with `yarn workspace @sarj/platform-web fix`, the type-assertion and module-constant ones do not. globals.css comes back with four-space indents in a two-space file and no trailing newline.",
     "This is a mockup. Its data is invented and includes real customer names — adapt the screen, do not ship it as it stands.",
-  ]
+  ];
 
   if (design.item?.files.some((file) => file.type === "registry:page")) {
     lines.push(
       `This item ships app/${design.slug}/page.tsx, and shadcn lands it at src/app/${design.slug}/page.tsx — a live route under the platform's root layout, which already wraps every page in Clerk auth and the real product sidebar. The page also renders the design lab's own AppShell, so the result is a mock sidebar and breadcrumb nested inside the real ones. Take the components under components/sarj/mockups/${design.slug} and mount them in a real route; delete the page and components/sarj/shell/*.`,
-    )
+    );
   }
 
   for (const paths of clashes(design)) {
     lines.push(
       `This design ships ${paths.length} files named ${paths[0]?.split("/").pop()} (${paths.join(", ")}). shadcn resolves rewritten imports by basename, so after installing, one of them will be imported in place of the other — fix those import paths by hand before anything else.`,
-    )
+    );
   }
 
   if (design.item?.cssVars?.light || design.item?.css?.[":root"]) {
     lines.push(
       '`tokens` are added to globals.css — values in :root and aliases in @theme inline, light mode only. The platform also has a .dark block and a [data-whitelabel="tasama"] block, and neither receives a value, so under either a tint resolves to nothing. A property the platform already defines (warning, for instance) is left alone. Add the dark and tasama values by hand.',
-    )
+    );
   }
 
-  return lines
+  return lines;
 }
 
 export function createDesignLabServer(origin: string): McpServer {
@@ -91,7 +91,7 @@ export function createDesignLabServer(origin: string): McpServer {
         "To borrow a pattern without installing a whole screen, read it with get_design_source instead.",
       ].join(" "),
     },
-  )
+  );
 
   server.registerTool(
     "list_designs",
@@ -101,7 +101,7 @@ export function createDesignLabServer(origin: string): McpServer {
         "Every mockup in the design lab: slug, title, shape, product surface, the Linear tickets it answers, and its live URL. Start here when you do not know what exists.",
     },
     async () => json(designs(origin).map(summary)),
-  )
+  );
 
   server.registerTool(
     "find_design",
@@ -116,15 +116,15 @@ export function createDesignLabServer(origin: string): McpServer {
       },
     },
     async ({ query }) => {
-      const matches = findDesigns(query, origin)
+      const matches = findDesigns(query, origin);
       if (!matches.length) {
         return fail(
           `No design matches "${query}". Call list_designs to see what the lab has — not every ticket has a mockup.`,
-        )
+        );
       }
-      return json(matches.map(summary))
+      return json(matches.map(summary));
     },
-  )
+  );
 
   server.registerTool(
     "get_design",
@@ -143,15 +143,15 @@ export function createDesignLabServer(origin: string): McpServer {
       },
     },
     async ({ slug, cwd }) => {
-      const design = getDesign(slug, origin)
-      if (!design) return fail(`No design called "${slug}". Try find_design.`)
+      const design = getDesign(slug, origin);
+      if (!design) return fail(`No design called "${slug}". Try find_design.`);
       if (!design.item) {
         return fail(
           `"${slug}" is on the index but not in the registry. Someone needs to run \`npm run registry\` in the design lab.`,
-        )
+        );
       }
 
-      const { item } = design
+      const { item } = design;
 
       return json({
         slug: design.slug,
@@ -183,9 +183,9 @@ export function createDesignLabServer(origin: string): McpServer {
         ),
         nameClashes: clashes(design),
         notes: notes(design),
-      })
+      });
     },
-  )
+  );
 
   server.registerTool(
     "get_design_source",
@@ -204,36 +204,36 @@ export function createDesignLabServer(origin: string): McpServer {
       },
     },
     async ({ slug, file }) => {
-      const design = getDesign(slug, origin)
-      if (!design?.item) return fail(`No design called "${slug}".`)
+      const design = getDesign(slug, origin);
+      if (!design?.item) return fail(`No design called "${slug}".`);
 
       if (!file) {
         return json({
           slug,
           files: design.item.files.map((entry) => entry.path),
-        })
+        });
       }
 
       /* File contents live only in the published item; the generated index carries paths, and disk layout differs per deployment. */
-      const response = await fetch(design.registry)
+      const response = await fetch(design.registry);
       if (!response.ok) {
-        return fail(`Could not read ${design.registry} (${response.status}).`)
+        return fail(`Could not read ${design.registry} (${response.status}).`);
       }
 
       const published = (await response.json()) as {
-        files?: { path: string; content?: string }[]
-      }
-      const match = published.files?.find((entry) => entry.path === file)
+        files?: { path: string; content?: string }[];
+      };
+      const match = published.files?.find((entry) => entry.path === file);
 
       if (!match?.content) {
         return fail(
           `"${file}" is not one of this design's files. Call get_design_source without \`file\` to list them.`,
-        )
+        );
       }
 
-      return { content: [{ type: "text" as const, text: match.content }] }
+      return { content: [{ type: "text" as const, text: match.content }] };
     },
-  )
+  );
 
   server.registerTool(
     "get_design_tokens",
@@ -243,7 +243,7 @@ export function createDesignLabServer(origin: string): McpServer {
         "The custom properties and utilities Sarj designs use on top of a stock shadcn palette. The install adds these for you — read them only when reconciling a globals.css by hand.",
     },
     async () => {
-      const { light, theme, css } = addedTokens()
+      const { light, theme, css } = addedTokens();
 
       return json({
         root: {
@@ -260,9 +260,9 @@ export function createDesignLabServer(origin: string): McpServer {
           Object.entries(css).filter(([key]) => key.startsWith("@utility ")),
         ),
         note: "Light values only; this workspace ships one mode. `root` goes in :root as --name, `theme` in @theme inline, `utilities` are Tailwind v4 @utility blocks.",
-      })
+      });
     },
-  )
+  );
 
-  return server
+  return server;
 }

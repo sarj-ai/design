@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { STATUS_LEGEND } from "@/lib/mockups/conversations-revamp-list-data"
-import { StatusBadge } from "@/components/mockups/conversations-revamp/list/status-badges"
-import { ColumnHelpIcon } from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/ui/popover";
+import { STATUS_LEGEND } from "@/lib/mockups/conversations-revamp-list-data";
+import { StatusBadge } from "@/components/mockups/conversations-revamp/list/status-badges";
+import { ColumnHelpIcon } from "@/components/mockups/conversations-revamp/list/icons";
 
 export function StatusHelp() {
   return (
@@ -34,5 +34,5 @@ export function StatusHelp() {
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { CopyMenu } from "@/components/site/copy-menu"
-import { useCopy } from "@/components/site/use-copy"
-import { linearIssueUrl } from "@/lib/site/linear"
-import { mockupUrl } from "@/lib/site/registry"
-import { ShareLinkIcon } from "@/components/shell/workspace-icons"
+import { CopyMenu } from "@/components/site/copy-menu";
+import { useCopy } from "@/components/site/use-copy";
+import { linearIssueUrl } from "@/lib/site/linear";
+import { mockupUrl } from "@/lib/site/registry";
+import { ShareLinkIcon } from "@/components/shell/workspace-icons";
 
 export function LinkMenu({
   slug,
   tickets,
   title,
 }: {
-  slug: string
-  tickets: string[]
-  title: string
+  slug: string;
+  tickets: string[];
+  title: string;
 }) {
-  const { copy } = useCopy()
-  const page = mockupUrl(slug)
+  const { copy } = useCopy();
+  const page = mockupUrl(slug);
 
   return (
     <CopyMenu
@@ -42,5 +42,5 @@ export function LinkMenu({
         })),
       ]}
     />
-  )
+  );
 }

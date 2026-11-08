@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import {
   MODEL_SETTINGS,
   type CallCase,
   type TurnTimingRecord,
-} from "@/lib/mockups/call-turn-timing-data"
+} from "@/lib/mockups/call-turn-timing-data";
 
-import { LanguageModelIcon, SpeechToTextIcon, TextToSpeechIcon } from "./icons"
-import { TurnDetectionSection } from "./turn-detection-section"
+import { LanguageModelIcon, SpeechToTextIcon, TextToSpeechIcon } from "./icons";
+import { TurnDetectionSection } from "./turn-detection-section";
 
 export function ModelSettingsTab({
   timing,
   voice,
 }: {
-  timing: null | TurnTimingRecord
-  voice: CallCase["voice"]
+  timing: null | TurnTimingRecord;
+  voice: CallCase["voice"];
 }) {
   return (
     <div className="flex flex-col gap-6">
@@ -57,7 +57,7 @@ export function ModelSettingsTab({
         ]}
       />
     </div>
-  )
+  );
 }
 
 function ConfigSection({
@@ -65,9 +65,9 @@ function ConfigSection({
   title,
   rows,
 }: {
-  icon: React.ReactNode
-  title: string
-  rows: { label: string; value: string }[]
+  icon: React.ReactNode;
+  title: string;
+  rows: { label: string; value: string }[];
 }) {
   return (
     <section className="flex flex-col gap-3">
@@ -87,5 +87,5 @@ function ConfigSection({
         ))}
       </div>
     </section>
-  )
+  );
 }

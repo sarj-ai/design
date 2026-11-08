@@ -7,7 +7,7 @@
  * this person last opened the tab.
  */
 
-export type Category = "tool" | "knowledge" | "prompt" | "platform" | "other"
+export type Category = "tool" | "knowledge" | "prompt" | "platform" | "other";
 
 export const CATEGORIES: { key: Category; label: string }[] = [
   { key: "tool", label: "Tool" },
@@ -15,59 +15,59 @@ export const CATEGORIES: { key: Category; label: string }[] = [
   { key: "prompt", label: "Prompt" },
   { key: "platform", label: "Platform" },
   { key: "other", label: "Other" },
-]
+];
 
-export type DecisionKind = "resolved" | "dismissed"
+export type DecisionKind = "resolved" | "dismissed";
 
 export type Decision = {
-  kind: DecisionKind
-  by: string
+  kind: DecisionKind;
+  by: string;
   /** ISO date of the decision. */
-  at: string
-}
+  at: string;
+};
 
 export type Call = {
-  id: string
-  createdAt: string
-  phoneNumber: string
-  durationSeconds: number
-  status: "completed" | "failed" | "no answer"
-}
+  id: string;
+  createdAt: string;
+  phoneNumber: string;
+  durationSeconds: number;
+  status: "completed" | "failed" | "no answer";
+};
 
 export type Opportunity = {
-  id: string
-  title: string
-  category: Category
-  description: string
-  callCount: number
+  id: string;
+  title: string;
+  category: Category;
+  description: string;
+  callCount: number;
   /** The latest decision, shared by everyone in the organization. */
-  decision: Decision | null
+  decision: Decision | null;
   /** Calls that showed the same gap after the decision. Above zero, the
    *  opportunity is open again. */
-  callsSinceDecision: number
+  callsSinceDecision: number;
   /** First found after this person last opened the tab. Per person. */
-  isNew: boolean
-}
+  isNew: boolean;
+};
 
-export type Status = "open" | DecisionKind
+export type Status = "open" | DecisionKind;
 
 export function statusOf(opportunity: Opportunity): Status {
-  if (opportunity.decision === null) return "open"
-  if (opportunity.callsSinceDecision > 0) return "open"
-  return opportunity.decision.kind
+  if (opportunity.decision === null) return "open";
+  if (opportunity.callsSinceDecision > 0) return "open";
+  return opportunity.decision.kind;
 }
 
 export function hasRecurred(opportunity: Opportunity): boolean {
-  return opportunity.decision !== null && opportunity.callsSinceDecision > 0
+  return opportunity.decision !== null && opportunity.callsSinceDecision > 0;
 }
 
 export const SCENARIO = {
   name: "Motor renewal reminders",
   status: "Live",
   createdAt: "Aug 12, 2026",
-}
+};
 
-export const CURRENT_USER = "Omar Haddad"
+export const CURRENT_USER = "Omar Haddad";
 
 export const OPPORTUNITIES: Opportunity[] = [
   {
@@ -181,7 +181,7 @@ export const OPPORTUNITIES: Opportunity[] = [
     callsSinceDecision: 0,
     isNew: false,
   },
-]
+];
 
 /** The same list after everyone has decided on every opportunity. */
 export const ALL_HANDLED: Opportunity[] = OPPORTUNITIES.map((opportunity) =>
@@ -192,7 +192,7 @@ export const ALL_HANDLED: Opportunity[] = OPPORTUNITIES.map((opportunity) =>
         isNew: false,
       }
     : { ...opportunity, callsSinceDecision: 0, isNew: false },
-)
+);
 
 const PHONES = [
   "+966 55 214 8830",
@@ -201,7 +201,7 @@ const PHONES = [
   "+966 56 118 4027",
   "+966 53 640 2215",
   "+966 59 377 9061",
-]
+];
 
 const STATUSES: Call["status"][] = [
   "completed",
@@ -210,23 +210,23 @@ const STATUSES: Call["status"][] = [
   "no answer",
   "completed",
   "failed",
-]
+];
 
 /** The latest calls for an opportunity, newest first. Deterministic, so the
  *  page renders the same on the server and the client. */
 export function callsFor(opportunity: Opportunity): Call[] {
-  const seed = opportunity.id.length
-  const count = Math.min(opportunity.callCount, 5)
+  const seed = opportunity.id.length;
+  const count = Math.min(opportunity.callCount, 5);
   return Array.from({ length: count }, (_, index) => {
-    const day = 3 - Math.floor((index * 3 + seed) / 4)
-    const hour = 9 + ((seed + index * 5) % 9)
-    const minute = (seed * 7 + index * 13) % 60
+    const day = 3 - Math.floor((index * 3 + seed) / 4);
+    const hour = 9 + ((seed + index * 5) % 9);
+    const minute = (seed * 7 + index * 13) % 60;
     return {
       id: `${opportunity.id}-${index}`,
       createdAt: `2026-11-${String(Math.max(day, 1)).padStart(2, "0")}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`,
       phoneNumber: PHONES[(seed + index) % PHONES.length],
       durationSeconds: 48 + ((seed * 31 + index * 47) % 240),
       status: STATUSES[(seed + index) % STATUSES.length],
-    }
-  })
+    };
+  });
 }

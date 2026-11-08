@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   CALLS,
   type CallRow,
   DEFAULT_COLUMNS,
   TOTAL_RESULTS,
   type CallStatus,
-} from "@/lib/mockups/conversations-revamp-list-data"
-import { toast } from "sonner"
+} from "@/lib/mockups/conversations-revamp-list-data";
+import { toast } from "sonner";
 
 import {
   CALL_SPECIFICS,
   type CallState,
   type Channel,
-} from "@/lib/mockups/conversations-revamp-drawer-data"
+} from "@/lib/mockups/conversations-revamp-drawer-data";
 
 const PRE_CALL_STATUSES = new Set<CallStatus>([
   "queued",
@@ -32,33 +32,33 @@ const PRE_CALL_STATUSES = new Set<CallStatus>([
   "dialing",
   "in_progress",
   "transferring",
-])
-import { AppShell } from "@/components/shell/app-shell"
-import { FourthDrawer } from "@/components/mockups/conversations-revamp/drawer/fourth-drawer"
-import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table"
-import { SearchFilters } from "@/components/mockups/conversations-revamp/list/search-filters"
+]);
+import { AppShell } from "@/components/shell/app-shell";
+import { FourthDrawer } from "@/components/mockups/conversations-revamp/drawer/fourth-drawer";
+import { CallTable } from "@/components/mockups/conversations-revamp/list/call-table";
+import { SearchFilters } from "@/components/mockups/conversations-revamp/list/search-filters";
 import {
   NextIcon,
   PreviousIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 
 export function ConversationsPage({
   initialDrawerOpen = false,
   initialStatusOpen = false,
 }: {
-  initialDrawerOpen?: boolean
-  initialStatusOpen?: boolean
+  initialDrawerOpen?: boolean;
+  initialStatusOpen?: boolean;
 }) {
-  const [drawerOpen, setDrawerOpen] = React.useState(initialDrawerOpen)
-  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS)
-  const [drawerState, setDrawerState] = React.useState<CallState>("complete")
-  const [drawerChannel, setDrawerChannel] = React.useState<Channel>("call")
+  const [drawerOpen, setDrawerOpen] = React.useState(initialDrawerOpen);
+  const [columns, setColumns] = React.useState(DEFAULT_COLUMNS);
+  const [drawerState, setDrawerState] = React.useState<CallState>("complete");
+  const [drawerChannel, setDrawerChannel] = React.useState<Channel>("call");
 
-  const [rows, setRows] = React.useState(CALLS)
-  const [selected, setSelected] = React.useState<CallRow | null>(null)
+  const [rows, setRows] = React.useState(CALLS);
+  const [selected, setSelected] = React.useState<CallRow | null>(null);
 
   function cancelSelected() {
-    if (!selected) return
+    if (!selected) return;
 
     setRows((current) =>
       current.map((row) =>
@@ -66,11 +66,11 @@ export function ConversationsPage({
           ? { ...row, scheduleOrigin: undefined, status: "cancelled" as const }
           : row,
       ),
-    )
-    setDrawerOpen(false)
+    );
+    setDrawerOpen(false);
     toast.success("Scheduled call cancelled", {
       description: `${selected.scenario} · ${selected.phoneNumber ?? "chat"}`,
-    })
+    });
   }
 
   return (
@@ -94,16 +94,16 @@ export function ConversationsPage({
               calls={rows}
               columns={columns}
               onCallClick={(call) => {
-                setSelected(call)
+                setSelected(call);
                 setDrawerState(
                   call.status === "scheduled"
                     ? "scheduled"
                     : PRE_CALL_STATUSES.has(call.status)
                       ? "queued"
                       : "complete",
-                )
-                setDrawerChannel(call.interactionType)
-                setDrawerOpen(true)
+                );
+                setDrawerChannel(call.interactionType);
+                setDrawerOpen(true);
               }}
             />
           </div>
@@ -168,5 +168,5 @@ export function ConversationsPage({
         }
       />
     </AppShell>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Command,
@@ -8,53 +8,57 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import { InputGroup } from "@/components/ui/input-group"
-import { Kbd, KbdGroup } from "@/components/ui/kbd"
-import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "@/components/ui/command";
+import { InputGroup } from "@/components/ui/input-group";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   KIND_LABEL,
   KIND_ORDER,
   describe,
   type Variable,
-} from "@/lib/mockups/variable-mentions-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/variable-mentions-data";
+import { cn } from "@/lib/utils";
 
 import {
   chipClass,
   type ChipTreatment,
-} from "@/components/mockups/variable-mentions/chip-treatment"
+} from "@/components/mockups/variable-mentions/chip-treatment";
 import {
   InsertKeyIcon,
   MoveDownKeyIcon,
   MoveUpKeyIcon,
-} from "@/components/mockups/variable-mentions/icons"
+} from "@/components/mockups/variable-mentions/icons";
 
-const TOKEN = /\{\{\s*([\w-]+)\s*\}\}/g
+const TOKEN = /\{\{\s*([\w-]+)\s*\}\}/g;
 
 /** `@` at the start or after a space or opening bracket; `user@domain.com` never matches and `@ ` stops matching. */
-const TRIGGER = /(?:^|[\s(["'«“])@(\w*)$/
+const TRIGGER = /(?:^|[\s(["'«“])@(\w*)$/;
 
-const KEYCAP = "bg-foreground/10 text-foreground"
+const KEYCAP = "bg-foreground/10 text-foreground";
 
 interface Box {
-  height: number
-  left: number
-  top: number
-  width: number
+  height: number;
+  left: number;
+  top: number;
+  width: number;
 }
 
 interface Mention {
-  box: Box
-  node: Text
-  query: string
-  start: number
+  box: Box;
+  node: Text;
+  query: string;
+  start: number;
 }
 
 /** Contenteditable and uncontrolled: repainting from state on every keystroke would lose the caret. React owns the frame, picker and tooltip; the DOM owns the text. */
@@ -70,36 +74,36 @@ export function MentionEditor({
   variables,
   variablesLoading = false,
 }: {
-  ariaLabel: string
-  dir: "ltr" | "rtl"
-  disabled?: boolean
-  multiline?: boolean
-  onChange: (value: string) => void
-  placeholder: string
-  treatment: ChipTreatment
+  ariaLabel: string;
+  dir: "ltr" | "rtl";
+  disabled?: boolean;
+  multiline?: boolean;
+  onChange: (value: string) => void;
+  placeholder: string;
+  treatment: ChipTreatment;
   /** The stored string, `{{name}}` tokens included. */
-  value: string
-  variables: Variable[]
-  variablesLoading?: boolean
+  value: string;
+  variables: Variable[];
+  variablesLoading?: boolean;
 }) {
-  const root = React.useRef<HTMLDivElement>(null)
+  const root = React.useRef<HTMLDivElement>(null);
   /* The last string this editor read out of its own DOM. A `value` prop
      equal to it is our own edit coming back, not a change to paint. */
-  const emitted = React.useRef<string | null>(null)
+  const emitted = React.useRef<string | null>(null);
   const painted = React.useRef<{
-    treatment: ChipTreatment
-    variables: Variable[]
-  } | null>(null)
+    treatment: ChipTreatment;
+    variables: Variable[];
+  } | null>(null);
 
-  const [mention, setMention] = React.useState<Mention | null>(null)
+  const [mention, setMention] = React.useState<Mention | null>(null);
   /* Remembered with its query: a new query starts at the top again. */
   const [choice, setChoice] = React.useState<{
-    name: string
-    query: string
-  } | null>(null)
+    name: string;
+    query: string;
+  } | null>(null);
   const [hover, setHover] = React.useState<{ box: Box; name: string } | null>(
     null,
-  )
+  );
 
   const byName = React.useMemo(
     () =>
@@ -110,45 +114,45 @@ export function MentionEditor({
         ]),
       ),
     [variables],
-  )
+  );
 
   const classFor = React.useCallback(
     (name: string) => {
-      const hit = byName.get(name)
-      return chipClass(hit?.variable, treatment, hit?.index ?? 0)
+      const hit = byName.get(name);
+      return chipClass(hit?.variable, treatment, hit?.index ?? 0);
     },
     [byName, treatment],
-  )
+  );
 
   /* Paint from the stored string when it changes from outside, or when the
      chips need a different class — never on our own keystrokes. */
   React.useEffect(() => {
-    const el = root.current
-    if (!el) return
+    const el = root.current;
+    if (!el) return;
 
     const unchanged =
       emitted.current === value &&
       painted.current?.treatment === treatment &&
-      painted.current?.variables === variables
-    if (unchanged) return
+      painted.current?.variables === variables;
+    if (unchanged) return;
 
-    paint(el, value, classFor)
-    emitted.current = value
-    painted.current = { treatment, variables }
-  }, [classFor, treatment, value, variables])
+    paint(el, value, classFor);
+    emitted.current = value;
+    painted.current = { treatment, variables };
+  }, [classFor, treatment, value, variables]);
 
   const emit = React.useCallback(() => {
-    const el = root.current
-    if (!el) return
-    const text = serialize(el)
-    emitted.current = text
-    onChange(text)
-  }, [onChange])
+    const el = root.current;
+    if (!el) return;
+    const text = serialize(el);
+    emitted.current = text;
+    onChange(text);
+  }, [onChange]);
 
   const sync = React.useCallback(() => {
-    const el = root.current
-    const selection = window.getSelection()
-    const anchor = selection?.anchorNode
+    const el = root.current;
+    const selection = window.getSelection();
+    const anchor = selection?.anchorNode;
     if (
       !el ||
       !selection ||
@@ -157,28 +161,28 @@ export function MentionEditor({
       !el.contains(anchor) ||
       anchor.nodeType !== Node.TEXT_NODE
     ) {
-      setMention(null)
-      return
+      setMention(null);
+      return;
     }
 
-    const node = anchor as Text
-    const before = (node.nodeValue ?? "").slice(0, selection.anchorOffset)
-    const match = TRIGGER.exec(before)
+    const node = anchor as Text;
+    const before = (node.nodeValue ?? "").slice(0, selection.anchorOffset);
+    const match = TRIGGER.exec(before);
     if (!match) {
-      setMention(null)
-      return
+      setMention(null);
+      return;
     }
 
-    const query = match[1] ?? ""
-    const start = selection.anchorOffset - query.length - 1
-    const range = document.createRange()
-    range.setStart(node, start)
-    range.setEnd(node, selection.anchorOffset)
+    const query = match[1] ?? "";
+    const start = selection.anchorOffset - query.length - 1;
+    const range = document.createRange();
+    range.setStart(node, start);
+    range.setEnd(node, selection.anchorOffset);
 
-    setMention({ box: relativeBox(range, el), node, query, start })
-  }, [])
+    setMention({ box: relativeBox(range, el), node, query, start });
+  }, []);
 
-  const query = mention?.query.toLowerCase() ?? ""
+  const query = mention?.query.toLowerCase() ?? "";
 
   const matches = React.useMemo(
     () =>
@@ -186,150 +190,153 @@ export function MentionEditor({
         variable.name.toLowerCase().includes(query),
       ),
     [query, variables],
-  )
+  );
 
   const groups = KIND_ORDER.map((kind) => ({
     items: matches.filter((variable) => variable.kind === kind),
     kind,
-  })).filter((group) => group.items.length > 0)
+  })).filter((group) => group.items.length > 0);
 
   const noScenarioVariables = !variables.some(
     (variable) => variable.kind === "scenario",
-  )
+  );
 
   const selected =
     choice?.query === query &&
     matches.some((variable) => variable.name === choice.name)
       ? choice.name
-      : (matches[0]?.name ?? "")
+      : (matches[0]?.name ?? "");
 
   const setSelected = React.useCallback(
     (name: string) => setChoice({ name, query }),
     [query],
-  )
+  );
 
   const insert = React.useCallback(
     (name: string) => {
-      const el = root.current
-      const selection = window.getSelection()
-      if (!mention || !el || !selection) return
+      const el = root.current;
+      const selection = window.getSelection();
+      if (!mention || !el || !selection) return;
 
-      const { node, start } = mention
+      const { node, start } = mention;
       const end =
         selection.anchorNode === node
           ? selection.anchorOffset
-          : start + 1 + mention.query.length
-      const range = document.createRange()
-      range.setStart(node, start)
-      range.setEnd(node, Math.min(end, node.length))
-      range.deleteContents()
+          : start + 1 + mention.query.length;
+      const range = document.createRange();
+      range.setStart(node, start);
+      range.setEnd(node, Math.min(end, node.length));
+      range.deleteContents();
 
-      const chip = createChip(name, classFor(name))
-      range.insertNode(chip)
+      const chip = createChip(name, classFor(name));
+      range.insertNode(chip);
       /* A space after the chip, caret after it, so the next word does not land inside the chip. */
-      const space = document.createTextNode(" ")
-      chip.after(space)
-      const caret = document.createRange()
-      caret.setStart(space, 1)
-      caret.collapse(true)
-      selection.removeAllRanges()
-      selection.addRange(caret)
+      const space = document.createTextNode(" ");
+      chip.after(space);
+      const caret = document.createRange();
+      caret.setStart(space, 1);
+      caret.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(caret);
 
-      setMention(null)
-      emit()
+      setMention(null);
+      emit();
     },
     [classFor, emit, mention],
-  )
+  );
 
   const onInput = () => {
-    const el = root.current
-    if (!el) return
+    const el = root.current;
+    if (!el) return;
 
     if (hasTypedToken(el)) {
       /* `{{name}}` typed or pasted: repaint into a chip, then restore the caret by stored-string offset. */
-      const offset = caretOffset(el)
-      const text = serialize(el)
-      paint(el, text, classFor)
-      if (offset !== null) placeCaret(el, offset)
-      emitted.current = text
-      onChange(text)
+      const offset = caretOffset(el);
+      const text = serialize(el);
+      paint(el, text, classFor);
+      if (offset !== null) placeCaret(el, offset);
+      emitted.current = text;
+      onChange(text);
     } else {
-      emit()
+      emit();
     }
 
-    sync()
-  }
+    sync();
+  };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (mention) {
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        event.preventDefault()
-        if (matches.length === 0) return
+        event.preventDefault();
+        if (matches.length === 0) return;
         const current = matches.findIndex(
           (variable) => variable.name === selected,
-        )
+        );
         const next =
           event.key === "ArrowDown"
             ? Math.min(current + 1, matches.length - 1)
-            : Math.max(current - 1, 0)
-        setSelected(matches[next]?.name ?? "")
-        return
+            : Math.max(current - 1, 0);
+        setSelected(matches[next]?.name ?? "");
+        return;
       }
       if (event.key === "Enter") {
-        const hit = matches.find((variable) => variable.name === selected)
+        const hit = matches.find((variable) => variable.name === selected);
         if (hit) {
-          event.preventDefault()
-          insert(hit.name)
-          return
+          event.preventDefault();
+          insert(hit.name);
+          return;
         }
       }
       if (event.key === "Escape") {
-        event.preventDefault()
-        setMention(null)
-        return
+        event.preventDefault();
+        setMention(null);
+        return;
       }
     }
 
     if (event.key === "Enter") {
-      event.preventDefault()
+      event.preventDefault();
       /* A newline as text, so the field never grows a `<div>` per line. */
-      if (multiline) document.execCommand("insertText", false, "\n")
+      if (multiline) document.execCommand("insertText", false, "\n");
     }
-  }
+  };
 
   const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const chip = (event.target as HTMLElement).closest("[data-variable]")
-    const selection = window.getSelection()
+    const chip = (event.target as HTMLElement).closest("[data-variable]");
+    const selection = window.getSelection();
     if (chip && selection) {
       /* A chip cannot hold the caret, so a click on one parks it just after. */
-      const range = document.createRange()
-      range.setStartAfter(chip)
-      range.collapse(true)
-      selection.removeAllRanges()
-      selection.addRange(range)
+      const range = document.createRange();
+      range.setStartAfter(chip);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
-    sync()
-  }
+    sync();
+  };
 
   const onMouseOver = (event: React.MouseEvent<HTMLDivElement>) => {
-    const el = root.current
+    const el = root.current;
     const chip = (event.target as HTMLElement).closest<HTMLElement>(
       "[data-variable]",
-    )
-    if (!el || !chip) return
-    const range = document.createRange()
-    range.selectNode(chip)
-    setHover({ box: relativeBox(range, el), name: chip.dataset.variable ?? "" })
-  }
+    );
+    if (!el || !chip) return;
+    const range = document.createRange();
+    range.selectNode(chip);
+    setHover({
+      box: relativeBox(range, el),
+      name: chip.dataset.variable ?? "",
+    });
+  };
 
   const onMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
-    const chip = (event.target as HTMLElement).closest("[data-variable]")
+    const chip = (event.target as HTMLElement).closest("[data-variable]");
     if (chip && !chip.contains(event.relatedTarget as Node | null)) {
-      setHover(null)
+      setHover(null);
     }
-  }
+  };
 
-  const hovered = hover ? byName.get(hover.name)?.variable : undefined
+  const hovered = hover ? byName.get(hover.name)?.variable : undefined;
 
   return (
     <Popover open={mention !== null}>
@@ -493,18 +500,18 @@ export function MentionEditor({
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 function createChip(name: string, className: string): HTMLSpanElement {
-  const chip = document.createElement("span")
-  chip.textContent = name
-  chip.dataset.variable = name
-  chip.contentEditable = "false"
+  const chip = document.createElement("span");
+  chip.textContent = name;
+  chip.dataset.variable = name;
+  chip.contentEditable = "false";
   /* Isolated so the Latin name does not reorder the Arabic around it. */
-  chip.dir = "ltr"
-  chip.className = className
-  return chip
+  chip.dir = "ltr";
+  chip.className = className;
+  return chip;
 }
 
 function paint(
@@ -512,131 +519,131 @@ function paint(
   value: string,
   classFor: (name: string) => string,
 ) {
-  const fragment = document.createDocumentFragment()
-  let last = 0
+  const fragment = document.createDocumentFragment();
+  let last = 0;
 
   for (const match of value.matchAll(TOKEN)) {
-    const index = match.index ?? 0
-    const name = match[1] ?? ""
-    if (index > last) fragment.append(value.slice(last, index))
-    fragment.append(createChip(name, classFor(name)))
-    last = index + match[0].length
+    const index = match.index ?? 0;
+    const name = match[1] ?? "";
+    if (index > last) fragment.append(value.slice(last, index));
+    fragment.append(createChip(name, classFor(name)));
+    last = index + match[0].length;
   }
-  if (last < value.length) fragment.append(value.slice(last))
+  if (last < value.length) fragment.append(value.slice(last));
 
-  el.replaceChildren(fragment)
+  el.replaceChildren(fragment);
 }
 
 function serialize(container: Node): string {
-  let out = ""
+  let out = "";
 
   const walk = (node: Node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      out += node.nodeValue ?? ""
-      return
+      out += node.nodeValue ?? "";
+      return;
     }
-    if (!(node instanceof HTMLElement)) return
+    if (!(node instanceof HTMLElement)) return;
 
     if (node.dataset.variable) {
-      out += `{{${node.dataset.variable}}}`
-      return
+      out += `{{${node.dataset.variable}}}`;
+      return;
     }
     if (node.tagName === "BR") {
-      out += "\n"
-      return
+      out += "\n";
+      return;
     }
     /* Pasted rich text arrives as blocks; each one is a line. */
-    const block = node.tagName === "DIV" || node.tagName === "P"
-    if (block && out.length > 0 && !out.endsWith("\n")) out += "\n"
-    node.childNodes.forEach(walk)
-  }
+    const block = node.tagName === "DIV" || node.tagName === "P";
+    if (block && out.length > 0 && !out.endsWith("\n")) out += "\n";
+    node.childNodes.forEach(walk);
+  };
 
-  container.childNodes.forEach(walk)
-  return out
+  container.childNodes.forEach(walk);
+  return out;
 }
 
 function hasTypedToken(el: HTMLElement): boolean {
-  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
-  const single = new RegExp(TOKEN.source)
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const single = new RegExp(TOKEN.source);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-    if (node.parentElement?.closest("[data-variable]")) continue
-    if (single.test(node.nodeValue ?? "")) return true
+    if (node.parentElement?.closest("[data-variable]")) continue;
+    if (single.test(node.nodeValue ?? "")) return true;
   }
-  return false
+  return false;
 }
 
 function caretOffset(el: HTMLElement): number | null {
-  const selection = window.getSelection()
-  const anchor = selection?.anchorNode
-  if (!selection || !anchor || !el.contains(anchor)) return null
+  const selection = window.getSelection();
+  const anchor = selection?.anchorNode;
+  if (!selection || !anchor || !el.contains(anchor)) return null;
 
-  const range = document.createRange()
-  range.setStart(el, 0)
-  range.setEnd(anchor, selection.anchorOffset)
-  return serialize(range.cloneContents()).length
+  const range = document.createRange();
+  range.setStart(el, 0);
+  range.setEnd(anchor, selection.anchorOffset);
+  return serialize(range.cloneContents()).length;
 }
 
 function placeCaret(el: HTMLElement, offset: number) {
-  const selection = window.getSelection()
-  if (!selection) return
+  const selection = window.getSelection();
+  if (!selection) return;
 
-  const range = document.createRange()
-  let remaining = offset
-  let placed = false
+  const range = document.createRange();
+  let remaining = offset;
+  let placed = false;
 
   const walk = (node: Node): boolean => {
     if (node.nodeType === Node.TEXT_NODE) {
-      const length = node.nodeValue?.length ?? 0
+      const length = node.nodeValue?.length ?? 0;
       if (remaining <= length) {
-        range.setStart(node, remaining)
-        return true
+        range.setStart(node, remaining);
+        return true;
       }
-      remaining -= length
-      return false
+      remaining -= length;
+      return false;
     }
-    if (!(node instanceof HTMLElement)) return false
+    if (!(node instanceof HTMLElement)) return false;
 
     if (node.dataset.variable) {
-      const length = node.dataset.variable.length + 4
+      const length = node.dataset.variable.length + 4;
       if (remaining <= length) {
-        range.setStartAfter(node)
-        return true
+        range.setStartAfter(node);
+        return true;
       }
-      remaining -= length
-      return false
+      remaining -= length;
+      return false;
     }
     if (node.tagName === "BR") {
       if (remaining <= 1) {
-        range.setStartAfter(node)
-        return true
+        range.setStartAfter(node);
+        return true;
       }
-      remaining -= 1
-      return false
+      remaining -= 1;
+      return false;
     }
 
     for (const child of Array.from(node.childNodes)) {
-      if (walk(child)) return true
+      if (walk(child)) return true;
     }
-    return false
-  }
+    return false;
+  };
 
-  placed = walk(el)
+  placed = walk(el);
   if (!placed) {
-    range.selectNodeContents(el)
-    range.collapse(false)
+    range.selectNodeContents(el);
+    range.collapse(false);
   }
-  range.collapse(true)
-  selection.removeAllRanges()
-  selection.addRange(range)
+  range.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(range);
 }
 
 function relativeBox(range: Range, el: HTMLElement): Box {
-  const rect = range.getBoundingClientRect()
-  const base = el.getBoundingClientRect()
+  const rect = range.getBoundingClientRect();
+  const base = el.getBoundingClientRect();
   return {
     height: rect.height,
     left: rect.left - base.left,
     top: rect.top - base.top,
     width: rect.width,
-  }
+  };
 }

@@ -1,8 +1,8 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { FooterMark } from "@/components/shell/footer-mark"
-import { SarjMark } from "@/components/shell/sarj-mark"
-import { SITE_PLACES } from "@/components/shell/site-nav"
+import { FooterMark } from "@/components/shell/footer-mark";
+import { SarjMark } from "@/components/shell/sarj-mark";
+import { SITE_PLACES } from "@/components/shell/site-nav";
 
 /**
  * The index's footer, after AlignUI's: the places in the lab, a hairline with square
@@ -38,5 +38,5 @@ export function SiteFooter() {
         <FooterMark />
       </div>
     </footer>
-  )
+  );
 }

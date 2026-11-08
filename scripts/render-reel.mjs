@@ -1,16 +1,16 @@
 // Usage: npm run reel -- <slug> [--scale 2] [--skip-build] [--url <base>]
 
-import { spawn } from "node:child_process"
-import { once } from "node:events"
-import { createHash } from "node:crypto"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
-import path from "node:path"
-import process from "node:process"
+import { spawn } from "node:child_process";
+import { once } from "node:events";
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import process from "node:process";
 
 /* CJS: the named export only exists on `default`. */
-import nextEnv from "@next/env"
-import { chromium } from "playwright"
-import sharp from "sharp"
+import nextEnv from "@next/env";
+import { chromium } from "playwright";
+import sharp from "sharp";
 
 const DEFAULTS = {
   out: "reels",
@@ -18,33 +18,33 @@ const DEFAULTS = {
   port: "3100",
   scale: "1",
   crf: "18",
-}
+};
 
 function parseArgs(argv) {
-  const args = { ...DEFAULTS, "skip-build": false, slug: "" }
+  const args = { ...DEFAULTS, "skip-build": false, slug: "" };
 
   for (let i = 0; i < argv.length; i += 1) {
-    const arg = argv[i]
+    const arg = argv[i];
 
     if (!arg.startsWith("--")) {
-      if (!args.slug) args.slug = arg.replace(/^\//, "")
-      continue
+      if (!args.slug) args.slug = arg.replace(/^\//, "");
+      continue;
     }
 
-    const key = arg.slice(2)
+    const key = arg.slice(2);
     if (key === "skip-build") {
-      args["skip-build"] = true
-      continue
+      args["skip-build"] = true;
+      continue;
     }
-    if (!(key in DEFAULTS)) throw new Error(`Unknown option --${key}`)
-    args[key] = argv[++i] ?? ""
+    if (!(key in DEFAULTS)) throw new Error(`Unknown option --${key}`);
+    args[key] = argv[++i] ?? "";
   }
 
   if (!args.slug) {
-    throw new Error("Which reel? e.g. npm run reel -- callback-tool")
+    throw new Error("Which reel? e.g. npm run reel -- callback-tool");
   }
 
-  return args
+  return args;
 }
 
 function run(command, commandArgs, options = {}) {
@@ -52,55 +52,55 @@ function run(command, commandArgs, options = {}) {
     stdio: options.quiet ? "ignore" : "inherit",
     shell: false,
     ...options,
-  })
+  });
 }
 
 function waitForExit(child) {
   return new Promise((resolve, reject) => {
     child.on("exit", (code) =>
       code === 0 ? resolve() : reject(new Error(`exited with ${code}`)),
-    )
-    child.on("error", reject)
-  })
+    );
+    child.on("error", reject);
+  });
 }
 
 // Any HTTP answer, a 401 included, means the server is up.
 async function reachable(url) {
   try {
-    await fetch(url, { signal: AbortSignal.timeout(1500) })
-    return true
+    await fetch(url, { signal: AbortSignal.timeout(1500) });
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
 async function waitUntilReachable(url, timeoutMs = 60_000) {
-  const deadline = Date.now() + timeoutMs
+  const deadline = Date.now() + timeoutMs;
 
   while (Date.now() < deadline) {
-    if (await reachable(url)) return
-    await new Promise((resolve) => setTimeout(resolve, 400))
+    if (await reachable(url)) return;
+    await new Promise((resolve) => setTimeout(resolve, 400));
   }
 
-  throw new Error(`Server never came up at ${url}`)
+  throw new Error(`Server never came up at ${url}`);
 }
 
 // .env.local is read by Next, not Node: load it so the capture browser gets the site password.
-nextEnv.loadEnvConfig(process.cwd(), true, { error: () => {}, info: () => {} })
+nextEnv.loadEnvConfig(process.cwd(), true, { error: () => {}, info: () => {} });
 
 function credentials() {
-  const password = process.env.SITE_PASSWORD
-  return password ? { httpCredentials: { password, username: "render" } } : {}
+  const password = process.env.SITE_PASSWORD;
+  return password ? { httpCredentials: { password, username: "render" } } : {};
 }
 
-const POSTER = { width: 1280, height: 720 }
-const POSTER_MANIFEST = "src/lib/site/reel-posters.json"
+const POSTER = { width: 1280, height: 720 };
+const POSTER_MANIFEST = "src/lib/site/reel-posters.json";
 
 async function writePosterManifest(slug, buffer) {
-  let previous = { fingerprints: {} }
+  let previous = { fingerprints: {} };
 
   try {
-    previous = JSON.parse(await readFile(POSTER_MANIFEST, "utf8"))
+    previous = JSON.parse(await readFile(POSTER_MANIFEST, "utf8"));
   } catch {
     /* First reel — there is no manifest yet. */
   }
@@ -108,7 +108,7 @@ async function writePosterManifest(slug, buffer) {
   const fingerprints = {
     ...previous.fingerprints,
     [slug]: createHash("sha256").update(buffer).digest("hex").slice(0, 16),
-  }
+  };
 
   await writeFile(
     POSTER_MANIFEST,
@@ -123,65 +123,65 @@ async function writePosterManifest(slug, buffer) {
       null,
       2,
     )}\n`,
-  )
+  );
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2))
-  const scale = Number(args.scale)
+  const args = parseArgs(process.argv.slice(2));
+  const scale = Number(args.scale);
 
-  let baseUrl = args.url
-  let server
+  let baseUrl = args.url;
+  let server;
 
   if (!baseUrl) {
-    baseUrl = `http://localhost:${args.port}`
+    baseUrl = `http://localhost:${args.port}`;
 
     if (await reachable(baseUrl)) {
-      console.log(`Reusing the server already on ${baseUrl}`)
+      console.log(`Reusing the server already on ${baseUrl}`);
     } else {
       if (!args["skip-build"]) {
-        console.log("Building…")
-        await waitForExit(run("npx", ["next", "build"]))
+        console.log("Building…");
+        await waitForExit(run("npx", ["next", "build"]));
       }
 
-      console.log(`Starting next start on ${baseUrl}…`)
-      server = run("npx", ["next", "start", "-p", args.port], { quiet: true })
-      await waitUntilReachable(baseUrl)
+      console.log(`Starting next start on ${baseUrl}…`);
+      server = run("npx", ["next", "start", "-p", args.port], { quiet: true });
+      await waitUntilReachable(baseUrl);
     }
   }
 
-  const outDir = path.resolve(args.out)
-  await mkdir(outDir, { recursive: true })
-  const outFile = path.join(outDir, `${args.slug}.mp4`)
+  const outDir = path.resolve(args.out);
+  await mkdir(outDir, { recursive: true });
+  const outFile = path.join(outDir, `${args.slug}.mp4`);
 
-  const browser = await chromium.launch()
-  let ffmpeg
+  const browser = await chromium.launch();
+  let ffmpeg;
 
   try {
     const context = await browser.newContext({
       ...credentials(),
       viewport: { width: 1920, height: 1080 },
       deviceScaleFactor: scale,
-    })
+    });
 
-    const page = await context.newPage()
-    const target = new URL(`/reels/${args.slug}?render=1`, baseUrl).href
+    const page = await context.newPage();
+    const target = new URL(`/reels/${args.slug}?render=1`, baseUrl).href;
 
-    console.log(`Loading ${target}`)
-    await page.goto(target, { waitUntil: "networkidle" })
+    console.log(`Loading ${target}`);
+    await page.goto(target, { waitUntil: "networkidle" });
 
     // Frames are taken from the canvas, so hide every sibling (toasts, the dev overlay) or it lands in the video.
     await page.addStyleTag({
       content: "body > *:not([data-reel-root]) { display: none !important }",
-    })
+    });
 
     // Wait on the composition's seek hook, not a timeout, so frame 0 is reliable.
     await page.waitForFunction(() => Boolean(window.__reel), null, {
       timeout: 30_000,
-    })
+    });
 
     // Decode fonts and images before frame 0, or the opening renders in a fallback face with blank panels.
-    await page.evaluate(() => document.fonts.ready)
+    await page.evaluate(() => document.fonts.ready);
     await page.evaluate(() =>
       Promise.all(
         Array.from(document.images)
@@ -189,23 +189,23 @@ async function main() {
           .map(
             (image) =>
               new Promise((resolve) => {
-                image.onload = resolve
-                image.onerror = resolve
+                image.onload = resolve;
+                image.onerror = resolve;
               }),
           ),
       ),
-    )
+    );
 
     const { duration, fps } = await page.evaluate(() => ({
       duration: window.__reel.duration,
       fps: window.__reel.fps,
-    }))
+    }));
 
-    const width = 1920 * scale
-    const height = 1080 * scale
+    const width = 1920 * scale;
+    const height = 1080 * scale;
     console.log(
       `${duration} frames at ${fps}fps → ${width}x${height} → ${outFile}`,
-    )
+    );
 
     ffmpeg = run(
       "ffmpeg",
@@ -233,54 +233,54 @@ async function main() {
         outFile,
       ],
       { stdio: ["pipe", "ignore", "ignore"] },
-    )
+    );
 
-    const canvas = page.locator("[data-reel-canvas]")
-    const posterFrame = Math.floor(duration * 0.35)
-    const started = Date.now()
-    let poster
+    const canvas = page.locator("[data-reel-canvas]");
+    const posterFrame = Math.floor(duration * 0.35);
+    const started = Date.now();
+    let poster;
 
     for (let frame = 0; frame < duration; frame += 1) {
-      await page.evaluate((n) => window.__reel.seek(n), frame)
-      const buffer = await canvas.screenshot({ type: "png" })
+      await page.evaluate((n) => window.__reel.seek(n), frame);
+      const buffer = await canvas.screenshot({ type: "png" });
 
       // Respect backpressure: ffmpeg encodes slower than Chromium hands over frames.
-      if (!ffmpeg.stdin.write(buffer)) await once(ffmpeg.stdin, "drain")
+      if (!ffmpeg.stdin.write(buffer)) await once(ffmpeg.stdin, "drain");
 
       // Frame 0 is usually a blank canvas, so the poster is taken a third of the way in.
       if (frame === posterFrame) {
         poster = await sharp(buffer)
           .resize({ width: POSTER.width })
           .webp({ quality: 82 })
-          .toBuffer()
+          .toBuffer();
 
         await writeFile(
           path.join("public", "reels", args.slug, "poster.webp"),
           poster,
-        )
+        );
       }
 
       if (frame % 60 === 0 || frame === duration - 1) {
-        const pct = Math.round(((frame + 1) / duration) * 100)
-        process.stdout.write(`\r  ${pct}%  frame ${frame + 1}/${duration}`)
+        const pct = Math.round(((frame + 1) / duration) * 100);
+        process.stdout.write(`\r  ${pct}%  frame ${frame + 1}/${duration}`);
       }
     }
 
-    ffmpeg.stdin.end()
-    await waitForExit(ffmpeg)
-    ffmpeg = undefined
+    ffmpeg.stdin.end();
+    await waitForExit(ffmpeg);
+    ffmpeg = undefined;
 
-    if (poster) await writePosterManifest(args.slug, poster)
+    if (poster) await writePosterManifest(args.slug, poster);
 
-    const took = Math.round((Date.now() - started) / 1000)
-    console.log(`\n\nDone in ${took}s → ${outFile}`)
+    const took = Math.round((Date.now() - started) / 1000);
+    console.log(`\n\nDone in ${took}s → ${outFile}`);
 
-    await context.close()
+    await context.close();
   } finally {
-    ffmpeg?.kill()
-    await browser.close()
-    server?.kill()
+    ffmpeg?.kill();
+    await browser.close();
+    server?.kill();
   }
 }
 
-await main()
+await main();

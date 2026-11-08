@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -10,13 +10,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/shared/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -24,8 +24,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -33,26 +33,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   SOURCE_LABELS,
   isFileSource,
   sourceHref,
   type Source,
-} from "@/lib/mockups/knowledge-base-data"
+} from "@/lib/mockups/knowledge-base-data";
 import {
   DownloadIcon,
   FailedIcon,
   ReadyIcon,
   RemoveIcon,
-} from "@/components/mockups/knowledge-base/icons"
+} from "@/components/mockups/knowledge-base/icons";
 
 export function SourceTable({
   sources,
   onRemove,
 }: {
-  sources: Source[]
-  onRemove: (id: string) => void
+  sources: Source[];
+  onRemove: (id: string) => void;
 }) {
   return (
     <Table>
@@ -122,15 +122,15 @@ export function SourceTable({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
 
 function RemoveSource({
   source,
   onRemove,
 }: {
-  source: Source
-  onRemove: () => void
+  source: Source;
+  onRemove: () => void;
 }) {
   return (
     <AlertDialog>
@@ -163,7 +163,7 @@ function RemoveSource({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }
 
 function SourceName({ source }: { source: Source }) {
@@ -177,14 +177,14 @@ function SourceName({ source }: { source: Source }) {
       >
         {source.name}
       </a>
-    )
+    );
   }
 
   if (source.kind === "text") {
-    return <TextPreview source={source} />
+    return <TextPreview source={source} />;
   }
 
-  return <span className="font-medium">{source.name}</span>
+  return <span className="font-medium">{source.name}</span>;
 }
 
 function TextPreview({ source }: { source: Source }) {
@@ -212,7 +212,7 @@ function TextPreview({ source }: { source: Source }) {
         </p>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function StatusBadge({ source }: { source: Source }) {
@@ -222,7 +222,7 @@ function StatusBadge({ source }: { source: Source }) {
         <Spinner />
         Extracting
       </Badge>
-    )
+    );
   }
 
   if (source.status === "failed") {
@@ -231,7 +231,7 @@ function StatusBadge({ source }: { source: Source }) {
         <FailedIcon />
         Can&apos;t be read
       </Badge>
-    )
+    );
   }
 
   return (
@@ -239,5 +239,5 @@ function StatusBadge({ source }: { source: Source }) {
       <ReadyIcon className="text-success" />
       Ready
     </Badge>
-  )
+  );
 }

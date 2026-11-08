@@ -1,14 +1,14 @@
 /** Totals are summed from the generated series so the cards and the chart always agree. */
 
-export type PresetPeriod = "today" | "week" | "month" | "quarter"
-export type Period = PresetPeriod | "custom"
+export type PresetPeriod = "today" | "week" | "month" | "quarter";
+export type Period = PresetPeriod | "custom";
 
 export const PRESET_PERIODS: readonly { id: PresetPeriod; label: string }[] = [
   { id: "today", label: "Today" },
   { id: "week", label: "Last 7 days" },
   { id: "month", label: "Last 30 days" },
   { id: "quarter", label: "Last 90 days" },
-]
+];
 
 const COMPARISON: Record<Period, string> = {
   today: "vs yesterday",
@@ -16,100 +16,100 @@ const COMPARISON: Record<Period, string> = {
   month: "vs previous 30 days",
   quarter: "vs previous 90 days",
   custom: "vs previous period",
-}
+};
 
-export type ChartPoint = { label: string; inbound: number; outbound: number }
+export type ChartPoint = { label: string; inbound: number; outbound: number };
 
-export type Series = "inbound" | "outbound"
+export type Series = "inbound" | "outbound";
 
 export type NumberCard = {
-  label: string
-  value: string
+  label: string;
+  value: string;
   /** Percent against the previous window. Only the top three carry one. */
-  change?: number
-  riseIsGood?: boolean
-  series?: Series
-}
+  change?: number;
+  riseIsGood?: boolean;
+  series?: Series;
+};
 
 type DashboardData = {
-  comparison: string
-  summary: NumberCard[]
-  analytics: NumberCard[]
-  chart: ChartPoint[]
-  chartDescription: string
-}
+  comparison: string;
+  summary: NumberCard[];
+  analytics: NumberCard[];
+  chart: ChartPoint[];
+  chartDescription: string;
+};
 
 /* Deterministic noise, so the mockup draws the same chart on every load. */
 function noise(seed: number) {
-  const x = Math.sin(seed * 12.9898) * 43758.5453
-  return x - Math.floor(x)
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
 }
 
-const DAY_MS = 24 * 60 * 60 * 1000
-const TODAY = new Date(Date.UTC(2026, 9, 20))
+const DAY_MS = 24 * 60 * 60 * 1000;
+const TODAY = new Date(Date.UTC(2026, 9, 20));
 
 function dayLabel(date: Date) {
   return date.toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
     timeZone: "UTC",
-  })
+  });
 }
 
 function hourLabel(hour: number) {
-  if (hour === 0) return "12AM"
-  if (hour === 12) return "12PM"
-  return hour < 12 ? `${hour}AM` : `${hour - 12}PM`
+  if (hour === 0) return "12AM";
+  if (hour === 12) return "12PM";
+  return hour < 12 ? `${hour}AM` : `${hour - 12}PM`;
 }
 
 function hourlySeries(): ChartPoint[] {
-  const now = 15
+  const now = 15;
   return Array.from({ length: now + 1 }, (_, hour) => {
-    const shape = Math.max(0, Math.sin(((hour - 6) / 14) * Math.PI))
+    const shape = Math.max(0, Math.sin(((hour - 6) / 14) * Math.PI));
     return {
       label: hourLabel(hour),
       inbound: Math.round(shape * 38 + noise(hour + 1) * 6),
       outbound: Math.round(shape * 22 + noise(hour + 40) * 5),
-    }
-  })
+    };
+  });
 }
 
 function dailySeries(from: Date, days: number, seed: number): ChartPoint[] {
   return Array.from({ length: days }, (_, index) => {
-    const date = new Date(from.getTime() + index * DAY_MS)
-    const weekday = date.getUTCDay()
-    const weekend = weekday === 5 || weekday === 6 ? 0.45 : 1
+    const date = new Date(from.getTime() + index * DAY_MS);
+    const weekday = date.getUTCDay();
+    const weekend = weekday === 5 || weekday === 6 ? 0.45 : 1;
     return {
       label: dayLabel(date),
       inbound: Math.round((270 + noise(seed + index) * 90) * weekend),
       outbound: Math.round((170 + noise(seed + index + 500) * 70) * weekend),
-    }
-  })
+    };
+  });
 }
 
 function sum(points: ChartPoint[], key: "inbound" | "outbound") {
-  return points.reduce((total, point) => total + point[key], 0)
+  return points.reduce((total, point) => total + point[key], 0);
 }
 
 function duration(seconds: number) {
-  return `${Math.floor(seconds / 60)}m ${seconds % 60}s`
+  return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
 }
 
 type Shape = {
-  chart: ChartPoint[]
-  durationSeconds: number
-  successRate: number
-  scenarios: number
-  changes: [number, number, number]
-}
+  chart: ChartPoint[];
+  durationSeconds: number;
+  successRate: number;
+  scenarios: number;
+  changes: [number, number, number];
+};
 
 function build(
   period: Period,
   shape: Shape,
   chartDescription: string,
 ): DashboardData {
-  const inbound = sum(shape.chart, "inbound")
-  const outbound = sum(shape.chart, "outbound")
+  const inbound = sum(shape.chart, "inbound");
+  const outbound = sum(shape.chart, "outbound");
   return {
     comparison: COMPARISON[period],
     summary: [
@@ -146,7 +146,7 @@ function build(
     ],
     chart: shape.chart,
     chartDescription,
-  }
+  };
 }
 
 const SHAPES: Record<PresetPeriod, Shape> = {
@@ -178,23 +178,23 @@ const SHAPES: Record<PresetPeriod, Shape> = {
     scenarios: 19,
     changes: [18, -4, 3],
   },
-}
+};
 
-export type CustomRange = { from: Date; to: Date }
+export type CustomRange = { from: Date; to: Date };
 
 export function rangeLabel(range: CustomRange) {
-  return `${dayLabel(range.from)} – ${dayLabel(range.to)} (UTC)`
+  return `${dayLabel(range.from)} – ${dayLabel(range.to)} (UTC)`;
 }
 
 function chartDescription(period: Period, range: CustomRange | undefined) {
-  if (period === "today") return "Calls each hour, today"
+  if (period === "today") return "Calls each hour, today";
   if (period === "custom") {
     return range
       ? `Calls each day, ${dayLabel(range.from)} – ${dayLabel(range.to)}`
-      : "Calls each day"
+      : "Calls each day";
   }
-  const preset = PRESET_PERIODS.find((entry) => entry.id === period)
-  return `Calls each day, ${preset?.label.toLowerCase() ?? ""}`
+  const preset = PRESET_PERIODS.find((entry) => entry.id === period);
+  return `Calls each day, ${preset?.label.toLowerCase() ?? ""}`;
 }
 
 export function dashboardData(
@@ -204,8 +204,8 @@ export function dashboardData(
   const days =
     range === undefined
       ? 14
-      : Math.round((range.to.getTime() - range.from.getTime()) / DAY_MS) + 1
-  const from = range?.from ?? new Date(TODAY.getTime() - (days - 1) * DAY_MS)
+      : Math.round((range.to.getTime() - range.from.getTime()) / DAY_MS) + 1;
+  const from = range?.from ?? new Date(TODAY.getTime() - (days - 1) * DAY_MS);
   const shape: Shape =
     period === "custom"
       ? {
@@ -215,10 +215,10 @@ export function dashboardData(
           scenarios: 12,
           changes: [-3, 2, 0],
         }
-      : SHAPES[period]
+      : SHAPES[period];
 
-  const description = chartDescription(period, range)
-  if (!noCalls) return build(period, shape, description)
+  const description = chartDescription(period, range);
+  if (!noCalls) return build(period, shape, description);
 
   return build(
     period,
@@ -234,5 +234,5 @@ export function dashboardData(
       changes: [-100, -100, 0],
     },
     description,
-  )
+  );
 }

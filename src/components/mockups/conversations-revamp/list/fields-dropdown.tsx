@@ -1,52 +1,52 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import {
   COLUMN_LABELS,
   DEFAULT_COLUMNS,
   type ColumnId,
   type ColumnSetting,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 import {
   DragHandleIcon,
   FieldsIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 
 export function FieldsDropdown({
   columns,
   onChange,
 }: {
-  columns: ColumnSetting[]
-  onChange: (columns: ColumnSetting[]) => void
+  columns: ColumnSetting[];
+  onChange: (columns: ColumnSetting[]) => void;
 }) {
-  const [dragging, setDragging] = React.useState<ColumnId | null>(null)
-  const [dropAt, setDropAt] = React.useState<null | number>(null)
+  const [dragging, setDragging] = React.useState<ColumnId | null>(null);
+  const [dropAt, setDropAt] = React.useState<null | number>(null);
 
-  const shown = columns.filter((column) => column.visible).length
+  const shown = columns.filter((column) => column.visible).length;
 
   function move(from: number, to: number) {
-    if (to < 0 || to >= columns.length || from === to) return
-    const next = [...columns]
-    const [moved] = next.splice(from, 1)
-    next.splice(to, 0, moved)
-    onChange(next)
+    if (to < 0 || to >= columns.length || from === to) return;
+    const next = [...columns];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onChange(next);
   }
 
   // Drop uses an insertion point, which shifts once the row is lifted out.
   function moveTo(from: number, insertAt: number) {
-    const next = [...columns]
-    const [moved] = next.splice(from, 1)
-    next.splice(insertAt > from ? insertAt - 1 : insertAt, 0, moved)
-    onChange(next)
+    const next = [...columns];
+    const [moved] = next.splice(from, 1);
+    next.splice(insertAt > from ? insertAt - 1 : insertAt, 0, moved);
+    onChange(next);
   }
 
   function toggle(id: ColumnId) {
@@ -54,12 +54,12 @@ export function FieldsDropdown({
       columns.map((column) =>
         column.id === id ? { ...column, visible: !column.visible } : column,
       ),
-    )
+    );
   }
 
   function endDrag() {
-    setDragging(null)
-    setDropAt(null)
+    setDragging(null);
+    setDropAt(null);
   }
 
   return (
@@ -99,18 +99,20 @@ export function FieldsDropdown({
               key={column.id}
               onDragEnd={endDrag}
               onDragOver={(event) => {
-                event.preventDefault()
-                const box = event.currentTarget.getBoundingClientRect()
-                const below = event.clientY > box.top + box.height / 2
-                setDropAt(below ? index + 1 : index)
+                event.preventDefault();
+                const box = event.currentTarget.getBoundingClientRect();
+                const below = event.clientY > box.top + box.height / 2;
+                setDropAt(below ? index + 1 : index);
               }}
               onDragStart={() => {
-                setDragging(column.id)
+                setDragging(column.id);
               }}
               onDrop={() => {
-                const from = columns.findIndex((entry) => entry.id === dragging)
-                if (from !== -1 && dropAt !== null) moveTo(from, dropAt)
-                endDrag()
+                const from = columns.findIndex(
+                  (entry) => entry.id === dragging,
+                );
+                if (from !== -1 && dropAt !== null) moveTo(from, dropAt);
+                endDrag();
               }}
             >
               {dropAt === index ? <DropLine className="-top-px" /> : null}
@@ -123,12 +125,12 @@ export function FieldsDropdown({
                 className="shrink-0 cursor-grab text-muted-foreground"
                 onKeyDown={(event) => {
                   if (event.key === "ArrowUp") {
-                    event.preventDefault()
-                    move(index, index - 1)
+                    event.preventDefault();
+                    move(index, index - 1);
                   }
                   if (event.key === "ArrowDown") {
-                    event.preventDefault()
-                    move(index, index + 1)
+                    event.preventDefault();
+                    move(index, index + 1);
                   }
                 }}
                 size="icon-xs"
@@ -145,7 +147,7 @@ export function FieldsDropdown({
                 aria-label={`Show ${COLUMN_LABELS[column.id]}`}
                 checked={column.visible}
                 onCheckedChange={() => {
-                  toggle(column.id)
+                  toggle(column.id);
                 }}
               />
             </div>
@@ -155,7 +157,7 @@ export function FieldsDropdown({
         <Button
           className="self-end"
           onClick={() => {
-            onChange(DEFAULT_COLUMNS)
+            onChange(DEFAULT_COLUMNS);
           }}
           size="sm"
           variant="ghost"
@@ -164,7 +166,7 @@ export function FieldsDropdown({
         </Button>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 function DropLine({ className }: { className: string }) {
@@ -175,5 +177,5 @@ function DropLine({ className }: { className: string }) {
         className,
       )}
     />
-  )
+  );
 }

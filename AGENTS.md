@@ -45,8 +45,8 @@ The ticket and the PRD are the spec. Screenshots the user attaches are the spec.
 | `npm run dev` | http://localhost:3000 |
 | `npm run lint` | The design system, enforced. **Must report zero problems.** |
 | `npm run lint:fix` | The same, with the auto-fixable ones applied |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run format` | Prettier (skips generated and markdown files) |
+| `npm run typecheck` | `tsrs --noEmit` |
+| `npm run format` | oxfmt (shared style; skips generated and markdown files) |
 | `npm run shots` | Screenshots every route → `screenshots/` |
 | `npm run reel -- <slug>` | Renders that reel to `reels/<slug>.mp4` (1080p, h264) |
 | `npm run registry` | Regenerates `registry.json` + `public/r/*.json` from the import graph |
@@ -87,7 +87,7 @@ src/app/globals.css                      every token: colour, z-layers, motion
 src/app/page.tsx                         the index — renders the registry, nothing else
 src/lib/utils.ts                         shadcn's cn(), the one loose file — primitives import it from here
 eslint-rules/                            the sarj/* plugin, one file per rule
-scripts/                                 new-mockup.mjs, screenshots.mjs, new-reel.mjs, render-reel.mjs
+scripts/                                 new-mockup.mts, screenshots.mjs, new-reel.mjs, render-reel.mjs
 .claude/skills/                          every skill, one folder each — see below
 docs/audits/                             audits of the product against the system
 docs/handoffs/                           handoff notes for one piece of work
@@ -146,7 +146,7 @@ Reports and notes about the work go in `docs/`, never the repo root.
 
 ## The ten rules — enforced, not advisory
 
-`npm run lint` runs a local ESLint plugin. These are real errors everywhere
+`npm run lint` runs the managed Standards gate and local Oxlint rules. These are real errors everywhere
 outside `src/components/ui` and `src/hooks`, which `npx shadcn add` regenerates
 wholesale. **Zero warnings is the standing state** — the moment one warning is
 normal, new ones stop being visible.
@@ -170,7 +170,7 @@ shape, Cancel-then-verb footers, header icons, red buttons, Select position,
 form labels, the table shape, empty states, the pagination block, nested
 cards, banned copy, sentence case, scrollbars and type weights. The full
 table, what each one enforces, and the `LEGACY` exemption list in
-`eslint.config.mjs` are in `sj-design`.
+`oxlint.config.mts` are in `sj-design`.
 
 **Colour tokens — there are no others.** Surfaces `background` `card` `popover`
 `muted` `secondary` `accent` `sidebar` · Text `foreground` `muted-foreground`

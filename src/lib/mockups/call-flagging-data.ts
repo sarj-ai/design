@@ -1,7 +1,7 @@
 export const CALL = {
   id: "A1B2C3",
   timestamp: "02:14",
-}
+};
 
 export const FLAG_CATEGORIES = [
   "stt",
@@ -14,9 +14,9 @@ export const FLAG_CATEGORIES = [
   "connectivity",
   "voicemail",
   "other",
-] as const
+] as const;
 
-export type FlagCategory = (typeof FLAG_CATEGORIES)[number]
+export type FlagCategory = (typeof FLAG_CATEGORIES)[number];
 
 /** Subcategory ids repeat across parents: identity is the (category, id) pair, never the id alone. */
 export const FLAG_SUBCATEGORIES = {
@@ -43,12 +43,12 @@ export const FLAG_SUBCATEGORIES = {
   connectivity: [],
   voicemail: [],
   other: [],
-} as const satisfies Record<FlagCategory, readonly string[]>
+} as const satisfies Record<FlagCategory, readonly string[]>;
 
 type FlagSubcategory<C extends FlagCategory = FlagCategory> =
-  (typeof FLAG_SUBCATEGORIES)[C][number]
+  (typeof FLAG_SUBCATEGORIES)[C][number];
 
-type SubcategoryRule = "required" | "optional" | "none"
+type SubcategoryRule = "required" | "optional" | "none";
 
 export const FLAG_SUBCATEGORY_RULES: Record<FlagCategory, SubcategoryRule> = {
   stt: "required",
@@ -61,11 +61,11 @@ export const FLAG_SUBCATEGORY_RULES: Record<FlagCategory, SubcategoryRule> = {
   connectivity: "none",
   voicemail: "none",
   other: "none",
-}
+};
 
 type CallFlagSelection = {
-  [C in FlagCategory]: { category: C; subcategories: FlagSubcategory<C>[] }
-}[FlagCategory]
+  [C in FlagCategory]: { category: C; subcategories: FlagSubcategory<C>[] };
+}[FlagCategory];
 
 export const FLAG_CATEGORY_LABELS: Record<FlagCategory, string> = {
   stt: "STT",
@@ -78,10 +78,10 @@ export const FLAG_CATEGORY_LABELS: Record<FlagCategory, string> = {
   connectivity: "Connectivity",
   voicemail: "Voicemail",
   other: "Other",
-}
+};
 
 const FLAG_SUBCATEGORY_LABELS: {
-  [C in FlagCategory]: Record<FlagSubcategory<C>, string>
+  [C in FlagCategory]: Record<FlagSubcategory<C>, string>;
 } = {
   stt: {
     missed_words: "Missed words",
@@ -115,17 +115,17 @@ const FLAG_SUBCATEGORY_LABELS: {
   connectivity: {},
   voicemail: {},
   other: {},
-}
+};
 
 /** Not an enum value: submits the category with an empty `subcategories` list. */
-export const UNSPECIFIED_SUBCATEGORY_LABEL = "Not sure"
+export const UNSPECIFIED_SUBCATEGORY_LABEL = "Not sure";
 
 export function subcategoryLabel(category: FlagCategory, id: string): string {
-  const labels: Record<string, string> = FLAG_SUBCATEGORY_LABELS[category]
-  return labels[id] ?? id
+  const labels: Record<string, string> = FLAG_SUBCATEGORY_LABELS[category];
+  return labels[id] ?? id;
 }
 
 export const INITIAL_FLAG: CallFlagSelection = {
   category: "stt",
   subcategories: ["missed_words", "non_arab_dialect"],
-}
+};

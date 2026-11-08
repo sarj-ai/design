@@ -1,7 +1,7 @@
-import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { classesOf, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
-const LABELS = new Set(["FieldLabel", "Label", "FieldLegend", "FieldTitle"])
-const MUTED = /^text-muted-foreground(\/\d+)?$/
+const LABELS = new Set(["FieldLabel", "Label", "FieldLegend", "FieldTitle"]);
+const MUTED = /^text-muted-foreground(\/\d+)?$/;
 
 const formLabels = {
   meta: {
@@ -17,25 +17,25 @@ const formLabels = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXOpeningElement(opening) {
-        const name = imports.ui(jsxName(opening))
-        if (!LABELS.has(name)) return
+        const name = imports.ui(jsxName(opening));
+        if (!LABELS.has(name)) return;
         for (const { raw, base, variants, node } of classesOf(opening)) {
           if (MUTED.test(base) && variants.length === 0) {
             context.report({
               node,
               messageId: "muted",
               data: { cls: raw, name },
-            })
+            });
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default formLabels
+export default formLabels;

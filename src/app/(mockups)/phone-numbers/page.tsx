@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { CallActivityTab } from "@/components/mockups/phone-numbers/call-activity-tab"
-import { OutboundTab } from "@/components/mockups/phone-numbers/outbound-tab"
-import { ProvisionedTab } from "@/components/mockups/phone-numbers/provisioned-tab"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { CallActivityTab } from "@/components/mockups/phone-numbers/call-activity-tab";
+import { OutboundTab } from "@/components/mockups/phone-numbers/outbound-tab";
+import { ProvisionedTab } from "@/components/mockups/phone-numbers/provisioned-tab";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function PhoneNumbersPage() {
   return (
@@ -44,5 +44,5 @@ export default function PhoneNumbersPage() {
         </main>
       </TooltipProvider>
     </MockupShell>
-  )
+  );
 }

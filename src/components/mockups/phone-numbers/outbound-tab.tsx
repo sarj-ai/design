@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
+} from "@/components/shared/data-table";
 import {
   AssignIcon,
   DefaultTrunkIcon,
   OrganizationIcon,
   RowActionsIcon,
   UnassignIcon,
-} from "@/components/mockups/phone-numbers/icons"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/mockups/phone-numbers/icons";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,30 +21,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TRUNKS, type TrunkRow } from "@/lib/mockups/phone-numbers-data"
+} from "@/components/ui/table";
+import { TRUNKS, type TrunkRow } from "@/lib/mockups/phone-numbers-data";
 
 const ASSIGNED_FORMAT = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "short",
   year: "numeric",
   timeZone: "UTC",
-})
+});
 
 /* The platform's sort: defaults, then most-assigned, then alphabetical. */
 const SORTED = TRUNKS.toSorted((a, b) => {
-  if (a.isGlobalDefault !== b.isGlobalDefault) return a.isGlobalDefault ? -1 : 1
+  if (a.isGlobalDefault !== b.isGlobalDefault)
+    return a.isGlobalDefault ? -1 : 1;
   const assigned =
-    b.assignedOrganizations.length - a.assignedOrganizations.length
-  if (assigned !== 0) return assigned
-  return a.sipTrunkId.localeCompare(b.sipTrunkId)
-})
+    b.assignedOrganizations.length - a.assignedOrganizations.length;
+  if (assigned !== 0) return assigned;
+  return a.sipTrunkId.localeCompare(b.sipTrunkId);
+});
 
 export function OutboundTab() {
   return (
@@ -123,7 +124,7 @@ export function OutboundTab() {
         )}
       </TableBody>
     </DataTable>
-  )
+  );
 }
 
 function TrunkRowActions({ trunk }: { trunk: TrunkRow }) {
@@ -162,5 +163,5 @@ function TrunkRowActions({ trunk }: { trunk: TrunkRow }) {
         ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

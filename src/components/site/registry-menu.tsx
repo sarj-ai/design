@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { CopyMenu } from "@/components/site/copy-menu"
-import { useCopy } from "@/components/site/use-copy"
-import { INSTALL_COMMANDS, registryUrl } from "@/lib/site/registry"
-import { RegistryIcon } from "@/components/shell/workspace-icons"
+import { CopyMenu } from "@/components/site/copy-menu";
+import { useCopy } from "@/components/site/use-copy";
+import { INSTALL_COMMANDS, registryUrl } from "@/lib/site/registry";
+import { RegistryIcon } from "@/components/shell/workspace-icons";
 
 export function RegistryMenu({
   slug,
   title,
   tour,
 }: {
-  slug: string
-  title: string
+  slug: string;
+  title: string;
   /** Set on the first card only — see `hey-click.tsx`. */
-  tour?: string
+  tour?: string;
 }) {
-  const { copy } = useCopy()
-  const url = registryUrl(slug)
+  const { copy } = useCopy();
+  const url = registryUrl(slug);
 
   return (
     <CopyMenu
@@ -36,5 +36,5 @@ export function RegistryMenu({
           ),
       }))}
     />
-  )
+  );
 }

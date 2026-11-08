@@ -1,6 +1,6 @@
-import { Figure, type FigureProps, LINE } from "@/components/shared/figure"
+import { Figure, type FigureProps, LINE } from "@/components/shared/figure";
 
-import { TOPIC_FIGURE_VIEWBOX } from "./frame"
+import { TOPIC_FIGURE_VIEWBOX } from "./frame";
 
 /* Every tile draws inside the same box: x 50 to 190, y 78 to 190. */
 
@@ -17,7 +17,7 @@ function IndexPageFigure({ className }: FigureProps) {
         </g>
       ))}
     </Figure>
-  )
+  );
 }
 
 function TablesFigure({ className }: FigureProps) {
@@ -28,7 +28,7 @@ function TablesFigure({ className }: FigureProps) {
       <path {...LINE} d="M50 122h140M50 144h140M50 166h140" opacity=".5" />
       <path {...LINE} d="M98 78v112M146 78v112" opacity=".5" />
     </Figure>
-  )
+  );
 }
 
 function PaginationFigure({ className }: FigureProps) {
@@ -46,7 +46,7 @@ function PaginationFigure({ className }: FigureProps) {
       <rect {...LINE} height="20" rx="4" width="20" x="170" y="168" />
       <path {...LINE} d="M178 173l5 5-5 5" />
     </Figure>
-  )
+  );
 }
 
 function LoadingFigure({ className }: FigureProps) {
@@ -68,7 +68,7 @@ function LoadingFigure({ className }: FigureProps) {
         </g>
       ))}
     </Figure>
-  )
+  );
 }
 
 function EmptyStateFigure({ className }: FigureProps) {
@@ -87,7 +87,7 @@ function EmptyStateFigure({ className }: FigureProps) {
       <rect {...LINE} height="22" rx="5" width="48" x="96" y="138" />
       <path {...LINE} d="M120 144v10M115 149h10" />
     </Figure>
-  )
+  );
 }
 
 function NoResultsFigure({ className }: FigureProps) {
@@ -99,7 +99,7 @@ function NoResultsFigure({ className }: FigureProps) {
       <rect {...LINE} height="80" rx="6" width="140" x="50" y="110" />
       <path {...LINE} d="M50 130h140" opacity=".6" />
     </Figure>
-  )
+  );
 }
 
 function ErrorStateFigure({ className }: FigureProps) {
@@ -110,7 +110,7 @@ function ErrorStateFigure({ className }: FigureProps) {
       <path {...LINE} d="M134 176a14 14 0 1 1-14-14" opacity=".6" />
       <path {...LINE} d="M114 156l6 6-6 6" opacity=".6" />
     </Figure>
-  )
+  );
 }
 
 export const PATTERNS_B_FIGURES: Record<
@@ -124,4 +124,4 @@ export const PATTERNS_B_FIGURES: Record<
   "empty-state": EmptyStateFigure,
   "no-results": NoResultsFigure,
   "error-state": ErrorStateFigure,
-}
+};

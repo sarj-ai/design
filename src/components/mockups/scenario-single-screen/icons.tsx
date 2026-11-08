@@ -26,64 +26,64 @@ import {
   VariableIcon,
   VoiceIcon,
   Wrench01Icon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const PersonaIcon = icon(Mic01Icon, "PersonaIcon")
+export const PersonaIcon = icon(Mic01Icon, "PersonaIcon");
 
-export const LanguagesIcon = icon(Globe02Icon, "LanguagesIcon")
+export const LanguagesIcon = icon(Globe02Icon, "LanguagesIcon");
 
-export const TimezoneIcon = icon(Timer01Icon, "TimezoneIcon")
+export const TimezoneIcon = icon(Timer01Icon, "TimezoneIcon");
 
-export const KnowledgeIcon = icon(DatabaseIcon, "KnowledgeIcon")
+export const KnowledgeIcon = icon(DatabaseIcon, "KnowledgeIcon");
 
-export const ToolsIcon = icon(Wrench01Icon, "ToolsIcon")
+export const ToolsIcon = icon(Wrench01Icon, "ToolsIcon");
 
-export const CriteriaIcon = icon(Target02Icon, "CriteriaIcon")
+export const CriteriaIcon = icon(Target02Icon, "CriteriaIcon");
 
-export const ExtractionIcon = icon(PlugSocketIcon, "ExtractionIcon")
+export const ExtractionIcon = icon(PlugSocketIcon, "ExtractionIcon");
 
-export const RecordingIcon = icon(VoiceIcon, "RecordingIcon")
+export const RecordingIcon = icon(VoiceIcon, "RecordingIcon");
 
-export const VariablesIcon = icon(VariableIcon, "VariablesIcon")
+export const VariablesIcon = icon(VariableIcon, "VariablesIcon");
 
-export const InsightsIcon = icon(Idea01Icon, "InsightsIcon")
+export const InsightsIcon = icon(Idea01Icon, "InsightsIcon");
 
-export const OpportunitiesIcon = icon(ChartLineData01Icon, "OpportunitiesIcon")
+export const OpportunitiesIcon = icon(ChartLineData01Icon, "OpportunitiesIcon");
 
-export const OwnershipIcon = icon(Building01Icon, "OwnershipIcon")
+export const OwnershipIcon = icon(Building01Icon, "OwnershipIcon");
 
-export const OpenSettingIcon = icon(ArrowRight01Icon, "OpenSettingIcon")
+export const OpenSettingIcon = icon(ArrowRight01Icon, "OpenSettingIcon");
 
-export const TestCallIcon = icon(PlayIcon, "TestCallIcon")
+export const TestCallIcon = icon(PlayIcon, "TestCallIcon");
 
-export const PublishIcon = icon(RocketIcon, "PublishIcon")
+export const PublishIcon = icon(RocketIcon, "PublishIcon");
 
-export const AddIcon = icon(PlusSignIcon, "AddIcon")
+export const AddIcon = icon(PlusSignIcon, "AddIcon");
 
-export const RemoveIcon = icon(Delete02Icon, "RemoveIcon")
+export const RemoveIcon = icon(Delete02Icon, "RemoveIcon");
 
-export const DismissIcon = icon(Cancel01Icon, "DismissIcon")
+export const DismissIcon = icon(Cancel01Icon, "DismissIcon");
 
-export const FindIcon = icon(Search01Icon, "FindIcon")
+export const FindIcon = icon(Search01Icon, "FindIcon");
 
-export const UnsavedIcon = icon(Alert02Icon, "UnsavedIcon")
+export const UnsavedIcon = icon(Alert02Icon, "UnsavedIcon");
 
-export const ConfiguredIcon = icon(CheckmarkCircle02Icon, "ConfiguredIcon")
+export const ConfiguredIcon = icon(CheckmarkCircle02Icon, "ConfiguredIcon");
 
-export const EndCallToolIcon = icon(Cancel01Icon, "EndCallToolIcon")
-export const TransferToolIcon = icon(UserGroupIcon, "TransferToolIcon")
+export const EndCallToolIcon = icon(Cancel01Icon, "EndCallToolIcon");
+export const TransferToolIcon = icon(UserGroupIcon, "TransferToolIcon");
 export const SwitchLanguageToolIcon = icon(
   LanguageSkillIcon,
   "SwitchLanguageToolIcon",
-)
-export const VoicemailToolIcon = icon(VoiceIcon, "VoicemailToolIcon")
+);
+export const VoicemailToolIcon = icon(VoiceIcon, "VoicemailToolIcon");
 export const CollectDigitsToolIcon = icon(
   DialpadCircle01Icon,
   "CollectDigitsToolIcon",
-)
-export const HttpRequestToolIcon = icon(PlugSocketIcon, "HttpRequestToolIcon")
-export const IvrToolIcon = icon(Route01Icon, "IvrToolIcon")
-export const SallaToolIcon = icon(ShoppingBag01Icon, "SallaToolIcon")
-export const ZohoTicketToolIcon = icon(TicketStarIcon, "ZohoTicketToolIcon")
+);
+export const HttpRequestToolIcon = icon(PlugSocketIcon, "HttpRequestToolIcon");
+export const IvrToolIcon = icon(Route01Icon, "IvrToolIcon");
+export const SallaToolIcon = icon(ShoppingBag01Icon, "SallaToolIcon");
+export const ZohoTicketToolIcon = icon(TicketStarIcon, "ZohoTicketToolIcon");

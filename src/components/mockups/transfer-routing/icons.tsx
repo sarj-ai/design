@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Alert02Icon,
@@ -8,16 +8,16 @@ import {
   Delete02Icon,
   DragDropVerticalIcon,
   PlusSignIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const ReorderIcon = icon(DragDropVerticalIcon, "ReorderIcon")
-export const RemoveCaseIcon = icon(Cancel01Icon, "RemoveCaseIcon")
-export const CloseIcon = icon(Cancel01Icon, "CloseIcon")
-export const DeleteRouteIcon = icon(Delete02Icon, "DeleteRouteIcon")
-export const AddRouteIcon = icon(PlusSignIcon, "AddRouteIcon")
-export const SetDefaultIcon = icon(CheckmarkCircle02Icon, "SetDefaultIcon")
-export const ExpandIcon = icon(ArrowDown01Icon, "ExpandIcon")
+export const ReorderIcon = icon(DragDropVerticalIcon, "ReorderIcon");
+export const RemoveCaseIcon = icon(Cancel01Icon, "RemoveCaseIcon");
+export const CloseIcon = icon(Cancel01Icon, "CloseIcon");
+export const DeleteRouteIcon = icon(Delete02Icon, "DeleteRouteIcon");
+export const AddRouteIcon = icon(PlusSignIcon, "AddRouteIcon");
+export const SetDefaultIcon = icon(CheckmarkCircle02Icon, "SetDefaultIcon");
+export const ExpandIcon = icon(ArrowDown01Icon, "ExpandIcon");
 
-export const OverlapIcon = icon(Alert02Icon, "OverlapIcon")
+export const OverlapIcon = icon(Alert02Icon, "OverlapIcon");

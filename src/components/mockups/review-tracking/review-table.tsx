@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Table,
@@ -9,23 +9,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { DataTableHeaderRow } from "@/components/shared/data-table"
+} from "@/components/ui/table";
+import { DataTableHeaderRow } from "@/components/shared/data-table";
 import {
   DirectionChip,
   OutcomeBadge,
   ScenarioChip,
   StatusBadge,
-} from "@/components/mockups/conversations-revamp/list/status-badges"
-import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data"
-import { cn } from "@/lib/utils"
+} from "@/components/mockups/conversations-revamp/list/status-badges";
+import type { CallRow } from "@/lib/mockups/conversations-revamp-list-data";
+import { cn } from "@/lib/utils";
 
 type ExtraColumn = {
-  id: string
-  head: React.ReactNode
-  cell: (call: CallRow, index: number) => React.ReactNode
-  className?: string
-}
+  id: string;
+  head: React.ReactNode;
+  cell: (call: CallRow, index: number) => React.ReactNode;
+  className?: string;
+};
 
 /** Controls inside a row must stop the click, or ticking one also opens the call. */
 export function ReviewTable({
@@ -37,13 +37,13 @@ export function ReviewTable({
   timeMark,
   timeStrong,
 }: {
-  calls: CallRow[]
-  onOpen: (call: CallRow) => void
-  before?: ExtraColumn[]
-  after?: ExtraColumn[]
-  selected?: string | null
-  timeMark?: (call: CallRow) => React.ReactNode
-  timeStrong?: (call: CallRow) => boolean
+  calls: CallRow[];
+  onOpen: (call: CallRow) => void;
+  before?: ExtraColumn[];
+  after?: ExtraColumn[];
+  selected?: string | null;
+  timeMark?: (call: CallRow) => React.ReactNode;
+  timeStrong?: (call: CallRow) => boolean;
 }) {
   return (
     <Table>
@@ -92,9 +92,9 @@ export function ReviewTable({
                 event.target instanceof Element &&
                 event.target.closest("button, [role='checkbox']")
               ) {
-                return
+                return;
               }
-              onOpen(call)
+              onOpen(call);
             }}
           >
             {before.map((column) => (
@@ -155,5 +155,5 @@ export function ReviewTable({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }

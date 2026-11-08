@@ -1,7 +1,7 @@
 export type Rule = {
-  label: string
-  detail: string
-}
+  label: string;
+  detail: string;
+};
 
 /** The `id` picks the worked example `RuleDemo` renders under it. */
 export type GlobalRule = Rule & {
@@ -12,8 +12,8 @@ export type GlobalRule = Rule & {
     | "spacing"
     | "radius"
     | "accessibility"
-    | "scrollbars"
-}
+    | "scrollbars";
+};
 
 export const GLOBAL_RULES: GlobalRule[] = [
   {
@@ -49,7 +49,7 @@ export const GLOBAL_RULES: GlobalRule[] = [
     detail:
       "Keyboard, visible focus, contrast and labels — part of the pattern, not a later pass.",
   },
-]
+];
 
 export type SurfaceId =
   | "inline"
@@ -59,19 +59,19 @@ export type SurfaceId =
   | "confirm"
   | "drawer"
   | "record"
-  | "page"
+  | "page";
 
 type SurfaceChoice = {
-  id: SurfaceId
-  title: string
-  sits: string
-  size: string
-  criterion: string
-  avoid: string
-  shape: string[]
-  examples: string
-  seenIn: string
-}
+  id: SurfaceId;
+  title: string;
+  sits: string;
+  size: string;
+  criterion: string;
+  avoid: string;
+  shape: string[];
+  examples: string;
+  seenIn: string;
+};
 
 export const SURFACE_CHOICES: SurfaceChoice[] = [
   {
@@ -220,7 +220,7 @@ export const SURFACE_CHOICES: SurfaceChoice[] = [
       "A scenario, a persona, creating a scenario, connecting a SIP trunk.",
     seenIn: "ElevenLabs (New agent), Stripe (focus view), Vapi, PlayAI",
   },
-]
+];
 
 export type SurfaceRuleId =
   | "one-at-a-time"
@@ -234,14 +234,14 @@ export type SurfaceRuleId =
   | "typed"
   | "feedback"
   | "record-url"
-  | "picker"
+  | "picker";
 
 type SurfaceRule = {
-  id: SurfaceRuleId
-  label: string
-  detail: string
-  seenIn: string
-}
+  id: SurfaceRuleId;
+  label: string;
+  detail: string;
+  seenIn: string;
+};
 
 export const SURFACE_RULES: SurfaceRule[] = [
   {
@@ -328,28 +328,28 @@ export const SURFACE_RULES: SurfaceRule[] = [
       "Anchored to the button that asked. A dialog for one choice covers the page the choice is for.",
     seenIn: "ElevenLabs, Attio",
   },
-]
+];
 
 export const DEMO_VOICES = [
   { id: "layla-gulf", label: "Layla — Gulf Arabic" },
   { id: "omar-msa", label: "Omar — Modern Standard" },
   { id: "sara-egyptian", label: "Sara — Egyptian" },
-]
+];
 
 type CallRow = {
-  id: string
-  customer: string
-  status: "completed" | "failed" | "in_progress" | "scheduled"
-  cause: null | string
-  direction: "inbound" | "outbound"
-  scenario: string
+  id: string;
+  customer: string;
+  status: "completed" | "failed" | "in_progress" | "scheduled";
+  cause: null | string;
+  direction: "inbound" | "outbound";
+  scenario: string;
   /** ISO 639-1 codes. */
-  languages: string[]
+  languages: string[];
   /** Seconds. */
-  duration: null | number
-  cost: null | number
-  started: string
-}
+  duration: null | number;
+  cost: null | number;
+  started: string;
+};
 
 export const CALL_ROWS: CallRow[] = [
   {
@@ -424,15 +424,15 @@ export const CALL_ROWS: CallRow[] = [
     cost: 0.18,
     started: "12 Aug, 08:22",
   },
-]
+];
 
 type ChipNote = {
-  label: string
-  tone: string
-  icon: "completed" | "failed" | "inbound" | "running" | "scheduled" | null
-  token: string
-  why: string
-}
+  label: string;
+  tone: string;
+  icon: "completed" | "failed" | "inbound" | "running" | "scheduled" | null;
+  token: string;
+  why: string;
+};
 
 export const CHIP_NOTES: ChipNote[] = [
   {
@@ -477,13 +477,13 @@ export const CHIP_NOTES: ChipNote[] = [
     token: "muted",
     why: "Same reason, and no icon — scenario names are per workspace, so no glyph fits them all.",
   },
-]
+];
 
 type EmptyValueNote = {
-  sample: string
-  when: string
-  why: string
-}
+  sample: string;
+  when: string;
+  why: string;
+};
 
 export const EMPTY_VALUES: EmptyValueNote[] = [
   {
@@ -506,24 +506,24 @@ export const EMPTY_VALUES: EmptyValueNote[] = [
     when: "Never",
     why: "It names no reason, so nobody can act on it. Every case it covers is one of the three above.",
   },
-]
+];
 
 // Must match `LANGUAGES` in precedent-iso/src/models/config.ts.
 export const LANGUAGES = [
   { code: "EN", name: "English" },
   { code: "AR", name: "Arabic" },
   { code: "UR", name: "Urdu" },
-]
+];
 
 export const LANGUAGE_NAMES: Record<string, string> = Object.fromEntries(
   LANGUAGES.map((language) => [language.code, language.name]),
-)
+);
 
 type ButtonSizeNote = {
-  size: "xs" | "sm" | "default" | "lg"
-  when: string
-  why: string
-}
+  size: "xs" | "sm" | "default" | "lg";
+  when: string;
+  why: string;
+};
 
 export const BUTTON_SIZES: ButtonSizeNote[] = [
   {
@@ -546,7 +546,7 @@ export const BUTTON_SIZES: ButtonSizeNote[] = [
     when: "When it is the only thing on the surface to do",
     why: "36px. An empty state\u2019s single action: bigger because nothing is next to it, not because it matters more.",
   },
-]
+];
 
 export const FORM_RULES: Rule[] = [
   {
@@ -609,13 +609,13 @@ export const FORM_RULES: Rule[] = [
     detail:
       "A value that cannot be edited stays on screen, disabled, with one line saying why. Never swapped for plain text, never removed. The line is dropped when the control that turns editing on is on the same screen — a panel of dead switches under the switch that killed them needs no caption, and one that appears in only one state is a section the reader re-reads every visit.",
   },
-]
+];
 
 type ButtonRoleNote = {
-  variant: "default" | "outline" | "ghost" | "destructive"
-  label: string
-  when: string
-}
+  variant: "default" | "outline" | "ghost" | "destructive";
+  label: string;
+  when: string;
+};
 
 export const BUTTON_ROLES: ButtonRoleNote[] = [
   {
@@ -638,15 +638,15 @@ export const BUTTON_ROLES: ButtonRoleNote[] = [
     label: "Delete",
     when: "Delete, remove, revoke. A soft tint rather than solid red: it confirms first, so it does not also need to shout.",
   },
-]
+];
 
 export type PatternAnatomy = {
-  id: string
-  title: string
-  description: string
-  required: Rule[]
-  optional: Rule[]
-}
+  id: string;
+  title: string;
+  description: string;
+  required: Rule[];
+  optional: Rule[];
+};
 
 export const PATTERNS: PatternAnatomy[] = [
   {
@@ -692,21 +692,21 @@ export const PATTERNS: PatternAnatomy[] = [
     ],
     optional: [],
   },
-]
+];
 
 export type DocsPage = {
-  id: string
-  title: string
-  description: string
-  sarj?: boolean
-}
+  id: string;
+  title: string;
+  description: string;
+  sarj?: boolean;
+};
 
 export type DocsGroup = {
-  label?: string
-  pages: DocsPage[]
-}
+  label?: string;
+  pages: DocsPage[];
+};
 
-export type DocsSection = DocsPage & { groups: DocsGroup[] }
+export type DocsSection = DocsPage & { groups: DocsGroup[] };
 
 const PRODUCT_COMPONENTS: DocsPage[] = [
   {
@@ -822,14 +822,14 @@ const PRODUCT_COMPONENTS: DocsPage[] = [
       "Listening, thinking and speaking: how a voice agent shows what it is doing, drawn three ways — dots, waves and a string.",
     sarj: true,
   },
-]
+];
 
 const SARJ_FOUNDATIONS = new Set([
   "icons",
   "shadows",
   "typography",
   "scrollbars",
-])
+]);
 
 const FOUNDATION_PAGES: DocsPage[] = [
   {
@@ -859,7 +859,7 @@ const FOUNDATION_PAGES: DocsPage[] = [
       "Twenty-seven rules npm run lint fails you for. Everything else on this site is a decision; these are errors.",
     sarj: true,
   },
-]
+];
 
 export type MotionRule = {
   id:
@@ -867,10 +867,10 @@ export type MotionRule = {
     | "duration"
     | "animatable"
     | "reduced-motion"
-    | "motion-performance"
-  label: string
-  detail: string
-}
+    | "motion-performance";
+  label: string;
+  detail: string;
+};
 
 export const MOTION_RULES: MotionRule[] = [
   {
@@ -903,14 +903,14 @@ export const MOTION_RULES: MotionRule[] = [
     detail:
       "Picking the right property is most of it. The rest is not making React re-render sixty times a second.",
   },
-]
+];
 
 const MOTION_PAGES: DocsPage[] = MOTION_RULES.map((rule) => ({
   id: rule.id,
   title: rule.label,
   description: rule.detail,
   sarj: true,
-}))
+}));
 
 const PATTERN_PAGES: DocsPage[] = [
   {
@@ -969,7 +969,7 @@ const PATTERN_PAGES: DocsPage[] = [
       "Cursor controls and a page size, in one place under the table. A list either has both or has neither.",
     sarj: true,
   },
-]
+];
 
 const STATE_PAGES: DocsPage[] = [
   {
@@ -1000,7 +1000,7 @@ const STATE_PAGES: DocsPage[] = [
       "A failure takes the smallest piece of the screen it can: a field, a toast, a section, the rows, the page area. The sidebar always stays.",
     sarj: true,
   },
-]
+];
 
 export const DOCS_SECTIONS: DocsSection[] = [
   {
@@ -1034,13 +1034,13 @@ export const DOCS_SECTIONS: DocsSection[] = [
     sarj: true,
     groups: [{ pages: PRODUCT_COMPONENTS }],
   },
-]
+];
 
 type LayerToken = {
-  name: string
-  value: number
-  what: string
-}
+  name: string;
+  value: number;
+  what: string;
+};
 
 export const LAYER_TOKENS: LayerToken[] = [
   {
@@ -1084,14 +1084,14 @@ export const LAYER_TOKENS: LayerToken[] = [
     value: 80,
     what: "Always on top. Nothing is ever above a tooltip.",
   },
-]
+];
 
 type ControlStep = {
-  px: number
-  button: string
-  field: null | string
-  when: string
-}
+  px: number;
+  button: string;
+  field: null | string;
+  when: string;
+};
 
 export const CONTROL_STEPS: ControlStep[] = [
   {
@@ -1118,13 +1118,13 @@ export const CONTROL_STEPS: ControlStep[] = [
     field: null,
     when: "The single action on an empty state. Bigger because nothing is next to it, not because it matters more.",
   },
-]
+];
 
 type LintRule = {
-  id: string
-  bans: string
-  instead: string
-}
+  id: string;
+  bans: string;
+  instead: string;
+};
 
 export const LINT_RULES: LintRule[] = [
   {
@@ -1279,7 +1279,7 @@ export const LINT_RULES: LintRule[] = [
     bans: "The uppercase class; Title Case in a title, label, tab, button or heading",
     instead: "Sentence case. Acronyms stay; proper nouns go in an expression.",
   },
-]
+];
 
 export const TABLE_RULES: Rule[] = [
   {
@@ -1312,7 +1312,7 @@ export const TABLE_RULES: Rule[] = [
     detail:
       "A word, then an icon, then the overflow. Every glyph carries an aria-label, because the glyph is the only name it has.",
   },
-]
+];
 
 export const LOADING_RULES: Rule[] = [
   {
@@ -1335,7 +1335,7 @@ export const LOADING_RULES: Rule[] = [
     detail:
       "It says something is happening and nothing about what. The skeleton says both, and the page stops moving when it resolves.",
   },
-]
+];
 
 export const EMPTY_STATE_RULES: Rule[] = [
   {
@@ -1358,7 +1358,7 @@ export const EMPTY_STATE_RULES: Rule[] = [
     detail:
       "One line. It is the only place a reader who has never seen the feature finds out what the list is for.",
   },
-]
+];
 
 export const NO_RESULTS_RULES: Rule[] = [
   {
@@ -1381,7 +1381,7 @@ export const NO_RESULTS_RULES: Rule[] = [
     detail:
       "The header band stays. Removing it removes the columns, and with them the evidence that a filter is what is doing this.",
   },
-]
+];
 
 export const ERROR_RULES: Rule[] = [
   {
@@ -1434,7 +1434,7 @@ export const ERROR_RULES: Rule[] = [
     detail:
       "A section that shows its error while the rest of the page works is easy to miss in monitoring. Each one reports to Sentry with where it happened, the same as a page that broke.",
   },
-]
+];
 
 export const PAGINATION_RULES: Rule[] = [
   {
@@ -1457,4 +1457,4 @@ export const PAGINATION_RULES: Rule[] = [
     detail:
       "Controls at a fixed size with no way to change it is the half-built version, and it is the one that gets shipped.",
   },
-]
+];

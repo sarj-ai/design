@@ -4,10 +4,10 @@ import {
   jsxAncestors,
   jsxName,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
-const MUTED = /^text-muted-foreground(\/\d+)?$/
-const BAND = /^bg-muted(\/\d+)?$/
+const MUTED = /^text-muted-foreground(\/\d+)?$/;
+const BAND = /^bg-muted(\/\d+)?$/;
 
 const tableShape = {
   meta: {
@@ -28,17 +28,17 @@ const tableShape = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const opening = element.openingElement
-        const name = imports.ui(jsxName(opening))
+        const opening = element.openingElement;
+        const name = imports.ui(jsxName(opening));
 
         if (name === "TableHead") {
           if (getAttr(opening, "onClick")) {
-            context.report({ node: opening, messageId: "clickableHead" })
+            context.report({ node: opening, messageId: "clickableHead" });
           }
           for (const { raw, base, variants, node } of classesOf(opening)) {
             if (MUTED.test(base) && variants.length === 0) {
@@ -46,39 +46,39 @@ const tableShape = {
                 node,
                 messageId: "mutedHead",
                 data: { cls: raw },
-              })
+              });
             }
           }
-          return
+          return;
         }
 
-        if (name !== "TableRow") return
+        if (name !== "TableRow") return;
         const inHeader = [...jsxAncestors(element)].some(
           (a) => imports.ui(jsxName(a.openingElement)) === "TableHeader",
-        )
-        if (!inHeader) return
+        );
+        if (!inHeader) return;
 
-        const classes = classesOf(opening)
+        const classes = classesOf(opening);
         const band = classes.find(
           ({ base, variants }) => BAND.test(base) && variants.length === 0,
-        )
-        if (!band) return
+        );
+        if (!band) return;
         const held = classes.some(
           ({ base, variants }) =>
             base === band.base &&
             variants.length === 1 &&
             variants[0] === "hover",
-        )
+        );
         if (!held) {
           context.report({
             node: band.node,
             messageId: "bandHover",
             data: { band: band.base },
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default tableShape
+export default tableShape;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -11,13 +11,13 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/shared/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -25,13 +25,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import {
   daysUntil,
   formatDate,
@@ -41,15 +41,15 @@ import {
   TOKEN_CAP,
   tokenStatus,
   type Token,
-} from "@/lib/mockups/connected-apps-data"
-import { RevokeTokenIcon } from "@/components/mockups/connected-apps/icons"
+} from "@/lib/mockups/connected-apps-data";
+import { RevokeTokenIcon } from "@/components/mockups/connected-apps/icons";
 
 export function TokenTable({
   onRevoke,
   tokens,
 }: {
-  onRevoke: (token: Token) => void
-  tokens: Token[]
+  onRevoke: (token: Token) => void;
+  tokens: Token[];
 }) {
   return (
     <Table className="[&_tbody_tr:last-child]:border-0 [&_td]:px-4 [&_th]:px-4">
@@ -70,18 +70,18 @@ export function TokenTable({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
 
 function TokenRow({
   onRevoke,
   token,
 }: {
-  onRevoke: (token: Token) => void
-  token: Token
+  onRevoke: (token: Token) => void;
+  token: Token;
 }) {
-  const status = tokenStatus(token)
-  const live = status === "active"
+  const status = tokenStatus(token);
+  const live = status === "active";
 
   return (
     <TableRow className="transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none">
@@ -143,7 +143,7 @@ function TokenRow({
         )}
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function StatusBadge({ status }: { status: "active" | "expired" | "revoked" }) {
@@ -155,22 +155,22 @@ function StatusBadge({ status }: { status: "active" | "expired" | "revoked" }) {
       >
         Active
       </Badge>
-    )
+    );
   }
 
   return (
     <Badge className="bg-muted text-muted-foreground" variant="secondary">
       {status === "expired" ? "Expired" : "Revoked"}
     </Badge>
-  )
+  );
 }
 
 function ExpiryCell({ token }: { token: Token }) {
   if (!token.expiresAt) {
-    return <span className="text-muted-foreground">Never</span>
+    return <span className="text-muted-foreground">Never</span>;
   }
 
-  const days = daysUntil(token.expiresAt)
+  const days = daysUntil(token.expiresAt);
 
   if (days > 0 && days <= NEAR_EXPIRY_DAYS) {
     return (
@@ -185,25 +185,25 @@ function ExpiryCell({ token }: { token: Token }) {
         </TooltipTrigger>
         <TooltipContent>{formatDate(token.expiresAt)}</TooltipContent>
       </Tooltip>
-    )
+    );
   }
 
   return (
     <span className="text-muted-foreground">{formatDate(token.expiresAt)}</span>
-  )
+  );
 }
 
 function RevokeDialog({
   onRevoke,
   token,
 }: {
-  onRevoke: (token: Token) => void
-  token: Token
+  onRevoke: (token: Token) => void;
+  token: Token;
 }) {
-  const expired = tokenStatus(token) === "expired"
+  const expired = tokenStatus(token) === "expired";
   /* `daysUntil` is negative for a past date, so this is "used within the last week". */
   const recentlyUsed =
-    token.lastUsedAt !== null && -daysUntil(token.lastUsedAt) <= 7
+    token.lastUsedAt !== null && -daysUntil(token.lastUsedAt) <= 7;
 
   return (
     <AlertDialog>
@@ -257,5 +257,5 @@ function RevokeDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

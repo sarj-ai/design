@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { HintIcon } from "@/components/design-system/icons"
-import { FieldLabel } from "@/components/ui/field"
+import { HintIcon } from "@/components/design-system/icons";
+import { FieldLabel } from "@/components/ui/field";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 export function FieldHint({
   children,
@@ -17,11 +17,11 @@ export function FieldHint({
   hint,
   htmlFor,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
   /** Placement only: a horizontal `Field` needs to be told to grow this wrapper. */
-  className?: string
-  hint: string
-  htmlFor: string
+  className?: string;
+  hint: string;
+  htmlFor: string;
 }) {
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
@@ -46,5 +46,5 @@ export function FieldHint({
         </TooltipContent>
       </Tooltip>
     </div>
-  )
+  );
 }

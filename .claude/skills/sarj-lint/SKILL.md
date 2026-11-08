@@ -216,7 +216,7 @@ The primitives size icons automatically — if you are writing `size-*` on an ic
 inside a `Button`/`Badge`/`Item`, you are fixing the wrong thing.
 
 33 files still import lucide and warn rather than error while they are migrated;
-they are listed in `eslint.config.mjs`. **Do not add to that list.**
+they are listed in `oxlint.config.mts`. **Do not add to that list.**
 
 ---
 

@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import type { CallLink } from "@/lib/mockups/conversations-revamp-drawer-data"
+} from "@/components/ui/item";
+import type { CallLink } from "@/lib/mockups/conversations-revamp-drawer-data";
 import {
   LinkedCallIcon,
   OpenLinkedCallIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function LinkedCall({
   label,
   link,
 }: {
   /** What this call is to the one being read. */
-  label: string
-  link: CallLink
+  label: string;
+  link: CallLink;
 }) {
   return (
     <Item className="bg-card" size="sm" variant="outline">
@@ -42,5 +42,5 @@ export function LinkedCall({
         <OpenLinkedCallIcon className="rtl:rotate-180" />
       </Button>
     </Item>
-  )
+  );
 }

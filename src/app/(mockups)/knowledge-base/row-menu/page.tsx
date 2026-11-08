@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { KnowledgeBaseIndex } from "@/components/mockups/knowledge-base/knowledge-base-index"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { KnowledgeBaseIndex } from "@/components/mockups/knowledge-base/knowledge-base-index";
 
 export default function KnowledgeBaseRowMenuPage() {
   return (
@@ -11,5 +11,5 @@ export default function KnowledgeBaseRowMenuPage() {
     >
       <KnowledgeBaseIndex initialRowMenu />
     </MockupShell>
-  )
+  );
 }

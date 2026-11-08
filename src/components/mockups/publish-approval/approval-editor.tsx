@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/item";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { EditorHeader } from "@/components/mockups/config-versioning/editor-header"
-import { HistoryDrawer } from "@/components/mockups/config-versioning/history-drawer"
-import { SaveReview } from "@/components/mockups/config-versioning/save-review"
-import { RequestDialog } from "@/components/mockups/publish-approval/request-dialog"
-import type { Subject, Version } from "@/lib/mockups/config-versioning-data"
+} from "@/components/ui/tooltip";
+import { EditorHeader } from "@/components/mockups/config-versioning/editor-header";
+import { HistoryDrawer } from "@/components/mockups/config-versioning/history-drawer";
+import { SaveReview } from "@/components/mockups/config-versioning/save-review";
+import { RequestDialog } from "@/components/mockups/publish-approval/request-dialog";
+import type { Subject, Version } from "@/lib/mockups/config-versioning-data";
 import {
   type ApprovalRequest,
   type CaseId,
@@ -32,7 +32,7 @@ import {
   SCENARIO_ORG,
   type Viewer,
   who,
-} from "@/lib/mockups/publish-approval-data"
+} from "@/lib/mockups/publish-approval-data";
 
 export function ApprovalEditor({
   subject,
@@ -44,68 +44,68 @@ export function ApprovalEditor({
   onRequest,
   onOpenRequest,
 }: {
-  subject: Subject
-  viewer: Viewer
-  caseId: CaseId
+  subject: Subject;
+  viewer: Viewer;
+  caseId: CaseId;
   /** Newest first. */
-  requests: ApprovalRequest[]
+  requests: ApprovalRequest[];
   onSave: (
     body: Record<string, string>,
     editedFrom: number,
     note: string,
-  ) => number
-  onToggleLive: (on: boolean) => void
+  ) => number;
+  onToggleLive: (on: boolean) => void;
   /** Resolves false when sending failed. */
   onRequest: (request: {
-    version: number
-    summary: string
-    note: string
-  }) => Promise<boolean>
-  onOpenRequest: (id: string) => void
+    version: number;
+    summary: string;
+    note: string;
+  }) => Promise<boolean>;
+  onOpenRequest: (id: string) => void;
 }) {
-  const newest = subject.versions[0]
-  const [base, setBase] = React.useState(newest.n)
-  const [draft, setDraft] = React.useState(newest.body)
-  const [reviewing, setReviewing] = React.useState(false)
-  const [history, setHistory] = React.useState(false)
-  const [requestFor, setRequestFor] = React.useState<number | null>(null)
+  const newest = subject.versions[0];
+  const [base, setBase] = React.useState(newest.n);
+  const [draft, setDraft] = React.useState(newest.body);
+  const [reviewing, setReviewing] = React.useState(false);
+  const [history, setHistory] = React.useState(false);
+  const [requestFor, setRequestFor] = React.useState<number | null>(null);
 
-  const canEdit = caseId !== "view-only"
-  const inUse = subject.inUse
-  const pending = requests.find((request) => request.status === "pending")
+  const canEdit = caseId !== "view-only";
+  const inUse = subject.inUse;
+  const pending = requests.find((request) => request.status === "pending");
   const rejected =
-    !pending && requests[0]?.status === "rejected" ? requests[0] : null
-  const ahead = subject.live ? subject.versions.filter((v) => v.n > inUse) : []
+    !pending && requests[0]?.status === "rejected" ? requests[0] : null;
+  const ahead = subject.live ? subject.versions.filter((v) => v.n > inUse) : [];
   const changes = subject.fields.filter(
     (field) => draft[field.id] !== newest.body[field.id],
-  ).length
+  ).length;
 
   function save(note: string) {
-    const n = onSave(draft, base, note)
-    setBase(n)
-    setReviewing(false)
+    const n = onSave(draft, base, note);
+    setBase(n);
+    setReviewing(false);
     toast.success(`Saved as v${n}`, {
       description: pending
         ? `It isn’t in the request for v${pending.version}. Callers still hear v${inUse}.`
         : `Callers still hear v${inUse}.`,
-    })
+    });
   }
 
   function discard() {
-    setDraft(newest.body)
-    setBase(newest.n)
+    setDraft(newest.body);
+    setBase(newest.n);
   }
 
   async function send(request: { summary: string; note: string }) {
-    if (requestFor === null) return false
-    const ok = await onRequest({ version: requestFor, ...request })
+    if (requestFor === null) return false;
+    const ok = await onRequest({ version: requestFor, ...request });
     if (ok) {
       toast.success(`Request sent to ${SCENARIO_ORG}`, {
         description: `Callers hear v${requestFor} once it’s approved.`,
-      })
-      setRequestFor(null)
+      });
+      setRequestFor(null);
     }
-    return ok
+    return ok;
   }
 
   return (
@@ -133,7 +133,7 @@ export function ApprovalEditor({
 
       <FieldGroup>
         {subject.fields.map((field) => {
-          const Control = field.multiline ? Textarea : Input
+          const Control = field.multiline ? Textarea : Input;
           return (
             <Field key={field.id}>
               <FieldLabel htmlFor={field.id}>{field.label}</FieldLabel>
@@ -151,7 +151,7 @@ export function ApprovalEditor({
                 value={draft[field.id]}
               />
             </Field>
-          )
+          );
         })}
       </FieldGroup>
 
@@ -193,8 +193,8 @@ export function ApprovalEditor({
           by: SCENARIO_ORG,
           pending: pending?.version ?? null,
           onRequest: (n) => {
-            setHistory(false)
-            setRequestFor(n)
+            setHistory(false);
+            setRequestFor(n);
           },
         }}
         canEdit={canEdit}
@@ -205,11 +205,11 @@ export function ApprovalEditor({
           against: inUse === newest.n ? null : inUse,
         }}
         onEditFrom={(n) => {
-          const version = subject.versions.find((item) => item.n === n)
-          if (!version) return
-          setBase(n)
-          setDraft(version.body)
-          setHistory(false)
+          const version = subject.versions.find((item) => item.n === n);
+          if (!version) return;
+          setBase(n);
+          setDraft(version.body);
+          setHistory(false);
         }}
         onOpenChange={setHistory}
         onApply={async () => "failed"}
@@ -221,7 +221,7 @@ export function ApprovalEditor({
         caseId={caseId}
         live={inUse}
         onOpenChange={(open) => {
-          if (!open) setRequestFor(null)
+          if (!open) setRequestFor(null);
         }}
         onSend={send}
         open={requestFor !== null}
@@ -230,7 +230,7 @@ export function ApprovalEditor({
         version={requestFor ?? newest.n}
       />
     </main>
-  )
+  );
 }
 
 function StatusRow({
@@ -245,28 +245,28 @@ function StatusRow({
   onRequest,
   onOpenRequest,
 }: {
-  ahead: Version[]
-  inUse: number
-  live: boolean
-  newest: number
-  pending: ApprovalRequest | null
-  rejected: ApprovalRequest | null
-  viewer: Viewer
-  canRequest: boolean
-  onRequest: (n: number) => void
-  onOpenRequest: (id: string) => void
+  ahead: Version[];
+  inUse: number;
+  live: boolean;
+  newest: number;
+  pending: ApprovalRequest | null;
+  rejected: ApprovalRequest | null;
+  viewer: Viewer;
+  canRequest: boolean;
+  onRequest: (n: number) => void;
+  onOpenRequest: (id: string) => void;
 }) {
-  if (!live) return null
+  if (!live) return null;
 
   const request = (label: string, n: number) => (
     <RequestButton allowed={canRequest} onClick={() => onRequest(n)}>
       {label}
     </RequestButton>
-  )
+  );
 
   if (pending) {
-    const decides = canDecide(pending, viewer)
-    const newer = newest > pending.version
+    const decides = canDecide(pending, viewer);
+    const newer = newest > pending.version;
     return (
       <Item variant="outline">
         <ItemContent>
@@ -292,7 +292,7 @@ function StatusRow({
             : null}
         </ItemActions>
       </Item>
-    )
+    );
   }
 
   if (rejected?.decision) {
@@ -313,10 +313,10 @@ function StatusRow({
           {ahead.length > 0 ? request("Request approval", newest) : null}
         </ItemActions>
       </Item>
-    )
+    );
   }
 
-  if (ahead.length === 0) return null
+  if (ahead.length === 0) return null;
 
   return (
     <Item variant="outline">
@@ -332,7 +332,7 @@ function StatusRow({
       </ItemContent>
       <ItemActions>{request("Request approval", newest)}</ItemActions>
     </Item>
-  )
+  );
 }
 
 function RequestButton({
@@ -340,11 +340,11 @@ function RequestButton({
   onClick,
   children,
 }: {
-  allowed: boolean
-  onClick: () => void
-  children: React.ReactNode
+  allowed: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
 }) {
-  if (allowed) return <Button onClick={onClick}>{children}</Button>
+  if (allowed) return <Button onClick={onClick}>{children}</Button>;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -356,5 +356,5 @@ function RequestButton({
         You can view this scenario but not change it
       </TooltipContent>
     </Tooltip>
-  )
+  );
 }

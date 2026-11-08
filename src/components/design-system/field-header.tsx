@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { FieldHint } from "@/components/design-system/field-hint"
-import { FieldError, FieldLabel } from "@/components/ui/field"
+import { FieldHint } from "@/components/design-system/field-hint";
+import { FieldError, FieldLabel } from "@/components/ui/field";
 
 export function FieldHeader({
   children,
@@ -11,10 +11,10 @@ export function FieldHeader({
   hint,
   error,
 }: {
-  children: React.ReactNode
-  htmlFor: string
-  hint?: string
-  error?: string | null
+  children: React.ReactNode;
+  htmlFor: string;
+  hint?: string;
+  error?: string | null;
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
@@ -31,9 +31,9 @@ export function FieldHeader({
         </FieldError>
       ) : null}
     </div>
-  )
+  );
 }
 
 export function errorId(htmlFor: string) {
-  return `${htmlFor}-error`
+  return `${htmlFor}-error`;
 }

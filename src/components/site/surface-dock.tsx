@@ -1,121 +1,121 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import * as React from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { DockIcon } from "@/components/shell/workspace-icons"
+} from "@/components/ui/popover";
+import { DockIcon } from "@/components/shell/workspace-icons";
 
-type DockSection = { id: string; label: string }
+type DockSection = { id: string; label: string };
 
 // r=8 in a 20px box leaves room for the 2px stroke at any rotation.
-const RADIUS = 8
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS
+const RADIUS = 8;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /** The sightline: where a group counts as being read, and where a jump lands its heading. Near the top because groups are short. */
-const SIGHTLINE = 0.18
+const SIGHTLINE = 0.18;
 
 /* --ease-out-cubic, as the array Motion wants. */
-const EASE_OUT: [number, number, number, number] = [0.215, 0.61, 0.355, 1]
+const EASE_OUT: [number, number, number, number] = [0.215, 0.61, 0.355, 1];
 
 // Shared by the visible name and the invisible copies that size the pill; they must match to the pixel.
-const NAME = "whitespace-nowrap text-xs font-semibold"
+const NAME = "whitespace-nowrap text-xs font-semibold";
 
 /** Written to the element, not state: this runs on every scroll frame. */
 function draw(el: SVGCircleElement, fraction: number) {
-  el.style.strokeDashoffset = String(CIRCUMFERENCE * (1 - fraction))
+  el.style.strokeDashoffset = String(CIRCUMFERENCE * (1 - fraction));
 }
 
 export function SurfaceDock({ sections }: { sections: DockSection[] }) {
-  const reduce = useReducedMotion()
-  const [open, setOpen] = React.useState(false)
-  const [active, setActive] = React.useState(0)
-  const arc = React.useRef<SVGCircleElement | null>(null)
-  const progress = React.useRef(0)
+  const reduce = useReducedMotion();
+  const [open, setOpen] = React.useState(false);
+  const [active, setActive] = React.useState(0);
+  const arc = React.useRef<SVGCircleElement | null>(null);
+  const progress = React.useRef(0);
   // Outside the effect because the jump below scrolls to one of them.
-  const marks = React.useRef<number[]>([0])
+  const marks = React.useRef<number[]>([0]);
 
   React.useEffect(() => {
-    let queued = false
+    let queued = false;
 
     function read() {
-      queued = false
+      queued = false;
 
-      const y = window.scrollY
+      const y = window.scrollY;
       const maxScroll = Math.max(
         0,
         document.documentElement.scrollHeight - window.innerHeight,
-      )
-      const line = window.innerHeight * SIGHTLINE
+      );
+      const line = window.innerHeight * SIGHTLINE;
 
       // `Math.max` keeps the marks ascending; a group that has not rendered collapses to zero length.
-      const at = [0]
+      const at = [0];
       for (let i = 1; i < sections.length; i += 1) {
-        const el = document.getElementById(sections[i].id)
-        const mark = el ? el.getBoundingClientRect().top + y - line : at[i - 1]
+        const el = document.getElementById(sections[i].id);
+        const mark = el ? el.getBoundingClientRect().top + y - line : at[i - 1];
         // Clamped to the max scroll, or a last group near the document end could never become active.
-        at.push(Math.min(Math.max(mark, at[i - 1]), maxScroll))
+        at.push(Math.min(Math.max(mark, at[i - 1]), maxScroll));
       }
-      marks.current = at
+      marks.current = at;
 
-      let index = 0
+      let index = 0;
       for (let i = sections.length - 1; i > 0; i -= 1) {
         if (y >= at[i]) {
-          index = i
-          break
+          index = i;
+          break;
         }
       }
 
       // The last group runs to the end of the document, so the final ring closes on the last pixel of scroll.
-      const end = index + 1 < at.length ? at[index + 1] : maxScroll
-      const span = end - at[index]
+      const end = index + 1 < at.length ? at[index + 1] : maxScroll;
+      const span = end - at[index];
       const fraction =
-        span > 0 ? Math.min(1, Math.max(0, (y - at[index]) / span)) : 1
+        span > 0 ? Math.min(1, Math.max(0, (y - at[index]) / span)) : 1;
 
-      progress.current = fraction
-      if (arc.current) draw(arc.current, fraction)
+      progress.current = fraction;
+      if (arc.current) draw(arc.current, fraction);
 
       // Same number when unchanged, so React bails out of the render.
-      setActive(index)
+      setActive(index);
     }
 
     function onScroll() {
-      if (queued) return
-      queued = true
-      requestAnimationFrame(read)
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(read);
     }
 
-    read()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll, { passive: true })
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-    }
-  }, [sections])
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [sections]);
 
   /* A search can drop the group the dock was sitting in before the scroll
      handler has run again. */
-  const current = sections[Math.min(active, sections.length - 1)]
+  const current = sections[Math.min(active, sections.length - 1)];
 
-  const instant = { duration: 0 }
-  const swap = reduce ? instant : { duration: 0.2, ease: EASE_OUT }
-  const handover = reduce ? instant : { duration: 0.3, ease: EASE_OUT }
+  const instant = { duration: 0 };
+  const swap = reduce ? instant : { duration: 0.2, ease: EASE_OUT };
+  const handover = reduce ? instant : { duration: 0.3, ease: EASE_OUT };
 
   function jump(event: React.MouseEvent, index: number) {
-    const to = marks.current[index]
-    if (to === undefined) return
+    const to = marks.current[index];
+    if (to === undefined) return;
 
     // Scrolls to the group's handover point (+1px), not the element, so a jump and the dock's reading agree.
-    event.preventDefault()
-    window.scrollTo({ behavior: reduce ? "auto" : "smooth", top: to + 1 })
+    event.preventDefault();
+    window.scrollTo({ behavior: reduce ? "auto" : "smooth", top: to + 1 });
 
-    setOpen(false)
+    setOpen(false);
   }
 
   return (
@@ -158,9 +158,9 @@ export function SurfaceDock({ sections }: { sections: DockSection[] }) {
                     r={RADIUS}
                     // Nulls ignored: both arcs mount during a handover and share this ref.
                     ref={(el: SVGCircleElement | null) => {
-                      if (!el) return
-                      arc.current = el
-                      draw(el, progress.current)
+                      if (!el) return;
+                      arc.current = el;
+                      draw(el, progress.current);
                     }}
                     stroke="currentColor"
                     strokeDasharray={CIRCUMFERENCE}
@@ -245,5 +245,5 @@ export function SurfaceDock({ sections }: { sections: DockSection[] }) {
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

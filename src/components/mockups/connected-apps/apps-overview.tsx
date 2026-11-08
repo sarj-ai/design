@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+} from "@/components/shared/data-table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -16,14 +16,14 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   daysUntil,
   formatDate,
@@ -32,12 +32,12 @@ import {
   tokenStatus,
   type ConnectedApp,
   type Token,
-} from "@/lib/mockups/connected-apps-data"
-import { CreateAppDialog } from "@/components/mockups/connected-apps/create-app-dialog"
+} from "@/lib/mockups/connected-apps-data";
+import { CreateAppDialog } from "@/components/mockups/connected-apps/create-app-dialog";
 import {
   ConnectedAppIcon,
   CreateAppIcon,
-} from "@/components/mockups/connected-apps/icons"
+} from "@/components/mockups/connected-apps/icons";
 
 export function AppsOverview({
   apps,
@@ -45,12 +45,12 @@ export function AppsOverview({
   onOpen,
   tokens,
 }: {
-  apps: ConnectedApp[]
-  onCreate: (app: ConnectedApp) => void
-  onOpen: (appId: string) => void
-  tokens: Token[]
+  apps: ConnectedApp[];
+  onCreate: (app: ConnectedApp) => void;
+  onOpen: (appId: string) => void;
+  tokens: Token[];
 }) {
-  const [createOpen, setCreateOpen] = React.useState(false)
+  const [createOpen, setCreateOpen] = React.useState(false);
 
   return (
     <div className="flex flex-col gap-6">
@@ -122,7 +122,7 @@ export function AppsOverview({
         open={createOpen}
       />
     </div>
-  )
+  );
 }
 
 function AppRow({
@@ -130,20 +130,20 @@ function AppRow({
   onOpen,
   tokens,
 }: {
-  app: ConnectedApp
-  onOpen: (appId: string) => void
-  tokens: Token[]
+  app: ConnectedApp;
+  onOpen: (appId: string) => void;
+  tokens: Token[];
 }) {
-  const live = liveTokens(tokens, app.id)
-  const active = live.filter((token) => tokenStatus(token) === "active")
+  const live = liveTokens(tokens, app.id);
+  const active = live.filter((token) => tokenStatus(token) === "active");
 
   const expiring = active.filter(
     (token) =>
       token.expiresAt !== null &&
       daysUntil(token.expiresAt) <= NEAR_EXPIRY_DAYS,
-  ).length
+  ).length;
 
-  const expired = live.length - active.length
+  const expired = live.length - active.length;
 
   return (
     <TableRow
@@ -195,5 +195,5 @@ function AppRow({
         {app.createdBy}
       </TableCell>
     </TableRow>
-  )
+  );
 }

@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
 import {
   Field,
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   OUTBOUND_TRUNKS,
   TRANSFER_MODES,
   type SharedSettings as SharedSettingsValue,
   type TransferMode,
-} from "@/lib/mockups/transfer-routing-data"
-import { WorkingHoursFields } from "@/components/mockups/transfer-routing/route-card"
+} from "@/lib/mockups/transfer-routing-data";
+import { WorkingHoursFields } from "@/components/mockups/transfer-routing/route-card";
 
 export function SharedSettings({
   value,
   warmInUse,
   onChange,
 }: {
-  value: SharedSettingsValue
+  value: SharedSettingsValue;
   /** Any route can transfer warm, and a route overridden to warm still inherits this prompt. */
-  warmInUse: boolean
-  onChange: (next: SharedSettingsValue) => void
+  warmInUse: boolean;
+  onChange: (next: SharedSettingsValue) => void;
 }) {
   function patch(next: Partial<SharedSettingsValue>) {
-    onChange({ ...value, ...next })
+    onChange({ ...value, ...next });
   }
 
   return (
@@ -120,5 +120,5 @@ export function SharedSettings({
         </FieldDescription>
       </Field>
     </div>
-  )
+  );
 }

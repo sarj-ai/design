@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { Separator } from "@/components/ui/separator"
-import { NavSearch } from "@/components/shell/nav-search"
-import { SarjMark } from "@/components/shell/sarj-mark"
-import { DOCS_ROOT } from "@/lib/design-system/nav"
-import { MOCKUPS } from "@/lib/site/mockups-data"
-import { cn } from "@/lib/utils"
+import { Separator } from "@/components/ui/separator";
+import { NavSearch } from "@/components/shell/nav-search";
+import { SarjMark } from "@/components/shell/sarj-mark";
+import { DOCS_ROOT } from "@/lib/design-system/nav";
+import { MOCKUPS } from "@/lib/site/mockups-data";
+import { cn } from "@/lib/utils";
 
 /** The lab's top-level places — the nav and the index footer both list them. */
 export const SITE_PLACES = [
@@ -17,14 +17,15 @@ export const SITE_PLACES = [
   { href: "/reels", label: "Reels showcase" },
   { href: DOCS_ROOT, label: "Design system" },
   { href: "/changelog", label: "Changelog" },
-]
+];
 
 /** A mockup is a top-level route, so it is matched against the index rather than by prefix. */
 function placeOf(path: string): string | undefined {
-  if (path === "/" || MOCKUPS.some((mockup) => mockup.href === path)) return "/"
+  if (path === "/" || MOCKUPS.some((mockup) => mockup.href === path))
+    return "/";
   return SITE_PLACES.find(
     (place) => place.href !== "/" && path.startsWith(place.href),
-  )?.href
+  )?.href;
 }
 
 export function SiteNav({
@@ -33,13 +34,13 @@ export function SiteNav({
   actions,
   className,
 }: {
-  title?: string
-  eyebrow?: string
-  actions?: React.ReactNode
+  title?: string;
+  eyebrow?: string;
+  actions?: React.ReactNode;
   /** The band's surface, when the page under it is not `bg-background`. */
-  className?: string
+  className?: string;
 }) {
-  const active = placeOf(usePathname())
+  const active = placeOf(usePathname());
 
   return (
     <div
@@ -63,7 +64,7 @@ export function SiteNav({
           </Link>
 
           {SITE_PLACES.map((place) => {
-            const current = place.href === active
+            const current = place.href === active;
             return (
               <Link
                 aria-current={current ? "page" : undefined}
@@ -73,7 +74,7 @@ export function SiteNav({
               >
                 {place.label}
               </Link>
-            )
+            );
           })}
 
           {title ? (
@@ -121,5 +122,5 @@ export function SiteNav({
         </nav>
       </div>
     </div>
-  )
+  );
 }

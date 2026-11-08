@@ -1,23 +1,23 @@
-import { arbitraryValue, createClassVisitor } from "../lib/classes.mjs"
+import { arbitraryValue, createClassVisitor } from "../lib/classes.mjs";
 
 const SPACING =
-  "p|px|py|pt|pr|pb|pl|ps|pe|m|mx|my|mt|mr|mb|ml|ms|me|gap|gap-x|gap-y|space-x|space-y|inset|inset-x|inset-y|top|right|bottom|left|start|end|w|h|size|min-w|min-h|max-w|max-h|basis|translate-x|translate-y|scroll-m|scroll-p"
+  "p|px|py|pt|pr|pb|pl|ps|pe|m|mx|my|mt|mr|mb|ml|ms|me|gap|gap-x|gap-y|space-x|space-y|inset|inset-x|inset-y|top|right|bottom|left|start|end|w|h|size|min-w|min-h|max-w|max-h|basis|translate-x|translate-y|scroll-m|scroll-p";
 
 const RADIUS =
-  "rounded|rounded-t|rounded-r|rounded-b|rounded-l|rounded-s|rounded-e|rounded-tl|rounded-tr|rounded-br|rounded-bl|rounded-ss|rounded-se|rounded-es|rounded-ee"
+  "rounded|rounded-t|rounded-r|rounded-b|rounded-l|rounded-s|rounded-e|rounded-tl|rounded-tr|rounded-br|rounded-bl|rounded-ss|rounded-se|rounded-es|rounded-ee";
 
-const TYPE = "text|leading|tracking"
+const TYPE = "text|leading|tracking";
 
-const SPACING_RE = new RegExp(`^-?(${SPACING})-\\[`)
-const RADIUS_RE = new RegExp(`^-?(${RADIUS})-\\[`)
-const TYPE_RE = new RegExp(`^-?(${TYPE})-\\[`)
+const SPACING_RE = new RegExp(`^-?(${SPACING})-\\[`);
+const RADIUS_RE = new RegExp(`^-?(${RADIUS})-\\[`);
+const TYPE_RE = new RegExp(`^-?(${TYPE})-\\[`);
 
 const ESCAPE_HATCH =
-  /\b\d*\.?\d+(vh|vw|dvh|dvw|svh|svw|lvh|lvw|vmin|vmax|%)|var\(--/
+  /\b\d*\.?\d+(vh|vw|dvh|dvw|svh|svw|lvh|lvw|vmin|vmax|%)|var\(--/;
 
 /** A colour in a `text-[…]`; no-raw-color owns that message. */
 const COLOR_LITERAL =
-  /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgba?|hsla?|lab|lch|color-mix)\s*\(/
+  /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgba?|hsla?|lab|lch|color-mix)\s*\(/;
 
 const noArbitraryScale = {
   meta: {
@@ -39,19 +39,19 @@ const noArbitraryScale = {
   create(context) {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
-        const value = arbitraryValue(base)
-        if (value === null || ESCAPE_HATCH.test(value)) continue
+        const value = arbitraryValue(base);
+        if (value === null || ESCAPE_HATCH.test(value)) continue;
 
         if (SPACING_RE.test(base)) {
-          context.report({ node, messageId: "spacing", data: { cls: raw } })
+          context.report({ node, messageId: "spacing", data: { cls: raw } });
         } else if (RADIUS_RE.test(base)) {
-          context.report({ node, messageId: "radius", data: { cls: raw } })
+          context.report({ node, messageId: "radius", data: { cls: raw } });
         } else if (TYPE_RE.test(base) && !COLOR_LITERAL.test(value)) {
-          context.report({ node, messageId: "type", data: { cls: raw } })
+          context.report({ node, messageId: "type", data: { cls: raw } });
         }
       }
-    })
+    });
   },
-}
+};
 
-export default noArbitraryScale
+export default noArbitraryScale;

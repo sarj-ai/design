@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/ui/switch"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import {
   OWNER,
   SENTIMENT_LABELS,
   type CallRow,
-} from "@/lib/mockups/behavioral-alerts-data"
+} from "@/lib/mockups/behavioral-alerts-data";
 import {
   AlertDetectionsBody,
   detectionsSummary,
-} from "@/components/mockups/behavioral-alerts/alert-detections"
+} from "@/components/mockups/behavioral-alerts/alert-detections";
 import {
   FlagsIcon,
   CollectedIcon,
@@ -32,14 +32,19 @@ import {
   GeneratedAtIcon,
   SectionToggleIcon,
   TechnicalIcon,
-} from "@/components/mockups/behavioral-alerts/icons"
-import { UserExperienceBody } from "@/components/mockups/behavioral-alerts/user-experience"
+} from "@/components/mockups/behavioral-alerts/icons";
+import { UserExperienceBody } from "@/components/mockups/behavioral-alerts/user-experience";
 
-type SectionId = "alerts" | "collected" | "experience" | "outcome" | "technical"
+type SectionId =
+  | "alerts"
+  | "collected"
+  | "experience"
+  | "outcome"
+  | "technical";
 
-type Arrangement = { id: SectionId; open: boolean; visible: boolean }
+type Arrangement = { id: SectionId; open: boolean; visible: boolean };
 
-const STORAGE_KEY = "sarj-mockup:behavioral-alerts-panel"
+const STORAGE_KEY = "sarj-mockup:behavioral-alerts-panel";
 
 const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "experience", open: true, visible: true },
@@ -47,76 +52,76 @@ const DEFAULT_ARRANGEMENT: Arrangement[] = [
   { id: "outcome", open: false, visible: true },
   { id: "collected", open: false, visible: true },
   { id: "technical", open: false, visible: false },
-]
+];
 
 // Stored arrangement may predate added or renamed sections: keep known ids in
 // stored order, then append missing defaults.
 function normalise(stored: unknown): Arrangement[] {
-  if (!Array.isArray(stored)) return DEFAULT_ARRANGEMENT
+  if (!Array.isArray(stored)) return DEFAULT_ARRANGEMENT;
 
-  const known = new Set(DEFAULT_ARRANGEMENT.map((item) => item.id))
-  const kept: Arrangement[] = []
+  const known = new Set(DEFAULT_ARRANGEMENT.map((item) => item.id));
+  const kept: Arrangement[] = [];
 
   for (const entry of stored) {
-    const saved = entry as Arrangement | undefined
-    const id = saved?.id
-    if (!id || !known.has(id) || kept.some((item) => item.id === id)) continue
+    const saved = entry as Arrangement | undefined;
+    const id = saved?.id;
+    if (!id || !known.has(id) || kept.some((item) => item.id === id)) continue;
     kept.push({
       id,
       open: saved.open === true,
       visible: saved.visible !== false,
-    })
+    });
   }
 
   for (const fallback of DEFAULT_ARRANGEMENT) {
-    if (!kept.some((item) => item.id === fallback.id)) kept.push(fallback)
+    if (!kept.some((item) => item.id === fallback.id)) kept.push(fallback);
   }
 
-  return kept
+  return kept;
 }
 
 // Cached against the raw string: useSyncExternalStore compares snapshots by
 // identity.
-const listeners = new Set<() => void>()
-let cachedRaw: string | null = null
-let cachedValue = DEFAULT_ARRANGEMENT
+const listeners = new Set<() => void>();
+let cachedRaw: string | null = null;
+let cachedValue = DEFAULT_ARRANGEMENT;
 
 function subscribe(listener: () => void) {
-  listeners.add(listener)
+  listeners.add(listener);
   return () => {
-    listeners.delete(listener)
-  }
+    listeners.delete(listener);
+  };
 }
 
 function getSnapshot(): Arrangement[] {
-  const raw = window.localStorage.getItem(STORAGE_KEY)
+  const raw = window.localStorage.getItem(STORAGE_KEY);
 
   if (raw !== cachedRaw) {
-    cachedRaw = raw
-    cachedValue = DEFAULT_ARRANGEMENT
+    cachedRaw = raw;
+    cachedValue = DEFAULT_ARRANGEMENT;
 
     if (raw) {
       try {
-        cachedValue = normalise(JSON.parse(raw))
+        cachedValue = normalise(JSON.parse(raw));
       } catch {
-        window.localStorage.removeItem(STORAGE_KEY)
-        cachedRaw = null
+        window.localStorage.removeItem(STORAGE_KEY);
+        cachedRaw = null;
       }
     }
   }
 
-  return cachedValue
+  return cachedValue;
 }
 
 function getServerSnapshot(): Arrangement[] {
-  return DEFAULT_ARRANGEMENT
+  return DEFAULT_ARRANGEMENT;
 }
 
 function store(next: Arrangement[] | null) {
-  if (next) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
-  else window.localStorage.removeItem(STORAGE_KEY)
+  if (next) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  else window.localStorage.removeItem(STORAGE_KEY);
 
-  for (const listener of listeners) listener()
+  for (const listener of listeners) listener();
 }
 
 export function SectionRegister({
@@ -124,36 +129,36 @@ export function SectionRegister({
   onConfigureAlerts,
   onSeek,
 }: {
-  call: CallRow
-  onConfigureAlerts: () => void
-  onSeek: (seconds: number) => void
+  call: CallRow;
+  onConfigureAlerts: () => void;
+  onSeek: (seconds: number) => void;
 }) {
   const arrangement = React.useSyncExternalStore(
     subscribe,
     getSnapshot,
     getServerSnapshot,
-  )
-  const anchors = React.useRef<Record<string, HTMLDivElement | null>>({})
+  );
+  const anchors = React.useRef<Record<string, HTMLDivElement | null>>({});
 
   function setOpen(id: SectionId, open: boolean) {
     store(
       arrangement.map((item) => (item.id === id ? { ...item, open } : item)),
-    )
+    );
   }
 
   function jumpTo(id: SectionId) {
-    setOpen(id, true)
+    setOpen(id, true);
     anchors.current[id]?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
         : "smooth",
       block: "start",
-    })
+    });
   }
 
-  const sections = useSections(call, onConfigureAlerts, onSeek)
-  const present = arrangement.filter((item) => sections[item.id] !== null)
-  const shown = present.filter((item) => item.visible)
+  const sections = useSections(call, onConfigureAlerts, onSeek);
+  const present = arrangement.filter((item) => sections[item.id] !== null);
+  const shown = present.filter((item) => item.visible);
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
@@ -164,7 +169,7 @@ export function SectionRegister({
               className="font-normal"
               key={item.id}
               onClick={() => {
-                jumpTo(item.id)
+                jumpTo(item.id);
               }}
               size="xs"
               variant="ghost"
@@ -179,16 +184,16 @@ export function SectionRegister({
           onRearrange={(next) => {
             // Only present sections are draggable; absent ones keep their
             // stored slot.
-            const order = next.map((item) => item.id)
-            let cursor = 0
+            const order = next.map((item) => item.id);
+            let cursor = 0;
             store(
               arrangement.map((item) =>
                 order.includes(item.id) ? next[cursor++] : item,
               ),
-            )
+            );
           }}
           onReset={() => {
-            store(null)
+            store(null);
           }}
           sections={sections}
         />
@@ -196,8 +201,8 @@ export function SectionRegister({
 
       <div className="scrollbar-hide flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto p-1">
         {shown.map((item) => {
-          const section = sections[item.id]
-          if (!section) return null
+          const section = sections[item.id];
+          if (!section) return null;
 
           return (
             <PanelSection
@@ -205,21 +210,21 @@ export function SectionRegister({
               isOpen={item.open}
               key={item.id}
               onToggle={() => {
-                setOpen(item.id, !item.open)
+                setOpen(item.id, !item.open);
               }}
               ref={(node) => {
-                anchors.current[item.id] = node
+                anchors.current[item.id] = node;
               }}
               summary={section.summary}
               title={section.title}
             >
               {section.body}
             </PanelSection>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 function CustomizePopover({
@@ -228,28 +233,28 @@ function CustomizePopover({
   onReset,
   sections,
 }: {
-  arrangement: Arrangement[]
-  onRearrange: (next: Arrangement[]) => void
-  onReset: () => void
-  sections: Record<SectionId, null | Section>
+  arrangement: Arrangement[];
+  onRearrange: (next: Arrangement[]) => void;
+  onReset: () => void;
+  sections: Record<SectionId, null | Section>;
 }) {
-  const [dragging, setDragging] = React.useState<SectionId | null>(null)
-  const [dropAt, setDropAt] = React.useState<number | null>(null)
+  const [dragging, setDragging] = React.useState<SectionId | null>(null);
+  const [dropAt, setDropAt] = React.useState<number | null>(null);
 
   function move(from: number, to: number) {
-    if (to < 0 || to >= arrangement.length || from === to) return
-    const next = [...arrangement]
-    const [moved] = next.splice(from, 1)
-    next.splice(to, 0, moved)
-    onRearrange(next)
+    if (to < 0 || to >= arrangement.length || from === to) return;
+    const next = [...arrangement];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    onRearrange(next);
   }
 
   // Drop uses an insertion point, which shifts once the row is lifted out.
   function moveTo(from: number, insertAt: number) {
-    const next = [...arrangement]
-    const [moved] = next.splice(from, 1)
-    next.splice(insertAt > from ? insertAt - 1 : insertAt, 0, moved)
-    onRearrange(next)
+    const next = [...arrangement];
+    const [moved] = next.splice(from, 1);
+    next.splice(insertAt > from ? insertAt - 1 : insertAt, 0, moved);
+    onRearrange(next);
   }
 
   function set(id: SectionId, patch: Partial<Arrangement>) {
@@ -257,12 +262,12 @@ function CustomizePopover({
       arrangement.map((entry) =>
         entry.id === id ? { ...entry, ...patch } : entry,
       ),
-    )
+    );
   }
 
   function endDrag() {
-    setDragging(null)
-    setDropAt(null)
+    setDragging(null);
+    setDropAt(null);
   }
 
   return (
@@ -300,20 +305,20 @@ function CustomizePopover({
               key={item.id}
               onDragEnd={endDrag}
               onDragOver={(event) => {
-                event.preventDefault()
-                const box = event.currentTarget.getBoundingClientRect()
-                const below = event.clientY > box.top + box.height / 2
-                setDropAt(below ? index + 1 : index)
+                event.preventDefault();
+                const box = event.currentTarget.getBoundingClientRect();
+                const below = event.clientY > box.top + box.height / 2;
+                setDropAt(below ? index + 1 : index);
               }}
               onDragStart={() => {
-                setDragging(item.id)
+                setDragging(item.id);
               }}
               onDrop={() => {
                 const from = arrangement.findIndex(
                   (entry) => entry.id === dragging,
-                )
-                if (from !== -1 && dropAt !== null) moveTo(from, dropAt)
-                endDrag()
+                );
+                if (from !== -1 && dropAt !== null) moveTo(from, dropAt);
+                endDrag();
               }}
             >
               {dropAt === index ? <DropLine className="-top-px" /> : null}
@@ -327,12 +332,12 @@ function CustomizePopover({
                 className="shrink-0 cursor-grab"
                 onKeyDown={(event) => {
                   if (event.key === "ArrowUp") {
-                    event.preventDefault()
-                    move(index, index - 1)
+                    event.preventDefault();
+                    move(index, index - 1);
                   }
                   if (event.key === "ArrowDown") {
-                    event.preventDefault()
-                    move(index, index + 1)
+                    event.preventDefault();
+                    move(index, index + 1);
                   }
                 }}
                 size="icon-xs"
@@ -353,7 +358,7 @@ function CustomizePopover({
                     set(item.id, {
                       open: checked ? item.open : false,
                       visible: checked,
-                    })
+                    });
                   }}
                 />
               </span>
@@ -371,7 +376,7 @@ function CustomizePopover({
         </Button>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 function DropLine({ className }: { className: string }) {
@@ -382,15 +387,15 @@ function DropLine({ className }: { className: string }) {
         className,
       )}
     />
-  )
+  );
 }
 
 type Section = {
-  body: React.ReactNode
-  icon: React.ComponentType<{ className?: string }>
-  summary: string
-  title: string
-}
+  body: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
+  summary: string;
+  title: string;
+};
 
 function PanelSection({
   children,
@@ -401,13 +406,13 @@ function PanelSection({
   summary,
   title,
 }: {
-  children: React.ReactNode
-  icon: React.ComponentType<{ className?: string }>
-  isOpen: boolean
-  onToggle: () => void
-  ref: (node: HTMLDivElement | null) => void
-  summary: string
-  title: string
+  children: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
+  isOpen: boolean;
+  onToggle: () => void;
+  ref: (node: HTMLDivElement | null) => void;
+  summary: string;
+  title: string;
 }) {
   return (
     <div className="flex scroll-mt-1 flex-col rounded-lg bg-muted" ref={ref}>
@@ -432,7 +437,7 @@ function PanelSection({
         <div className="flex flex-col gap-3 px-3 pb-3">{children}</div>
       ) : null}
     </div>
-  )
+  );
 }
 
 function useSections(
@@ -440,7 +445,7 @@ function useSections(
   onConfigureAlerts: () => void,
   onSeek: (seconds: number) => void,
 ): Record<SectionId, null | Section> {
-  const journey = call.analysis.journey
+  const journey = call.analysis.journey;
 
   return {
     alerts: {
@@ -486,11 +491,11 @@ function useSections(
       summary: `${call.callId.slice(0, 8)}…`,
       title: "Technical",
     },
-  }
+  };
 }
 
 function OutcomeBody({ call }: { call: CallRow }) {
-  const achieved = call.outcome.criteria.filter((item) => item.achieved).length
+  const achieved = call.outcome.criteria.filter((item) => item.achieved).length;
 
   return (
     <>
@@ -545,7 +550,7 @@ function OutcomeBody({ call }: { call: CallRow }) {
         ))}
       </div>
     </>
-  )
+  );
 }
 
 function CollectedBody({ call }: { call: CallRow }) {
@@ -565,7 +570,7 @@ function CollectedBody({ call }: { call: CallRow }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function TechnicalBody({ call }: { call: CallRow }) {
@@ -576,7 +581,7 @@ function TechnicalBody({ call }: { call: CallRow }) {
     { label: "Ended", value: call.endedAt },
     { label: "User", value: OWNER.userId },
     { label: "Organization", value: OWNER.organizationId },
-  ]
+  ];
 
   return (
     <div className="flex flex-col gap-2">
@@ -590,5 +595,5 @@ function TechnicalBody({ call }: { call: CallRow }) {
         </div>
       ))}
     </div>
-  )
+  );
 }

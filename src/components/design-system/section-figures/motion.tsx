@@ -1,12 +1,12 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
-import { SECTION_FIGURE_VIEWBOX } from "./frame"
+import { SECTION_FIGURE_VIEWBOX } from "./frame";
 
 /* The plot: time along, progress up. 0 to 300ms at 2 units per ms (x 180 to 780), progress 0 to 1 over 136 units (y 207 to 71). */
-const X0 = 180
-const X1 = 780
-const Y0 = 207
-const Y1 = 71
+const X0 = 180;
+const X1 = 780;
+const Y0 = 207;
+const Y1 = 71;
 
 /** Durations and curves must match eslint-rules/rules/motion-tokens.mjs and globals.css. */
 export function MotionFigure({ className }: FigureProps) {
@@ -58,5 +58,5 @@ export function MotionFigure({ className }: FigureProps) {
         </text>
       </g>
     </Figure>
-  )
+  );
 }

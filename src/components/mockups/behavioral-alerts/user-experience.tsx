@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
-import type { UserJourney } from "@/lib/mockups/behavioral-alerts-data"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import type { UserJourney } from "@/lib/mockups/behavioral-alerts-data";
 import {
   PurposeMetIcon,
   PurposeMissedIcon,
   RationaleIcon,
   RatingStarIcon,
-} from "@/components/mockups/behavioral-alerts/icons"
-import { SentimentBadge } from "@/components/mockups/behavioral-alerts/severity"
+} from "@/components/mockups/behavioral-alerts/icons";
+import { SentimentBadge } from "@/components/mockups/behavioral-alerts/severity";
 
 export function UserExperienceBody({ journey }: { journey: UserJourney }) {
   return (
@@ -54,10 +54,10 @@ export function UserExperienceBody({ journey }: { journey: UserJourney }) {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-const STARS = [1, 2, 3, 4, 5]
+const STARS = [1, 2, 3, 4, 5];
 
 function Rating({ rating, rationale }: { rating: number; rationale: string }) {
   return (
@@ -95,5 +95,5 @@ function Rating({ rating, rationale }: { rating: number; rationale: string }) {
         </TooltipContent>
       </Tooltip>
     </div>
-  )
+  );
 }

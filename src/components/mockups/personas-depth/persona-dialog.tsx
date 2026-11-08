@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,43 +11,43 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/dialog";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import {
   GENDERS,
   LANGUAGES,
   type Persona,
   type PersonaGender,
   type PersonaLanguage,
-} from "@/lib/mockups/personas-depth-data"
-import { VoicePicker } from "@/components/mockups/personas-depth/voice-picker"
+} from "@/lib/mockups/personas-depth-data";
+import { VoicePicker } from "@/components/mockups/personas-depth/voice-picker";
 
 export type PersonaDraft = {
-  name: string
-  language: PersonaLanguage
-  gender: PersonaGender
-  voiceId: string
-  prompt: string
-}
+  name: string;
+  language: PersonaLanguage;
+  gender: PersonaGender;
+  voiceId: string;
+  prompt: string;
+};
 
 /* Mirrors the platform's components/settings/backchannel-settings.tsx. */
-const DEFAULT_FILLER_WORDS = ["تمام", "حاضر", "ممتاز", "زين", "نعم"]
+const DEFAULT_FILLER_WORDS = ["تمام", "حاضر", "ممتاز", "زين", "نعم"];
 
-const NOISE_TYPES = ["Office", "City Street", "Crowded Room", "Forest"]
+const NOISE_TYPES = ["Office", "City Street", "Crowded Room", "Forest"];
 
 /** The form is a child mounted with the dialog content, so each open resets its state without effects. */
 export function PersonaDialog({
@@ -56,10 +56,10 @@ export function PersonaDialog({
   persona,
   onSubmit,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  persona: Persona | null
-  onSubmit: (draft: PersonaDraft) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  persona: Persona | null;
+  onSubmit: (draft: PersonaDraft) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -72,7 +72,7 @@ export function PersonaDialog({
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function PersonaForm({
@@ -80,56 +80,56 @@ function PersonaForm({
   onSubmit,
   onClose,
 }: {
-  persona: Persona | null
-  onSubmit: (draft: PersonaDraft) => void
-  onClose: () => void
+  persona: Persona | null;
+  onSubmit: (draft: PersonaDraft) => void;
+  onClose: () => void;
 }) {
-  const editing = persona !== null
+  const editing = persona !== null;
 
-  const [tab, setTab] = React.useState("profile")
-  const [name, setName] = React.useState(persona?.name ?? "")
+  const [tab, setTab] = React.useState("profile");
+  const [name, setName] = React.useState(persona?.name ?? "");
   const [language, setLanguage] = React.useState<PersonaLanguage>(
     persona?.language ?? "Arabic",
-  )
+  );
   const [gender, setGender] = React.useState<PersonaGender>(
     persona?.gender ?? "Female",
-  )
-  const [voiceId, setVoiceId] = React.useState(persona?.voiceId ?? "")
-  const [prompt, setPrompt] = React.useState(persona?.prompt ?? "")
-  const [speed, setSpeed] = React.useState(1)
+  );
+  const [voiceId, setVoiceId] = React.useState(persona?.voiceId ?? "");
+  const [prompt, setPrompt] = React.useState(persona?.prompt ?? "");
+  const [speed, setSpeed] = React.useState(1);
 
-  const [backchannel, setBackchannel] = React.useState(true)
-  const [fillerWords, setFillerWords] = React.useState(DEFAULT_FILLER_WORDS)
-  const [fillerDraft, setFillerDraft] = React.useState("")
-  const [fillerFrequency, setFillerFrequency] = React.useState(0.6)
-  const [backgroundNoise, setBackgroundNoise] = React.useState(false)
-  const [noiseType, setNoiseType] = React.useState("Office")
-  const [noiseVolume, setNoiseVolume] = React.useState(0.05)
-  const [turnOverride, setTurnOverride] = React.useState(false)
-  const [minWait, setMinWait] = React.useState("0.4")
-  const [maxWait, setMaxWait] = React.useState("1.2")
-  const [timeoutOn, setTimeoutOn] = React.useState(true)
-  const [timeoutSeconds, setTimeoutSeconds] = React.useState("8")
-  const [timeoutRetries, setTimeoutRetries] = React.useState("2")
+  const [backchannel, setBackchannel] = React.useState(true);
+  const [fillerWords, setFillerWords] = React.useState(DEFAULT_FILLER_WORDS);
+  const [fillerDraft, setFillerDraft] = React.useState("");
+  const [fillerFrequency, setFillerFrequency] = React.useState(0.6);
+  const [backgroundNoise, setBackgroundNoise] = React.useState(false);
+  const [noiseType, setNoiseType] = React.useState("Office");
+  const [noiseVolume, setNoiseVolume] = React.useState(0.05);
+  const [turnOverride, setTurnOverride] = React.useState(false);
+  const [minWait, setMinWait] = React.useState("0.4");
+  const [maxWait, setMaxWait] = React.useState("1.2");
+  const [timeoutOn, setTimeoutOn] = React.useState(true);
+  const [timeoutSeconds, setTimeoutSeconds] = React.useState("8");
+  const [timeoutRetries, setTimeoutRetries] = React.useState("2");
 
   function changeLanguage(next: PersonaLanguage) {
-    setLanguage(next)
-    setVoiceId("")
+    setLanguage(next);
+    setVoiceId("");
   }
 
   function changeGender(next: PersonaGender) {
-    setGender(next)
-    setVoiceId("")
+    setGender(next);
+    setVoiceId("");
   }
 
   function addFillerWord() {
-    const word = fillerDraft.trim()
-    if (!word || fillerWords.includes(word)) return
-    setFillerWords([...fillerWords, word])
-    setFillerDraft("")
+    const word = fillerDraft.trim();
+    if (!word || fillerWords.includes(word)) return;
+    setFillerWords([...fillerWords, word]);
+    setFillerDraft("");
   }
 
-  const canSave = name.trim().length > 0 && voiceId !== ""
+  const canSave = name.trim().length > 0 && voiceId !== "";
 
   return (
     <>
@@ -300,8 +300,8 @@ function PersonaForm({
                         onChange={(event) => setFillerDraft(event.target.value)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter") {
-                            event.preventDefault()
-                            addFillerWord()
+                            event.preventDefault();
+                            addFillerWord();
                           }
                         }}
                         placeholder="Add a filler word and press Enter"
@@ -486,23 +486,23 @@ function PersonaForm({
         <Button
           disabled={!canSave}
           onClick={() => {
-            onSubmit({ name: name.trim(), language, gender, voiceId, prompt })
-            onClose()
+            onSubmit({ name: name.trim(), language, gender, voiceId, prompt });
+            onClose();
           }}
         >
           {editing ? "Save changes" : "Create persona"}
         </Button>
       </DialogFooter>
     </>
-  )
+  );
 }
 
 function GroupPanel({
   label,
   children,
 }: {
-  label: string
-  children: React.ReactNode
+  label: string;
+  children: React.ReactNode;
 }) {
   // Half-strength: full `bg-muted` matches the Slider track and hides it.
   return (
@@ -510,7 +510,7 @@ function GroupPanel({
       <span className="text-xs font-medium text-muted-foreground">{label}</span>
       {children}
     </section>
-  )
+  );
 }
 
 function SettingRow({
@@ -519,10 +519,10 @@ function SettingRow({
   control,
   children,
 }: {
-  title: string
-  description: string
-  control: React.ReactNode
-  children?: React.ReactNode
+  title: string;
+  description: string;
+  control: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -535,7 +535,7 @@ function SettingRow({
       </div>
       {children ? <div className="flex flex-col gap-3">{children}</div> : null}
     </div>
-  )
+  );
 }
 
 function SliderRow({
@@ -543,9 +543,9 @@ function SliderRow({
   readout,
   children,
 }: {
-  label: string
-  readout: string
-  children: React.ReactNode
+  label: string;
+  readout: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex items-center gap-3">
@@ -555,5 +555,5 @@ function SliderRow({
         {readout}
       </span>
     </div>
-  )
+  );
 }

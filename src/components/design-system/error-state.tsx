@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { RetryIcon, WarningIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
+import { RetryIcon, WarningIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -11,8 +11,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
 
 /**
  * The one error block: what failed, why it is safe to try again, and Try
@@ -37,11 +37,11 @@ export function ErrorState({
 }: {
   /** What failed, named: "Could not load scenarios". Never "Something went
    *  wrong". */
-  title: string
-  description?: string
-  onRetry: () => void
-  retrying?: boolean
-  className?: string
+  title: string;
+  description?: string;
+  onRetry: () => void;
+  retrying?: boolean;
+  className?: string;
 }) {
   return (
     <Empty className={className}>
@@ -64,7 +64,7 @@ export function ErrorState({
         </Button>
       </EmptyContent>
     </Empty>
-  )
+  );
 }
 
 /**
@@ -73,21 +73,21 @@ export function ErrorState({
  * request that timed out.
  */
 export function useRetry() {
-  const [failed, setFailed] = React.useState(true)
-  const [retrying, setRetrying] = React.useState(false)
-  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined)
+  const [failed, setFailed] = React.useState(true);
+  const [retrying, setRetrying] = React.useState(false);
+  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  React.useEffect(() => () => clearTimeout(timer.current), [])
+  React.useEffect(() => () => clearTimeout(timer.current), []);
 
   return {
     failed,
     retrying,
     retry() {
-      setRetrying(true)
+      setRetrying(true);
       timer.current = setTimeout(() => {
-        setRetrying(false)
-        setFailed(false)
-      }, 900)
+        setRetrying(false);
+        setFailed(false);
+      }, 900);
     },
-  }
+  };
 }

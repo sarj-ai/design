@@ -1,35 +1,35 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   type CallLink,
   type CallSpecifics,
   type CallState,
   type ScheduleDetail,
-} from "@/lib/mockups/conversations-revamp-drawer-data"
-import { CancelCallDialog } from "@/components/mockups/conversations-revamp/drawer/cancel-call-dialog"
-import { LinkedCall } from "@/components/mockups/conversations-revamp/drawer/linked-call"
+} from "@/lib/mockups/conversations-revamp-drawer-data";
+import { CancelCallDialog } from "@/components/mockups/conversations-revamp/drawer/cancel-call-dialog";
+import { LinkedCall } from "@/components/mockups/conversations-revamp/drawer/linked-call";
 import {
   CalendarIcon,
   QueuedIcon,
   RequestedIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function PreCallPanel({
   onCancel,
   specifics,
   state,
 }: {
-  onCancel: () => void
-  specifics: CallSpecifics
-  state: Exclude<CallState, "complete">
+  onCancel: () => void;
+  specifics: CallSpecifics;
+  state: Exclude<CallState, "complete">;
 }) {
   if (state === "queued") {
     return (
@@ -47,7 +47,7 @@ export function PreCallPanel({
           </EmptyHeader>
         </Empty>
       </div>
-    )
+    );
   }
 
   return (
@@ -73,7 +73,7 @@ export function PreCallPanel({
         </EmptyHeader>
       </Empty>
     </div>
-  )
+  );
 }
 
 function ScheduledCallSection({
@@ -81,11 +81,11 @@ function ScheduledCallSection({
   ranFrom,
   schedule,
 }: {
-  onCancel: () => void
-  ranFrom?: CallLink
-  schedule: ScheduleDetail
+  onCancel: () => void;
+  ranFrom?: CallLink;
+  schedule: ScheduleDetail;
 }) {
-  const requested = schedule.origin === "requested"
+  const requested = schedule.origin === "requested";
 
   return (
     <div className="flex shrink-0 flex-col gap-4 rounded-lg bg-muted p-4">
@@ -140,7 +140,7 @@ function ScheduledCallSection({
 
       <CancelCallDialog onConfirm={onCancel} />
     </div>
-  )
+  );
 }
 
 function Field({ label, value }: { label: string; value: string }) {
@@ -151,5 +151,5 @@ function Field({ label, value }: { label: string; value: string }) {
         {value}
       </span>
     </div>
-  )
+  );
 }

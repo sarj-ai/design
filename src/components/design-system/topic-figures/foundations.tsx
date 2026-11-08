@@ -1,8 +1,8 @@
-import { IconsTopicGlyph } from "@/components/design-system/icons"
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
-import { cn } from "@/lib/utils"
+import { IconsTopicGlyph } from "@/components/design-system/icons";
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
+import { cn } from "@/lib/utils";
 
-import { TOPIC_FIGURE_VIEWBOX } from "./frame"
+import { TOPIC_FIGURE_VIEWBOX } from "./frame";
 
 /* Every subject sits in the box x 60–180, y 72–192. */
 
@@ -15,7 +15,7 @@ function ColourFigure({ className }: FigureProps) {
         <path d="M84 104v56M108 104v56M132 104v56M156 104v56" opacity=".6" />
       </g>
     </Figure>
-  )
+  );
 }
 
 function LayeringFigure({ className }: FigureProps) {
@@ -27,7 +27,7 @@ function LayeringFigure({ className }: FigureProps) {
         <rect height="64" rx="8" width="80" x="60" y="128" />
       </g>
     </Figure>
-  )
+  );
 }
 
 function IconsFigure({ className }: FigureProps) {
@@ -67,7 +67,7 @@ function IconsFigure({ className }: FigureProps) {
       </Figure>
       <IconsTopicGlyph className="relative mt-4 size-12" strokeWidth={1.5} />
     </div>
-  )
+  );
 }
 
 function ShadowsFigure({ className }: FigureProps) {
@@ -82,7 +82,7 @@ function ShadowsFigure({ className }: FigureProps) {
         <rect height="72" rx="10" width="104" x="68" y="92" />
       </g>
     </Figure>
-  )
+  );
 }
 
 function TypographyFigure({ className }: FigureProps) {
@@ -99,16 +99,16 @@ function TypographyFigure({ className }: FigureProps) {
         <path d="M176 132v48" />
       </g>
     </Figure>
-  )
+  );
 }
 
 /* The spacing steps 8 12 16 24 32, at 1.25 units to the pixel. */
-const SPACING_STEPS = [8, 12, 16, 24, 32].map((px) => px * 1.25)
+const SPACING_STEPS = [8, 12, 16, 24, 32].map((px) => px * 1.25);
 /* Computed once here rather than accumulated during render. */
 const SPACING_LEFTS = SPACING_STEPS.map(
   (_, i) =>
     52.5 + SPACING_STEPS.slice(0, i).reduce((sum, size) => sum + size + 5, 0),
-)
+);
 
 function SpacingFigure({ className }: FigureProps) {
   return (
@@ -127,7 +127,7 @@ function SpacingFigure({ className }: FigureProps) {
         ))}
       </g>
     </Figure>
-  )
+  );
 }
 
 function RadiusFigure({ className }: FigureProps) {
@@ -149,7 +149,7 @@ function RadiusFigure({ className }: FigureProps) {
         10px
       </text>
     </Figure>
-  )
+  );
 }
 
 function ScrollbarsFigure({ className }: FigureProps) {
@@ -161,7 +161,7 @@ function ScrollbarsFigure({ className }: FigureProps) {
         <path d="M164 88v40" strokeWidth="4" />
       </g>
     </Figure>
-  )
+  );
 }
 
 function AccessibilityFigure({ className }: FigureProps) {
@@ -173,11 +173,11 @@ function AccessibilityFigure({ className }: FigureProps) {
         <path d="M100 134h40" opacity=".5" />
       </g>
     </Figure>
-  )
+  );
 }
 
 /* The four control heights, 36 32 28 24px, at 1.5 units to the pixel. */
-const CONTROL_HEIGHTS = [36, 32, 28, 24].map((px) => px * 1.5)
+const CONTROL_HEIGHTS = [36, 32, 28, 24].map((px) => px * 1.5);
 
 function ControlScaleFigure({ className }: FigureProps) {
   return (
@@ -197,7 +197,7 @@ function ControlScaleFigure({ className }: FigureProps) {
         ))}
       </g>
     </Figure>
-  )
+  );
 }
 
 function EnforcementFigure({ className }: FigureProps) {
@@ -210,7 +210,7 @@ function EnforcementFigure({ className }: FigureProps) {
         <path d="m88 154 4-4 4 4 4-4 4 4 4-4 4 4 4-4 4 4 4-4 4 4 4-4 4 4 4-4 4 4 4-4 4 4" />
       </g>
     </Figure>
-  )
+  );
 }
 
 export const FOUNDATIONS_FIGURES: Record<
@@ -228,4 +228,4 @@ export const FOUNDATIONS_FIGURES: Record<
   accessibility: AccessibilityFigure,
   "control-scale": ControlScaleFigure,
   enforcement: EnforcementFigure,
-}
+};

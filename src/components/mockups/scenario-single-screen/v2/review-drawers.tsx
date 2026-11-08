@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/empty";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   ConfiguredIcon,
   DismissIcon,
   UnsavedIcon,
-} from "@/components/mockups/scenario-single-screen/v2/icons"
-import { SheetSection } from "@/components/mockups/scenario-single-screen/v2/setting-sheet"
+} from "@/components/mockups/scenario-single-screen/v2/icons";
+import { SheetSection } from "@/components/mockups/scenario-single-screen/v2/setting-sheet";
 import {
   CURRENT_ORGANIZATION,
   type Insight,
   type InsightTarget,
   type Opportunity,
   ORGANIZATIONS,
-} from "@/lib/mockups/scenario-single-screen-data"
+} from "@/lib/mockups/scenario-single-screen-data";
 
 const TARGET_LABELS: Record<InsightTarget, string> = {
   criteria: "success criteria",
@@ -41,7 +41,7 @@ const TARGET_LABELS: Record<InsightTarget, string> = {
   knowledge: "knowledge bases",
   prompt: "the prompt",
   tools: "tools",
-}
+};
 
 export function InsightsDrawerBody({
   dismissed,
@@ -49,12 +49,12 @@ export function InsightsDrawerBody({
   onDismiss,
   onOpenTarget,
 }: {
-  dismissed: string[]
-  insights: Insight[]
-  onDismiss: (title: string) => void
-  onOpenTarget: (target: InsightTarget) => void
+  dismissed: string[];
+  insights: Insight[];
+  onDismiss: (title: string) => void;
+  onOpenTarget: (target: InsightTarget) => void;
 }) {
-  const open = insights.filter((insight) => !dismissed.includes(insight.title))
+  const open = insights.filter((insight) => !dismissed.includes(insight.title));
 
   if (open.length === 0) {
     return (
@@ -69,7 +69,7 @@ export function InsightsDrawerBody({
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
-    )
+    );
   }
 
   return (
@@ -86,7 +86,7 @@ export function InsightsDrawerBody({
               <div className="flex-1" />
               <Button
                 onClick={() => {
-                  onDismiss(insight.title)
+                  onDismiss(insight.title);
                 }}
                 size="xs"
                 variant="ghost"
@@ -96,7 +96,7 @@ export function InsightsDrawerBody({
               </Button>
               <Button
                 onClick={() => {
-                  onOpenTarget(insight.target)
+                  onOpenTarget(insight.target);
                 }}
                 size="xs"
                 variant="outline"
@@ -108,19 +108,19 @@ export function InsightsDrawerBody({
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 const IMPACT_VARIANT = {
   high: "default",
   low: "outline",
   medium: "secondary",
-} as const
+} as const;
 
 export function OpportunitiesDrawerBody({
   opportunities,
 }: {
-  opportunities: Opportunity[]
+  opportunities: Opportunity[];
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -140,16 +140,16 @@ export function OpportunitiesDrawerBody({
         </Card>
       ))}
     </div>
-  )
+  );
 }
 
 export function OwnershipDrawerBody({
   attachedBases,
 }: {
-  attachedBases: number
+  attachedBases: number;
 }) {
-  const [organization, setOrganization] = React.useState(CURRENT_ORGANIZATION)
-  const moving = organization !== CURRENT_ORGANIZATION
+  const [organization, setOrganization] = React.useState(CURRENT_ORGANIZATION);
+  const moving = organization !== CURRENT_ORGANIZATION;
 
   return (
     <SheetSection title="Owning organization">
@@ -189,5 +189,5 @@ export function OwnershipDrawerBody({
         Transfer to {organization}
       </Button>
     </SheetSection>
-  )
+  );
 }

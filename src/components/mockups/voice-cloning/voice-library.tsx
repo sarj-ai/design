@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   AlertDialog,
@@ -12,41 +12,41 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   LanguageChip,
   NotApplicable,
-} from "@/components/design-system/call-table"
+} from "@/components/design-system/call-table";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
-import { usePlayback } from "@/components/mockups/voice-cloning/audio"
+} from "@/components/shared/data-table";
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
+import { usePlayback } from "@/components/mockups/voice-cloning/audio";
 import {
   ActiveVoiceIcon,
   AddVoiceIcon,
@@ -57,40 +57,40 @@ import {
   PlayVoiceIcon,
   RecordIcon,
   SearchVoicesIcon,
-} from "@/components/mockups/voice-cloning/icons"
+} from "@/components/mockups/voice-cloning/icons";
 import {
   GENDER_OPTIONS,
   LANGUAGE_OPTIONS,
   type Voice,
   type VoiceStatus,
-} from "@/lib/mockups/voice-cloning-data"
+} from "@/lib/mockups/voice-cloning-data";
 
 const STATUS_OPTIONS = [
   { value: "active", label: "Active" },
   { value: "inactive", label: "Inactive" },
   { value: "pending", label: "Pending" },
-]
+];
 
 const PROVIDER_OPTIONS = ["Sarj Omni", "ElevenLabs", "Hamsa", "Cartesia"].map(
   (provider) => ({ value: provider, label: provider }),
-)
+);
 
 export function VoiceLibrary({
   voices,
   onClone,
   onDelete,
 }: {
-  voices: Voice[]
-  onClone: () => void
-  onDelete: (voice: Voice) => void
+  voices: Voice[];
+  onClone: () => void;
+  onDelete: (voice: Voice) => void;
 }) {
-  const [query, setQuery] = React.useState("")
-  const [provider, setProvider] = React.useState<string | null>(null)
-  const [status, setStatus] = React.useState<string | null>(null)
-  const [language, setLanguage] = React.useState<string | null>(null)
-  const [gender, setGender] = React.useState<string | null>(null)
-  const [pageSize, setPageSize] = React.useState(25)
-  const [deleting, setDeleting] = React.useState<Voice | null>(null)
+  const [query, setQuery] = React.useState("");
+  const [provider, setProvider] = React.useState<string | null>(null);
+  const [status, setStatus] = React.useState<string | null>(null);
+  const [language, setLanguage] = React.useState<string | null>(null);
+  const [gender, setGender] = React.useState<string | null>(null);
+  const [pageSize, setPageSize] = React.useState(25);
+  const [deleting, setDeleting] = React.useState<Voice | null>(null);
 
   const rows = voices.filter(
     (voice) =>
@@ -99,10 +99,10 @@ export function VoiceLibrary({
       (status === null || voice.status === status) &&
       (language === null || voice.language === language) &&
       (gender === null || voice.gender === gender),
-  )
+  );
   const activeCount = [provider, status, language, gender].filter(
     (value) => value !== null,
-  ).length
+  ).length;
 
   return (
     <main className="mx-auto flex w-full max-w-350 flex-col gap-4 p-8">
@@ -136,10 +136,10 @@ export function VoiceLibrary({
         <FilterBar
           activeCount={activeCount}
           onClearAll={() => {
-            setProvider(null)
-            setStatus(null)
-            setLanguage(null)
-            setGender(null)
+            setProvider(null);
+            setStatus(null);
+            setLanguage(null);
+            setGender(null);
           }}
         >
           <ChoiceFilter
@@ -221,20 +221,20 @@ export function VoiceLibrary({
 
       <DeleteVoiceConfirm
         onConfirm={(voice) => {
-          onDelete(voice)
-          toast(`${voice.name} deleted`)
+          onDelete(voice);
+          toast(`${voice.name} deleted`);
         }}
         onOpenChange={(open) => {
-          if (!open) setDeleting(null)
+          if (!open) setDeleting(null);
         }}
         voice={deleting}
       />
     </main>
-  )
+  );
 }
 
 function VoiceRow({ voice, onDelete }: { voice: Voice; onDelete: () => void }) {
-  const playback = usePlayback(3)
+  const playback = usePlayback(3);
 
   return (
     <TableRow>
@@ -293,7 +293,7 @@ function VoiceRow({ voice, onDelete }: { voice: Voice; onDelete: () => void }) {
         </span>
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function StatusChip({ status }: { status: VoiceStatus }) {
@@ -306,7 +306,7 @@ function StatusChip({ status }: { status: VoiceStatus }) {
         <ActiveVoiceIcon />
         Active
       </Badge>
-    )
+    );
   }
   if (status === "pending") {
     return (
@@ -316,13 +316,13 @@ function StatusChip({ status }: { status: VoiceStatus }) {
       >
         Pending
       </Badge>
-    )
+    );
   }
   return (
     <Badge className="bg-muted text-muted-foreground" variant="secondary">
       Inactive
     </Badge>
-  )
+  );
 }
 
 export function DeleteVoiceConfirm({
@@ -330,14 +330,14 @@ export function DeleteVoiceConfirm({
   onOpenChange,
   onConfirm,
 }: {
-  voice: Voice | null
-  onOpenChange: (open: boolean) => void
-  onConfirm: (voice: Voice) => void
+  voice: Voice | null;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: (voice: Voice) => void;
 }) {
   /* Keeps the last voice on screen while the confirm animates out. */
-  const [shown, setShown] = React.useState<Voice | null>(voice)
-  if (voice && voice !== shown) setShown(voice)
-  const inUse = (shown?.usedBy.length ?? 0) > 0
+  const [shown, setShown] = React.useState<Voice | null>(voice);
+  if (voice && voice !== shown) setShown(voice);
+  const inUse = (shown?.usedBy.length ?? 0) > 0;
 
   return (
     <AlertDialog onOpenChange={onOpenChange} open={voice !== null}>
@@ -384,5 +384,5 @@ export function DeleteVoiceConfirm({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

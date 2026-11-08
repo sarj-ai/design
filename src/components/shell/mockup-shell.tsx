@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
-import { Button } from "@/components/ui/button"
-import { BackIcon } from "@/components/shell/workspace-icons"
+import { Button } from "@/components/ui/button";
+import { BackIcon } from "@/components/shell/workspace-icons";
 
 /** 48px tall: `AppShell` starts its fixed sidebar under it. */
 export function MockupShell({
@@ -12,11 +12,11 @@ export function MockupShell({
   actions,
   children,
 }: {
-  title: string
+  title: string;
   /** Kept for the callers that pass it; the bar shows the title alone. */
-  eyebrow?: string
-  actions?: React.ReactNode
-  children: React.ReactNode
+  eyebrow?: string;
+  actions?: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex min-h-full grow flex-col bg-sidebar">
@@ -39,5 +39,5 @@ export function MockupShell({
 
       <div className="flex min-h-0 flex-1 flex-col">{children}</div>
     </div>
-  )
+  );
 }

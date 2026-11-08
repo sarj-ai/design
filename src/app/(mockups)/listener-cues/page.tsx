@@ -1,60 +1,60 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { Button } from "@/components/ui/button"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   GLOBAL_CONFIGS,
   PERSONA,
   personaOverride,
   type CueConfig,
   type Language,
-} from "@/lib/mockups/listener-cues-data"
-import { BackchannelSettings } from "@/components/mockups/listener-cues/backchannel-settings"
-import { ListenerCuesDrawer } from "@/components/mockups/listener-cues/listener-cues-drawer"
+} from "@/lib/mockups/listener-cues-data";
+import { BackchannelSettings } from "@/components/mockups/listener-cues/backchannel-settings";
+import { ListenerCuesDrawer } from "@/components/mockups/listener-cues/listener-cues-drawer";
 
-type Scope = "global" | "persona"
+type Scope = "global" | "persona";
 
 export default function ListenerCuesPage() {
-  const [scope, setScope] = React.useState<Scope>("persona")
+  const [scope, setScope] = React.useState<Scope>("persona");
 
   const [globals, setGlobals] =
-    React.useState<Record<Language, CueConfig>>(GLOBAL_CONFIGS)
+    React.useState<Record<Language, CueConfig>>(GLOBAL_CONFIGS);
 
-  const [language, setLanguage] = React.useState<Language>(PERSONA.language)
+  const [language, setLanguage] = React.useState<Language>(PERSONA.language);
 
   // `null` while the persona inherits.
   const [override, setOverride] = React.useState<Record<
     Language,
     CueConfig
-  > | null>(() => personaOverride(GLOBAL_CONFIGS))
+  > | null>(() => personaOverride(GLOBAL_CONFIGS));
 
-  const [fillerWords, setFillerWords] = React.useState(true)
-  const [listenerCues, setListenerCues] = React.useState(true)
+  const [fillerWords, setFillerWords] = React.useState(true);
+  const [listenerCues, setListenerCues] = React.useState(true);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(true)
+  const [drawerOpen, setDrawerOpen] = React.useState(true);
 
-  const isPersona = scope === "persona"
-  const config = isPersona && override ? override[language] : globals[language]
+  const isPersona = scope === "persona";
+  const config = isPersona && override ? override[language] : globals[language];
 
   const setConfig = (next: CueConfig) => {
     if (isPersona && override) {
-      setOverride({ ...override, [language]: next })
-      return
+      setOverride({ ...override, [language]: next });
+      return;
     }
-    setGlobals({ ...globals, [language]: next })
-  }
+    setGlobals({ ...globals, [language]: next });
+  };
 
   return (
     <MockupShell
@@ -65,7 +65,7 @@ export default function ListenerCuesPage() {
           <span className="text-xs text-muted-foreground">Scope</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (value) setScope(value as Scope)
+              if (value) setScope(value as Scope);
             }}
             size="sm"
             type="single"
@@ -83,7 +83,7 @@ export default function ListenerCuesPage() {
           <span className="text-xs text-muted-foreground">Approved set</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (value) setLanguage(value as Language)
+              if (value) setLanguage(value as Language);
             }}
             size="sm"
             type="single"
@@ -99,8 +99,8 @@ export default function ListenerCuesPage() {
       <AppShell
         active={isPersona ? "Personas" : "Global Settings"}
         onNavigate={(title) => {
-          if (title === "Personas") setScope("persona")
-          if (title === "Global Settings") setScope("global")
+          if (title === "Personas") setScope("persona");
+          if (title === "Global Settings") setScope("global");
         }}
       >
         <main className="mx-auto flex w-full max-w-350 flex-col gap-6 p-3 lg:p-4">
@@ -137,8 +137,8 @@ export default function ListenerCuesPage() {
                 onConfigure={() => setDrawerOpen(true)}
                 onFillerWordsChange={setFillerWords}
                 onListenerCuesChange={(enabled) => {
-                  setListenerCues(enabled)
-                  if (!enabled) setDrawerOpen(false)
+                  setListenerCues(enabled);
+                  if (!enabled) setDrawerOpen(false);
                 }}
               />
             </CardContent>
@@ -158,5 +158,5 @@ export default function ListenerCuesPage() {
         persona={isPersona ? PERSONA.name : undefined}
       />
     </MockupShell>
-  )
+  );
 }

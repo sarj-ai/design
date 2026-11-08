@@ -1,20 +1,20 @@
-export type AlertPriority = "high" | "low" | "medium"
+export type AlertPriority = "high" | "low" | "medium";
 
 export const PRIORITY_LABELS: Record<AlertPriority, string> = {
   high: "High",
   low: "Low",
   medium: "Medium",
-}
+};
 
-export const PRIORITY_ORDER: AlertPriority[] = ["high", "medium", "low"]
+export const PRIORITY_ORDER: AlertPriority[] = ["high", "medium", "low"];
 
 export type ConfiguredAlert = {
-  description: string
-  enabled: boolean
-  id: string
-  name: string
-  priority: AlertPriority
-}
+  description: string;
+  enabled: boolean;
+  id: string;
+  name: string;
+  priority: AlertPriority;
+};
 
 export const CONFIGURED_ALERTS: ConfiguredAlert[] = [
   {
@@ -57,86 +57,90 @@ export const CONFIGURED_ALERTS: ConfiguredAlert[] = [
     priority: "low",
     enabled: false,
   },
-]
+];
 
-export type AlertSeverity = "mild" | "moderate" | "severe"
+export type AlertSeverity = "mild" | "moderate" | "severe";
 
 export const SEVERITY_LABELS: Record<AlertSeverity, string> = {
   mild: "Mild",
   moderate: "Moderate",
   severe: "Severe",
-}
+};
 
-export const SEVERITY_ORDER: AlertSeverity[] = ["severe", "moderate", "mild"]
+export const SEVERITY_ORDER: AlertSeverity[] = ["severe", "moderate", "mild"];
 
 export type Detection = {
-  alertId: string
+  alertId: string;
   /** Seconds into the recording; places the detection on the waveform. */
-  at: number
-  explanation: string
-  evidence: string
-  id: string
-  severity: AlertSeverity
-}
+  at: number;
+  explanation: string;
+  evidence: string;
+  id: string;
+  severity: AlertSeverity;
+};
 
-export type Sentiment = "angry" | "frustrated" | "neutral" | "positive"
+export type Sentiment = "angry" | "frustrated" | "neutral" | "positive";
 
 export const SENTIMENT_LABELS: Record<Sentiment, string> = {
   angry: "Angry",
   frustrated: "Frustrated",
   neutral: "Neutral",
   positive: "Positive",
-}
+};
 
 export type UserJourney = {
-  keywords: string[]
-  purpose: string
-  purposeAchieved: boolean
+  keywords: string[];
+  purpose: string;
+  purposeAchieved: boolean;
   /** 1–5. */
-  rating: number
-  ratingRationale: string
-  sentiment: Sentiment
-}
+  rating: number;
+  ratingRationale: string;
+  sentiment: Sentiment;
+};
 
 export type AnalysisState =
-  "clear" | "detected" | "pending" | "unavailable" | "unconfigured"
+  | "clear"
+  | "detected"
+  | "pending"
+  | "unavailable"
+  | "unconfigured";
 
 export type AlertAnalysis = {
-  detections: Detection[]
+  detections: Detection[];
   /** Absent on `pending` and `unavailable`; present on every other state. */
-  journey: null | UserJourney
-  state: AnalysisState
-}
+  journey: null | UserJourney;
+  state: AnalysisState;
+};
 
 export type TranscriptLine = {
   /** Seconds into the recording, so a turn and the waveform agree. */
-  at: number
-  speaker: "agent" | "caller"
-  text: string
-}
+  at: number;
+  speaker: "agent" | "caller";
+  text: string;
+};
 
 export type CallRow = {
-  callId: string
-  collected: { label: string; value: string }[]
-  createdAt: string
-  direction: "inbound" | "outbound"
+  callId: string;
+  collected: { label: string; value: string }[];
+  createdAt: string;
+  direction: "inbound" | "outbound";
   /** Seconds. */
-  duration: number
-  endedAt: string
-  id: string
-  language: string
-  analysis: AlertAnalysis
+  duration: number;
+  endedAt: string;
+  id: string;
+  language: string;
+  analysis: AlertAnalysis;
   outcome: {
-    reason: string
-    status: "failure" | "success"
-    criteria: { achieved: boolean; primary: boolean; text: string }[]
-  }
-  phoneNumber: string
-  scenario: string
-  startedAt: string
-  status: "completed" | "voicemail"
-  transcript: TranscriptLine[]
-}
+    reason: string;
+    status: "failure" | "success";
+    criteria: { achieved: boolean; primary: boolean; text: string }[];
+  };
+  phoneNumber: string;
+  scenario: string;
+  startedAt: string;
+  status: "completed" | "voicemail";
+  transcript: TranscriptLine[];
+};
 
 const SALES_TRANSCRIPT: TranscriptLine[] = [
   {
@@ -195,7 +199,7 @@ const SALES_TRANSCRIPT: TranscriptLine[] = [
     text: "Understood. I've logged a callback from the sales manager and I'll email you the breakdown now. Anything else I can help with?",
   },
   { at: 75, speaker: "caller", text: "No, that's it." },
-]
+];
 
 const SERVICE_TRANSCRIPT: TranscriptLine[] = [
   {
@@ -224,7 +228,7 @@ const SERVICE_TRANSCRIPT: TranscriptLine[] = [
     speaker: "caller",
     text: "Perfect, thank you. That was quick.",
   },
-]
+];
 
 const ARABIC_TRANSCRIPT: TranscriptLine[] = [
   {
@@ -253,7 +257,7 @@ const ARABIC_TRANSCRIPT: TranscriptLine[] = [
     text: "أعتذر عن اللبس. الدوام الحالي هو من اثنين ظهراً إلى عشر مساءً، وبرسل لك رسالة فيها المواعيد.",
   },
   { at: 36, speaker: "caller", text: "تمام، شكراً." },
-]
+];
 
 export const CALLS: CallRow[] = [
   {
@@ -515,13 +519,13 @@ export const CALLS: CallRow[] = [
     },
     analysis: { state: "unavailable", journey: null, detections: [] },
   },
-]
+];
 
-export const SCENARIO_NAME = "Performance car sales inquiry"
+export const SCENARIO_NAME = "Performance car sales inquiry";
 
 export const OWNER = {
   email: "talzamel@sarj.ai",
   organization: "Sarj.ai",
   organizationId: "cd9ebc10-4e18-4a92-b7d1-2f5c88e70a75",
   userId: "17f2454d-8a11-4d6c-b0e9-3f61ca4e4241",
-}
+};

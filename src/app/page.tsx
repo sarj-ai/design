@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import type * as React from "react"
-import { useMemo, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { HugeiconsIcon } from "@hugeicons/react"
+import type * as React from "react";
+import { useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { OpenIcon } from "@/components/shell/workspace-icons"
-import { SiteFooter } from "@/components/shell/site-footer"
-import { SiteNav } from "@/components/shell/site-nav"
-import { HeyClick } from "@/components/site/hey-click"
-import { LinkMenu } from "@/components/site/link-menu"
-import { OrderRail } from "@/components/site/order-rail"
-import { RegistryMenu } from "@/components/site/registry-menu"
-import { SurfaceDock } from "@/components/site/surface-dock"
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { OpenIcon } from "@/components/shell/workspace-icons";
+import { SiteFooter } from "@/components/shell/site-footer";
+import { SiteNav } from "@/components/shell/site-nav";
+import { HeyClick } from "@/components/site/hey-click";
+import { LinkMenu } from "@/components/site/link-menu";
+import { OrderRail } from "@/components/site/order-rail";
+import { RegistryMenu } from "@/components/site/registry-menu";
+import { SurfaceDock } from "@/components/site/surface-dock";
 import {
   MOCKUPS,
   addedLabel,
@@ -31,12 +31,12 @@ import {
   surfaceId,
   surfaceLabel,
   type Order,
-} from "@/lib/site/mockups-data"
-import thumbnails from "@/lib/site/thumbnails.json"
+} from "@/lib/site/mockups-data";
+import thumbnails from "@/lib/site/thumbnails.json";
 
 export default function Home() {
-  const [order, setOrder] = useState<Order>("newest")
-  const grouped = order === "section"
+  const [order, setOrder] = useState<Order>("newest");
+  const grouped = order === "section";
 
   const groups = useMemo(
     () =>
@@ -44,7 +44,7 @@ export default function Home() {
         ? groupBySurface(sortByAdded(MOCKUPS, "newest"))
         : [{ surface: null, mockups: sortByAdded(MOCKUPS, order) }],
     [order],
-  )
+  );
 
   // Memoised: the dock re-measures the page whenever this identity changes.
   const sections = useMemo(
@@ -54,7 +54,7 @@ export default function Home() {
         label: surfaceLabel(surface),
       })),
     [groups],
-  )
+  );
 
   return (
     <>
@@ -99,10 +99,10 @@ export default function Home() {
             {/* Keyed on the order so a re-sort replays the cards' entrance. */}
             <div className="grid gap-6 md:grid-cols-2" key={order}>
               {mockups.map((mockup, card) => {
-                const { href, title, meta, icon, tickets } = mockup
-                const slug = href.slice(1)
+                const { href, title, meta, icon, tickets } = mockup;
+                const slug = href.slice(1);
                 // The walkthrough's install menu: the first card visible after a search.
-                const tour = group === 0 && card === 0 ? "install" : undefined
+                const tour = group === 0 && card === 0 ? "install" : undefined;
 
                 return (
                   <article
@@ -176,7 +176,7 @@ export default function Home() {
                       </Button>
                     </div>
                   </article>
-                )
+                );
               })}
             </div>
           </section>
@@ -192,5 +192,5 @@ export default function Home() {
 
       <SiteFooter />
     </>
-  )
+  );
 }

@@ -1,18 +1,18 @@
 export type LiveRecord = {
-  by: string
-  at: string
-}
+  by: string;
+  at: string;
+};
 
 export type ScenarioRow = {
-  id: string
-  name: string
-  languages: string[]
-  created: string
-  updated: string
+  id: string;
+  name: string;
+  languages: string[];
+  created: string;
+  updated: string;
   /** Null when nobody has edited it since it was created. */
-  updatedBy: string | null
-  live: LiveRecord | null
-}
+  updatedBy: string | null;
+  live: LiveRecord | null;
+};
 
 export const SCENARIOS: ScenarioRow[] = [
   {
@@ -123,7 +123,7 @@ export const SCENARIOS: ScenarioRow[] = [
     updatedBy: "talzamel",
     live: null,
   },
-]
+];
 
 export const DELETED: ScenarioRow[] = [
   {
@@ -144,13 +144,13 @@ export const DELETED: ScenarioRow[] = [
     updatedBy: "fjanahi",
     live: null,
   },
-]
+];
 
 export type PromptField = {
-  id: "first-message" | "instruction"
-  label: string
-  body: string
-}
+  id: "first-message" | "instruction";
+  label: string;
+  body: string;
+};
 
 export const PROMPT_FIELDS: PromptField[] = [
   {
@@ -169,17 +169,17 @@ export const PROMPT_FIELDS: PromptField[] = [
       "If the customer disputes the invoice, offer a transfer to billing.",
     ].join("\n"),
   },
-]
+];
 
 export type EditorCase = {
-  id: string
-  label: string
-  scenario: string
-  live: LiveRecord | null
-  canToggle: boolean
-  toggleFails: boolean
-  turnedLiveElsewhere: LiveRecord | null
-}
+  id: string;
+  label: string;
+  scenario: string;
+  live: LiveRecord | null;
+  canToggle: boolean;
+  toggleFails: boolean;
+  turnedLiveElsewhere: LiveRecord | null;
+};
 
 export const EDITOR_CASES: EditorCase[] = [
   {
@@ -227,4 +227,4 @@ export const EDITOR_CASES: EditorCase[] = [
     toggleFails: true,
     turnedLiveElsewhere: null,
   },
-]
+];

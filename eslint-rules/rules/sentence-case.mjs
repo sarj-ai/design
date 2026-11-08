@@ -1,5 +1,5 @@
-import { createClassVisitor } from "../lib/classes.mjs"
-import { jsxName, textOf, trackUiImports } from "../lib/jsx.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
+import { jsxName, textOf, trackUiImports } from "../lib/jsx.mjs";
 
 const NAMED = new Set([
   "Button",
@@ -22,8 +22,8 @@ const NAMED = new Set([
   "SelectItem",
   "BreadcrumbPage",
   "BreadcrumbLink",
-])
-const HEADINGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6"])
+]);
+const HEADINGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6"]);
 
 const SMALL = new Set([
   "a",
@@ -46,17 +46,17 @@ const SMALL = new Set([
   "via",
   "vs",
   "with",
-])
+]);
 
 function isTitleCase(text) {
-  const words = text.match(/[A-Za-z][A-Za-z'’]*/g) ?? []
-  if (words.length < 2) return false
+  const words = text.match(/[A-Za-z][A-Za-z'’]*/g) ?? [];
+  if (words.length < 2) return false;
   const rest = words
     .slice(1)
     .filter((w) => w.length > 1 && w !== w.toUpperCase())
-    .filter((w) => !SMALL.has(w.toLowerCase()))
-  if (rest.length === 0) return false
-  return rest.every((w) => /^[A-Z]/.test(w))
+    .filter((w) => !SMALL.has(w.toLowerCase()));
+  if (rest.length === 0) return false;
+  return rest.every((w) => /^[A-Z]/.test(w));
 }
 
 const sentenceCase = {
@@ -76,42 +76,48 @@ const sentenceCase = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       ...createClassVisitor(({ node, classes }) => {
         for (const { raw, base } of classes) {
           if (base === "uppercase") {
-            context.report({ node, messageId: "uppercase", data: { cls: raw } })
+            context.report({
+              node,
+              messageId: "uppercase",
+              data: { cls: raw },
+            });
           }
         }
       }),
       JSXElement(element) {
-        const local = jsxName(element.openingElement)
-        if (!NAMED.has(imports.ui(local)) && !HEADINGS.has(local)) return
+        const local = jsxName(element.openingElement);
+        if (!NAMED.has(imports.ui(local)) && !HEADINGS.has(local)) return;
 
         // Only literal text: an expression is data and keeps its own case, which is how proper nouns opt out.
-        const own = (element.children ?? []).filter((c) => c.type === "JSXText")
-        const { text } = textOf({ children: own })
-        if (!text || !isTitleCase(text)) return
+        const own = (element.children ?? []).filter(
+          (c) => c.type === "JSXText",
+        );
+        const { text } = textOf({ children: own });
+        if (!text || !isTitleCase(text)) return;
 
-        const [first, ...rest] = text.split(" ")
+        const [first, ...rest] = text.split(" ");
         const fixed = [
           first,
           ...rest.map((w) =>
             w.length > 1 && w === w.toUpperCase() ? w : w.toLowerCase(),
           ),
-        ].join(" ")
+        ].join(" ");
 
         context.report({
           node: element.openingElement,
           messageId: "titleCase",
           data: { text, fixed },
-        })
+        });
       },
-    }
+    };
   },
-}
+};
 
-export default sentenceCase
+export default sentenceCase;

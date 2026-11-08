@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useReducedMotion } from "motion/react"
+import * as React from "react";
+import { useReducedMotion } from "motion/react";
 
-import { Button } from "@/components/ui/button"
-import type { Order } from "@/lib/site/mockups-data"
+import { Button } from "@/components/ui/button";
+import type { Order } from "@/lib/site/mockups-data";
 
 const ORDERS: { value: Order; label: string }[] = [
   { value: "newest", label: "Newest first" },
   { value: "oldest", label: "Oldest first" },
   { value: "section", label: "By section" },
-]
+];
 
-type Section = { id: string; label: string }
+type Section = { id: string; label: string };
 
 /** Where a group counts as being read, and where a jump lands its heading. Near the top because groups are short. */
-const SIGHTLINE = 0.18
+const SIGHTLINE = 0.18;
 
 /**
  * The index's sort, parked in the empty left gutter: a hairline with the three orders
@@ -28,12 +28,12 @@ export function OrderRail({
   onOrderChange,
   sections,
 }: {
-  order: Order
-  onOrderChange: (order: Order) => void
-  sections: Section[]
+  order: Order;
+  onOrderChange: (order: Order) => void;
+  sections: Section[];
 }) {
-  const index = ORDERS.findIndex((entry) => entry.value === order)
-  const showSections = order === "section" && sections.length > 1
+  const index = ORDERS.findIndex((entry) => entry.value === order);
+  const showSections = order === "section" && sections.length > 1;
 
   return (
     <div
@@ -49,7 +49,7 @@ export function OrderRail({
           style={{ transform: `translateY(${index * 100}%)` }}
         />
         {ORDERS.map((entry) => {
-          const current = entry.value === order
+          const current = entry.value === order;
           return (
             <Button
               aria-pressed={current}
@@ -65,95 +65,95 @@ export function OrderRail({
             >
               {entry.label}
             </Button>
-          )
+          );
         })}
       </div>
 
       {showSections ? <SectionList sections={sections} /> : null}
     </div>
-  )
+  );
 }
 
 function SectionList({ sections }: { sections: Section[] }) {
-  const reduce = useReducedMotion()
-  const [active, setActive] = React.useState(0)
+  const reduce = useReducedMotion();
+  const [active, setActive] = React.useState(0);
   // Outside the effect because a jump scrolls to one of them.
-  const marks = React.useRef<number[]>([0])
+  const marks = React.useRef<number[]>([0]);
   // Set while a click's smooth scroll runs, so the marker goes straight to the clicked row instead of trailing through every section the scroll passes.
-  const jumping = React.useRef(false)
+  const jumping = React.useRef(false);
 
   React.useEffect(() => {
-    let queued = false
+    let queued = false;
 
     function read() {
-      queued = false
+      queued = false;
 
-      const y = window.scrollY
+      const y = window.scrollY;
       const maxScroll = Math.max(
         0,
         document.documentElement.scrollHeight - window.innerHeight,
-      )
-      const line = window.innerHeight * SIGHTLINE
+      );
+      const line = window.innerHeight * SIGHTLINE;
 
       // `Math.max` keeps the marks ascending; a group that has not rendered collapses to zero length.
-      const at = [0]
+      const at = [0];
       for (let i = 1; i < sections.length; i += 1) {
-        const el = document.getElementById(sections[i].id)
-        const mark = el ? el.getBoundingClientRect().top + y - line : at[i - 1]
+        const el = document.getElementById(sections[i].id);
+        const mark = el ? el.getBoundingClientRect().top + y - line : at[i - 1];
         // Clamped to the max scroll, or a last group near the document end could never become active.
-        at.push(Math.min(Math.max(mark, at[i - 1]), maxScroll))
+        at.push(Math.min(Math.max(mark, at[i - 1]), maxScroll));
       }
-      marks.current = at
+      marks.current = at;
 
-      let next = 0
+      let next = 0;
       for (let i = sections.length - 1; i > 0; i -= 1) {
         if (y >= at[i]) {
-          next = i
-          break
+          next = i;
+          break;
         }
       }
 
       // Same number when unchanged, so React bails out of the render.
-      if (!jumping.current) setActive(next)
+      if (!jumping.current) setActive(next);
     }
 
     function onScroll() {
-      if (queued) return
-      queued = true
-      requestAnimationFrame(read)
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(read);
     }
 
-    read()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    window.addEventListener("resize", onScroll, { passive: true })
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll)
-      window.removeEventListener("resize", onScroll)
-    }
-  }, [sections])
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [sections]);
 
   function jump(event: React.MouseEvent, to: number) {
-    const top = marks.current[to]
-    if (top === undefined) return
+    const top = marks.current[to];
+    if (top === undefined) return;
     // The group's handover point (+1px), not the element, so a jump and the reading agree.
-    event.preventDefault()
-    setActive(to)
-    jumping.current = true
+    event.preventDefault();
+    setActive(to);
+    jumping.current = true;
     const release = () => {
-      jumping.current = false
-      window.removeEventListener("scrollend", release)
-      window.clearTimeout(fallback)
-    }
+      jumping.current = false;
+      window.removeEventListener("scrollend", release);
+      window.clearTimeout(fallback);
+    };
     // `scrollend` ends the hold. Already there, no scroll runs and it never fires; the timeout is a backstop longer than any smooth scroll.
     const fallback = window.setTimeout(
       release,
       Math.abs(window.scrollY - (top + 1)) < 2 ? 0 : 3000,
-    )
-    window.addEventListener("scrollend", release)
-    window.scrollTo({ behavior: reduce ? "auto" : "smooth", top: top + 1 })
+    );
+    window.addEventListener("scrollend", release);
+    window.scrollTo({ behavior: reduce ? "auto" : "smooth", top: top + 1 });
   }
 
-  const current = Math.min(active, sections.length - 1)
+  const current = Math.min(active, sections.length - 1);
 
   return (
     <nav aria-label="Sections" className="relative ms-4 flex flex-col border-s">
@@ -176,5 +176,5 @@ function SectionList({ sections }: { sections: Section[] }) {
         </a>
       ))}
     </nav>
-  )
+  );
 }

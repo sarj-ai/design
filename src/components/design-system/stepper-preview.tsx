@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { StepDoneIcon } from "@/components/design-system/icons"
-import { Spinner } from "@/components/ui/spinner"
+import { StepDoneIcon } from "@/components/design-system/icons";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Stepper,
   StepperDescription,
@@ -13,63 +13,63 @@ import {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from "@/components/ui/stepper"
+} from "@/components/ui/stepper";
 
-const CHECKING_MS = 1100
-const SETTLED_MS = 900
-const OPENING_MS = 600
+const CHECKING_MS = 1100;
+const SETTLED_MS = 900;
+const OPENING_MS = 600;
 
 const STEPS = [
   { title: "Endpoint", description: "Where calls are signalled." },
   { title: "Credentials", description: "What authenticates them." },
   { title: "Routing", description: "How they are carried." },
-]
+];
 
 const INDICATOR =
-  "transition-colors duration-200 ease-out-cubic motion-reduce:transition-none data-[state=completed]:bg-success data-[state=completed]:text-success-foreground data-[state=completed]:[&_svg_path]:[--draw-length:22] data-[state=completed]:[&_svg_path]:[stroke-dasharray:var(--draw-length)] data-[state=completed]:[&_svg_path]:animate-draw-stroke motion-reduce:[&_svg_path]:animate-none"
+  "transition-colors duration-200 ease-out-cubic motion-reduce:transition-none data-[state=completed]:bg-success data-[state=completed]:text-success-foreground data-[state=completed]:[&_svg_path]:[--draw-length:22] data-[state=completed]:[&_svg_path]:[stroke-dasharray:var(--draw-length)] data-[state=completed]:[&_svg_path]:animate-draw-stroke motion-reduce:[&_svg_path]:animate-none";
 
 const INDICATORS = {
   completed: <StepDoneIcon className="size-3.5" />,
   loading: <Spinner className="size-3.5" />,
-}
+};
 
 export function StepperPreview() {
-  const [step, setStep] = React.useState(2)
-  const [loading, setLoading] = React.useState(false)
-  const [paused, setPaused] = React.useState(false)
+  const [step, setStep] = React.useState(2);
+  const [loading, setLoading] = React.useState(false);
+  const [paused, setPaused] = React.useState(false);
 
   React.useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const sync = () => setPaused(query.matches)
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setPaused(query.matches);
 
-    sync()
-    query.addEventListener("change", sync)
-    return () => query.removeEventListener("change", sync)
-  }, [])
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   /* One timer per frame, not an interval, so a click lands in the loop instead of fighting a clock. */
   React.useEffect(() => {
-    if (paused) return
+    if (paused) return;
 
-    const settled = step > STEPS.length
-    const opening = !settled && !loading
+    const settled = step > STEPS.length;
+    const opening = !settled && !loading;
 
     const timer = window.setTimeout(
       () => {
         if (opening) {
-          setLoading(true)
-          return
+          setLoading(true);
+          return;
         }
 
-        const next = settled ? 1 : step + 1
-        setStep(next)
-        setLoading(next <= STEPS.length)
+        const next = settled ? 1 : step + 1;
+        setStep(next);
+        setLoading(next <= STEPS.length);
       },
       opening ? OPENING_MS : settled ? SETTLED_MS : CHECKING_MS,
-    )
+    );
 
-    return () => window.clearTimeout(timer)
-  }, [loading, paused, step])
+    return () => window.clearTimeout(timer);
+  }, [loading, paused, step]);
 
   return (
     <div className="grid gap-8 md:grid-cols-2">
@@ -134,5 +134,5 @@ export function StepperPreview() {
         </Stepper>
       </div>
     </div>
-  )
+  );
 }

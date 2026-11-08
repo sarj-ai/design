@@ -1,4 +1,4 @@
-import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
 const noNestedCard = {
   meta: {
@@ -12,24 +12,24 @@ const noNestedCard = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        if (imports.ui(jsxName(element.openingElement)) !== "Card") return
+        if (imports.ui(jsxName(element.openingElement)) !== "Card") return;
         for (const ancestor of jsxAncestors(element)) {
           if (imports.ui(jsxName(ancestor.openingElement)) === "Card") {
             context.report({
               node: element.openingElement,
               messageId: "nested",
-            })
-            return
+            });
+            return;
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default noNestedCard
+export default noNestedCard;

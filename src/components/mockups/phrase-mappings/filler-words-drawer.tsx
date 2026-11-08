@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Accordion } from "@/components/ui/accordion"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Accordion } from "@/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -14,20 +14,20 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Field,
   FieldDescription,
   FieldSeparator,
   FieldTitle,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 import {
   Item,
   ItemActions,
@@ -35,14 +35,14 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/item";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   MAX_MAPPINGS,
   findConflicts,
@@ -51,16 +51,16 @@ import {
   type FillerConfig,
   type Mapping,
   type PreviewVoice,
-} from "@/lib/mockups/phrase-mappings-data"
-import { MappingRow } from "@/components/mockups/phrase-mappings/mapping-row"
-import { GenericFillerField } from "@/components/mockups/phrase-mappings/generic-filler-field"
+} from "@/lib/mockups/phrase-mappings-data";
+import { MappingRow } from "@/components/mockups/phrase-mappings/mapping-row";
+import { GenericFillerField } from "@/components/mockups/phrase-mappings/generic-filler-field";
 import {
   AddMappingIcon,
   CloseIcon,
   ConflictIcon,
   FillerWordsIcon,
   OverrideIcon,
-} from "@/components/mockups/phrase-mappings/icons"
+} from "@/components/mockups/phrase-mappings/icons";
 
 export function FillerWordsDrawer({
   config,
@@ -73,48 +73,48 @@ export function FillerWordsDrawer({
   persona,
   voice,
 }: {
-  config: FillerConfig
-  inherited: boolean
-  onChange: (config: FillerConfig) => void
-  onCreateOverride: () => void
-  onOpenChange: (open: boolean) => void
-  onRemoveOverride: () => void
-  open: boolean
-  persona?: string
-  voice: PreviewVoice
+  config: FillerConfig;
+  inherited: boolean;
+  onChange: (config: FillerConfig) => void;
+  onCreateOverride: () => void;
+  onOpenChange: (open: boolean) => void;
+  onRemoveOverride: () => void;
+  open: boolean;
+  persona?: string;
+  voice: PreviewVoice;
 }) {
-  const fieldId = React.useId()
-  const [openMapping, setOpenMapping] = React.useState<string>("")
+  const fieldId = React.useId();
+  const [openMapping, setOpenMapping] = React.useState<string>("");
 
-  const conflicts = findConflicts(config.mappings)
-  const blocking = problems(config)
-  const full = config.mappings.length >= MAX_MAPPINGS
+  const conflicts = findConflicts(config.mappings);
+  const blocking = problems(config);
+  const full = config.mappings.length >= MAX_MAPPINGS;
 
   const set = (patch: Partial<FillerConfig>) =>
-    onChange({ ...config, ...patch })
+    onChange({ ...config, ...patch });
 
   const setMapping = (next: Mapping) =>
     set({
       mappings: config.mappings.map((mapping) =>
         mapping.id === next.id ? next : mapping,
       ),
-    })
+    });
 
   const addMapping = () => {
-    const mapping = newMapping()
-    set({ mappings: [...config.mappings, mapping] })
-    setOpenMapping(mapping.id)
-  }
+    const mapping = newMapping();
+    set({ mappings: [...config.mappings, mapping] });
+    setOpenMapping(mapping.id);
+  };
 
   /** By position, not response: long Arabic responses break the English sentence. */
   const positionsOf = (ids: string[]) => {
     const positions = ids
       .map((id) => config.mappings.findIndex((entry) => entry.id === id) + 1)
-      .sort((a, b) => a - b)
+      .sort((a, b) => a - b);
 
-    if (positions.length < 3) return positions.join(" and ")
-    return `${positions.slice(0, -1).join(", ")} and ${positions.at(-1)}`
-  }
+    if (positions.length < 3) return positions.join(" and ");
+    return `${positions.slice(0, -1).join(", ")} and ${positions.at(-1)}`;
+  };
 
   return (
     <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
@@ -396,5 +396,5 @@ export function FillerWordsDrawer({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

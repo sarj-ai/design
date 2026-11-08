@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index"
-import { type Notice, Notifications } from "@/components/shared/notifications"
-import { AppShell } from "@/components/shell/app-shell"
+import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index";
+import { type Notice, Notifications } from "@/components/shared/notifications";
+import { AppShell } from "@/components/shell/app-shell";
 
 const NOTICES: Notice[] = [
   {
@@ -25,10 +25,10 @@ const NOTICES: Notice[] = [
     detail: "Welcome and onboarding (outbound)",
     at: "6 Oct, 11:20",
   },
-]
+];
 
 export function NotificationsPreview() {
-  const [read, setRead] = React.useState<Set<string>>(new Set(["wel-5"]))
+  const [read, setRead] = React.useState<Set<string>>(new Set(["wel-5"]));
 
   return (
     <div className="relative flex h-180 translate-x-0 flex-col overflow-hidden rounded-xl border">
@@ -52,5 +52,5 @@ export function NotificationsPreview() {
         <ScenarioIndex />
       </AppShell>
     </div>
-  )
+  );
 }

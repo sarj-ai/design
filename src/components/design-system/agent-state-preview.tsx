@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AGENT_STATES,
   type AgentState,
-} from "@/components/shared/agent-state/engine"
+} from "@/components/shared/agent-state/engine";
 import {
   AgentDots,
   AgentString,
   AgentWaves,
-} from "@/components/shared/agent-state/visuals"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/shared/agent-state/visuals";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const STYLES = [
   { id: "dots", label: "Dot matrix", Visual: AgentDots, frame: "size-32" },
   { id: "waves", label: "Waves", Visual: AgentWaves, frame: "h-32 w-full" },
   { id: "string", label: "String", Visual: AgentString, frame: "size-32" },
-] as const
+] as const;
 
 export function AgentStatePreview() {
   return (
@@ -62,11 +62,11 @@ export function AgentStatePreview() {
         <Switching />
       </TabsContent>
     </Tabs>
-  )
+  );
 }
 
 function Switching() {
-  const [state, setState] = React.useState<AgentState>("listening")
+  const [state, setState] = React.useState<AgentState>("listening");
 
   return (
     <Card>
@@ -97,5 +97,5 @@ function Switching() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

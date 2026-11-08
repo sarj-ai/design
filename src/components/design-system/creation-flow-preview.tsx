@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   BankingIcon,
@@ -15,9 +15,9 @@ import {
   StartBlankIcon,
   StepDoneIcon,
   TelecomIcon,
-} from "@/components/design-system/icons"
-import { CreationFlow } from "@/components/design-system/creation-flow"
-import { OrbAvatar } from "@/components/shared/orb-avatar"
+} from "@/components/design-system/icons";
+import { CreationFlow } from "@/components/design-system/creation-flow";
+import { OrbAvatar } from "@/components/shared/orb-avatar";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,24 +27,24 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Bubble, BubbleContent } from "@/components/ui/bubble"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Bubble, BubbleContent } from "@/components/ui/bubble";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Field, FieldLabel, FieldSeparator } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/empty";
+import { Field, FieldLabel, FieldSeparator } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Item,
   ItemActions,
@@ -52,25 +52,25 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Message } from "@/components/ui/message"
-import { Spinner } from "@/components/ui/spinner"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/item";
+import { Message } from "@/components/ui/message";
+import { Spinner } from "@/components/ui/spinner";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cn } from "@/lib/utils";
 
 type Template = {
-  id: string
-  name: string
-  firstMessage: string
-  reply: string
-}
+  id: string;
+  name: string;
+  firstMessage: string;
+  reply: string;
+};
 
 type Industry = {
-  id: string
-  name: string
-  Icon: React.ComponentType
-  templates: Template[]
-}
+  id: string;
+  name: string;
+  Icon: React.ComponentType;
+  templates: Template[];
+};
 
 const INDUSTRIES: Industry[] = [
   {
@@ -216,7 +216,7 @@ const INDUSTRIES: Industry[] = [
     Icon: RealEstateIcon,
     templates: [],
   },
-]
+];
 
 const QUICK_STARTS = [
   {
@@ -239,16 +239,16 @@ const QUICK_STARTS = [
     prompt:
       "Role: sales assistant for an e-commerce company.\nGoal: answer product questions, recommend products and capture leads.\nTone: knowledgeable and upbeat, in modern Saudi Arabic.\nKnown before the call: customer_name, cart_items, cart_value.\nCollect: product interest, intent, budget, delivery city.\nTransfer to a sales manager for orders of 10 or more items.",
   },
-]
+];
 
 const PLACEHOLDER =
-  "An appointment booking agent for a dental clinic in Riyadh. Books visits, checks which doctors are free and confirms by SMS. Collects the patient's name and a preferred time. Speaks professional Saudi Arabic, and transfers to reception when a patient asks for a doctor who is booked for two weeks."
+  "An appointment booking agent for a dental clinic in Riyadh. Books visits, checks which doctors are free and confirms by SMS. Collects the patient's name and a preferred time. Speaks professional Saudi Arabic, and transfers to reception when a patient asks for a doctor who is booked for two weeks.";
 
 const LANGUAGES = [
   { value: "ar", label: "Arabic" },
   { value: "en", label: "English" },
   { value: "ur", label: "Urdu" },
-]
+];
 
 const STAGES = [
   "Analysing your requirements",
@@ -257,22 +257,22 @@ const STAGES = [
   "Tuning the language",
   "Configuring tools",
   "Finishing your scenario",
-]
+];
 
-const PROMPT_MIN = 50
-const PROMPT_MAX = 10000
-const PROMPT_WARN = 8000
+const PROMPT_MIN = 50;
+const PROMPT_MAX = 10000;
+const PROMPT_WARN = 8000;
 
-const STAGE_MS = 700
+const STAGE_MS = 700;
 
-type Step = "start" | "describe" | "build" | "use-case" | "name"
-type Path = "describe" | "template" | "blank"
+type Step = "start" | "describe" | "build" | "use-case" | "name";
+type Path = "describe" | "template" | "blank";
 
 const PATHS: Record<Path, Step[]> = {
   describe: ["start", "describe", "build", "name"],
   template: ["start", "use-case", "name"],
   blank: ["start", "name"],
-}
+};
 
 const QUESTIONS: Record<Step, string> = {
   start: "How do you want to start?",
@@ -280,94 +280,94 @@ const QUESTIONS: Record<Step, string> = {
   build: "Building your scenario",
   "use-case": "What will the agent help with?",
   name: "Name your scenario",
-}
+};
 
 export function CreationFlowPreview() {
-  const [open, setOpen] = React.useState(true)
-  const [leaving, setLeaving] = React.useState(false)
-  const [trail, setTrail] = React.useState<Step[]>(["start"])
-  const [direction, setDirection] = React.useState(1)
-  const [path, setPath] = React.useState<Path | null>(null)
-  const [industryId, setIndustryId] = React.useState<string | null>(null)
-  const [templateId, setTemplateId] = React.useState<string | null>(null)
-  const [prompt, setPrompt] = React.useState("")
-  const [quickStart, setQuickStart] = React.useState<string | null>(null)
-  const [languages, setLanguages] = React.useState(["ar"])
-  const [stage, setStage] = React.useState(0)
-  const [name, setName] = React.useState("")
+  const [open, setOpen] = React.useState(true);
+  const [leaving, setLeaving] = React.useState(false);
+  const [trail, setTrail] = React.useState<Step[]>(["start"]);
+  const [direction, setDirection] = React.useState(1);
+  const [path, setPath] = React.useState<Path | null>(null);
+  const [industryId, setIndustryId] = React.useState<string | null>(null);
+  const [templateId, setTemplateId] = React.useState<string | null>(null);
+  const [prompt, setPrompt] = React.useState("");
+  const [quickStart, setQuickStart] = React.useState<string | null>(null);
+  const [languages, setLanguages] = React.useState(["ar"]);
+  const [stage, setStage] = React.useState(0);
+  const [name, setName] = React.useState("");
 
-  const step = trail[trail.length - 1]
-  const industry = INDUSTRIES.find((i) => i.id === industryId) ?? null
-  const template = industry?.templates.find((t) => t.id === templateId) ?? null
+  const step = trail[trail.length - 1];
+  const industry = INDUSTRIES.find((i) => i.id === industryId) ?? null;
+  const template = industry?.templates.find((t) => t.id === templateId) ?? null;
 
   const go = (next: Step) => {
-    setDirection(1)
-    setTrail((t) => [...t, next])
-  }
+    setDirection(1);
+    setTrail((t) => [...t, next]);
+  };
 
   /* Back skips the build screen: returning to it would run the job again. */
   const back = () => {
-    setDirection(-1)
+    setDirection(-1);
     setTrail((t) => {
-      const next = t.slice(0, -1)
-      return next[next.length - 1] === "build" ? next.slice(0, -1) : next
-    })
-  }
+      const next = t.slice(0, -1);
+      return next[next.length - 1] === "build" ? next.slice(0, -1) : next;
+    });
+  };
 
   const backTo = (target: Step) => {
-    setDirection(-1)
-    setTrail((t) => t.slice(0, t.lastIndexOf(target) + 1))
-  }
+    setDirection(-1);
+    setTrail((t) => t.slice(0, t.lastIndexOf(target) + 1));
+  };
 
   const reset = () => {
-    setTrail(["start"])
-    setDirection(1)
-    setPath(null)
-    setIndustryId(null)
-    setTemplateId(null)
-    setPrompt("")
-    setQuickStart(null)
-    setLanguages(["ar"])
-    setStage(0)
-    setName("")
-  }
+    setTrail(["start"]);
+    setDirection(1);
+    setPath(null);
+    setIndustryId(null);
+    setTemplateId(null);
+    setPrompt("");
+    setQuickStart(null);
+    setLanguages(["ar"]);
+    setStage(0);
+    setName("");
+  };
 
   const close = () => {
-    setOpen(false)
-    setLeaving(false)
-    reset()
-  }
+    setOpen(false);
+    setLeaving(false);
+    reset();
+  };
 
-  const requestClose = () => (trail.length > 1 ? setLeaving(true) : close())
+  const requestClose = () => (trail.length > 1 ? setLeaving(true) : close());
 
   const build = () => {
-    setStage(0)
-    go("build")
-  }
+    setStage(0);
+    go("build");
+  };
 
   React.useEffect(() => {
-    if (step !== "build") return
+    if (step !== "build") return;
     const timer = window.setTimeout(() => {
       if (stage < STAGES.length) {
-        setStage(stage + 1)
-        return
+        setStage(stage + 1);
+        return;
       }
-      setName(quickStart ?? "Clinic appointment booking")
-      setDirection(1)
-      setTrail((t) => [...t, "name"])
-    }, STAGE_MS)
-    return () => window.clearTimeout(timer)
-  }, [step, stage, quickStart])
+      setName(quickStart ?? "Clinic appointment booking");
+      setDirection(1);
+      setTrail((t) => [...t, "name"]);
+    }, STAGE_MS);
+    return () => window.clearTimeout(timer);
+  }, [step, stage, quickStart]);
 
   const create = () => {
     toast.success(`${name.trim()} created`, {
       description: "Opening it in the editor.",
-    })
-    close()
-  }
+    });
+    close();
+  };
 
-  const dots = PATHS[path ?? "describe"]
-  const at = Math.max(0, dots.indexOf(step))
+  const dots = PATHS[path ?? "describe"];
+  const at = Math.max(0, dots.indexOf(step));
 
   return (
     <div className="relative">
@@ -386,19 +386,19 @@ export function CreationFlowPreview() {
           {step === "start" ? (
             <StartStep
               onBlank={() => {
-                setPath("blank")
-                setTemplateId(null)
-                setName("")
-                go("name")
+                setPath("blank");
+                setTemplateId(null);
+                setName("");
+                go("name");
               }}
               onDescribe={() => {
-                setPath("describe")
-                go("describe")
+                setPath("describe");
+                go("describe");
               }}
               onIndustry={(id) => {
-                setPath("template")
-                setIndustryId(id)
-                go("use-case")
+                setPath("template");
+                setIndustryId(id);
+                go("use-case");
               }}
             />
           ) : null}
@@ -409,8 +409,8 @@ export function CreationFlowPreview() {
               onBuild={build}
               onLanguages={setLanguages}
               onPrompt={(value, from) => {
-                setPrompt(value)
-                setQuickStart(from)
+                setPrompt(value);
+                setQuickStart(from);
               }}
               prompt={prompt}
             />
@@ -424,13 +424,13 @@ export function CreationFlowPreview() {
             <UseCaseStep
               industry={industry}
               onDescribe={() => {
-                setPath("describe")
-                go("describe")
+                setPath("describe");
+                go("describe");
               }}
               onTemplate={(t) => {
-                setTemplateId(t.id)
-                setName(t.name)
-                go("name")
+                setTemplateId(t.id);
+                setName(t.name);
+                go("name");
               }}
             />
           ) : null}
@@ -500,19 +500,19 @@ export function CreationFlowPreview() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }
 
-const CHOICE = "cursor-pointer text-start hover:bg-muted/50"
+const CHOICE = "cursor-pointer text-start hover:bg-muted/50";
 
 function StartStep({
   onBlank,
   onDescribe,
   onIndustry,
 }: {
-  onBlank: () => void
-  onDescribe: () => void
-  onIndustry: (id: string) => void
+  onBlank: () => void;
+  onDescribe: () => void;
+  onIndustry: (id: string) => void;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -570,7 +570,7 @@ function StartStep({
         </button>
       </Item>
     </div>
-  )
+  );
 }
 
 function DescribeStep({
@@ -580,14 +580,14 @@ function DescribeStep({
   onPrompt,
   prompt,
 }: {
-  languages: string[]
-  onBuild: () => void
-  onLanguages: (value: string[]) => void
-  onPrompt: (value: string, quickStart: string | null) => void
-  prompt: string
+  languages: string[];
+  onBuild: () => void;
+  onLanguages: (value: string[]) => void;
+  onPrompt: (value: string, quickStart: string | null) => void;
+  prompt: string;
 }) {
-  const length = prompt.trim().length
-  const ready = length >= PROMPT_MIN && languages.length > 0
+  const length = prompt.trim().length;
+  const ready = length >= PROMPT_MIN && languages.length > 0;
 
   return (
     <div className="flex flex-col gap-4">
@@ -600,7 +600,7 @@ function DescribeStep({
           onChange={(e) => onPrompt(e.target.value, null)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && ready)
-              onBuild()
+              onBuild();
           }}
           placeholder={PLACEHOLDER}
           rows={7}
@@ -664,7 +664,7 @@ function DescribeStep({
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function BuildStep({ prompt, stage }: { prompt: string; stage: number }) {
@@ -693,7 +693,7 @@ function BuildStep({ prompt, stage }: { prompt: string; stage: number }) {
         ))}
       </ol>
     </div>
-  )
+  );
 }
 
 function UseCaseStep({
@@ -701,9 +701,9 @@ function UseCaseStep({
   onDescribe,
   onTemplate,
 }: {
-  industry: Industry
-  onDescribe: () => void
-  onTemplate: (template: Template) => void
+  industry: Industry;
+  onDescribe: () => void;
+  onTemplate: (template: Template) => void;
 }) {
   if (!industry.templates.length) {
     return (
@@ -723,7 +723,7 @@ function UseCaseStep({
           </Button>
         </EmptyContent>
       </Empty>
-    )
+    );
   }
 
   return (
@@ -766,7 +766,7 @@ function UseCaseStep({
         </Item>
       ))}
     </div>
-  )
+  );
 }
 
 function Source({
@@ -774,9 +774,9 @@ function Source({
   media,
   title,
 }: {
-  description: string
-  media: React.ReactNode
-  title: string
+  description: string;
+  media: React.ReactNode;
+  title: string;
 }) {
   return (
     <>
@@ -790,7 +790,7 @@ function Source({
         </ItemDescription>
       </ItemContent>
     </>
-  )
+  );
 }
 
 function NameStep({
@@ -800,20 +800,20 @@ function NameStep({
   onName,
   source,
 }: {
-  name: string
-  onChange: () => void
-  onCreate: () => void
-  onName: (value: string) => void
-  source: React.ReactNode
+  name: string;
+  onChange: () => void;
+  onCreate: () => void;
+  onName: (value: string) => void;
+  source: React.ReactNode;
 }) {
-  const ready = name.trim().length > 0
+  const ready = name.trim().length > 0;
 
   return (
     <form
       className="flex flex-col gap-6"
       onSubmit={(e) => {
-        e.preventDefault()
-        if (ready) onCreate()
+        e.preventDefault();
+        if (ready) onCreate();
       }}
     >
       <Item variant="muted">
@@ -842,5 +842,5 @@ function NameStep({
         </Button>
       </div>
     </form>
-  )
+  );
 }

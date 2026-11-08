@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import type { ReactNode } from "react"
+import type { ReactNode } from "react";
 
-import { DataTableHeaderRow } from "@/components/shared/data-table"
+import { DataTableHeaderRow } from "@/components/shared/data-table";
 import {
   Table,
   TableBody,
@@ -10,28 +10,28 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   COLUMN_HELP,
   COLUMN_LABELS,
   type CallRow,
   type ColumnId,
   type ColumnSetting,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 import {
   AgentOutcomeBadge,
   DirectionChip,
   OutcomeBadge,
   ScenarioChip,
   StatusBadge,
-} from "@/components/mockups/conversations-revamp/list/status-badges"
-import { StatusHelp } from "@/components/mockups/conversations-revamp/list/status-help"
-import { TimeIcon } from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/status-badges";
+import { StatusHelp } from "@/components/mockups/conversations-revamp/list/status-help";
+import { TimeIcon } from "@/components/mockups/conversations-revamp/list/icons";
 
 export function CallTable({
   calls,
@@ -39,12 +39,12 @@ export function CallTable({
   onCallClick,
   rowMarker,
 }: {
-  calls: CallRow[]
-  columns: ColumnSetting[]
-  onCallClick: (call: CallRow) => void
-  rowMarker?: (call: CallRow) => ReactNode
+  calls: CallRow[];
+  columns: ColumnSetting[];
+  onCallClick: (call: CallRow) => void;
+  rowMarker?: (call: CallRow) => ReactNode;
 }) {
-  const shown = columns.filter((column) => column.visible)
+  const shown = columns.filter((column) => column.visible);
 
   return (
     <Table>
@@ -74,7 +74,7 @@ export function CallTable({
             className="cursor-pointer transition-colors duration-150 ease-out-cubic hover:bg-muted/50 motion-reduce:transition-none"
             key={call.id}
             onClick={() => {
-              onCallClick(call)
+              onCallClick(call);
             }}
           >
             {shown.map((column) => (
@@ -90,7 +90,7 @@ export function CallTable({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
 
 function NoValue() {
@@ -98,7 +98,7 @@ function NoValue() {
     <span aria-label="Not applicable" className="text-muted-foreground">
       —
     </span>
-  )
+  );
 }
 
 function Cell({
@@ -106,9 +106,9 @@ function Cell({
   column,
   marker,
 }: {
-  call: CallRow
-  column: ColumnId
-  marker?: ReactNode
+  call: CallRow;
+  column: ColumnId;
+  marker?: ReactNode;
 }) {
   switch (column) {
     case "direction":
@@ -116,7 +116,7 @@ function Cell({
         <DirectionChip direction={call.direction} />
       ) : (
         <NoValue />
-      )
+      );
 
     case "duration":
       return call.duration === "-" ? (
@@ -125,7 +125,7 @@ function Cell({
         <span className="text-sm font-medium text-foreground">
           {call.duration}
         </span>
-      )
+      );
 
     case "outcome":
       return call.outcomeReason ? (
@@ -141,10 +141,10 @@ function Cell({
         </Tooltip>
       ) : (
         <OutcomeBadge status={call.outcome} />
-      )
+      );
 
     case "agentOutcome":
-      return <AgentOutcomeBadge status={call.agentOutcome} />
+      return <AgentOutcomeBadge status={call.agentOutcome} />;
 
     case "phoneNumber":
       return call.phoneNumber ? (
@@ -153,10 +153,10 @@ function Cell({
         </span>
       ) : (
         <NoValue />
-      )
+      );
 
     case "scenario":
-      return <ScenarioChip scenario={call.scenario} />
+      return <ScenarioChip scenario={call.scenario} />;
 
     case "status":
       return (
@@ -164,7 +164,7 @@ function Cell({
           scheduleOrigin={call.scheduleOrigin}
           status={call.status}
         />
-      )
+      );
 
     case "time":
       return (
@@ -175,6 +175,6 @@ function Cell({
           </span>
           <span className="text-sm">{call.createdAt}</span>
         </div>
-      )
+      );
   }
 }

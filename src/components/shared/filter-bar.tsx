@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Cancel01Icon, PlusSignIcon } from "@hugeicons/core-free-icons"
-import type { DateRange } from "react-day-picker"
+import * as React from "react";
+import { Cancel01Icon, PlusSignIcon } from "@hugeicons/core-free-icons";
+import type { DateRange } from "react-day-picker";
 
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +14,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -22,38 +22,38 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Field, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/dropdown-menu";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { icon } from "@/components/shared/icon"
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { icon } from "@/components/shared/icon";
 
-const AddIcon = icon(PlusSignIcon, "AddIcon")
-const ClearIcon = icon(Cancel01Icon, "ClearIcon")
+const AddIcon = icon(PlusSignIcon, "AddIcon");
+const ClearIcon = icon(Cancel01Icon, "ClearIcon");
 
-export type { DateRange }
-type FilterOption = { value: string; label: string }
-export type Range = { min?: number; max?: number }
+export type { DateRange };
+type FilterOption = { value: string; label: string };
+export type Range = { min?: number; max?: number };
 
 export function FilterBar({
   children,
   activeCount = 0,
   onClearAll,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
   /** How many filters are set. Clear all appears at two. */
-  activeCount?: number
-  onClearAll?: () => void
+  activeCount?: number;
+  onClearAll?: () => void;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -64,7 +64,7 @@ export function FilterBar({
         </Button>
       ) : null}
     </div>
-  )
+  );
 }
 
 /** One tree for both states: swapping the trigger once a value is set would remount it and close the open list. */
@@ -74,10 +74,10 @@ function Chip({
   onClear,
   trigger,
 }: {
-  field: string
-  summary: string | null
-  onClear: () => void
-  trigger: (button: React.ReactElement) => React.ReactNode
+  field: string;
+  summary: string | null;
+  onClear: () => void;
+  trigger: (button: React.ReactElement) => React.ReactNode;
 }) {
   return (
     <ButtonGroup>
@@ -106,37 +106,37 @@ function Chip({
         </Button>
       ) : null}
     </ButtonGroup>
-  )
+  );
 }
 
 function manySummary(options: FilterOption[], value: string[]) {
-  if (!value.length) return null
+  if (!value.length) return null;
   const labels = value.map(
     (item) => options.find((option) => option.value === item)?.label ?? item,
-  )
-  if (labels.length === 1) return labels[0]
+  );
+  if (labels.length === 1) return labels[0];
   if (labels.length === 2 && labels.join(", ").length <= 24)
-    return labels.join(", ")
-  return `${labels[0]} +${labels.length - 1}`
+    return labels.join(", ");
+  return `${labels[0]} +${labels.length - 1}`;
 }
 
-const DAY = 24 * 60 * 60 * 1000
+const DAY = 24 * 60 * 60 * 1000;
 
 function datePresets(today: Date) {
   return [
     { label: "Today", from: today },
     { label: "Last 7 days", from: new Date(today.getTime() - 6 * DAY) },
     { label: "Last 30 days", from: new Date(today.getTime() - 29 * DAY) },
-  ]
+  ];
 }
 
 function dateSummary(value: DateRange | undefined, today: Date) {
-  if (!value?.from) return null
+  if (!value?.from) return null;
   const preset = datePresets(today).find(
     (entry) =>
       value.from?.toDateString() === entry.from.toDateString() &&
       value.to?.toDateString() === today.toDateString(),
-  )
+  );
   return (
     preset?.label ??
     [value.from, value.to]
@@ -145,20 +145,20 @@ function dateSummary(value: DateRange | undefined, today: Date) {
         date!.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
       )
       .join(" – ")
-  )
+  );
 }
 
 function rangeSummary(range: Range | null, unit: string) {
-  if (!range) return null
-  const { min, max } = range
-  if (min !== undefined && max !== undefined) return `${min}–${max} ${unit}`
-  if (min !== undefined) return `Over ${min} ${unit}`
-  if (max !== undefined) return `Under ${max} ${unit}`
-  return null
+  if (!range) return null;
+  const { min, max } = range;
+  if (min !== undefined && max !== undefined) return `${min}–${max} ${unit}`;
+  if (min !== undefined) return `Over ${min} ${unit}`;
+  if (max !== undefined) return `Under ${max} ${unit}`;
+  return null;
 }
 
 /** Past this many options the list gets a search box. */
-const SEARCH_FROM = 8
+const SEARCH_FROM = 8;
 
 function OptionList({
   button,
@@ -169,17 +169,17 @@ function OptionList({
   onClear,
   closeOnSelect,
 }: {
-  button: React.ReactElement
-  field: string
-  options: FilterOption[]
-  selected: string[]
-  onSelect: (value: string) => void
-  onClear?: () => void
-  closeOnSelect: boolean
+  button: React.ReactElement;
+  field: string;
+  options: FilterOption[];
+  selected: string[];
+  onSelect: (value: string) => void;
+  onClear?: () => void;
+  closeOnSelect: boolean;
 }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
   // Ticked ones float to the top only when the list opens, not under the pointer.
-  const [order, setOrder] = React.useState(options)
+  const [order, setOrder] = React.useState(options);
 
   if (options.length < SEARCH_FROM) {
     return (
@@ -194,8 +194,8 @@ function OptionList({
               checked={selected.includes(option.value)}
               key={option.value}
               onSelect={(event) => {
-                if (!closeOnSelect) event.preventDefault()
-                onSelect(option.value)
+                if (!closeOnSelect) event.preventDefault();
+                onSelect(option.value);
               }}
             >
               {option.label}
@@ -209,7 +209,7 @@ function OptionList({
           ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
-    )
+    );
   }
 
   return (
@@ -220,8 +220,8 @@ function OptionList({
           setOrder([
             ...options.filter((o) => selected.includes(o.value)),
             ...options.filter((o) => !selected.includes(o.value)),
-          ])
-        setOpen(next)
+          ]);
+        setOpen(next);
       }}
     >
       <PopoverTrigger asChild>{button}</PopoverTrigger>
@@ -240,8 +240,8 @@ function OptionList({
                     data-checked={selected.includes(option.value)}
                     key={option.value}
                     onSelect={() => {
-                      onSelect(option.value)
-                      if (closeOnSelect) setOpen(false)
+                      onSelect(option.value);
+                      if (closeOnSelect) setOpen(false);
                     }}
                     value={option.label}
                   >
@@ -266,7 +266,7 @@ function OptionList({
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 export function SelectFilter({
@@ -275,10 +275,10 @@ export function SelectFilter({
   value,
   onChange,
 }: {
-  field: string
-  options: FilterOption[]
-  value: string[]
-  onChange: (value: string[]) => void
+  field: string;
+  options: FilterOption[];
+  value: string[];
+  onChange: (value: string[]) => void;
 }) {
   return (
     <Chip
@@ -303,7 +303,7 @@ export function SelectFilter({
         />
       )}
     />
-  )
+  );
 }
 
 export function ChoiceFilter({
@@ -312,10 +312,10 @@ export function ChoiceFilter({
   value,
   onChange,
 }: {
-  field: string
-  options: FilterOption[]
-  value: string | null
-  onChange: (value: string | null) => void
+  field: string;
+  options: FilterOption[];
+  value: string | null;
+  onChange: (value: string | null) => void;
 }) {
   return (
     <Chip
@@ -333,7 +333,7 @@ export function ChoiceFilter({
         />
       )}
     />
-  )
+  );
 }
 
 export function DateFilter({
@@ -342,11 +342,11 @@ export function DateFilter({
   onChange,
   today,
 }: {
-  field: string
-  value: DateRange | undefined
-  onChange: (value: DateRange | undefined) => void
+  field: string;
+  value: DateRange | undefined;
+  onChange: (value: DateRange | undefined) => void;
   /** Mock data is dated, so the demo fixes today. */
-  today: Date
+  today: Date;
 }) {
   return (
     <Chip
@@ -388,7 +388,7 @@ export function DateFilter({
         </Popover>
       )}
     />
-  )
+  );
 }
 
 export function RangeFilter({
@@ -398,17 +398,17 @@ export function RangeFilter({
   value,
   onChange,
 }: {
-  field: string
-  unit: string
-  presets: Range[]
-  value: Range | null
-  onChange: (value: Range | null) => void
+  field: string;
+  unit: string;
+  presets: Range[];
+  value: Range | null;
+  onChange: (value: Range | null) => void;
 }) {
-  const id = React.useId()
+  const id = React.useId();
   const set = (next: Range) =>
-    onChange(next.min === undefined && next.max === undefined ? null : next)
-  const read = (raw: string) => (raw === "" ? undefined : Number(raw))
-  const current = value ?? {}
+    onChange(next.min === undefined && next.max === undefined ? null : next);
+  const read = (raw: string) => (raw === "" ? undefined : Number(raw));
+  const current = value ?? {};
 
   return (
     <Chip
@@ -421,9 +421,9 @@ export function RangeFilter({
           <PopoverContent align="start" className="flex w-64 flex-col gap-3">
             <div className="flex flex-col gap-1">
               {presets.map((preset) => {
-                const label = rangeSummary(preset, unit)!
+                const label = rangeSummary(preset, unit)!;
                 const on =
-                  preset.min === value?.min && preset.max === value?.max
+                  preset.min === value?.min && preset.max === value?.max;
                 return (
                   <Button
                     className="justify-start"
@@ -434,7 +434,7 @@ export function RangeFilter({
                   >
                     {label}
                   </Button>
-                )
+                );
               })}
             </div>
             <Separator />
@@ -464,7 +464,7 @@ export function RangeFilter({
         </Popover>
       )}
     />
-  )
+  );
 }
 
 export function ToggleFilter({
@@ -472,9 +472,9 @@ export function ToggleFilter({
   value,
   onChange,
 }: {
-  field: string
-  value: boolean
-  onChange: (value: boolean) => void
+  field: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
 }) {
   return (
     <ButtonGroup>
@@ -499,17 +499,17 @@ export function ToggleFilter({
         </Button>
       ) : null}
     </ButtonGroup>
-  )
+  );
 }
 
 export function AddFilter({
   fields,
   onAdd,
 }: {
-  fields: { id: string; label: string }[]
-  onAdd: (id: string) => void
+  fields: { id: string; label: string }[];
+  onAdd: (id: string) => void;
 }) {
-  if (!fields.length) return null
+  if (!fields.length) return null;
 
   return (
     <DropdownMenu modal={false}>
@@ -527,5 +527,5 @@ export function AddFilter({
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

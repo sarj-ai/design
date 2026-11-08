@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { FieldHint } from "@/components/design-system/field-hint"
-import { Button } from "@/components/ui/button"
+import { FieldHint } from "@/components/design-system/field-hint";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
@@ -10,12 +10,15 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "@/components/ui/field"
-import { errorId, FieldHeader } from "@/components/design-system/field-header"
-import { Input } from "@/components/ui/input"
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/field";
+import { errorId, FieldHeader } from "@/components/design-system/field-header";
+import { Input } from "@/components/ui/input";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 export function FormDemo() {
   return (
@@ -135,5 +138,5 @@ export function FormDemo() {
         <Button type="button">Save voice</Button>
       </div>
     </form>
-  )
+  );
 }

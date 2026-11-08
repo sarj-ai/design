@@ -1,21 +1,21 @@
-import { createClassVisitor } from "../lib/classes.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
 
-const DURATION = /^duration-(.+)$/
-const EASE = /^ease-(.+)$/
+const DURATION = /^duration-(.+)$/;
+const EASE = /^ease-(.+)$/;
 
-const ALLOWED_DURATIONS = new Set(["0", "100", "150", "200", "250", "300"])
+const ALLOWED_DURATIONS = new Set(["0", "100", "150", "200", "250", "300"]);
 
 const ALLOWED_EASINGS = new Set([
   "ease-out-cubic",
   "ease-in-out-cubic",
   "ease-linear", // constant motion only: marquees, progress, spinners
   "ease-initial",
-])
+]);
 
 const EASING_SWAP = {
   "ease-out": "ease-out-cubic",
   "ease-in-out": "ease-in-out-cubic",
-}
+};
 
 const motionTokens = {
   meta: {
@@ -42,45 +42,45 @@ const motionTokens = {
   create(context) {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
-        const duration = DURATION.exec(base)
+        const duration = DURATION.exec(base);
         if (duration) {
-          const value = duration[1].replace(/^\[|ms\]?$|\]$/g, "")
+          const value = duration[1].replace(/^\[|ms\]?$|\]$/g, "");
           if (!ALLOWED_DURATIONS.has(value)) {
             context.report({
               node,
               messageId: "duration",
               data: { cls: raw },
-            })
+            });
           }
-          continue
+          continue;
         }
 
-        if (!EASE.test(base) || ALLOWED_EASINGS.has(base)) continue
+        if (!EASE.test(base) || ALLOWED_EASINGS.has(base)) continue;
 
         if (base.startsWith("ease-[")) {
           context.report({
             node,
             messageId: "arbitraryEasing",
             data: { cls: raw },
-          })
+          });
         } else if (base === "ease-in") {
-          context.report({ node, messageId: "easeIn", data: { cls: raw } })
+          context.report({ node, messageId: "easeIn", data: { cls: raw } });
         } else if (EASING_SWAP[base]) {
           context.report({
             node,
             messageId: "easingSwap",
             data: { cls: raw, swap: EASING_SWAP[base] },
-          })
+          });
         } else {
           context.report({
             node,
             messageId: "unknownEasing",
             data: { cls: raw },
-          })
+          });
         }
       }
-    })
+    });
   },
-}
+};
 
-export default motionTokens
+export default motionTokens;

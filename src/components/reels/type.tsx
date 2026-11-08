@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function Kicker({
   children,
   className,
 }: {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }) {
   return (
     <p
@@ -20,7 +20,7 @@ export function Kicker({
     >
       {children}
     </p>
-  )
+  );
 }
 
 export function Headline({
@@ -28,9 +28,9 @@ export function Headline({
   className,
   size = "h1",
 }: {
-  children: React.ReactNode
-  className?: string
-  size?: "display" | "h1" | "h2"
+  children: React.ReactNode;
+  className?: string;
+  size?: "display" | "h1" | "h2";
 }) {
   return (
     <h2
@@ -44,15 +44,15 @@ export function Headline({
     >
       {children}
     </h2>
-  )
+  );
 }
 
 export function Lead({
   children,
   className,
 }: {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }) {
   return (
     <p
@@ -63,7 +63,7 @@ export function Lead({
     >
       {children}
     </p>
-  )
+  );
 }
 
 export function Brandmark({ children }: { children: React.ReactNode }) {
@@ -73,5 +73,5 @@ export function Brandmark({ children }: { children: React.ReactNode }) {
         {children}
       </span>
     </div>
-  )
+  );
 }

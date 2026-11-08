@@ -1,37 +1,37 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { TabsContent } from "@/components/ui/tabs"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
+import { Badge } from "@/components/ui/badge";
+import { TabsContent } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
 import {
   ConfigurationTabIcon,
   CreatedIcon,
   OpportunitiesTabIcon,
   ScenarioTabIcon,
   ScheduleTabIcon,
-} from "@/components/mockups/opportunity-triage/icons"
-import { OpportunitiesPanel } from "@/components/mockups/opportunity-triage/opportunities-panel"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+} from "@/components/mockups/opportunity-triage/icons";
+import { OpportunitiesPanel } from "@/components/mockups/opportunity-triage/opportunities-panel";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   ALL_HANDLED,
   hasRecurred,
   OPPORTUNITIES,
   SCENARIO,
   type Opportunity,
-} from "@/lib/mockups/opportunity-triage-data"
+} from "@/lib/mockups/opportunity-triage-data";
 
 const STATES = [
   { id: "mixed", label: "Some open" },
   { id: "handled", label: "All handled" },
   { id: "none", label: "None yet" },
   { id: "loading", label: "Loading" },
-] as const
+] as const;
 
-type ReviewState = (typeof STATES)[number]["id"]
+type ReviewState = (typeof STATES)[number]["id"];
 
 const TABS = [
   {
@@ -58,31 +58,31 @@ const TABS = [
     short: "Opportunities",
     Icon: OpportunitiesTabIcon,
   },
-] as const
+] as const;
 
-type Tab = (typeof TABS)[number]["id"]
+type Tab = (typeof TABS)[number]["id"];
 
 /** Before the tab is opened, while it is open, and after leaving it. */
-type Visit = "before" | "viewing" | "after"
+type Visit = "before" | "viewing" | "after";
 
 function dataFor(state: ReviewState): Opportunity[] {
-  if (state === "handled") return ALL_HANDLED
-  if (state === "none") return []
-  return OPPORTUNITIES
+  if (state === "handled") return ALL_HANDLED;
+  if (state === "none") return [];
+  return OPPORTUNITIES;
 }
 
 export default function OpportunityTriagePage() {
-  const [state, setState] = React.useState<ReviewState>("mixed")
+  const [state, setState] = React.useState<ReviewState>("mixed");
   const [opportunities, setOpportunities] = React.useState(() =>
     dataFor("mixed"),
-  )
-  const [tab, setTab] = React.useState<Tab>("configuration")
-  const [visit, setVisit] = React.useState<Visit>("before")
+  );
+  const [tab, setTab] = React.useState<Tab>("configuration");
+  const [visit, setVisit] = React.useState<Visit>("before");
 
   const hasNews = opportunities.some(
     (opportunity) => opportunity.isNew || hasRecurred(opportunity),
-  )
-  const showDot = visit === "before" && hasNews && state !== "loading"
+  );
+  const showDot = visit === "before" && hasNews && state !== "loading";
 
   return (
     <MockupShell
@@ -90,11 +90,11 @@ export default function OpportunityTriagePage() {
         <ToggleGroup
           aria-label="State"
           onValueChange={(next) => {
-            if (!next) return
-            const nextState = next as ReviewState
-            setState(nextState)
-            setOpportunities(dataFor(nextState))
-            setVisit(tab === "opportunities" ? "viewing" : "before")
+            if (!next) return;
+            const nextState = next as ReviewState;
+            setState(nextState);
+            setOpportunities(dataFor(nextState));
+            setVisit(tab === "opportunities" ? "viewing" : "before");
           }}
           size="sm"
           type="single"
@@ -146,14 +146,14 @@ export default function OpportunityTriagePage() {
               ),
             }))}
             onValueChange={(next) => {
-              const nextTab = next as Tab
+              const nextTab = next as Tab;
               if (nextTab === "opportunities" && visit === "before") {
-                setVisit("viewing")
+                setVisit("viewing");
               }
               if (tab === "opportunities" && nextTab !== "opportunities") {
-                setVisit("after")
+                setVisit("after");
               }
-              setTab(nextTab)
+              setTab(nextTab);
             }}
             value={tab}
           >
@@ -187,5 +187,5 @@ export default function OpportunityTriagePage() {
         </main>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

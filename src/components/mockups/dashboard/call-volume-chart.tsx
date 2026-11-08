@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import * as React from "react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -10,29 +10,29 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { cn } from "@/lib/utils"
-import type { ChartPoint, Series } from "@/lib/mockups/dashboard-data"
+} from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
+import type { ChartPoint, Series } from "@/lib/mockups/dashboard-data";
 
 const CHART_CONFIG = {
   inbound: { label: "Inbound", color: "var(--chart-6)" },
   outbound: { label: "Outbound", color: "var(--chart-2)" },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 const SERIES_KEY: Record<Series, string> = {
   inbound: "bg-chart-6",
   outbound: "bg-chart-2",
-}
+};
 
 /* An SVG id from React's, which may carry characters `url(#…)` will not take. */
 function useSvgId(prefix: string) {
-  return `${prefix}-${React.useId().replace(/[^a-zA-Z0-9-]/g, "")}`
+  return `${prefix}-${React.useId().replace(/[^a-zA-Z0-9-]/g, "")}`;
 }
 
 /* An alpha mask, which reads only each stop's opacity. */
@@ -54,7 +54,7 @@ function EdgeFade({ id }: { id: string }) {
         <rect fill={`url(#${id}-ramp)`} height="1.2" width="1" y="-0.1" />
       </mask>
     </>
-  )
+  );
 }
 
 function SeriesKey({ series }: { series: Series }) {
@@ -63,7 +63,7 @@ function SeriesKey({ series }: { series: Series }) {
       aria-hidden
       className={cn("h-0.5 w-3 shrink-0 rounded-full", SERIES_KEY[series])}
     />
-  )
+  );
 }
 
 export function Sparkline({
@@ -71,9 +71,9 @@ export function Sparkline({
   points,
   series,
 }: {
-  className?: string
-  points: ChartPoint[]
-  series: Series
+  className?: string;
+  points: ChartPoint[];
+  series: Series;
 }) {
   return (
     <ChartContainer
@@ -100,17 +100,17 @@ export function Sparkline({
         />
       </AreaChart>
     </ChartContainer>
-  )
+  );
 }
 
 export function CallVolumeChart({
   description,
   points,
 }: {
-  description: string
-  points: ChartPoint[]
+  description: string;
+  points: ChartPoint[];
 }) {
-  const edgeFadeId = useSvgId("calls-edge-fade")
+  const edgeFadeId = useSvgId("calls-edge-fade");
   return (
     <Card>
       <CardHeader>
@@ -185,5 +185,5 @@ export function CallVolumeChart({
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

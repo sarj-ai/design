@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import {
   DownloadRecordingIcon,
   PauseRecordingIcon,
   PlaybackSpeedIcon,
   PlayRecordingIcon,
-} from "@/components/mockups/behavioral-alerts/icons"
+} from "@/components/mockups/behavioral-alerts/icons";
 
 const PLAYBACK_RATES = [
   { label: "0.5x speed", value: "0.5" },
@@ -30,36 +30,36 @@ const PLAYBACK_RATES = [
   { label: "1.25x speed", value: "1.25" },
   { label: "1.5x speed", value: "1.5" },
   { label: "2x speed", value: "2" },
-]
+];
 
-const BARS = 144
+const BARS = 144;
 
 // Deterministic so server and client draw the same bars; Math.random would not.
 function noise(index: number) {
-  const value = Math.sin(index * 12.9898) * 43758.5453
-  return value - Math.floor(value)
+  const value = Math.sin(index * 12.9898) * 43758.5453;
+  return value - Math.floor(value);
 }
 
 const WAVE = Array.from({ length: BARS }, (_, index) => {
-  const position = index / BARS
-  const envelope = 0.3 + 0.7 * Math.abs(Math.sin(position * Math.PI * 3.7))
-  const detail = 0.35 + 0.65 * noise(index)
+  const position = index / BARS;
+  const envelope = 0.3 + 0.7 * Math.abs(Math.sin(position * Math.PI * 3.7));
+  const detail = 0.35 + 0.65 * noise(index);
 
-  return Math.min(1, Math.max(0.1, envelope * detail))
-})
+  return Math.min(1, Math.max(0.1, envelope * detail));
+});
 
 export function formatTimeSeconds(seconds: number) {
   return `${Math.floor(seconds / 60)}:${(seconds % 60)
     .toString()
-    .padStart(2, "0")}`
+    .padStart(2, "0")}`;
 }
 
 export type RecordingMarker = {
-  id: string
-  label: string
-  at: number
-  tone: string
-}
+  id: string;
+  label: string;
+  at: number;
+  tone: string;
+};
 
 export function RecordingPlayer({
   at = 0,
@@ -67,15 +67,15 @@ export function RecordingPlayer({
   markers,
   onSeek,
 }: {
-  at?: number
-  duration: number
-  markers?: RecordingMarker[]
-  onSeek: (seconds: number) => void
+  at?: number;
+  duration: number;
+  markers?: RecordingMarker[];
+  onSeek: (seconds: number) => void;
 }) {
-  const [playing, setPlaying] = React.useState(false)
-  const [rate, setRate] = React.useState("1")
+  const [playing, setPlaying] = React.useState(false);
+  const [rate, setRate] = React.useState("1");
 
-  const played = Math.round((at / duration) * BARS)
+  const played = Math.round((at / duration) * BARS);
 
   return (
     <div className="flex shrink-0 flex-col overflow-hidden rounded-lg bg-muted">
@@ -84,9 +84,9 @@ export function RecordingPlayer({
           aria-label="Seek in the recording"
           className="relative flex h-10 cursor-pointer items-center gap-px focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           onClick={(event) => {
-            const box = event.currentTarget.getBoundingClientRect()
-            const ratio = (event.clientX - box.left) / box.width
-            onSeek(Math.round(Math.min(Math.max(ratio, 0), 1) * duration))
+            const box = event.currentTarget.getBoundingClientRect();
+            const ratio = (event.clientX - box.left) / box.width;
+            onSeek(Math.round(Math.min(Math.max(ratio, 0), 1) * duration));
           }}
           role="button"
           tabIndex={0}
@@ -113,8 +113,8 @@ export function RecordingPlayer({
                   marker.tone,
                 )}
                 onClick={(event) => {
-                  event.stopPropagation()
-                  onSeek(marker.at)
+                  event.stopPropagation();
+                  onSeek(marker.at);
                 }}
                 style={{
                   insetInlineStart: `${(marker.at / duration) * 100}%`,
@@ -132,7 +132,7 @@ export function RecordingPlayer({
         <Button
           aria-label={playing ? "Pause" : "Play"}
           onClick={() => {
-            setPlaying(!playing)
+            setPlaying(!playing);
           }}
           size="icon-sm"
         >
@@ -172,5 +172,5 @@ export function RecordingPlayer({
         </div>
       </div>
     </div>
-  )
+  );
 }

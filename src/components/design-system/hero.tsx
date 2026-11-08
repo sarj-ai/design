@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { SectionMenu } from "@/components/design-system/section-menu"
-import ContourMapBackground from "@/components/ui/contour-map-background"
-import TextHighlightWave from "@/components/ui/text-highlight-wave"
+import { SectionMenu } from "@/components/design-system/section-menu";
+import ContourMapBackground from "@/components/ui/contour-map-background";
+import TextHighlightWave from "@/components/ui/text-highlight-wave";
 
 export function DesignSystemHero({
   views,
   initialSection = null,
   initialTopic = null,
 }: {
-  views: Record<string, React.ReactNode>
-  initialSection?: string | null
-  initialTopic?: string | null
+  views: Record<string, React.ReactNode>;
+  initialSection?: string | null;
+  initialTopic?: string | null;
 }) {
   return (
     <main className="flex flex-1 flex-col">
@@ -42,5 +42,5 @@ export function DesignSystemHero({
         />
       </div>
     </main>
-  )
+  );
 }

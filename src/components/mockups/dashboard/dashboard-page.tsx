@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   CallVolumeChart,
   Sparkline,
-} from "@/components/mockups/dashboard/call-volume-chart"
+} from "@/components/mockups/dashboard/call-volume-chart";
 import {
   ChangeDownIcon,
   ChangeUpIcon,
-} from "@/components/mockups/dashboard/icons"
-import { PeriodSelector } from "@/components/mockups/dashboard/period-selector"
-import { cn } from "@/lib/utils"
+} from "@/components/mockups/dashboard/icons";
+import { PeriodSelector } from "@/components/mockups/dashboard/period-selector";
+import { cn } from "@/lib/utils";
 import {
   dashboardData,
   type ChartPoint,
   type CustomRange,
   type NumberCard,
   type Period,
-} from "@/lib/mockups/dashboard-data"
+} from "@/lib/mockups/dashboard-data";
 
 export function DashboardPage({ noCalls }: { noCalls: boolean }) {
-  const [period, setPeriod] = React.useState<Period>("today")
-  const [range, setRange] = React.useState<CustomRange>()
-  const data = dashboardData(period, { noCalls, range })
+  const [period, setPeriod] = React.useState<Period>("today");
+  const [range, setRange] = React.useState<CustomRange>();
+  const data = dashboardData(period, { noCalls, range });
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,8 +32,8 @@ export function DashboardPage({ noCalls }: { noCalls: boolean }) {
         <PeriodSelector
           onPeriodChange={setPeriod}
           onRangeApply={(next) => {
-            setRange(next)
-            setPeriod("custom")
+            setRange(next);
+            setPeriod("custom");
           }}
           period={period}
           range={range}
@@ -61,15 +61,15 @@ export function DashboardPage({ noCalls }: { noCalls: boolean }) {
         points={data.chart}
       />
     </div>
-  )
+  );
 }
 
 function NumberTile({
   card,
   points,
 }: {
-  card: NumberCard
-  points?: ChartPoint[]
+  card: NumberCard;
+  points?: ChartPoint[];
 }) {
   return (
     <Card className="relative">
@@ -90,24 +90,25 @@ function NumberTile({
         />
       ) : null}
     </Card>
-  )
+  );
 }
 
 function Change({
   percent,
   riseIsGood,
 }: {
-  percent: number
-  riseIsGood: boolean | undefined
+  percent: number;
+  riseIsGood: boolean | undefined;
 }) {
-  const Arrow = percent > 0 ? ChangeUpIcon : percent < 0 ? ChangeDownIcon : null
-  const direction = percent > 0 ? "Up " : percent < 0 ? "Down " : ""
+  const Arrow =
+    percent > 0 ? ChangeUpIcon : percent < 0 ? ChangeDownIcon : null;
+  const direction = percent > 0 ? "Up " : percent < 0 ? "Down " : "";
   const tone =
     percent === 0 || riseIsGood === undefined
       ? "neutral"
       : percent > 0 === riseIsGood
         ? "good"
-        : "bad"
+        : "bad";
   /* Tint foregrounds: `success` and `destructive` are fills, too light for 14px text. */
   return (
     <span
@@ -122,5 +123,5 @@ function Change({
       <span className="sr-only">{direction}</span>
       {Math.abs(percent)}%
     </span>
-  )
+  );
 }

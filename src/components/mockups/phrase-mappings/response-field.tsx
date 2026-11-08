@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Spinner } from "@/components/ui/spinner"
+} from "@/components/ui/input-group";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   RESPONSE_MAX_CHARS,
   type PreviewVoice,
-} from "@/lib/mockups/phrase-mappings-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/phrase-mappings-data";
+import { cn } from "@/lib/utils";
 
-import { PlayPreviewIcon, StopPreviewIcon } from "./icons"
+import { PlayPreviewIcon, StopPreviewIcon } from "./icons";
 
-const RENDER_MS = 700
+const RENDER_MS = 700;
 
-const SPEECH_MS_PER_CHAR = 95
-const MIN_SPEECH_MS = 1100
+const SPEECH_MS_PER_CHAR = 95;
+const MIN_SPEECH_MS = 1100;
 
-type Preview = "idle" | "rendering" | "playing"
+type Preview = "idle" | "rendering" | "playing";
 
 export function ResponseField({
   disabled,
@@ -37,32 +37,32 @@ export function ResponseField({
   value,
   voice,
 }: {
-  disabled: boolean
-  fieldId: string
-  onChange: (response: string) => void
-  value: string
-  voice: PreviewVoice
+  disabled: boolean;
+  fieldId: string;
+  onChange: (response: string) => void;
+  value: string;
+  voice: PreviewVoice;
 }) {
-  const [preview, setPreview] = React.useState<Preview>("idle")
+  const [preview, setPreview] = React.useState<Preview>("idle");
 
-  const overLimit = value.length > RESPONSE_MAX_CHARS
-  const spoken = value.trim()
+  const overLimit = value.length > RESPONSE_MAX_CHARS;
+  const spoken = value.trim();
 
   React.useEffect(() => {
-    if (preview === "idle") return
+    if (preview === "idle") return;
 
     const timer = window.setTimeout(
       () => setPreview(preview === "rendering" ? "playing" : "idle"),
       preview === "rendering"
         ? RENDER_MS
         : Math.max(MIN_SPEECH_MS, spoken.length * SPEECH_MS_PER_CHAR),
-    )
+    );
 
-    return () => window.clearTimeout(timer)
-  }, [preview, spoken.length])
+    return () => window.clearTimeout(timer);
+  }, [preview, spoken.length]);
 
   const label =
-    preview === "idle" ? `Play in ${voice.name}'s voice` : "Stop preview"
+    preview === "idle" ? `Play in ${voice.name}'s voice` : "Stop preview";
 
   const glyph =
     preview === "rendering" ? (
@@ -71,9 +71,9 @@ export function ResponseField({
       <StopPreviewIcon />
     ) : (
       <PlayPreviewIcon />
-    )
+    );
 
-  const toggle = () => setPreview(preview === "idle" ? "rendering" : "idle")
+  const toggle = () => setPreview(preview === "idle" ? "rendering" : "idle");
 
   return (
     <Field data-invalid={overLimit || undefined}>
@@ -89,8 +89,8 @@ export function ResponseField({
           disabled={disabled}
           id={`${fieldId}-response`}
           onChange={(event) => {
-            setPreview("idle")
-            onChange(event.target.value)
+            setPreview("idle");
+            onChange(event.target.value);
           }}
           placeholder="What the agent plays back"
           value={value}
@@ -134,5 +134,5 @@ export function ResponseField({
         </span>
       </div>
     </Field>
-  )
+  );
 }

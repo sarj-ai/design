@@ -5,14 +5,14 @@
  * scripts/build-registry.mjs reads this file; the markdown links each component to its item.
  */
 
-import { INSTALL_COMMANDS, registryUrl } from "@/lib/site/registry"
+import { INSTALL_COMMANDS, registryUrl } from "@/lib/site/registry";
 
 /** The whole-system markdown, installed as a Claude skill. */
-export const DESIGN_SYSTEM_ITEM = "design-system"
+export const DESIGN_SYSTEM_ITEM = "design-system";
 
 /** Where `shadcn add` writes the markdown in the consumer — `~/` is the package root it runs in. */
 export const DESIGN_SYSTEM_TARGET =
-  "~/.claude/skills/sarj-design-system/SKILL.md"
+  "~/.claude/skills/sarj-design-system/SKILL.md";
 
 /** Components topic id → the file under src/ that renders its demo on the topic page. */
 export const COMPONENT_ENTRIES: Record<string, string> = {
@@ -32,14 +32,14 @@ export const COMPONENT_ENTRIES: Record<string, string> = {
   "orb-avatar": "components/shared/orb-avatar.tsx",
   recording: "components/design-system/recording-preview.tsx",
   "agent-states": "components/design-system/agent-state-preview.tsx",
-}
+};
 
 /** `ds-` keeps a component's item from colliding with a mockup slug of the same name. */
 export function componentItem(topicId: string): string {
-  return `ds-${topicId}`
+  return `ds-${topicId}`;
 }
 
 /** The platform is a Yarn workspace, so the yarn command — with its `--cwd` — is the one to hand out. */
 export function installCommand(item: string): string {
-  return INSTALL_COMMANDS[0].command(registryUrl(item))
+  return INSTALL_COMMANDS[0].command(registryUrl(item));
 }

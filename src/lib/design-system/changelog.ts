@@ -1,16 +1,16 @@
 // Newest first: add entries at the top, in the same commit as the change.
 
-export type ChangeKind = "added" | "changed" | "fixed" | "removed"
+export type ChangeKind = "added" | "changed" | "fixed" | "removed";
 
 export type ChangelogEntry = {
   /** ISO date, `YYYY-MM-DD`. */
-  date: string
-  title: string
-  summary?: string
-  changes: { kind: ChangeKind; text: string }[]
+  date: string;
+  title: string;
+  summary?: string;
+  changes: { kind: ChangeKind; text: string }[];
   /** Topic ids from `DOCS_SECTIONS`, linked under the entry. */
-  topics?: string[]
-}
+  topics?: string[];
+};
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
@@ -529,4 +529,4 @@ export const CHANGELOG: ChangelogEntry[] = [
       "pagination",
     ],
   },
-]
+];

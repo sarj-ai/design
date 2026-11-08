@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -10,17 +10,16 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/drawer";
+import { Textarea } from "@/components/ui/textarea";
 import {
   assemblePrompt,
   type SectionedPrompt,
-} from "@/lib/mockups/scenario-single-screen-v2-data"
-
+} from "@/lib/mockups/scenario-single-screen-v2-data";
 import {
   DismissIcon,
   RawPromptIcon,
-} from "@/components/mockups/scenario-single-screen/v2/icons"
+} from "@/components/mockups/scenario-single-screen/v2/icons";
 
 export function RawPromptDrawer({
   onOpenChange,
@@ -28,12 +27,12 @@ export function RawPromptDrawer({
   prompt,
   rtl,
 }: {
-  onOpenChange: (open: boolean) => void
-  open: boolean
-  prompt: SectionedPrompt
-  rtl: boolean
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  prompt: SectionedPrompt;
+  rtl: boolean;
 }) {
-  const raw = assemblePrompt(prompt)
+  const raw = assemblePrompt(prompt);
 
   return (
     <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
@@ -85,5 +84,5 @@ export function RawPromptDrawer({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

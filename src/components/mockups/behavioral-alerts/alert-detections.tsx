@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Spinner } from "@/components/ui/spinner"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 import {
   CONFIGURED_ALERTS,
   SEVERITY_ORDER,
   type AlertAnalysis,
   type Detection,
-} from "@/lib/mockups/behavioral-alerts-data"
-import { ScenarioSettingsIcon } from "@/components/mockups/behavioral-alerts/icons"
-import { formatTimeSeconds } from "@/components/mockups/behavioral-alerts/recording-player"
-import { Seekable } from "@/components/mockups/behavioral-alerts/seekable"
+} from "@/lib/mockups/behavioral-alerts-data";
+import { ScenarioSettingsIcon } from "@/components/mockups/behavioral-alerts/icons";
+import { formatTimeSeconds } from "@/components/mockups/behavioral-alerts/recording-player";
+import { Seekable } from "@/components/mockups/behavioral-alerts/seekable";
 import {
   SEVERITY_RULE,
   SeverityBadge,
-} from "@/components/mockups/behavioral-alerts/severity"
+} from "@/components/mockups/behavioral-alerts/severity";
 
 export function AlertDetectionsBody({
   analysis,
   onConfigureAlerts,
   onSeek,
 }: {
-  analysis: AlertAnalysis
-  onConfigureAlerts: () => void
-  onSeek: (seconds: number) => void
+  analysis: AlertAnalysis;
+  onConfigureAlerts: () => void;
+  onSeek: (seconds: number) => void;
 }) {
   if (analysis.state === "pending") {
     return (
@@ -33,7 +33,7 @@ export function AlertDetectionsBody({
         Analysing this call. Detections appear here when the post-call task
         finishes.
       </p>
-    )
+    );
   }
 
   if (analysis.state === "unavailable") {
@@ -42,7 +42,7 @@ export function AlertDetectionsBody({
         The call ended before anything was said, so there was no transcript to
         analyse.
       </p>
-    )
+    );
   }
 
   if (analysis.state === "unconfigured") {
@@ -61,7 +61,7 @@ export function AlertDetectionsBody({
           Configure flags
         </Button>
       </>
-    )
+    );
   }
 
   if (analysis.detections.length === 0) {
@@ -69,13 +69,13 @@ export function AlertDetectionsBody({
       <p className="text-sm text-muted-foreground">
         No configured flag was detected on this call.
       </p>
-    )
+    );
   }
 
   const detections = [...analysis.detections].sort(
     (a, b) =>
       SEVERITY_ORDER.indexOf(a.severity) - SEVERITY_ORDER.indexOf(b.severity),
-  )
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -87,32 +87,32 @@ export function AlertDetectionsBody({
         />
       ))}
     </div>
-  )
+  );
 }
 
 export function detectionsSummary(analysis: AlertAnalysis) {
-  if (analysis.state === "pending") return "Analysing"
-  if (analysis.state === "unavailable") return "No transcript"
-  if (analysis.state === "unconfigured") return "None configured"
-  if (analysis.detections.length === 0) return "None detected"
-  return `${analysis.detections.length} detected`
+  if (analysis.state === "pending") return "Analysing";
+  if (analysis.state === "unavailable") return "No transcript";
+  if (analysis.state === "unconfigured") return "None configured";
+  if (analysis.detections.length === 0) return "None detected";
+  return `${analysis.detections.length} detected`;
 }
 
 function DetectionRow({
   detection,
   onSeek,
 }: {
-  detection: Detection
-  onSeek: (seconds: number) => void
+  detection: Detection;
+  onSeek: (seconds: number) => void;
 }) {
-  const alert = CONFIGURED_ALERTS.find((item) => item.id === detection.alertId)
+  const alert = CONFIGURED_ALERTS.find((item) => item.id === detection.alertId);
 
   return (
     <Seekable
       className="flex gap-3 rounded-lg bg-card p-3"
       label={`Seek to ${formatTimeSeconds(detection.at)}`}
       onActivate={() => {
-        onSeek(detection.at)
+        onSeek(detection.at);
       }}
     >
       <span
@@ -143,5 +143,5 @@ function DetectionRow({
         <p className="text-sm text-muted-foreground">{detection.explanation}</p>
       </div>
     </Seekable>
-  )
+  );
 }

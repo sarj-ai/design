@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,9 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemActions,
@@ -22,19 +22,19 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/item";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   GENDERS,
   LANGUAGES,
@@ -42,16 +42,16 @@ import {
   VOICES,
   type PersonaGender,
   type PersonaLanguage,
-} from "@/lib/mockups/persona-pronunciation-data"
-import { PronunciationTerms } from "@/components/mockups/persona-pronunciation/pronunciation-terms"
+} from "@/lib/mockups/persona-pronunciation-data";
+import { PronunciationTerms } from "@/components/mockups/persona-pronunciation/pronunciation-terms";
 import {
   BehaviorSettingsIcon,
   CloseIcon,
   RenameIcon,
-} from "@/components/mockups/persona-pronunciation/icons"
+} from "@/components/mockups/persona-pronunciation/icons";
 
 export function EditPersonaDialog() {
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(true);
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -67,34 +67,34 @@ export function EditPersonaDialog() {
         <PersonaForm onClose={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function PersonaForm({ onClose }: { onClose: () => void }) {
-  const [name, setName] = React.useState(PERSONA.name)
-  const [renaming, setRenaming] = React.useState(false)
+  const [name, setName] = React.useState(PERSONA.name);
+  const [renaming, setRenaming] = React.useState(false);
   const [language, setLanguage] = React.useState<PersonaLanguage>(
     PERSONA.language,
-  )
-  const [gender, setGender] = React.useState<PersonaGender>(PERSONA.gender)
-  const [prompt, setPrompt] = React.useState(PERSONA.prompt)
-  const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId)
-  const [fillerWords, setFillerWords] = React.useState(PERSONA.fillerWords)
+  );
+  const [gender, setGender] = React.useState<PersonaGender>(PERSONA.gender);
+  const [prompt, setPrompt] = React.useState(PERSONA.prompt);
+  const [voiceId, setVoiceId] = React.useState(PERSONA.voiceId);
+  const [fillerWords, setFillerWords] = React.useState(PERSONA.fillerWords);
   const [backgroundNoise, setBackgroundNoise] = React.useState(
     PERSONA.backgroundNoise,
-  )
+  );
   const [endCallOnSilence, setEndCallOnSilence] = React.useState(
     PERSONA.endCallOnSilence,
-  )
+  );
   const [silenceSeconds, setSilenceSeconds] = React.useState(
     PERSONA.silenceSeconds,
-  )
-  const [maxRetries, setMaxRetries] = React.useState(PERSONA.maxRetries)
+  );
+  const [maxRetries, setMaxRetries] = React.useState(PERSONA.maxRetries);
 
   function commitName(value: string) {
-    const next = value.trim()
-    if (next) setName(next)
-    setRenaming(false)
+    const next = value.trim();
+    if (next) setName(next);
+    setRenaming(false);
   }
 
   return (
@@ -118,8 +118,8 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
                   dir="auto"
                   onBlur={(event) => commitName(event.target.value)}
                   onKeyDown={(event) => {
-                    if (event.key === "Enter") event.currentTarget.blur()
-                    if (event.key === "Escape") setRenaming(false)
+                    if (event.key === "Enter") event.currentTarget.blur();
+                    if (event.key === "Escape") setRenaming(false);
                   }}
                 />
               ) : (
@@ -219,7 +219,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
               onValueChange={(value) => setVoiceId(value as string)}
             >
               {VOICES.map((voice) => {
-                const selected = voice.id === voiceId
+                const selected = voice.id === voiceId;
                 return (
                   <Item
                     asChild
@@ -243,7 +243,7 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
                       </ItemContent>
                     </label>
                   </Item>
-                )
+                );
               })}
             </RadioGroup>
           </section>
@@ -332,5 +332,5 @@ function PersonaForm({ onClose }: { onClose: () => void }) {
         <Button onClick={onClose}>Save changes</Button>
       </DialogFooter>
     </>
-  )
+  );
 }

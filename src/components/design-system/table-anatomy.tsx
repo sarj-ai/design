@@ -2,10 +2,10 @@ import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { RuleList } from "@/components/design-system/rule-list"
-import { TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { CALL_ROWS, TABLE_RULES } from "@/lib/design-system/data"
+} from "@/components/shared/data-table";
+import { RuleList } from "@/components/design-system/rule-list";
+import { TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { CALL_ROWS, TABLE_RULES } from "@/lib/design-system/data";
 
 export function TableAnatomy() {
   return (
@@ -44,10 +44,10 @@ export function TableAnatomy() {
 
       <RuleList rules={TABLE_RULES} />
     </div>
-  )
+  );
 }
 
 function formatDuration(seconds: number) {
-  const minutes = Math.floor(seconds / 60)
-  return `${minutes}:${String(seconds % 60).padStart(2, "0")}`
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
 }

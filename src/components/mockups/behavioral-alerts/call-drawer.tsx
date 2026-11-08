@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import type { PanelImperativeHandle } from "react-resizable-panels"
+import * as React from "react";
+import type { PanelImperativeHandle } from "react-resizable-panels";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/resizable";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetTitle,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 import {
   CONFIGURED_ALERTS,
   OWNER,
   type CallRow,
-} from "@/lib/mockups/behavioral-alerts-data"
+} from "@/lib/mockups/behavioral-alerts-data";
 import {
   CallCompletedIcon,
   CopyCallLinkIcon,
@@ -33,13 +33,13 @@ import {
   OwnerIcon,
   ShowPanelIcon,
   VoicemailIcon,
-} from "@/components/mockups/behavioral-alerts/icons"
-import { SectionRegister } from "@/components/mockups/behavioral-alerts/section-register"
-import { SEVERITY_RULE } from "@/components/mockups/behavioral-alerts/severity"
+} from "@/components/mockups/behavioral-alerts/icons";
+import { SectionRegister } from "@/components/mockups/behavioral-alerts/section-register";
+import { SEVERITY_RULE } from "@/components/mockups/behavioral-alerts/severity";
 import {
   TranscriptPanel,
   type Evidence,
-} from "@/components/mockups/behavioral-alerts/transcript-panel"
+} from "@/components/mockups/behavioral-alerts/transcript-panel";
 
 export function CallDrawer({
   call,
@@ -47,12 +47,12 @@ export function CallDrawer({
   onOpenChange,
   open,
 }: {
-  call: CallRow | null
-  onConfigureAlerts: () => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  call: CallRow | null;
+  onConfigureAlerts: () => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
-  if (!call) return null
+  if (!call) return null;
 
   return (
     <Sheet onOpenChange={onOpenChange} open={open}>
@@ -62,40 +62,40 @@ export function CallDrawer({
         onConfigureAlerts={onConfigureAlerts}
       />
     </Sheet>
-  )
+  );
 }
 
 function DrawerBody({
   call,
   onConfigureAlerts,
 }: {
-  call: CallRow
-  onConfigureAlerts: () => void
+  call: CallRow;
+  onConfigureAlerts: () => void;
 }) {
-  const [at, setAt] = React.useState(0)
-  const content = React.useRef<HTMLDivElement>(null)
+  const [at, setAt] = React.useState(0);
+  const content = React.useRef<HTMLDivElement>(null);
 
-  const transcript = React.useRef<PanelImperativeHandle>(null)
-  const panel = React.useRef<PanelImperativeHandle>(null)
+  const transcript = React.useRef<PanelImperativeHandle>(null);
+  const panel = React.useRef<PanelImperativeHandle>(null);
   const [hidden, setHidden] = React.useState<"none" | "panel" | "transcript">(
     "none",
-  )
+  );
 
-  const detections = call.analysis.detections
+  const detections = call.analysis.detections;
 
   const markers = detections.map((detection) => ({
     id: detection.id,
     label: alertName(detection.alertId),
     at: detection.at,
     tone: SEVERITY_RULE[detection.severity],
-  }))
+  }));
 
   const evidence = new Map<number, Evidence>(
     detections.map((detection) => [
       detection.at,
       { name: alertName(detection.alertId), severity: detection.severity },
     ]),
-  )
+  );
 
   return (
     <SheetContent
@@ -103,9 +103,9 @@ function DrawerBody({
       // The resize handle stops pointerdown natively, so the dialog reads a
       // press on it as outside. Ignore presses that land inside the panel.
       onPointerDownOutside={(event) => {
-        const target = event.detail.originalEvent.target
+        const target = event.detail.originalEvent.target;
         if (target instanceof Node && content.current?.contains(target)) {
-          event.preventDefault()
+          event.preventDefault();
         }
       }}
       ref={content}
@@ -124,10 +124,10 @@ function DrawerBody({
             hidden === "none" ? null : (
               <Button
                 onClick={() => {
-                  ;(hidden === "transcript"
+                  (hidden === "transcript"
                     ? transcript
                     : panel
-                  ).current?.expand()
+                  ).current?.expand();
                 }}
                 size="sm"
                 variant="outline"
@@ -158,7 +158,7 @@ function DrawerBody({
                   : current === "transcript"
                     ? "none"
                     : current,
-              )
+              );
             }}
             panelRef={transcript}
           >
@@ -185,7 +185,7 @@ function DrawerBody({
                   : current === "panel"
                     ? "none"
                     : current,
-              )
+              );
             }}
             panelRef={panel}
           >
@@ -198,19 +198,19 @@ function DrawerBody({
         </ResizablePanelGroup>
       </div>
     </SheetContent>
-  )
+  );
 }
 
 function alertName(alertId: string) {
-  return CONFIGURED_ALERTS.find((item) => item.id === alertId)?.name ?? alertId
+  return CONFIGURED_ALERTS.find((item) => item.id === alertId)?.name ?? alertId;
 }
 
 function CallHeader({
   actions,
   call,
 }: {
-  actions?: React.ReactNode
-  call: CallRow
+  actions?: React.ReactNode;
+  call: CallRow;
 }) {
   return (
     <div className="flex shrink-0 flex-col gap-2 border-b p-4">
@@ -276,5 +276,5 @@ function CallHeader({
         </div>
       </div>
     </div>
-  )
+  );
 }

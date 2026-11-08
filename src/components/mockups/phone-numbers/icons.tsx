@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Alert02Icon,
@@ -12,18 +12,18 @@ import {
   StarIcon,
   PhoneOff01Icon,
   UserAdd01Icon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const HighVolumeIcon = icon(Alert02Icon, "HighVolumeIcon")
-export const SortAscIcon = icon(ArrowUp01Icon, "SortAscIcon")
-export const SortDescIcon = icon(ArrowDown01Icon, "SortDescIcon")
-export const OrganizationIcon = icon(Building02Icon, "OrganizationIcon")
-export const ClearIcon = icon(Cancel01Icon, "ClearIcon")
-export const UnassignIcon = icon(Delete02Icon, "UnassignIcon")
-export const RowActionsIcon = icon(MoreHorizontalIcon, "RowActionsIcon")
-export const SearchIcon = icon(Search01Icon, "SearchIcon")
-export const DefaultTrunkIcon = icon(StarIcon, "DefaultTrunkIcon")
-export const NoNumbersIcon = icon(PhoneOff01Icon, "NoNumbersIcon")
-export const AssignIcon = icon(UserAdd01Icon, "AssignIcon")
+export const HighVolumeIcon = icon(Alert02Icon, "HighVolumeIcon");
+export const SortAscIcon = icon(ArrowUp01Icon, "SortAscIcon");
+export const SortDescIcon = icon(ArrowDown01Icon, "SortDescIcon");
+export const OrganizationIcon = icon(Building02Icon, "OrganizationIcon");
+export const ClearIcon = icon(Cancel01Icon, "ClearIcon");
+export const UnassignIcon = icon(Delete02Icon, "UnassignIcon");
+export const RowActionsIcon = icon(MoreHorizontalIcon, "RowActionsIcon");
+export const SearchIcon = icon(Search01Icon, "SearchIcon");
+export const DefaultTrunkIcon = icon(StarIcon, "DefaultTrunkIcon");
+export const NoNumbersIcon = icon(PhoneOff01Icon, "NoNumbersIcon");
+export const AssignIcon = icon(UserAdd01Icon, "AssignIcon");

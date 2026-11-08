@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import * as React from "react"
+import Image from "next/image";
+import * as React from "react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,14 +11,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/collapsible";
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -35,8 +35,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import {
   BatchCallsIcon,
   BuildingIcon,
@@ -66,18 +66,18 @@ import {
   VariablesIcon,
   VoiceLibraryIcon,
   WebhooksIcon,
-} from "@/components/shell/app-shell-icons"
+} from "@/components/shell/app-shell-icons";
 
 interface NavItem {
   /** Label for the hover "+". */
-  action?: string
+  action?: string;
   /** A count beside the label — what is waiting on the viewer there. */
-  badge?: number
-  icon: React.ComponentType
-  title: string
+  badge?: number;
+  icon: React.ComponentType;
+  title: string;
 }
 
-const PLAYGROUND: NavItem = { icon: PlaygroundIcon, title: "Playground" }
+const PLAYGROUND: NavItem = { icon: PlaygroundIcon, title: "Playground" };
 
 const NAV: { defaultOpen: boolean; items: NavItem[]; label: string }[] = [
   {
@@ -123,16 +123,16 @@ const NAV: { defaultOpen: boolean; items: NavItem[]; label: string }[] = [
       { icon: MessagingSettingsIcon, title: "Messaging Settings" },
     ],
   },
-]
+];
 
 function NavLink({
   active,
   item,
   onNavigate,
 }: {
-  active: boolean
-  item: NavItem
-  onNavigate?: (title: string) => void
+  active: boolean;
+  item: NavItem;
+  onNavigate?: (title: string) => void;
 }) {
   return (
     <SidebarMenuItem>
@@ -158,7 +158,7 @@ function NavLink({
       ) : null}
       {item.badge ? <SidebarMenuBadge>{item.badge}</SidebarMenuBadge> : null}
     </SidebarMenuItem>
-  )
+  );
 }
 
 /** Collapsed to the icon rail there is no room for a label, so groups are forced open and the label disabled. */
@@ -169,15 +169,15 @@ function NavGroup({
   label,
   onNavigate,
 }: {
-  active: string
-  defaultOpen: boolean
-  items: NavItem[]
-  label: string
-  onNavigate?: (title: string) => void
+  active: string;
+  defaultOpen: boolean;
+  items: NavItem[];
+  label: string;
+  onNavigate?: (title: string) => void;
 }) {
-  const { state } = useSidebar()
-  const isCollapsed = state === "collapsed"
-  const [open, setOpen] = React.useState(defaultOpen)
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
+  const [open, setOpen] = React.useState(defaultOpen);
 
   return (
     <Collapsible
@@ -213,7 +213,7 @@ function NavGroup({
         </CollapsibleContent>
       </SidebarGroup>
     </Collapsible>
-  )
+  );
 }
 
 function AppHeader({
@@ -224,14 +224,14 @@ function AppHeader({
   showSettings,
 }: {
   /** Swaps "Developer Doc" for a Developers button; "open" when that page is showing. */
-  developers?: "link" | "open"
+  developers?: "link" | "open";
   /** The admin view a superadmin is reading the page as. */
-  scope?: React.ReactNode
+  scope?: React.ReactNode;
   /** Replaces the account row entirely. */
-  actions?: React.ReactNode
+  actions?: React.ReactNode;
   /** Crumbs after Home. The last is the page; earlier ones are links. */
-  trail: readonly string[]
-  showSettings?: boolean
+  trail: readonly string[];
+  showSettings?: boolean;
 }) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-4 px-4">
@@ -296,7 +296,7 @@ function AppHeader({
         )}
       </div>
     </header>
-  )
+  );
 }
 
 export function AppShell({
@@ -311,24 +311,24 @@ export function AppShell({
   children,
 }: {
   /** Title of the sidebar item this screen lives under, e.g. "Personas". */
-  active: string
+  active: string;
   /** The admin view, in the top bar. */
-  scope?: React.ReactNode
-  developers?: "link" | "open"
+  scope?: React.ReactNode;
+  developers?: "link" | "open";
   /** Whether the mockup shell's header sits above, which the sidebar has to
    *  clear. Off when the app is shown inside a frame on its own. */
-  underShell?: boolean
+  underShell?: boolean;
   /** Crumbs after Home; a bare string is a single one. Defaults to `active`. */
-  breadcrumb?: string | readonly string[]
+  breadcrumb?: string | readonly string[];
   /** Nav item titles this viewer's role cannot open. */
-  hiddenItems?: readonly string[]
+  hiddenItems?: readonly string[];
   /** Nav items a mockup proposes, each placed after an existing one. */
-  addedItems?: readonly { after: string; item: NavItem }[]
+  addedItems?: readonly { after: string; item: NavItem }[];
   /** Called with a nav item's title on click. Items the mockup ignores stay inert. */
-  onNavigate?: (title: string) => void
-  children: React.ReactNode
+  onNavigate?: (title: string) => void;
+  children: React.ReactNode;
 }) {
-  const hidden = new Set(hiddenItems ?? [])
+  const hidden = new Set(hiddenItems ?? []);
   const groups = NAV.map((group) => ({
     ...group,
     items: group.items
@@ -339,7 +339,7 @@ export function AppShell({
           .map((added) => added.item),
       ])
       .filter((item) => !hidden.has(item.title)),
-  })).filter((group) => group.items.length > 0)
+  })).filter((group) => group.items.length > 0);
 
   return (
     // The app's sidebar is 15rem; shadcn ships 16rem. Set here because the primitive is generated.
@@ -417,5 +417,5 @@ export function AppShell({
         <div className="min-h-0 flex-1 overflow-auto">{children}</div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

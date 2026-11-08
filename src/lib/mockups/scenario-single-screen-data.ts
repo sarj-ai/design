@@ -1,16 +1,16 @@
-export type LanguageCode = "ar" | "en" | "ur"
+export type LanguageCode = "ar" | "en" | "ur";
 
 export const LANGUAGE_LABELS: Record<LanguageCode, string> = {
   ar: "Arabic",
   en: "English",
   ur: "Urdu",
-}
+};
 
 export const LANGUAGE_SHORT: Record<LanguageCode, string> = {
   ar: "AR",
   en: "EN",
   ur: "UR",
-}
+};
 
 export const SCENARIO = {
   calls: 1624,
@@ -19,15 +19,15 @@ export const SCENARIO = {
   name: "Reservation Assistant for Sizzler",
   status: "active" as const,
   successRate: 76,
-}
+};
 
 export interface PerLanguage {
-  firstMessage: string
-  firstMessageEnabled: boolean
-  language: LanguageCode
-  persona: string
-  prompt: string
-  removed?: boolean
+  firstMessage: string;
+  firstMessageEnabled: boolean;
+  language: LanguageCode;
+  persona: string;
+  prompt: string;
+  removed?: boolean;
 }
 
 const EN_PROMPT = `# Agent identity & purpose
@@ -50,7 +50,7 @@ Give the confirmation number and close in your own words.
 Warm but efficient. Short sentences. Never rush the guest, never re-ask a detail already given.
 
 # Escalation
-Transfer to a manager for parties over 12, same-day cancellations inside 2 hours, and any complaint about a previous visit.`
+Transfer to a manager for parties over 12, same-day cancellations inside 2 hours, and any complaint about a previous visit.`;
 
 const AR_PROMPT = `# هوية الوكيل والغرض منه
 أنت {{agent_name}}، مساعد حجوزات محترف ومرحب لمطعم سيزلر، وهو مطعم راقٍ.
@@ -63,7 +63,7 @@ const AR_PROMPT = `# هوية الوكيل والغرض منه
 اجمع عدد الأشخاص، ثم التاريخ، ثم الوقت.
 اعرض تسجيل مناسبة خاصة أو احتياجات غذائية.
 أعد قراءة الحجز للتأكيد.
-أعطِ رقم التأكيد وأنهِ المكالمة بأسلوبك.`
+أعطِ رقم التأكيد وأنهِ المكالمة بأسلوبك.`;
 
 const UR_PROMPT = `# ایجنٹ کی شناخت اور مقصد
 آپ {{agent_name}} ہیں، سِزلر کے لیے ایک پیشہ ور اور خوش آمدید کہنے والے ریزرویشن اسسٹنٹ۔
@@ -74,7 +74,7 @@ const UR_PROMPT = `# ایجنٹ کی شناخت اور مقصد
 # گفتگو کا سلسلہ
 مہمان کو خوش آمدید کہیں۔
 افراد کی تعداد، پھر تاریخ، پھر وقت پوچھیں۔
-بکنگ دہرا کر تصدیق کریں۔`
+بکنگ دہرا کر تصدیق کریں۔`;
 
 export const PER_LANGUAGE: PerLanguage[] = [
   {
@@ -101,18 +101,18 @@ export const PER_LANGUAGE: PerLanguage[] = [
     persona: "Imran — Neutral, Urdu",
     prompt: UR_PROMPT,
   },
-]
+];
 
-export const DEFAULT_LANGUAGE: LanguageCode = "en"
+export const DEFAULT_LANGUAGE: LanguageCode = "en";
 
-export const TIMEZONE = "Asia/Riyadh"
+export const TIMEZONE = "Asia/Riyadh";
 
 export interface TemplateVariable {
-  defaultValue: string
-  name: string
-  required: boolean
-  type: "boolean" | "date" | "number" | "text"
-  usedIn: LanguageCode[]
+  defaultValue: string;
+  name: string;
+  required: boolean;
+  type: "boolean" | "date" | "number" | "text";
+  usedIn: LanguageCode[];
 }
 
 export const TEMPLATE_VARIABLES: TemplateVariable[] = [
@@ -151,13 +151,13 @@ export const TEMPLATE_VARIABLES: TemplateVariable[] = [
     type: "number",
     usedIn: ["en"],
   },
-]
+];
 
 export interface ExtractionField {
-  description: string
-  name: string
-  required: boolean
-  type: "boolean" | "date" | "number" | "text"
+  description: string;
+  name: string;
+  required: boolean;
+  type: "boolean" | "date" | "number" | "text";
 }
 
 export const DATA_EXTRACTION = {
@@ -201,14 +201,14 @@ export const DATA_EXTRACTION = {
       type: "boolean" as const,
     },
   ] satisfies ExtractionField[],
-}
+};
 
 export interface Destination {
-  connected: boolean
-  description: string
-  enabled: boolean
-  label: string
-  type: "webhook" | "zoho-crm" | "zoho-desk"
+  connected: boolean;
+  description: string;
+  enabled: boolean;
+  label: string;
+  type: "webhook" | "zoho-crm" | "zoho-desk";
 }
 
 export const DESTINATIONS: Destination[] = [
@@ -233,17 +233,17 @@ export const DESTINATIONS: Destination[] = [
     label: "Webhook",
     type: "webhook",
   },
-]
+];
 
 export const RECORD_SINKS = {
   zohoCallActivity: true,
-}
+};
 
 export interface KnowledgeBase {
-  attached: boolean
-  documents: number
-  languages: LanguageCode[]
-  name: string
+  attached: boolean;
+  documents: number;
+  languages: LanguageCode[];
+  name: string;
 }
 
 export const KNOWLEDGE_BASES: KnowledgeBase[] = [
@@ -277,11 +277,11 @@ export const KNOWLEDGE_BASES: KnowledgeBase[] = [
     languages: ["ar"],
     name: "Private dining packages",
   },
-]
+];
 
 export interface SuccessCriterion {
-  primary: boolean
-  text: string
+  primary: boolean;
+  text: string;
 }
 
 export const SUCCESS_CRITERIA: SuccessCriterion[] = [
@@ -293,7 +293,7 @@ export const SUCCESS_CRITERIA: SuccessCriterion[] = [
     primary: false,
     text: "Offered to record a special occasion or dietary requirement, and gave the guest a confirmation number before closing.",
   },
-]
+];
 
 export type ToolSlug =
   | "code-switching"
@@ -304,14 +304,14 @@ export type ToolSlug =
   | "salla-tools"
   | "transfer-to-human"
   | "voicemail-detection"
-  | "zoho-desk-create-ticket"
+  | "zoho-desk-create-ticket";
 
 export interface Tool {
-  description: string
-  enabled: boolean
-  label: string
-  summary?: string
-  slug: ToolSlug
+  description: string;
+  enabled: boolean;
+  label: string;
+  summary?: string;
+  slug: ToolSlug;
 }
 
 export const TOOLS: Tool[] = [
@@ -374,7 +374,7 @@ export const TOOLS: Tool[] = [
     label: "Create a ticket on ZohoDesk",
     slug: "zoho-desk-create-ticket",
   },
-]
+];
 
 export const PERSONAS = [
   "Noura — Warm, Gulf English",
@@ -382,16 +382,20 @@ export const PERSONAS = [
   "Imran — Neutral, Urdu",
   "Faisal — Formal, Gulf English",
   "Huda — Bright, Egyptian Arabic",
-]
+];
 
 export type InsightTarget =
-  "criteria" | "extraction" | "knowledge" | "prompt" | "tools"
+  | "criteria"
+  | "extraction"
+  | "knowledge"
+  | "prompt"
+  | "tools";
 
 export interface Insight {
-  body: string
-  calls: number
-  target: InsightTarget
-  title: string
+  body: string;
+  calls: number;
+  target: InsightTarget;
+  title: string;
 }
 
 export const INSIGHTS: Insight[] = [
@@ -425,14 +429,14 @@ export const INSIGHTS: Insight[] = [
     target: "criteria",
     title: "Second criterion passes calls with no confirmation",
   },
-]
+];
 
-export const UNRESOLVED_INSIGHTS = 41
+export const UNRESOLVED_INSIGHTS = 41;
 
 export interface Opportunity {
-  detail: string
-  impact: "high" | "low" | "medium"
-  title: string
+  detail: string;
+  impact: "high" | "low" | "medium";
+  title: string;
 }
 
 export const OPPORTUNITIES: Opportunity[] = [
@@ -454,13 +458,13 @@ export const OPPORTUNITIES: Opportunity[] = [
     impact: "low",
     title: "Menu content overlaps across two bases",
   },
-]
+];
 
 export const ORGANIZATIONS = [
   "Sizzler KSA",
   "Sizzler UAE",
   "Americana Restaurants",
   "Sarj Internal",
-]
+];
 
-export const CURRENT_ORGANIZATION = "Sizzler KSA"
+export const CURRENT_ORGANIZATION = "Sizzler KSA";

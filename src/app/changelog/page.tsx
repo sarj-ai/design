@@ -1,51 +1,51 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { SiteNav } from "@/components/shell/site-nav"
-import { ChangelogRail } from "@/components/site/changelog-rail"
-import { ChangelogShare } from "@/components/site/changelog-share"
+import { SiteNav } from "@/components/shell/site-nav";
+import { ChangelogRail } from "@/components/site/changelog-rail";
+import { ChangelogShare } from "@/components/site/changelog-share";
 import {
   CHANGELOG,
   type ChangeKind,
   type ChangelogEntry,
-} from "@/lib/design-system/changelog"
-import { docsHref, docsPage } from "@/lib/design-system/nav"
+} from "@/lib/design-system/changelog";
+import { docsHref, docsPage } from "@/lib/design-system/nav";
 
 export const metadata = {
   title: "Changelog",
   description: "What changed in the Sarj design system, newest first.",
-}
+};
 
 const KIND_LABEL: Record<ChangeKind, string> = {
   added: "Added",
   changed: "Changed",
   fixed: "Fixed",
   removed: "Removed",
-}
+};
 
 /* UTC so the prerendered date never shifts a day with the build machine. */
 const DATE = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "short",
   timeZone: "UTC",
-})
+});
 
 const MONTH = new Intl.DateTimeFormat("en-GB", {
   month: "long",
   timeZone: "UTC",
-})
+});
 
 const MONTH_YEAR = new Intl.DateTimeFormat("en-GB", {
   month: "short",
   year: "numeric",
   timeZone: "UTC",
-})
+});
 
 const FIRST = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "long",
   year: "numeric",
   timeZone: "UTC",
-})
+});
 
 /* The dot beside each kind, so a run of removals or fixes stands out on a scan. */
 const KIND_DOT: Record<ChangeKind, string> = {
@@ -53,38 +53,38 @@ const KIND_DOT: Record<ChangeKind, string> = {
   changed: "bg-primary",
   fixed: "bg-warning",
   removed: "bg-destructive",
-}
+};
 
-type Day = { date: string; entries: ChangelogEntry[] }
-type Month = { id: string; date: Date; days: Day[]; count: number }
+type Day = { date: string; entries: ChangelogEntry[] };
+type Month = { id: string; date: Date; days: Day[]; count: number };
 
 function byMonth(entries: ChangelogEntry[]) {
-  const months: Month[] = []
+  const months: Month[] = [];
   for (const entry of entries) {
-    const id = entry.date.slice(0, 7)
-    let month = months.at(-1)
+    const id = entry.date.slice(0, 7);
+    let month = months.at(-1);
     if (month?.id !== id) {
-      month = { id, date: new Date(entry.date), days: [], count: 0 }
-      months.push(month)
+      month = { id, date: new Date(entry.date), days: [], count: 0 };
+      months.push(month);
     }
-    month.count += 1
-    const day = month.days.at(-1)
-    if (day?.date === entry.date) day.entries.push(entry)
-    else month.days.push({ date: entry.date, entries: [entry] })
+    month.count += 1;
+    const day = month.days.at(-1);
+    if (day?.date === entry.date) day.entries.push(entry);
+    else month.days.push({ date: entry.date, entries: [entry] });
   }
-  return months
+  return months;
 }
 
 export default function ChangelogPage() {
-  const months = byMonth(CHANGELOG)
-  const lines = CHANGELOG.flatMap((entry) => entry.changes)
+  const months = byMonth(CHANGELOG);
+  const lines = CHANGELOG.flatMap((entry) => entry.changes);
   const kinds = (Object.keys(KIND_LABEL) as ChangeKind[])
     .map((kind) => ({
       kind,
       count: lines.filter((change) => change.kind === kind).length,
     }))
-    .filter(({ count }) => count)
-  const first = CHANGELOG.at(-1)?.date
+    .filter(({ count }) => count);
+  const first = CHANGELOG.at(-1)?.date;
 
   return (
     <>
@@ -161,7 +161,7 @@ export default function ChangelogPage() {
         </div>
       </main>
     </>
-  )
+  );
 }
 
 /** A stable address for one update: its date and title, so a shared link survives new entries above it. */
@@ -170,8 +170,8 @@ function entryId(entry: ChangelogEntry) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
-    .slice(0, 60)
-  return `${entry.date}-${slug}`
+    .slice(0, 60);
+  return `${entry.date}-${slug}`;
 }
 
 function toMarkdown(entry: ChangelogEntry) {
@@ -183,14 +183,14 @@ function toMarkdown(entry: ChangelogEntry) {
     ),
   ]
     .filter(Boolean)
-    .join("\n")
+    .join("\n");
 }
 
 function Entry({ entry }: { entry: ChangelogEntry }) {
   const topics = (entry.topics ?? []).flatMap((id) => {
-    const page = docsPage(id)
-    return page ? [{ href: docsHref(id), title: page.title }] : []
-  })
+    const page = docsPage(id);
+    return page ? [{ href: docsHref(id), title: page.title }] : [];
+  });
 
   return (
     <article
@@ -241,5 +241,5 @@ function Entry({ entry }: { entry: ChangelogEntry }) {
         </div>
       ) : null}
     </article>
-  )
+  );
 }

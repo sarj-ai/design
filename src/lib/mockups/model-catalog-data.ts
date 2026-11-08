@@ -1,16 +1,16 @@
-export type Modality = "llm" | "tts"
+export type Modality = "llm" | "tts";
 
 export const MODALITIES: { id: Modality; label: string }[] = [
   { id: "llm", label: "LLM" },
   { id: "tts", label: "TTS" },
-]
+];
 
 type Provider = {
-  id: string
-  name: string
-  modalities: Modality[]
-  listsModels: boolean
-}
+  id: string;
+  name: string;
+  modalities: Modality[];
+  listsModels: boolean;
+};
 
 export const PROVIDERS: Provider[] = [
   {
@@ -37,7 +37,7 @@ export const PROVIDERS: Provider[] = [
   { id: "cartesia", name: "Cartesia", modalities: ["tts"], listsModels: false },
   { id: "deepgram", name: "Deepgram", modalities: ["tts"], listsModels: false },
   { id: "hamsa", name: "Hamsa", modalities: ["tts"], listsModels: false },
-]
+];
 
 const LIVE_MODELS: Record<string, Partial<Record<Modality, string[]>>> = {
   openai: {
@@ -66,17 +66,17 @@ const LIVE_MODELS: Record<string, Partial<Record<Modality, string[]>>> = {
   elevenlabs: {
     tts: ["eleven_turbo_v2_5", "eleven_multilingual_v2", "eleven_flash_v2_5"],
   },
-}
+};
 
 export type CatalogEntry = {
-  id: string
-  modality: Modality
-  providerId: string
-  modelId: string
-  displayName: string
-  notes: null | string
-  active: boolean
-}
+  id: string;
+  modality: Modality;
+  providerId: string;
+  modelId: string;
+  displayName: string;
+  notes: null | string;
+  active: boolean;
+};
 
 export const CATALOG: CatalogEntry[] = [
   {
@@ -171,19 +171,19 @@ export const CATALOG: CatalogEntry[] = [
       "Gulf dialect only. No English fallback — pair it with a second model.",
     active: false,
   },
-]
+];
 
 export function canOnboard(modality: Modality): boolean {
-  return modality === "llm"
+  return modality === "llm";
 }
 
 export function providerById(id: string): Provider | undefined {
-  return PROVIDERS.find((provider) => provider.id === id)
+  return PROVIDERS.find((provider) => provider.id === id);
 }
 
 export function liveModelsFor(
   providerId: string,
   modality: Modality,
 ): string[] {
-  return LIVE_MODELS[providerId]?.[modality] ?? []
+  return LIVE_MODELS[providerId]?.[modality] ?? [];
 }

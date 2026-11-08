@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -9,32 +9,32 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { PlaygroundList } from "@/components/mockups/live-scenarios/playground-list"
-import { ScenarioEditor } from "@/components/mockups/live-scenarios/scenario-editor"
-import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { EDITOR_CASES } from "@/lib/mockups/live-scenarios-data"
+} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { PlaygroundList } from "@/components/mockups/live-scenarios/playground-list";
+import { ScenarioEditor } from "@/components/mockups/live-scenarios/scenario-editor";
+import { ScenarioIndex } from "@/components/mockups/live-scenarios/scenario-index";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { EDITOR_CASES } from "@/lib/mockups/live-scenarios-data";
 
 const SURFACES = [
   { id: "editor", label: "Editor" },
   { id: "index", label: "Scenarios" },
   { id: "playground", label: "Playground" },
-] as const
+] as const;
 
-type Surface = (typeof SURFACES)[number]["id"]
+type Surface = (typeof SURFACES)[number]["id"];
 
 export default function LiveScenariosPage() {
-  const [surface, setSurface] = React.useState<Surface>("editor")
-  const [caseId, setCaseId] = React.useState(EDITOR_CASES[0].id)
+  const [surface, setSurface] = React.useState<Surface>("editor");
+  const [caseId, setCaseId] = React.useState(EDITOR_CASES[0].id);
   const editorCase =
-    EDITOR_CASES.find((entry) => entry.id === caseId) ?? EDITOR_CASES[0]
+    EDITOR_CASES.find((entry) => entry.id === caseId) ?? EDITOR_CASES[0];
 
   React.useEffect(() => {
-    toast.dismiss()
-  }, [surface, caseId])
+    toast.dismiss();
+  }, [surface, caseId]);
 
   return (
     <MockupShell
@@ -57,7 +57,7 @@ export default function LiveScenariosPage() {
           ) : null}
           <ToggleGroup
             onValueChange={(next) => {
-              if (next) setSurface(next as Surface)
+              if (next) setSurface(next as Surface);
             }}
             size="sm"
             type="single"
@@ -93,5 +93,5 @@ export default function LiveScenariosPage() {
         </AppShell>
       ) : null}
     </MockupShell>
-  )
+  );
 }

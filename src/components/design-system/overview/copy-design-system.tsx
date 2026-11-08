@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { CopySkillIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
-import { DESIGN_SYSTEM_MD } from "@/lib/design-system/design-system-md"
+import { CopySkillIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
+import { DESIGN_SYSTEM_MD } from "@/lib/design-system/design-system-md";
 
 export function CopyDesignSystemButton() {
   async function copy() {
     try {
-      await navigator.clipboard.writeText(DESIGN_SYSTEM_MD)
-      toast.success("Copied the design system")
+      await navigator.clipboard.writeText(DESIGN_SYSTEM_MD);
+      toast.success("Copied the design system");
     } catch {
-      toast.error("Could not copy the design system")
+      toast.error("Could not copy the design system");
     }
   }
 
@@ -27,5 +27,5 @@ export function CopyDesignSystemButton() {
       <CopySkillIcon />
       Copy design system
     </Button>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@/components/shared/data-table";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -16,13 +16,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import {
   ALL_PERMISSIONS,
   PERMISSIONS,
@@ -30,11 +30,11 @@ import {
   type Permission,
   type PermissionId,
   type Role,
-} from "@/lib/mockups/roles-permissions-data"
+} from "@/lib/mockups/roles-permissions-data";
 import {
   AllowedIcon,
   EditPermissionsIcon,
-} from "@/components/mockups/roles-permissions/icons"
+} from "@/components/mockups/roles-permissions/icons";
 
 export function RolesMatrix({
   canEdit,
@@ -45,16 +45,16 @@ export function RolesMatrix({
   onToggle,
   roles,
 }: {
-  canEdit: boolean
-  draft: PermissionId[]
-  editingRoleId: string | null
-  grants: Record<string, PermissionId[]>
-  onStartEdit: (roleId: string) => void
-  onToggle: (permission: PermissionId, granted: boolean) => void
-  roles: Role[]
+  canEdit: boolean;
+  draft: PermissionId[];
+  editingRoleId: string | null;
+  grants: Record<string, PermissionId[]>;
+  onStartEdit: (roleId: string) => void;
+  onToggle: (permission: PermissionId, granted: boolean) => void;
+  roles: Role[];
 }) {
   function held(roleId: string): PermissionId[] {
-    return roleId === editingRoleId ? draft : (grants[roleId] ?? [])
+    return roleId === editingRoleId ? draft : (grants[roleId] ?? []);
   }
 
   return (
@@ -128,7 +128,7 @@ export function RolesMatrix({
         </TableBody>
       </Table>
     </Card>
-  )
+  );
 }
 
 function RoleHead({
@@ -137,10 +137,10 @@ function RoleHead({
   onStartEdit,
   role,
 }: {
-  canEdit: boolean
-  held: number
-  onStartEdit: (roleId: string) => void
-  role: Role
+  canEdit: boolean;
+  held: number;
+  onStartEdit: (roleId: string) => void;
+  role: Role;
 }) {
   return (
     /* `whitespace-normal` undoes the primitive's `nowrap` so the head wraps in fixed columns. */
@@ -184,7 +184,7 @@ function RoleHead({
         </span>
       </div>
     </TableHead>
-  )
+  );
 }
 
 function GrantCell({
@@ -194,11 +194,11 @@ function GrantCell({
   permission,
   role,
 }: {
-  editing: boolean
-  granted: boolean
-  onToggle: (permission: PermissionId, granted: boolean) => void
-  permission: Permission
-  role: Role
+  editing: boolean;
+  granted: boolean;
+  onToggle: (permission: PermissionId, granted: boolean) => void;
+  permission: Permission;
+  role: Role;
 }) {
   if (editing) {
     return (
@@ -221,7 +221,7 @@ function GrantCell({
           </span>
         </div>
       </TableCell>
-    )
+    );
   }
 
   return (
@@ -232,5 +232,5 @@ function GrantCell({
       </span>
       <span className="sr-only">{granted ? "Allowed" : "Not allowed"}</span>
     </TableCell>
-  )
+  );
 }

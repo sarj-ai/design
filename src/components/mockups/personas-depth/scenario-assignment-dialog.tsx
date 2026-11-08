@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Item,
   ItemActions,
@@ -20,36 +20,36 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   SCENARIOS,
   scenarioById,
   type Persona,
-} from "@/lib/mockups/personas-depth-data"
+} from "@/lib/mockups/personas-depth-data";
 
 export function ScenarioAssignmentDialog({
   persona,
   onOpenChange,
   onChangeScenarios,
 }: {
-  persona: Persona | null
-  onOpenChange: (open: boolean) => void
-  onChangeScenarios: (personaId: string, scenarioIds: string[]) => void
+  persona: Persona | null;
+  onOpenChange: (open: boolean) => void;
+  onChangeScenarios: (personaId: string, scenarioIds: string[]) => void;
 }) {
-  const [pickedId, setPickedId] = React.useState("")
+  const [pickedId, setPickedId] = React.useState("");
 
   const assigned = persona
     ? persona.scenarioIds
         .map(scenarioById)
         .filter((scenario) => scenario !== undefined)
-    : []
+    : [];
 
   const assignable = persona
     ? SCENARIOS.filter(
@@ -57,20 +57,20 @@ export function ScenarioAssignmentDialog({
           scenario.languages.includes(persona.language) &&
           !persona.scenarioIds.includes(scenario.id),
       )
-    : []
+    : [];
 
   function assign() {
-    if (!persona || !pickedId) return
-    onChangeScenarios(persona.id, [...persona.scenarioIds, pickedId])
-    setPickedId("")
+    if (!persona || !pickedId) return;
+    onChangeScenarios(persona.id, [...persona.scenarioIds, pickedId]);
+    setPickedId("");
   }
 
   function remove(scenarioId: string) {
-    if (!persona) return
+    if (!persona) return;
     onChangeScenarios(
       persona.id,
       persona.scenarioIds.filter((id) => id !== scenarioId),
-    )
+    );
   }
 
   return (
@@ -155,5 +155,5 @@ export function ScenarioAssignmentDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

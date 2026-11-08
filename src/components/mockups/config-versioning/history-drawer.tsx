@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,9 +12,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -22,46 +22,46 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "@/components/ui/empty"
+} from "@/components/ui/empty";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Spinner } from "@/components/ui/spinner"
-import { Item } from "@/components/ui/item"
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { Item } from "@/components/ui/item";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { DiffStat, diffStat, FoldedDiff } from "@/components/shared/line-diff"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
+} from "@/components/ui/tooltip";
+import { DiffStat, diffStat, FoldedDiff } from "@/components/shared/line-diff";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
 import {
   CloseIcon,
   EditFromIcon,
-} from "@/components/mockups/config-versioning/icons"
+} from "@/components/mockups/config-versioning/icons";
 import {
   type CaseId,
   DELETED_REFERENCE,
   type Subject,
   type Version,
-} from "@/lib/mockups/config-versioning-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/config-versioning-data";
+import { cn } from "@/lib/utils";
 
-const PAGE = 5
+const PAGE = 5;
 
-export type ApplyResult = "ok" | "failed" | "blocked"
+export type ApplyResult = "ok" | "failed" | "blocked";
 
 export function HistoryDrawer({
   open,
@@ -75,19 +75,19 @@ export function HistoryDrawer({
   onEditFrom,
   approval,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  subject: Subject
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  subject: Subject;
   /** The version to open on, and what to compare it with. */
-  initial: { n: number; against: number | null }
-  caseId: CaseId
-  canEdit: boolean
+  initial: { n: number; against: number | null };
+  caseId: CaseId;
+  canEdit: boolean;
   /** The version open in the editor. */
-  editing: number
-  onApply: (n: number) => Promise<ApplyResult>
-  onEditFrom: (n: number) => void
+  editing: number;
+  onApply: (n: number) => Promise<ApplyResult>;
+  onEditFrom: (n: number) => void;
   /** When set, applying a live version becomes an approval request. */
-  approval?: Approval
+  approval?: Approval;
 }) {
   return (
     <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
@@ -123,17 +123,17 @@ export function HistoryDrawer({
         ) : null}
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
-type Load = "loading" | "failed" | "ready"
+type Load = "loading" | "failed" | "ready";
 
 type Approval = {
-  by: string
+  by: string;
   /** The version already waiting, if any. One request at a time. */
-  pending: number | null
-  onRequest: (n: number) => void
-}
+  pending: number | null;
+  onRequest: (n: number) => void;
+};
 
 function HistoryBody({
   approval,
@@ -145,24 +145,24 @@ function HistoryBody({
   onApply,
   onEditFrom,
 }: {
-  approval?: Approval
-  subject: Subject
-  initial: { n: number; against: number | null }
-  caseId: CaseId
-  canEdit: boolean
-  editing: number
-  onApply: (n: number) => Promise<ApplyResult>
-  onEditFrom: (n: number) => void
+  approval?: Approval;
+  subject: Subject;
+  initial: { n: number; against: number | null };
+  caseId: CaseId;
+  canEdit: boolean;
+  editing: number;
+  onApply: (n: number) => Promise<ApplyResult>;
+  onEditFrom: (n: number) => void;
 }) {
-  const [load, setLoad] = React.useState<Load>("loading")
-  const [attempt, setAttempt] = React.useState(0)
-  const [selected, setSelected] = React.useState(initial.n)
-  const [against, setAgainst] = React.useState<number | null>(initial.against)
+  const [load, setLoad] = React.useState<Load>("loading");
+  const [attempt, setAttempt] = React.useState(0);
+  const [selected, setSelected] = React.useState(initial.n);
+  const [against, setAgainst] = React.useState<number | null>(initial.against);
   const [count, setCount] = React.useState(() => {
-    const index = subject.versions.findIndex((item) => item.n === initial.n)
-    return Math.max(PAGE, Math.ceil((index + 1) / PAGE) * PAGE)
-  })
-  const [loadingMore, setLoadingMore] = React.useState(false)
+    const index = subject.versions.findIndex((item) => item.n === initial.n);
+    return Math.max(PAGE, Math.ceil((index + 1) / PAGE) * PAGE);
+  });
+  const [loadingMore, setLoadingMore] = React.useState(false);
 
   React.useEffect(() => {
     const timer = setTimeout(
@@ -171,11 +171,11 @@ function HistoryBody({
           caseId === "history-fails" && attempt === 0 ? "failed" : "ready",
         ),
       600,
-    )
-    return () => clearTimeout(timer)
-  }, [attempt, caseId])
+    );
+    return () => clearTimeout(timer);
+  }, [attempt, caseId]);
 
-  if (load === "loading") return <ListSkeleton />
+  if (load === "loading") return <ListSkeleton />;
 
   if (load === "failed") {
     return (
@@ -191,8 +191,8 @@ function HistoryBody({
           <EmptyContent>
             <Button
               onClick={() => {
-                setLoad("loading")
-                setAttempt((current) => current + 1)
+                setLoad("loading");
+                setAttempt((current) => current + 1);
               }}
               size="lg"
               variant="outline"
@@ -202,20 +202,20 @@ function HistoryBody({
           </EmptyContent>
         </Empty>
       </div>
-    )
+    );
   }
 
-  const shown = subject.versions.slice(0, count)
-  const more = subject.versions.length - shown.length
+  const shown = subject.versions.slice(0, count);
+  const more = subject.versions.length - shown.length;
   const version =
-    subject.versions.find((item) => item.n === selected) ?? subject.versions[0]
+    subject.versions.find((item) => item.n === selected) ?? subject.versions[0];
   const find = (n: number | null) =>
-    subject.versions.find((item) => item.n === n) ?? null
+    subject.versions.find((item) => item.n === n) ?? null;
   const compare =
     find(against === version.n ? null : against) ??
     find(version.editedFrom) ??
     subject.versions.find((item) => item.n < version.n) ??
-    null
+    null;
 
   return (
     <div className="flex min-h-0 flex-1">
@@ -229,8 +229,8 @@ function HistoryBody({
                 last={index === shown.length - 1}
                 latest={item.n === subject.versions[0].n}
                 onSelect={() => {
-                  setSelected(item.n)
-                  setAgainst(null)
+                  setSelected(item.n);
+                  setAgainst(null);
                 }}
                 selected={item.n === version.n}
                 version={item}
@@ -242,11 +242,11 @@ function HistoryBody({
               className="mt-2 w-full"
               disabled={loadingMore}
               onClick={() => {
-                setLoadingMore(true)
+                setLoadingMore(true);
                 setTimeout(() => {
-                  setCount((current) => current + PAGE)
-                  setLoadingMore(false)
-                }, 500)
+                  setCount((current) => current + PAGE);
+                  setLoadingMore(false);
+                }, 500);
               }}
               variant="ghost"
             >
@@ -270,7 +270,7 @@ function HistoryBody({
         version={version}
       />
     </div>
-  )
+  );
 }
 
 function VersionRow({
@@ -281,12 +281,12 @@ function VersionRow({
   selected,
   onSelect,
 }: {
-  version: Version
-  inUse: boolean
-  latest: boolean
-  last: boolean
-  selected: boolean
-  onSelect: () => void
+  version: Version;
+  inUse: boolean;
+  latest: boolean;
+  last: boolean;
+  selected: boolean;
+  onSelect: () => void;
 }) {
   return (
     <li className="relative">
@@ -346,7 +346,7 @@ function VersionRow({
         </button>
       </Item>
     </li>
-  )
+  );
 }
 
 function VersionPane({
@@ -360,47 +360,47 @@ function VersionPane({
   onApply,
   onEditFrom,
 }: {
-  approval?: Approval
-  subject: Subject
-  version: Version
-  against: Version | null
-  onAgainst: (n: number) => void
-  canEdit: boolean
-  editing: number
-  onApply: (n: number) => Promise<ApplyResult>
-  onEditFrom: (n: number) => void
+  approval?: Approval;
+  subject: Subject;
+  version: Version;
+  against: Version | null;
+  onAgainst: (n: number) => void;
+  canEdit: boolean;
+  editing: number;
+  onApply: (n: number) => Promise<ApplyResult>;
+  onEditFrom: (n: number) => void;
 }) {
-  const [busy, setBusy] = React.useState(false)
-  const [result, setResult] = React.useState<ApplyResult | null>(null)
-  const [confirming, setConfirming] = React.useState(false)
-  const inUse = subject.inUse
-  const isInUse = version.n === inUse
+  const [busy, setBusy] = React.useState(false);
+  const [result, setResult] = React.useState<ApplyResult | null>(null);
+  const [confirming, setConfirming] = React.useState(false);
+  const inUse = subject.inUse;
+  const isInUse = version.n === inUse;
 
-  const verb = subject.live && version.n > inUse ? "Publish" : "Apply"
+  const verb = subject.live && version.n > inUse ? "Publish" : "Apply";
   const action =
     isInUse || (approval && approval.pending !== null)
       ? null
       : approval
         ? "Request approval"
-        : `${verb} v${version.n}`
+        : `${verb} v${version.n}`;
 
   async function apply() {
     if (approval) {
-      approval.onRequest(version.n)
-      return
+      approval.onRequest(version.n);
+      return;
     }
-    setConfirming(false)
-    setBusy(true)
-    setResult(null)
-    const outcome = await onApply(version.n)
-    setBusy(false)
-    if (outcome !== "ok") setResult(outcome)
+    setConfirming(false);
+    setBusy(true);
+    setResult(null);
+    const outcome = await onApply(version.n);
+    setBusy(false);
+    if (outcome !== "ok") setResult(outcome);
   }
 
-  const [view, setView] = React.useState<"changes" | "version">("changes")
+  const [view, setView] = React.useState<"changes" | "version">("changes");
   const record = subject.log.filter(
     (entry) => entry.n === version.n && entry.how !== "saved",
-  )
+  );
 
   return (
     <section className="flex min-w-0 flex-1 flex-col gap-6 overflow-y-auto p-6">
@@ -458,10 +458,10 @@ function VersionPane({
                 disabled={!canEdit || busy || result === "blocked"}
                 onClick={() => {
                   if (subject.live && !approval && result === null) {
-                    setConfirming(true)
-                    return
+                    setConfirming(true);
+                    return;
                   }
-                  void apply()
+                  void apply();
                 }}
               >
                 {busy ? <Spinner /> : null}
@@ -550,9 +550,9 @@ function VersionPane({
               {/* Every field gets a band, so an unchanged one still says so,
                   and only the changed ones open into a diff. */}
               {subject.fields.map((field) => {
-                const before = against.body[field.id]
-                const after = version.body[field.id]
-                const same = before === after
+                const before = against.body[field.id];
+                const after = version.body[field.id];
+                const same = before === after;
                 return (
                   <div
                     className="overflow-hidden rounded-lg border"
@@ -577,7 +577,7 @@ function VersionPane({
                       />
                     )}
                   </div>
-                )
+                );
               })}
             </div>
           ) : (
@@ -612,7 +612,7 @@ function VersionPane({
         </AlertDialogContent>
       </AlertDialog>
     </section>
-  )
+  );
 }
 
 function FieldBand({
@@ -620,10 +620,10 @@ function FieldBand({
   open,
   children,
 }: {
-  label: string
+  label: string;
   /** Draws the bottom edge because content sits under it. */
-  open: boolean
-  children?: React.ReactNode
+  open: boolean;
+  children?: React.ReactNode;
 }) {
   return (
     <div
@@ -635,15 +635,15 @@ function FieldBand({
       <span>{label}</span>
       {children}
     </div>
-  )
+  );
 }
 
 function FullVersion({
   subject,
   version,
 }: {
-  subject: Subject
-  version: Version
+  subject: Subject;
+  version: Version;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -656,17 +656,17 @@ function FullVersion({
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function Permission({
   allowed,
   children,
 }: {
-  allowed: boolean
-  children: React.ReactNode
+  allowed: boolean;
+  children: React.ReactNode;
 }) {
-  if (allowed) return <>{children}</>
+  if (allowed) return <>{children}</>;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -674,7 +674,7 @@ function Permission({
       </TooltipTrigger>
       <TooltipContent>You can view versions but not change them</TooltipContent>
     </Tooltip>
-  )
+  );
 }
 
 function ListSkeleton() {
@@ -694,5 +694,5 @@ function ListSkeleton() {
         <Skeleton className="h-40 w-full motion-reduce:animate-none" />
       </div>
     </div>
-  )
+  );
 }

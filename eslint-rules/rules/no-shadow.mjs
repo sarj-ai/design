@@ -1,12 +1,12 @@
-import { createClassVisitor } from "../lib/classes.mjs"
+import { createClassVisitor } from "../lib/classes.mjs";
 
-const SHADOW = /^-?(shadow|drop-shadow|inset-shadow|text-shadow)(-.+)?$/
+const SHADOW = /^-?(shadow|drop-shadow|inset-shadow|text-shadow)(-.+)?$/;
 const REMOVERS = new Set([
   "shadow-none",
   "drop-shadow-none",
   "inset-shadow-none",
   "text-shadow-none",
-])
+]);
 
 const noShadow = {
   meta: {
@@ -25,11 +25,11 @@ const noShadow = {
   create(context) {
     return createClassVisitor(({ node, classes }) => {
       for (const { raw, base } of classes) {
-        if (!SHADOW.test(base) || REMOVERS.has(base)) continue
-        context.report({ node, messageId: "shadow", data: { cls: raw } })
+        if (!SHADOW.test(base) || REMOVERS.has(base)) continue;
+        context.report({ node, messageId: "shadow", data: { cls: raw } });
       }
-    })
+    });
   },
-}
+};
 
-export default noShadow
+export default noShadow;

@@ -2,7 +2,7 @@ import type {
   CallRow,
   CallStatus,
   OutcomeStatus,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 
 const RAN: [string, string, string, CallStatus, OutcomeStatus, string][] = [
   [
@@ -117,9 +117,9 @@ const RAN: [string, string, string, CallStatus, OutcomeStatus, string][] = [
     "met",
     "4:45",
   ],
-]
+];
 
-const USERS = ["talzamel@sarj.ai", "malmasoudi@sarj.ai", "fjanahi@sarj.ai"]
+const USERS = ["talzamel@sarj.ai", "malmasoudi@sarj.ai", "fjanahi@sarj.ai"];
 
 export const REVIEW_CALLS: CallRow[] = RAN.map(
   ([time, phoneNumber, scenario, status, outcome, duration], index) => ({
@@ -136,9 +136,9 @@ export const REVIEW_CALLS: CallRow[] = RAN.map(
     agentOutcome: outcome === "met" ? "helpful" : "unavailable",
     duration,
   }),
-)
+);
 
-export const TOTAL_CALLS = 214
+export const TOTAL_CALLS = 214;
 
 export const IDEAS = [
   { id: "row-numbers", label: "Row numbers", from: "Mohammed" },
@@ -157,35 +157,36 @@ export const IDEAS = [
   { id: "history", label: "Watch history", from: "Abdulrahman" },
   { id: "review-mode", label: "Review mode", from: "Vansh" },
   { id: "session", label: "Review session", from: "Mohammed" },
-] as const
+] as const;
 
 export const COMPETITORS = [
   { id: "elevenlabs", label: "ElevenLabs", from: "Position in the drawer" },
   { id: "vapi", label: "Vapi", from: "Call ID and counted tabs" },
   { id: "intercom", label: "Intercom", from: "Open and closed" },
-] as const
+] as const;
 
 export type IdeaId =
-  (typeof IDEAS)[number]["id"] | (typeof COMPETITORS)[number]["id"]
+  | (typeof IDEAS)[number]["id"]
+  | (typeof COMPETITORS)[number]["id"];
 
 export const CALL_IDS: Record<string, string> = Object.fromEntries(
   REVIEW_CALLS.map((call, index) => [
     call.id,
     `019ce${(0xd97a3 + index * 0x2b1f).toString(16)}`,
   ]),
-)
+);
 
-export const LAST_OPENED = REVIEW_CALLS[4].id
+export const LAST_OPENED = REVIEW_CALLS[4].id;
 
 export const OPENED = REVIEW_CALLS.filter(
   (_, index) => index >= 3 && index !== 7,
-).map((call) => call.id)
+).map((call) => call.id);
 
 export const REVIEWED = REVIEW_CALLS.filter((_, index) => index >= 6).map(
   (call) => call.id,
-)
+);
 
-export const SAVED = [REVIEW_CALLS[2].id, REVIEW_CALLS[8].id]
+export const SAVED = [REVIEW_CALLS[2].id, REVIEW_CALLS[8].id];
 
 export const HISTORY: { id: string; at: string }[] = [
   { id: REVIEW_CALLS[4].id, at: "2 min ago" },
@@ -193,4 +194,4 @@ export const HISTORY: { id: string; at: string }[] = [
   { id: REVIEW_CALLS[9].id, at: "14 min ago" },
   { id: REVIEW_CALLS[6].id, at: "Yesterday, 17:20" },
   { id: REVIEW_CALLS[10].id, at: "Yesterday, 16:58" },
-]
+];

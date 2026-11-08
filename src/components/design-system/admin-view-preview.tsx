@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Select,
@@ -8,15 +8,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { OrganisationIcon } from "@/components/design-system/icons"
-import { AppShell } from "@/components/shell/app-shell"
-import { ConversationsIndexPreview } from "@/components/design-system/conversations-index-preview"
+} from "@/components/ui/select";
+import { OrganisationIcon } from "@/components/design-system/icons";
+import { AppShell } from "@/components/shell/app-shell";
+import { ConversationsIndexPreview } from "@/components/design-system/conversations-index-preview";
 
-const ORGANISATIONS = ["Sarj.ai", "Rawabi Holding", "Tamimi Markets"]
+const ORGANISATIONS = ["Sarj.ai", "Rawabi Holding", "Tamimi Markets"];
 
 export function AdminViewSwitcher() {
-  const [organisation, setOrganisation] = React.useState(ORGANISATIONS[0])
+  const [organisation, setOrganisation] = React.useState(ORGANISATIONS[0]);
 
   return (
     <Select value={organisation} onValueChange={setOrganisation}>
@@ -37,7 +37,7 @@ export function AdminViewSwitcher() {
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }
 
 /** `translate-x-0` makes this frame the containing block for the app's fixed sidebar and drawers. */
@@ -52,5 +52,5 @@ export function AdminViewPagePreview() {
         <ConversationsIndexPreview />
       </AppShell>
     </div>
-  )
+  );
 }

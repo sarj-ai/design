@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import type { ColumnSetting } from "@/lib/mockups/conversations-revamp-list-data"
-import { FieldsDropdown } from "@/components/mockups/conversations-revamp/list/fields-dropdown"
+} from "@/components/ui/select";
+import type { ColumnSetting } from "@/lib/mockups/conversations-revamp-list-data";
+import { FieldsDropdown } from "@/components/mockups/conversations-revamp/list/fields-dropdown";
 import {
   CalendarIcon,
   ChevronDownIcon,
@@ -27,19 +27,19 @@ import {
   OutboundIcon,
   RefreshIcon,
   SearchIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
-import { StatusFilter } from "@/components/mockups/conversations-revamp/list/status-filter"
+} from "@/components/mockups/conversations-revamp/list/icons";
+import { StatusFilter } from "@/components/mockups/conversations-revamp/list/status-filter";
 
 export function SearchFilters({
   columns,
   onColumnsChange,
   statusOpen = false,
 }: {
-  columns: ColumnSetting[]
-  onColumnsChange: (columns: ColumnSetting[]) => void
-  statusOpen?: boolean
+  columns: ColumnSetting[];
+  onColumnsChange: (columns: ColumnSetting[]) => void;
+  statusOpen?: boolean;
 }) {
-  const [showMoreFilters, setShowMoreFilters] = React.useState(false)
+  const [showMoreFilters, setShowMoreFilters] = React.useState(false);
 
   return (
     <>
@@ -103,7 +103,7 @@ export function SearchFilters({
             }
             className={showMoreFilters ? "bg-muted" : undefined}
             onClick={() => {
-              setShowMoreFilters(!showMoreFilters)
+              setShowMoreFilters(!showMoreFilters);
             }}
             size="sm"
             variant="outline"
@@ -170,5 +170,5 @@ export function SearchFilters({
         </div>
       ) : null}
     </>
-  )
+  );
 }

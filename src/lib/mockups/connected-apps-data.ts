@@ -1,9 +1,9 @@
 /** Fixed rather than Date.now(), so screenshots stay stable. */
-export const NOW = "2026-08-19T11:00:00.000Z"
+export const NOW = "2026-08-19T11:00:00.000Z";
 
-export const TOKEN_CAP = 5
+export const TOKEN_CAP = 5;
 
-export const NEAR_EXPIRY_DAYS = 14
+export const NEAR_EXPIRY_DAYS = 14;
 
 export type Permission =
   | "agent_profiles:read"
@@ -26,13 +26,13 @@ export type Permission =
   | "reports:read"
   | "scenarios:read"
   | "scenarios:write"
-  | "settings:read"
+  | "settings:read";
 
 type ScopeGroup = {
-  label: string
-  read: Permission
-  write: Permission | null
-}
+  label: string;
+  read: Permission;
+  write: Permission | null;
+};
 
 export const SCOPE_GROUPS: ScopeGroup[] = [
   { label: "Scenarios", read: "scenarios:read", write: "scenarios:write" },
@@ -67,38 +67,38 @@ export const SCOPE_GROUPS: ScopeGroup[] = [
   { label: "Reports", read: "reports:read", write: null },
   { label: "Organization", read: "organizations:read", write: null },
   { label: "Settings", read: "settings:read", write: null },
-]
+];
 
 export const READ_ONLY_SCOPES: Permission[] = SCOPE_GROUPS.map(
   (group) => group.read,
-)
+);
 
 export const ALL_SCOPES: Permission[] = SCOPE_GROUPS.flatMap((group) =>
   group.write ? [group.read, group.write] : [group.read],
-)
+);
 
 export type ConnectedApp = {
-  id: string
-  name: string
-  description: string
-  createdAt: string
-  createdBy: string
-}
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  createdBy: string;
+};
 
 export type Token = {
-  id: string
-  appId: string
-  name: string
+  id: string;
+  appId: string;
+  name: string;
   /** The secret's first eight characters, all the platform keeps of it. */
-  prefix: string
-  scopes: Permission[]
-  createdAt: string
-  createdBy: string
+  prefix: string;
+  scopes: Permission[];
+  createdAt: string;
+  createdBy: string;
   /** `null` never expires. */
-  expiresAt: string | null
-  lastUsedAt: string | null
-  revokedAt: string | null
-}
+  expiresAt: string | null;
+  lastUsedAt: string | null;
+  revokedAt: string | null;
+};
 
 export const CONNECTED_APPS: ConnectedApp[] = [
   {
@@ -122,7 +122,7 @@ export const CONNECTED_APPS: ConnectedApp[] = [
     createdAt: "2026-01-18T06:40:00.000Z",
     createdBy: "Mishal Al-Dossari",
   },
-]
+];
 
 export const TOKENS: Token[] = [
   {
@@ -242,24 +242,24 @@ export const TOKENS: Token[] = [
     lastUsedAt: null,
     revokedAt: null,
   },
-]
+];
 
 /** As the platform mints them: 32 random bytes in URL-safe base64 (43 chars), no vendor prefix. */
 const SECRET_ALPHABET =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 export function mintSecret(): string {
-  let secret = ""
+  let secret = "";
   for (let index = 0; index < 43; index += 1) {
     secret += SECRET_ALPHABET.charAt(
       Math.floor(Math.random() * SECRET_ALPHABET.length),
-    )
+    );
   }
-  return secret
+  return secret;
 }
 
 export function prefixOf(secret: string): string {
-  return secret.slice(0, 8)
+  return secret.slice(0, 8);
 }
 
 export function formatDate(iso: string): string {
@@ -267,50 +267,50 @@ export function formatDate(iso: string): string {
     day: "numeric",
     month: "short",
     year: "numeric",
-  })
+  });
 }
 
 export function daysUntil(iso: string): number {
-  const millis = new Date(iso).getTime() - new Date(NOW).getTime()
-  return Math.ceil(millis / 86_400_000)
+  const millis = new Date(iso).getTime() - new Date(NOW).getTime();
+  return Math.ceil(millis / 86_400_000);
 }
 
 export function relativeSince(iso: string | null): string {
-  if (!iso) return "Never used"
+  if (!iso) return "Never used";
 
   const hours = Math.floor(
     (new Date(NOW).getTime() - new Date(iso).getTime()) / 3_600_000,
-  )
-  if (hours < 1) return "Just now"
-  if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`
+  );
+  if (hours < 1) return "Just now";
+  if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
 
-  const days = Math.floor(hours / 24)
-  if (days < 7) return `${days} ${days === 1 ? "day" : "days"} ago`
-  return formatDate(iso)
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} ${days === 1 ? "day" : "days"} ago`;
+  return formatDate(iso);
 }
 
-type TokenStatus = "active" | "expired" | "revoked"
+type TokenStatus = "active" | "expired" | "revoked";
 
 /** Revoked outranks expired. */
 export function tokenStatus(token: Token): TokenStatus {
-  if (token.revokedAt) return "revoked"
-  if (token.expiresAt && daysUntil(token.expiresAt) <= 0) return "expired"
-  return "active"
+  if (token.revokedAt) return "revoked";
+  if (token.expiresAt && daysUntil(token.expiresAt) <= 0) return "expired";
+  return "active";
 }
 
 function sameScopes(scopes: Permission[], preset: Permission[]): boolean {
   return (
     scopes.length === preset.length &&
     preset.every((permission) => scopes.includes(permission))
-  )
+  );
 }
 
 export function scopeSummary(scopes: Permission[]): string {
-  if (sameScopes(scopes, ALL_SCOPES)) return "Full access"
-  if (sameScopes(scopes, READ_ONLY_SCOPES)) return "Read-only"
-  return `Custom · ${scopes.length}`
+  if (sameScopes(scopes, ALL_SCOPES)) return "Full access";
+  if (sameScopes(scopes, READ_ONLY_SCOPES)) return "Read-only";
+  return `Custom · ${scopes.length}`;
 }
 
 export function liveTokens(tokens: Token[], appId: string): Token[] {
-  return tokens.filter((token) => token.appId === appId && !token.revokedAt)
+  return tokens.filter((token) => token.appId === appId && !token.revokedAt);
 }

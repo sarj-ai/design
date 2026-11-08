@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useEffect } from "react"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useEffect } from "react";
 
-import { CloseIcon } from "@/components/design-system/icons"
-import { Button } from "@/components/ui/button"
-import { DOCS_SECTIONS } from "@/lib/design-system/data"
-import { cn } from "@/lib/utils"
+import { CloseIcon } from "@/components/design-system/icons";
+import { Button } from "@/components/ui/button";
+import { DOCS_SECTIONS } from "@/lib/design-system/data";
+import { cn } from "@/lib/utils";
 
 /** Topics whose demo needs the sheet's full width; the rest read at max-w-3xl. */
 export const FULL_WIDTH_TOPICS = new Set([
@@ -22,21 +22,21 @@ export const FULL_WIDTH_TOPICS = new Set([
   "integration-card",
   "surfaces",
   "error-state",
-])
+]);
 
 /** power4.inOut — the sheet's one curve, up and down. */
-const SLIDE = [0.77, 0, 0.175, 1] as const
+const SLIDE = [0.77, 0, 0.175, 1] as const;
 /** power3.out */
-const ARRIVE = [0.215, 0.61, 0.355, 1] as const
+const ARRIVE = [0.215, 0.61, 0.355, 1] as const;
 
 function locate(topicId: string) {
   for (const section of DOCS_SECTIONS) {
     for (const group of section.groups) {
-      const topic = group.pages.find((page) => page.id === topicId)
-      if (topic) return { section, topic }
+      const topic = group.pages.find((page) => page.id === topicId);
+      if (topic) return { section, topic };
     }
   }
-  return null
+  return null;
 }
 
 /**
@@ -50,30 +50,30 @@ export function TopicSheet({
   instant,
   onClose,
 }: {
-  topicId: string | null
-  views: Record<string, React.ReactNode>
-  instant: boolean
-  onClose: () => void
+  topicId: string | null;
+  views: Record<string, React.ReactNode>;
+  instant: boolean;
+  onClose: () => void;
 }) {
-  const reduced = useReducedMotion() ?? false
-  const still = reduced || instant
-  const found = topicId ? locate(topicId) : null
+  const reduced = useReducedMotion() ?? false;
+  const still = reduced || instant;
+  const found = topicId ? locate(topicId) : null;
 
   /* The overview must not scroll under the sheet, and Escape closes it. */
   useEffect(() => {
-    if (!found) return
-    const root = document.documentElement
-    const previous = root.style.overflow
-    root.style.overflow = "hidden"
+    if (!found) return;
+    const root = document.documentElement;
+    const previous = root.style.overflow;
+    root.style.overflow = "hidden";
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose()
+      if (event.key === "Escape") onClose();
     }
-    window.addEventListener("keydown", onKey)
+    window.addEventListener("keydown", onKey);
     return () => {
-      root.style.overflow = previous
-      window.removeEventListener("keydown", onKey)
-    }
-  }, [found, onClose])
+      root.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [found, onClose]);
 
   return (
     <AnimatePresence>
@@ -146,5 +146,5 @@ export function TopicSheet({
         </div>
       ) : null}
     </AnimatePresence>
-  )
+  );
 }

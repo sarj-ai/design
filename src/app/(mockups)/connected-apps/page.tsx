@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   CONNECTED_APPS,
   NOW,
   TOKENS,
   type ConnectedApp,
   type Token,
-} from "@/lib/mockups/connected-apps-data"
-import { AppDetail } from "@/components/mockups/connected-apps/app-detail"
-import { AppsOverview } from "@/components/mockups/connected-apps/apps-overview"
+} from "@/lib/mockups/connected-apps-data";
+import { AppDetail } from "@/components/mockups/connected-apps/app-detail";
+import { AppsOverview } from "@/components/mockups/connected-apps/apps-overview";
 
-type Preview = "populated" | "first-run"
+type Preview = "populated" | "first-run";
 
 export default function ConnectedAppsPage() {
-  const [preview, setPreview] = React.useState<Preview>("populated")
-  const [openAppId, setOpenAppId] = React.useState<string | null>(null)
-  const [apps, setApps] = React.useState<ConnectedApp[]>(CONNECTED_APPS)
-  const [tokens, setTokens] = React.useState<Token[]>(TOKENS)
+  const [preview, setPreview] = React.useState<Preview>("populated");
+  const [openAppId, setOpenAppId] = React.useState<string | null>(null);
+  const [apps, setApps] = React.useState<ConnectedApp[]>(CONNECTED_APPS);
+  const [tokens, setTokens] = React.useState<Token[]>(TOKENS);
 
-  const openApp = apps.find((app) => app.id === openAppId) ?? null
+  const openApp = apps.find((app) => app.id === openAppId) ?? null;
 
   function switchPreview(next: Preview) {
-    setPreview(next)
-    setOpenAppId(null)
-    setApps(next === "populated" ? CONNECTED_APPS : [])
-    setTokens(next === "populated" ? TOKENS : [])
+    setPreview(next);
+    setOpenAppId(null);
+    setApps(next === "populated" ? CONNECTED_APPS : []);
+    setTokens(next === "populated" ? TOKENS : []);
   }
 
   function createApp(app: ConnectedApp) {
-    setApps((previous) => [...previous, app])
-    setOpenAppId(app.id)
+    setApps((previous) => [...previous, app]);
+    setOpenAppId(app.id);
   }
 
   function revoke(token: Token) {
@@ -42,7 +42,7 @@ export default function ConnectedAppsPage() {
       previous.map((entry) =>
         entry.id === token.id ? { ...entry, revokedAt: NOW } : entry,
       ),
-    )
+    );
   }
 
   return (
@@ -52,7 +52,7 @@ export default function ConnectedAppsPage() {
           <span className="text-xs text-muted-foreground">Preview</span>
           <ToggleGroup
             onValueChange={(value) => {
-              if (value) switchPreview(value as Preview)
+              if (value) switchPreview(value as Preview);
             }}
             size="sm"
             type="single"
@@ -71,7 +71,7 @@ export default function ConnectedAppsPage() {
         active="Integrations"
         breadcrumb={openApp ? openApp.name : "Integrations"}
         onNavigate={(title) => {
-          if (title === "Integrations") setOpenAppId(null)
+          if (title === "Integrations") setOpenAppId(null);
         }}
       >
         <div className="flex flex-1 flex-col p-3 lg:p-4">
@@ -96,5 +96,5 @@ export default function ConnectedAppsPage() {
         </div>
       </AppShell>
     </MockupShell>
-  )
+  );
 }

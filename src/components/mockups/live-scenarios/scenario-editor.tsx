@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Drawer,
   DrawerClose,
@@ -13,48 +13,48 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { EditorHeader } from "@/components/mockups/live-scenarios/editor-header"
-import { LineDiff } from "@/components/shared/line-diff"
-import { CloseReviewIcon } from "@/components/mockups/live-scenarios/icons"
+} from "@/components/ui/drawer";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { EditorHeader } from "@/components/mockups/live-scenarios/editor-header";
+import { LineDiff } from "@/components/shared/line-diff";
+import { CloseReviewIcon } from "@/components/mockups/live-scenarios/icons";
 import {
   PROMPT_FIELDS,
   type EditorCase,
   type LiveRecord,
   type PromptField,
-} from "@/lib/mockups/live-scenarios-data"
+} from "@/lib/mockups/live-scenarios-data";
 
 export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
-  const [live, setLive] = React.useState<LiveRecord | null>(editorCase.live)
-  const [pending, setPending] = React.useState(false)
-  const [liveChangedUnderUs, setLiveChangedUnderUs] = React.useState(false)
+  const [live, setLive] = React.useState<LiveRecord | null>(editorCase.live);
+  const [pending, setPending] = React.useState(false);
+  const [liveChangedUnderUs, setLiveChangedUnderUs] = React.useState(false);
 
-  const [saved, setSaved] = React.useState(PROMPT_FIELDS)
-  const [draft, setDraft] = React.useState(PROMPT_FIELDS)
-  const [reviewing, setReviewing] = React.useState(false)
+  const [saved, setSaved] = React.useState(PROMPT_FIELDS);
+  const [draft, setDraft] = React.useState(PROMPT_FIELDS);
+  const [reviewing, setReviewing] = React.useState(false);
 
   const changed = draft.filter(
     (field, index) => field.body !== saved[index].body,
-  )
-  const dirty = changed.length > 0
+  );
+  const dirty = changed.length > 0;
 
   function flipLive(on: boolean) {
-    setPending(true)
+    setPending(true);
     window.setTimeout(() => {
-      setPending(false)
+      setPending(false);
       if (editorCase.toggleFails) {
         toast.error(on ? "Couldn't turn live on" : "Couldn't turn live off", {
           description: "Nothing changed. Try again.",
           action: { label: "Retry", onClick: () => flipLive(on) },
-        })
-        return
+        });
+        return;
       }
-      const before = live
-      const next = on ? { by: "You", at: "just now" } : null
-      setLive(next)
+      const before = live;
+      const next = on ? { by: "You", at: "just now" } : null;
+      setLive(next);
       toast(
         on
           ? `${editorCase.scenario} is live`
@@ -65,38 +65,38 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
             : "Saving applies straight away, without the warning.",
           action: { label: "Undo", onClick: () => setLive(before) },
         },
-      )
-    }, 700)
+      );
+    }, 700);
   }
 
   function openReview() {
     if (editorCase.turnedLiveElsewhere && !live) {
-      setLive(editorCase.turnedLiveElsewhere)
-      setLiveChangedUnderUs(true)
+      setLive(editorCase.turnedLiveElsewhere);
+      setLiveChangedUnderUs(true);
     }
-    setReviewing(true)
+    setReviewing(true);
   }
 
   function save() {
-    setSaved(draft)
-    setReviewing(false)
+    setSaved(draft);
+    setReviewing(false);
     toast.success(live ? "Saved to the live scenario" : "Saved", {
       description: live ? "The next call uses these changes." : undefined,
-    })
+    });
   }
 
   function discard() {
-    const before = draft
-    setDraft(saved)
+    const before = draft;
+    setDraft(saved);
     toast("Changes discarded", {
       action: { label: "Undo", onClick: () => setDraft(before) },
-    })
+    });
   }
 
   function remove() {
     toast(`${editorCase.scenario} moved to Recently deleted`, {
       action: { label: "Undo", onClick: () => {} },
-    })
+    });
   }
 
   return (
@@ -153,15 +153,15 @@ export function ScenarioEditor({ editorCase }: { editorCase: EditorCase }) {
         onSave={save}
       />
     </main>
-  )
+  );
 }
 
 function PromptField({
   field,
   onChange,
 }: {
-  field: PromptField
-  onChange: (body: string) => void
+  field: PromptField;
+  onChange: (body: string) => void;
 }) {
   return (
     <Field>
@@ -182,7 +182,7 @@ function PromptField({
         />
       )}
     </Field>
-  )
+  );
 }
 
 function SaveReview({
@@ -195,14 +195,14 @@ function SaveReview({
   saved,
   onSave,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  scenario: string
-  live: LiveRecord | null
-  liveChangedUnderUs: boolean
-  changed: PromptField[]
-  saved: PromptField[]
-  onSave: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  scenario: string;
+  live: LiveRecord | null;
+  liveChangedUnderUs: boolean;
+  changed: PromptField[];
+  saved: PromptField[];
+  onSave: () => void;
 }) {
   return (
     <Drawer direction="right" open={open} onOpenChange={onOpenChange}>
@@ -251,5 +251,5 @@ function SaveReview({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

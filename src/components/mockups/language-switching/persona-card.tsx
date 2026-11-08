@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { PrimaryTabs } from "@/components/design-system/tabs-preview"
-import { LanguageSwitchSetting } from "@/components/mockups/language-switching/language-switch-setting"
-import { PersonaPicker } from "@/components/mockups/language-switching/persona-picker"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Separator } from "@/components/ui/separator"
-import { TabsContent } from "@/components/ui/tabs"
+import { PrimaryTabs } from "@/components/design-system/tabs-preview";
+import { LanguageSwitchSetting } from "@/components/mockups/language-switching/language-switch-setting";
+import { PersonaPicker } from "@/components/mockups/language-switching/persona-picker";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Separator } from "@/components/ui/separator";
+import { TabsContent } from "@/components/ui/tabs";
 import {
   LANGUAGE_NAMES,
   type LanguageCode,
   type ScenarioLanguage,
   type SwitchConfig,
-} from "@/lib/mockups/language-switching-data"
+} from "@/lib/mockups/language-switching-data";
 
 export function PersonaCard({
   config,
@@ -25,15 +25,15 @@ export function PersonaCard({
   start,
   footer,
 }: {
-  config: SwitchConfig
-  invalid: Set<LanguageCode>
-  languages: ScenarioLanguage[]
-  onConfigChange: (next: SwitchConfig) => void
-  onLanguagesChange: (next: ScenarioLanguage[]) => void
-  start: LanguageCode
-  footer?: React.ReactNode
+  config: SwitchConfig;
+  invalid: Set<LanguageCode>;
+  languages: ScenarioLanguage[];
+  onConfigChange: (next: SwitchConfig) => void;
+  onLanguagesChange: (next: ScenarioLanguage[]) => void;
+  start: LanguageCode;
+  footer?: React.ReactNode;
 }) {
-  const [tab, setTab] = React.useState<string>(start)
+  const [tab, setTab] = React.useState<string>(start);
 
   return (
     <Card>
@@ -88,5 +88,5 @@ export function PersonaCard({
         <CardFooter className="justify-end">{footer}</CardFooter>
       ) : null}
     </Card>
-  )
+  );
 }

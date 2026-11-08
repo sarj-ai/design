@@ -1,36 +1,36 @@
-export type PersonaLanguage = "Arabic" | "English" | "Urdu"
-export type PersonaGender = "Female" | "Male"
+export type PersonaLanguage = "Arabic" | "English" | "Urdu";
+export type PersonaGender = "Female" | "Male";
 
 type Voice = {
-  id: string
-  name: string
-  vibe: string
-  language: PersonaLanguage
-  gender: PersonaGender
-  provider: string
-  active: boolean
-}
+  id: string;
+  name: string;
+  vibe: string;
+  language: PersonaLanguage;
+  gender: PersonaGender;
+  provider: string;
+  active: boolean;
+};
 
 export type Persona = {
-  id: string
-  name: string
-  language: PersonaLanguage
-  gender: PersonaGender
-  voiceId: string
-  isDefault: boolean
-  prompt: string
-  scenarioIds: string[]
-  createdAt: string
-}
+  id: string;
+  name: string;
+  language: PersonaLanguage;
+  gender: PersonaGender;
+  voiceId: string;
+  isDefault: boolean;
+  prompt: string;
+  scenarioIds: string[];
+  createdAt: string;
+};
 
 type Scenario = {
-  id: string
-  name: string
-  languages: PersonaLanguage[]
-}
+  id: string;
+  name: string;
+  languages: PersonaLanguage[];
+};
 
-export const LANGUAGES: PersonaLanguage[] = ["Arabic", "English", "Urdu"]
-export const GENDERS: PersonaGender[] = ["Female", "Male"]
+export const LANGUAGES: PersonaLanguage[] = ["Arabic", "English", "Urdu"];
+export const GENDERS: PersonaGender[] = ["Female", "Male"];
 
 export const VOICES: Voice[] = [
   {
@@ -542,7 +542,7 @@ export const VOICES: Voice[] = [
     provider: "Azure",
     active: true,
   },
-]
+];
 
 export const SCENARIOS: Scenario[] = [
   {
@@ -585,7 +585,7 @@ export const SCENARIOS: Scenario[] = [
     name: "Driver onboarding",
     languages: ["Urdu"],
   },
-]
+];
 
 export const PERSONAS: Persona[] = [
   {
@@ -732,12 +732,12 @@ export const PERSONAS: Persona[] = [
     scenarioIds: ["s-onboarding", "s-delivery"],
     createdAt: "Jun 14, 2026",
   },
-]
+];
 
 export function voiceById(id: string): Voice | undefined {
-  return VOICES.find((voice) => voice.id === id)
+  return VOICES.find((voice) => voice.id === id);
 }
 
 export function scenarioById(id: string): Scenario | undefined {
-  return SCENARIOS.find((scenario) => scenario.id === id)
+  return SCENARIOS.find((scenario) => scenario.id === id);
 }

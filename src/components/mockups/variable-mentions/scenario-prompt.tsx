@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   Card,
@@ -8,8 +8,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   LANGUAGE_LABEL,
   LANGUAGE_SHORT,
@@ -19,10 +19,10 @@ import {
   type LanguageCode,
   type PromptText,
   type Variable,
-} from "@/lib/mockups/variable-mentions-data"
+} from "@/lib/mockups/variable-mentions-data";
 
-import type { ChipTreatment } from "@/components/mockups/variable-mentions/chip-treatment"
-import { MentionEditor } from "@/components/mockups/variable-mentions/mention-editor"
+import type { ChipTreatment } from "@/components/mockups/variable-mentions/chip-treatment";
+import { MentionEditor } from "@/components/mockups/variable-mentions/mention-editor";
 
 /** Switching language remounts both editors so the text is painted fresh, chips and all. */
 export function ScenarioPrompt({
@@ -31,22 +31,22 @@ export function ScenarioPrompt({
   variablesLoading,
   viewOnly,
 }: {
-  treatment: ChipTreatment
-  variables: Variable[]
-  variablesLoading: boolean
-  viewOnly: boolean
+  treatment: ChipTreatment;
+  variables: Variable[];
+  variablesLoading: boolean;
+  viewOnly: boolean;
 }) {
-  const [language, setLanguage] = React.useState<LanguageCode>("en")
-  const [texts, setTexts] = React.useState(TEXTS)
+  const [language, setLanguage] = React.useState<LanguageCode>("en");
+  const [texts, setTexts] = React.useState(TEXTS);
 
-  const current = texts[language]
-  const dir = language === "ar" ? "rtl" : "ltr"
+  const current = texts[language];
+  const dir = language === "ar" ? "rtl" : "ltr";
 
   const update = (patch: Partial<PromptText>) =>
     setTexts((previous) => ({
       ...previous,
       [language]: { ...previous[language], ...patch },
-    }))
+    }));
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-8">
@@ -56,7 +56,7 @@ export function ScenarioPrompt({
         <ToggleGroup
           aria-label="Language"
           onValueChange={(value) => {
-            if (value) setLanguage(value as LanguageCode)
+            if (value) setLanguage(value as LanguageCode);
           }}
           size="sm"
           type="single"
@@ -124,5 +124,5 @@ export function ScenarioPrompt({
         </CardContent>
       </Card>
     </main>
-  )
+  );
 }

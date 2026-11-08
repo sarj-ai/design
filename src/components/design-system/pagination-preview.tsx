@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { RuleList } from "@/components/design-system/rule-list"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PAGINATION_RULES } from "@/lib/design-system/data"
+import { RuleList } from "@/components/design-system/rule-list";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PAGINATION_RULES } from "@/lib/design-system/data";
 
 export function PaginationPreview() {
   return (
@@ -16,5 +16,5 @@ export function PaginationPreview() {
       />
       <RuleList rules={PAGINATION_RULES} />
     </div>
-  )
+  );
 }

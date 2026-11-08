@@ -9,26 +9,26 @@
  * - At most four Sarj voices per language and gender. Nour is not one of them.
  */
 
-export type Owner = "org" | "sarj"
-export type Gender = "Female" | "Male"
-export type Language = "Arabic" | "English" | "Urdu"
+export type Owner = "org" | "sarj";
+export type Gender = "Female" | "Male";
+export type Language = "Arabic" | "English" | "Urdu";
 
-export const LANGUAGES: Language[] = ["Arabic", "English", "Urdu"]
-export const GENDERS: Gender[] = ["Male", "Female"]
+export const LANGUAGES: Language[] = ["Arabic", "English", "Urdu"];
+export const GENDERS: Gender[] = ["Male", "Female"];
 export const LANGUAGE_CODES: Record<Language, string> = {
   Arabic: "AR",
   English: "EN",
   Urdu: "UR",
-}
+};
 
 export type Voice = {
-  id: string
-  name: string
-  provider: string
-  owner: Owner
-  language: Language
-  gender: Gender
-}
+  id: string;
+  name: string;
+  provider: string;
+  owner: Owner;
+  language: Language;
+  gender: Gender;
+};
 
 const v = (
   id: string,
@@ -43,7 +43,7 @@ const v = (
   owner,
   language,
   gender,
-})
+});
 
 export const VOICES: Voice[] = [
   // The organization's own — cloned under DES-198.
@@ -70,18 +70,18 @@ export const VOICES: Voice[] = [
 
   v("ayesha", "Azure", "sarj", "Urdu", "Female"),
   v("asad", "Azure", "sarj", "Urdu", "Male"),
-]
+];
 
 export type Persona = {
-  id: string
-  name: string
-  language: Language
-  gender: Gender
-  voiceId: string
-  isDefault: boolean
-  createdAt: string
-  prompt: string
-}
+  id: string;
+  name: string;
+  language: Language;
+  gender: Gender;
+  voiceId: string;
+  isDefault: boolean;
+  createdAt: string;
+  prompt: string;
+};
 
 const p = (
   id: string,
@@ -100,7 +100,7 @@ const p = (
   isDefault,
   createdAt,
   prompt: "",
-})
+});
 
 /** فاطمة and نورة share Sara — the duplicate the Voice column now shows. */
 export const PERSONAS: Persona[] = [
@@ -122,9 +122,10 @@ export const PERSONAS: Persona[] = [
           "You are Fahad, a calm receptionist who keeps answers short and confirms each booking.",
       }
     : persona,
-)
+);
 
 /** The persona whose dialog opens with the page. */
-export const EDITING_ID = "p6"
+export const EDITING_ID = "p6";
 
-export const voiceById = (id: string) => VOICES.find((voice) => voice.id === id)
+export const voiceById = (id: string) =>
+  VOICES.find((voice) => voice.id === id);

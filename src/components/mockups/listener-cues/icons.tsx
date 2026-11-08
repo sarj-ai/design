@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Alert02Icon,
@@ -12,24 +12,24 @@ import {
   Settings01Icon,
   Tick02Icon,
   UserSharingIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const FillerWordsIcon = icon(Message01Icon, "FillerWordsIcon")
-export const ListenerCuesIcon = icon(AudioWave01Icon, "ListenerCuesIcon")
+export const FillerWordsIcon = icon(Message01Icon, "FillerWordsIcon");
+export const ListenerCuesIcon = icon(AudioWave01Icon, "ListenerCuesIcon");
 
-export const ConfigureIcon = icon(Settings01Icon, "ConfigureIcon")
+export const ConfigureIcon = icon(Settings01Icon, "ConfigureIcon");
 
-export const PreviewCueIcon = icon(PlayIcon, "PreviewCueIcon")
-export const AddCueIcon = icon(PlusSignIcon, "AddCueIcon")
-export const RemoveCueIcon = icon(Delete02Icon, "RemoveCueIcon")
+export const PreviewCueIcon = icon(PlayIcon, "PreviewCueIcon");
+export const AddCueIcon = icon(PlusSignIcon, "AddCueIcon");
+export const RemoveCueIcon = icon(Delete02Icon, "RemoveCueIcon");
 
-export const PickerChevronIcon = icon(ArrowDown01Icon, "PickerChevronIcon")
-export const InMixIcon = icon(Tick02Icon, "InMixIcon")
+export const PickerChevronIcon = icon(ArrowDown01Icon, "PickerChevronIcon");
+export const InMixIcon = icon(Tick02Icon, "InMixIcon");
 
-export const OverrideIcon = icon(UserSharingIcon, "OverrideIcon")
+export const OverrideIcon = icon(UserSharingIcon, "OverrideIcon");
 
-export const NoClipsIcon = icon(Alert02Icon, "NoClipsIcon")
+export const NoClipsIcon = icon(Alert02Icon, "NoClipsIcon");
 
-export const CloseIcon = icon(Cancel01Icon, "CloseIcon")
+export const CloseIcon = icon(Cancel01Icon, "CloseIcon");

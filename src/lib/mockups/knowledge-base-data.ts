@@ -1,4 +1,4 @@
-export type SourceKind = "pdf" | "docx" | "txt" | "markdown" | "url" | "text"
+export type SourceKind = "pdf" | "docx" | "txt" | "markdown" | "url" | "text";
 
 export const SOURCE_LABELS: Record<SourceKind, string> = {
   pdf: "PDF",
@@ -7,30 +7,30 @@ export const SOURCE_LABELS: Record<SourceKind, string> = {
   markdown: "Markdown",
   url: "URL",
   text: "Text",
-}
+};
 
-export type SourceStatus = "ready" | "extracting" | "failed"
+export type SourceStatus = "ready" | "extracting" | "failed";
 
 export type Source = {
-  id: string
-  name: string
-  kind: SourceKind
-  url?: string
-  status: SourceStatus
-  size: string
-  addedBy: string
-  addedAt: string
-  problem?: string
-  body?: string
-}
+  id: string;
+  name: string;
+  kind: SourceKind;
+  url?: string;
+  status: SourceStatus;
+  size: string;
+  addedBy: string;
+  addedAt: string;
+  problem?: string;
+  body?: string;
+};
 
 export function isFileSource(kind: SourceKind): boolean {
-  return kind !== "url" && kind !== "text"
+  return kind !== "url" && kind !== "text";
 }
 
 /** Rows store the address without a scheme; a link still needs one. */
 export function sourceHref(url: string): string {
-  return /^https?:\/\//i.test(url) ? url : `https://${url}`
+  return /^https?:\/\//i.test(url) ? url : `https://${url}`;
 }
 
 export const KNOWLEDGE_BASE = {
@@ -39,14 +39,14 @@ export const KNOWLEDGE_BASE = {
   updatedBy: "talzamel@sarj.ai",
   summary:
     "Covers instalment plans, how a customer settles an overdue balance, and what counts as a hardship case. Includes the current late-fee schedule and the wording the team uses when a payment date is promised. Use it for anything about balances, payment dates, or fees.",
-}
+};
 
 export const NEW_KNOWLEDGE_BASE = {
   name: "Untitled Knowledge Base",
   updatedAt: "just now",
   updatedBy: "talzamel@sarj.ai",
   summary: "",
-}
+};
 
 export const SOURCES: Source[] = [
   {
@@ -106,16 +106,16 @@ export const SOURCES: Source[] = [
     addedAt: "Jul 14, 2026",
     problem: "This PDF is scanned images, so there is no text to pull out",
   },
-]
+];
 
 export type KnowledgeBaseRow = {
-  id: string
-  name: string
-  documents: number | null
-  created: string
-  updatedAt: string
-  updatedBy: string
-}
+  id: string;
+  name: string;
+  documents: number | null;
+  created: string;
+  updatedAt: string;
+  updatedBy: string;
+};
 
 export const KNOWLEDGE_BASES: KnowledgeBaseRow[] = [
   {
@@ -166,16 +166,16 @@ export const KNOWLEDGE_BASES: KnowledgeBaseRow[] = [
     updatedAt: "Jul 20, 2026",
     updatedBy: "talzamel@sarj.ai",
   },
-]
+];
 
 export function sentenceCount(summary: string): number {
-  return summary.split(/[.!?]+\s|[.!?]+$/).filter((part) => part.trim()).length
+  return summary.split(/[.!?]+\s|[.!?]+$/).filter((part) => part.trim()).length;
 }
 
-export const SUMMARY_SENTENCE_LIMIT = 10
+export const SUMMARY_SENTENCE_LIMIT = 10;
 
 export function pendingSource(id: string, name: string, size: string): Source {
-  const extension = name.split(".").pop()?.toLowerCase() ?? ""
+  const extension = name.split(".").pop()?.toLowerCase() ?? "";
   const kind: SourceKind =
     extension === "docx"
       ? "docx"
@@ -183,7 +183,7 @@ export function pendingSource(id: string, name: string, size: string): Source {
         ? "txt"
         : extension === "md"
           ? "markdown"
-          : "pdf"
+          : "pdf";
 
   return {
     id,
@@ -193,5 +193,5 @@ export function pendingSource(id: string, name: string, size: string): Source {
     size,
     addedBy: "talzamel@sarj.ai",
     addedAt: "Just now",
-  }
+  };
 }

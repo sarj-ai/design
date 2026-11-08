@@ -1,37 +1,37 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { LanguageChip } from "@/components/design-system/call-table"
+} from "@/components/ui/table";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { LanguageChip } from "@/components/design-system/call-table";
 import {
   DeletePersonaIcon,
   EditPersonaIcon,
   NewPersonaIcon,
-} from "@/components/mockups/voice-ownership/icons"
+} from "@/components/mockups/voice-ownership/icons";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
-import { PageHeader } from "@/components/shared/page-header"
+} from "@/components/shared/data-table";
+import { ChoiceFilter, FilterBar } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
+import { PageHeader } from "@/components/shared/page-header";
 import {
   LANGUAGE_CODES,
   LANGUAGES,
   PERSONAS,
   voiceById,
   type Persona,
-} from "@/lib/mockups/voice-ownership-data"
+} from "@/lib/mockups/voice-ownership-data";
 
 /**
  * The platform's persona list (app/agents) as it ships, plus one column:
@@ -40,12 +40,12 @@ import {
 export function PersonaList({
   onEdit,
 }: {
-  onEdit: (persona: Persona) => void
+  onEdit: (persona: Persona) => void;
 }) {
-  const [language, setLanguage] = React.useState<string | null>(null)
+  const [language, setLanguage] = React.useState<string | null>(null);
   const rows = PERSONAS.filter(
     (persona) => !language || persona.language === language,
-  )
+  );
 
   return (
     <TooltipProvider>
@@ -84,7 +84,7 @@ export function PersonaList({
           </TableHeader>
           <TableBody>
             {rows.map((persona) => {
-              const voice = voiceById(persona.voiceId)
+              const voice = voiceById(persona.voiceId);
               return (
                 <TableRow key={persona.id}>
                   <TableCell>
@@ -148,7 +148,7 @@ export function PersonaList({
                     </span>
                   </TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </DataTable>
@@ -163,5 +163,5 @@ export function PersonaList({
         />
       </main>
     </TooltipProvider>
-  )
+  );
 }

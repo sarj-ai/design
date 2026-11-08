@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -13,8 +13,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
-import { FieldSeparator } from "@/components/ui/field"
+} from "@/components/ui/drawer";
+import { FieldSeparator } from "@/components/ui/field";
 import {
   DEFAULT_ROUTE_ID,
   KEYPAD_KEYS,
@@ -27,47 +27,51 @@ import {
   overriddenFields,
   type Route,
   type SharedSettings as SharedSettingsValue,
-} from "@/lib/mockups/transfer-routing-data"
-import { RouteCard } from "@/components/mockups/transfer-routing/route-card"
-import { SharedSettings } from "@/components/mockups/transfer-routing/shared-settings"
+} from "@/lib/mockups/transfer-routing-data";
+import { RouteCard } from "@/components/mockups/transfer-routing/route-card";
+import { SharedSettings } from "@/components/mockups/transfer-routing/shared-settings";
 import {
   AddRouteIcon,
   CloseIcon,
   OverlapIcon,
-} from "@/components/mockups/transfer-routing/icons"
+} from "@/components/mockups/transfer-routing/icons";
 
 export function TransferToolDrawer() {
-  const [open, setOpen] = React.useState(true)
-  const [routes, setRoutes] = React.useState<Route[]>(ROUTES)
-  const [defaultRouteId, setDefaultRouteId] = React.useState(DEFAULT_ROUTE_ID)
+  const [open, setOpen] = React.useState(true);
+  const [routes, setRoutes] = React.useState<Route[]>(ROUTES);
+  const [defaultRouteId, setDefaultRouteId] = React.useState(DEFAULT_ROUTE_ID);
   const [shared, setShared] =
-    React.useState<SharedSettingsValue>(SHARED_SETTINGS)
+    React.useState<SharedSettingsValue>(SHARED_SETTINGS);
 
-  const [armedId, setArmedId] = React.useState<string | null>(null)
-  const [draggingId, setDraggingId] = React.useState<string | null>(null)
+  const [armedId, setArmedId] = React.useState<string | null>(null);
+  const [draggingId, setDraggingId] = React.useState<string | null>(null);
 
-  const overlaps = findOverlaps(routes)
-  const flagged = overlappingCases(overlaps)
-  const overlappingRouteIds = new Set(overlaps.flatMap((item) => item.routeIds))
+  const overlaps = findOverlaps(routes);
+  const flagged = overlappingCases(overlaps);
+  const overlappingRouteIds = new Set(
+    overlaps.flatMap((item) => item.routeIds),
+  );
 
-  const firstOverriding = routes.find((route) => overriddenFields(route).length)
+  const firstOverriding = routes.find(
+    (route) => overriddenFields(route).length,
+  );
 
   function addRoute() {
-    const taken = new Set(routes.map((route) => route.keypadKey))
-    const free = KEYPAD_KEYS.find((key) => !taken.has(key)) ?? ""
-    setRoutes([...routes, emptyRoute(`route-${routes.length + 1}`, free)])
+    const taken = new Set(routes.map((route) => route.keypadKey));
+    const free = KEYPAD_KEYS.find((key) => !taken.has(key)) ?? "";
+    setRoutes([...routes, emptyRoute(`route-${routes.length + 1}`, free)]);
   }
 
   function move(fromId: string, toId: string) {
-    if (fromId === toId) return
+    if (fromId === toId) return;
 
-    const next = [...routes]
-    const from = next.findIndex((route) => route.id === fromId)
-    const to = next.findIndex((route) => route.id === toId)
-    if (from < 0 || to < 0) return
+    const next = [...routes];
+    const from = next.findIndex((route) => route.id === fromId);
+    const to = next.findIndex((route) => route.id === toId);
+    if (from < 0 || to < 0) return;
 
-    next.splice(to, 0, ...next.splice(from, 1))
-    setRoutes(next)
+    next.splice(to, 0, ...next.splice(from, 1));
+    setRoutes(next);
   }
 
   return (
@@ -131,11 +135,11 @@ export function TransferToolDrawer() {
                 onArm={(armed) => setArmedId(armed ? route.id : null)}
                 onDragStart={() => setDraggingId(route.id)}
                 onDragEnter={() => {
-                  if (draggingId) move(draggingId, route.id)
+                  if (draggingId) move(draggingId, route.id);
                 }}
                 onDragEnd={() => {
-                  setDraggingId(null)
-                  setArmedId(null)
+                  setDraggingId(null);
+                  setArmedId(null);
                 }}
               />
             ))}
@@ -143,7 +147,7 @@ export function TransferToolDrawer() {
             {overlaps.map((overlap) => {
               const [first, second] = overlap.routeIds.map(
                 (id) => routes.find((route) => route.id === id)?.name ?? "",
-              )
+              );
 
               return (
                 <Alert
@@ -160,7 +164,7 @@ export function TransferToolDrawer() {
                     Try making one more specific.
                   </AlertDescription>
                 </Alert>
-              )
+              );
             })}
 
             <Button variant="outline" onClick={addRoute} className="w-full">
@@ -198,5 +202,5 @@ export function TransferToolDrawer() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

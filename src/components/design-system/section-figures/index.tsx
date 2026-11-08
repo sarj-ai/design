@@ -1,8 +1,8 @@
-import type { FigureProps } from "@/components/shared/figure"
+import type { FigureProps } from "@/components/shared/figure";
 
-import { FoundationsFigure } from "./foundations"
-import { MotionFigure } from "./motion"
-import { PatternsFigure } from "./patterns"
+import { FoundationsFigure } from "./foundations";
+import { MotionFigure } from "./motion";
+import { PatternsFigure } from "./patterns";
 
 export const SECTION_FIGURES: Record<
   string,
@@ -11,4 +11,4 @@ export const SECTION_FIGURES: Record<
   foundations: FoundationsFigure,
   motion: MotionFigure,
   patterns: PatternsFigure,
-}
+};

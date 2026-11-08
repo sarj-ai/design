@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,8 +11,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
 import {
   Item,
   ItemActions,
@@ -20,25 +20,25 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/item";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   CloneVoiceIcon,
   CloseIcon,
   PreviewVoiceIcon,
   StopPreviewIcon,
-} from "@/components/mockups/voice-ownership/icons"
-import { OrbAvatar } from "@/components/shared/orb-avatar"
+} from "@/components/mockups/voice-ownership/icons";
+import { OrbAvatar } from "@/components/shared/orb-avatar";
 import {
   GENDERS,
   LANGUAGES,
@@ -47,8 +47,8 @@ import {
   type Language,
   type Persona,
   type Voice,
-} from "@/lib/mockups/voice-ownership-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/voice-ownership-data";
+import { cn } from "@/lib/utils";
 
 /**
  * The platform's edit persona dialog (agents/components/agent-profile-form.tsx),
@@ -60,9 +60,9 @@ export function EditPersonaDialog({
   hasOrgVoices,
   onOpenChange,
 }: {
-  persona: Persona | null
-  hasOrgVoices: boolean
-  onOpenChange: (open: boolean) => void
+  persona: Persona | null;
+  hasOrgVoices: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   return (
     <Dialog onOpenChange={onOpenChange} open={persona !== null}>
@@ -82,7 +82,7 @@ export function EditPersonaDialog({
         ) : null}
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function PersonaForm({
@@ -90,14 +90,14 @@ function PersonaForm({
   hasOrgVoices,
   onClose,
 }: {
-  persona: Persona
-  hasOrgVoices: boolean
-  onClose: () => void
+  persona: Persona;
+  hasOrgVoices: boolean;
+  onClose: () => void;
 }) {
-  const [language, setLanguage] = React.useState<Language>(persona.language)
-  const [gender, setGender] = React.useState<Gender>(persona.gender)
-  const [prompt, setPrompt] = React.useState(persona.prompt)
-  const [voiceId, setVoiceId] = React.useState(persona.voiceId)
+  const [language, setLanguage] = React.useState<Language>(persona.language);
+  const [gender, setGender] = React.useState<Gender>(persona.gender);
+  const [prompt, setPrompt] = React.useState(persona.prompt);
+  const [voiceId, setVoiceId] = React.useState(persona.voiceId);
 
   return (
     <>
@@ -191,7 +191,7 @@ function PersonaForm({
         <Button onClick={onClose}>Save changes</Button>
       </DialogFooter>
     </>
-  )
+  );
 }
 
 /** The organization's own voices first, then Sarj's short list — both filtered by the persona's language and gender. */
@@ -202,25 +202,25 @@ function VoiceSection({
   value,
   onChange,
 }: {
-  language: Language
-  gender: Gender
-  hasOrgVoices: boolean
-  value: string
-  onChange: (id: string) => void
+  language: Language;
+  gender: Gender;
+  hasOrgVoices: boolean;
+  value: string;
+  onChange: (id: string) => void;
 }) {
-  const [playing, setPlaying] = React.useState<string | null>(null)
+  const [playing, setPlaying] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    if (!playing) return
-    const timer = window.setTimeout(() => setPlaying(null), 2400)
-    return () => window.clearTimeout(timer)
-  }, [playing])
+    if (!playing) return;
+    const timer = window.setTimeout(() => setPlaying(null), 2400);
+    return () => window.clearTimeout(timer);
+  }, [playing]);
 
   const offered = VOICES.filter(
     (voice) => voice.language === language && voice.gender === gender,
-  )
-  const own = hasOrgVoices ? offered.filter((v) => v.owner === "org") : []
-  const sarj = offered.filter((v) => v.owner === "sarj")
+  );
+  const own = hasOrgVoices ? offered.filter((v) => v.owner === "org") : [];
+  const sarj = offered.filter((v) => v.owner === "sarj");
 
   const card = (voice: Voice) => (
     <VoiceCard
@@ -230,7 +230,7 @@ function VoiceSection({
       selected={voice.id === value}
       voice={voice}
     />
-  )
+  );
 
   return (
     <section className="flex flex-col gap-4">
@@ -258,7 +258,7 @@ function VoiceSection({
         </div>
       </RadioGroup>
     </section>
-  )
+  );
 }
 
 /** The label stretches over the card; Preview sits above it so playing never selects. */
@@ -268,10 +268,10 @@ function VoiceCard({
   playing,
   onPreview,
 }: {
-  voice: Voice
-  selected: boolean
-  playing: boolean
-  onPreview: () => void
+  voice: Voice;
+  selected: boolean;
+  playing: boolean;
+  onPreview: () => void;
 }) {
   return (
     <Item
@@ -306,7 +306,7 @@ function VoiceCard({
         </Button>
       </ItemActions>
     </Item>
-  )
+  );
 }
 
 /** Sits where the organization's first voice would, the same size as one; opens the DES-198 clone flow. */
@@ -327,5 +327,5 @@ function CloneTile() {
         </ItemContent>
       </button>
     </Item>
-  )
+  );
 }

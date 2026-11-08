@@ -1,12 +1,12 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
-import { TOPIC_FIGURE_VIEWBOX } from "./frame"
+import { TOPIC_FIGURE_VIEWBOX } from "./frame";
 
 /* Every motion tile draws inside one box: x 60 to 200, y 76 to 196. */
-const L = 60
-const R = 200
-const T = 76
-const B = 196
+const L = 60;
+const R = 200;
+const T = 76;
+const B = 196;
 
 function EasingFigure({ className }: FigureProps) {
   return (
@@ -21,12 +21,12 @@ function EasingFigure({ className }: FigureProps) {
         <circle cx="109.7" cy={T} r="4" />
       </g>
     </Figure>
-  )
+  );
 }
 
 /** Durations must match eslint-rules/rules/motion-tokens.mjs. */
 function DurationFigure({ className }: FigureProps) {
-  const x = (ms: number) => L + (ms * (R - L)) / 300
+  const x = (ms: number) => L + (ms * (R - L)) / 300;
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
       <g {...LINE}>
@@ -51,7 +51,7 @@ function DurationFigure({ className }: FigureProps) {
         300ms
       </text>
     </Figure>
-  )
+  );
 }
 
 function AnimatableFigure({ className }: FigureProps) {
@@ -71,7 +71,7 @@ function AnimatableFigure({ className }: FigureProps) {
         <path d="M90 116h72m-8-6 8 6-8 6" opacity=".7" />
       </g>
     </Figure>
-  )
+  );
 }
 
 function ReducedMotionFigure({ className }: FigureProps) {
@@ -85,11 +85,11 @@ function ReducedMotionFigure({ className }: FigureProps) {
         <rect height="40" rx="6" width="40" x={L} y={B - 40} />
       </g>
     </Figure>
-  )
+  );
 }
 
 function MotionPerformanceFigure({ className }: FigureProps) {
-  const bars = [52, 64, 44, 70, 58, 48]
+  const bars = [52, 64, 44, 70, 58, 48];
   return (
     <Figure className={className} viewBox={TOPIC_FIGURE_VIEWBOX}>
       <g {...LINE}>
@@ -108,7 +108,7 @@ function MotionPerformanceFigure({ className }: FigureProps) {
         ))}
       </g>
     </Figure>
-  )
+  );
 }
 
 export const MOTION_FIGURES: Record<
@@ -120,4 +120,4 @@ export const MOTION_FIGURES: Record<
   animatable: AnimatableFigure,
   "reduced-motion": ReducedMotionFigure,
   "motion-performance": MotionPerformanceFigure,
-}
+};

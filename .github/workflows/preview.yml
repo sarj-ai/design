@@ -73,16 +73,7 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          set -o pipefail
-          npx wrangler versions upload 2>&1 | tee upload.log
-          # Wrangler prints "Version Preview URL: https://<prefix>-design-lab.<subdomain>.workers.dev"
-          url="$(grep -oE 'https://[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev' upload.log | head -1)"
-          if [ -z "$url" ]; then
-            echo "::error::No preview URL in the wrangler output. Version preview URLs may be disabled for this Worker."
-            exit 1
-          fi
-          echo "url=$url" >> "$GITHUB_OUTPUT"
+        run: bash scripts/upload-preview-version.sh
 
       - name: Verify the preview requires Sarj Access
         env:
@@ -95,10 +86,4 @@ jobs:
           PR: ${{ github.event.pull_request.number }}
           URL: ${{ steps.upload.outputs.url }}
           SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          body="**Preview:** $URL
-
-          Built from \`${SHA:0:7}\`. This version is uploaded but takes no production traffic — main is still serving whatever was last deployed."
-          # --edit-last keeps one comment per PR instead of one per push; the
-          # fallback covers the first run, when there is nothing to edit.
-          gh pr comment "$PR" --edit-last --body "$body" || gh pr comment "$PR" --body "$body"
+        run: bash scripts/comment-preview-version.sh

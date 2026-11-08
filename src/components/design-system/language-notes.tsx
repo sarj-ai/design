@@ -1,9 +1,9 @@
 import {
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Badge } from "@/components/ui/badge"
-import { LANGUAGES } from "@/lib/design-system/data"
+} from "@/components/design-system/reference-table";
+import { Badge } from "@/components/ui/badge";
+import { LANGUAGES } from "@/lib/design-system/data";
 
 export function LanguageNotes() {
   return (
@@ -32,5 +32,5 @@ export function LanguageNotes() {
         }))}
       />
     </section>
-  )
+  );
 }

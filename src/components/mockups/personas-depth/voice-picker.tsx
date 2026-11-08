@@ -1,66 +1,66 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
+} from "@/components/ui/input-group";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/item";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 import {
   VOICES,
   type PersonaGender,
   type PersonaLanguage,
-} from "@/lib/mockups/personas-depth-data"
+} from "@/lib/mockups/personas-depth-data";
 import {
   PlayPreviewIcon,
   SearchIcon,
   StopPreviewIcon,
-} from "@/components/mockups/personas-depth/icons"
+} from "@/components/mockups/personas-depth/icons";
 
-const SEARCH_THRESHOLD = 6
+const SEARCH_THRESHOLD = 6;
 
 function useHasMoreBelow(shownCount: number) {
   /* Queried from the wrapper: ScrollArea forwards no ref to its viewport. */
-  const wrapperRef = React.useRef<HTMLDivElement | null>(null)
-  const [hasMore, setHasMore] = React.useState(false)
+  const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+  const [hasMore, setHasMore] = React.useState(false);
 
   React.useEffect(() => {
     const viewport = wrapperRef.current?.querySelector<HTMLElement>(
       "[data-slot=scroll-area-viewport]",
-    )
-    if (!viewport) return
+    );
+    if (!viewport) return;
 
     const measure = () => {
       const remaining =
-        viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight
+        viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight;
       /* 1px slack: fractional scroll heights would leave the fade on at the bottom. */
-      setHasMore(remaining > 1)
-    }
+      setHasMore(remaining > 1);
+    };
 
-    measure()
-    viewport.addEventListener("scroll", measure, { passive: true })
+    measure();
+    viewport.addEventListener("scroll", measure, { passive: true });
 
-    const observer = new ResizeObserver(measure)
-    observer.observe(viewport)
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
 
     return () => {
-      viewport.removeEventListener("scroll", measure)
-      observer.disconnect()
-    }
-  }, [shownCount])
+      viewport.removeEventListener("scroll", measure);
+      observer.disconnect();
+    };
+  }, [shownCount]);
 
-  return { hasMore, wrapperRef }
+  return { hasMore, wrapperRef };
 }
 
 export function VoicePicker({
@@ -69,18 +69,18 @@ export function VoicePicker({
   selectedId,
   onSelect,
 }: {
-  language: PersonaLanguage
-  gender: PersonaGender
-  selectedId: string
-  onSelect: (voiceId: string) => void
+  language: PersonaLanguage;
+  gender: PersonaGender;
+  selectedId: string;
+  onSelect: (voiceId: string) => void;
 }) {
-  const [playingId, setPlayingId] = React.useState<string | null>(null)
-  const [query, setQuery] = React.useState("")
+  const [playingId, setPlayingId] = React.useState<string | null>(null);
+  const [query, setQuery] = React.useState("");
 
   const voices = VOICES.filter(
     (voice) =>
       voice.active && voice.language === language && voice.gender === gender,
-  )
+  );
 
   const shown = query
     ? voices.filter((voice) =>
@@ -88,9 +88,9 @@ export function VoicePicker({
           .toLowerCase()
           .includes(query.toLowerCase()),
       )
-    : voices
+    : voices;
 
-  const { hasMore, wrapperRef } = useHasMoreBelow(shown.length)
+  const { hasMore, wrapperRef } = useHasMoreBelow(shown.length);
 
   if (voices.length === 0) {
     return (
@@ -98,7 +98,7 @@ export function VoicePicker({
         No {gender.toLowerCase()} {language} voices are available yet. Pick a
         different gender, or ask an admin to add one in the voice library.
       </div>
-    )
+    );
   }
 
   return (
@@ -137,8 +137,8 @@ export function VoicePicker({
               </div>
             ) : (
               shown.map((voice) => {
-                const selected = voice.id === selectedId
-                const playing = voice.id === playingId
+                const selected = voice.id === selectedId;
+                const playing = voice.id === playingId;
 
                 return (
                   <div key={voice.id} className="relative">
@@ -187,7 +187,7 @@ export function VoicePicker({
                       {playing ? <StopPreviewIcon /> : <PlayPreviewIcon />}
                     </Button>
                   </div>
-                )
+                );
               })
             )}
           </div>
@@ -201,5 +201,5 @@ export function VoicePicker({
         ) : null}
       </div>
     </div>
-  )
+  );
 }

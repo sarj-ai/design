@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   AlertDialog,
@@ -11,8 +11,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -20,13 +20,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyContent,
@@ -34,8 +34,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/empty";
+import { Switch } from "@/components/ui/switch";
 import {
   Item,
   ItemActions,
@@ -43,44 +43,44 @@ import {
   ItemDescription,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
-import { cn } from "@/lib/utils"
-import type { ConfiguredAlert } from "@/lib/mockups/behavioral-alerts-data"
-import { AlertFormDialog } from "@/components/mockups/behavioral-alerts/alert-form-dialog"
+} from "@/components/ui/item";
+import { cn } from "@/lib/utils";
+import type { ConfiguredAlert } from "@/lib/mockups/behavioral-alerts-data";
+import { AlertFormDialog } from "@/components/mockups/behavioral-alerts/alert-form-dialog";
 import {
   AddAlertIcon,
   FlagsIcon,
   DeleteAlertIcon,
   EditAlertIcon,
   RowMenuIcon,
-} from "@/components/mockups/behavioral-alerts/icons"
-import { PriorityBadge } from "@/components/mockups/behavioral-alerts/severity"
+} from "@/components/mockups/behavioral-alerts/icons";
+import { PriorityBadge } from "@/components/mockups/behavioral-alerts/severity";
 
 export function ScenarioAlertsSection({
   alerts,
   onAlertsChange,
 }: {
-  alerts: ConfiguredAlert[]
-  onAlertsChange: (alerts: ConfiguredAlert[]) => void
+  alerts: ConfiguredAlert[];
+  onAlertsChange: (alerts: ConfiguredAlert[]) => void;
 }) {
-  const [editing, setEditing] = React.useState<ConfiguredAlert | null>(null)
-  const [formOpen, setFormOpen] = React.useState(false)
-  const [deleting, setDeleting] = React.useState<ConfiguredAlert | null>(null)
+  const [editing, setEditing] = React.useState<ConfiguredAlert | null>(null);
+  const [formOpen, setFormOpen] = React.useState(false);
+  const [deleting, setDeleting] = React.useState<ConfiguredAlert | null>(null);
   // Bumped on every open so the form remounts; keying by alert id would not
   // reset a second edit of the same alert.
-  const [formKey, setFormKey] = React.useState(0)
-  const [watching, setWatching] = React.useState(true)
+  const [formKey, setFormKey] = React.useState(0);
+  const [watching, setWatching] = React.useState(true);
 
   function openNew() {
-    setEditing(null)
-    setFormKey((current) => current + 1)
-    setFormOpen(true)
+    setEditing(null);
+    setFormKey((current) => current + 1);
+    setFormOpen(true);
   }
 
   function openEdit(alert: ConfiguredAlert) {
-    setEditing(alert)
-    setFormKey((current) => current + 1)
-    setFormOpen(true)
+    setEditing(alert);
+    setFormKey((current) => current + 1);
+    setFormOpen(true);
   }
 
   function save(alert: ConfiguredAlert) {
@@ -88,14 +88,14 @@ export function ScenarioAlertsSection({
       alerts.some((item) => item.id === alert.id)
         ? alerts.map((item) => (item.id === alert.id ? alert : item))
         : [...alerts, alert],
-    )
-    setFormOpen(false)
+    );
+    setFormOpen(false);
   }
 
   function setEnabled(id: string, enabled: boolean) {
     onAlertsChange(
       alerts.map((item) => (item.id === id ? { ...item, enabled } : item)),
-    )
+    );
   }
 
   return (
@@ -160,7 +160,7 @@ export function ScenarioAlertsSection({
                   onClick={
                     watching
                       ? () => {
-                          openEdit(alert)
+                          openEdit(alert);
                         }
                       : undefined
                   }
@@ -183,7 +183,7 @@ export function ScenarioAlertsSection({
 
                   <ItemActions
                     onClick={(event) => {
-                      event.stopPropagation()
+                      event.stopPropagation();
                     }}
                   >
                     <Switch
@@ -191,7 +191,7 @@ export function ScenarioAlertsSection({
                       checked={alert.enabled}
                       disabled={!watching}
                       onCheckedChange={(checked) => {
-                        setEnabled(alert.id, checked)
+                        setEnabled(alert.id, checked);
                       }}
                     />
 
@@ -209,7 +209,7 @@ export function ScenarioAlertsSection({
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
                           onClick={() => {
-                            openEdit(alert)
+                            openEdit(alert);
                           }}
                         >
                           <EditAlertIcon />
@@ -217,7 +217,7 @@ export function ScenarioAlertsSection({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => {
-                            setDeleting(alert)
+                            setDeleting(alert);
                           }}
                           variant="destructive"
                         >
@@ -244,7 +244,7 @@ export function ScenarioAlertsSection({
 
       <AlertDialog
         onOpenChange={(open) => {
-          if (!open) setDeleting(null)
+          if (!open) setDeleting(null);
         }}
         open={deleting !== null}
       >
@@ -260,9 +260,11 @@ export function ScenarioAlertsSection({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                if (!deleting) return
-                onAlertsChange(alerts.filter((item) => item.id !== deleting.id))
-                setDeleting(null)
+                if (!deleting) return;
+                onAlertsChange(
+                  alerts.filter((item) => item.id !== deleting.id),
+                );
+                setDeleting(null);
               }}
               variant="destructive"
             >
@@ -272,5 +274,5 @@ export function ScenarioAlertsSection({
         </AlertDialogContent>
       </AlertDialog>
     </>
-  )
+  );
 }

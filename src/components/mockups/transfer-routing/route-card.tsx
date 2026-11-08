@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   KEYPAD_KEYS,
   TRANSFER_MODES,
@@ -37,14 +37,14 @@ import {
   type SharedSettings,
   type TransferMode,
   type WorkingHours,
-} from "@/lib/mockups/transfer-routing-data"
-import { CaseField } from "@/components/mockups/transfer-routing/case-field"
+} from "@/lib/mockups/transfer-routing-data";
+import { CaseField } from "@/components/mockups/transfer-routing/case-field";
 import {
   DeleteRouteIcon,
   ExpandIcon,
   ReorderIcon,
   SetDefaultIcon,
-} from "@/components/mockups/transfer-routing/icons"
+} from "@/components/mockups/transfer-routing/icons";
 
 export function RouteCard({
   route,
@@ -63,32 +63,32 @@ export function RouteCard({
   onDragEnter,
   onDragEnd,
 }: {
-  route: Route
-  isDefault: boolean
-  shared: SharedSettings
-  overlappingCases: Set<string>
-  hasOverlap: boolean
-  dragging: boolean
+  route: Route;
+  isDefault: boolean;
+  shared: SharedSettings;
+  overlappingCases: Set<string>;
+  hasOverlap: boolean;
+  dragging: boolean;
   /** The grip is held, so this card may start a drag. */
-  armed: boolean
-  settingsOpen: boolean
-  onChange: (next: Route) => void
-  onDelete: () => void
-  onSetDefault: () => void
-  onArm: (armed: boolean) => void
-  onDragStart: () => void
-  onDragEnter: () => void
-  onDragEnd: () => void
+  armed: boolean;
+  settingsOpen: boolean;
+  onChange: (next: Route) => void;
+  onDelete: () => void;
+  onSetDefault: () => void;
+  onArm: (armed: boolean) => void;
+  onDragStart: () => void;
+  onDragEnter: () => void;
+  onDragEnd: () => void;
 }) {
-  const overrides = overriddenFields(route)
-  const mode = effectiveMode(route, shared)
+  const overrides = overriddenFields(route);
+  const mode = effectiveMode(route, shared);
 
   function patch(next: Partial<Route>) {
-    onChange({ ...route, ...next })
+    onChange({ ...route, ...next });
   }
 
   function patchOverride(next: Partial<Route["overrides"]>) {
-    onChange({ ...route, overrides: { ...route.overrides, ...next } })
+    onChange({ ...route, overrides: { ...route.overrides, ...next } });
   }
 
   return (
@@ -307,7 +307,7 @@ export function RouteCard({
         </Collapsible>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function OverrideRow({
@@ -317,11 +317,11 @@ function OverrideRow({
   onToggle,
   children,
 }: {
-  title: string
-  shared: string
-  overridden: boolean
-  onToggle: (on: boolean) => void
-  children: React.ReactNode
+  title: string;
+  shared: string;
+  overridden: boolean;
+  onToggle: (on: boolean) => void;
+  children: React.ReactNode;
 }) {
   return (
     <Field className="gap-3">
@@ -340,7 +340,7 @@ function OverrideRow({
       </Field>
       {overridden ? children : null}
     </Field>
-  )
+  );
 }
 
 export function WorkingHoursFields({
@@ -348,9 +348,9 @@ export function WorkingHoursFields({
   idPrefix,
   onChange,
 }: {
-  value: WorkingHours
-  idPrefix: string
-  onChange: (next: WorkingHours) => void
+  value: WorkingHours;
+  idPrefix: string;
+  onChange: (next: WorkingHours) => void;
 }) {
   return (
     <div className="flex flex-col gap-3">
@@ -392,5 +392,5 @@ export function WorkingHoursFields({
         />
       </Field>
     </div>
-  )
+  );
 }

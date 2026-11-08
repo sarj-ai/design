@@ -2,25 +2,25 @@ import {
   arbitraryValue,
   collectStrings,
   createClassVisitor,
-} from "../lib/classes.mjs"
+} from "../lib/classes.mjs";
 
 const PALETTE =
-  "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose"
+  "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
 
 const COLOR_UTILITIES =
-  "bg|text|border|ring|ring-offset|fill|stroke|from|via|to|decoration|outline|accent|caret|divide|placeholder|shadow"
+  "bg|text|border|ring|ring-offset|fill|stroke|from|via|to|decoration|outline|accent|caret|divide|placeholder|shadow";
 
 const RAW_PALETTE = new RegExp(
   `^-?(${COLOR_UTILITIES})-(${PALETTE})-\\d{2,3}(\\/\\d{1,3})?$`,
-)
+);
 
 /** `bg-white`, `text-black` — but never `bg-tailwind-black`, which is a token. */
 const RAW_BW = new RegExp(
   `^-?(${COLOR_UTILITIES})-(white|black)(\\/\\d{1,3})?$`,
-)
+);
 
 const COLOR_LITERAL =
-  /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgba?|hsla?|lab|lch|color-mix)\s*\(/
+  /#[0-9a-fA-F]{3,8}\b|\b(?:oklch|oklab|rgba?|hsla?|lab|lch|color-mix)\s*\(/;
 
 const COLOR_STYLE_KEYS = new Set([
   "color",
@@ -41,7 +41,7 @@ const COLOR_STYLE_KEYS = new Set([
   "stroke",
   "boxShadow",
   "textShadow",
-])
+]);
 
 const COLOR_PROPS = new Set([
   "fill",
@@ -50,7 +50,7 @@ const COLOR_PROPS = new Set([
   "backgroundColor",
   "borderColor",
   "activeFill",
-])
+]);
 
 const noRawColor = {
   meta: {
@@ -80,51 +80,51 @@ const noRawColor = {
     const reportClass = ({ node, classes }) => {
       for (const { raw, base } of classes) {
         if (RAW_PALETTE.test(base)) {
-          context.report({ node, messageId: "rawPalette", data: { cls: raw } })
-          continue
+          context.report({ node, messageId: "rawPalette", data: { cls: raw } });
+          continue;
         }
         if (RAW_BW.test(base)) {
           context.report({
             node,
             messageId: "rawBlackWhite",
             data: { cls: raw },
-          })
-          continue
+          });
+          continue;
         }
-        const arbitrary = arbitraryValue(base)
+        const arbitrary = arbitraryValue(base);
         if (arbitrary && COLOR_LITERAL.test(arbitrary)) {
           context.report({
             node,
             messageId: "arbitraryColor",
             data: { cls: raw },
-          })
+          });
         }
       }
-    }
+    };
 
-    const classVisitor = createClassVisitor(reportClass)
+    const classVisitor = createClassVisitor(reportClass);
 
     return {
       ...classVisitor,
 
       JSXAttribute(node) {
         // Keep the className scan — this handler shadows the shared one.
-        classVisitor.JSXAttribute(node)
+        classVisitor.JSXAttribute(node);
 
-        const name = node.name?.name
+        const name = node.name?.name;
 
         if (name === "style") {
-          const expression = node.value?.expression
+          const expression = node.value?.expression;
           if (expression?.type === "ObjectExpression") {
             for (const prop of expression.properties) {
-              if (prop.type !== "Property") continue
-              const key = prop.key?.name ?? prop.key?.value
+              if (prop.type !== "Property") continue;
+              const key = prop.key?.name ?? prop.key?.value;
               if (COLOR_STYLE_KEYS.has(key)) {
                 context.report({
                   node: prop,
                   messageId: "colorStyleKey",
                   data: { key },
-                })
+                });
               }
             }
           }
@@ -134,10 +134,10 @@ const noRawColor = {
                 node: strNode,
                 messageId: "literalInStyle",
                 data: { value },
-              })
+              });
             }
           }
-          return
+          return;
         }
 
         if (COLOR_PROPS.has(name)) {
@@ -147,13 +147,13 @@ const noRawColor = {
                 node: strNode,
                 messageId: "colorProp",
                 data: { prop: name, value },
-              })
+              });
             }
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default noRawColor
+export default noRawColor;

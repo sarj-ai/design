@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { InputGroup, InputGroupInput } from "@/components/ui/input-group"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import type { TimeOfDay } from "@/lib/mockups/call-retry-data"
+import { InputGroup, InputGroupInput } from "@/components/ui/input-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import type { TimeOfDay } from "@/lib/mockups/call-retry-data";
 
 /** Not `<input type="time">`: it only shows AM/PM under an en-US locale. */
 export function TimeOfDayInput({
@@ -15,31 +15,31 @@ export function TimeOfDayInput({
   onChange,
   value,
 }: {
-  disabled?: boolean
+  disabled?: boolean;
   /** Prefix for the two input ids. */
-  id: string
-  invalid?: boolean
+  id: string;
+  invalid?: boolean;
   /** Accessible name for this end of the window; not rendered. */
-  label: string
-  onChange: (value: TimeOfDay) => void
-  value: TimeOfDay
+  label: string;
+  onChange: (value: TimeOfDay) => void;
+  value: TimeOfDay;
 }) {
   /** Raw text while typing, so `2` is not re-padded to `02` under the caret. Cleared on blur. */
   const [draft, setDraft] = React.useState<null | {
-    hour: string
-    minute: string
-  }>(null)
+    hour: string;
+    minute: string;
+  }>(null);
 
   const text = draft ?? {
     hour: value.hour.toString().padStart(2, "0"),
     minute: value.minute.toString().padStart(2, "0"),
-  }
+  };
 
   function edit(part: "hour" | "minute", raw: string) {
-    setDraft({ ...text, [part]: raw })
+    setDraft({ ...text, [part]: raw });
 
-    const parsed = Number(raw)
-    if (raw === "" || Number.isNaN(parsed)) return
+    const parsed = Number(raw);
+    if (raw === "" || Number.isNaN(parsed)) return;
 
     onChange({
       ...value,
@@ -47,7 +47,7 @@ export function TimeOfDayInput({
         part === "hour"
           ? Math.min(Math.max(parsed, 1), 12)
           : Math.min(Math.max(parsed, 0), 59),
-    })
+    });
   }
 
   return (
@@ -63,10 +63,10 @@ export function TimeOfDayInput({
             max={12}
             min={1}
             onBlur={() => {
-              setDraft(null)
+              setDraft(null);
             }}
             onChange={(event) => {
-              edit("hour", event.target.value)
+              edit("hour", event.target.value);
             }}
             type="number"
             value={text.hour}
@@ -84,10 +84,10 @@ export function TimeOfDayInput({
             max={59}
             min={0}
             onBlur={() => {
-              setDraft(null)
+              setDraft(null);
             }}
             onChange={(event) => {
-              edit("minute", event.target.value)
+              edit("minute", event.target.value);
             }}
             type="number"
             value={text.minute}
@@ -98,8 +98,8 @@ export function TimeOfDayInput({
       <ToggleGroup
         disabled={disabled}
         onValueChange={(next) => {
-          if (!next) return
-          onChange({ ...value, meridiem: next as TimeOfDay["meridiem"] })
+          if (!next) return;
+          onChange({ ...value, meridiem: next as TimeOfDay["meridiem"] });
         }}
         type="single"
         value={value.meridiem}
@@ -113,5 +113,5 @@ export function TimeOfDayInput({
         </ToggleGroupItem>
       </ToggleGroup>
     </div>
-  )
+  );
 }

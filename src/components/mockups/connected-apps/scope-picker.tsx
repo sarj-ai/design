@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
   FieldTitle,
-} from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ScrollArea } from "@/components/ui/scroll-area"
+} from "@/components/ui/field";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ALL_SCOPES,
   READ_ONLY_SCOPES,
   SCOPE_GROUPS,
   type Permission,
-} from "@/lib/mockups/connected-apps-data"
+} from "@/lib/mockups/connected-apps-data";
 
-type Preset = "read-only" | "full" | "custom"
+type Preset = "read-only" | "full" | "custom";
 
 const PRESETS: { id: Preset; label: string; help: string }[] = [
   {
@@ -38,21 +38,21 @@ const PRESETS: { id: Preset; label: string; help: string }[] = [
     label: "Custom",
     help: "Pick permissions one by one.",
   },
-]
+];
 
 export function ScopePicker({
   onChange,
   scopes,
 }: {
-  onChange: (scopes: Permission[]) => void
-  scopes: Permission[]
+  onChange: (scopes: Permission[]) => void;
+  scopes: Permission[];
 }) {
-  const [preset, setPreset] = React.useState<Preset>("read-only")
+  const [preset, setPreset] = React.useState<Preset>("read-only");
 
   function selectPreset(next: Preset) {
-    setPreset(next)
-    if (next === "read-only") onChange(READ_ONLY_SCOPES)
-    if (next === "full") onChange(ALL_SCOPES)
+    setPreset(next);
+    if (next === "read-only") onChange(READ_ONLY_SCOPES);
+    if (next === "full") onChange(ALL_SCOPES);
   }
 
   function toggle(permission: Permission, granted: boolean) {
@@ -60,7 +60,7 @@ export function ScopePicker({
       granted
         ? [...scopes, permission]
         : scopes.filter((value) => value !== permission),
-    )
+    );
   }
 
   return (
@@ -149,5 +149,5 @@ export function ScopePicker({
         </div>
       ) : null}
     </Field>
-  )
+  );
 }

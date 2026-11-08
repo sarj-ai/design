@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,22 +8,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   ATTEMPTS_MAX,
   ATTEMPTS_MIN,
@@ -31,9 +31,9 @@ import {
   retryConfigErrors,
   TIMEZONES,
   type RetryConfig,
-} from "@/lib/mockups/call-retry-data"
-import { TimeOfDayInput } from "@/components/mockups/call-retry/time-of-day-field"
-import { WaitDurationField } from "@/components/mockups/call-retry/wait-duration-field"
+} from "@/lib/mockups/call-retry-data";
+import { TimeOfDayInput } from "@/components/mockups/call-retry/time-of-day-field";
+import { WaitDurationField } from "@/components/mockups/call-retry/wait-duration-field";
 
 export function RetrySettingsCard({
   description,
@@ -43,19 +43,19 @@ export function RetrySettingsCard({
   scope,
   value,
 }: {
-  description?: string
-  disabled?: boolean
-  onChange: (value: RetryConfig) => void
-  onSave: () => void
+  description?: string;
+  disabled?: boolean;
+  onChange: (value: RetryConfig) => void;
+  onSave: () => void;
   /** The inheritance control, rendered above the fields. */
-  scope?: React.ReactNode
-  value: RetryConfig
+  scope?: React.ReactNode;
+  value: RetryConfig;
 }) {
-  const errors = retryConfigErrors(value)
-  const fieldsDisabled = disabled || !value.enabled
+  const errors = retryConfigErrors(value);
+  const fieldsDisabled = disabled || !value.enabled;
 
   function update(patch: Partial<RetryConfig>) {
-    onChange({ ...value, ...patch })
+    onChange({ ...value, ...patch });
   }
 
   return (
@@ -83,7 +83,7 @@ export function RetrySettingsCard({
             disabled={disabled}
             id="retry-enabled"
             onCheckedChange={(checked) => {
-              update({ enabled: checked })
+              update({ enabled: checked });
             }}
           />
         </div>
@@ -119,14 +119,14 @@ export function RetrySettingsCard({
               max={ATTEMPTS_MAX}
               min={ATTEMPTS_MIN}
               onChange={(event) => {
-                const next = Number(event.target.value)
-                if (Number.isNaN(next)) return
+                const next = Number(event.target.value);
+                if (Number.isNaN(next)) return;
                 update({
                   attempts: Math.min(
                     Math.max(next, ATTEMPTS_MIN),
                     ATTEMPTS_MAX,
                   ),
-                })
+                });
               }}
               type="number"
               value={value.attempts}
@@ -140,7 +140,7 @@ export function RetrySettingsCard({
             id="retry-wait"
             label="Wait between retries"
             onChange={(wait) => {
-              update({ wait })
+              update({ wait });
             }}
             value={value.wait}
           />
@@ -169,7 +169,7 @@ export function RetrySettingsCard({
                 invalid={errors.window !== null}
                 label="From"
                 onChange={(windowStart) => {
-                  update({ windowStart })
+                  update({ windowStart });
                 }}
                 value={value.windowStart}
               />
@@ -182,7 +182,7 @@ export function RetrySettingsCard({
                 invalid={errors.window !== null}
                 label="To"
                 onChange={(windowEnd) => {
-                  update({ windowEnd })
+                  update({ windowEnd });
                 }}
                 value={value.windowEnd}
               />
@@ -192,7 +192,7 @@ export function RetrySettingsCard({
               <Select
                 disabled={fieldsDisabled}
                 onValueChange={(timezone) => {
-                  update({ timezone })
+                  update({ timezone });
                 }}
                 value={value.timezone}
               >
@@ -224,5 +224,5 @@ export function RetrySettingsCard({
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

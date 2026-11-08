@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -10,9 +10,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { CancelCallIcon } from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { CancelCallIcon } from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function CancelCallDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
@@ -40,5 +40,5 @@ export function CancelCallDialog({ onConfirm }: { onConfirm: () => void }) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

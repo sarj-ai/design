@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   CloseIcon,
@@ -18,19 +18,19 @@ import {
   SortableIcon,
   StepDoneIcon,
   WarningIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 import {
   ReferenceLabel,
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
-} from "@/components/design-system/reference-table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { GlobalRule } from "@/lib/design-system/data"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/reference-table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import type { GlobalRule } from "@/lib/design-system/data";
+import { cn } from "@/lib/utils";
 
 const SCROLL_ROWS = [
   "CL-8842 · Rawabi Holding",
@@ -38,7 +38,7 @@ const SCROLL_ROWS = [
   "CL-8840 · Al Bilad Bank",
   "CL-8839 · Almarai",
   "CL-8838 · Tamimi Markets",
-]
+];
 
 function ScrollRows() {
   return (
@@ -49,7 +49,7 @@ function ScrollRows() {
         </span>
       ))}
     </div>
-  )
+  );
 }
 
 const ICONS = [
@@ -155,7 +155,7 @@ const ICONS = [
     from: "Tick02Icon",
     use: "A step already behind you.",
   },
-]
+];
 
 const SHADOWS = [
   {
@@ -168,7 +168,7 @@ const SHADOWS = [
     name: "ring-1 ring-foreground/10",
     use: "Elevation — what Card draws. The only lift in the system.",
   },
-]
+];
 
 const TYPE = [
   {
@@ -196,7 +196,7 @@ const TYPE = [
     sample: "Supporting text",
     use: "Descriptions and captions. Never smaller — muted says it.",
   },
-]
+];
 
 const GAPS = [
   { cls: "gap-2", px: "8px", use: "An icon and the label it belongs to." },
@@ -216,7 +216,7 @@ const GAPS = [
     use: "Card to card. Pick one of this and gap-4 per page.",
   },
   { cls: "gap-8", px: "32px", use: "Section to section." },
-]
+];
 
 const RADII = [
   {
@@ -231,7 +231,7 @@ const RADII = [
     use: "The base. Panels and bordered boxes.",
   },
   { cls: "rounded-xl", px: "14px", use: "Card and the overlays." },
-]
+];
 
 export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
   switch (id) {
@@ -259,7 +259,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "shadows":
       return (
@@ -278,7 +278,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "typography":
       return (
@@ -299,7 +299,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "spacing":
       return (
@@ -324,7 +324,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "radius":
       return (
@@ -345,7 +345,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             ],
           }))}
         />
-      )
+      );
 
     case "scrollbars":
       return (
@@ -386,7 +386,7 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             },
           ]}
         />
-      )
+      );
 
     case "accessibility":
       return (
@@ -435,6 +435,6 @@ export function FoundationTable({ id }: { id: GlobalRule["id"] }) {
             },
           ]}
         />
-      )
+      );
   }
 }

@@ -1,14 +1,14 @@
-import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs"
+import { jsxAncestors, jsxName, trackUiImports } from "../lib/jsx.mjs";
 
 // Sees nesting written in one file only; a component that renders its own Dialog from another file is missed.
 
-const STACKING = new Set(["Dialog", "Sheet", "Drawer"])
+const STACKING = new Set(["Dialog", "Sheet", "Drawer"]);
 const CONTENT = new Set([
   "DialogContent",
   "SheetContent",
   "DrawerContent",
   "AlertDialogContent",
-])
+]);
 
 const oneOverlay = {
   meta: {
@@ -25,28 +25,28 @@ const oneOverlay = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const inner = imports.ui(jsxName(element.openingElement))
-        if (!STACKING.has(inner)) return
+        const inner = imports.ui(jsxName(element.openingElement));
+        if (!STACKING.has(inner)) return;
 
         for (const ancestor of jsxAncestors(element)) {
-          const outer = imports.ui(jsxName(ancestor.openingElement))
+          const outer = imports.ui(jsxName(ancestor.openingElement));
           if (CONTENT.has(outer)) {
             context.report({
               node: element.openingElement,
               messageId: "stacked",
               data: { inner, outer },
-            })
-            return
+            });
+            return;
           }
         }
       },
-    }
+    };
   },
-}
+};
 
-export default oneOverlay
+export default oneOverlay;

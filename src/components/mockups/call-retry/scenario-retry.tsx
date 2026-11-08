@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
-import type { RetryConfig } from "@/lib/mockups/call-retry-data"
-import { RetrySettingsCard } from "@/components/mockups/call-retry/retry-settings-card"
-import { SaveConfirmDialog } from "@/components/mockups/call-retry/save-confirm-dialog"
+import { RetrySettingsCard } from "@/components/mockups/call-retry/retry-settings-card";
+import { SaveConfirmDialog } from "@/components/mockups/call-retry/save-confirm-dialog";
+import type { RetryConfig } from "@/lib/mockups/call-retry-data";
 
 export function ScenarioRetry({
   config,
@@ -13,12 +13,12 @@ export function ScenarioRetry({
   queued,
   scheduled,
 }: {
-  config: RetryConfig
-  onConfigChange: (config: RetryConfig) => void
-  queued: number
-  scheduled: number
+  config: RetryConfig;
+  onConfigChange: (config: RetryConfig) => void;
+  queued: number;
+  scheduled: number;
 }) {
-  const [confirming, setConfirming] = React.useState(false)
+  const [confirming, setConfirming] = React.useState(false);
 
   return (
     <>
@@ -27,17 +27,17 @@ export function ScenarioRetry({
         onChange={onConfigChange}
         onSave={() => {
           if (queued + scheduled === 0) {
-            toast.success("Retry settings saved")
-            return
+            toast.success("Retry settings saved");
+            return;
           }
-          setConfirming(true)
+          setConfirming(true);
         }}
         value={config}
       />
 
       <SaveConfirmDialog
         onConfirm={() => {
-          toast.success("Retry settings saved")
+          toast.success("Retry settings saved");
         }}
         onOpenChange={setConfirming}
         open={confirming}
@@ -45,5 +45,5 @@ export function ScenarioRetry({
         scheduled={scheduled}
       />
     </>
-  )
+  );
 }

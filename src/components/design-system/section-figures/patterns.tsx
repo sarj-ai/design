@@ -1,6 +1,6 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
-import { SECTION_FIGURE_VIEWBOX } from "./frame"
+import { SECTION_FIGURE_VIEWBOX } from "./frame";
 
 /** Sizes mirror shared/data-table.tsx, drawn at 0.8 units per pixel. */
 export function PatternsFigure({ className }: FigureProps) {
@@ -62,5 +62,5 @@ export function PatternsFigure({ className }: FigureProps) {
         40px
       </text>
     </Figure>
-  )
+  );
 }

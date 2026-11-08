@@ -102,7 +102,7 @@ write instead.
 
 `npm run lint` reports zero problems, and it is worth keeping it there: the
 moment a warning is normal, new ones stop being visible. The only exemption in
-`eslint.config.mjs` is `src/components/ui` and `src/hooks`, which
+`oxlint.config.mts` is `src/components/ui` and `src/hooks`, which
 `npx shadcn add` regenerates wholesale.
 
 ## Layout
@@ -117,7 +117,7 @@ src/lib/mockups/<slug>-data.ts      mock data
 src/lib/site/mockups-data.ts        the index registry
 src/app/globals.css                 every token: colour, z-layers
 eslint-rules/                       the sarj/* plugin
-scripts/                            new-mockup.mjs, screenshots.mjs
+scripts/                            new-mockup.mts, screenshots.mjs
 .claude/skills/                     every skill — sarj-mockup, sarj-lint, sarj-brand…
 docs/                               audits and handoff notes
 ```

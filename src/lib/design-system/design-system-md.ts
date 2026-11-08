@@ -17,15 +17,15 @@ import {
   TABLE_RULES,
   type DocsSection,
   type Rule,
-} from "@/lib/design-system/data"
-import { foundationsBody } from "@/lib/design-system/foundations-skill"
+} from "@/lib/design-system/data";
+import { foundationsBody } from "@/lib/design-system/foundations-skill";
 import {
   COMPONENT_ENTRIES,
   DESIGN_SYSTEM_ITEM,
   componentItem,
   installCommand,
-} from "@/lib/design-system/registry-items"
-import { registryUrl } from "@/lib/site/registry"
+} from "@/lib/design-system/registry-items";
+import { registryUrl } from "@/lib/site/registry";
 
 /*
  * The whole design system as one markdown file, written for an agent to load before it builds a
@@ -34,17 +34,17 @@ import { registryUrl } from "@/lib/site/registry"
  */
 
 function rules(list: Rule[]): string[] {
-  return list.map((rule) => `- **${rule.label}** — ${rule.detail}`)
+  return list.map((rule) => `- **${rule.label}** — ${rule.detail}`);
 }
 
 function topicsOf(section: DocsSection) {
-  return section.groups.flatMap((group) => group.pages)
+  return section.groups.flatMap((group) => group.pages);
 }
 
 function section(id: string): DocsSection {
-  const found = DOCS_SECTIONS.find((item) => item.id === id)
-  if (!found) throw new Error(`No design-system section "${id}"`)
-  return found
+  const found = DOCS_SECTIONS.find((item) => item.id === id);
+  if (!found) throw new Error(`No design-system section "${id}"`);
+  return found;
 }
 
 /*
@@ -52,29 +52,29 @@ function section(id: string): DocsSection {
  * the reader of this file is often someone, or an agent, who cannot sign in to the rest of it.
  */
 function componentLines(id: string, title: string, description: string) {
-  if (!(id in COMPONENT_ENTRIES)) return [`- **${title}** — ${description}`]
-  const item = componentItem(id)
+  if (!(id in COMPONENT_ENTRIES)) return [`- **${title}** — ${description}`];
+  const item = componentItem(id);
   return [
     `- **${title}** — ${description}`,
     `  - Source: ${registryUrl(item)}`,
     `  - Install: \`${installCommand(item)}\``,
-  ]
+  ];
 }
 
 /** Joins two data fields as two sentences, whether or not the first already ends in punctuation. */
 function sentences(first: string, second: string) {
-  return /[.!?:]$/.test(first) ? `${first} ${second}` : `${first}. ${second}`
+  return /[.!?:]$/.test(first) ? `${first} ${second}` : `${first}. ${second}`;
 }
 
 /** Foundations' own headings start at `##`; under this file's `## Foundations` they sit one level lower. */
 function demoted(lines: string[]) {
-  return lines.map((line) => (line.startsWith("#") ? `#${line}` : line))
+  return lines.map((line) => (line.startsWith("#") ? `#${line}` : line));
 }
 
-const FOUNDATIONS = section("foundations")
-const MOTION = section("motion")
-const PATTERN_SECTION = section("patterns")
-const COMPONENTS = section("product-components")
+const FOUNDATIONS = section("foundations");
+const MOTION = section("motion");
+const PATTERN_SECTION = section("patterns");
+const COMPONENTS = section("product-components");
 
 export const DESIGN_SYSTEM_MD = [
   "---",
@@ -201,4 +201,4 @@ export const DESIGN_SYSTEM_MD = [
     componentLines(topic.id, topic.title, topic.description),
   ),
   "",
-].join("\n")
+].join("\n");

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { AddVoiceDialog } from "@/components/mockups/add-voice/add-voice-dialog"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { AddVoiceDialog } from "@/components/mockups/add-voice/add-voice-dialog";
 
 export default function AddVoicePage() {
   return (
@@ -13,5 +13,5 @@ export default function AddVoicePage() {
         <AddVoiceDialog />
       </main>
     </MockupShell>
-  )
+  );
 }

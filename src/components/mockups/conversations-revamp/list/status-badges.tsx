@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   SCHEDULE_ORIGIN_LABELS,
   type AgentOutcomeStatus,
@@ -9,7 +9,7 @@ import {
   type CallStatus,
   type OutcomeStatus,
   type ScheduleOrigin,
-} from "@/lib/mockups/conversations-revamp-list-data"
+} from "@/lib/mockups/conversations-revamp-list-data";
 import {
   CalendarIcon,
   CompletedIcon,
@@ -24,9 +24,9 @@ import {
   TimeIcon,
   VoicemailIcon,
   CallOutgoingIcon,
-} from "@/components/mockups/conversations-revamp/list/icons"
+} from "@/components/mockups/conversations-revamp/list/icons";
 
-type Tone = "danger" | "neutral" | "scheduled" | "success" | "warning"
+type Tone = "danger" | "neutral" | "scheduled" | "success" | "warning";
 
 const TONE: Record<Tone, string> = {
   danger: "bg-destructive-tint text-destructive-tint-foreground",
@@ -34,7 +34,7 @@ const TONE: Record<Tone, string> = {
   scheduled: "bg-primary-tint text-primary-tint-foreground",
   success: "bg-success-tint text-success-tint-foreground",
   warning: "bg-warning-tint text-warning-tint-foreground",
-}
+};
 
 // `variant="secondary"` only drops the default primary fill; the tone class
 // supplies the colours.
@@ -43,15 +43,15 @@ function Chip({
   className,
   tone = "neutral",
 }: {
-  children: React.ReactNode
-  className?: string
-  tone?: Tone
+  children: React.ReactNode;
+  className?: string;
+  tone?: Tone;
 }) {
   return (
     <Badge className={cn(TONE[tone], className)} variant="secondary">
       {children}
     </Badge>
-  )
+  );
 }
 
 const STATUS_DISPLAY: Record<
@@ -81,32 +81,32 @@ const STATUS_DISPLAY: Record<
   },
   user_rejected: { label: "Failed", reason: "user rejected", tone: "danger" },
   voicemail: { label: "Failed", reason: "voicemail", tone: "danger" },
-}
+};
 
 function StatusIcon({ status }: { status: CallStatus }) {
   switch (status) {
     case "completed":
-      return <CompletedIcon />
+      return <CompletedIcon />;
     case "in_progress":
     case "dialing":
-      return <RunningIcon />
+      return <RunningIcon />;
     case "transferring":
     case "transferred":
-      return <CallOutgoingIcon />
+      return <CallOutgoingIcon />;
     case "timeout":
     case "expired":
     case "user_rejected":
     case "cancelled":
-      return <NotAnsweredIcon />
+      return <NotAnsweredIcon />;
     case "queued":
     case "ringing":
-      return <TimeIcon />
+      return <TimeIcon />;
     case "scheduled":
-      return <CalendarIcon />
+      return <CalendarIcon />;
     case "voicemail":
-      return <VoicemailIcon />
+      return <VoicemailIcon />;
     default:
-      return <NoticeIcon />
+      return <NoticeIcon />;
   }
 }
 
@@ -114,15 +114,15 @@ export function StatusBadge({
   scheduleOrigin,
   status,
 }: {
-  scheduleOrigin?: ScheduleOrigin
-  status: CallStatus
+  scheduleOrigin?: ScheduleOrigin;
+  status: CallStatus;
 }) {
-  const { label, reason, tone } = STATUS_DISPLAY[status]
+  const { label, reason, tone } = STATUS_DISPLAY[status];
 
   const cause =
     status === "scheduled" && scheduleOrigin
       ? SCHEDULE_ORIGIN_LABELS[scheduleOrigin]
-      : reason
+      : reason;
 
   return (
     <Chip tone={tone}>
@@ -130,11 +130,11 @@ export function StatusBadge({
       {label}
       {cause ? <span className="opacity-70">– {cause}</span> : null}
     </Chip>
-  )
+  );
 }
 
 export function OutcomeBadge({ status }: { status: OutcomeStatus }) {
-  if (status === "unavailable") return <NoVerdict />
+  if (status === "unavailable") return <NoVerdict />;
 
   return status === "met" ? (
     <Chip tone="success">
@@ -146,11 +146,11 @@ export function OutcomeBadge({ status }: { status: OutcomeStatus }) {
       <FailureIcon />
       Not met
     </Chip>
-  )
+  );
 }
 
 export function AgentOutcomeBadge({ status }: { status: AgentOutcomeStatus }) {
-  if (status === "unavailable") return <NoVerdict />
+  if (status === "unavailable") return <NoVerdict />;
 
   return status === "helpful" ? (
     <Chip tone="success">
@@ -162,11 +162,11 @@ export function AgentOutcomeBadge({ status }: { status: AgentOutcomeStatus }) {
       <NotHelpfulIcon />
       Not helpful
     </Chip>
-  )
+  );
 }
 
 function NoVerdict() {
-  return <span className="text-sm text-muted-foreground">Unavailable</span>
+  return <span className="text-sm text-muted-foreground">Unavailable</span>;
 }
 
 export function DirectionChip({ direction }: { direction: CallDirection }) {
@@ -175,9 +175,9 @@ export function DirectionChip({ direction }: { direction: CallDirection }) {
       {direction === "inbound" ? <InboundIcon /> : <OutboundIcon />}
       {direction}
     </Chip>
-  )
+  );
 }
 
 export function ScenarioChip({ scenario }: { scenario: string }) {
-  return <Chip className="max-w-50 truncate">{scenario}</Chip>
+  return <Chip className="max-w-50 truncate">{scenario}</Chip>;
 }

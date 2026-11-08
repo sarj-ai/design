@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
-import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Drawer,
   DrawerClose,
@@ -13,62 +13,62 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Item, ItemContent, ItemGroup } from "@/components/ui/item"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/input-group";
+import { Item, ItemContent, ItemGroup } from "@/components/ui/item";
+import { Separator } from "@/components/ui/separator";
 import {
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { TabsContent } from "@/components/ui/tabs"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   DataTable,
   DataTableHead,
   DataTableHeaderRow,
-} from "@/components/shared/data-table"
-import { FilterBar, SelectFilter } from "@/components/shared/filter-bar"
-import { ListFooter } from "@/components/shared/list-footer"
+} from "@/components/shared/data-table";
+import { FilterBar, SelectFilter } from "@/components/shared/filter-bar";
+import { ListFooter } from "@/components/shared/list-footer";
 import {
   CloseIcon,
   NextRecordIcon,
   PreviousRecordIcon,
   SearchIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 import {
   SurfaceDemo,
   useRecordKeys,
-} from "@/components/design-system/surface-demos"
-import { SurfaceDiagram } from "@/components/design-system/surface-diagram"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { cn } from "@/lib/utils"
+} from "@/components/design-system/surface-demos";
+import { SurfaceDiagram } from "@/components/design-system/surface-diagram";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { cn } from "@/lib/utils";
 import {
   SURFACE_CHOICES,
   SURFACE_RULES,
   type SurfaceId,
   type SurfaceRuleId,
-} from "@/lib/design-system/data"
+} from "@/lib/design-system/data";
 import {
   SURFACE_AUDIT,
   VERDICT_LABEL,
   type AuditRow,
   type Verdict,
-} from "@/lib/design-system/surface-audit"
+} from "@/lib/design-system/surface-audit";
 
 const TABS = [
   { id: "decide", label: "Decide" },
   { id: "rules", label: "Rules" },
   { id: "dry-run", label: "Dry run" },
-]
+];
 
-type Task = "configuring" | "creating" | "picking" | "reading" | "confirming"
+type Task = "configuring" | "creating" | "picking" | "reading" | "confirming";
 
 const TASKS: { id: Task; label: string }[] = [
   { id: "configuring", label: "Configuring" },
@@ -76,9 +76,9 @@ const TASKS: { id: Task; label: string }[] = [
   { id: "picking", label: "Picking" },
   { id: "reading", label: "Reading a record" },
   { id: "confirming", label: "Confirming" },
-]
+];
 
-type Answer = { id: string; label: string; surface: SurfaceId }
+type Answer = { id: string; label: string; surface: SurfaceId };
 
 const FOLLOW_UP: Partial<
   Record<Task, { question: string; answers: Answer[] }>
@@ -119,12 +119,12 @@ const FOLLOW_UP: Partial<
       },
     ],
   },
-}
+};
 
 const DIRECT: Partial<Record<Task, SurfaceId>> = {
   picking: "popover",
   reading: "record",
-}
+};
 
 const LEADS_TO: Record<SurfaceId, { task: Task; answer?: string }> = {
   inline: { task: "configuring", answer: "one" },
@@ -135,16 +135,16 @@ const LEADS_TO: Record<SurfaceId, { task: Task; answer?: string }> = {
   drawer: { task: "configuring", answer: "more" },
   record: { task: "reading" },
   page: { task: "creating", answer: "object" },
-}
+};
 
 type AuditFilters = {
-  query: string
-  areas: string[]
-  verdicts: string[]
-  today: string[]
-  should: string[]
-  breaks: string[]
-}
+  query: string;
+  areas: string[];
+  verdicts: string[];
+  today: string[];
+  should: string[];
+  breaks: string[];
+};
 
 const NO_FILTERS: AuditFilters = {
   query: "",
@@ -153,28 +153,28 @@ const NO_FILTERS: AuditFilters = {
   today: [],
   should: [],
   breaks: [],
-}
+};
 
 const SURFACE_TITLE = Object.fromEntries(
   SURFACE_CHOICES.map((choice) => [choice.id, choice.title]),
-) as Record<SurfaceId, string>
+) as Record<SurfaceId, string>;
 
 const RULE_LABEL = Object.fromEntries(
   SURFACE_RULES.map((rule) => [rule.id, rule.label]),
-) as Record<SurfaceRuleId, string>
+) as Record<SurfaceRuleId, string>;
 
 function breaking(rule: SurfaceRuleId) {
-  return SURFACE_AUDIT.filter((row) => row.breaks.includes(rule)).length
+  return SURFACE_AUDIT.filter((row) => row.breaks.includes(rule)).length;
 }
 
 export function SurfaceDecisionPreview() {
-  const [tab, setTab] = React.useState("decide")
-  const [filters, setFilters] = React.useState<AuditFilters>(NO_FILTERS)
+  const [tab, setTab] = React.useState("decide");
+  const [filters, setFilters] = React.useState<AuditFilters>(NO_FILTERS);
 
   const openDryRun = (patch: Partial<AuditFilters>) => {
-    setFilters({ ...NO_FILTERS, ...patch })
-    setTab("dry-run")
-  }
+    setFilters({ ...NO_FILTERS, ...patch });
+    setTab("dry-run");
+  };
 
   return (
     <SecondaryTabs items={TABS} onValueChange={setTab} value={tab}>
@@ -188,24 +188,24 @@ export function SurfaceDecisionPreview() {
         <DryRun filters={filters} onFiltersChange={setFilters} />
       </TabsContent>
     </SecondaryTabs>
-  )
+  );
 }
 
 function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
-  const [task, setTask] = React.useState<Task>("configuring")
+  const [task, setTask] = React.useState<Task>("configuring");
   const [answers, setAnswers] = React.useState<Partial<Record<Task, string>>>({
     configuring: "more",
     creating: "object",
     confirming: "no",
-  })
+  });
 
-  const followUp = FOLLOW_UP[task]
+  const followUp = FOLLOW_UP[task];
   const surface: SurfaceId =
     DIRECT[task] ??
     followUp?.answers.find((entry) => entry.id === answers[task])?.surface ??
-    "drawer"
-  const choice = SURFACE_CHOICES.find((entry) => entry.id === surface)!
-  const sentHere = SURFACE_AUDIT.filter((row) => row.should === surface).length
+    "drawer";
+  const choice = SURFACE_CHOICES.find((entry) => entry.id === surface)!;
+  const sentHere = SURFACE_AUDIT.filter((row) => row.should === surface).length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -250,7 +250,7 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
 
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {SURFACE_CHOICES.map((entry) => {
-              const selected = entry.id === surface
+              const selected = entry.id === surface;
               return (
                 <Item
                   asChild
@@ -266,13 +266,13 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
                   <button
                     aria-pressed={selected}
                     onClick={() => {
-                      const lead = LEADS_TO[entry.id]
-                      setTask(lead.task)
+                      const lead = LEADS_TO[entry.id];
+                      setTask(lead.task);
                       if (lead.answer) {
                         setAnswers((current) => ({
                           ...current,
                           [lead.task]: lead.answer,
-                        }))
+                        }));
                       }
                     }}
                     type="button"
@@ -286,7 +286,7 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
                     </span>
                   </button>
                 </Item>
-              )
+              );
             })}
           </div>
         </CardContent>
@@ -365,22 +365,22 @@ function Decide({ onShowRows }: { onShowRows: (surface: SurfaceId) => void }) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function Question({
   label,
   children,
 }: {
-  label: string
-  children: React.ReactNode
+  label: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-2">
       <span className="text-sm font-medium">{label}</span>
       {children}
     </div>
-  )
+  );
 }
 
 function Row({ term, children }: { term: string; children: React.ReactNode }) {
@@ -389,7 +389,7 @@ function Row({ term, children }: { term: string; children: React.ReactNode }) {
       <dt className="text-xs font-medium text-muted-foreground">{term}</dt>
       <dd className="text-foreground">{children}</dd>
     </div>
-  )
+  );
 }
 
 /* Numbered straight through, so "rule 7" means one thing wherever it is quoted. */
@@ -403,9 +403,9 @@ const RULE_GROUPS: { label: string; rules: SurfaceRuleId[] }[] = [
     rules: ["undo-first", "confirm-copy", "red", "typed"],
   },
   { label: "Lists", rules: ["record-url", "picker"] },
-]
+];
 
-const RULE_ORDER = RULE_GROUPS.flatMap((group) => group.rules)
+const RULE_ORDER = RULE_GROUPS.flatMap((group) => group.rules);
 
 function Rules({ onShowRows }: { onShowRows: (rule: SurfaceRuleId) => void }) {
   return (
@@ -417,8 +417,8 @@ function Rules({ onShowRows }: { onShowRows: (rule: SurfaceRuleId) => void }) {
           </h3>
           <ItemGroup className="gap-0">
             {group.rules.map((id, index) => {
-              const rule = SURFACE_RULES.find((entry) => entry.id === id)!
-              const count = breaking(id)
+              const rule = SURFACE_RULES.find((entry) => entry.id === id)!;
+              const count = breaking(id);
               return (
                 <React.Fragment key={id}>
                   {index > 0 ? <Separator /> : null}
@@ -452,13 +452,13 @@ function Rules({ onShowRows }: { onShowRows: (rule: SurfaceRuleId) => void }) {
                     </div>
                   </Item>
                 </React.Fragment>
-              )
+              );
             })}
           </ItemGroup>
         </section>
       ))}
     </Card>
-  )
+  );
 }
 
 const VERDICT_TINT: Record<Verdict, string> = {
@@ -468,32 +468,32 @@ const VERDICT_TINT: Record<Verdict, string> = {
   "add-confirm": "bg-warning-tint text-warning-tint-foreground",
   "drop-confirm": "bg-info-tint text-info-tint-foreground",
   "add-undo": "bg-info-tint text-info-tint-foreground",
-}
+};
 
 function options(values: string[], label = (value: string) => value) {
   return Array.from(new Set(values)).map((value) => ({
     value,
     label: label(value),
-  }))
+  }));
 }
 
-const AREA_OPTIONS = options(SURFACE_AUDIT.map((row) => row.area))
+const AREA_OPTIONS = options(SURFACE_AUDIT.map((row) => row.area));
 const VERDICT_OPTIONS = options(
   SURFACE_AUDIT.map((row) => row.verdict),
   (value) => VERDICT_LABEL[value as Verdict],
-)
-const TODAY_OPTIONS = options(SURFACE_AUDIT.map((row) => row.today))
+);
+const TODAY_OPTIONS = options(SURFACE_AUDIT.map((row) => row.today));
 const SHOULD_OPTIONS = SURFACE_CHOICES.map((choice) => ({
   value: choice.id,
   label: choice.title,
-}))
+}));
 const BREAKS_OPTIONS = SURFACE_RULES.map((rule) => ({
   value: rule.id,
   label: rule.label,
-}))
+}));
 
 function matches(row: AuditRow, filters: AuditFilters) {
-  const query = filters.query.trim().toLowerCase()
+  const query = filters.query.trim().toLowerCase();
   return (
     (!query ||
       row.what.toLowerCase().includes(query) ||
@@ -504,7 +504,7 @@ function matches(row: AuditRow, filters: AuditFilters) {
     (!filters.should.length || filters.should.includes(row.should)) &&
     (!filters.breaks.length ||
       filters.breaks.some((rule) => row.breaks.includes(rule as SurfaceRuleId)))
-  )
+  );
 }
 
 const VERDICT_ORDER: Verdict[] = [
@@ -514,33 +514,33 @@ const VERDICT_ORDER: Verdict[] = [
   "add-undo",
   "drop-confirm",
   "keep",
-]
+];
 
 function DryRun({
   filters,
   onFiltersChange,
 }: {
-  filters: AuditFilters
-  onFiltersChange: (filters: AuditFilters) => void
+  filters: AuditFilters;
+  onFiltersChange: (filters: AuditFilters) => void;
 }) {
-  const [pageSize, setPageSize] = React.useState(25)
-  const [page, setPage] = React.useState(0)
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null)
+  const [pageSize, setPageSize] = React.useState(25);
+  const [page, setPage] = React.useState(0);
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 
   const set = (patch: Partial<AuditFilters>) => {
-    onFiltersChange({ ...filters, ...patch })
-    setPage(0)
-  }
+    onFiltersChange({ ...filters, ...patch });
+    setPage(0);
+  };
 
-  const rows = SURFACE_AUDIT.filter((row) => matches(row, filters))
-  const pages = Math.max(1, Math.ceil(rows.length / pageSize))
-  const current = Math.min(page, pages - 1)
-  const visible = rows.slice(current * pageSize, (current + 1) * pageSize)
+  const rows = SURFACE_AUDIT.filter((row) => matches(row, filters));
+  const pages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const current = Math.min(page, pages - 1);
+  const visible = rows.slice(current * pageSize, (current + 1) * pageSize);
 
   const counts = VERDICT_ORDER.map((verdict) => ({
     verdict,
     count: SURFACE_AUDIT.filter((row) => row.verdict === verdict).length,
-  })).filter((entry) => entry.count)
+  })).filter((entry) => entry.count);
 
   const activeCount = [
     filters.areas,
@@ -548,7 +548,7 @@ function DryRun({
     filters.today,
     filters.should,
     filters.breaks,
-  ].filter((value) => value.length).length
+  ].filter((value) => value.length).length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -558,7 +558,7 @@ function DryRun({
         </p>
         <div className="grid grid-cols-3 gap-3 lg:grid-cols-6">
           {counts.map((entry) => {
-            const selected = filters.verdicts.includes(entry.verdict)
+            const selected = filters.verdicts.includes(entry.verdict);
             return (
               <Item
                 asChild
@@ -592,7 +592,7 @@ function DryRun({
                   </span>
                 </button>
               </Item>
-            )
+            );
           })}
         </div>
       </div>
@@ -713,8 +713,8 @@ function DryRun({
         onFirst={() => setPage(0)}
         onNext={() => setPage(current + 1)}
         onPageSizeChange={(size) => {
-          setPageSize(size)
-          setPage(0)
+          setPageSize(size);
+          setPage(0);
         }}
         onPrevious={() => setPage(current - 1)}
         pageSize={pageSize}
@@ -724,7 +724,7 @@ function DryRun({
 
       <AuditRecord index={openIndex} onIndexChange={setOpenIndex} rows={rows} />
     </div>
-  )
+  );
 }
 
 function AuditRecord({
@@ -732,17 +732,17 @@ function AuditRecord({
   index,
   onIndexChange,
 }: {
-  rows: AuditRow[]
-  index: number | null
-  onIndexChange: (index: number | null) => void
+  rows: AuditRow[];
+  index: number | null;
+  onIndexChange: (index: number | null) => void;
 }) {
-  const row = index === null ? null : rows[index]
+  const row = index === null ? null : rows[index];
 
   const step = (by: number) => {
-    if (index === null) return
-    onIndexChange(Math.min(rows.length - 1, Math.max(0, index + by)))
-  }
-  useRecordKeys(row !== null, step)
+    if (index === null) return;
+    onIndexChange(Math.min(rows.length - 1, Math.max(0, index + by)));
+  };
+  useRecordKeys(row !== null, step);
 
   return (
     <Drawer
@@ -844,5 +844,5 @@ function AuditRecord({
         ) : null}
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

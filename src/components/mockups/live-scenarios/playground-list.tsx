@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Item, ItemContent, ItemTitle } from "@/components/ui/item"
-import { LiveBadge } from "@/components/mockups/live-scenarios/status-chip"
-import { SearchScenariosIcon } from "@/components/mockups/live-scenarios/icons"
-import { SCENARIOS } from "@/lib/mockups/live-scenarios-data"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/input-group";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
+import { LiveBadge } from "@/components/mockups/live-scenarios/status-chip";
+import { SearchScenariosIcon } from "@/components/mockups/live-scenarios/icons";
+import { SCENARIOS } from "@/lib/mockups/live-scenarios-data";
+import { cn } from "@/lib/utils";
 
-const SELECTED = "border-primary ring-1 ring-primary"
+const SELECTED = "border-primary ring-1 ring-primary";
 
 export function PlaygroundList() {
-  const [query, setQuery] = React.useState("")
-  const [selected, setSelected] = React.useState(SCENARIOS[2].id)
+  const [query, setQuery] = React.useState("");
+  const [selected, setSelected] = React.useState(SCENARIOS[2].id);
 
   const rows = SCENARIOS.filter((row) =>
     row.name.toLowerCase().includes(query.trim().toLowerCase()),
-  )
+  );
 
   return (
     <div className="flex h-full w-80 flex-col border-e bg-background">
@@ -77,5 +77,5 @@ export function PlaygroundList() {
         ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -12,7 +12,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,15 +20,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty"
-import { Field, FieldLabel, FieldSeparator } from "@/components/ui/field"
+} from "@/components/ui/empty";
+import { Field, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import {
   Item,
   ItemActions,
@@ -36,16 +36,16 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import {
   COOLDOWN_OPTIONS,
   FREQUENCY_MIN,
@@ -61,8 +61,8 @@ import {
   setWeight,
   type CueConfig,
   type Language,
-} from "@/lib/mockups/listener-cues-data"
-import { CueRow } from "@/components/mockups/listener-cues/cue-row"
+} from "@/lib/mockups/listener-cues-data";
+import { CueRow } from "@/components/mockups/listener-cues/cue-row";
 import {
   AddCueIcon,
   CloseIcon,
@@ -70,7 +70,7 @@ import {
   NoClipsIcon,
   OverrideIcon,
   PickerChevronIcon,
-} from "@/components/mockups/listener-cues/icons"
+} from "@/components/mockups/listener-cues/icons";
 
 export function ListenerCuesDrawer({
   config,
@@ -83,33 +83,33 @@ export function ListenerCuesDrawer({
   open,
   persona,
 }: {
-  config: CueConfig
+  config: CueConfig;
   /** Persona scope only: the persona has no override yet. */
-  inherited: boolean
-  language: Language
-  onChange: (config: CueConfig) => void
-  onCreateOverride: () => void
-  onOpenChange: (open: boolean) => void
-  onRemoveOverride: () => void
-  open: boolean
+  inherited: boolean;
+  language: Language;
+  onChange: (config: CueConfig) => void;
+  onCreateOverride: () => void;
+  onOpenChange: (open: boolean) => void;
+  onRemoveOverride: () => void;
+  open: boolean;
   /** Undefined in global settings. */
-  persona?: string
+  persona?: string;
 }) {
-  const fieldId = React.useId()
-  const clips = approvedClips(language, config.cues)
-  const inMixCount = clips.filter((entry) => entry.inMix).length
-  const shown = displayWeights(config.cues)
+  const fieldId = React.useId();
+  const clips = approvedClips(language, config.cues);
+  const inMixCount = clips.filter((entry) => entry.inMix).length;
+  const shown = displayWeights(config.cues);
 
   /** Offsets for the scale's minimum and the thumb's inset, so marks sit under the thumb. */
-  const span = 100 - FREQUENCY_MIN
-  const THUMB_PX = 12
+  const span = 100 - FREQUENCY_MIN;
+  const THUMB_PX = 12;
   const at = (value: number) =>
-    `calc(${(value - FREQUENCY_MIN) / span} * (100% - ${THUMB_PX}px) + ${THUMB_PX / 2}px)`
-  const bandWidth = `calc(${(RECOMMENDED.max - RECOMMENDED.min) / span} * (100% - ${THUMB_PX}px))`
+    `calc(${(value - FREQUENCY_MIN) / span} * (100% - ${THUMB_PX}px) + ${THUMB_PX / 2}px)`;
+  const bandWidth = `calc(${(RECOMMENDED.max - RECOMMENDED.min) / span} * (100% - ${THUMB_PX}px))`;
   /** Half the value label's own width, so it can be kept on the track. */
-  const VALUE_HALF_PX = 20
+  const VALUE_HALF_PX = 20;
 
-  const set = (patch: Partial<CueConfig>) => onChange({ ...config, ...patch })
+  const set = (patch: Partial<CueConfig>) => onChange({ ...config, ...patch });
 
   return (
     <Drawer direction="right" onOpenChange={onOpenChange} open={open}>
@@ -426,5 +426,5 @@ export function ListenerCuesDrawer({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Image from "next/image"
+import * as React from "react";
+import Image from "next/image";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { TabsContent } from "@/components/ui/tabs"
-import { PageHeader } from "@/components/shared/page-header"
-import { SecondaryTabs } from "@/components/design-system/tabs-preview"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { TabsContent } from "@/components/ui/tabs";
+import { PageHeader } from "@/components/shared/page-header";
+import { SecondaryTabs } from "@/components/design-system/tabs-preview";
+import { cn } from "@/lib/utils";
 
-type Flow = { from: string; to: string; direction: "in" | "out" }
+type Flow = { from: string; to: string; direction: "in" | "out" };
 
 type Integration = {
-  id: string
-  name: string
-  logo: string
-  description: string
-  connected: boolean
-  staffOnly: boolean
-  flows: Flow[]
+  id: string;
+  name: string;
+  logo: string;
+  description: string;
+  connected: boolean;
+  staffOnly: boolean;
+  flows: Flow[];
   /** Events a day over the last week, oldest first. */
-  activity?: number[]
-  lastEvent?: string
-  health?: { tone: "ok" | "warn"; text: string; action?: string }
-  offers?: string[]
-}
+  activity?: number[];
+  lastEvent?: string;
+  health?: { tone: "ok" | "warn"; text: string; action?: string };
+  offers?: string[];
+};
 
 const INTEGRATIONS: Integration[] = [
   {
@@ -78,19 +78,19 @@ const INTEGRATIONS: Integration[] = [
       "Write call results back to the record",
     ],
   },
-]
+];
 
-const CONNECTED = INTEGRATIONS.filter((item) => item.connected)
-const AVAILABLE = INTEGRATIONS.filter((item) => !item.connected)
+const CONNECTED = INTEGRATIONS.filter((item) => item.connected);
+const AVAILABLE = INTEGRATIONS.filter((item) => !item.connected);
 
 const VARIANTS = [
   { id: "flow", label: "Flow" },
   { id: "activity", label: "Activity" },
   { id: "hub", label: "Hub" },
-]
+];
 
 export function IntegrationCardPreview() {
-  const [variant, setVariant] = React.useState("flow")
+  const [variant, setVariant] = React.useState("flow");
 
   return (
     <SecondaryTabs items={VARIANTS} value={variant} onValueChange={setVariant}>
@@ -118,7 +118,7 @@ export function IntegrationCardPreview() {
         </Frame>
       </TabsContent>
     </SecondaryTabs>
-  )
+  );
 }
 
 function Frame({ children }: { children: React.ReactNode }) {
@@ -129,15 +129,15 @@ function Frame({ children }: { children: React.ReactNode }) {
         {children}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function Logo({
   integration,
   size = "md",
 }: {
-  integration: Integration
-  size?: "sm" | "md"
+  integration: Integration;
+  size?: "sm" | "md";
 }) {
   return (
     <span
@@ -154,7 +154,7 @@ function Logo({
         width={40}
       />
     </span>
-  )
+  );
 }
 
 function SarjMark() {
@@ -168,7 +168,7 @@ function SarjMark() {
         width={40}
       />
     </span>
-  )
+  );
 }
 
 function Title({ integration }: { integration: Integration }) {
@@ -186,12 +186,12 @@ function Title({ integration }: { integration: Integration }) {
         {integration.description}
       </span>
     </div>
-  )
+  );
 }
 
 function Health({ integration }: { integration: Integration }) {
-  const health = integration.health
-  if (!health) return null
+  const health = integration.health;
+  if (!health) return null;
   return (
     <div className="flex min-w-0 items-center gap-2 text-xs">
       <span
@@ -212,22 +212,22 @@ function Health({ integration }: { integration: Integration }) {
         {health.text}
       </span>
     </div>
-  )
+  );
 }
 
 function PrimaryAction({ integration }: { integration: Integration }) {
-  if (!integration.connected) return <Button size="sm">Connect</Button>
+  if (!integration.connected) return <Button size="sm">Connect</Button>;
   if (integration.health?.action)
     return (
       <Button size="sm" variant="outline">
         {integration.health.action}
       </Button>
-    )
+    );
   return (
     <Button size="sm" variant="ghost">
       Manage
     </Button>
-  )
+  );
 }
 
 function FlowCard({ integration }: { integration: Integration }) {
@@ -272,21 +272,21 @@ function FlowCard({ integration }: { integration: Integration }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function FlowLine({
   direction,
   pending = false,
 }: {
-  direction: "in" | "out"
-  pending?: boolean
+  direction: "in" | "out";
+  pending?: boolean;
 }) {
   const tone = pending
     ? "border-muted-foreground"
     : direction === "in"
       ? "border-primary"
-      : "border-chart-2"
+      : "border-chart-2";
 
   return (
     <span
@@ -306,13 +306,13 @@ function FlowLine({
         )}
       />
     </span>
-  )
+  );
 }
 
 function ActivityCard({ integration }: { integration: Integration }) {
-  const activity = integration.activity ?? []
-  const peak = Math.max(1, ...activity)
-  const total = activity.reduce((sum, value) => sum + value, 0)
+  const activity = integration.activity ?? [];
+  const peak = Math.max(1, ...activity);
+  const total = activity.reduce((sum, value) => sum + value, 0);
 
   return (
     <Card size="sm">
@@ -374,7 +374,7 @@ function ActivityCard({ integration }: { integration: Integration }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function Hub() {
@@ -438,5 +438,5 @@ function Hub() {
         ))}
       </div>
     </div>
-  )
+  );
 }

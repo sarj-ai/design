@@ -1,9 +1,9 @@
-import type { FigureProps } from "@/components/shared/figure"
+import type { FigureProps } from "@/components/shared/figure";
 
-import { FOUNDATIONS_FIGURES } from "./foundations"
-import { MOTION_FIGURES } from "./motion"
-import { PATTERNS_A_FIGURES } from "./patterns-a"
-import { PATTERNS_B_FIGURES } from "./patterns-b"
+import { FOUNDATIONS_FIGURES } from "./foundations";
+import { MOTION_FIGURES } from "./motion";
+import { PATTERNS_A_FIGURES } from "./patterns-a";
+import { PATTERNS_B_FIGURES } from "./patterns-b";
 
 export const TOPIC_FIGURES: Record<
   string,
@@ -13,4 +13,4 @@ export const TOPIC_FIGURES: Record<
   ...MOTION_FIGURES,
   ...PATTERNS_A_FIGURES,
   ...PATTERNS_B_FIGURES,
-}
+};

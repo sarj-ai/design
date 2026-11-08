@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
 import {
   ArrowLeft01Icon,
   ArrowLeftDoubleIcon,
   ArrowRight01Icon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { icon } from "@/components/shared/icon"
+} from "@/components/ui/select";
+import { icon } from "@/components/shared/icon";
 
-const FirstIcon = icon(ArrowLeftDoubleIcon, "FirstIcon")
-const PreviousIcon = icon(ArrowLeft01Icon, "PreviousIcon")
-const NextIcon = icon(ArrowRight01Icon, "NextIcon")
+const FirstIcon = icon(ArrowLeftDoubleIcon, "FirstIcon");
+const PreviousIcon = icon(ArrowLeft01Icon, "PreviousIcon");
+const NextIcon = icon(ArrowRight01Icon, "NextIcon");
 
-const PAGE_SIZES = [10, 25, 50, 100] as const
+const PAGE_SIZES = [10, 25, 50, 100] as const;
 
 export function ListFooter({
   from,
@@ -37,22 +37,22 @@ export function ListFooter({
   onNext,
 }: {
   /** Position of the first row on this page, counting from 1. */
-  from: number
+  from: number;
   /** Rows on this page. */
-  shown: number
+  shown: number;
   /** Rows across every page. */
-  total: number
+  total: number;
   /** Plural, lower case: "scenarios", "calls". */
-  noun: string
-  pageSize: number
-  onPageSizeChange?: (size: number) => void
-  atStart?: boolean
-  atEnd?: boolean
-  onFirst?: () => void
-  onPrevious?: () => void
-  onNext?: () => void
+  noun: string;
+  pageSize: number;
+  onPageSizeChange?: (size: number) => void;
+  atStart?: boolean;
+  atEnd?: boolean;
+  onFirst?: () => void;
+  onPrevious?: () => void;
+  onNext?: () => void;
 }) {
-  const to = from + shown - 1
+  const to = from + shown - 1;
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground">
@@ -112,5 +112,5 @@ export function ListFooter({
         </ButtonGroup>
       </div>
     </div>
-  )
+  );
 }

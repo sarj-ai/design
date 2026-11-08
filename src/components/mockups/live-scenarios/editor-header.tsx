@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { LiveSwitch } from "@/components/shared/live-switch"
+} from "@/components/ui/dropdown-menu";
+import { LiveSwitch } from "@/components/shared/live-switch";
 import {
   RunScenarioIcon,
   ScenarioMenuIcon,
-} from "@/components/mockups/live-scenarios/icons"
-import type { LiveRecord } from "@/lib/mockups/live-scenarios-data"
+} from "@/components/mockups/live-scenarios/icons";
+import type { LiveRecord } from "@/lib/mockups/live-scenarios-data";
 
 export function EditorHeader({
   scenario,
@@ -23,12 +23,12 @@ export function EditorHeader({
   onToggle,
   onDelete,
 }: {
-  scenario: string
-  live: LiveRecord | null
-  pending: boolean
-  canToggle: boolean
-  onToggle: (on: boolean) => void
-  onDelete: () => void
+  scenario: string;
+  live: LiveRecord | null;
+  pending: boolean;
+  canToggle: boolean;
+  onToggle: (on: boolean) => void;
+  onDelete: () => void;
 }) {
   return (
     <header className="flex items-start justify-between gap-6">
@@ -67,5 +67,5 @@ export function EditorHeader({
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   AlertDialog,
@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 export function SaveConfirmDialog({
   onConfirm,
@@ -18,11 +18,11 @@ export function SaveConfirmDialog({
   queued,
   scheduled,
 }: {
-  onConfirm: () => void
-  onOpenChange: (open: boolean) => void
-  open: boolean
-  queued: number
-  scheduled: number
+  onConfirm: () => void;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+  queued: number;
+  scheduled: number;
 }) {
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
@@ -45,5 +45,5 @@ export function SaveConfirmDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

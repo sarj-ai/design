@@ -1,6 +1,6 @@
-import { Separator } from "@/components/ui/separator"
-import { RuleList } from "@/components/design-system/rule-list"
-import type { PatternAnatomy as Anatomy } from "@/lib/design-system/data"
+import { Separator } from "@/components/ui/separator";
+import { RuleList } from "@/components/design-system/rule-list";
+import type { PatternAnatomy as Anatomy } from "@/lib/design-system/data";
 
 export function PatternAnatomy({ pattern }: { pattern: Anatomy }) {
   return (
@@ -32,5 +32,5 @@ export function PatternAnatomy({ pattern }: { pattern: Anatomy }) {
         </>
       ) : null}
     </div>
-  )
+  );
 }

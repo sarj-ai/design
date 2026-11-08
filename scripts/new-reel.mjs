@@ -1,13 +1,13 @@
 // Usage: npm run new:reel -- <slug> [--title …] [--description …] [--meta …] [--eyebrow …] [--icon …] [--seconds N]
 
-import { access, mkdir, readFile, writeFile } from "node:fs/promises"
-import path from "node:path"
-import process from "node:process"
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import process from "node:process";
 
-const REGISTRY = "src/lib/site/reels-data.ts"
+const REGISTRY = "src/lib/site/reels-data.ts";
 const ICON_IMPORT_BLOCK =
-  /import \{([^}]*)\} from "@hugeicons\/core-free-icons"/
-const SENTINEL = "  // `npm run new:reel` appends new reels above this line."
+  /import \{([^}]*)\} from "@hugeicons\/core-free-icons"/;
+const SENTINEL = "  // `npm run new:reel` appends new reels above this line.";
 
 const OPTIONS = {
   title: "",
@@ -16,33 +16,33 @@ const OPTIONS = {
   eyebrow: "Release reel",
   icon: "VideoReplayIcon",
   seconds: "38",
-}
+};
 
 function parseArgs(argv) {
-  const args = { ...OPTIONS, slug: "" }
+  const args = { ...OPTIONS, slug: "" };
 
   for (let i = 0; i < argv.length; i += 1) {
-    const arg = argv[i]
+    const arg = argv[i];
 
     if (!arg.startsWith("--")) {
-      if (args.slug) throw new Error(`Unexpected second slug: ${arg}`)
-      args.slug = arg.replace(/^\//, "")
-      continue
+      if (args.slug) throw new Error(`Unexpected second slug: ${arg}`);
+      args.slug = arg.replace(/^\//, "");
+      continue;
     }
 
-    const key = arg.slice(2)
-    if (!(key in OPTIONS)) throw new Error(`Unknown option --${key}`)
-    args[key] = argv[++i] ?? ""
+    const key = arg.slice(2);
+    if (!(key in OPTIONS)) throw new Error(`Unknown option --${key}`);
+    args[key] = argv[++i] ?? "";
   }
 
   if (!args.slug) {
-    throw new Error("Which reel? e.g. npm run new:reel -- release-17")
+    throw new Error("Which reel? e.g. npm run new:reel -- release-17");
   }
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(args.slug)) {
-    throw new Error(`Slug must be kebab-case: ${args.slug}`)
+    throw new Error(`Slug must be kebab-case: ${args.slug}`);
   }
 
-  return args
+  return args;
 }
 
 function titleFrom(slug) {
@@ -51,27 +51,27 @@ function titleFrom(slug) {
     .map((word, index) =>
       index === 0 ? word[0].toUpperCase() + word.slice(1) : word,
     )
-    .join(" ")
+    .join(" ");
 }
 
 function componentFrom(slug) {
   return `${slug
     .split("-")
     .map((word) => word[0].toUpperCase() + word.slice(1))
-    .join("")}Reel`
+    .join("")}Reel`;
 }
 
 async function exists(target) {
   try {
-    await access(target)
-    return true
+    await access(target);
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
 
 function routeFile({ slug, title, eyebrow }) {
-  const component = componentFrom(slug)
+  const component = componentFrom(slug);
 
   return `import { ReelPage } from "@/components/reels/reel-page"
 import { ${component}, DURATION } from "@/components/reels/${slug}/reel"
@@ -94,11 +94,11 @@ export default async function Page({
     </ReelPage>
   )
 }
-`
+`;
 }
 
 function compositionFile({ slug, title, seconds: length }) {
-  const component = componentFrom(slug)
+  const component = componentFrom(slug);
 
   return `"use client"
 
@@ -190,7 +190,7 @@ export function ${component}() {
     </>
   )
 }
-`
+`;
 }
 
 function registryEntry({
@@ -210,73 +210,73 @@ function registryEntry({
     icon: ${icon},
     duration: ${length} * FPS,
   },
-`
+`;
 }
 
 function withIconImport(source, icon) {
-  const match = source.match(ICON_IMPORT_BLOCK)
-  if (!match) throw new Error("No HugeIcons import block in the registry")
+  const match = source.match(ICON_IMPORT_BLOCK);
+  if (!match) throw new Error("No HugeIcons import block in the registry");
 
   const names = match[1]
     .split(",")
     .map((name) => name.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 
-  if (names.includes(icon)) return source
+  if (names.includes(icon)) return source;
 
-  const sorted = [...names, icon].sort((a, b) => a.localeCompare(b))
+  const sorted = [...names, icon].sort((a, b) => a.localeCompare(b));
   return source.replace(
     ICON_IMPORT_BLOCK,
     `import {\n  ${sorted.join(",\n  ")},\n} from "@hugeicons/core-free-icons"`,
-  )
+  );
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2))
-  const title = args.title || titleFrom(args.slug)
-  const meta = args.meta || `${args.eyebrow} · ${args.seconds}s`
+  const args = parseArgs(process.argv.slice(2));
+  const title = args.title || titleFrom(args.slug);
+  const meta = args.meta || `${args.eyebrow} · ${args.seconds}s`;
   const description =
-    args.description || `${title}. Replace this with what the reel covers.`
+    args.description || `${title}. Replace this with what the reel covers.`;
 
-  const routeDir = path.join("src", "app", "reels", args.slug)
-  const componentDir = path.join("src", "components", "reels", args.slug)
-  const shotsDir = path.join("public", "reels", args.slug)
+  const routeDir = path.join("src", "app", "reels", args.slug);
+  const componentDir = path.join("src", "components", "reels", args.slug);
+  const shotsDir = path.join("public", "reels", args.slug);
 
   if (await exists(routeDir)) {
-    throw new Error(`/reels/${args.slug} already exists`)
+    throw new Error(`/reels/${args.slug} already exists`);
   }
 
-  let registry = await readFile(REGISTRY, "utf8")
+  let registry = await readFile(REGISTRY, "utf8");
   if (registry.includes(`href: "/reels/${args.slug}"`)) {
-    throw new Error(`${args.slug} is already on the reel index`)
+    throw new Error(`${args.slug} is already on the reel index`);
   }
   if (!registry.includes(SENTINEL)) {
-    throw new Error(`Lost the sentinel in ${REGISTRY}`)
+    throw new Error(`Lost the sentinel in ${REGISTRY}`);
   }
 
-  await mkdir(routeDir, { recursive: true })
-  await mkdir(componentDir, { recursive: true })
-  await mkdir(shotsDir, { recursive: true })
+  await mkdir(routeDir, { recursive: true });
+  await mkdir(componentDir, { recursive: true });
+  await mkdir(shotsDir, { recursive: true });
 
   await writeFile(
     path.join(routeDir, "page.tsx"),
     routeFile({ ...args, title }),
-  )
+  );
   await writeFile(
     path.join(componentDir, "reel.tsx"),
     compositionFile({ ...args, title }),
-  )
+  );
   await writeFile(
     path.join(shotsDir, "README.md"),
     `# ${title} — screenshots\n\nDrop 2x captures of the product here, then point each \`<Shot focus={…}>\`\nat the region that matters, in the screenshot's own pixels.\n\nCrop off the design-lab shell header and the Agentation dev overlay — neither\nis product UI. Real customer names must not reach a video that leaves the\ncompany.\n`,
-  )
+  );
 
-  registry = withIconImport(registry, args.icon)
+  registry = withIconImport(registry, args.icon);
   registry = registry.replace(
     SENTINEL,
     `${registryEntry({ ...args, title, meta, description })}${SENTINEL}`,
-  )
-  await writeFile(REGISTRY, registry)
+  );
+  await writeFile(REGISTRY, registry);
 
   console.log(`
   ${routeDir}/page.tsx
@@ -288,7 +288,7 @@ Next:
   1. Put 2x screenshots in ${shotsDir}
   2. Rewrite ${componentDir}/reel.tsx — the skeleton is wiring, not a design
   3. npm run reel -- ${args.slug}
-`)
+`);
 }
 
-await main()
+await main();

@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 
 import {
   Table,
@@ -7,26 +7,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 type ReferenceColumn = {
-  header: string
+  header: string;
   /** A literal width class: Tailwind only emits utilities it sees spelled out. Omit on the column that takes the remaining width. */
-  width?: string
-}
+  width?: string;
+};
 
 export type ReferenceRow = {
-  key: string
-  cells: React.ReactNode[]
-}
+  key: string;
+  cells: React.ReactNode[];
+};
 
 export function ReferenceTable({
   columns,
   rows,
 }: {
-  columns: ReferenceColumn[]
-  rows: ReferenceRow[]
+  columns: ReferenceColumn[];
+  rows: ReferenceRow[];
 }) {
   return (
     <div className="overflow-hidden rounded-lg border">
@@ -64,15 +64,15 @@ export function ReferenceTable({
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
 
 export function ReferenceName({ children }: { children: React.ReactNode }) {
-  return <span className="font-mono text-sm">{children}</span>
+  return <span className="font-mono text-sm">{children}</span>;
 }
 
 export function ReferenceLabel({ children }: { children: React.ReactNode }) {
-  return <span className="text-sm font-medium">{children}</span>
+  return <span className="text-sm font-medium">{children}</span>;
 }
 
 export function ReferenceNote({ children }: { children: React.ReactNode }) {
@@ -80,5 +80,5 @@ export function ReferenceNote({ children }: { children: React.ReactNode }) {
     <span className="text-sm leading-relaxed text-muted-foreground">
       {children}
     </span>
-  )
+  );
 }

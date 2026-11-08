@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,49 +11,49 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   DEFAULT_FALLBACK_VOICE_ID,
   FALLBACK_VOICES,
   GENDERS,
   LANGUAGES,
   PROVIDERS,
-} from "@/lib/mockups/add-voice-data"
-import { FallbackVoicePicker } from "@/components/mockups/add-voice/fallback-voice-picker"
-import { FieldHelpIcon } from "@/components/mockups/add-voice/icons"
+} from "@/lib/mockups/add-voice-data";
+import { FallbackVoicePicker } from "@/components/mockups/add-voice/fallback-voice-picker";
+import { FieldHelpIcon } from "@/components/mockups/add-voice/icons";
 
 export function AddVoiceDialog() {
-  const [open, setOpen] = React.useState(true)
-  const [provider, setProvider] = React.useState(PROVIDERS[0].value)
-  const [fallbackId, setFallbackId] = React.useState(DEFAULT_FALLBACK_VOICE_ID)
+  const [open, setOpen] = React.useState(true);
+  const [provider, setProvider] = React.useState(PROVIDERS[0].value);
+  const [fallbackId, setFallbackId] = React.useState(DEFAULT_FALLBACK_VOICE_ID);
 
   const defaultModel =
-    PROVIDERS.find((option) => option.value === provider)?.defaultModel ?? ""
+    PROVIDERS.find((option) => option.value === provider)?.defaultModel ?? "";
 
   const fallback =
     FALLBACK_VOICES.find((voice) => voice.id === fallbackId) ??
-    FALLBACK_VOICES[0]
+    FALLBACK_VOICES[0];
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
@@ -201,5 +201,5 @@ export function AddVoiceDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

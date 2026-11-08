@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { motion, useReducedMotion } from "motion/react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import * as React from "react"
+import { motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import * as React from "react";
 
-import { ClearIcon, SearchIcon } from "@/components/shell/workspace-icons"
-import { Command } from "@/components/ui/command"
-import { Kbd } from "@/components/ui/kbd"
+import { ClearIcon, SearchIcon } from "@/components/shell/workspace-icons";
+import { Command } from "@/components/ui/command";
+import { Kbd } from "@/components/ui/kbd";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { DOCS_SECTIONS } from "@/lib/design-system/data"
-import { docsHref } from "@/lib/design-system/nav"
-import { MOCKUPS } from "@/lib/site/mockups-data"
-import { REELS } from "@/lib/site/reels-data"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/input-group";
+import { DOCS_SECTIONS } from "@/lib/design-system/data";
+import { docsHref } from "@/lib/design-system/nav";
+import { MOCKUPS } from "@/lib/site/mockups-data";
+import { REELS } from "@/lib/site/reels-data";
+import { cn } from "@/lib/utils";
 
 /* `COLLAPSED` matches `InputGroup`'s `h-8`. Width is animated on purpose:
    scaleX would stretch the corner radius over a ~7x growth. */
-const COLLAPSED = 36
-const EXPANDED = 268
+const COLLAPSED = 36;
+const EXPANDED = 268;
 
-const MAX_RESULTS = 7
+const MAX_RESULTS = 7;
 
-type Hit = { group: string; href: string; title: string }
+type Hit = { group: string; href: string; title: string };
 
 const HAYSTACK: Hit[] = [
   ...DOCS_SECTIONS.flatMap((section) =>
@@ -49,23 +49,23 @@ const HAYSTACK: Hit[] = [
     href: entry.href,
     title: entry.title,
   })),
-]
+];
 
 function search(term: string): Hit[] {
-  const needle = term.trim().toLowerCase()
-  if (!needle) return []
+  const needle = term.trim().toLowerCase();
+  if (!needle) return [];
 
   return HAYSTACK.filter((hit) => hit.title.toLowerCase().includes(needle))
     .sort((a, b) => {
       const lead =
         Number(b.title.toLowerCase().startsWith(needle)) -
-        Number(a.title.toLowerCase().startsWith(needle))
-      return lead || a.title.length - b.title.length
+        Number(a.title.toLowerCase().startsWith(needle));
+      return lead || a.title.length - b.title.length;
     })
-    .slice(0, MAX_RESULTS)
+    .slice(0, MAX_RESULTS);
 }
 
-const NEVER_CHANGES = () => () => {}
+const NEVER_CHANGES = () => () => {};
 
 /** Empty until hydration: the server cannot know the reader's keyboard. */
 function useModifierKey() {
@@ -73,101 +73,101 @@ function useModifierKey() {
     NEVER_CHANGES,
     () => (navigator.userAgent.includes("Mac") ? "⌘" : "Ctrl"),
     () => "",
-  )
+  );
 }
 
 export function NavSearch() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const reduced = useReducedMotion()
-  const modifier = useModifierKey()
+  const router = useRouter();
+  const pathname = usePathname();
+  const reduced = useReducedMotion();
+  const modifier = useModifierKey();
 
-  const [open, setOpen] = React.useState(false)
-  const [term, setTerm] = React.useState("")
-  const [active, setActive] = React.useState(0)
+  const [open, setOpen] = React.useState(false);
+  const [term, setTerm] = React.useState("");
+  const [active, setActive] = React.useState(0);
 
-  const rootRef = React.useRef<HTMLDivElement>(null)
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const hits = React.useMemo(() => search(term), [term])
+  const hits = React.useMemo(() => search(term), [term]);
 
   const close = React.useCallback(() => {
-    setOpen(false)
-    setTerm("")
-    setActive(0)
-  }, [])
+    setOpen(false);
+    setTerm("");
+    setActive(0);
+  }, []);
 
   // ⌘F deliberately overrides the browser's find bar.
   React.useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase()
-      if (key !== "f" && key !== "k") return
-      if (!event.metaKey && !event.ctrlKey) return
+      const key = event.key.toLowerCase();
+      if (key !== "f" && key !== "k") return;
+      if (!event.metaKey && !event.ctrlKey) return;
 
-      event.preventDefault()
-      setOpen(true)
-      inputRef.current?.focus()
-      inputRef.current?.select()
-    }
+      event.preventDefault();
+      setOpen(true);
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    };
 
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [])
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // `pointerdown` rather than `click` so it closes on the press that starts an interaction elsewhere.
   React.useEffect(() => {
-    if (!open) return
+    if (!open) return;
 
     const onDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) close()
-    }
+      if (!rootRef.current?.contains(event.target as Node)) close();
+    };
 
-    window.addEventListener("pointerdown", onDown)
-    return () => window.removeEventListener("pointerdown", onDown)
-  }, [close, open])
+    window.addEventListener("pointerdown", onDown);
+    return () => window.removeEventListener("pointerdown", onDown);
+  }, [close, open]);
 
-  const spotTimer = React.useRef<number | undefined>(undefined)
+  const spotTimer = React.useRef<number | undefined>(undefined);
 
   // On the index, a mockup hit scrolls to its card and lights it instead of leaving the page.
   const spotlight = React.useCallback(
     (slug: string) => {
-      const card = document.getElementById(`mockup-${slug}`)
-      if (!card) return false
+      const card = document.getElementById(`mockup-${slug}`);
+      if (!card) return false;
 
       card.scrollIntoView({
         behavior: reduced ? "auto" : "smooth",
         block: "center",
-      })
+      });
       // One card lit at a time; a new pick clears the last one and its timer.
-      window.clearTimeout(spotTimer.current)
+      window.clearTimeout(spotTimer.current);
       document
         .querySelectorAll("[data-spotlight]")
-        .forEach((lit) => lit.removeAttribute("data-spotlight"))
+        .forEach((lit) => lit.removeAttribute("data-spotlight"));
       // Re-adding on the next frame restarts the animation when the same card is picked twice.
       // The timer starts inside the frame, so a late frame cannot light the card after it was cleared.
       requestAnimationFrame(() => {
-        card.setAttribute("data-spotlight", "")
+        card.setAttribute("data-spotlight", "");
         spotTimer.current = window.setTimeout(
           () => card.removeAttribute("data-spotlight"),
           5000,
-        )
-      })
-      return true
+        );
+      });
+      return true;
     },
     [reduced],
-  )
+  );
 
   const go = (hit: Hit) => {
-    close()
+    close();
     if (
       hit.group === "Mockups" &&
       pathname === "/" &&
       spotlight(hit.href.slice(1))
     ) {
-      return
+      return;
     }
-    router.push(hit.href)
-  }
+    router.push(hit.href);
+  };
 
   return (
     <div className="relative size-9 shrink-0" ref={rootRef}>
@@ -190,11 +190,11 @@ export function NavSearch() {
               aria-label={open ? "Close search" : "Search the lab"}
               onClick={() => {
                 if (open) {
-                  close()
-                  return
+                  close();
+                  return;
                 }
-                setOpen(true)
-                inputRef.current?.focus()
+                setOpen(true);
+                inputRef.current?.focus();
               }}
               size="icon-xs"
             >
@@ -205,29 +205,29 @@ export function NavSearch() {
           <InputGroupInput
             aria-label="Search the lab"
             onChange={(event) => {
-              setTerm(event.target.value)
-              setActive(0)
+              setTerm(event.target.value);
+              setActive(0);
             }}
             onFocus={() => setOpen(true)}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
-                close()
-                return
+                close();
+                return;
               }
-              if (!hits.length) return
+              if (!hits.length) return;
 
               if (event.key === "ArrowDown") {
-                event.preventDefault()
-                setActive((index) => (index + 1) % hits.length)
+                event.preventDefault();
+                setActive((index) => (index + 1) % hits.length);
               }
               if (event.key === "ArrowUp") {
-                event.preventDefault()
-                setActive((index) => (index - 1 + hits.length) % hits.length)
+                event.preventDefault();
+                setActive((index) => (index - 1 + hits.length) % hits.length);
               }
               if (event.key === "Enter") {
-                event.preventDefault()
-                const hit = hits[active]
-                if (hit) go(hit)
+                event.preventDefault();
+                const hit = hits[active];
+                if (hit) go(hit);
               }
             }}
             placeholder="Search"
@@ -259,9 +259,9 @@ export function NavSearch() {
               href={hit.href}
               key={`${hit.href}-${hit.title}`}
               onClick={(event) => {
-                if (event.metaKey || event.ctrlKey || event.shiftKey) return
-                event.preventDefault()
-                go(hit)
+                if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                event.preventDefault();
+                go(hit);
               }}
               onPointerEnter={() => setActive(index)}
             >
@@ -274,5 +274,5 @@ export function NavSearch() {
         </Command>
       ) : null}
     </div>
-  )
+  );
 }

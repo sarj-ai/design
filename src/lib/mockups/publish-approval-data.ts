@@ -1,17 +1,17 @@
 import {
   LIVE_SCENARIO,
   type Subject,
-} from "@/lib/mockups/config-versioning-data"
+} from "@/lib/mockups/config-versioning-data";
 
-export type ViewerId = "requester" | "approver"
+export type ViewerId = "requester" | "approver";
 
 export type Viewer = {
-  id: ViewerId
-  name: string
-  label: string
-  sarj: boolean
-  approves: string | null
-}
+  id: ViewerId;
+  name: string;
+  label: string;
+  sarj: boolean;
+  approves: string | null;
+};
 
 export const VIEWERS: Viewer[] = [
   {
@@ -28,42 +28,42 @@ export const VIEWERS: Viewer[] = [
     sarj: false,
     approves: "Riyad Bank",
   },
-]
+];
 
 export function who(name: string, viewer: Viewer, inSentence = false) {
-  if (name !== viewer.name) return name
-  return inSentence ? "you" : "You"
+  if (name !== viewer.name) return name;
+  return inSentence ? "you" : "You";
 }
 
-export type Status = "pending" | "approved" | "rejected" | "withdrawn"
+export type Status = "pending" | "approved" | "rejected" | "withdrawn";
 
-export type Change = { label: string; before: string; after: string }
+export type Change = { label: string; before: string; after: string };
 
 export type ApprovalRequest = {
-  id: string
-  item: string
-  org: string
-  version: number
-  live: number
-  by: string
-  raised: string
-  waiting: string
-  note: string
-  summary: string
-  changes: Change[]
-  status: Status
-  decision: { by: string; at: string; reason?: string } | null
-}
+  id: string;
+  item: string;
+  org: string;
+  version: number;
+  live: number;
+  by: string;
+  raised: string;
+  waiting: string;
+  note: string;
+  summary: string;
+  changes: Change[];
+  status: Status;
+  decision: { by: string; at: string; reason?: string } | null;
+};
 
 export function canDecide(request: ApprovalRequest, viewer: Viewer) {
-  return viewer.approves === request.org
+  return viewer.approves === request.org;
 }
 
 export function canSee(request: ApprovalRequest, viewer: Viewer) {
-  return viewer.sarj || request.org === viewer.approves
+  return viewer.sarj || request.org === viewer.approves;
 }
 
-export const SCENARIO_ORG = "Riyad Bank"
+export const SCENARIO_ORG = "Riyad Bank";
 
 export const SCENARIO: Subject = {
   ...LIVE_SCENARIO,
@@ -72,7 +72,7 @@ export const SCENARIO: Subject = {
     author: version.author === "You" ? "Ahmad Khalil" : version.author,
     mine: false,
   })),
-}
+};
 
 export function forViewer(subject: Subject, viewer: Viewer): Subject {
   return {
@@ -86,7 +86,7 @@ export function forViewer(subject: Subject, viewer: Viewer): Subject {
       ...entry,
       by: who(entry.by, viewer),
     })),
-  }
+  };
 }
 
 export function changesBetween(
@@ -94,36 +94,36 @@ export function changesBetween(
   live: number,
   version: number,
 ): Change[] {
-  const before = subject.versions.find((item) => item.n === live)
-  const after = subject.versions.find((item) => item.n === version)
-  if (!before || !after) return []
+  const before = subject.versions.find((item) => item.n === live);
+  const after = subject.versions.find((item) => item.n === version);
+  if (!before || !after) return [];
   return subject.fields
     .filter((field) => before.body[field.id] !== after.body[field.id])
     .map((field) => ({
       label: field.label,
       before: before.body[field.id],
       after: after.body[field.id],
-    }))
+    }));
 }
 
 export function summaryFor(version: number, live: number) {
-  if (version === 14 && live === 12) return SUMMARY_V14
-  if (version === 15 && live === 12) return SUMMARY_V15
+  if (version === 14 && live === 12) return SUMMARY_V14;
+  if (version === 15 && live === 12) return SUMMARY_V15;
   if (version < live)
-    return `Callers go back to how the survey ran in v${version}, before the changes made since.`
-  return `Callers hear the survey as saved in v${version}.`
+    return `Callers go back to how the survey ran in v${version}, before the changes made since.`;
+  return `Callers hear the survey as saved in v${version}.`;
 }
 
 const SUMMARY_V14 =
-  "Callers rate their visit from 1 to 5 instead of 1 to 10. Anyone who gives 2 or lower is asked what went wrong and offered a callback from the branch manager."
+  "Callers rate their visit from 1 to 5 instead of 1 to 10. Anyone who gives 2 or lower is asked what went wrong and offered a callback from the branch manager.";
 
-const SUMMARY_V15 = `${SUMMARY_V14} The greeting now names Riyad Bank.`
+const SUMMARY_V15 = `${SUMMARY_V14} The greeting now names Riyad Bank.`;
 
 const V15_GREETING =
-  "Hello {{name}}, this is Sara from Riyad Bank's branch team. Do you have a minute for a quick survey?"
+  "Hello {{name}}, this is Sara from Riyad Bank's branch team. Do you have a minute for a quick survey?";
 
 const MAIN_NOTE =
-  "Riyad Bank's branch reports moved to a 5-point scale this month, and they asked for low scores to reach the branch manager the same day."
+  "Riyad Bank's branch reports moved to a 5-point scale this month, and they asked for low scores to reach the branch manager the same day.";
 
 export function mainRequest(
   status: Status,
@@ -144,7 +144,7 @@ export function mainRequest(
     changes: changesBetween(LIVE_SCENARIO, 12, version),
     status,
     decision,
-  }
+  };
 }
 
 export const OTHER_REQUESTS: ApprovalRequest[] = [
@@ -269,7 +269,7 @@ export const OTHER_REQUESTS: ApprovalRequest[] = [
     status: "withdrawn",
     decision: { by: "Sami Rahman", at: "4 Oct, 10:02" },
   },
-]
+];
 
 export type CaseId =
   | "normal"
@@ -282,7 +282,7 @@ export type CaseId =
   | "approve-fails"
   | "load-fails"
   | "empty"
-  | "view-only"
+  | "view-only";
 
 export const CASES: { id: CaseId; label: string }[] = [
   { id: "normal", label: "Nothing requested yet" },
@@ -296,10 +296,10 @@ export const CASES: { id: CaseId; label: string }[] = [
   { id: "load-fails", label: "Approvals fail to load" },
   { id: "empty", label: "No requests" },
   { id: "view-only", label: "View only" },
-]
+];
 
 export function withV15(subject: Subject): Subject {
-  const v14 = subject.versions[0]
+  const v14 = subject.versions[0];
   return {
     ...subject,
     versions: [
@@ -314,5 +314,5 @@ export function withV15(subject: Subject): Subject {
       },
       ...subject.versions,
     ],
-  }
+  };
 }

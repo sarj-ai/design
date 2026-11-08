@@ -1,90 +1,90 @@
-export type Field = { id: string; label: string; multiline: boolean }
+export type Field = { id: string; label: string; multiline: boolean };
 
 export type Version = {
-  n: number
-  author: string
-  mine: boolean
-  at: string
-  editedFrom: number | null
-  note: string | null
-  body: Record<string, string>
-}
+  n: number;
+  author: string;
+  mine: boolean;
+  at: string;
+  editedFrom: number | null;
+  note: string | null;
+  body: Record<string, string>;
+};
 
 export type InUseEntry = {
-  n: number
-  by: string
-  at: string
-  how: "saved" | "published" | "applied"
-}
+  n: number;
+  by: string;
+  at: string;
+  how: "saved" | "published" | "applied";
+};
 
 export type Subject = {
-  name: string
-  fields: Field[]
+  name: string;
+  fields: Field[];
   /** Newest first. */
-  versions: Version[]
-  live: boolean
-  inUse: number
+  versions: Version[];
+  live: boolean;
+  inUse: number;
   /** Newest first, so the first entry is the version in use now. */
-  log: InUseEntry[]
-  toggled: { by: string; at: string } | null
-}
+  log: InUseEntry[];
+  toggled: { by: string; at: string } | null;
+};
 
 const SCENARIO_FIELDS: Field[] = [
   { id: "first-message", label: "First message", multiline: false },
   { id: "prompt", label: "Instruction prompt", multiline: true },
-]
+];
 
 const GREETING_0 =
-  "Hello, this is Sara from the branch team. Do you have two minutes for a short survey?"
+  "Hello, this is Sara from the branch team. Do you have two minutes for a short survey?";
 const GREETING_A =
-  "Hello {{name}}, this is Sara from the branch team. Do you have two minutes for a short survey?"
+  "Hello {{name}}, this is Sara from the branch team. Do you have two minutes for a short survey?";
 const GREETING_B =
-  "Hello {{name}}, this is Sara from the branch team. Do you have a minute for a quick survey?"
+  "Hello {{name}}, this is Sara from the branch team. Do you have a minute for a quick survey?";
 
-const lines = (...rows: string[]) => rows.join("\n")
+const lines = (...rows: string[]) => rows.join("\n");
 
 const INTRO =
-  "You are a friendly voice assistant calling about a recent branch visit."
-const CLOSE = "Thank the customer and end the call."
-const RECORDING = "This call may be recorded for quality purposes."
+  "You are a friendly voice assistant calling about a recent branch visit.";
+const CLOSE = "Thank the customer and end the call.";
+const RECORDING = "This call may be recorded for quality purposes.";
 const RETRY =
-  "If the customer does not answer, ask once more, then thank them and end the call."
+  "If the customer does not answer, ask once more, then thank them and end the call.";
 
-const PROMPT_5 = lines(INTRO, "Ask how the visit went.", CLOSE)
-const PROMPT_6 = lines(INTRO, "Ask how the visit went.", RECORDING, CLOSE)
+const PROMPT_5 = lines(INTRO, "Ask how the visit went.", CLOSE);
+const PROMPT_6 = lines(INTRO, "Ask how the visit went.", RECORDING, CLOSE);
 const PROMPT_7 = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
   RECORDING,
   CLOSE,
-)
+);
 const PROMPT_A = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
   RECORDING,
   CLOSE,
-)
+);
 const PROMPT_B = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
   CLOSE,
-)
+);
 const PROMPT_C = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 10.",
   RETRY,
   CLOSE,
-)
+);
 const PROMPT_D = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
   "Ask for a rating from 1 to 5, where 5 is excellent.",
   RETRY,
   CLOSE,
-)
+);
 const PROMPT_E = lines(
   INTRO,
   "Ask how the visit went and what could be better.",
@@ -92,7 +92,7 @@ const PROMPT_E = lines(
   "If the rating is 2 or lower, ask what went wrong and offer a callback from the branch manager.",
   RETRY,
   CLOSE,
-)
+);
 
 function scenarioVersions(): Version[] {
   return [
@@ -186,7 +186,7 @@ function scenarioVersions(): Version[] {
       note: "First version",
       body: { "first-message": GREETING_0, prompt: PROMPT_5 },
     },
-  ]
+  ];
 }
 
 export const LIVE_SCENARIO: Subject = {
@@ -203,7 +203,7 @@ export const LIVE_SCENARIO: Subject = {
     { n: 9, by: "Nouf Al-Harbi", at: "28 Sep, 15:10", how: "published" },
   ],
   toggled: { by: "Nouf Al-Harbi", at: "28 Sep" },
-}
+};
 
 export const TEST_SCENARIO: Subject = {
   name: "Branch visit survey (test)",
@@ -213,7 +213,7 @@ export const TEST_SCENARIO: Subject = {
   inUse: 14,
   log: [{ n: 14, by: "You", at: "today 14:02", how: "saved" }],
   toggled: null,
-}
+};
 
 export type CaseId =
   | "normal"
@@ -224,7 +224,7 @@ export type CaseId =
   | "no-live-permission"
   | "publish-fails"
   | "apply-blocked"
-  | "apply-skips"
+  | "apply-skips";
 
 export const CASES: { id: CaseId; label: string }[] = [
   { id: "normal", label: "Normal" },
@@ -236,21 +236,21 @@ export const CASES: { id: CaseId; label: string }[] = [
   { id: "publish-fails", label: "Publish fails" },
   { id: "apply-blocked", label: "Version uses something deleted" },
   { id: "apply-skips", label: "Version has a removed block" },
-]
+];
 
 export const RIVAL: Omit<Version, "n" | "editedFrom" | "body"> = {
   author: "Ahmad Khalil",
   mine: false,
   at: "Today, 14:20",
   note: "Branch name in the greeting",
-}
+};
 
-export const DELETED_REFERENCE = "the tool “Book callback”"
-export const REMOVED_BLOCK = "Sentiment tags"
+export const DELETED_REFERENCE = "the tool “Book callback”";
+export const REMOVED_BLOCK = "Sentiment tags";
 
 export const CONVERSATION = {
   scenario: LIVE_SCENARIO.name,
   version: 12,
   phoneNumber: "+966 55 012 4471",
   startedAt: "Today, 13:48",
-}
+};

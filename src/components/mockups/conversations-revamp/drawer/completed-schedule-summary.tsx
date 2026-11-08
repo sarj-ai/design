@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import type { ScheduleDetail } from "@/lib/mockups/conversations-revamp-drawer-data"
+import { Badge } from "@/components/ui/badge";
+import type { ScheduleDetail } from "@/lib/mockups/conversations-revamp-drawer-data";
 import {
   CalendarIcon,
   RequestedIcon,
-} from "@/components/mockups/conversations-revamp/drawer/icons"
+} from "@/components/mockups/conversations-revamp/drawer/icons";
 
 export function CompletedScheduleSummary({
   schedule,
 }: {
-  schedule: ScheduleDetail
+  schedule: ScheduleDetail;
 }) {
-  const requested = schedule.origin === "requested"
+  const requested = schedule.origin === "requested";
 
   return (
     <div className="flex flex-col gap-3 rounded-lg bg-muted p-4">
@@ -55,7 +55,7 @@ export function CompletedScheduleSummary({
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 function Fact({ label, value }: { label: string; value: string }) {
@@ -66,5 +66,5 @@ function Fact({ label, value }: { label: string; value: string }) {
         {value}
       </span>
     </div>
-  )
+  );
 }

@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemGroup,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Separator } from "@/components/ui/separator"
-import { Notification01Icon } from "@hugeicons/core-free-icons"
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { Notification01Icon } from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
-import { cn } from "@/lib/utils"
+import { icon } from "@/components/shared/icon";
+import { cn } from "@/lib/utils";
 
-const NotificationsIcon = icon(Notification01Icon, "NotificationsIcon")
+const NotificationsIcon = icon(Notification01Icon, "NotificationsIcon");
 
 export type Notice = {
   /** The request it opens. */
-  id: string
-  title: string
-  detail: string
-  at: string
-}
+  id: string;
+  title: string;
+  detail: string;
+  at: string;
+};
 
 export function Notifications({
   notices,
@@ -41,18 +41,18 @@ export function Notifications({
   viewAll,
   defaultOpen = false,
 }: {
-  notices: Notice[]
-  read: ReadonlySet<string>
-  onRead: (ids: string[]) => void
-  onOpen: (id: string) => void
-  onViewAll: () => void
+  notices: Notice[];
+  read: ReadonlySet<string>;
+  onRead: (ids: string[]) => void;
+  onOpen: (id: string) => void;
+  onViewAll: () => void;
   /** The page the foot leads to, e.g. "Approvals". */
-  viewAll: string
+  viewAll: string;
   /** Open on mount — for a demo, not for the product. */
-  defaultOpen?: boolean
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = React.useState(defaultOpen)
-  const unread = notices.filter((notice) => !read.has(notice.id)).length
+  const [open, setOpen] = React.useState(defaultOpen);
+  const unread = notices.filter((notice) => !read.has(notice.id)).length;
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
@@ -108,9 +108,9 @@ export function Notifications({
               >
                 <button
                   onClick={() => {
-                    onRead([notice.id])
-                    setOpen(false)
-                    onOpen(notice.id)
+                    onRead([notice.id]);
+                    setOpen(false);
+                    onOpen(notice.id);
                   }}
                   type="button"
                 >
@@ -132,8 +132,8 @@ export function Notifications({
           <Button
             className="w-full"
             onClick={() => {
-              setOpen(false)
-              onViewAll()
+              setOpen(false);
+              onViewAll();
             }}
             variant="ghost"
           >
@@ -142,5 +142,5 @@ export function Notifications({
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-type NumberDirection = "both" | "inbound" | "outbound"
+type NumberDirection = "both" | "inbound" | "outbound";
 
 export const NUMBER_DIRECTION_LABELS: Record<NumberDirection, string> = {
   both: "Inbound & outbound",
   inbound: "Inbound only",
   outbound: "Outbound only",
-}
+};
 
 export type CallActivityRow = {
-  answered: number
-  blockedAt: null | string
-  firstCallAt: null | string
-  inboundCount: number
-  lastCallAt: null | string
-  organizationId: string
-  organizationName: string
-  outboundCount: number
-  phoneNumber: string
-  totalCallCount: number
-}
+  answered: number;
+  blockedAt: null | string;
+  firstCallAt: null | string;
+  inboundCount: number;
+  lastCallAt: null | string;
+  organizationId: string;
+  organizationName: string;
+  outboundCount: number;
+  phoneNumber: string;
+  totalCallCount: number;
+};
 
 export const CALL_ACTIVITY: CallActivityRow[] = [
   {
@@ -92,17 +92,17 @@ export const CALL_ACTIVITY: CallActivityRow[] = [
     lastCallAt: null,
     blockedAt: null,
   },
-]
+];
 
 export type TrunkRow = {
-  assignedOrganizations: { id: string; name: string }[]
-  createdAt: null | string
-  isGlobalDefault: boolean
-  isInUse: boolean
-  numbers: string[]
-  provider: string
-  sipTrunkId: string
-}
+  assignedOrganizations: { id: string; name: string }[];
+  createdAt: null | string;
+  isGlobalDefault: boolean;
+  isInUse: boolean;
+  numbers: string[];
+  provider: string;
+  sipTrunkId: string;
+};
 
 export const TRUNKS: TrunkRow[] = [
   {
@@ -140,23 +140,23 @@ export const TRUNKS: TrunkRow[] = [
     assignedOrganizations: [],
     createdAt: "2026-07-04T11:22:00.000Z",
   },
-]
+];
 
 type ProvisionedRow = {
-  connectionLabel: null | string
-  connectionPending: boolean
-  direction: NumberDirection
-  isClientOwned: boolean
-  organizationName: null | string
-  ownershipLabel: string
-  phoneNumber: string
-  providerName: string
-  provisionedNumberId: string
-  registeredAt: string
-  scenarioName: null | string
-  sipTrunkId: string
-  status: "active" | "inactive"
-}
+  connectionLabel: null | string;
+  connectionPending: boolean;
+  direction: NumberDirection;
+  isClientOwned: boolean;
+  organizationName: null | string;
+  ownershipLabel: string;
+  phoneNumber: string;
+  providerName: string;
+  provisionedNumberId: string;
+  registeredAt: string;
+  scenarioName: null | string;
+  sipTrunkId: string;
+  status: "active" | "inactive";
+};
 
 export const PROVISIONED: ProvisionedRow[] = [
   {
@@ -249,7 +249,7 @@ export const PROVISIONED: ProvisionedRow[] = [
     status: "inactive",
     registeredAt: "2026-03-27T08:05:00.000Z",
   },
-]
+];
 
 export const ORGANIZATIONS: { id: string; name: string }[] = [
   { id: "org_11", name: "Almarai" },
@@ -258,14 +258,14 @@ export const ORGANIZATIONS: { id: string; name: string }[] = [
   { id: "org_27", name: "Jarir Bookstore" },
   { id: "org_19", name: "Nana Direct" },
   { id: "org_33", name: "Tamimi Markets" },
-]
+];
 
 export const PROVIDERS: { id: string; name: string }[] = [
   { id: "prv_9f2a41", name: "STC Business" },
   { id: "prv_3c88de", name: "Mobily Wholesale" },
   { id: "prv_71b0c5", name: "Zain KSA SIP" },
   { id: "prv_2d6f80", name: "Twilio Elastic SIP" },
-]
+];
 
 export const TIME_RANGES: { label: string; value: string }[] = [
   { label: "All time", value: "all" },
@@ -273,4 +273,4 @@ export const TIME_RANGES: { label: string; value: string }[] = [
   { label: "Last 7 days", value: "7d" },
   { label: "Last 30 days", value: "30d" },
   { label: "Last 90 days", value: "90d" },
-]
+];

@@ -5,17 +5,17 @@ import {
   jsxName,
   textOf,
   trackUiImports,
-} from "../lib/jsx.mjs"
+} from "../lib/jsx.mjs";
 
-const DEAD_LABELS = new Set(["done", "ok", "okay", "yes", "submit", "got it"])
-const ACTIONS = new Set(["Button", "AlertDialogAction", "AlertDialogCancel"])
+const DEAD_LABELS = new Set(["done", "ok", "okay", "yes", "submit", "got it"]);
+const ACTIONS = new Set(["Button", "AlertDialogAction", "AlertDialogCancel"]);
 const FOOTERS = new Set([
   "DialogFooter",
   "SheetFooter",
   "DrawerFooter",
   "AlertDialogFooter",
   "CardFooter",
-])
+]);
 
 const footerActions = {
   meta: {
@@ -40,84 +40,84 @@ const footerActions = {
   },
 
   create(context) {
-    const imports = trackUiImports()
+    const imports = trackUiImports();
     const labelOf = (element) => {
-      const { text, dynamic } = textOf(element)
-      return dynamic ? null : text
-    }
+      const { text, dynamic } = textOf(element);
+      return dynamic ? null : text;
+    };
 
     return {
       ...imports.visitor,
       JSXElement(element) {
-        const opening = element.openingElement
-        const name = imports.ui(jsxName(opening))
+        const opening = element.openingElement;
+        const name = imports.ui(jsxName(opening));
 
         if (ACTIONS.has(name)) {
-          const label = labelOf(element)
-          const key = label?.toLowerCase().replace(/[.!]+$/, "")
+          const label = labelOf(element);
+          const key = label?.toLowerCase().replace(/[.!]+$/, "");
           if (key && DEAD_LABELS.has(key)) {
             context.report({
               node: opening,
               messageId: "deadLabel",
               data: { label },
-            })
+            });
           }
-          return
+          return;
         }
 
-        if (!FOOTERS.has(name)) return
+        if (!FOOTERS.has(name)) return;
 
-        const buttons = []
+        const buttons = [];
         for (const child of jsxDescendants(element)) {
-          const childName = imports.ui(jsxName(child.openingElement))
+          const childName = imports.ui(jsxName(child.openingElement));
           if (childName === "ButtonGroup") {
             context.report({
               node: child.openingElement,
               messageId: "buttonGroup",
-            })
+            });
           }
           if (ACTIONS.has(childName))
-            buttons.push({ element: child, name: childName })
+            buttons.push({ element: child, name: childName });
         }
 
         const isCancel = ({ element: el, name: n }) =>
-          n === "AlertDialogCancel" || labelOf(el)?.toLowerCase() === "cancel"
+          n === "AlertDialogCancel" || labelOf(el)?.toLowerCase() === "cancel";
         const variantOf = ({ element: el, name: n }) =>
           attrString(getAttr(el.openingElement, "variant")) ??
           (getAttr(el.openingElement, "variant")
             ? "?"
             : n === "AlertDialogCancel"
               ? "outline"
-              : "default")
+              : "default");
 
-        const cancelIndex = buttons.findIndex(isCancel)
+        const cancelIndex = buttons.findIndex(isCancel);
         if (cancelIndex !== -1) {
-          const cancel = buttons[cancelIndex]
+          const cancel = buttons[cancelIndex];
           if (cancelIndex !== 0) {
             context.report({
               node: cancel.element.openingElement,
               messageId: "cancelLast",
-            })
+            });
           }
-          const variant = variantOf(cancel)
+          const variant = variantOf(cancel);
           if (variant !== "outline" && variant !== "?") {
             context.report({
               node: cancel.element.openingElement,
               messageId: "cancelVariant",
-            })
+            });
           }
         }
 
-        const filled = buttons.filter((b) => variantOf(b) === "default")
+        const filled = buttons.filter((b) => variantOf(b) === "default");
         if (filled.length > 1) {
           context.report({
             node: filled[1].element.openingElement,
             messageId: "twoPrimaries",
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};
 
-export default footerActions
+export default footerActions;

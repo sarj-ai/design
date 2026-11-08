@@ -1,6 +1,6 @@
-import { Figure, type FigureProps, LINE } from "@/components/shared/figure"
+import { Figure, type FigureProps, LINE } from "@/components/shared/figure";
 
-import { TOPIC_FIGURE_VIEWBOX } from "./frame"
+import { TOPIC_FIGURE_VIEWBOX } from "./frame";
 
 /* Every subject sits in the same box: x 48–192, y 84–196. */
 
@@ -30,7 +30,7 @@ function ButtonsFigure({ className }: FigureProps) {
       />
       <path {...LINE} d="M148 140H176" opacity={0.6} />
     </Figure>
-  )
+  );
 }
 
 function FormsFigure({ className }: FigureProps) {
@@ -50,7 +50,7 @@ function FormsFigure({ className }: FigureProps) {
         y={188}
       />
     </Figure>
-  )
+  );
 }
 
 function SurfacesFigure({ className }: FigureProps) {
@@ -87,7 +87,7 @@ function SurfacesFigure({ className }: FigureProps) {
       />
       <path {...LINE} d="M152 128H192M152 152H192" />
     </Figure>
-  )
+  );
 }
 
 function TabsFigure({ className }: FigureProps) {
@@ -107,7 +107,7 @@ function TabsFigure({ className }: FigureProps) {
         y={128}
       />
     </Figure>
-  )
+  );
 }
 
 function DrawerFigure({ className }: FigureProps) {
@@ -129,7 +129,7 @@ function DrawerFigure({ className }: FigureProps) {
       />
       <path {...LINE} d="M148 104H176M148 124H180M148 144H168" opacity={0.6} />
     </Figure>
-  )
+  );
 }
 
 function StepperFigure({ className }: FigureProps) {
@@ -149,7 +149,7 @@ function StepperFigure({ className }: FigureProps) {
       <path {...LINE} d="M96 92H160M96 140H176" />
       <path {...LINE} d="M96 188H148" opacity={0.6} />
     </Figure>
-  )
+  );
 }
 
 function SelectionFigure({ className }: FigureProps) {
@@ -176,7 +176,7 @@ function SelectionFigure({ className }: FigureProps) {
         y={104}
       />
     </Figure>
-  )
+  );
 }
 
 export const PATTERNS_A_FIGURES: Record<
@@ -190,4 +190,4 @@ export const PATTERNS_A_FIGURES: Record<
   "drawer-anatomy": DrawerFigure,
   stepper: StepperFigure,
   selection: SelectionFigure,
-}
+};

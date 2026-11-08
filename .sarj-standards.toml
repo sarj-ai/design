@@ -1,0 +1,52 @@
+# Managed by `code-standards setup`; commit this file.
+bundle = "9.4.9"
+rule_profile = "all"
+schema = 4
+
+[capabilities]
+disable = [
+  "ruff",
+  "pyright",
+  "swiftformat",
+  "swiftlint",
+  "ktlint",
+  "detekt",
+  "mobile-security",
+  "markdownlint",
+  "shellcheck",
+  "taplo",
+  "yamllint",
+  "zizmor",
+  "checkov",
+  "deptry",
+  "jscpd",
+  "knip",
+  "sqlfluff",
+]
+
+[artifacts]
+durable = [
+  "**/README.md",
+  "docs/**",
+  "**/docs/**",
+  "architecture/**",
+  "**/adr/**",
+  ".github/**",
+  "**/AGENTS.md",
+  "**/CLAUDE.md",
+]
+
+[dest]
+kotlin = "."
+python = "."
+swift = "."
+typescript = "."
+
+[hooks]
+manager = "pre-commit"
+
+[baseline]
+diagnostics = "diagnostic-baseline.json"
+
+[doctor]
+exclude = ["src/components/ui/stepper.tsx"]

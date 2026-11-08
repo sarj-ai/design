@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ArrowUpRight01Icon,
@@ -12,21 +12,21 @@ import {
   ViewIcon,
   ViewOffIcon,
   WebhookIcon,
-} from "@hugeicons/core-free-icons"
+} from "@hugeicons/core-free-icons";
 
-import { icon } from "@/components/shared/icon"
+import { icon } from "@/components/shared/icon";
 
-export const CopyCodeIcon = icon(Copy01Icon, "CopyCodeIcon")
-export const CopiedIcon = icon(Tick02Icon, "CopiedIcon")
+export const CopyCodeIcon = icon(Copy01Icon, "CopyCodeIcon");
+export const CopiedIcon = icon(Tick02Icon, "CopiedIcon");
 
-export const ExternalIcon = icon(ArrowUpRight01Icon, "ExternalIcon")
+export const ExternalIcon = icon(ArrowUpRight01Icon, "ExternalIcon");
 
-export const ApiKeyIcon = icon(Key01Icon, "ApiKeyIcon")
-export const ApiReferenceIcon = icon(BookOpen02Icon, "ApiReferenceIcon")
-export const WebhookLinkIcon = icon(WebhookIcon, "WebhookLinkIcon")
-export const McpIcon = icon(McpServerIcon, "McpIcon")
+export const ApiKeyIcon = icon(Key01Icon, "ApiKeyIcon");
+export const ApiReferenceIcon = icon(BookOpen02Icon, "ApiReferenceIcon");
+export const WebhookLinkIcon = icon(WebhookIcon, "WebhookLinkIcon");
+export const McpIcon = icon(McpServerIcon, "McpIcon");
 
-export const CreateIcon = icon(PlusSignIcon, "CreateIcon")
-export const DeleteKeyIcon = icon(Delete02Icon, "DeleteKeyIcon")
-export const RevealIcon = icon(ViewIcon, "RevealIcon")
-export const HideIcon = icon(ViewOffIcon, "HideIcon")
+export const CreateIcon = icon(PlusSignIcon, "CreateIcon");
+export const DeleteKeyIcon = icon(Delete02Icon, "DeleteKeyIcon");
+export const RevealIcon = icon(ViewIcon, "RevealIcon");
+export const HideIcon = icon(ViewOffIcon, "HideIcon");

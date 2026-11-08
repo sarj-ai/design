@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { MockupShell } from "@/components/shell/mockup-shell"
-import { SOURCES } from "@/lib/mockups/knowledge-base-data"
-import { KnowledgeBaseDetail } from "@/components/mockups/knowledge-base/knowledge-base-detail"
+import { MockupShell } from "@/components/shell/mockup-shell";
+import { SOURCES } from "@/lib/mockups/knowledge-base-data";
+import { KnowledgeBaseDetail } from "@/components/mockups/knowledge-base/knowledge-base-detail";
 
 export default function KnowledgeBaseAddUrlPage() {
   return (
@@ -12,5 +12,5 @@ export default function KnowledgeBaseAddUrlPage() {
     >
       <KnowledgeBaseDetail initialSources={SOURCES} initialDialog="url" />
     </MockupShell>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { Figure, LINE, type FigureProps } from "@/components/shared/figure"
+import { Figure, LINE, type FigureProps } from "@/components/shared/figure";
 
 /** 1400px is `max-w-350`, the lab's page width. */
 export function MockupsFigure({ className }: FigureProps) {
@@ -33,7 +33,7 @@ export function MockupsFigure({ className }: FigureProps) {
         1400px
       </text>
     </Figure>
-  )
+  );
 }
 
 export function ReelsFigure({ className }: FigureProps) {
@@ -80,7 +80,7 @@ export function ReelsFigure({ className }: FigureProps) {
         1080
       </text>
     </Figure>
-  )
+  );
 }
 
 /** 10px is `--radius` in globals.css. */
@@ -125,5 +125,5 @@ export function SystemFigure({ className }: FigureProps) {
         10px
       </text>
     </Figure>
-  )
+  );
 }

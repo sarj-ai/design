@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -12,12 +12,12 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   ElevenLabsIdea,
   IntercomIdea,
   VapiIdea,
-} from "@/components/mockups/review-tracking/competitor-ideas"
+} from "@/components/mockups/review-tracking/competitor-ideas";
 import {
   HistoryIdea,
   LastOpenedIdea,
@@ -25,18 +25,18 @@ import {
   RowNumbersIdea,
   SavedIdea,
   UnreadIdea,
-} from "@/components/mockups/review-tracking/list-ideas"
+} from "@/components/mockups/review-tracking/list-ideas";
 import {
   ReviewModeIdea,
   SessionIdea,
-} from "@/components/mockups/review-tracking/review-ideas"
-import { AppShell } from "@/components/shell/app-shell"
-import { MockupShell } from "@/components/shell/mockup-shell"
+} from "@/components/mockups/review-tracking/review-ideas";
+import { AppShell } from "@/components/shell/app-shell";
+import { MockupShell } from "@/components/shell/mockup-shell";
 import {
   COMPETITORS,
   IDEAS,
   type IdeaId,
-} from "@/lib/mockups/review-tracking-data"
+} from "@/lib/mockups/review-tracking-data";
 
 const VIEWS: Record<IdeaId, () => React.ReactNode> = {
   "row-numbers": RowNumbersIdea,
@@ -50,15 +50,15 @@ const VIEWS: Record<IdeaId, () => React.ReactNode> = {
   elevenlabs: ElevenLabsIdea,
   vapi: VapiIdea,
   intercom: IntercomIdea,
-}
+};
 
 export default function ReviewTrackingPage() {
-  const [idea, setIdea] = React.useState<IdeaId>("last-opened")
-  const View = VIEWS[idea]
+  const [idea, setIdea] = React.useState<IdeaId>("last-opened");
+  const View = VIEWS[idea];
 
   React.useEffect(() => {
-    toast.dismiss()
-  }, [idea])
+    toast.dismiss();
+  }, [idea]);
 
   return (
     <MockupShell
@@ -100,5 +100,5 @@ export default function ReviewTrackingPage() {
         <View key={idea} />
       </AppShell>
     </MockupShell>
-  )
+  );
 }

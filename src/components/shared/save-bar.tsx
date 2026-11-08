@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 /** Place it last in a column at least as tall as the scroll area (`min-h-full flex flex-col`): `mt-auto` holds it down on a short page, `sticky` on a long one. */
 export function SaveBar({
@@ -9,11 +9,11 @@ export function SaveBar({
   onDiscard,
   onSave,
 }: {
-  changes: number
-  onDiscard: () => void
-  onSave: () => void
+  changes: number;
+  onDiscard: () => void;
+  onSave: () => void;
 }) {
-  const shown = changes > 0
+  const shown = changes > 0;
 
   return (
     <div
@@ -44,5 +44,5 @@ export function SaveBar({
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Item,
   ItemActions,
@@ -12,21 +12,21 @@ import {
   ItemFooter,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { Progress } from "@/components/ui/progress"
+} from "@/components/ui/item";
+import { Progress } from "@/components/ui/progress";
 import {
   RecordingIndicator,
   useMicrophoneLevels,
   useSimulatedLevels,
-} from "@/components/shared/recording-indicator"
+} from "@/components/shared/recording-indicator";
 
 export function RecordingPreview() {
   /* Simulated until the reader asks for their own microphone: a docs page must not open a permission prompt on load. */
-  const [useMic, setUseMic] = React.useState(false)
-  const mic = useMicrophoneLevels(useMic)
-  const simulated = useSimulatedLevels(!useMic || mic.state !== "live")
-  const speaking = useMic && mic.state === "live" ? mic.levels : simulated
-  const silent = [0, 0, 0, 0]
+  const [useMic, setUseMic] = React.useState(false);
+  const mic = useMicrophoneLevels(useMic);
+  const simulated = useSimulatedLevels(!useMic || mic.state !== "live");
+  const speaking = useMic && mic.state === "live" ? mic.levels : simulated;
+  const silent = [0, 0, 0, 0];
 
   return (
     <div className="flex flex-col gap-4">
@@ -64,21 +64,21 @@ export function RecordingPreview() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function InContext() {
-  const levels = useSimulatedLevels(true)
-  const [elapsed, setElapsed] = React.useState(0)
+  const levels = useSimulatedLevels(true);
+  const [elapsed, setElapsed] = React.useState(0);
 
   React.useEffect(() => {
-    const started = Date.now()
+    const started = Date.now();
     const timer = setInterval(
       () => setElapsed(((Date.now() - started) / 1000) % 20),
       100,
-    )
-    return () => clearInterval(timer)
-  }, [])
+    );
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Item variant="outline">
@@ -109,5 +109,5 @@ function InContext() {
         />
       </ItemFooter>
     </Item>
-  )
+  );
 }

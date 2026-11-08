@@ -1,8 +1,7 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
 
 import {
   BackToPickerIcon,
@@ -12,10 +11,10 @@ import {
   RetryIcon,
   TestFailedIcon,
   TestPassedIcon,
-} from "@/components/mockups/model-catalog/icons"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/mockups/model-catalog/icons";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -23,14 +22,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Field,
   FieldDescription,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -38,42 +37,42 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import {
   liveModelsFor,
   MODALITIES,
   PROVIDERS,
   providerById,
   type Modality,
-} from "@/lib/mockups/model-catalog-data"
-import { cn } from "@/lib/utils"
+} from "@/lib/mockups/model-catalog-data";
+import { cn } from "@/lib/utils";
 
-const NEW_PROVIDER = "__new__"
+const NEW_PROVIDER = "__new__";
 
 const EXAMPLES: Record<Modality, { model: string; name: string }> = {
   llm: { model: "llama-3.3-70b-versatile", name: "Llama 3.3 70B" },
   tts: { model: "eleven_flash_v2_5", name: "ElevenLabs Flash v2.5" },
-}
+};
 
-type Mode = "pick" | "connect"
-type FetchState = "idle" | "loading" | "ready" | "failed"
-type TestState = "idle" | "running" | "passed" | "failed"
+type Mode = "pick" | "connect";
+type FetchState = "idle" | "loading" | "ready" | "failed";
+type TestState = "idle" | "running" | "passed" | "failed";
 
 export function AddModelDialog({
   modality,
   onOpenChange,
   open,
 }: {
-  modality: Modality
-  onOpenChange: (open: boolean) => void
-  open: boolean
+  modality: Modality;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
 }) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -87,49 +86,49 @@ export function AddModelDialog({
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 function AddModelBody({
   modality,
   onDone,
 }: {
-  modality: Modality
-  onDone: () => void
+  modality: Modality;
+  onDone: () => void;
 }) {
-  const [mode, setMode] = React.useState<Mode>("pick")
-  const [providerId, setProviderId] = React.useState("")
-  const [modelId, setModelId] = React.useState("")
-  const [displayName, setDisplayName] = React.useState("")
-  const [notes, setNotes] = React.useState("")
-  const [manual, setManual] = React.useState(false)
-  const [fetchState, setFetchState] = React.useState<FetchState>("idle")
-  const [testState, setTestState] = React.useState<TestState>("idle")
+  const [mode, setMode] = React.useState<Mode>("pick");
+  const [providerId, setProviderId] = React.useState("");
+  const [modelId, setModelId] = React.useState("");
+  const [displayName, setDisplayName] = React.useState("");
+  const [notes, setNotes] = React.useState("");
+  const [manual, setManual] = React.useState(false);
+  const [fetchState, setFetchState] = React.useState<FetchState>("idle");
+  const [testState, setTestState] = React.useState<TestState>("idle");
 
-  const [newProviderName, setNewProviderName] = React.useState("")
-  const [baseUrl, setBaseUrl] = React.useState("")
-  const [apiKey, setApiKey] = React.useState("")
+  const [newProviderName, setNewProviderName] = React.useState("");
+  const [baseUrl, setBaseUrl] = React.useState("");
+  const [apiKey, setApiKey] = React.useState("");
 
   const modalityLabel =
-    MODALITIES.find((option) => option.id === modality)?.label ?? ""
-  const provider = providerById(providerId)
-  const connecting = mode === "connect"
+    MODALITIES.find((option) => option.id === modality)?.label ?? "";
+  const provider = providerById(providerId);
+  const connecting = mode === "connect";
   const eligible = PROVIDERS.filter((option) =>
     option.modalities.includes(modality),
-  )
+  );
 
   const usesLiveList =
     !connecting &&
     provider?.listsModels === true &&
     !manual &&
-    fetchState !== "failed"
+    fetchState !== "failed";
 
-  const testRequired = !usesLiveList && (connecting || Boolean(provider))
+  const testRequired = !usesLiveList && (connecting || Boolean(provider));
   const testReady = connecting
     ? Boolean(
         newProviderName.trim() && baseUrl.trim() && apiKey && modelId.trim(),
       )
-    : Boolean(modelId.trim())
+    : Boolean(modelId.trim());
 
   const canSave =
     Boolean(modelId.trim()) &&
@@ -137,56 +136,58 @@ function AddModelBody({
     (connecting
       ? Boolean(newProviderName.trim() && baseUrl.trim() && apiKey)
       : Boolean(provider)) &&
-    (!testRequired || testState === "passed")
+    (!testRequired || testState === "passed");
 
   function selectProvider(next: string) {
-    setModelId("")
-    setManual(false)
-    setTestState("idle")
+    setModelId("");
+    setManual(false);
+    setTestState("idle");
 
     if (next === NEW_PROVIDER) {
-      setMode("connect")
-      setProviderId("")
-      setFetchState("idle")
-      return
+      setMode("connect");
+      setProviderId("");
+      setFetchState("idle");
+      return;
     }
 
-    setProviderId(next)
+    setProviderId(next);
 
-    const chosen = providerById(next)
+    const chosen = providerById(next);
     if (chosen?.listsModels) {
-      setFetchState("loading")
+      setFetchState("loading");
       /* Groq is stubbed to fail so the fallback is reachable. */
       window.setTimeout(() => {
-        setFetchState(chosen.id === "groq" ? "failed" : "ready")
-      }, 900)
+        setFetchState(chosen.id === "groq" ? "failed" : "ready");
+      }, 900);
     } else {
-      setFetchState("idle")
+      setFetchState("idle");
     }
   }
 
   function backToPicker() {
-    setMode("pick")
-    setProviderId("")
-    setModelId("")
-    setNewProviderName("")
-    setBaseUrl("")
-    setApiKey("")
-    setTestState("idle")
-    setFetchState("idle")
+    setMode("pick");
+    setProviderId("");
+    setModelId("");
+    setNewProviderName("");
+    setBaseUrl("");
+    setApiKey("");
+    setTestState("idle");
+    setFetchState("idle");
   }
 
   function runTest() {
-    setTestState("running")
+    setTestState("running");
     /* A stub short ID fails, so both outcomes are reachable. */
     window.setTimeout(() => {
-      setTestState(modelId.trim().length > 3 ? "passed" : "failed")
-    }, 1100)
+      setTestState(modelId.trim().length > 3 ? "passed" : "failed");
+    }, 1100);
   }
 
   function save() {
-    toast.success(`${displayName.trim()} added to the ${modalityLabel} catalog`)
-    onDone()
+    toast.success(
+      `${displayName.trim()} added to the ${modalityLabel} catalog`,
+    );
+    onDone();
   }
 
   return (
@@ -238,8 +239,8 @@ function AddModelBody({
               <Input
                 id="base-url"
                 onChange={(event) => {
-                  setBaseUrl(event.target.value)
-                  setTestState("idle")
+                  setBaseUrl(event.target.value);
+                  setTestState("idle");
                 }}
                 placeholder="https://api.fireworks.ai/inference/v1"
                 value={baseUrl}
@@ -251,8 +252,8 @@ function AddModelBody({
               <Input
                 id="api-key"
                 onChange={(event) => {
-                  setApiKey(event.target.value)
-                  setTestState("idle")
+                  setApiKey(event.target.value);
+                  setTestState("idle");
                 }}
                 placeholder="sk-…"
                 type="password"
@@ -281,8 +282,8 @@ function AddModelBody({
               <Input
                 id="model"
                 onChange={(event) => {
-                  setModelId(event.target.value)
-                  setTestState("idle")
+                  setModelId(event.target.value);
+                  setTestState("idle");
                 }}
                 placeholder={EXAMPLES[modality].model}
                 value={modelId}
@@ -323,13 +324,13 @@ function AddModelBody({
                 manual={manual}
                 modelId={modelId}
                 onManualChange={(next) => {
-                  setManual(next)
-                  setModelId("")
-                  setTestState("idle")
+                  setManual(next);
+                  setModelId("");
+                  setTestState("idle");
                 }}
                 onModelIdChange={(next) => {
-                  setModelId(next)
-                  setTestState("idle")
+                  setModelId(next);
+                  setTestState("idle");
                 }}
                 onRetryFetch={() => selectProvider(provider.id)}
                 providerListsModels={provider.listsModels}
@@ -386,7 +387,7 @@ function AddModelBody({
         </Button>
       </DialogFooter>
     </>
-  )
+  );
 }
 
 function HelpLabel({
@@ -394,9 +395,9 @@ function HelpLabel({
   help,
   htmlFor,
 }: {
-  children: string
-  help: string
-  htmlFor: string
+  children: string;
+  help: string;
+  htmlFor: string;
 }) {
   return (
     <div className="flex items-center gap-1.5">
@@ -411,7 +412,7 @@ function HelpLabel({
         <TooltipContent className="max-w-64">{help}</TooltipContent>
       </Tooltip>
     </div>
-  )
+  );
 }
 
 function ModelField({
@@ -427,17 +428,17 @@ function ModelField({
   providerName,
   usesLiveList,
 }: {
-  fetchState: FetchState
-  liveModels: string[]
-  manual: boolean
-  modelId: string
-  modelPlaceholder: string
-  onManualChange: (manual: boolean) => void
-  onModelIdChange: (modelId: string) => void
-  onRetryFetch: () => void
-  providerListsModels: boolean
-  providerName: string
-  usesLiveList: boolean
+  fetchState: FetchState;
+  liveModels: string[];
+  manual: boolean;
+  modelId: string;
+  modelPlaceholder: string;
+  onManualChange: (manual: boolean) => void;
+  onModelIdChange: (modelId: string) => void;
+  onRetryFetch: () => void;
+  providerListsModels: boolean;
+  providerName: string;
+  usesLiveList: boolean;
 }) {
   if (fetchState === "loading") {
     return (
@@ -448,7 +449,7 @@ function ModelField({
           Fetching {providerName}&apos;s models…
         </div>
       </Field>
-    )
+    );
   }
 
   return (
@@ -531,7 +532,7 @@ function ModelField({
         ) : null}
       </div>
     </Field>
-  )
+  );
 }
 
 function ConnectionTest({
@@ -539,12 +540,12 @@ function ConnectionTest({
   ready,
   state,
 }: {
-  onRun: () => void
-  ready: boolean
-  state: TestState
+  onRun: () => void;
+  ready: boolean;
+  state: TestState;
 }) {
-  const passed = state === "passed"
-  const failed = state === "failed"
+  const passed = state === "passed";
+  const failed = state === "failed";
 
   return (
     <div className="flex flex-col gap-3 rounded-lg bg-muted p-3">
@@ -581,5 +582,5 @@ function ConnectionTest({
         </div>
       ) : null}
     </div>
-  )
+  );
 }

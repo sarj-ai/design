@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { IndexPagePreview } from "@/components/design-system/page-preview"
-import { KnowledgeIndexPreview } from "@/components/design-system/knowledge-index-preview"
+import { IndexPagePreview } from "@/components/design-system/page-preview";
+import { KnowledgeIndexPreview } from "@/components/design-system/knowledge-index-preview";
 import {
   EmptyStatePreview,
   ErrorStatePreview,
   LoadingPreview,
   NoResultsPreview,
-} from "@/components/design-system/state-previews"
-import { Card, CardContent } from "@/components/ui/card"
-import { TabsContent } from "@/components/ui/tabs"
-import { PrimaryTabs } from "@/components/design-system/tabs-preview"
+} from "@/components/design-system/state-previews";
+import { Card, CardContent } from "@/components/ui/card";
+import { TabsContent } from "@/components/ui/tabs";
+import { PrimaryTabs } from "@/components/design-system/tabs-preview";
 
 const STATES = [
   { id: "populated", label: "Populated", view: <IndexPagePreview /> },
@@ -20,10 +20,10 @@ const STATES = [
   { id: "empty", label: "Empty", view: <EmptyStatePreview /> },
   { id: "no-results", label: "No results", view: <NoResultsPreview /> },
   { id: "error", label: "Error", view: <ErrorStatePreview /> },
-]
+];
 
 export function IndexPageDemo() {
-  const [state, setState] = React.useState(STATES[0].id)
+  const [state, setState] = React.useState(STATES[0].id);
 
   return (
     <div className="flex flex-col gap-12">
@@ -52,5 +52,5 @@ export function IndexPageDemo() {
         </Card>
       </section>
     </div>
-  )
+  );
 }

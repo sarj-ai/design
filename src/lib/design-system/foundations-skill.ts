@@ -1,10 +1,10 @@
-import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens"
+import { COLOUR_GROUPS } from "@/lib/design-system/colour-tokens";
 import {
   CONTROL_STEPS,
   GLOBAL_RULES,
   LAYER_TOKENS,
   LINT_RULES,
-} from "@/lib/design-system/data"
+} from "@/lib/design-system/data";
 
 /**
  * Foundations as markdown lines, from `## Rules` down. Shared by the "Copy as skill" button and
@@ -50,7 +50,7 @@ export function foundationsBody(): string[] {
         `- \`sarj/${rule.id}\` bans ${rule.bans}. Instead: ${rule.instead}`,
     ),
     "",
-  ]
+  ];
 }
 
 export const FOUNDATIONS_SKILL = [
@@ -64,4 +64,4 @@ export const FOUNDATIONS_SKILL = [
   "Nothing here is a judgement call. Use the tokens, never a literal.",
   "",
   ...foundationsBody(),
-].join("\n")
+].join("\n");

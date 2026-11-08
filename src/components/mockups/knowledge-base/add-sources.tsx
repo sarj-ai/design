@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,18 +11,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { ActionTile } from "@/components/shared/page-header"
+} from "@/components/ui/dialog";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ActionTile } from "@/components/shared/page-header";
 import {
   AddFilesIcon,
   AddTextIcon,
   AddUrlIcon,
-} from "@/components/mockups/knowledge-base/icons"
+} from "@/components/mockups/knowledge-base/icons";
 
-export type AddKind = "files" | "url" | "text"
+export type AddKind = "files" | "url" | "text";
 
 export function AddSources({ onOpen }: { onOpen: (kind: AddKind) => void }) {
   return (
@@ -43,7 +43,7 @@ export function AddSources({ onOpen }: { onOpen: (kind: AddKind) => void }) {
         onClick={() => onOpen("text")}
       />
     </>
-  )
+  );
 }
 
 export function AddSourceDialog({
@@ -51,32 +51,32 @@ export function AddSourceDialog({
   onOpenChange,
   onAdd,
 }: {
-  kind: AddKind | null
-  onOpenChange: (open: boolean) => void
+  kind: AddKind | null;
+  onOpenChange: (open: boolean) => void;
   onAdd: (
     kind: AddKind,
     source: { name: string; url?: string; body?: string },
-  ) => void
+  ) => void;
 }) {
-  const [url, setUrl] = React.useState("")
-  const [title, setTitle] = React.useState("")
-  const [body, setBody] = React.useState("")
+  const [url, setUrl] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [body, setBody] = React.useState("");
 
-  const isUrl = kind === "url"
+  const isUrl = kind === "url";
 
-  const ready = Boolean(title.trim() && (isUrl ? url.trim() : body.trim()))
+  const ready = Boolean(title.trim() && (isUrl ? url.trim() : body.trim()));
 
   function submit() {
-    if (!kind || !ready) return
+    if (!kind || !ready) return;
     onAdd(kind, {
       name: title.trim(),
       url: isUrl ? url.trim() : undefined,
       body: isUrl ? undefined : body.trim(),
-    })
-    setUrl("")
-    setTitle("")
-    setBody("")
-    onOpenChange(false)
+    });
+    setUrl("");
+    setTitle("");
+    setBody("");
+    onOpenChange(false);
   }
 
   return (
@@ -149,5 +149,5 @@ export function AddSourceDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

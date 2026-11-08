@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
 import {
   CostIcon,
   ModelIcon,
   TranscriptIcon,
-} from "@/components/design-system/icons"
+} from "@/components/design-system/icons";
 import {
   ReferenceLabel,
   ReferenceName,
   ReferenceNote,
   ReferenceTable,
   type ReferenceRow,
-} from "@/components/design-system/reference-table"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/design-system/reference-table";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const VIEWS = [
   { id: "transcript", label: "Transcript", Icon: TranscriptIcon },
   { id: "model", label: "Model", Icon: ModelIcon },
   { id: "cost", label: "Cost", Icon: CostIcon },
-]
+];
 
 const PANELS: Record<
   string,
@@ -139,7 +139,7 @@ const PANELS: Record<
       },
     ],
   },
-}
+};
 
 const INSTEAD = [
   {
@@ -162,37 +162,37 @@ const INSTEAD = [
     surface: "Drawer",
     why: "You still need the page behind it while you change it.",
   },
-]
+];
 
-type Marker = { base: number; x: number; scale: number }
+type Marker = { base: number; x: number; scale: number };
 
 /** Drawn at the widest tab's width and scaled down from its left edge, so the move is a transform rather than a width change. */
 function useMarker(active: string) {
-  const triggers = React.useRef(new Map<string, HTMLButtonElement>())
-  const [marker, setMarker] = React.useState<Marker | null>(null)
+  const triggers = React.useRef(new Map<string, HTMLButtonElement>());
+  const [marker, setMarker] = React.useState<Marker | null>(null);
 
   React.useEffect(() => {
     const measure = () => {
-      const nodes = Array.from(triggers.current.values())
-      const current = triggers.current.get(active)
-      if (!current || !nodes.length) return
-      const base = Math.max(...nodes.map((node) => node.offsetWidth))
+      const nodes = Array.from(triggers.current.values());
+      const current = triggers.current.get(active);
+      if (!current || !nodes.length) return;
+      const base = Math.max(...nodes.map((node) => node.offsetWidth));
       setMarker({
         base,
         x: current.offsetLeft,
         scale: current.offsetWidth / base,
-      })
-    }
+      });
+    };
 
-    measure()
+    measure();
 
     /* Re-measured because labels change width when Nunito loads and at narrower viewports. */
-    const observer = new ResizeObserver(measure)
-    for (const node of triggers.current.values()) observer.observe(node)
-    return () => observer.disconnect()
-  }, [active])
+    const observer = new ResizeObserver(measure);
+    for (const node of triggers.current.values()) observer.observe(node);
+    return () => observer.disconnect();
+  }, [active]);
 
-  return { triggers, marker }
+  return { triggers, marker };
 }
 
 function triggerRef(
@@ -200,13 +200,13 @@ function triggerRef(
   id: string,
 ) {
   return (node: HTMLButtonElement | null) => {
-    if (node) triggers.current.set(id, node)
-    else triggers.current.delete(id)
-  }
+    if (node) triggers.current.set(id, node);
+    else triggers.current.delete(id);
+  };
 }
 
 export function TabsPreview() {
-  const [view, setView] = React.useState(VIEWS[0].id)
+  const [view, setView] = React.useState(VIEWS[0].id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -251,15 +251,15 @@ export function TabsPreview() {
         }))}
       />
     </div>
-  )
+  );
 }
 
 type TabItem = {
-  id: string
+  id: string;
   /** Usually a word. A node when the tab carries a marker after its name, such as a new-since-last-visit dot. */
-  label: React.ReactNode
-  Icon?: React.ComponentType
-}
+  label: React.ReactNode;
+  Icon?: React.ComponentType;
+};
 
 export function PrimaryTabs({
   items = VIEWS,
@@ -267,12 +267,12 @@ export function PrimaryTabs({
   value,
   children,
 }: {
-  items?: TabItem[]
-  onValueChange: (value: string) => void
-  value: string
-  children?: React.ReactNode
+  items?: TabItem[];
+  onValueChange: (value: string) => void;
+  value: string;
+  children?: React.ReactNode;
 }) {
-  const { triggers, marker } = useMarker(value)
+  const { triggers, marker } = useMarker(value);
 
   return (
     <Tabs className="gap-4" onValueChange={onValueChange} value={value}>
@@ -306,7 +306,7 @@ export function PrimaryTabs({
 
       {children}
     </Tabs>
-  )
+  );
 }
 
 export function SecondaryTabs({
@@ -317,13 +317,13 @@ export function SecondaryTabs({
   value,
 }: {
   /** A control at the end of the tab row that scopes every tab. */
-  items?: TabItem[]
-  aside?: React.ReactNode
-  children: React.ReactNode
-  onValueChange: (value: string) => void
-  value: string
+  items?: TabItem[];
+  aside?: React.ReactNode;
+  children: React.ReactNode;
+  onValueChange: (value: string) => void;
+  value: string;
 }) {
-  const { triggers, marker } = useMarker(value)
+  const { triggers, marker } = useMarker(value);
 
   return (
     <Tabs className="gap-4" onValueChange={onValueChange} value={value}>
@@ -360,5 +360,5 @@ export function SecondaryTabs({
 
       {children}
     </Tabs>
-  )
+  );
 }

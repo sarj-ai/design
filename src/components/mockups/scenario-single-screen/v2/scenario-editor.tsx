@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -11,10 +11,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   CriteriaDrawerBody,
   ExtractionDrawerBody,
@@ -24,7 +24,7 @@ import {
   RecordingDrawerBody,
   ToolsDrawerBody,
   VariablesDrawerBody,
-} from "@/components/mockups/scenario-single-screen/v2/config-drawers"
+} from "@/components/mockups/scenario-single-screen/v2/config-drawers";
 import {
   CriteriaIcon,
   ExtractionIcon,
@@ -41,17 +41,17 @@ import {
   ToolsIcon,
   UnsavedIcon,
   VariablesIcon,
-} from "@/components/mockups/scenario-single-screen/v2/icons"
+} from "@/components/mockups/scenario-single-screen/v2/icons";
 import {
   InsightsDrawerBody,
   OpportunitiesDrawerBody,
   OwnershipDrawerBody,
-} from "@/components/mockups/scenario-single-screen/v2/review-drawers"
+} from "@/components/mockups/scenario-single-screen/v2/review-drawers";
 import {
   RailGroup,
   SettingRow,
-} from "@/components/mockups/scenario-single-screen/v2/setting-rail"
-import { SettingSheet } from "@/components/mockups/scenario-single-screen/v2/setting-sheet"
+} from "@/components/mockups/scenario-single-screen/v2/setting-rail";
+import { SettingSheet } from "@/components/mockups/scenario-single-screen/v2/setting-sheet";
 import {
   DATA_EXTRACTION,
   DEFAULT_LANGUAGE,
@@ -73,14 +73,14 @@ import {
   TOOLS,
   type ToolSlug,
   UNRESOLVED_INSIGHTS,
-} from "@/lib/mockups/scenario-single-screen-data"
+} from "@/lib/mockups/scenario-single-screen-data";
 import {
   IMPLICIT_VARIABLES,
   SECTIONED_PROMPTS,
   type SectionedPrompt,
-} from "@/lib/mockups/scenario-single-screen-v2-data"
-import { PromptBuilder } from "@/components/mockups/scenario-single-screen/v2/prompt-builder"
-import { RawPromptDrawer } from "@/components/mockups/scenario-single-screen/v2/raw-prompt-drawer"
+} from "@/lib/mockups/scenario-single-screen-v2-data";
+import { PromptBuilder } from "@/components/mockups/scenario-single-screen/v2/prompt-builder";
+import { RawPromptDrawer } from "@/components/mockups/scenario-single-screen/v2/raw-prompt-drawer";
 
 type Setting =
   | "criteria"
@@ -94,7 +94,7 @@ type Setting =
   | "recording"
   | "timezone"
   | "tools"
-  | "variables"
+  | "variables";
 
 const INSIGHT_TARGETS: Record<InsightTarget, Setting | null> = {
   criteria: "criteria",
@@ -102,88 +102,91 @@ const INSIGHT_TARGETS: Record<InsightTarget, Setting | null> = {
   knowledge: "knowledge",
   prompt: null,
   tools: "tools",
-}
+};
 
 export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
-  const [openSetting, setOpenSetting] = React.useState<Setting | null>(null)
-  const [dirty, setDirty] = React.useState(false)
+  const [openSetting, setOpenSetting] = React.useState<Setting | null>(null);
+  const [dirty, setDirty] = React.useState(false);
 
-  const [language, setLanguage] = React.useState<LanguageCode>(DEFAULT_LANGUAGE)
+  const [language, setLanguage] =
+    React.useState<LanguageCode>(DEFAULT_LANGUAGE);
   const [defaultLanguage, setDefaultLanguage] =
-    React.useState<LanguageCode>(DEFAULT_LANGUAGE)
-  const [perLanguage, setPerLanguage] = React.useState(PER_LANGUAGE)
-  const [timezone, setTimezone] = React.useState(TIMEZONE)
-  const [bases, setBases] = React.useState(KNOWLEDGE_BASES)
-  const [tools, setTools] = React.useState(TOOLS)
-  const [criteria, setCriteria] = React.useState(SUCCESS_CRITERIA)
-  const [variables, setVariables] = React.useState(TEMPLATE_VARIABLES)
+    React.useState<LanguageCode>(DEFAULT_LANGUAGE);
+  const [perLanguage, setPerLanguage] = React.useState(PER_LANGUAGE);
+  const [timezone, setTimezone] = React.useState(TIMEZONE);
+  const [bases, setBases] = React.useState(KNOWLEDGE_BASES);
+  const [tools, setTools] = React.useState(TOOLS);
+  const [criteria, setCriteria] = React.useState(SUCCESS_CRITERIA);
+  const [variables, setVariables] = React.useState(TEMPLATE_VARIABLES);
   const [extractionOn, setExtractionOn] = React.useState(
     DATA_EXTRACTION.enabled,
-  )
-  const [destinations, setDestinations] = React.useState(DESTINATIONS)
+  );
+  const [destinations, setDestinations] = React.useState(DESTINATIONS);
   const [zohoRecording, setZohoRecording] = React.useState(
     RECORD_SINKS.zohoCallActivity,
-  )
-  const [dismissedInsights, setDismissedInsights] = React.useState<string[]>([])
-  const [sectioned, setSectioned] = React.useState(SECTIONED_PROMPTS)
-  const [rawOpen, setRawOpen] = React.useState(false)
+  );
+  const [dismissedInsights, setDismissedInsights] = React.useState<string[]>(
+    [],
+  );
+  const [sectioned, setSectioned] = React.useState(SECTIONED_PROMPTS);
+  const [rawOpen, setRawOpen] = React.useState(false);
 
   const edit = <T,>(setter: (value: T) => void) => {
     return (value: T) => {
-      setter(value)
-      setDirty(true)
-    }
-  }
+      setter(value);
+      setDirty(true);
+    };
+  };
 
   const current =
-    perLanguage.find((entry) => entry.language === language) ?? perLanguage[0]
+    perLanguage.find((entry) => entry.language === language) ?? perLanguage[0];
 
   const updateCurrent = (patch: Partial<(typeof perLanguage)[number]>) => {
     setPerLanguage((entries) =>
       entries.map((entry) =>
         entry.language === language ? { ...entry, ...patch } : entry,
       ),
-    )
-    setDirty(true)
-  }
+    );
+    setDirty(true);
+  };
 
   const currentSections =
-    sectioned.find((entry) => entry.language === language) ?? sectioned[0]
+    sectioned.find((entry) => entry.language === language) ?? sectioned[0];
 
   const updateSections = (next: SectionedPrompt) => {
     setSectioned((entries) =>
       entries.map((entry) => (entry.language === language ? next : entry)),
-    )
-    setDirty(true)
-  }
+    );
+    setDirty(true);
+  };
 
   const insertableVariables = [
     ...IMPLICIT_VARIABLES,
     ...variables.map((variable) => variable.name),
-  ]
+  ];
 
-  const spokenLanguages = perLanguage.map((entry) => entry.language)
-  const attachedBases = bases.filter((base) => base.attached)
-  const enabledTools = tools.filter((tool) => tool.enabled)
+  const spokenLanguages = perLanguage.map((entry) => entry.language);
+  const attachedBases = bases.filter((base) => base.attached);
+  const enabledTools = tools.filter((tool) => tool.enabled);
   const enabledDestinations = destinations.filter(
     (destination) => destination.enabled,
-  )
-  const openInsights = UNRESOLVED_INSIGHTS - dismissedInsights.length
+  );
+  const openInsights = UNRESOLVED_INSIGHTS - dismissedInsights.length;
 
   const reset = () => {
-    setPerLanguage(PER_LANGUAGE)
-    setSectioned(SECTIONED_PROMPTS)
-    setDefaultLanguage(DEFAULT_LANGUAGE)
-    setTimezone(TIMEZONE)
-    setBases(KNOWLEDGE_BASES)
-    setTools(TOOLS)
-    setCriteria(SUCCESS_CRITERIA)
-    setVariables(TEMPLATE_VARIABLES)
-    setExtractionOn(DATA_EXTRACTION.enabled)
-    setDestinations(DESTINATIONS)
-    setZohoRecording(RECORD_SINKS.zohoCallActivity)
-    setDirty(false)
-  }
+    setPerLanguage(PER_LANGUAGE);
+    setSectioned(SECTIONED_PROMPTS);
+    setDefaultLanguage(DEFAULT_LANGUAGE);
+    setTimezone(TIMEZONE);
+    setBases(KNOWLEDGE_BASES);
+    setTools(TOOLS);
+    setCriteria(SUCCESS_CRITERIA);
+    setVariables(TEMPLATE_VARIABLES);
+    setExtractionOn(DATA_EXTRACTION.enabled);
+    setDestinations(DESTINATIONS);
+    setZohoRecording(RECORD_SINKS.zohoCallActivity);
+    setDirty(false);
+  };
 
   return (
     <div className="flex flex-1 flex-col p-3 lg:p-4">
@@ -206,7 +209,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
           <div className="flex shrink-0 items-center gap-2">
             <Button
               onClick={() => {
-                setOpenSetting("insights")
+                setOpenSetting("insights");
               }}
               variant="outline"
             >
@@ -236,7 +239,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               </p>
               <ToggleGroup
                 onValueChange={(next) => {
-                  if (next) setLanguage(next as LanguageCode)
+                  if (next) setLanguage(next as LanguageCode);
                 }}
                 size="sm"
                 type="single"
@@ -267,7 +270,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                     aria-label="First message"
                     checked={current.firstMessageEnabled}
                     onCheckedChange={(checked) => {
-                      updateCurrent({ firstMessageEnabled: checked })
+                      updateCurrent({ firstMessageEnabled: checked });
                     }}
                   />
                 </CardAction>
@@ -282,7 +285,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                   }
                   disabled={!current.firstMessageEnabled}
                   onChange={(event) => {
-                    updateCurrent({ firstMessage: event.target.value })
+                    updateCurrent({ firstMessage: event.target.value });
                   }}
                   value={current.firstMessage}
                 />
@@ -292,10 +295,10 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
             <PromptBuilder
               onChange={updateSections}
               onOpenRaw={() => {
-                setRawOpen(true)
+                setRawOpen(true);
               }}
               onOpenVariables={() => {
-                setOpenSetting("variables")
+                setOpenSetting("variables");
               }}
               prompt={currentSections}
               rtl={current.language === "ar" || current.language === "ur"}
@@ -310,7 +313,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={PersonaIcon}
                 onOpen={() => {
-                  setOpenSetting("persona")
+                  setOpenSetting("persona");
                 }}
                 title="Persona"
                 value={current.persona}
@@ -318,7 +321,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={LanguagesIcon}
                 onOpen={() => {
-                  setOpenSetting("languages")
+                  setOpenSetting("languages");
                 }}
                 title="Languages"
                 value={`${spokenLanguages
@@ -328,7 +331,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={TimezoneIcon}
                 onOpen={() => {
-                  setOpenSetting("timezone")
+                  setOpenSetting("timezone");
                 }}
                 title="Timezone"
                 value={timezone}
@@ -339,7 +342,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={KnowledgeIcon}
                 onOpen={() => {
-                  setOpenSetting("knowledge")
+                  setOpenSetting("knowledge");
                 }}
                 title="Knowledge bases"
                 value={
@@ -351,7 +354,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={ToolsIcon}
                 onOpen={() => {
-                  setOpenSetting("tools")
+                  setOpenSetting("tools");
                 }}
                 title="Tools"
                 value={
@@ -363,7 +366,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={VariablesIcon}
                 onOpen={() => {
-                  setOpenSetting("variables")
+                  setOpenSetting("variables");
                 }}
                 title="Template variables"
                 value={`${variables.length} · ${
@@ -376,7 +379,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={CriteriaIcon}
                 onOpen={() => {
-                  setOpenSetting("criteria")
+                  setOpenSetting("criteria");
                 }}
                 title="Success criteria"
                 value={`${criteria.length} criteria · ${
@@ -386,7 +389,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={ExtractionIcon}
                 onOpen={() => {
-                  setOpenSetting("extraction")
+                  setOpenSetting("extraction");
                 }}
                 title="Data extraction"
                 value={
@@ -404,7 +407,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               <SettingRow
                 icon={RecordingIcon}
                 onOpen={() => {
-                  setOpenSetting("recording")
+                  setOpenSetting("recording");
                 }}
                 title="Recording delivery"
                 value={zohoRecording ? "Zoho call activity" : "Not delivered"}
@@ -416,7 +419,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                 <SettingRow
                   icon={OpportunitiesIcon}
                   onOpen={() => {
-                    setOpenSetting("opportunities")
+                    setOpenSetting("opportunities");
                   }}
                   title="Optimization opportunities"
                   value={`${OPPORTUNITIES.length} open`}
@@ -424,7 +427,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                 <SettingRow
                   icon={OwnershipIcon}
                   onOpen={() => {
-                    setOpenSetting("ownership")
+                    setOpenSetting("ownership");
                   }}
                   title="Owning organization"
                   value="Sizzler KSA"
@@ -453,7 +456,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                 </Button>
                 <Button
                   onClick={() => {
-                    setDirty(false)
+                    setDirty(false);
                   }}
                 >
                   Save
@@ -469,7 +472,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="One voice per language. The persona also carries the turn timing and backchannel settings that language uses."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "persona" : null)
+          setOpenSetting(open ? "persona" : null);
         }}
         open={openSetting === "persona"}
         title="Persona"
@@ -480,8 +483,8 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               entries.map((entry) =>
                 entry.language === code ? { ...entry, persona } : entry,
               ),
-            )
-            setDirty(true)
+            );
+            setDirty(true);
           }}
           perLanguage={perLanguage}
         />
@@ -490,7 +493,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Each language keeps its own prompt, first message and persona."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "languages" : null)
+          setOpenSetting(open ? "languages" : null);
         }}
         open={openSetting === "languages" || openSetting === "timezone"}
         title="Languages and timezone"
@@ -507,7 +510,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Attached bases are searched when the agent needs a fact it was not told."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "knowledge" : null)
+          setOpenSetting(open ? "knowledge" : null);
         }}
         open={openSetting === "knowledge"}
         title="Knowledge bases"
@@ -521,8 +524,8 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                   ? { ...base, attached: !base.attached }
                   : base,
               ),
-            )
-            setDirty(true)
+            );
+            setDirty(true);
           }}
           spokenLanguages={spokenLanguages}
         />
@@ -531,7 +534,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Actions the agent can take during a call, beyond talking."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "tools" : null)
+          setOpenSetting(open ? "tools" : null);
         }}
         open={openSetting === "tools"}
         title="Tools"
@@ -542,8 +545,8 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
               entries.map((tool) =>
                 tool.slug === slug ? { ...tool, enabled: !tool.enabled } : tool,
               ),
-            )
-            setDirty(true)
+            );
+            setDirty(true);
           }}
           tools={tools}
         />
@@ -552,7 +555,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="What a call has to achieve to be scored as successful."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "criteria" : null)
+          setOpenSetting(open ? "criteria" : null);
         }}
         open={openSetting === "criteria"}
         title="Success criteria"
@@ -566,7 +569,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Placeholders the prompt and first message fill in when a call starts."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "variables" : null)
+          setOpenSetting(open ? "variables" : null);
         }}
         open={openSetting === "variables"}
         title="Template variables"
@@ -580,7 +583,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Fields read out of the transcript when the call ends, and where they go."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "extraction" : null)
+          setOpenSetting(open ? "extraction" : null);
         }}
         open={openSetting === "extraction"}
         title="Data extraction"
@@ -596,8 +599,8 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
                   ? { ...destination, enabled: !destination.enabled }
                   : destination,
               ),
-            )
-            setDirty(true)
+            );
+            setDirty(true);
           }}
           onEnabledChange={edit(setExtractionOn)}
         />
@@ -606,7 +609,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Where the call recording is sent once the call ends."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "recording" : null)
+          setOpenSetting(open ? "recording" : null);
         }}
         open={openSetting === "recording"}
         title="Recording delivery"
@@ -620,7 +623,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="What the last 90 days of calls say about this scenario."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "insights" : null)
+          setOpenSetting(open ? "insights" : null);
         }}
         open={openSetting === "insights"}
         title="Insights"
@@ -629,10 +632,10 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
           dismissed={dismissedInsights}
           insights={INSIGHTS}
           onDismiss={(title) => {
-            setDismissedInsights((titles) => [...titles, title])
+            setDismissedInsights((titles) => [...titles, title]);
           }}
           onOpenTarget={(target) => {
-            setOpenSetting(INSIGHT_TARGETS[target])
+            setOpenSetting(INSIGHT_TARGETS[target]);
           }}
         />
       </SettingSheet>
@@ -640,7 +643,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Cost and quality wins Sarj staff can act on for this scenario."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "opportunities" : null)
+          setOpenSetting(open ? "opportunities" : null);
         }}
         open={openSetting === "opportunities"}
         title="Optimization opportunities"
@@ -651,7 +654,7 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
       <SettingSheet
         description="Move this scenario to another organization."
         onOpenChange={(open) => {
-          setOpenSetting(open ? "ownership" : null)
+          setOpenSetting(open ? "ownership" : null);
         }}
         open={openSetting === "ownership"}
         title="Owning organization"
@@ -666,5 +669,5 @@ export function ScenarioEditor({ isStaff }: { isStaff: boolean }) {
         rtl={current.language === "ar" || current.language === "ur"}
       />
     </div>
-  )
+  );
 }

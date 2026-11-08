@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/command";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import type { Column } from "@/lib/mockups/configure-report-data"
+} from "@/components/ui/popover";
+import type { Column } from "@/lib/mockups/configure-report-data";
 
-import { AddColumnIcon } from "./icons"
+import { AddColumnIcon } from "./icons";
 
 /** Filtered here, not by cmdk, because "Select all" must know exactly which rows are shown. */
 export function ColumnPicker({
@@ -29,56 +29,56 @@ export function ColumnPicker({
   placeholder,
   selected,
 }: {
-  emptyLabel: string
-  onChange: (columns: Column[]) => void
-  options: Column[]
-  placeholder: string
-  selected: Column[]
+  emptyLabel: string;
+  onChange: (columns: Column[]) => void;
+  options: Column[];
+  placeholder: string;
+  selected: Column[];
 }) {
-  const [open, setOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
-  const selectAllId = React.useId()
+  const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const selectAllId = React.useId();
 
-  const on = new Set(selected.map((column) => column.id))
+  const on = new Set(selected.map((column) => column.id));
 
-  const needle = query.trim().toLowerCase()
+  const needle = query.trim().toLowerCase();
   const visible = needle
     ? options.filter((option) => option.label.toLowerCase().includes(needle))
-    : options
+    : options;
 
-  const allVisibleOn = visible.length > 0 && visible.every((o) => on.has(o.id))
+  const allVisibleOn = visible.length > 0 && visible.every((o) => on.has(o.id));
 
   /** Columns already on keep their place; newly ticked ones append in list order. */
   function apply(next: Set<string>) {
-    const kept = selected.filter((column) => next.has(column.id))
+    const kept = selected.filter((column) => next.has(column.id));
     const added = options.filter(
       (option) => next.has(option.id) && !on.has(option.id),
-    )
-    onChange([...kept, ...added])
+    );
+    onChange([...kept, ...added]);
   }
 
   function toggle(option: Column) {
-    const next = new Set(on)
-    if (next.has(option.id)) next.delete(option.id)
-    else next.add(option.id)
-    apply(next)
+    const next = new Set(on);
+    if (next.has(option.id)) next.delete(option.id);
+    else next.add(option.id);
+    apply(next);
   }
 
   function toggleVisible() {
-    const next = new Set(on)
+    const next = new Set(on);
     for (const option of visible) {
-      if (allVisibleOn) next.delete(option.id)
-      else next.add(option.id)
+      if (allVisibleOn) next.delete(option.id);
+      else next.add(option.id);
     }
-    apply(next)
+    apply(next);
   }
 
   return (
     <Popover
       onOpenChange={(next) => {
-        setOpen(next)
+        setOpen(next);
         /* A search left behind from last time reads as an empty group. */
-        if (!next) setQuery("")
+        if (!next) setQuery("");
       }}
       open={open}
     >
@@ -149,5 +149,5 @@ export function ColumnPicker({
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

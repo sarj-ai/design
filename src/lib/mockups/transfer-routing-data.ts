@@ -1,9 +1,9 @@
-export type TransferMode = "cold" | "warm"
+export type TransferMode = "cold" | "warm";
 
 export const TRANSFER_MODES: { value: TransferMode; label: string }[] = [
   { value: "cold", label: "Cold transfer — connect immediately" },
   { value: "warm", label: "Warm transfer — brief the agent first" },
-]
+];
 
 export const KEYPAD_KEYS = [
   "0",
@@ -18,44 +18,44 @@ export const KEYPAD_KEYS = [
   "9",
   "*",
   "#",
-]
+];
 
 export const OUTBOUND_TRUNKS = [
   "Sarj shared trunk",
   "Quara dedicated trunk (STC)",
   "Mobily SIP trunk",
-]
+];
 
 export type WorkingHours = {
-  start: string
-  end: string
-  outsideHoursMessage: string
-}
+  start: string;
+  end: string;
+  outsideHoursMessage: string;
+};
 
 /** `null` means still shared. Working hours and the outside-hours message are overridden together. */
 export type RouteOverrides = {
-  transferMode: TransferMode | null
-  messageBeforeTransfer: string | null
-  workingHours: WorkingHours | null
-  warmSummaryPrompt: string | null
-}
+  transferMode: TransferMode | null;
+  messageBeforeTransfer: string | null;
+  workingHours: WorkingHours | null;
+  warmSummaryPrompt: string | null;
+};
 
 export type Route = {
-  id: string
-  name: string
-  destination: string
-  cases: string[]
-  keypadKey: string
-  overrides: RouteOverrides
-}
+  id: string;
+  name: string;
+  destination: string;
+  cases: string[];
+  keypadKey: string;
+  overrides: RouteOverrides;
+};
 
 export type SharedSettings = {
-  transferMode: TransferMode
-  messageBeforeTransfer: string
-  workingHours: WorkingHours
-  warmSummaryPrompt: string
-  outboundTrunk: string
-}
+  transferMode: TransferMode;
+  messageBeforeTransfer: string;
+  workingHours: WorkingHours;
+  warmSummaryPrompt: string;
+  outboundTrunk: string;
+};
 
 export const SHARED_SETTINGS: SharedSettings = {
   transferMode: "cold",
@@ -70,9 +70,9 @@ export const SHARED_SETTINGS: SharedSettings = {
   warmSummaryPrompt:
     "Summarise who is calling, what they asked for, and anything already tried on this call. Keep it to three sentences.",
   outboundTrunk: "Quara dedicated trunk (STC)",
-}
+};
 
-export const DEFAULT_ROUTE_ID = "route-support"
+export const DEFAULT_ROUTE_ID = "route-support";
 
 export const ROUTES: Route[] = [
   {
@@ -121,7 +121,7 @@ export const ROUTES: Route[] = [
         "Say why the customer wants to cancel, how long they have been with us, and anything they have already been offered.",
     },
   },
-]
+];
 
 export function emptyRoute(id: string, keypadKey: string): Route {
   return {
@@ -136,7 +136,7 @@ export function emptyRoute(id: string, keypadKey: string): Route {
       workingHours: null,
       warmSummaryPrompt: null,
     },
-  }
+  };
 }
 
 export function overriddenFields(route: Route): string[] {
@@ -145,21 +145,21 @@ export function overriddenFields(route: Route): string[] {
     messageBeforeTransfer,
     workingHours,
     warmSummaryPrompt,
-  } = route.overrides
+  } = route.overrides;
 
   return [
     transferMode !== null ? "Transfer mode" : null,
     messageBeforeTransfer !== null ? "Message before transferring" : null,
     workingHours !== null ? "Working hours" : null,
     warmSummaryPrompt !== null ? "Warm summary prompt" : null,
-  ].filter((field): field is string => field !== null)
+  ].filter((field): field is string => field !== null);
 }
 
 export function effectiveMode(
   route: Route,
   shared: SharedSettings,
 ): TransferMode {
-  return route.overrides.transferMode ?? shared.transferMode
+  return route.overrides.transferMode ?? shared.transferMode;
 }
 
 /* A cheap lexical stand-in for the semantic overlap check an LLM makes live on the call. */
@@ -209,48 +209,48 @@ const FILLER = new Set([
   "want",
   "wants",
   "with",
-])
+]);
 
 function contentWords(text: string): string[] {
   return text
     .toLowerCase()
     .split(/[^a-z']+/)
-    .filter((word) => word.length > 2 && !FILLER.has(word))
+    .filter((word) => word.length > 2 && !FILLER.has(word));
 }
 
 type Overlap = {
-  routeIds: [string, string]
-  cases: [string, string]
-  shared: string[]
-}
+  routeIds: [string, string];
+  cases: [string, string];
+  shared: string[];
+};
 
 export function findOverlaps(routes: Route[]): Overlap[] {
-  const overlaps: Overlap[] = []
+  const overlaps: Overlap[] = [];
 
   for (let i = 0; i < routes.length; i += 1) {
     for (let j = i + 1; j < routes.length; j += 1) {
       for (const a of routes[i].cases) {
         for (const b of routes[j].cases) {
-          const wordsB = new Set(contentWords(b))
+          const wordsB = new Set(contentWords(b));
           const shared = [...new Set(contentWords(a))].filter((word) =>
             wordsB.has(word),
-          )
+          );
 
           if (shared.length) {
             overlaps.push({
               routeIds: [routes[i].id, routes[j].id],
               cases: [a, b],
               shared,
-            })
+            });
           }
         }
       }
     }
   }
 
-  return overlaps
+  return overlaps;
 }
 
 export function overlappingCases(overlaps: Overlap[]): Set<string> {
-  return new Set(overlaps.flatMap((overlap) => overlap.cases))
+  return new Set(overlaps.flatMap((overlap) => overlap.cases));
 }
