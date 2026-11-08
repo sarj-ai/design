@@ -69,6 +69,9 @@ jobs:
       - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           version: "0.13.5"
+          enable-cache: true
+          # Match Standards' bundle cache without scanning installed JS packages.
+          cache-dependency-glob: .sarj-standards.toml
       - name: Install the pinned standards CLI
         env:
           UV_PYTHON_DOWNLOADS_JSON_URL: https://raw.githubusercontent.com/astral-sh/uv/4ecd0eff2a81e3ffdcd7cfee10d08936e4747c17/crates/uv-python-managed/download-metadata.json
