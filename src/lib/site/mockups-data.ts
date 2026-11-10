@@ -6,6 +6,7 @@ import {
   AudioWave01Icon,
   BookBookmark01Icon,
   CallOutgoing01Icon,
+  CancelCircleIcon,
   CheckmarkBadge01Icon,
   DashboardSquare01Icon,
   DocumentAttachmentIcon,
@@ -24,6 +25,7 @@ import {
   Timer01Icon,
   UserGroupIcon,
   VoiceIdIcon,
+  WebhookIcon,
   WorkHistoryIcon,
   Wrench01Icon,
 } from "@hugeicons/core-free-icons";
@@ -419,6 +421,28 @@ export const MOCKUPS: Mockup[] = [
     icon: TaskDone02Icon,
     tickets: ["DES-208", "INT-188"],
     added: "2026-11-04T03:46:43.852Z",
+  },
+  {
+    href: "/batch-cancel",
+    title: "Cancel a batch",
+    meta: "Batch calls · in progress",
+    surface: null,
+    description:
+      "Cancel sits apart from Pause on the batch page and in the batch list. The confirmation says how many queued calls go and what stays, and a cancelled batch shows its counts and what you can still do.",
+    icon: CancelCircleIcon,
+    tickets: ["DES-209", "INT-264"],
+    added: "2026-11-05T07:54:08.660Z",
+  },
+  {
+    href: "/webhook-events",
+    title: "Webhook events",
+    meta: "Page · in progress",
+    surface: null,
+    description:
+      "Choose which call events reach the organization's one webhook URL, read what each one sends, and keep the existing completed and not completed deliveries on by default.",
+    icon: WebhookIcon,
+    tickets: ["DES-201", "INT-28"],
+    added: "2026-11-10T05:37:33.114Z",
   },
   // `npm run new` appends new mockups above this line.
 ];

@@ -6036,6 +6036,264 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "batch-cancel",
+      "type": "registry:block",
+      "title": "Cancel a batch",
+      "description": "Cancel sits apart from Pause on the batch page and in the batch list. The confirmation says how many queued calls go and what stays, and a cancelled batch shows its counts and what you can still do.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "dropdown-menu",
+        "item",
+        "native-select",
+        "progress",
+        "separator",
+        "sidebar",
+        "spinner",
+        "table",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/batch-cancel/page.tsx",
+          "type": "registry:page",
+          "target": "app/batch-cancel/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/batch-cancel/batch-parts.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/batch-cancel/batch-parts.tsx"
+        },
+        {
+          "path": "src/components/mockups/batch-cancel/batch-views.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/batch-cancel/batch-views.tsx"
+        },
+        {
+          "path": "src/components/mockups/batch-cancel/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/batch-cancel/icons.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shared/reviewer-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/reviewer-switch.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/batch-cancel-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/batch-cancel-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "webhook-events",
+      "type": "registry:block",
+      "title": "Webhook events",
+      "description": "Choose which call events reach the organization's one webhook URL, read what each one sends, and keep the existing completed and not completed deliveries on by default.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "field",
+        "input",
+        "item",
+        "label",
+        "native-select",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "switch",
+        "table",
+        "tabs",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/webhook-events/page.tsx",
+          "type": "registry:page",
+          "target": "app/webhook-events/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/json-view-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/json-view-preview.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-events/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-events/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-events/webhooks-page.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-events/webhooks-page.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shared/reviewer-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/reviewer-switch.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/webhook-events-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/webhook-events-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }
