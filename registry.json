@@ -6294,6 +6294,953 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "webhook-reruns",
+      "type": "registry:block",
+      "title": "Rerun webhooks on past calls",
+      "description": "Staff resend a past call's webhook, one call or by filter, with the stored or a rebuilt payload.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "react-day-picker",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "calendar",
+        "card",
+        "collapsible",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input-group",
+        "item",
+        "label",
+        "native-select",
+        "popover",
+        "progress",
+        "radio-group",
+        "select",
+        "separator",
+        "sidebar",
+        "spinner",
+        "switch",
+        "table",
+        "tabs",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/webhook-reruns/page.tsx",
+          "type": "registry:page",
+          "target": "app/webhook-reruns/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/json-view-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/json-view-preview.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-reruns/bulk-reruns.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-reruns/bulk-reruns.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-reruns/call-webhook.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-reruns/call-webhook.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-reruns/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-reruns/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/webhook-reruns/resend-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/webhook-reruns/resend-dialog.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/filter-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/filter-bar.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/list-footer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/list-footer.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shared/reviewer-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/reviewer-switch.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/webhook-reruns-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/webhook-reruns-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "kb-spreadsheets",
+      "type": "registry:block",
+      "title": "Client-maintained knowledge base files",
+      "description": "Upload .xlsx and .csv files to a knowledge base and edit their rows in place, inside a 20k-token budget per file.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "empty",
+        "field",
+        "input",
+        "input-group",
+        "item",
+        "native-select",
+        "progress",
+        "separator",
+        "sidebar",
+        "spinner",
+        "table",
+        "textarea",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/kb-spreadsheets/page.tsx",
+          "type": "registry:page",
+          "target": "app/kb-spreadsheets/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/kb-spreadsheets/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/kb-spreadsheets/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/kb-spreadsheets/kb-spreadsheets.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/kb-spreadsheets/kb-spreadsheets.tsx"
+        },
+        {
+          "path": "src/components/mockups/kb-spreadsheets/knowledge-base-detail.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/kb-spreadsheets/knowledge-base-detail.tsx"
+        },
+        {
+          "path": "src/components/mockups/kb-spreadsheets/sheet-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/kb-spreadsheets/sheet-editor.tsx"
+        },
+        {
+          "path": "src/components/mockups/kb-spreadsheets/source-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/kb-spreadsheets/source-table.tsx"
+        },
+        {
+          "path": "src/components/mockups/knowledge-base/add-sources.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/knowledge-base/add-sources.tsx"
+        },
+        {
+          "path": "src/components/mockups/knowledge-base/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/knowledge-base/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/knowledge-base/summary-field.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/knowledge-base/summary-field.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shared/reviewer-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/reviewer-switch.tsx"
+        },
+        {
+          "path": "src/components/shared/save-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/save-bar.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/kb-spreadsheets-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/kb-spreadsheets-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/knowledge-base-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/knowledge-base-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "scenario-dashboard",
+      "type": "registry:block",
+      "title": "Per-scenario dashboard",
+      "description": "A Dashboard tab on each scenario: latency, cost, failures and rule-based optimization opportunities, by version, date and granularity.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "react-day-picker",
+        "recharts",
+        "sonner",
+        "tailwind-merge",
+        "zod"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "calendar",
+        "card",
+        "chart",
+        "collapsible",
+        "empty",
+        "popover",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "table",
+        "tabs",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/scenario-dashboard/page.tsx",
+          "type": "registry:page",
+          "target": "app/scenario-dashboard/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/opportunity-triage/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/opportunity-triage/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/opportunity-triage/opportunities-panel.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/opportunity-triage/opportunities-panel.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-dashboard/charts.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-dashboard/charts.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-dashboard/dashboard-filters.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-dashboard/dashboard-filters.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-dashboard/dashboard-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-dashboard/dashboard-tab.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-dashboard/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-dashboard/icons.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/opportunity-triage-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/opportunity-triage-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/scenario-dashboard-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/scenario-dashboard-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-primary-tint": "var(--primary-tint)",
+          "color-primary-tint-foreground": "var(--primary-tint-foreground)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "primary-tint": "oklch(0.948 0.019 291.8)",
+          "primary-tint-foreground": "oklch(0.411 0.108 291.8)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "call-measurements",
+      "type": "registry:block",
+      "title": "Measurements on each call",
+      "description": "A staff-only Measurements tab on the call detail: our cost by component and model, p50/p75/p95 and turn-taking latency, first sound per turn split into end-of-speech wait, model and voice, and the turn and tool counts.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "recharts",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "chart",
+        "collapsible",
+        "empty",
+        "select",
+        "separator",
+        "sidebar",
+        "table",
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/call-measurements/page.tsx",
+          "type": "registry:page",
+          "target": "app/call-measurements/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/call-measurements/call-detail.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/call-measurements/call-detail.tsx"
+        },
+        {
+          "path": "src/components/mockups/call-measurements/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/call-measurements/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/call-measurements/measurements-tab.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/call-measurements/measurements-tab.tsx"
+        },
+        {
+          "path": "src/components/mockups/call-measurements/turn-latency-chart.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/call-measurements/turn-latency-chart.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/call-measurements-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/call-measurements-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "global-prompt-versioning",
+      "type": "registry:block",
+      "title": "Versioning for the global prompt",
+      "description": "Global prompt saves become versions that wait for a publish, with history, compare, restore and approval.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "dialog",
+        "drawer",
+        "empty",
+        "field",
+        "input",
+        "item",
+        "label",
+        "select",
+        "separator",
+        "sidebar",
+        "skeleton",
+        "spinner",
+        "table",
+        "tabs",
+        "textarea",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/global-prompt-versioning/page.tsx",
+          "type": "registry:page",
+          "target": "app/global-prompt-versioning/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-header.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-hint.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-hint.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/conversation-version.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/conversation-version.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/global-prompt-editor.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/global-prompt-editor.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/history-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/history-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/request-dialog.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/request-dialog.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/review-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/review-drawer.tsx"
+        },
+        {
+          "path": "src/components/mockups/global-prompt-versioning/save-review.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/global-prompt-versioning/save-review.tsx"
+        },
+        {
+          "path": "src/components/mockups/publish-approval/status-badge.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/publish-approval/status-badge.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/line-diff.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/line-diff.tsx"
+        },
+        {
+          "path": "src/components/shared/save-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/save-bar.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/config-versioning-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/config-versioning-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/global-prompt-versioning-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/global-prompt-versioning-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/publish-approval-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/publish-approval-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-warning": "var(--warning)",
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-warning-tint": "var(--warning-tint)",
+          "color-warning-tint-foreground": "var(--warning-tint-foreground)",
+          "color-destructive-tint": "var(--destructive-tint)",
+          "color-destructive-tint-foreground": "var(--destructive-tint-foreground)"
+        },
+        "light": {
+          "warning": "oklch(0.769 0.188 70.08)",
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "warning-tint": "oklch(0.955 0.055 70.08)",
+          "warning-tint-foreground": "oklch(0.402 0.086 55)",
+          "destructive-tint": "oklch(0.948 0.028 27.325)",
+          "destructive-tint-foreground": "oklch(0.442 0.176 27.325)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
+    },
+    {
+      "name": "scenario-advanced-settings",
+      "type": "registry:block",
+      "title": "Scenario advanced settings",
+      "description": "TODO — one line on what scenario-advanced-settings answers.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "collapsible",
+        "drawer",
+        "field",
+        "input-group",
+        "item",
+        "label",
+        "separator",
+        "sidebar",
+        "switch",
+        "table",
+        "tabs",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/scenario-advanced-settings/page.tsx",
+          "type": "registry:page",
+          "target": "app/scenario-advanced-settings/page.tsx"
+        },
+        {
+          "path": "src/components/design-system/field-hint.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/field-hint.tsx"
+        },
+        {
+          "path": "src/components/design-system/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/icons.tsx"
+        },
+        {
+          "path": "src/components/design-system/reference-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/reference-table.tsx"
+        },
+        {
+          "path": "src/components/design-system/tabs-preview.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/design-system/tabs-preview.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-advanced-settings/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-advanced-settings/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/scenario-advanced-settings/settings-drawer.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/scenario-advanced-settings/settings-drawer.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/save-bar.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/save-bar.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/scenario-advanced-settings-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/scenario-advanced-settings-data.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }

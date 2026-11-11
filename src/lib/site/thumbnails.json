@@ -31,7 +31,13 @@
     "transfer-routing": "89277f4c8d1ca311",
     "variable-mentions": "3fb4faf2e3f2c22d",
     "voice-cloning": "adc3fd8e16b5058e",
-    "voice-ownership": "21f0b0cca3227674"
+    "voice-ownership": "21f0b0cca3227674",
+    "webhook-reruns": "06a3bab945597644",
+    "kb-spreadsheets": "2caecc9ce5304704",
+    "scenario-dashboard": "ad5c3e659cabcd64",
+    "call-measurements": "3fea083353cb4ff8",
+    "global-prompt-versioning": "818c1d7979551f54",
+    "scenario-advanced-settings": "158dcbd48c7edfb8"
   },
   "height": 533,
   "width": 1280

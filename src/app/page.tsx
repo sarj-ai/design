@@ -38,6 +38,10 @@ export default function Home() {
   const [order, setOrder] = useState<Order>("newest");
   const grouped = order === "section";
 
+  const THUMB_FINGERPRINTS: ReadonlyMap<string, string> = new Map(
+    Object.entries(thumbnails.fingerprints),
+  );
+
   const groups = useMemo(
     () =>
       order === "section"
@@ -141,15 +145,11 @@ export default function Home() {
                       tabIndex={-1}
                     >
                       {/* Unoptimized: `npm run thumbs` already wrote a 2x WebP. The fingerprint is the cache key, since redeploys reuse a filename. */}
-                      {slug in thumbnails.fingerprints ? (
+                      {THUMB_FINGERPRINTS.has(slug) ? (
                         <Image
                           alt=""
                           height={thumbnails.height}
-                          src={`/thumbs/${slug}.webp?v=${
-                            thumbnails.fingerprints[
-                              slug as keyof typeof thumbnails.fingerprints
-                            ]
-                          }`}
+                          src={`/thumbs/${slug}.webp?v=${THUMB_FINGERPRINTS.get(slug) ?? ""}`}
                           unoptimized
                           width={thumbnails.width}
                         />

@@ -444,6 +444,71 @@ export const MOCKUPS: Mockup[] = [
     tickets: ["DES-201", "INT-28"],
     added: "2026-11-10T05:37:33.114Z",
   },
+  {
+    href: "/webhook-reruns",
+    title: "Rerun webhooks on past calls",
+    meta: "Page · exploration",
+    surface: "Integrations Pages",
+    description:
+      "Staff resend a past call's webhook, one call or by filter, with the stored or a rebuilt payload.",
+    icon: SparklesIcon,
+    tickets: ["INT-313"],
+    added: "2026-11-11T08:35:38.412Z",
+  },
+  {
+    href: "/kb-spreadsheets",
+    title: "Client-maintained knowledge base files",
+    meta: "Page · exploration",
+    surface: "Knowledge Bases",
+    description:
+      "Upload .xlsx and .csv files to a knowledge base and edit their rows in place, inside a 20k-token budget per file.",
+    icon: SparklesIcon,
+    tickets: ["INT-293"],
+    added: "2026-11-11T08:35:40.137Z",
+  },
+  {
+    href: "/scenario-dashboard",
+    title: "Per-scenario dashboard",
+    meta: "Page · exploration",
+    surface: "Scenario Edit",
+    description:
+      "A Dashboard tab on each scenario: latency, cost, failures and rule-based optimization opportunities, by version, date and granularity.",
+    icon: SparklesIcon,
+    tickets: ["INT-295"],
+    added: "2026-11-11T08:35:40.901Z",
+  },
+  {
+    href: "/call-measurements",
+    title: "Measurements on each call",
+    meta: "Tab · exploration",
+    surface: "Conversations",
+    description:
+      "A staff-only Measurements tab on the call detail: our cost by component and model, p50/p75/p95 and turn-taking latency, first sound per turn split into end-of-speech wait, model and voice, and the turn and tool counts.",
+    icon: SparklesIcon,
+    tickets: ["INT-312"],
+    added: "2026-11-11T08:35:41.679Z",
+  },
+  {
+    href: "/global-prompt-versioning",
+    title: "Versioning for the global prompt",
+    meta: "Page · drawers · dialog",
+    surface: "Settings",
+    description:
+      "Global prompt saves become versions that wait for a publish, with history, compare, restore and approval.",
+    icon: SparklesIcon,
+    tickets: ["INT-253"],
+    added: "2026-11-11T08:35:42.491Z",
+  },
+  {
+    href: "/scenario-advanced-settings",
+    title: "Scenario advanced settings",
+    meta: "Page · exploration",
+    surface: "Scenario Edit",
+    description: "TODO — one line on what scenario-advanced-settings answers.",
+    icon: SparklesIcon,
+    tickets: ["INT-294"],
+    added: "2026-11-11T08:37:29.744Z",
+  },
   // `npm run new` appends new mockups above this line.
 ];
 

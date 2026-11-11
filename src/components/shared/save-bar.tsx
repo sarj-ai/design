@@ -8,10 +8,12 @@ export function SaveBar({
   changes,
   onDiscard,
   onSave,
+  saveLabel = "Save",
 }: {
   changes: number;
   onDiscard: () => void;
   onSave: () => void;
+  saveLabel?: string;
 }) {
   const shown = changes > 0;
 
@@ -40,7 +42,7 @@ export function SaveBar({
           className="bg-background text-foreground hover:bg-background/90"
           onClick={onSave}
         >
-          Save
+          {saveLabel}
         </Button>
       </div>
     </div>
