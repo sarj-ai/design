@@ -321,7 +321,7 @@ function ApiKeys() {
   const [deleting, setDeleting] = React.useState<ApiKey | null>(null);
 
   function create() {
-    const secret = `sk_live_${Math.random().toString(36).slice(2, 14)}`;
+    const secret = `sk_live_${crypto.randomUUID().replaceAll("-", "")}`;
     setKeys((current) => [
       { id: secret, prefix: secret.slice(0, 12), created: "Just now" },
       ...current,
