@@ -1,0 +1,70 @@
+name: Current source CodeQL evidence
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: current-codeql-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Current CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [actions, javascript-typescript, python]
+    env:
+      CODEQL_LANGUAGE: ${{ matrix.language }}
+      EVIDENCE_FILE: codeql-evaluation.json
+      SARIF_DIRECTORY: codeql-current-results
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 26.12.1
+      - name: Install the unchanged frozen evidence-parser dependencies
+        run: npm ci
+      - name: Initialize incomplete evidence
+        run: node --experimental-strip-types scripts/codeql-evidence.mts initialize --language "$CODEQL_LANGUAGE" --output "$EVIDENCE_FILE"
+      - name: Initialize the unchanged default query suite
+        uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          threads: 2
+          ram: 4096
+      - name: Analyze current source without changing default setup
+        id: analyze
+        uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4
+        with:
+          category: current-source/${{ matrix.language }}
+          output: codeql-current-results
+          upload: never
+          upload-database: false
+          threads: 2
+          ram: 4096
+      - name: Verify native evidence and retain every finding
+        if: always()
+        env:
+          ANALYSIS_OUTCOME: ${{ steps.analyze.outcome }}
+        run: node --experimental-strip-types scripts/codeql-evidence.mts verify --language "$CODEQL_LANGUAGE" --output "$EVIDENCE_FILE" --directory "$SARIF_DIRECTORY" --analysis-outcome "$ANALYSIS_OUTCOME"
+      - name: Preserve the native report and incomplete results
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: current-codeql-${{ matrix.language }}-${{ github.sha }}
+          path: |
+            codeql-evaluation.json
+            codeql-current-results/*.sarif
+          retention-days: 30
+          if-no-files-found: error
