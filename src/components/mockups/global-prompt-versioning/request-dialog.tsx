@@ -121,9 +121,9 @@ function RequestForm({
     attempts.current += 1;
     const ok =
       caseId === "send-fails" && attempts.current === 1
-        ? await new Promise<boolean>((resolve) =>
-            setTimeout(() => resolve(false), 900),
-          )
+        ? await new Promise<boolean>((resolve) => {
+            setTimeout(() => resolve(false), 900);
+          })
         : await onSend({ summary: summary.trim(), note: note.trim() });
     setSending(false);
     if (!ok) setFailed(true);

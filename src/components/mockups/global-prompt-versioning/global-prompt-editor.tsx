@@ -166,7 +166,7 @@ export function GlobalPromptEditor({
           mine: true,
           at: "Just now",
           editedFrom: base,
-          note: note || null,
+          note: note === "" ? null : note,
           body: draft,
         },
         ...current.versions,
@@ -215,7 +215,9 @@ export function GlobalPromptEditor({
   }
 
   async function apply(n: number): Promise<ApplyResult> {
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 900);
+    });
     if (caseId === "publish-fails") return "failed";
     const version = subject.versions.find((item) => item.n === n);
     if (!version) return "failed";
@@ -231,7 +233,9 @@ export function GlobalPromptEditor({
 
   async function send(input: { summary: string; note: string }) {
     if (requestFor === null) return false;
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 900);
+    });
     const made: ApprovalRequest = {
       ...mainRequest("pending"),
       id: `gp-${String(requestFor)}-${String(requests.length)}`,
@@ -270,7 +274,9 @@ export function GlobalPromptEditor({
   }
 
   async function approve(id: string) {
-    await new Promise((resolve) => setTimeout(resolve, 900));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 900);
+    });
     const target = requests.find((item) => item.id === id);
     if (!target) return false;
     decide(id, {
