@@ -1,0 +1,12 @@
+{
+  "advisory": "https://github.com/advisories/GHSA-gcqx-w48m-w2h4",
+  "reported_issue": "https://github.com/TehShrike/deepmerge/issues/273",
+  "upstream_patched_release": null,
+  "package_version": "4.3.1",
+  "package_integrity": "sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==",
+  "patch_origin": "Locally maintained correction; not an upstream release or merged upstream patch.",
+  "correction": "Define enumerable, writable, configurable own data properties at all three result-write sites so __proto__ never invokes the inherited setter. Preserve the existing key guards, plain-object prototype and custom merge behavior.",
+  "files": ["index.js", "dist/cjs.js", "dist/umd.js"],
+  "regressions": "scripts/deepmerge-prototype-guard.test.mts",
+  "scanner_limit": "The installed upstream version remains 4.3.1 and scanners may retain this advisory. No finding is suppressed."
+}
