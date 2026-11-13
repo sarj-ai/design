@@ -23,6 +23,7 @@ jobs:
         language: [actions, javascript-typescript, python]
     env:
       CODEQL_LANGUAGE: ${{ matrix.language }}
+      CODEQL_ACTION_DIFF_INFORMED_QUERIES: "false"
       EVIDENCE_FILE: codeql-evaluation.json
       SARIF_DIRECTORY: codeql-current-results
     steps:

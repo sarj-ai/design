@@ -18,14 +18,22 @@ const InvocationSchema = z.object({
   toolConfigurationNotifications: z.array(NotificationSchema).default([]),
 });
 const EngineVersionSchema = z.string().trim().min(1);
+const QueryRuleSchema = z.object({ id: EngineVersionSchema });
+const ToolComponentSchema = z.object({
+  name: EngineVersionSchema,
+  rules: z.array(QueryRuleSchema).default([]),
+});
 const DriverSchema = z.object({
   name: z.literal("CodeQL"),
   semanticVersion: EngineVersionSchema.optional(),
   version: EngineVersionSchema.optional(),
-  rules: z.array(z.unknown()).min(1),
+  rules: z.array(QueryRuleSchema),
 });
 const RunSchema = z.object({
-  tool: z.object({ driver: DriverSchema }),
+  tool: z.object({
+    driver: DriverSchema,
+    extensions: z.array(ToolComponentSchema),
+  }),
   automationDetails: z.object({ id: z.string() }),
   invocations: z.array(InvocationSchema).min(1),
   results: z.array(
@@ -54,6 +62,29 @@ export function evaluate(value: unknown, language: Language) {
   if (run.automationDetails.id !== `current-source/${language}/`) {
     throw new Error("Wrong language category");
   }
+  if (
+    run.tool.extensions.some(
+      (component) => component.name === "codeql-action/pr-diff-range",
+    )
+  ) {
+    throw new Error(
+      "Diff-limited analysis cannot establish full source evidence",
+    );
+  }
+  const queryPack = `codeql/${language === "javascript-typescript" ? "javascript" : language}-queries`;
+  const queryComponents = run.tool.extensions.filter(
+    (component) => component.name === queryPack,
+  );
+  const component = queryComponents.at(0);
+  if (
+    queryComponents.length !== 1 ||
+    !component ||
+    component.rules.length === 0 ||
+    new Set(component.rules.map((rule) => rule.id)).size !==
+      component.rules.length
+  ) {
+    throw new Error("Missing or ambiguous native language query rules");
+  }
   verifyInvocations(run.invocations);
   if (run.results.some((entry) => entry.suppressions.length > 0)) {
     throw new Error("Suppressed records cannot establish complete evidence");
@@ -61,7 +92,9 @@ export function evaluate(value: unknown, language: Language) {
   return {
     findings: run.results.length,
     engineVersion,
-    ruleCount: driver.rules.length,
+    ruleCount: component.rules.length,
+    queryPack,
+    fullSourceAnalysis: true,
   };
 }
 

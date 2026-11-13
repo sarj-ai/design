@@ -9,6 +9,7 @@ import { CollectionStateSchema, evaluate, main } from "./codeql-evidence.mts";
 interface NativeRun {
   tool: {
     driver: { name: string; semanticVersion: string; rules: { id: string }[] };
+    extensions: { name: string; rules: { id: string }[] }[];
   };
   automationDetails: { id: string };
   invocations: [
@@ -29,8 +30,11 @@ function native(): { version: string; runs: [NativeRun] } {
           driver: {
             name: "CodeQL",
             semanticVersion: "2.27.4",
-            rules: [{ id: "synthetic" }],
+            rules: [],
           },
+          extensions: [
+            { name: "codeql/python-queries", rules: [{ id: "py/synthetic" }] },
+          ],
         },
         automationDetails: { id: "current-source/python/" },
         invocations: [
@@ -47,6 +51,8 @@ await test("complete native collection remains separate from control effectivene
     findings: 0,
     engineVersion: "2.27.4",
     ruleCount: 1,
+    queryPack: "codeql/python-queries",
+    fullSourceAnalysis: true,
   });
 });
 
@@ -67,6 +73,11 @@ for (const failure of [
   "wrong-language",
   "suppressed",
   "empty-rules",
+  "missing-query-pack",
+  "wrong-query-pack",
+  "duplicate-query-pack",
+  "diff-informed",
+  "duplicate-rule",
   "no-version",
   "missing-invocations",
   "missing-version",
@@ -84,7 +95,30 @@ for (const failure of [
       run.automationDetails.id = "current-source/actions/";
     if (failure === "suppressed")
       run.results.push({ suppressions: [{ kind: "external" }] });
-    if (failure === "empty-rules") run.tool.driver.rules = [];
+    if (failure === "empty-rules")
+      run.tool.extensions = [{ name: "codeql/python-queries", rules: [] }];
+    if (failure === "missing-query-pack") run.tool.extensions = [];
+    if (failure === "wrong-query-pack")
+      run.tool.extensions = [
+        {
+          name: "codeql/actions-queries",
+          rules: [{ id: "actions/synthetic" }],
+        },
+      ];
+    if (failure === "duplicate-query-pack")
+      run.tool.extensions.push(...run.tool.extensions);
+    if (failure === "diff-informed")
+      run.tool.extensions.push({
+        name: "codeql-action/pr-diff-range",
+        rules: [],
+      });
+    if (failure === "duplicate-rule")
+      run.tool.extensions = [
+        {
+          name: "codeql/python-queries",
+          rules: [{ id: "py/synthetic" }, { id: "py/synthetic" }],
+        },
+      ];
     if (failure === "no-version")
       Reflect.deleteProperty(run.tool.driver, "semanticVersion");
     if (failure === "missing-invocations")
