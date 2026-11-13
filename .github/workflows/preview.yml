@@ -26,7 +26,8 @@ jobs:
     # Their normal CI checks still validate the code without uploading a preview.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
-      github.actor != 'dependabot[bot]'
+      github.actor != 'dependabot[bot]' &&
+      !startsWith(github.head_ref, 'codex/trycomp-')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

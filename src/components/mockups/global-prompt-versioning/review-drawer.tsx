@@ -143,9 +143,9 @@ function Review({
     attempts.current += 1;
     const ok =
       failApprove && attempts.current === 1
-        ? await new Promise<boolean>((resolve) =>
-            setTimeout(() => resolve(false), 900),
-          )
+        ? await new Promise<boolean>((resolve) => {
+            setTimeout(() => resolve(false), 900);
+          })
         : await onApprove(request.id);
     setApproving(false);
     if (!ok) setFailed(true);
