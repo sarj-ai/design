@@ -17,4 +17,5 @@ repos:
         always_run: true
         pass_filenames: true
         require_serial: true
+        verbose: true
         stages: [commit-msg]

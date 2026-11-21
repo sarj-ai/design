@@ -1,9 +1,9 @@
 {
   "schemaVersion": 2,
   "provenance": {
-    "bundleVersion": "9.4.9",
-    "consumerBaseSha": "5f2057dc2448e7c094f42b26d0aa6d5929305370",
-    "catalogDigest": "55f02d9d4a2372ebf4dc2939539c8d2a718ad0ad4966222b145593c65ae42154"
+    "bundleVersion": "9.75.0",
+    "consumerBaseSha": "d10cda02576772d39e0d839d44f32e6e573aa5b9",
+    "catalogDigest": "ed64614f526f9b90eea29a6bdae88b2153fdfacba51fe71ba72dc8aff3ca4bb8"
   },
   "diagnostics": [
     {
@@ -32,13 +32,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/no-comment-cruft",
       "path": "src/components/mockups/scenario-single-screen/v2/scenario-editor.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "c3a87c8e66029c09c1f63d23c3ac8c6124911c5cac80c01aa343aa198d8b0806",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-comment-cruft",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -116,13 +109,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/no-explicit-type-predicate",
       "path": "src/components/site/changelog-rail.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "8b770bc61b413fe3c18a3b1b57b585b2349b083a43b3673582d54e6f8eb4f28d",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-explicit-type-predicate",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -271,13 +257,6 @@
       "ruleId": "@sarj/no-frontend-comments",
       "path": "scripts/lib/import-graph.mjs",
       "count": 1
-    },
-    {
-      "fingerprint": "73fa490d819da7c2d0d0e1453fad9ec05422c8441c15034d390f6b71c45f4a74",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
     },
     {
       "fingerprint": "3d05751a00424dc437f0f39a18e44a8cc8a82417bcf5eb11022dee9c9d43e52a",
@@ -1659,48 +1638,6 @@
       "count": 1
     },
     {
-      "fingerprint": "cd6af83384811d44ce939a9cc430cbc94c7086f55eca65d494b6709d230beb29",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "b6ee6b1965cc96f577cd8deecd8dd4fdec70ec557a4a526caf5e70681e028b5f",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 12
-    },
-    {
-      "fingerprint": "cac78c282663c923cadd524c4b8cf0dace4003f767e296d70ddccc0b2a46833e",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 10
-    },
-    {
-      "fingerprint": "56c502a52c12f884b2838e10be4cc96e4e13de193ef8460aa490271a218ad348",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 11
-    },
-    {
-      "fingerprint": "4ddc27098cb28ecda1d9732a686253ff47b9ef490f7cffd59f842f20e031503d",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/text-highlight-wave.tsx",
-      "count": 14
-    },
-    {
-      "fingerprint": "71703c35e94714d213ee5e4569aca15099d728c574340dd9e55a63a92d60466c",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-frontend-comments",
-      "path": "src/components/ui/toggle.tsx",
-      "count": 4
-    },
-    {
       "fingerprint": "d185392ef7594e4e5c92ecb92a02e33493cd4e38c4b9b044b4e77d4ac080b426",
       "source": "oxlint",
       "ruleId": "@sarj/no-frontend-comments",
@@ -2009,13 +1946,6 @@
       "count": 1
     },
     {
-      "fingerprint": "c594499137891a8fa24777f278199d7c69523091109a0ce265a178292feec583",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-logical-or-fallback",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
       "fingerprint": "3b2c41abb98dc0c10ab141f4744df2b5d8b9c0fb14536bc581626483fe5c9bb8",
       "source": "oxlint",
       "ruleId": "@sarj/no-logical-or-fallback",
@@ -2035,13 +1965,6 @@
       "ruleId": "@sarj/no-logical-or-fallback",
       "path": "src/components/design-system/conversations-index-preview.tsx",
       "count": 2
-    },
-    {
-      "fingerprint": "a6449ec90508945e08543b5313d5c181c0d048fb7a08895795184c46926cf0b5",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-logical-or-fallback",
-      "path": "src/components/design-system/surface-demos.tsx",
-      "count": 1
     },
     {
       "fingerprint": "cc79abfccf9af4b5259ad55b9c3233ff715413d9e30bc7ff9afcdc69e331a55f",
@@ -2121,13 +2044,6 @@
       "count": 1
     },
     {
-      "fingerprint": "f6edbae0661f911e364016ae430a721a603e7a27750b4b2eed77fb47df0fe016",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-logical-or-fallback",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "331b4260a5ddff4c31dad64907b3f3b6ec43546e6ce83624841ef7a46bb93909",
       "source": "oxlint",
       "ruleId": "@sarj/no-logical-or-fallback",
@@ -2153,27 +2069,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/no-positional-tuple-return",
       "path": "src/components/shared/orb-avatar.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "d66f33eef3752bf11fbab4abaeb03c4fca2c712e88a38f8ddae10b982055b5f5",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-positional-tuple-return",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "da53db450cdbd965319c66ade62f1008d3f9ccf3469b7f26d309f2c2e8d25a68",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-raw-env",
-      "path": "src/app/api/mcp/route.ts",
-      "count": 1
-    },
-    {
-      "fingerprint": "46558fcf962b3ac6fc126df02c444c706f5823aa562a9133a9d2bb38590383f8",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-raw-env",
-      "path": "src/lib/site/registry.ts",
       "count": 1
     },
     {
@@ -2237,27 +2132,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/no-runtime-typeof",
       "path": "src/components/shell/app-shell.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "8ed5688ba89a0c7ee2bb9d607c6b31bffc372563ecb597554a30504d9e6a33f3",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-runtime-typeof",
-      "path": "src/components/ui/chart.tsx",
-      "count": 6
-    },
-    {
-      "fingerprint": "863a83bf19b02ee205b29015f9cad4eb05bb26e49e9b9e3b49a302396c849fde",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-runtime-typeof",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "5699fed3144dfa8f8e1a66c684e9fb29e81b1e7500510524bd384c6b9c28e990",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-runtime-typeof",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -2363,13 +2237,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/no-unnecessary-use-client",
       "path": "src/components/mockups/phone-numbers/outbound-tab.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "ae2e11cdb4a2d2327573e7ba9ae7e591c098f8421400ad8773432a738d611cfd",
-      "source": "oxlint",
-      "ruleId": "@sarj/no-unnecessary-use-client",
-      "path": "src/components/ui/table.tsx",
       "count": 1
     },
     {
@@ -4928,83 +4795,6 @@
       "count": 1
     },
     {
-      "fingerprint": "00522b5cc2072795d06777468abd3f3f0be8fa1859a46f3fd924aef1f6b3f438",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 4
-    },
-    {
-      "fingerprint": "09a18f08663ff39f452fe95184aeeb1e21ea335806119d35b587d062d9f2ba7b",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 4
-    },
-    {
-      "fingerprint": "370fb0d1e3786f3245696904c74135019bba3a9160ecb53faf7a7a01837613ed",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "43f0c726b94663b5910064725bc196e731b38726a656928a7668c506c610d5fa",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "521dd255988113f07053f30564f12b4beb008e5330d74f22c57a1b2003a6f089",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 4
-    },
-    {
-      "fingerprint": "8567569fb56516d0a41e409ae2489a9b088dcf3374baafd3621001057fe6a78b",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "9ead6abb2f95fae8d8e9983a81abdbb0ee2933e3015b1d60a877a20448a3440a",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "ae98a017c4ef8eaaaf6457d73c75c89e64a191da8e613e9012a96b241ae2fcd1",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "c86f73cc7727be23725ade8f341db9b579405ae883184fd2fd848c984b2650dc",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "d668e743c7d2900d4011e8b06ecde3c6f3f08eb7f72f545b5635a04fe7c4e1ad",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "f4b768b17ba45c80fabfc6cf0e7871f6a528afc25a62fe110c771532448a5956",
-      "source": "oxlint",
-      "ruleId": "@sarj/require-camelcase-properties",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
       "fingerprint": "10a5ddf2f18fc3ec4e31a2f3f57d58dac391710c8185d1abcbbbd1f00cc27e62",
       "source": "oxlint",
       "ruleId": "@sarj/require-camelcase-properties",
@@ -5390,20 +5180,6 @@
       "count": 1
     },
     {
-      "fingerprint": "2758604f4f5f667d920dc939865605dc30f2e18a4a6139db0e7ac1cc297fc63a",
-      "source": "oxlint",
-      "ruleId": "@sarj/sole-export-matches-filename",
-      "path": "src/components/ui/sonner.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "2b17a0f4a7198ed32f103bf1272662a2340019efdae64b59a377b3b06fa39822",
-      "source": "oxlint",
-      "ruleId": "@sarj/sole-export-matches-filename",
-      "path": "src/hooks/use-mobile.ts",
-      "count": 1
-    },
-    {
       "fingerprint": "f2f87281d16f6578b402ace811f93c7c528aea946855d6613ccd910118c65d8d",
       "source": "oxlint",
       "ruleId": "@sarj/sole-export-matches-filename",
@@ -5464,62 +5240,6 @@
       "source": "oxlint",
       "ruleId": "@sarj/stepdown",
       "path": "scripts/lib/import-graph.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "0f1f4d2cb9278ba22f54a83dd32ded189c679dcf1a4b3d0b5f22c9871d19017a",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "38d27132768c8e3f6ea8a72eb610ca7c1a90f999f2331eaf649146a6f5258476",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "39c62a2f2bff2d15d0480b28558ad44d3a04d35c6437c004f78ed24a2af4dc42",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "410be8bb82680ec7e88375b19ce8e4a0186dc1c4f6109fd286b201fc159589f3",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "d3b6b66286986c75a609127cbb17e46cc8b6463672d447fe39e401c7610dfe6d",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "e0c9542eb28c9a5062f443808ac706aacc5f8b1d65215254a4392a86b7d77edb",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "eb71d168af2232bf0a2c8155816d454a5f6efc252bd8bdce1bf4d96d1ff1bd0f",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "ec570609ad7f544a7d059833acd3c23d7da3c86379273d4ca8032858f35e369e",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "scripts/new-mockup.mjs",
       "count": 1
     },
     {
@@ -6034,13 +5754,6 @@
       "count": 1
     },
     {
-      "fingerprint": "1b3c7230856414c381a8870d47eaa59ed3e9ab6a0c3fb841afe08e93c7572e8e",
-      "source": "oxlint",
-      "ruleId": "@sarj/stepdown",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "41466db2f72a2c75012bfb094f5c2dd0db72ccbb63a14b1b6b2fa1fcf0aa8b14",
       "source": "oxlint",
       "ruleId": "@sarj/stepdown",
@@ -6118,20 +5831,6 @@
       "count": 1
     },
     {
-      "fingerprint": "52cd09dba447f83168e25f5673c1aedd16841ce1f37a57d7d6275bc0344c1134",
-      "source": "oxlint",
-      "ruleId": "arrow-body-style",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "cb55c5d673cfedccda2368a49fe172c7298738c8f0e52b1fbe5860f05bce54ac",
-      "source": "oxlint",
-      "ruleId": "arrow-body-style",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 2
-    },
-    {
       "fingerprint": "65f82a3db78d5b95c8e6f30e02f1d415db318efed52dee4c158cbf7e9cdd8efb",
       "source": "oxlint",
       "ruleId": "effects/no-pass-data-to-parent",
@@ -6164,13 +5863,6 @@
       "source": "oxlint",
       "ruleId": "effects/no-pass-live-state-to-parent",
       "path": "src/components/mockups/connected-apps/create-token-dialog.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "dbf338b2dcb6b60e7fbea0f6106fdbc91ae635ca94dcc5538b1ed216b51f0766",
-      "source": "oxlint",
-      "ruleId": "eqeqeq",
-      "path": "src/components/ui/field.tsx",
       "count": 1
     },
     {
@@ -6248,13 +5940,6 @@
       "source": "oxlint",
       "ruleId": "eslint-js/no-restricted-syntax",
       "path": "src/components/shell/nav-search.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "821e9acc11e4f9d35daa8cb87b1d0f9353749256979cb9a83f172926ccbf478f",
-      "source": "oxlint",
-      "ruleId": "eslint-js/no-restricted-syntax",
-      "path": "src/components/ui/contour-map-background.tsx",
       "count": 1
     },
     {
@@ -6727,13 +6412,6 @@
       "count": 1
     },
     {
-      "fingerprint": "eaca9eaea382bdfde38d8145ac43b1923d76d9a44aa39c29f9d78790b1ee3c8c",
-      "source": "oxlint",
-      "ruleId": "jsdoc-js/no-restricted-syntax",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "880d1c2b6e473fa20f8376ab1158ec7255e1ffeafd7fc402f5db5ec54a774019",
       "source": "oxlint",
       "ruleId": "jsdoc-js/no-restricted-syntax",
@@ -6853,13 +6531,6 @@
       "count": 3
     },
     {
-      "fingerprint": "40fe59e2b54724e250758e9ccc8ac998d86e1b10feac864477f9972c13960b95",
-      "source": "oxlint",
-      "ruleId": "no-console",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
       "fingerprint": "4c8610522790c44e4a79fcc75baa3dd0aad2240ce5517bc79ef2bb9db29ea22a",
       "source": "oxlint",
       "ruleId": "no-console",
@@ -6965,13 +6636,6 @@
       "count": 1
     },
     {
-      "fingerprint": "fa721ad160db7fc6047201c644202eed7eb754f7f5852b6aa0880cdd5714339a",
-      "source": "oxlint",
-      "ruleId": "no-param-reassign",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "72f4418ba90ba7710a0884cbfe8de8551babe80a31d32c2b7d2bfadc9d4ba04e",
       "source": "oxlint",
       "ruleId": "no-promise-executor-return",
@@ -7070,34 +6734,6 @@
       "count": 1
     },
     {
-      "fingerprint": "4381a11fe9cb0939142dd9a0a0e1eddbcfc8de991b63f45f9a4c7a8bb2e70bdd",
-      "source": "oxlint",
-      "ruleId": "no-shadow",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "ce0a8efec4223c45d5c59efecad82f50f44ca9c2e7a1dbcb70327ec03d009afc",
-      "source": "oxlint",
-      "ruleId": "no-shadow",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 4
-    },
-    {
-      "fingerprint": "622c12edcbdb10f2b1f1dad1c00ebf66126ef66c7b7cc5ceef5b0e7a9d790340",
-      "source": "oxlint",
-      "ruleId": "no-shadow",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "f789a7fb1fd775e4d6263e66411ddbdee9d6dc95d27a17865b1c12ab943635b2",
-      "source": "oxlint",
-      "ruleId": "no-shadow",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 2
-    },
-    {
       "fingerprint": "af54370c86224aae0ca2825828116964ab94aa65408a4f14551cbd212084e33b",
       "source": "oxlint",
       "ruleId": "no-shadow",
@@ -7158,118 +6794,6 @@
       "source": "oxlint",
       "ruleId": "react-js/jsx-no-leaked-render",
       "path": "src/components/mockups/roles-permissions/roles-matrix.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "dca4efbf53d6c9ffd18709518a1462af6f1463fe63c7b1fe05ae1a2b31d464c9",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/calendar.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "97f91c1a7fe5602dcea0d7f914d4fe3096b46ddb60876dba2bfc10ccd70f844d",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "e01a7808b661b59c522cd36acfe211ce6b7857c5f8e4f1d17834a71e0a090007",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/dialog.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "419523fb6b3b91ed4d075f0f87b46b151397b3a6b92d640ec99233221bf68efa",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/field.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "9482e6de3d64634873519b42e3b43171a99771caa6026d70e9d0cd7f4b7b63b8",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/resizable.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "aac0af7ec1c531fc4a662c12ee30cffff6d1a5957d83c25bcc5d96298d7280f3",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/sheet.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "8b5ebc5a9323f7c4664586fccbe2e2c99935882d4ed7d5ce90d04981b2d25477",
-      "source": "oxlint",
-      "ruleId": "react-js/jsx-no-leaked-render",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "5665a93bb4c813ba5dd4bf2abbc175d1b6c084f1eb6f6b99a6eb09c8fa9818fa",
-      "source": "oxlint",
-      "ruleId": "react/button-has-type",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "010e2203f05ef7dc899cdc4334ae34dc73781285d9be44b4e1e08937ab335013",
-      "source": "oxlint",
-      "ruleId": "react/hooks",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "aab1b645388dde6b17298ecbf986dd104ec039b8942604856eae8930a7a7bd2a",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/reels/video-player.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "1e50e8cb31c09bef544c530049f4e3994d343d38d7289614628f1096252f8003",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/shared/agent-state/engine.ts",
-      "count": 1
-    },
-    {
-      "fingerprint": "6c53290edb3dde42f4d3d19582dc61b838139e7ab6b1311e2ebb81f00811d4f0",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/shared/recording-indicator.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "25789b2326c5005b67eac6ae7bd12b27ed4a56ff3a04f11629f08c67861c23f2",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/shell/footer-mark.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "520e0ccb1c253165d6dc9f1babd371f2596c781cb4767ca40c43ba8d6c1abc36",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/site/order-rail.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "ca057659e7bffa29d155cda0e24df2416039722490ad82f4ada72751d6bd4006",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/site/surface-dock.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "3fe8f8e49623a80bb6c499155f2de3d0454f809ff056d383c5c2feb47d7d4d90",
-      "source": "oxlint",
-      "ruleId": "react/immutability",
-      "path": "src/components/ui/contour-map-background.tsx",
       "count": 1
     },
     {
@@ -7385,34 +6909,6 @@
       "count": 1
     },
     {
-      "fingerprint": "aba6e22a90ee3c7c683678d218f7778f4adb2bd279bc903069b3a1a90c50718b",
-      "source": "oxlint",
-      "ruleId": "react/no-array-index-key",
-      "path": "src/components/ui/chart.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "e0b01dd531b00d15639c614caab79882c79af44ec6992d4d61462ddb20c48531",
-      "source": "oxlint",
-      "ruleId": "react/no-array-index-key",
-      "path": "src/components/ui/field.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "9a9b4dd4968691eece6a402b04cbc20362aa137bc5a37428d714124742db44f5",
-      "source": "oxlint",
-      "ruleId": "react/no-array-index-key",
-      "path": "src/components/ui/text-highlight-wave.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "1ffedd812b990137eb472ac98af4299bd79df43f8eaff13f6c2f83c88b8390fe",
-      "source": "oxlint",
-      "ruleId": "react/no-danger",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "9ac6d84c47d8ce9d0511935be59ce4735ce118cf0e83f8afde6ffbe6d2b2323d",
       "source": "oxlint",
       "ruleId": "react/no-object-type-as-default-prop",
@@ -7427,25 +6923,11 @@
       "count": 2
     },
     {
-      "fingerprint": "3ecb2f68aee9e8c5116ba7068f68b1609f32b4af8a71e4892b37cf3c9203b8da",
-      "source": "oxlint",
-      "ruleId": "react/no-object-type-as-default-prop",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "5140477555625cc5dc07b5725f03f555989c9d0611cb129c59fabbbe1af249cd",
       "source": "oxlint",
       "ruleId": "react/purity",
       "path": "src/components/shell/site-footer.tsx",
       "count": 1
-    },
-    {
-      "fingerprint": "ee536ac9b18e715520a3d87136b33f320f18ba90431c1fc47dd740cda1b4ffd0",
-      "source": "oxlint",
-      "ruleId": "react/rule-suppression",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 12
     },
     {
       "fingerprint": "a427c6164e96659cdafa42cd712449e4b977ae7f0e2db660f7ac718d56971d6b",
@@ -7459,13 +6941,6 @@
       "source": "oxlint",
       "ruleId": "regexp/no-useless-assertions",
       "path": "eslint-rules/rules/copy-conventions.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "f3c53e1978e6f9b9a2335cad3b0f8277d93b1a62017ea139a4f8e852901b794c",
-      "source": "oxlint",
-      "ruleId": "typescript/array-type",
-      "path": "src/components/ui/field.tsx",
       "count": 1
     },
     {
@@ -7627,7 +7102,7 @@
       "source": "oxlint",
       "ruleId": "typescript/consistent-type-assertions",
       "path": "src/app/page.tsx",
-      "count": 3
+      "count": 2
     },
     {
       "fingerprint": "f0746644aeb0557198de0f6f2b30068c283271b8fe466c9442c2ffd09353c1bd",
@@ -7663,13 +7138,6 @@
       "ruleId": "typescript/consistent-type-assertions",
       "path": "src/components/design-system/surface-decision-preview.tsx",
       "count": 5
-    },
-    {
-      "fingerprint": "308f0d66cf7f6559dd5f8f6dcb9dfca347d74d866053b6f15a6a6232f1cf1995",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/design-system/surface-demos.tsx",
-      "count": 1
     },
     {
       "fingerprint": "1549d9cc0c2bd55c074efcad334e621aa9c87d4a582efbabf92762097d2c878c",
@@ -7938,48 +7406,6 @@
       "count": 1
     },
     {
-      "fingerprint": "2f121125cfd2387344ffbfe49d4332a17a2ed7e95d89b83b760821723219dc21",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/chart.tsx",
-      "count": 8
-    },
-    {
-      "fingerprint": "2bc43c70dd2cf84653e97e9add0ee8117cc38d634b9b28d92570cf6322c7b87e",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/input-group.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "50355c4fc2922a358199df8c3a6d93e7b1a477d7c4d405ccc367dfefa0eeb235",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "eed0bb3076564f8b4a42d5f5783dd8e8b783a4f4c9a631ea4e7d34d7f4159e72",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/sonner.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "a08b4de8aa5b127f4f1c350fb3137e2cb7abcc3bd95f90bd4dcd0e39724a3e21",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "9a08ae7011a0c84af547c2964a8bbedbf60184effd786d0dbeaf3bcc1ebdd8d5",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-assertions",
-      "path": "src/components/ui/toggle-group.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "5dff70982fc4e7cc127f063a0c2bf5fc4b23ce42f82efb212682e0c4eed8811b",
       "source": "oxlint",
       "ruleId": "typescript/consistent-type-assertions",
@@ -8139,13 +7565,6 @@
       "ruleId": "typescript/consistent-type-definitions",
       "path": "src/components/design-system/surface-decision-preview.tsx",
       "count": 2
-    },
-    {
-      "fingerprint": "2087ceb1083b2de5cd6ac0fcaae3f33bde83b2d261161f1e7bfbd1201a8d52e7",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-definitions",
-      "path": "src/components/design-system/surface-demos.tsx",
-      "count": 1
     },
     {
       "fingerprint": "b2e1ba2781eea2e0c4791f497ae21fefee912ecbce6d601e7ede14f2535128d3",
@@ -8334,27 +7753,6 @@
       "source": "oxlint",
       "ruleId": "typescript/consistent-type-definitions",
       "path": "src/components/site/surface-dock.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "fb2425707d65efa91b387441c3ea6f25b8457d665e7a18b2b90537716e079c7a",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-definitions",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "d211b83ee582525ddcba0b79b67ff07500ba9dee1f8881057248962af1893150",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-definitions",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "791c8209868ea57c6707f671331f52dec1680498fad0be229d892592f7fdba9f",
-      "source": "oxlint",
-      "ruleId": "typescript/consistent-type-definitions",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -8673,13 +8071,6 @@
       "count": 1
     },
     {
-      "fingerprint": "d9425d6eb0cc1941f2380bf726364e0921b4bc03a435a64724a1b849e7e07539",
-      "source": "oxlint",
-      "ruleId": "typescript/no-confusing-void-expression",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 2
-    },
-    {
       "fingerprint": "bbf5211fb68e40e13a006742b9bf0dd4a9035691e736a21d19a1b71217280727",
       "source": "oxlint",
       "ruleId": "typescript/no-deprecated",
@@ -8691,13 +8082,6 @@
       "source": "oxlint",
       "ruleId": "typescript/no-deprecated",
       "path": "src/components/mockups/variable-mentions/mention-editor.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "488c3ebcc93593a621b8ee128bf6ec20e57da6b57b71e03c816782a8aa1232fa",
-      "source": "oxlint",
-      "ruleId": "typescript/no-deprecated",
-      "path": "src/components/ui/chart.tsx",
       "count": 1
     },
     {
@@ -8792,13 +8176,6 @@
       "count": 1
     },
     {
-      "fingerprint": "92149d21d10c0b3dce26e7ee06bf7b2b34859f23c51317b693f74b6bfb1e4899",
-      "source": "oxlint",
-      "ruleId": "typescript/no-import-type-side-effects",
-      "path": "src/components/ui/toggle-group.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "18a05325e6f3294644c7fa299002110321591c60b6e3feccd27822b544492c3d",
       "source": "oxlint",
       "ruleId": "typescript/no-misused-promises",
@@ -8817,13 +8194,6 @@
       "source": "oxlint",
       "ruleId": "typescript/no-misused-spread",
       "path": "src/components/design-system/overview/overview-tour.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "56b4fc63ae808e54a246fc8e132d4e25e19c3d237714e9d5e05db8d641fe3645",
-      "source": "oxlint",
-      "ruleId": "typescript/no-misused-spread",
-      "path": "src/components/ui/text-highlight-wave.tsx",
       "count": 1
     },
     {
@@ -8853,13 +8223,6 @@
       "ruleId": "typescript/no-non-null-assertion",
       "path": "src/components/shared/filter-bar.tsx",
       "count": 2
-    },
-    {
-      "fingerprint": "4d9332711cfc539270e1a1a9e055116c771621dbd648fe6081c01290fc071d58",
-      "source": "oxlint",
-      "ruleId": "typescript/no-non-null-assertion",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
     },
     {
       "fingerprint": "3fc48d5dcdf70bc38d3eea8fd9bb4d099683734cb4ef0095f27b34cbad846c98",
@@ -9065,41 +8428,6 @@
       "count": 1
     },
     {
-      "fingerprint": "7d19d952896bbbe564626f333388f370a90e002a53ac2085cdc65b5ac3642a5d",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-condition",
-      "path": "src/components/ui/chart.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "30d6d30fca363da7aa6e4c8bc9eae6662a86684a1037d321faa7fa9ca7823d1f",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-condition",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "1e1065923dec180ef729c406b96c5f6068c9e91268f99c0b1d8c8b9bf38fcd7e",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-condition",
-      "path": "src/components/ui/field.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "4833bb865995893f055d10c576fbce326bb22bf196b118d89717b0bda1d0a307",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-condition",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "9d92c601726f4be81f2b01403286f4fd7922ca7adb1d6b6f8af19896bb0986f0",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-condition",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 5
-    },
-    {
       "fingerprint": "a24c1592cf87d838305c7a2f798f25d2d524e8cff0a15191af43d2a1045bee12",
       "source": "oxlint",
       "ruleId": "typescript/no-unnecessary-condition",
@@ -9126,13 +8454,6 @@
       "ruleId": "typescript/no-unnecessary-type-assertion",
       "path": "src/components/mockups/scenario-single-screen/v2/prompt-builder.tsx",
       "count": 1
-    },
-    {
-      "fingerprint": "51ac10f702f2c8da51f976c47b3c2e0994fd008d8fd9ca86faa801edcee63219",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unnecessary-type-assertion",
-      "path": "src/components/ui/chart.tsx",
-      "count": 2
     },
     {
       "fingerprint": "4f944a6946bfa0d111ccbc2cb54d55c35d89c65d4ef3f261dbd434b742b6a37b",
@@ -9408,13 +8729,6 @@
       "count": 5
     },
     {
-      "fingerprint": "d6cc33379a66eb31d93f61afdab0457653ae53fad185bd676f79411efcc1d6ed",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-argument",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
       "fingerprint": "0eb99fd5a8b96822193efb968043a5f4d72a69bcb0cd8424849e5c59572f4fe7",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-argument",
@@ -9559,13 +8873,6 @@
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-argument",
       "path": "scripts/thumbnails.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "d3da11ede895f1c586b3b29a0d2015e888df3b0b6d0516ee2dc62d23c230ad60",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-argument",
-      "path": "src/components/ui/chart.tsx",
       "count": 1
     },
     {
@@ -9884,20 +9191,6 @@
       "count": 1
     },
     {
-      "fingerprint": "147c419b7f6adc48286a8910e43ca2d575d60a84d8a07f5573a8a25806b397c1",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-assignment",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
-      "fingerprint": "d9edb402dce151ea73cdd07398dc819e943976d85bbe3dd8e6c3fe57024ece5b",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-assignment",
-      "path": "scripts/new-mockup.mjs",
-      "count": 11
-    },
-    {
       "fingerprint": "1b289b61614541bc7afccca73916a23a40f3ee60cc1f49f26487c0001183934d",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-assignment",
@@ -9938,13 +9231,6 @@
       "ruleId": "typescript/no-unsafe-assignment",
       "path": "scripts/thumbnails.mjs",
       "count": 9
-    },
-    {
-      "fingerprint": "c7ca769df01d7d1f3e0090b8e19430e28e9167b6724567763ea563f1f8529d94",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-assignment",
-      "path": "src/components/ui/chart.tsx",
-      "count": 3
     },
     {
       "fingerprint": "0c04d7d4a9ecd5c5c53fb37d3531a52d92ce129c0e4e9b92297db6b27188dca4",
@@ -10197,13 +9483,6 @@
       "ruleId": "typescript/no-unsafe-call",
       "path": "scripts/lib/import-graph.mjs",
       "count": 12
-    },
-    {
-      "fingerprint": "9aa2545bd71105d9e55328dd5009b9edf377d0936b492f6aabbfc463c39b40a3",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-call",
-      "path": "scripts/new-mockup.mjs",
-      "count": 28
     },
     {
       "fingerprint": "0dc441d74905bfced439ee91248e5da11cf514daa38305f44888a4d0ca93a6e3",
@@ -11648,132 +10927,6 @@
       "count": 1
     },
     {
-      "fingerprint": "1e92323e484dd19a9cd7e548363084eee9e62eff486b86f3dcfce864fab1d105",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "32a629bfeaa8c56c0282fe035131d703c1433fa01fd0652aef872e43742b81b9",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 3
-    },
-    {
-      "fingerprint": "3301a1d084155d8afcc4f1c97e506665a981ef50be9a092c4b483efa1cdd1b46",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "4746787315a459a7889bcbc947070faf6f45fe1623b9779f44239405c677040e",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "49dfe7702fd523ea594d95454ea4dee01b7ace7f5c8c1961e98ef87a6183a521",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 3
-    },
-    {
-      "fingerprint": "667b9e3ef9a8707939f598a30073ddc954bb01a716bf209161d2ff6f43e3b419",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 5
-    },
-    {
-      "fingerprint": "7250a51cc9182eec8a12b026afefec6b8349573ea354d4f9ad3561ace5300476",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
-      "fingerprint": "7d4c2363bea028a3100e163a3c9b55c4ec24e7a9ea3b467a14429ab6128f0d2f",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
-      "fingerprint": "8085ce16f6b4986c3fe016b1488edbdd2a50965e4722f5d7084c8cad1652906e",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
-      "fingerprint": "863819368acb98b2f9634f5ab054d5791a5e5f714ce4aef41afda010a03d0e39",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "9f3670f1b6c16e90d54500b70af352fdf0243281f8f29b43d4e5f0ebd9185c15",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "acdb5e3517eb7d2b29fe01a32fb4838da1dacde608cd298922ea5bce18cd974a",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 3
-    },
-    {
-      "fingerprint": "b721c14a7167bcbdcf8070c15c814ccf5940736364effde659e96376d795981d",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "b83566ae0cb7d28870a6ac1703256ce650651e5a7899ab945a7f565a0fa73267",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "c99b3a2455dd5116a25217332d5a4e6576465245ab6d70faba652693d443f7e7",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "cd881969448cd5267ef93e176e286e2a7a279009974b41c56c021d046e13e393",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "ef4a3ebbc397a6ddaff75367873cc5ca259145dfae339ed9bf7442c1a4c296a1",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
-      "fingerprint": "fad20f10cc6c93e586bebdd765545134838629fa6a2f6105e659468742b0d9bc",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
       "fingerprint": "0ad0e58cc8ce0a40b85071af678b5745ada8138d110980f92ffd8dc7b7122419",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-member-access",
@@ -12166,13 +11319,6 @@
       "count": 1
     },
     {
-      "fingerprint": "16c3e33e2d24f3cba84f841468462f50a24f6e802f5ce6d7a90c5dc7c9d5c985",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-member-access",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "419882acfc20a5d31489eb4118724f4de6108f40bee39ded592f3919c8e2104b",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-return",
@@ -12283,13 +11429,6 @@
       "ruleId": "typescript/no-unsafe-return",
       "path": "scripts/lib/import-graph.mjs",
       "count": 2
-    },
-    {
-      "fingerprint": "19c4268d3949b8ed7a685d7f7ba9701097ac7384889c9b8c92c132443519bbf0",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-return",
-      "path": "scripts/new-mockup.mjs",
-      "count": 9
     },
     {
       "fingerprint": "b601e933193f84f733b424952359f4ed6547eb6dbee5225808b3e3ee1f86346d",
@@ -12551,13 +11690,6 @@
       "count": 1
     },
     {
-      "fingerprint": "97f5edb19e3f1de3cadc0d2042c03592e225af9f4e8cd391579e56d4f667ab39",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/app/page.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "e070dc32ef6bd3fccec7e76e5220c91517e1f017b9dce48aef049f922708c335",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-type-assertion",
@@ -12639,13 +11771,6 @@
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-type-assertion",
       "path": "src/components/design-system/surface-decision-preview.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "e9406074370a3a853a14df8abbf2237168aec5de93be35d7c0de89957c98cba7",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/design-system/surface-demos.tsx",
       "count": 1
     },
     {
@@ -12992,69 +12117,6 @@
       "count": 1
     },
     {
-      "fingerprint": "2c1f7d42ac23d9fb0794ea083e0458fac751ac99f23cccac352b234ed8d7fb3e",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "7498173786e2b9c5d226a64662b8419a5f92a5cd879f87a61650419f8678a172",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/chart.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "8b663693a2329f3e73d6db55af55ebe3ee004bd0f52b1dbf140dceef44ea31b4",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/chart.tsx",
-      "count": 4
-    },
-    {
-      "fingerprint": "3a875eb4ac4cf57de661dc8c48d5478311326451d029e23e52be6bbb806eab48",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/input-group.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "3d626016046b7b98ae55bfdc43479d198d24565bf869ca963692d45db4bb7e6f",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "03999a91652654663feccd90e5e6188656de025c7d1ae2302a3322ca2233739f",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/sonner.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "dc8ac5f85f975bd7cbef93416c66264ddbd423ec0bdbc251dd3c2a27145eed7c",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/sonner.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "0b3d6b7801e19e878f2b766e47b2567bb71f559c6d96ca34c635f8af2e48c44e",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "3911e8b1f280a19133d2159e870d6a70aa7e11d5a8424eea7e9fb2780babc891",
-      "source": "oxlint",
-      "ruleId": "typescript/no-unsafe-type-assertion",
-      "path": "src/components/ui/toggle-group.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "9c72ad1c344d290d1aa353f89bac2c5bce1d874ec36e1dcfb00a82bc0e9510f7",
       "source": "oxlint",
       "ruleId": "typescript/no-unsafe-type-assertion",
@@ -13102,27 +12164,6 @@
       "ruleId": "typescript/prefer-nullish-coalescing",
       "path": "src/components/mockups/conversations-revamp/list/conversations-page.tsx",
       "count": 1
-    },
-    {
-      "fingerprint": "ea79a8adf7ec2fdf66e925369491b2423ef69e68826f274b0d5380c3493a033d",
-      "source": "oxlint",
-      "ruleId": "typescript/prefer-nullish-coalescing",
-      "path": "src/components/ui/progress.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "0a04b56b7d15ea45de2634b541a63637e01dbfdceb652df563ab0175ba59a9e8",
-      "source": "oxlint",
-      "ruleId": "typescript/prefer-nullish-coalescing",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "29534241e28f57b8aa778492a7b4d5420bc10c28aec46b7183b6842ebe3fca0f",
-      "source": "oxlint",
-      "ruleId": "typescript/prefer-nullish-coalescing",
-      "path": "src/components/ui/toggle-group.tsx",
-      "count": 4
     },
     {
       "fingerprint": "6977926be142e829cdf7e7ace2ffd145ee6d0fa181048a4cf3ede6c7b419d9ac",
@@ -13272,13 +12313,6 @@
       "count": 4
     },
     {
-      "fingerprint": "e4e56b3103caab46389e70144c0ddd40519d5bc79951e1dcd9464c187fd08ff8",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-plus-operands",
-      "path": "scripts/new-mockup.mjs",
-      "count": 4
-    },
-    {
       "fingerprint": "05e3c22a230b55ab0a65f2c6cf28c60e8ee0ee966f601c8f8fe98cc83962254c",
       "source": "oxlint",
       "ruleId": "typescript/restrict-plus-operands",
@@ -13326,13 +12360,6 @@
       "ruleId": "typescript/restrict-template-expressions",
       "path": "scripts/lib/import-graph.mjs",
       "count": 3
-    },
-    {
-      "fingerprint": "d3fb3ee4935d41361d3e28dea545d1118a462c7475c60df4a41769ddfe826572",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "scripts/new-mockup.mjs",
-      "count": 20
     },
     {
       "fingerprint": "f597a038acba9f7c09752f5785e5a95c261bf5367d2783ec8e57a5595bf7ef9c",
@@ -13487,13 +12514,6 @@
       "ruleId": "typescript/restrict-template-expressions",
       "path": "src/components/design-system/section-menu.tsx",
       "count": 5
-    },
-    {
-      "fingerprint": "b3a7e56f4e933aa5aa571e0887d007e6f5d754fbe1cd5389b238cd56bad7df66",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/components/design-system/surface-demos.tsx",
-      "count": 1
     },
     {
       "fingerprint": "c3d2885789669396d121508fce8e806eddb4e144ee3aa4e6ba37e55ccc757fa1",
@@ -13986,41 +13006,6 @@
       "count": 2
     },
     {
-      "fingerprint": "6564766dfa25e5fcb92cca92fe05daf8b408659d7fc5471ec9176db7d794046f",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/components/ui/chart.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "9e83e58a0e0b17e1a37eb6ac9f501d4f868054e455506d44390ebc07a4743f65",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/components/ui/progress.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "3a35ec839f79e0b972801711781d169a711f0a0eff029329962545c7e6b603f4",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "d7627ee0648bbcb1c1c9f4683ac7babbc58e417453dd2ab8afb752ad89314991",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 2
-    },
-    {
-      "fingerprint": "f921043ff00b3b91e2014cc70fbe9e3acf492f8b3584ba02f0d63c7510facd1f",
-      "source": "oxlint",
-      "ruleId": "typescript/restrict-template-expressions",
-      "path": "src/hooks/use-mobile.ts",
-      "count": 1
-    },
-    {
       "fingerprint": "43da726e44c8c77919605b1d22460d0aabdca9f58c6b4935e66ae5a86f82f7e3",
       "source": "oxlint",
       "ruleId": "typescript/restrict-template-expressions",
@@ -14182,13 +13167,6 @@
       "count": 1
     },
     {
-      "fingerprint": "b41f6ee93082b90d6c34446bc34aafbd911af80da22cf32e7d779cfbf2e4407d",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/no-computed-property-existence-check",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
       "fingerprint": "042a30052b21eeb5e8b0f40f3c2811e98b146ff30c81383518e31ab28a883b45",
       "source": "oxlint",
       "ruleId": "unicorn-js/no-computed-property-existence-check",
@@ -14221,13 +13199,6 @@
       "source": "oxlint",
       "ruleId": "unicorn-js/no-computed-property-existence-check",
       "path": "src/app/(mockups)/language-switching/page.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "c1c2e504a12f08e91052f6577f761f1a8d039e8efb7cda6b143dd2e5742f7352",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/no-computed-property-existence-check",
-      "path": "src/app/page.tsx",
       "count": 1
     },
     {
@@ -14270,20 +13241,6 @@
       "source": "oxlint",
       "ruleId": "unicorn-js/no-computed-property-existence-check",
       "path": "src/components/shared/line-diff.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "d2f459020d84efdcf52f49f87ddc85455d6f80e0448cc21c127c2f600abc362c",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/no-computed-property-existence-check",
-      "path": "src/components/ui/chart.tsx",
-      "count": 3
-    },
-    {
-      "fingerprint": "ed3c63a98cb243b91f784a7c867975caf08a7fa409258dfa7c2e86ee70644636",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/no-computed-property-existence-check",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -14378,13 +13335,6 @@
       "count": 1
     },
     {
-      "fingerprint": "c072332cfad983515ef4c6e75105f2930da21e8e9b0c390a2908a682520600a0",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/no-unsafe-string-replacement",
-      "path": "scripts/new-mockup.mjs",
-      "count": 2
-    },
-    {
       "fingerprint": "f00a66702a780e0762003b1cfc62fac468812a4c3a48f6efe8e1d75d56d64120",
       "source": "oxlint",
       "ruleId": "unicorn-js/no-unsafe-string-replacement",
@@ -14441,13 +13391,6 @@
       "count": 1
     },
     {
-      "fingerprint": "f870f5b627d8001e2b2a223fb9194ed57959e33381f47037602325522c02ea4f",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/prefer-combined-guards",
-      "path": "src/components/ui/contour-map-background.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "fdba825b1066a1bc3bc3eb7ec8efb1d72385725c344370a87e4afad03d0c8b89",
       "source": "oxlint",
       "ruleId": "unicorn-js/prefer-combined-guards",
@@ -14476,13 +13419,6 @@
       "count": 2
     },
     {
-      "fingerprint": "e71f9fc8295bc3664b22fd0cc7911a2dd46c7e6bfd8409155f51c11683e3c050",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/prefer-iterator-to-array",
-      "path": "src/components/ui/field.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "4db21f0d11e8fa41346d03b77011f0e7cbb673dafe852e84c9321bb73d53e6d8",
       "source": "oxlint",
       "ruleId": "unicorn-js/prefer-iterator-to-array",
@@ -14494,13 +13430,6 @@
       "source": "oxlint",
       "ruleId": "unicorn-js/prefer-iterator-to-array",
       "path": "src/lib/mockups/phrase-mappings-data.ts",
-      "count": 1
-    },
-    {
-      "fingerprint": "0aace753a5963c720efc56a83092016fcfa08175f9113b3285ddeff3227f87ea",
-      "source": "oxlint",
-      "ruleId": "unicorn-js/prefer-single-object-destructuring",
-      "path": "src/components/ui/stepper.tsx",
       "count": 1
     },
     {
@@ -14623,13 +13552,6 @@
       "count": 3
     },
     {
-      "fingerprint": "a66081eeadbfba49c4bfe660aaf863ff336d456e577fe623113f95ff77ef4bf9",
-      "source": "oxlint",
-      "ruleId": "unicorn/no-array-sort",
-      "path": "scripts/new-mockup.mjs",
-      "count": 1
-    },
-    {
       "fingerprint": "b71e06fa06b31f0e3643cf08f2b9cd5f6c5b4785e21eebff4d742ee7fe0d4b02",
       "source": "oxlint",
       "ruleId": "unicorn/no-array-sort",
@@ -14700,13 +13622,6 @@
       "count": 3
     },
     {
-      "fingerprint": "b929570fe3b4f1e788b73f5e241b5528f10a00dec725b75e543cea9744073787",
-      "source": "oxlint",
-      "ruleId": "unicorn/no-document-cookie",
-      "path": "src/components/ui/sidebar.tsx",
-      "count": 1
-    },
-    {
       "fingerprint": "40638fa3f53fd81bcb86226e27179e58d742268e0f857d3f503852898d57f1ed",
       "source": "oxlint",
       "ruleId": "unicorn/no-object-as-default-parameter",
@@ -14740,13 +13655,6 @@
       "ruleId": "unicorn/prefer-add-event-listener",
       "path": "scripts/render-reel.mjs",
       "count": 2
-    },
-    {
-      "fingerprint": "1e9cd95880a828d1e695507eb9e99b7698eae42166f1742e85a816c086c58e92",
-      "source": "oxlint",
-      "ruleId": "unicorn/prefer-array-index-of",
-      "path": "src/components/ui/stepper.tsx",
-      "count": 1
     },
     {
       "fingerprint": "1dc0dd8cf1b7f2207c1eda13f5ddc6e55e0f16e98ab8ae7a04643976920ffe9c",
@@ -14984,13 +13892,6 @@
       "source": "oxlint",
       "ruleId": "unicorn/prefer-string-replace-all",
       "path": "src/components/mockups/tool-calls-transcript/call-transcript.tsx",
-      "count": 1
-    },
-    {
-      "fingerprint": "db25ce0679c0b8d514de9ad0b5977cf539d873e3bfb5e0a87ba8731c30aa0436",
-      "source": "oxlint",
-      "ruleId": "unicorn/prefer-string-replace-all",
-      "path": "src/components/ui/chart.tsx",
       "count": 1
     },
     {
