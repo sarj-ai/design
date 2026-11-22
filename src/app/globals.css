@@ -75,6 +75,99 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Sonner's collapsed stack peeks 14px; the custom toast lets a whole title row show behind the front one. */
+.toast-stack [data-sonner-toast][data-expanded="false"][data-front="false"] {
+  --lift-amount: calc(var(--lift) * 2.75rem);
+}
+
+/* Anything with opacity below 1 cuts backdrop-filter off from the page, and Sonner fades each toast's
+   wrapper in and out. Keep the wrapper opaque so the glass is live through the whole slide; the card's
+   own animate-toast-in fades it in, and the card (not the wrapper) fades it out. */
+.toast-stack [data-sonner-toast][data-mounted="false"][data-visible="true"] {
+  opacity: 1;
+}
+
+.toast-stack [data-sonner-toast][data-removed="true"][data-visible="true"] {
+  opacity: 1 !important;
+}
+
+.toast-stack [data-sonner-toast][data-removed="true"] [data-slot="card"] {
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out-cubic);
+}
+
+/* A toast's time left, as a ring on its edge that drains. --toast-left is the arc still showing,
+   from the top centre clockwise; registering it as an angle lets the keyframes interpolate it.
+   One conic gradient, so the faded start (0–16deg) and the faded end (the last 28deg) are smooth. */
+@property --toast-left {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+@keyframes toast-edge-drain {
+  from {
+    --toast-left: 360deg;
+  }
+  to {
+    --toast-left: 0deg;
+  }
+}
+
+.toast-edge,
+.toast-edge-glow::before {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    transparent 0deg,
+    currentColor 16deg,
+    currentColor max(16deg, calc(var(--toast-left) - 28deg)),
+    transparent var(--toast-left)
+  );
+  /* Keep only a ring the width of the padding. */
+  mask:
+    linear-gradient(black 0 0) content-box exclude,
+    linear-gradient(black 0 0);
+  animation: toast-edge-drain var(--countdown, 6s) linear both;
+}
+
+.toast-edge {
+  padding: 1px;
+  opacity: 0.5;
+}
+
+/* Light in the glass, not a line on it: a wide ring, blurred by its parent so the blur
+   softens the already-masked ring (a filter on the ring itself would be cut by its own mask).
+   The card clips the outer half, so it blooms only into the surface. */
+.toast-edge-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.1;
+  filter: blur(4px);
+}
+
+.toast-edge-glow::before {
+  content: "";
+  padding: 6px;
+  animation-play-state: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-stack [data-sonner-toast][data-removed="true"] [data-slot="card"] {
+    transition: none;
+  }
+
+  /* A full ring that stays: the countdown still exists, it just does not move. */
+  .toast-edge,
+  .toast-edge-glow::before {
+    animation: none;
+  }
+}
+
 @theme inline {
   --color-tailwind-black: #06050f;
   --color-manafa-blue: #0d6efd;
@@ -192,6 +285,26 @@
 
   --animate-pane-in: pane-in 0.2s var(--ease-out-cubic) both;
 
+  /* A toast's content arrives out of focus and settles, under Sonner's own slide. */
+  --animate-toast-in: toast-in 0.3s var(--ease-out-cubic) both;
+
+  /* A progress bar's glow breathes, and a sheen runs along its fill. */
+  --animate-progress-glow: progress-glow 1.2s var(--ease-in-out-cubic) infinite;
+  --animate-progress-sheen: progress-sheen 1.6s var(--ease-in-out-cubic) infinite;
+
+
+  /* A toast's kind glyph builds itself once the card has landed: the ring draws, the mark
+     follows, the text arrives, then the glyph reacts — success pops, error shakes. ~0.45s in all. */
+  --animate-glyph-ring: draw-stroke 0.2s var(--ease-out-cubic) 0.05s both;
+  --animate-glyph-mark: draw-stroke 0.15s var(--ease-out-cubic) 0.22s both;
+  --animate-glyph-drop: glyph-drop 0.2s var(--ease-out-cubic) 0.2s both;
+  --animate-glyph-dot: glyph-dot 0.2s var(--ease-out-cubic) 0.3s both;
+  /* Set --text-delay per line to stagger title, description and action. */
+  --animate-glyph-text: glyph-text 0.25s var(--ease-out-cubic) var(--text-delay, 0.3s) both;
+  --animate-glyph-pop: glyph-pop 0.25s var(--ease-out-cubic) 0.37s both;
+  --animate-glyph-shake: glyph-shake 0.3s var(--ease-in-out-cubic) 0.4s both;
+
+
   --animate-drawer-up: drawer-up 0.3s var(--ease-out-cubic) both;
 
   /* `both` so staggered lines hold the start frame until their delay elapses. */
@@ -247,6 +360,103 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes progress-glow {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes progress-sheen {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+
+  @keyframes glyph-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes glyph-dot {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.6);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes glyph-text {
+    from {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes glyph-pop {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.18);
+    }
+  }
+
+  @keyframes glyph-shake {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    20% {
+      transform: rotate(-14deg);
+    }
+    45% {
+      transform: rotate(11deg);
+    }
+    70% {
+      transform: rotate(-6deg);
+    }
+    85% {
+      transform: rotate(3deg);
+    }
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
     }
   }
 

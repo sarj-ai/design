@@ -509,6 +509,17 @@ export const MOCKUPS: Mockup[] = [
     tickets: ["INT-294"],
     added: "2026-11-11T08:37:29.744Z",
   },
+  {
+    href: "/custom-toasts",
+    title: "Custom toasts",
+    meta: "Component · exploration",
+    surface: null,
+    description:
+      "The platform's current toasts beside the new glass ones, fired from the top bar over the Scenarios index.",
+    icon: SparklesIcon,
+    tickets: [],
+    added: "2026-11-21T15:00:43.405Z",
+  },
   // `npm run new` appends new mockups above this line.
 ];
 

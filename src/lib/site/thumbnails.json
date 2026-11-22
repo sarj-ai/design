@@ -37,7 +37,8 @@
     "scenario-dashboard": "ad5c3e659cabcd64",
     "call-measurements": "3fea083353cb4ff8",
     "global-prompt-versioning": "818c1d7979551f54",
-    "scenario-advanced-settings": "158dcbd48c7edfb8"
+    "scenario-advanced-settings": "158dcbd48c7edfb8",
+    "custom-toasts": "905bade6772390ec"
   },
   "height": 533,
   "width": 1280

@@ -7241,6 +7241,170 @@
           "--z-nav": "30"
         }
       }
+    },
+    {
+      "name": "custom-toasts",
+      "type": "registry:block",
+      "title": "Custom toasts",
+      "description": "The platform's current toasts beside the new glass ones, fired from the top bar over the Scenarios index.",
+      "dependencies": [
+        "@hugeicons/core-free-icons",
+        "@hugeicons/react",
+        "clsx",
+        "sonner",
+        "tailwind-merge",
+        "working"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "button-group",
+        "card",
+        "collapsible",
+        "item",
+        "native-select",
+        "separator",
+        "sidebar",
+        "sonner",
+        "table",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "src/app/(mockups)/custom-toasts/page.tsx",
+          "type": "registry:page",
+          "target": "app/custom-toasts/page.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/current-toasts.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/current-toasts.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/dismiss-glyph.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/dismiss-glyph.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/glass-filter.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/glass-filter.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/glow-progress.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/glow-progress.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/icons.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/index-backdrop.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/index-backdrop.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/kind-glyph.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/kind-glyph.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/new-toasts.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/new-toasts.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/smart-toasts.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/smart-toasts.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/toast-card.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/toast-card.tsx"
+        },
+        {
+          "path": "src/components/shared/data-table.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/data-table.tsx"
+        },
+        {
+          "path": "src/components/shared/icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/icon.tsx"
+        },
+        {
+          "path": "src/components/shared/page-header.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/page-header.tsx"
+        },
+        {
+          "path": "src/components/shared/reviewer-switch.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shared/reviewer-switch.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell-icons.tsx"
+        },
+        {
+          "path": "src/components/shell/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/app-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/mockup-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/mockup-shell.tsx"
+        },
+        {
+          "path": "src/components/shell/workspace-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/shell/workspace-icons.tsx"
+        },
+        {
+          "path": "src/lib/mockups/custom-toasts-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/custom-toasts-data.ts"
+        },
+        {
+          "path": "src/lib/mockups/custom-toasts-glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/sarj/mockups/custom-toasts-glass.ts"
+        },
+        {
+          "path": "src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-success": "var(--success)",
+          "color-success-tint": "var(--success-tint)",
+          "color-success-tint-foreground": "var(--success-tint-foreground)",
+          "color-info": "var(--info)"
+        },
+        "light": {
+          "success": "oklch(0.627 0.17 149.2)",
+          "success-tint": "oklch(0.945 0.045 149.2)",
+          "success-tint-foreground": "oklch(0.402 0.098 149.2)",
+          "info": "oklch(0.54 0.15 250)"
+        }
+      },
+      "css": {
+        "@utility z-nav": {
+          "z-index": "var(--z-nav)"
+        },
+        ":root": {
+          "--z-nav": "30"
+        }
+      }
     }
   ]
 }
