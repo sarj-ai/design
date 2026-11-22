@@ -10,14 +10,15 @@ import {
 
 const TOASTER_ID = "current";
 
-/** Sends one toast the way the platform ships it today: Sonner's defaults. */
 export function fireCurrent(item: CurrentToast, persist = false) {
   const options = {
     id: persist ? `current-${item.id}` : undefined,
     toasterId: TOASTER_ID,
     duration: persist ? Infinity : 6000,
     description: item.description,
-    action: item.action ? { label: item.action, onClick: () => {} } : undefined,
+    action: item.action
+      ? { label: item.action, onClick: () => undefined }
+      : undefined,
   };
   if (item.kind === "default") toast(item.title, options);
   else toast[item.kind](item.title, options);

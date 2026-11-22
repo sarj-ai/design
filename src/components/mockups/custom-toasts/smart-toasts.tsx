@@ -6,18 +6,13 @@ import { toast } from "sonner";
 import { GlowProgress } from "./glow-progress";
 import { ToastCard } from "./toast-card";
 
-// Three toasts that carry the next step instead of only reporting the last one.
-// Each owns its states and turns into the next one in place; none stacks a second toast.
-
 export const LIVE_TOASTER_ID = "live";
 
-// 1. Undo instead of confirm: the archive happens now, and the toast is the way back.
 const UNDO_SECONDS = 6;
 
 function UndoToast({ id }: { id: string | number }) {
   const [restored, setRestored] = useState(false);
 
-  // Its own timer, not Sonner's, so pointing at the stack does not freeze the countdown ring.
   useEffect(() => {
     if (restored) return;
     const timer = setTimeout(() => toast.dismiss(id), UNDO_SECONDS * 1000);
@@ -62,10 +57,8 @@ export function fireUndo() {
   });
 }
 
-// 2. Progress that becomes the result: one toast from "working" to "here it is".
 function ExportToast({ id }: { id: string | number }) {
   const [progress, setProgress] = useState(0);
-  // Done once the bar has visibly filled, not when the number first hits 100.
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -74,7 +67,6 @@ function ExportToast({ id }: { id: string | number }) {
       return () => clearTimeout(timer);
     }
     if (progress >= 100) return;
-    // Uneven steps, so it reads as work rather than a timer; the bar smooths them out.
     const timer = setTimeout(
       () =>
         setProgress((value) =>
@@ -129,7 +121,6 @@ export function fireExport() {
   });
 }
 
-// 3. Errors that fix themselves: count down, retry, and land on the result.
 const RETRY_SECONDS = 3;
 
 function RetryToast({ id }: { id: string | number }) {
@@ -179,7 +170,7 @@ function RetryToast({ id }: { id: string | number }) {
   return (
     <ToastCard
       action={{ label: "Retry now", onClick: () => setPhase("retrying") }}
-      description={`The connection dropped. Retrying in ${seconds}s.`}
+      description={`The connection dropped. Retrying in ${String(seconds)}s.`}
       id={id}
       kind="error"
       phase="waiting"

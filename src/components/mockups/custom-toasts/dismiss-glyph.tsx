@@ -1,14 +1,10 @@
-// The dismiss button's glyph: two strokes lying on top of each other read as a
-// dash; pointing at the button turns them ±45° into an X. Rotate and scale only,
-// so it stays on the compositor. Needs a `group/dismiss` parent.
-
 const STROKE =
   "origin-center transition-transform duration-200 ease-out-cubic motion-reduce:transition-none group-hover/dismiss:scale-x-125 group-focus-visible/dismiss:scale-x-125";
 
 export function DismissGlyph() {
   return (
     <svg
-      aria-hidden
+      aria-hidden="true"
       fill="none"
       stroke="currentColor"
       strokeLinecap="round"

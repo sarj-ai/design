@@ -7,12 +7,12 @@ import {
   CurrentToaster,
   fireCurrent,
 } from "@/components/mockups/custom-toasts/current-toasts";
-import { ReplayIcon } from "@/components/mockups/custom-toasts/icons";
-import { ScenariosIndex } from "@/components/mockups/custom-toasts/index-backdrop";
 import {
   fireNew,
   NewToaster,
 } from "@/components/mockups/custom-toasts/new-toasts";
+import { ReplayIcon } from "@/components/mockups/custom-toasts/replay-icon";
+import { ScenariosIndex } from "@/components/mockups/custom-toasts/scenarios-index";
 import {
   fireExport,
   fireRetry,
@@ -32,7 +32,7 @@ const STYLES = [
 
 type Style = (typeof STYLES)[number]["id"];
 
-const SMART = [
+const SMART: readonly { label: string; fire: () => void }[] = [
   { label: "Archive", fire: fireUndo },
   { label: "Export", fire: fireExport },
   { label: "Retry", fire: fireRetry },
@@ -57,7 +57,9 @@ export default function CustomToastsPage() {
   const showAll = () => {
     toast.dismiss();
     setExpand(true);
-    setTimeout(() => CURRENT_TOASTS.forEach((item) => fire(item, true)), 300);
+    setTimeout(() => {
+      for (const item of CURRENT_TOASTS) fire(item, true);
+    }, 300);
   };
 
   return (

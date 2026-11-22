@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/table";
 import { BACKDROP_ROWS } from "@/lib/mockups/custom-toasts-data";
 
-/** The Scenarios index the toasts land on. Long enough to scroll rows under the glass. */
 export function ScenariosIndex() {
   return (
     <div className="flex flex-col gap-6 p-6 pb-40">

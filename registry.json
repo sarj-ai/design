@@ -7252,8 +7252,7 @@
         "@hugeicons/react",
         "clsx",
         "sonner",
-        "tailwind-merge",
-        "working"
+        "tailwind-merge"
       ],
       "registryDependencies": [
         "avatar",
@@ -7288,6 +7287,11 @@
           "target": "@components/sarj/mockups/custom-toasts/dismiss-glyph.tsx"
         },
         {
+          "path": "src/components/mockups/custom-toasts/draw-glass-map.ts",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/draw-glass-map.ts"
+        },
+        {
           "path": "src/components/mockups/custom-toasts/glass-filter.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/custom-toasts/glass-filter.tsx"
@@ -7298,16 +7302,6 @@
           "target": "@components/sarj/mockups/custom-toasts/glow-progress.tsx"
         },
         {
-          "path": "src/components/mockups/custom-toasts/icons.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/mockups/custom-toasts/icons.tsx"
-        },
-        {
-          "path": "src/components/mockups/custom-toasts/index-backdrop.tsx",
-          "type": "registry:component",
-          "target": "@components/sarj/mockups/custom-toasts/index-backdrop.tsx"
-        },
-        {
           "path": "src/components/mockups/custom-toasts/kind-glyph.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/custom-toasts/kind-glyph.tsx"
@@ -7316,6 +7310,16 @@
           "path": "src/components/mockups/custom-toasts/new-toasts.tsx",
           "type": "registry:component",
           "target": "@components/sarj/mockups/custom-toasts/new-toasts.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/replay-icon.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/replay-icon.tsx"
+        },
+        {
+          "path": "src/components/mockups/custom-toasts/scenarios-index.tsx",
+          "type": "registry:component",
+          "target": "@components/sarj/mockups/custom-toasts/scenarios-index.tsx"
         },
         {
           "path": "src/components/mockups/custom-toasts/smart-toasts.tsx",
@@ -7371,11 +7375,6 @@
           "path": "src/lib/mockups/custom-toasts-data.ts",
           "type": "registry:lib",
           "target": "@lib/sarj/mockups/custom-toasts-data.ts"
-        },
-        {
-          "path": "src/lib/mockups/custom-toasts-glass.ts",
-          "type": "registry:lib",
-          "target": "@lib/sarj/mockups/custom-toasts-glass.ts"
         },
         {
           "path": "src/lib/utils.ts",

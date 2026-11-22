@@ -1,10 +1,6 @@
-// Every toast shape the platform calls today, with copy taken from the
-// platform source (products/platform/apps/web/src). Nothing calls
-// toast.warning, toast.loading or toast.promise, so those are not shown.
-
 export type ToastKind = "default" | "success" | "error" | "info" | "message";
 
-export type CurrentToast = {
+export interface CurrentToast {
   id: string;
   state: string;
   call: string;
@@ -12,9 +8,9 @@ export type CurrentToast = {
   title: string;
   description?: string;
   action?: string;
-};
+}
 
-export const CURRENT_TOASTS: CurrentToast[] = [
+export const CURRENT_TOASTS: readonly CurrentToast[] = [
   {
     id: "default",
     state: "Default",
@@ -82,15 +78,14 @@ export const CURRENT_TOASTS: CurrentToast[] = [
   },
 ];
 
-// The index page the new toasts float over. Only there so the glass has real UI behind it.
-export type BackdropRow = {
+export interface BackdropRow {
   name: string;
   live: boolean;
   calls: number;
   lastCall: string;
-};
+}
 
-export const BACKDROP_ROWS: BackdropRow[] = [
+export const BACKDROP_ROWS: readonly BackdropRow[] = [
   {
     name: "Appointment reminders",
     live: true,

@@ -290,8 +290,8 @@
 
   /* A progress bar's glow breathes, and a sheen runs along its fill. */
   --animate-progress-glow: progress-glow 1.2s var(--ease-in-out-cubic) infinite;
-  --animate-progress-sheen: progress-sheen 1.6s var(--ease-in-out-cubic) infinite;
-
+  --animate-progress-sheen: progress-sheen 1.6s var(--ease-in-out-cubic)
+    infinite;
 
   /* A toast's kind glyph builds itself once the card has landed: the ring draws, the mark
      follows, the text arrives, then the glyph reacts — success pops, error shakes. ~0.45s in all. */
@@ -300,10 +300,10 @@
   --animate-glyph-drop: glyph-drop 0.2s var(--ease-out-cubic) 0.2s both;
   --animate-glyph-dot: glyph-dot 0.2s var(--ease-out-cubic) 0.3s both;
   /* Set --text-delay per line to stagger title, description and action. */
-  --animate-glyph-text: glyph-text 0.25s var(--ease-out-cubic) var(--text-delay, 0.3s) both;
+  --animate-glyph-text: glyph-text 0.25s var(--ease-out-cubic)
+    var(--text-delay, 0.3s) both;
   --animate-glyph-pop: glyph-pop 0.25s var(--ease-out-cubic) 0.37s both;
   --animate-glyph-shake: glyph-shake 0.3s var(--ease-in-out-cubic) 0.4s both;
-
 
   --animate-drawer-up: drawer-up 0.3s var(--ease-out-cubic) both;
 

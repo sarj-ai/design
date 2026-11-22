@@ -27,7 +27,6 @@ function NewToast({ item, id }: { item: CurrentToast; id: string | number }) {
   );
 }
 
-/** Sends one new toast into the same toaster the smart toasts use. */
 export function fireNew(item: CurrentToast, persist = false) {
   toast.custom((id) => <NewToast id={id} item={item} />, {
     id: persist ? `new-${item.id}` : undefined,
