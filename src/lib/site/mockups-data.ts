@@ -520,6 +520,17 @@ export const MOCKUPS: Mockup[] = [
     tickets: [],
     added: "2026-11-21T15:00:43.405Z",
   },
+  {
+    href: "/topic-trends",
+    title: "Topic trends per scenario",
+    meta: "Page · exploration",
+    surface: "Scenario Edit",
+    description:
+      "A Topics & trends view on the scenario dashboard: what callers wanted, grouped into topics, with daily or weekly bars, unresolved and frustrated rates, and the calls behind each number.",
+    icon: SparklesIcon,
+    tickets: ["POST-2"],
+    added: "2026-11-23T13:04:02.498Z",
+  },
   // `npm run new` appends new mockups above this line.
 ];
 
